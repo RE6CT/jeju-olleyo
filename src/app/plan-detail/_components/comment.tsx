@@ -7,6 +7,7 @@ import { useState } from 'react';
 
 /**
  * 댓글 컴포넌트
+ * @param CommentType.userId - 댓글 작성한 유저의 id
  * @param CommentType.nickname - 댓글 작성한 유저의 닉네임
  * @param CommentType.content - 댓글 내용
  * @param CommentType.createdAt - 댓글 작성 시간

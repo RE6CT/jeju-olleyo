@@ -14,18 +14,14 @@ const LikeButton = ({
 }) => {
   const [likes, setLikes] = useState(initialLikes);
 
-  return (
-    <button
-      onClick={async () => {
-        const updatedLikes = await toggleLike(plan_id, user_id);
-        if (updatedLikes !== null) {
-          setLikes(updatedLikes);
-        }
-      }}
-    >
-      좋아요
-    </button>
-  );
+  const handleLikeButtonClick = async () => {
+    const updatedLikes = await toggleLike(plan_id, user_id);
+    if (updatedLikes !== null) {
+      setLikes(updatedLikes);
+    }
+  };
+
+  return <button onClick={handleLikeButtonClick}>좋아요</button>;
 };
 
 export default LikeButton;

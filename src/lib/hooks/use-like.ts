@@ -13,7 +13,7 @@ const useLike = (planId: number, userId: string, initialLikes: number) => {
     const currentLike = await getLike(planId, userId);
 
     if (currentLike) {
-      await deleteLike(currentLike.planLikeId);
+      await deleteLike(currentLike.plan_like_id);
     } else {
       await addLike(planId, userId);
     }

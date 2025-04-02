@@ -2,19 +2,19 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { SearchBar } from './SearchBar';
+import { SearchBar } from './search-bar';
 
 export const Header = () => {
   const router = useRouter();
 
   return (
     <header className="flex justify-between bg-black text-white">
-      <div className="flex gap-10">
+      <div className="flex">
         <Link href="/">로고 제주올레요</Link>
         <SearchBar />
       </div>
 
-      <nav className="flex space-x-6">
+      <nav className="flex">
         <Link href="/mypage">내 여행</Link>
         <Link href="/shared-plan">커뮤니티</Link>
         <Link href="/mypage">마이페이지</Link>

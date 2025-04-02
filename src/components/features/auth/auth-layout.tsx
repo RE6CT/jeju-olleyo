@@ -8,10 +8,11 @@ interface AuthLayoutProps {
 }
 
 /**
- * 인증 관련 페이지의 공통 레이아웃
+ * 인증 관련 페이지의 레이아웃 컴포넌트
  *
- * @param children 헤더, 폼, 푸터 컴포넌트
+ * @param children 자식 요소
  */
+
 const AuthLayout = ({ children }: AuthLayoutProps) => {
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-50">

@@ -5,10 +5,13 @@ import { Separator } from '@/components/ui/separator';
 import { SocialProviderProps } from '@/types/auth.type';
 import Image from 'next/image';
 
-
 /**
  * 소셜 로그인 버튼 컴포넌트
+ *
+ * @param provider 소셜 로그인 제공자 (구글, 카카오 등)
+ * @param onClick 클릭 이벤트 핸들러
  */
+
 const SocialProvider = ({ provider, onClick }: SocialProviderProps) => {
   const config = {
     google: {

@@ -1,12 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import SearchBar from './search-bar';
 
 const Header = () => {
-  const router = useRouter();
-
   return (
     <header className="flex justify-between bg-black text-white">
       <div className="flex">

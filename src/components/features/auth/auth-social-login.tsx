@@ -2,12 +2,9 @@
 
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { SocialProviderProps } from '@/types/auth.type';
 import Image from 'next/image';
 
-interface SocialProviderProps {
-  provider: 'google' | 'kakao';
-  onClick: () => void;
-}
 
 /**
  * 소셜 로그인 버튼 컴포넌트

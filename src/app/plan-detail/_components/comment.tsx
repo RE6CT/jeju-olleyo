@@ -1,4 +1,5 @@
 import { CommentType } from '@/types/common.type';
+import { Button } from '../../../components/ui/button';
 
 /**
  * 댓글 컴포넌트
@@ -12,7 +13,6 @@ const Comment = ({ nickname, content, created_at }: CommentType) => {
       {nickname}
       {content}
       {created_at.toLocaleString()}
-      <button />
     </>
   );
 };

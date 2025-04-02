@@ -8,7 +8,7 @@ import { Command, CommandInput } from '@/components/ui/command';
 //   CommandShortcut,
 // } from '@/components/ui/command';
 
-export const SearchBar = () => {
+const SearchBar = () => {
   return (
     <>
       <Command className="w-[300px] rounded-lg border">
@@ -45,3 +45,5 @@ export const SearchBar = () => {
     </>
   );
 };
+
+export default SearchBar;

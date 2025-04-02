@@ -1,42 +1,28 @@
-'use server';
+'use client';
 
-import { createClient } from '../supabase/server';
-// 나중에 유저 여부 체크 필요
+import { useState } from 'react';
+import getLike from '@/lib/apis/get-like.api';
+import addLike from '@/lib/apis/add-like.api';
+import deleteLike from '@/lib/apis/delete-like.api';
+import countLike from '@/lib/apis/count-like.api';
 
-export async function toggleLike(planId: number, userId: string) {
-  const supabase = await createClient();
+const useLike = (planId: number, userId: string, initialLikes: number) => {
+  const [likes, setLikes] = useState(initialLikes);
 
-  const { data: currentLike, error } = await supabase
-    .from('plan_likes')
-    .select('plan_like_id')
-    .eq('plan_id', planId)
-    .eq('user_id', userId)
-    .single();
+  const toggleLike = async () => {
+    const currentLike = await getLike(planId, userId);
 
-  if (error) throw new Error(error.message);
+    if (currentLike) {
+      await deleteLike(currentLike.planLikeId);
+    } else {
+      await addLike(planId, userId);
+    }
 
-  if (currentLike) {
-    const { error: deleteError } = await supabase
-      .from('plan_likes')
-      .delete()
-      .eq('plan_like_id', currentLike.planLikeId);
+    const updatedCount = await countLike(planId);
+    setLikes(updatedCount != null ? updatedCount : likes);
+  };
 
-    if (deleteError) throw new Error(deleteError.message);
-  } else {
-    const { error: addError } = await supabase.from('plan_likes').insert({
-      planId,
-      userId,
-    });
+  return { likes, toggleLike };
+};
 
-    if (addError) throw new Error(addError.message);
-  }
-
-  const { count, error: countError } = await supabase
-    .from('plan_likes')
-    .select('*', { count: 'exact', head: true })
-    .eq('plan_id', planId);
-
-  if (countError) throw new Error(countError.message);
-
-  return count;
-}
+export default useLike;

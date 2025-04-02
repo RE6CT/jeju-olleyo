@@ -1,7 +1,6 @@
 'use client';
 
-import { toggleLike } from '@/lib/hooks/use-like';
-import { useState } from 'react';
+import useLike from '@/lib/hooks/use-like';
 
 const LikeButton = ({
   userId,
@@ -12,16 +11,9 @@ const LikeButton = ({
   planId: number;
   initialLikes: number;
 }) => {
-  const [likes, setLikes] = useState(initialLikes);
+  const { likes, toggleLike } = useLike(planId, userId, initialLikes);
 
-  const handleLikeButtonClick = async () => {
-    const updatedLikes = await toggleLike(planId, userId);
-    if (updatedLikes !== null) {
-      setLikes(updatedLikes);
-    }
-  };
-
-  return <button onClick={handleLikeButtonClick}>좋아요</button>;
+  return <button onClick={toggleLike}>좋아요 {likes}</button>;
 };
 
 export default LikeButton;

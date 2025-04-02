@@ -2,10 +2,16 @@
 
 import { createClient } from '../supabase/server';
 
-const count-like.api = () => {
-  return (
-    <div>count-like.api</div>
-  )
-}
+const countLike = async (planId: number) => {
+  const supabase = await createClient();
 
-export default count-like.api
+  const { count, error } = await supabase
+    .from('plan_likes')
+    .select('*', { count: 'exact', head: true })
+    .eq('plan_id', planId);
+
+  if (error) throw new Error(error.message);
+  return count;
+};
+
+export default countLike;

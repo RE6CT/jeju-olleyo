@@ -2,10 +2,15 @@
 
 import { createClient } from '../supabase/server';
 
-const delete-like.api = () => {
-  return (
-    <div>delete-like.api</div>
-  )
-}
+const deleteLike = async (planLikeId: number) => {
+  const supabase = await createClient();
 
-export default delete-like.api
+  const { error } = await supabase
+    .from('plan_likes')
+    .delete()
+    .eq('plan_like_id', planLikeId);
+
+  if (error) throw new Error(error.message);
+};
+
+export default deleteLike;

@@ -2,10 +2,15 @@
 
 import { createClient } from '../supabase/server';
 
-const AddLike = () => {
-  return (
-    <div>add-like.api</div>
-  )
-}
+const addLike = async (planId: number, userId: string) => {
+  const supabase = await createClient();
 
-export default AddLike;
+  const { error } = await supabase.from('plan_likes').insert({
+    planId,
+    userId,
+  });
+
+  if (error) throw new Error(error.message);
+};
+
+export default addLike;

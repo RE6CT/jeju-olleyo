@@ -6,7 +6,9 @@ import { KakaoMapOptions } from '@/types/kakao-map.type';
 // 참고문서: https://marklee1117.tistory.com/82
 const KakaoMap = ({ center, level }: KakaoMapOptions) => {
   const mapRef = useRef<HTMLDivElement>(null);
+  const mapInstance = useRef<any>(null);
 
+  // 지도 초기화
   useEffect(() => {
     const script = document.createElement('script');
     script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_API_KEY}&autoload=false`;
@@ -15,13 +17,16 @@ const KakaoMap = ({ center, level }: KakaoMapOptions) => {
 
     script.onload = () => {
       window.kakao.maps.load(() => {
-        if (mapRef.current) {
+        if (mapRef.current && !mapInstance.current) {
           const options = {
             center: new window.kakao.maps.LatLng(center.lat, center.lng),
             level: level,
           };
 
-          new window.kakao.maps.Map(mapRef.current, options);
+          mapInstance.current = new window.kakao.maps.Map(
+            mapRef.current,
+            options,
+          );
         }
       });
     };
@@ -29,7 +34,16 @@ const KakaoMap = ({ center, level }: KakaoMapOptions) => {
     return () => {
       document.head.removeChild(script);
     };
-  }, []); // 컴포넌트가 마운트될 때만 실행
+  }, []);
+
+  // center, zoon level 변경시 지도 업데이트
+  useEffect(() => {
+    if (mapInstance.current) {
+      const latlng = new window.kakao.maps.LatLng(center.lat, center.lng);
+      mapInstance.current.setCenter(latlng);
+      mapInstance.current.setLevel(level);
+    }
+  }, [center.lat, center.lng, level]);
 
   return <div ref={mapRef} style={{ width: '100%', height: '100%' }} />;
 };

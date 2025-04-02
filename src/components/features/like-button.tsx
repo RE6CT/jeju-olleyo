@@ -1,21 +1,21 @@
 'use client';
 
-import { toggleLike } from '@/lib/apis/like.api';
+import { toggleLike } from '@/lib/hooks/use-like';
 import { useState } from 'react';
 
 const LikeButton = ({
-  user_id,
-  plan_id,
+  userId,
+  planId,
   initialLikes,
 }: {
-  user_id: string;
-  plan_id: number;
+  userId: string;
+  planId: number;
   initialLikes: number;
 }) => {
   const [likes, setLikes] = useState(initialLikes);
 
   const handleLikeButtonClick = async () => {
-    const updatedLikes = await toggleLike(plan_id, user_id);
+    const updatedLikes = await toggleLike(planId, userId);
     if (updatedLikes !== null) {
       setLikes(updatedLikes);
     }

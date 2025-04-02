@@ -3,7 +3,17 @@
 import { useEffect, useRef } from 'react';
 import { KakaoMapInstance, KakaoMapOptions } from '@/types/kakao-map.type';
 
-// 참고문서: https://marklee1117.tistory.com/82
+/**
+ * 카카오맵을 표시하는 컴포넌트
+ *
+ * @component
+ *
+ * @param {KakaoMapOptions} props - 카카오맵 옵션
+ * @param {Object} props.center - 지도의 중심 좌표
+ * @param {number} props.center.lat - 위도
+ * @param {number} props.center.lng - 경도
+ * @param {number} props.level - 지도의 확대/축소 레벨
+ */
 const KakaoMap = ({ center, level }: KakaoMapOptions) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<KakaoMapInstance | null>(null);

@@ -1,12 +1,12 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { KakaoMapOptions } from '@/types/kakao-map.type';
+import { KakaoMapInstance, KakaoMapOptions } from '@/types/kakao-map.type';
 
 // 참고문서: https://marklee1117.tistory.com/82
 const KakaoMap = ({ center, level }: KakaoMapOptions) => {
   const mapRef = useRef<HTMLDivElement>(null);
-  const mapInstance = useRef<any>(null);
+  const mapInstance = useRef<KakaoMapInstance | null>(null);
 
   // 지도 초기화
   useEffect(() => {

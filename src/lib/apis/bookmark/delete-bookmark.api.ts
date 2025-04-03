@@ -1,16 +1,16 @@
 'use server';
 
-import { createClient } from '../supabase/server';
+import { createClient } from '@/lib/supabase/server';
 
-const deleteLike = async (planLikeId: number) => {
+const fetchDeleteBookmark = async (bookmark_id: number) => {
   const supabase = await createClient();
 
   const { error } = await supabase
-    .from('plan_likes')
+    .from('bookmarks')
     .delete()
-    .eq('plan_like_id', planLikeId);
+    .eq('bookmark_id', bookmark_id);
 
   if (error) throw new Error(error.message);
 };
 
-export default deleteLike;
+export default fetchDeleteBookmark;

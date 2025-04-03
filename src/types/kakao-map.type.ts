@@ -41,3 +41,22 @@ export type MarkerProps = MarkerOptions & {
   map?: KakaoMapInstance;
   onClick?: () => void;
 };
+
+export type ClustererOptions = {
+  map: KakaoMapInstance;
+  markers: MarkerOptions[];
+  gridSize?: number;
+  minLevel?: number;
+  minClusterSize?: number;
+  disableClickZoom?: boolean;
+  styles?: {
+    width: string;
+    height: string;
+    background: string;
+    color: string;
+    textAlign: string;
+    lineHeight: string;
+  }[];
+};
+
+export type ClustererInstance = {};

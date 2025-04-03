@@ -1,28 +1,32 @@
 'use client';
 
 import { useState } from 'react';
-import getLike from '@/lib/apis/get-like.api';
-import addLike from '@/lib/apis/add-like.api';
-import deleteLike from '@/lib/apis/delete-like.api';
-import countLike from '@/lib/apis/count-like.api';
+import fetchGetBookmarkByIdQuery from '../apis/bookmark/get-bookmark.api';
+import fetchDeleteBookmark from '../apis/bookmark/delete-bookmark.api';
+import fetchAddBookmarkByIdQuery from '../apis/bookmark/add-bookmark.api';
 
-const useLike = (planId: number, userId: string, initialLikes: number) => {
-  const [likes, setLikes] = useState(initialLikes);
+const useBookmark = (
+  bookmark_id: number,
+  place: number,
+  userId: string,
+  initialBookmarks: boolean,
+) => {
+  const [bookmarks, setBookmarks] = useState(initialBookmarks);
 
-  const toggleLike = async () => {
-    const currentLike = await getLike(planId, userId);
+  const toggleBookmark = async () => {
+    const currentBookmark = await fetchGetBookmarkByIdQuery(place, userId);
 
-    if (currentLike) {
-      await deleteLike(currentLike.plan_like_id);
+    if (currentBookmark) {
+      await fetchDeleteBookmark(currentBookmark.bookmark_id);
     } else {
-      await addLike(planId, userId);
+      await fetchAddBookmarkByIdQuery(place, userId);
     }
 
     const updatedCount = await countLike(planId);
-    setLikes(updatedCount != null ? updatedCount : likes);
+    setBookmarks(updatedCount != null ? updatedCount : likes);
   };
 
-  return { likes, toggleLike };
+  return { toggleBookmark };
 };
 
 export default useLike;

@@ -2,14 +2,11 @@
 
 import { createClient } from '@/lib/supabase/server';
 
-const fetchAddBookmarkByIdQuery = async (
-  bookmark_id: number,
-  user_id: string,
-) => {
+const fetchAddBookmarkByIdQuery = async (place: number, user_id: string) => {
   const supabase = await createClient();
 
   const { error } = await supabase.from('bookmarks').insert({
-    bookmark_id,
+    place,
     user_id,
   });
 

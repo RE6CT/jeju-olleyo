@@ -7,7 +7,7 @@ const fetchGetBookmarkByIdQuery = async (place: number, userId: string) => {
 
   const { data, error } = await supabase
     .from('bookmarks')
-    .select('plan_like_id')
+    .select('bookmark_id')
     .eq('place', place)
     .eq('user_id', userId)
     .single();

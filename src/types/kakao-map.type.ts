@@ -13,14 +13,18 @@ export type KakaoMapInstance = {
   getLevel(): number;
 };
 
+export type KakaoMapProps = KakaoMapOptions & {
+  onMapLoad: (map: KakaoMapInstance) => void;
+};
+
 export type MarkerOptions = {
   position: {
     lat: number;
     lng: number;
   };
   title: string;
-  clickable: boolean;
-  draggable: boolean;
+  clickable?: boolean;
+  draggable?: boolean;
 };
 
 export type MarkerInstance = {

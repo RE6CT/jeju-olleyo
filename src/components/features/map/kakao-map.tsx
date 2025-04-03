@@ -1,20 +1,20 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import { KakaoMapInstance, KakaoMapOptions } from '@/types/kakao-map.type';
+import { useEffect, useRef, useState } from 'react';
+import { KakaoMapInstance, KakaoMapProps } from '@/types/kakao-map.type';
+import React from 'react';
 
 /**
  * 카카오맵 컴포넌트
- * @param center - 지도의 중심 좌표 (위도, 경도)
- * @param center.lat - 지도의 위도
- * @param center.lag - 지도의 경도
- * @param level - 지도의 확대 레벨
+ * @param KakaoMapProps.center - 지도의 중심 좌표 (위도, 경도)
+ * @param KakaoMapProps.level - 지도의 확대 레벨
+ * @param KakaoMapProps.onMapLoad - 지도 로드 완료 후 실행할 함수
  */
-const KakaoMap = ({ center, level }: KakaoMapOptions) => {
+const KakaoMap = ({ center, level, onMapLoad }: KakaoMapProps) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<KakaoMapInstance | null>(null);
+  const [isMapLoaded, setIsMapLoaded] = useState(false); // 지도 로드 상태
 
-  // 지도 초기화
   useEffect(() => {
     const script = document.createElement('script');
     script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_API_KEY}&autoload=false`;
@@ -28,11 +28,12 @@ const KakaoMap = ({ center, level }: KakaoMapOptions) => {
             center: new window.kakao.maps.LatLng(center.lat, center.lng),
             level: level,
           };
-
           mapInstance.current = new window.kakao.maps.Map(
             mapRef.current,
             options,
           );
+          setIsMapLoaded(true);
+          if (mapInstance.current) onMapLoad(mapInstance.current); // map 인스턴스를 외부 컴포넌트로 전달
         }
       });
     };
@@ -40,9 +41,8 @@ const KakaoMap = ({ center, level }: KakaoMapOptions) => {
     return () => {
       document.head.removeChild(script);
     };
-  }, []);
+  }, []); // 의존성 배열 비움
 
-  // center, zoon level 변경시 지도 업데이트
   useEffect(() => {
     if (mapInstance.current) {
       const latlng = new window.kakao.maps.LatLng(center.lat, center.lng);

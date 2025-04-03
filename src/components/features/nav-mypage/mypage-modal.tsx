@@ -22,6 +22,13 @@ const MypageModal = ({
   setIsOpen,
   modalRef,
 }: MypageModalProps) => {
+  // 추후 실제 유저 정보로 수정
+  const user = {
+    profileImg: '',
+    nickname: '리왹트',
+    email: 're6ct@email.com',
+  };
+
   /**
    * 로그아웃 버튼 이벤트 핸들러
    * @param e - 이벤트
@@ -44,15 +51,15 @@ const MypageModal = ({
         onClick={() => onLinkClick('profile')}
         className="flex cursor-pointer"
       >
-        <Image src="" alt="" width={58} height={58} />
+        <Image src={user.profileImg} alt="" width={58} height={58} />
         <div className="flex flex-col">
           <div className="flex">
-            <h3 className="whitespace-nowrap font-semibold">리왹트</h3>
+            <h3 className="whitespace-nowrap font-semibold">{user.nickname}</h3>
             <Button onClick={(e) => handleSignout(e)} variant="outline">
               로그아웃
             </Button>
           </div>
-          re6ct@email.com
+          {user.email}
         </div>
       </section>
       <Separator />

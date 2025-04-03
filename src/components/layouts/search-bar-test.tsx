@@ -2,14 +2,14 @@
 
 import { Command, CommandInput } from '@/components/ui/command';
 import { useRouter } from 'next/navigation';
-
-import { useState } from 'react';
+import { useRef } from 'react';
 
 const SearchBarTest = () => {
-  const [query, setQuery] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
   const handleSearch = () => {
+    const query = inputRef.current?.value.trim();
     if (query) {
       router.push(`searchtest?query=${query}`);
     }
@@ -19,8 +19,7 @@ const SearchBarTest = () => {
     <>
       <Command className="w-[300px] rounded-lg border">
         <CommandInput
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          ref={inputRef}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
               e.preventDefault();

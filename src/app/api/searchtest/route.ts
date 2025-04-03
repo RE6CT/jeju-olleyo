@@ -3,6 +3,8 @@ import {
   KOREA_TOUR_API_KEY,
   KOREA_TOUR_APP_NAME,
   KOREA_TOUR_BASE_URL,
+  PAGE_SIZE,
+  TOTAL_PAGES,
 } from '@/constants/\bkorea-tour-api';
 import { ApiError } from 'next/dist/server/api-utils';
 import { NextResponse, NextRequest } from 'next/server';
@@ -21,28 +23,38 @@ export async function GET(req: NextRequest) {
   if (!baseUrl) {
     throw new ApiError(500, 'API endpoint URL 설정이 잘못되었습니다.');
   }
-  const url = `${baseUrl}?numOfRows=100&MobileOS=ETC&MobileApp=${appName}&areaCode=${areaCode}&_type=json&serviceKey=${apiKey}`;
+
+  // 제주 데이터 모든 페이지 순회
+  const requests = Array.from({ length: TOTAL_PAGES }, (_, idx) => {
+    const page = idx + 1;
+    const url = `${baseUrl}?numOfRows=${PAGE_SIZE}&pageNo=${page}&MobileOS=ETC&MobileApp=${appName}&areaCode=${areaCode}&_type=json&serviceKey=${apiKey}`;
+    return fetch(url)
+      .then(async (res) => {
+        if (!res.ok) {
+          const errorText = await res.text();
+          throw new ApiError(
+            res.status,
+            `page ${page} 요청 실패: ${errorText}`,
+          );
+        }
+        return res.json();
+      })
+      .catch((e) => {
+        throw new ApiError(500, `page ${page} 요청 실패: ${e.message}`);
+      });
+  });
 
   // 지역기반 관광정보조회 (한국관광공사_국문 관광정보 서비스_GW) - 전체검색
   try {
-    const res = await fetch(url);
-    if (!res.ok) {
-      const errorText = await res.text();
-      throw new ApiError(res.status, `공공 API 요청 실패: ${errorText}`);
-    }
+    const res = await Promise.all(requests);
 
-    const data = await res.json();
-    const rawData = data?.response?.body?.items?.item;
-    if (!rawData) {
-      throw new ApiError(404, '장소 데이터가 없습니다.');
-    }
-
-    const placeInfo = Array.isArray(rawData)
-      ? rawData
-      : Object.values(rawData ?? {});
+    const allPlaces = res.flatMap((data) => {
+      const rawData = data?.response?.body?.items?.item;
+      return Array.isArray(rawData) ? rawData : Object.values(rawData ?? {});
+    });
 
     // 쿼리 기준 필터링
-    const filteredPlace = placeInfo.filter((p: any) => {
+    const filteredPlace = allPlaces.filter((p: any) => {
       return p.title?.includes(keyword);
     });
 

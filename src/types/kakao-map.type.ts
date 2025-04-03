@@ -53,6 +53,7 @@ export type ClustererOptions = {
     width: string;
     height: string;
     background: string;
+    borderRadius: string;
     color: string;
     textAlign: string;
     lineHeight: string;

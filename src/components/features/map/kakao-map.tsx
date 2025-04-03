@@ -39,12 +39,13 @@ const KakaoMap = ({ center, level, onMapLoad }: KakaoMapProps) => {
     };
 
     return () => {
+      script.onload = null;
       document.head.removeChild(script);
     };
   }, []); // 의존성 배열 비움
 
   useEffect(() => {
-    if (mapInstance.current) {
+    if (mapInstance.current && isMapLoaded) {
       const latlng = new window.kakao.maps.LatLng(center.lat, center.lng);
       mapInstance.current.setCenter(latlng);
       mapInstance.current.setLevel(level);

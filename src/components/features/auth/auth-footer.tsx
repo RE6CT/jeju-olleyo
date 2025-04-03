@@ -14,9 +14,11 @@ import { AuthFooterProps } from '@/types/auth.type';
 
 const AuthFooter = ({ question, linkText, linkHref }: AuthFooterProps) => {
   return (
+    // 푸터 카드
     <CardFooter className="flex justify-center">
       <div className="text-sm text-gray-600">
-        {question}{' '}
+        {question}
+        {/* 링크 */}
         <Link href={linkHref} className="text-blue-600 hover:text-blue-800">
           {linkText}
         </Link>

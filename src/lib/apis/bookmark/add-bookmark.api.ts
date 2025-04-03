@@ -2,15 +2,15 @@
 
 import { createClient } from '../supabase/server';
 
-const addLike = async (plan_id: number, user_id: string) => {
+const fetchAddBookmarkByIdQuery = async (place: number, user_id: string) => {
   const supabase = await createClient();
 
-  const { error } = await supabase.from('plan_likes').insert({
-    plan_id,
+  const { error } = await supabase.from('bookmarks').insert({
+    place,
     user_id,
   });
 
   if (error) throw new Error(error.message);
 };
 
-export default addLike;
+export default fetchAddBookmarkByIdQuery;

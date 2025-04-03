@@ -19,6 +19,7 @@ import { loginSchema, registerSchema } from '@/lib/schemas/auth-schema';
  *
  * @param type 로그인 또는 회원가입 타입
  * @param onSubmit 폼 제출 핸들러
+ * @param isLoading 로딩 상태 여부
  */
 
 const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
@@ -75,16 +76,26 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
     [isLogin, onSubmit],
   );
 
-  console.log(errorsSignup);
+  /**
+   * 에러 메시지를 표시하는 컴포넌트
+   *
+   * @param message 표시할 에러 메시지
+   * @returns 에러 메시지 컴포넌트
+   */
+  const ErrorMessage = ({ message }: { message: string | undefined }) => (
+    <div className="h-5">
+      {message && <p className="text-sm text-red-500">{message}</p>}
+    </div>
+  );
 
   return (
     <CardContent>
       {isLogin ? (
         <form
+          className="space-y-2"
           onSubmit={handleSubmitLogin(
             handleFormSubmit as (data: LoginFormValues) => void,
           )}
-          className="space-y-4"
         >
           {/* 이메일 입력 필드 */}
           <div className="space-y-2">
@@ -95,11 +106,7 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
               placeholder="name@example.com"
               {...registerLogin('email')}
             />
-            {errorsLogin.email && (
-              <p className="text-sm text-red-500">
-                {errorsLogin.email.message}
-              </p>
-            )}
+            <ErrorMessage message={errorsLogin.email?.message} />
           </div>
 
           <div className="space-y-2">
@@ -112,11 +119,7 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
               placeholder="비밀번호를 입력하세요"
               register={registerLogin('password')}
             />
-            {errorsLogin.password && (
-              <p className="text-sm text-red-500">
-                {errorsLogin.password.message}
-              </p>
-            )}
+            <ErrorMessage message={errorsLogin.password?.message} />
           </div>
 
           <div className="flex items-center justify-between">
@@ -152,7 +155,7 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
           </div>
 
           {/* 폼 제출 버튼 영역 */}
-          <Button type="submit" className="w-full" disabled={isLoading}>
+          <Button type="submit" className="mt-4 w-full" disabled={isLoading}>
             {isLoading ? '처리 중...' : buttonText}
           </Button>
         </form>
@@ -161,10 +164,9 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
           onSubmit={handleSubmitSignup(
             handleFormSubmit as (data: RegisterFormValues) => void,
           )}
-          className="space-y-4"
         >
           {/* 이메일 입력 필드 */}
-          <div className="space-y-2">
+          <div className="space-y-1">
             <Label htmlFor="email">이메일</Label>
             <Input
               id="email"
@@ -172,14 +174,10 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
               placeholder="name@example.com"
               {...registerSignup('email')}
             />
-            {errorsSignup.email && (
-              <p className="text-sm text-red-500">
-                {errorsSignup.email.message}
-              </p>
-            )}
+            <ErrorMessage message={errorsSignup.email?.message} />
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-1">
             {/* 비밀번호 입력 필드 */}
             <Label htmlFor="password">비밀번호</Label>
             <PasswordInput
@@ -187,14 +185,10 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
               placeholder="비밀번호를 입력하세요"
               register={registerSignup('password')}
             />
-            {errorsSignup.password && (
-              <p className="text-sm text-red-500">
-                {errorsSignup.password.message}
-              </p>
-            )}
+            <ErrorMessage message={errorsSignup.password?.message} />
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-1">
             {/* 비밀번호 확인 입력 필드 */}
             <Label htmlFor="confirmPassword">비밀번호 확인</Label>
             <PasswordInput
@@ -202,14 +196,10 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
               placeholder="비밀번호를 다시 입력하세요"
               register={registerSignup('confirmPassword')}
             />
-            {errorsSignup.confirmPassword && (
-              <p className="text-sm text-red-500">
-                {errorsSignup.confirmPassword.message}
-              </p>
-            )}
+            <ErrorMessage message={errorsSignup.confirmPassword?.message} />
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-1">
             {/* 닉네임 입력 필드 */}
             <Label htmlFor="nickname">닉네임</Label>
             <Input
@@ -218,14 +208,10 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
               placeholder="사용할 닉네임을 입력하세요"
               {...registerSignup('nickname')}
             />
-            {errorsSignup.nickname && (
-              <p className="text-sm text-red-500">
-                {errorsSignup.nickname.message}
-              </p>
-            )}
+            <ErrorMessage message={errorsSignup.nickname?.message} />
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-1">
             {/* 전화번호 입력 필드 */}
             <Label htmlFor="phone">전화번호</Label>
             <Input
@@ -234,15 +220,11 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
               placeholder="01012345678"
               {...registerSignup('phone')}
             />
-            {errorsSignup.phone && (
-              <p className="text-sm text-red-500">
-                {errorsSignup.phone.message}
-              </p>
-            )}
+            <ErrorMessage message={errorsSignup.phone?.message} />
           </div>
 
           {/* 폼 제출 버튼 영역 */}
-          <Button type="submit" className="w-full" disabled={isLoading}>
+          <Button type="submit" className="mt-2 w-full" disabled={isLoading}>
             {isLoading ? '처리 중...' : buttonText}
           </Button>
         </form>

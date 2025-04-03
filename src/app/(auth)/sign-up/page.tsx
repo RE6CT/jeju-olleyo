@@ -4,11 +4,13 @@ import AuthLayout from '@/components/features/auth/auth-layout';
 import AuthHeader from '@/components/features/auth/auth-header';
 import AuthForm from '@/components/features/auth/auth-form';
 import AuthFooter from '@/components/features/auth/auth-footer';
+import { RegisterFormValues } from '@/types/auth.type';
 
 const SignUpPage = () => {
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  // 회원가입 폼 제출 핸들러
+  const handleSubmit = async (data: RegisterFormValues) => {
     try {
+      console.log('회원가입 데이터:', data);
       // 여기에 회원가입 로직 구현
     } catch (error) {
       console.error('회원가입 오류:', error);
@@ -24,7 +26,7 @@ const SignUpPage = () => {
         description="아래 정보를 입력하여 계정을 생성하세요"
       />
       {/* 회원가입 폼 */}
-      <AuthForm type="signup" onSubmit={handleSubmit} />
+      <AuthForm type="register" onSubmit={handleSubmit} />
       {/* 소셜 로그인 옵션 */}
       <AuthFooter
         question="이미 계정이 있으신가요?"

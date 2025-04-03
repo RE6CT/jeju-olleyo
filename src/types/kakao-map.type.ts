@@ -12,3 +12,32 @@ export type KakaoMapInstance = {
   getCenter(): { getLat(): number; getLng(): number };
   getLevel(): number;
 };
+
+export type KakaoMapProps = KakaoMapOptions & {
+  onMapLoad: (map: KakaoMapInstance) => void;
+};
+
+export type MarkerOptions = {
+  position: {
+    lat: number;
+    lng: number;
+  };
+  title: string;
+  clickable?: boolean;
+  draggable?: boolean;
+  onClick?: () => void;
+};
+
+export type MarkerInstance = {
+  setMap(map: KakaoMapInstance | null): void;
+  setPosition(position: { getLat(): number; getLng(): number }): void;
+  setTitle(title: string): void;
+  setClickable(clickable: boolean): void;
+  setDraggable(draggable: boolean): void;
+  addListener(event: string, callback: () => void): void;
+};
+
+export type MarkerProps = MarkerOptions & {
+  map?: KakaoMapInstance;
+  onClick?: () => void;
+};

@@ -46,18 +46,6 @@ const MapPage = () => {
             onClick={() => console.log(`${marker.title} 클릭!`)}
           />
         ))}
-      <Button
-        onClick={addMarker}
-        style={{
-          position: 'absolute',
-          top: '10px',
-          left: '10px',
-          zIndex: 10,
-          padding: '5px 10px',
-        }}
-      >
-        마커 추가
-      </Button>
     </div>
   );
 };

@@ -20,7 +20,7 @@ const Polyline = ({ map, path, ...options }: PolylineProps) => {
       ),
       // default 스타일
       strokeWeight: 3,
-      strokeColor: '#FF6B6B',
+      strokeColor: '#4CAF50',
       strokeOpacity: 0.8,
       strokeStyle: 'solid',
       ...options,

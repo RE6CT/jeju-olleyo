@@ -16,8 +16,9 @@ const Marker = ({
   clickable = true,
   draggable = false,
 }: MarkerOptions) => {
-  const markerRef = useRef<MarkerInstance | null>(null);
+  const markerInstance = useRef<MarkerInstance | null>(null);
 
+  // 마커 초기화
   useEffect(() => {
     if (window.kakao && window.kakao.maps) {
       const marker = new window.kakao.maps.Marker({
@@ -27,17 +28,28 @@ const Marker = ({
         draggable,
       });
 
-      markerRef.current = marker;
+      markerInstance.current = marker;
 
       return () => {
-        if (markerRef.current) {
-          markerRef.current.setMap(null);
+        if (markerInstance.current) {
+          markerInstance.current.setMap(null);
         }
       };
     }
+  }, []);
+
+  // 마커 속성 업데이트
+  useEffect(() => {
+    if (markerInstance.current) {
+      const latlng = new window.kakao.maps.LatLng(position.lat, position.lng);
+      markerInstance.current.setPosition(latlng);
+      markerInstance.current.setTitle(title);
+      markerInstance.current.setClickable(clickable);
+      markerInstance.current.setDraggable(draggable);
+    }
   }, [position.lat, position.lng, title, clickable, draggable]);
 
-  return null;
+  return null; // 마커는 실제 DOM 요소를 렌더링하지 않음
 };
 
 export default Marker;

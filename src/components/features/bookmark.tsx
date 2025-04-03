@@ -1,6 +1,7 @@
 'use client';
 
 import useBookmark from '@/lib/hooks/use-bookmark';
+import { Bookmark as BookmarkIcon } from 'lucide-react';
 
 const Bookmark = ({
   userId,
@@ -23,7 +24,11 @@ const Bookmark = ({
     place_lng,
   );
 
-  return <button onClick={toggleBookmark}>북마크</button>;
+  return (
+    <button onClick={toggleBookmark}>
+      <BookmarkIcon className="h-5 w-5 cursor-pointer" />
+    </button>
+  );
 };
 
 export default Bookmark;

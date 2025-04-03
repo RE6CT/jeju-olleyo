@@ -9,9 +9,9 @@ const SearchBarTest = () => {
   const router = useRouter();
 
   const handleSearch = () => {
-    const query = inputRef.current?.value.trim();
+    const query = inputRef.current?.value;
     if (query) {
-      router.push(`searchtest?query=${query}`);
+      router.push(`/searchtest?query=${query}`);
     }
   };
 

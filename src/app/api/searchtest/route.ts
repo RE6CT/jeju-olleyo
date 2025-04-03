@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from 'next/server';
 
 export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
+  const { searchParams } = new URL(req.url, 'http://localhost:3000');
   const keyword = searchParams.get('query');
 
   const areaCode = '39';
@@ -13,7 +13,8 @@ export async function GET(req: NextRequest) {
   try {
     const res = await fetch(url);
     const data = await res.json();
-    const placeInfo = data.response?.body?.items?.item;
+    console.log(data);
+    const placeInfo = Array.isArray(data) ? data : Object.values(data ?? {});
 
     const filteredPlace = placeInfo.filter((p: any) => {
       return p.title?.includes(keyword);

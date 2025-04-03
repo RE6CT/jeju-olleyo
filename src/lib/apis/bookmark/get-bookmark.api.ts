@@ -1,14 +1,14 @@
 'use server';
 
-import { createClient } from '../supabase/server';
+import { createClient } from '@/lib/supabase/server';
 
-const getLike = async (planId: number, userId: string) => {
+const fetchGetBookmarkByIdQuery = async (place: number, userId: string) => {
   const supabase = await createClient();
 
   const { data, error } = await supabase
-    .from('plan_likes')
+    .from('bookmarks')
     .select('plan_like_id')
-    .eq('plan_id', planId)
+    .eq('place', place)
     .eq('user_id', userId)
     .single();
 
@@ -17,4 +17,4 @@ const getLike = async (planId: number, userId: string) => {
   return data;
 };
 
-export default getLike;
+export default fetchGetBookmarkByIdQuery;

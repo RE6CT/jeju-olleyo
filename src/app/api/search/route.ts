@@ -1,43 +1,26 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 
-export async function GET() {
-  // 이달의 챔피언 키값 불러오기
-  const rotationsRes = await fetch(
-    'https://br1.api.riotgames.com/lol/platform/v3/champion-rotations',
-    {
-      headers: {
-        'X-Riot-Token': process.env.NEXT_PUBLIC_RIOT_API_KEY!,
-      },
-    },
-  );
-  const rotationData = await rotationsRes.json();
-  const championIds: Array<number> = rotationData.freeChampionIds;
+export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const keyword = searchParams.get('query');
 
-  // 챔피언 데이터 불러오기
-  const ddragonRes = await fetch(
-    'https://ddragon.leagueoflegends.com/cdn/15.5.1/data/ko_KR/champion.json',
-  );
-  const ddragonData = await ddragonRes.json();
-  const allChampions = Object.values(ddragonData.data) as Champion[];
+  const areaCode = '39';
+  const apiKey = process.env.NEXT_PUBLIC_KOREA_TOUR_API_KEY;
+  const baseUrl = 'https://apis.data.go.kr/B551011/KorService1/areaBasedList1';
+  const url = `${baseUrl}?MobileOS=ETC&MobileApp=%EC%A0%9C%EC%A3%BC%EC%98%AC%EB%A0%88%EC%9A%94&areaCode=${areaCode}&serviceKey=${apiKey}`;
 
-  // 불러온 챔피언 데이터에서 일치하는 키값 골라내기
-  const championInfo = championIds
-    .map((champId) => {
-      const selectedChampion = allChampions.find(
-        (champ) => champ.key === String(champId),
-      );
-      if (selectedChampion) {
-        return {
-          key: selectedChampion.key,
-          id: selectedChampion.id,
-          name: selectedChampion.name,
-          title: selectedChampion.title,
-          image: selectedChampion.image.full,
-        };
-      }
-      return null;
-    })
-    .filter((champ) => champ !== null);
+  // 지역기반 관광정보조회 (한국관광공사_국문 관광정보 서비스_GW) - 전체검색
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    const placeInfo = data.response?.body?.items?.item;
 
-  return NextResponse.json(championInfo);
+    const filteredPlace = placeInfo.filter((p: any) => {
+      return p.title?.includes(keyword);
+    });
+
+    return NextResponse.json(filteredPlace);
+  } catch (error) {
+    return NextResponse.json({ error: '검색 중 오류 발생' }, { status: 500 });
+  }
 }

@@ -30,6 +30,7 @@ export async function GET(req: NextRequest) {
       ? rawData
       : Object.values(rawData ?? {});
 
+    // 쿼리 기준 필터링
     const filteredPlace = placeInfo.filter((p: any) => {
       return p.title?.includes(keyword);
     });

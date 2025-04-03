@@ -1,15 +1,19 @@
+import {
+  AREA_CODE_JEJU,
+  KOREA_TOUR_API_KEY,
+  KOREA_TOUR_APP_NAME,
+  KOREA_TOUR_BASE_URL,
+} from '@/constants/\bkorea-tour-api';
 import { NextResponse, NextRequest } from 'next/server';
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url, 'http://localhost:3000');
   const keyword = searchParams.get('query');
 
-  const areaCode = '39';
-  const appName = encodeURIComponent('제주올레요');
-  const apiKey = encodeURIComponent(
-    process.env.NEXT_PUBLIC_KOREA_TOUR_API_KEY!,
-  );
-  const baseUrl = 'https://apis.data.go.kr/B551011/KorService1/areaBasedList1';
+  const areaCode = AREA_CODE_JEJU;
+  const appName = encodeURIComponent(KOREA_TOUR_APP_NAME);
+  const apiKey = encodeURIComponent(KOREA_TOUR_API_KEY);
+  const baseUrl = KOREA_TOUR_BASE_URL;
   const url = `${baseUrl}?numOfRows=100&MobileOS=ETC&MobileApp=${appName}&areaCode=${areaCode}&_type=json&serviceKey=${apiKey}`;
 
   // 지역기반 관광정보조회 (한국관광공사_국문 관광정보 서비스_GW) - 전체검색

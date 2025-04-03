@@ -44,7 +44,7 @@ export type MarkerProps = MarkerOptions & {
 
 export type ClustererOptions = {
   map: KakaoMapInstance;
-  markers: MarkerOptions[];
+  markers: MarkerProps[];
   gridSize?: number;
   minLevel?: number;
   minClusterSize?: number;

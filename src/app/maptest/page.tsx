@@ -3,7 +3,11 @@
 import { useState, useCallback } from 'react';
 import KakaoMap from '@/components/features/map/kakao-map';
 import Clusterer from '@/components/features/map/clusterer';
-import { KakaoMapInstance, MarkerOptions } from '@/types/kakao-map.type';
+import {
+  KakaoMapInstance,
+  MarkerOptions,
+  MarkerProps,
+} from '@/types/kakao-map.type';
 
 // 임시 장소 데이터
 const PLACES: MarkerOptions[] = [
@@ -27,10 +31,19 @@ const PLACES: MarkerOptions[] = [
 
 const MapPage = () => {
   const [map, setMap] = useState<KakaoMapInstance | null>(null);
-  const [markers, setMarkers] = useState<MarkerOptions[]>(PLACES);
+  const [markers, setMarkers] = useState<MarkerProps[]>(
+    PLACES.map((place) => ({
+      ...place,
+      onClick: () => handleMarkerClick(place.title),
+    })),
+  );
 
   const handleMapLoad = useCallback((mapInstance: KakaoMapInstance) => {
     setMap(mapInstance);
+  }, []);
+
+  const handleMarkerClick = useCallback((title: string) => {
+    console.log(`${title} 클릭!`);
   }, []);
 
   /**
@@ -42,6 +55,7 @@ const MapPage = () => {
       {
         position: { lat: 33.45 + prev.length * 0.01, lng: 126.57 },
         title: `테스트 마커 ${prev.length + 1}`,
+        onClick: () => handleMarkerClick(`테스트 마커 ${prev.length + 1}`),
       },
     ]);
   };

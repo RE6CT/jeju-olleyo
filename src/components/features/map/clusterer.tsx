@@ -52,25 +52,36 @@ const Clusterer = ({ map, markers, ...options }: ClustererOptions) => {
   useEffect(() => {
     if (!map) return;
 
+    const kakaoMarkers = markers.map((marker) => {
+      const kakaoMarker = new window.kakao.maps.Marker({
+        position: new window.kakao.maps.LatLng(
+          marker.position.lat,
+          marker.position.lng,
+        ),
+        title: marker.title,
+        clickable: marker.clickable,
+        draggable: marker.draggable,
+      });
+
+      if (marker.onClick) {
+        window.kakao.maps.event.addListener(
+          kakaoMarker,
+          'click',
+          marker.onClick,
+        );
+      }
+
+      return kakaoMarker;
+    });
+
     // 새로운 클러스터러 생성
     const clusterer = new window.kakao.maps.MarkerClusterer({
       map,
-      markers: markers.map(
-        (marker) =>
-          new window.kakao.maps.Marker({
-            position: new window.kakao.maps.LatLng(
-              marker.position.lat,
-              marker.position.lng,
-            ),
-            title: marker.title,
-            clickable: marker.clickable,
-            draggable: marker.draggable,
-          }),
-      ),
+      markers: kakaoMarkers,
       gridSize: 60,
       minLevel: 6,
       minClusterSize: 2,
-      disableClickZoom: false,
+      disableClickZoom: true,
       styles,
       ...options,
     });

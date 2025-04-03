@@ -4,12 +4,12 @@ import { useEffect, useRef } from 'react';
 import { KakaoMapInstance, KakaoMapOptions } from '@/types/kakao-map.type';
 
 /**
-카카오맵 컴포넌트
-@param center - 지도의 중심 좌표 (위도, 경도)
-@param center.lat - 지도의 위도
-@param center.lag - 지도의 경도
-@param level - 지도의 확대 레벨
-*/
+ * 카카오맵 컴포넌트
+ * @param center - 지도의 중심 좌표 (위도, 경도)
+ * @param center.lat - 지도의 위도
+ * @param center.lag - 지도의 경도
+ * @param level - 지도의 확대 레벨
+ */
 const KakaoMap = ({ center, level }: KakaoMapOptions) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<KakaoMapInstance | null>(null);

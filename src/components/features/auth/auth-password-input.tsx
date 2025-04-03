@@ -21,10 +21,12 @@ const PasswordInput = ({
   required = false,
   register,
 }: PasswordInputProps) => {
+  // 비밀번호 표시 상태를 관리하는 상태 변수
   const [showPassword, setShowPassword] = useState(false);
 
   return (
     <div className="relative">
+      {/* 비밀번호 입력 필드 */}
       <Input
         id={id}
         type={showPassword ? 'text' : 'password'}

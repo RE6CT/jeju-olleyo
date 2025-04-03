@@ -44,6 +44,7 @@ const AuthForm = ({ type, onSubmit }: AuthFormProps) => {
         },
   });
 
+  // 폼 제출 핸들러
   const processSubmit: SubmitHandler<LoginFormValues | RegisterFormValues> = (
     data,
   ) => {
@@ -57,8 +58,10 @@ const AuthForm = ({ type, onSubmit }: AuthFormProps) => {
   };
 
   return (
+    // 인증 관련 페이지의 폼 카드
     <CardContent>
       <form onSubmit={handleSubmit(processSubmit)} className="space-y-4">
+        {/* 이메일 입력 필드 */}
         <div className="space-y-2">
           <Label htmlFor="email">이메일</Label>
           <Input
@@ -72,6 +75,7 @@ const AuthForm = ({ type, onSubmit }: AuthFormProps) => {
         {isLogin ? (
           <>
             <div className="space-y-2">
+              {/* 비밀번호 입력 필드 */}
               <div className="flex items-center justify-between">
                 <Label htmlFor="password">비밀번호</Label>
               </div>
@@ -84,6 +88,7 @@ const AuthForm = ({ type, onSubmit }: AuthFormProps) => {
 
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
+                {/* 아이디 저장 체크박스 */}
                 <Controller
                   name="remember"
                   control={control}
@@ -103,6 +108,7 @@ const AuthForm = ({ type, onSubmit }: AuthFormProps) => {
                 </Label>
               </div>
               <div>
+                {/* 비밀번호 찾기 링크 */}
                 <Link
                   href="/forgot-password"
                   className="text-xs text-blue-600 hover:text-blue-800"
@@ -115,6 +121,7 @@ const AuthForm = ({ type, onSubmit }: AuthFormProps) => {
         ) : (
           <>
             <div className="space-y-2">
+              {/* 비밀번호 입력 필드 */}
               <Label htmlFor="password">비밀번호</Label>
               <PasswordInput
                 id="password"
@@ -124,6 +131,7 @@ const AuthForm = ({ type, onSubmit }: AuthFormProps) => {
             </div>
 
             <div className="space-y-2">
+              {/* 비밀번호 확인 입력 필드 */}
               <Label htmlFor="confirmPassword">비밀번호 확인</Label>
               <PasswordInput
                 id="confirmPassword"
@@ -138,6 +146,7 @@ const AuthForm = ({ type, onSubmit }: AuthFormProps) => {
             </div>
 
             <div className="space-y-2">
+              {/* 닉네임 입력 필드 */}
               <Label htmlFor="nickname">닉네임</Label>
               <Input
                 id="nickname"
@@ -148,6 +157,7 @@ const AuthForm = ({ type, onSubmit }: AuthFormProps) => {
             </div>
 
             <div className="space-y-2">
+              {/* 전화번호 입력 필드 */}
               <Label htmlFor="phone">전화번호</Label>
               <Input
                 id="phone"
@@ -158,7 +168,7 @@ const AuthForm = ({ type, onSubmit }: AuthFormProps) => {
             </div>
           </>
         )}
-
+        {/* 폼 제출 버튼 영역 */}
         <Button type="submit" className="w-full">
           {buttonText}
         </Button>

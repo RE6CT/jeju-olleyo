@@ -7,6 +7,7 @@ import AuthFooter from '@/components/features/auth/auth-footer';
 import { RegisterFormValues } from '@/types/auth.type';
 
 const SignUpPage = () => {
+  // 회원가입 폼 제출 핸들러
   const handleSubmit = async (data: RegisterFormValues) => {
     try {
       console.log('회원가입 데이터:', data);

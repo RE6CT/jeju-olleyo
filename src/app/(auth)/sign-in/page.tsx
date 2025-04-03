@@ -8,6 +8,7 @@ import AuthFooter from '@/components/features/auth/auth-footer';
 import { LoginFormValues } from '@/types/auth.type';
 
 const LoginPage = () => {
+  // 로그인 폼 제출 핸들러
   const handleSubmit = async (data: LoginFormValues) => {
     try {
       console.log('로그인 데이터:', data);

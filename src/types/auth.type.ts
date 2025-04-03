@@ -17,7 +17,6 @@ export type SocialProviderProps = {
 export type AuthFormProps = {
   type: 'login' | 'signup';
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-  isLoading: boolean;
 };
 
 export type PasswordInputProps = {

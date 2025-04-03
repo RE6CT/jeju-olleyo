@@ -61,3 +61,24 @@ export type ClustererOptions = {
 };
 
 export type ClustererInstance = {};
+
+export type PolylineOptions = {
+  path: {
+    lat: number;
+    lng: number;
+  }[];
+  strokeWeight?: number;
+  strokeColor?: string;
+  strokeOpacity?: number;
+  strokeStyle?: 'solid' | 'dot' | 'dash' | 'dashdot';
+};
+
+export type PolylineInstance = {
+  setMap(map: KakaoMapInstance | null): void;
+  setOptions(options: PolylineOptions): void;
+  setPath(path: { getLat(): number; getLng(): number }[]): void;
+};
+
+export type PolylineProps = PolylineOptions & {
+  map?: KakaoMapInstance;
+};

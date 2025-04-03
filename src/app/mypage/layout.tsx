@@ -1,6 +1,6 @@
 import Sidebar from './_components/sidebar';
 
-const MyPage = () => {
+const Layout = () => {
   return (
     <>
       <Sidebar />
@@ -8,4 +8,4 @@ const MyPage = () => {
   );
 };
 
-export default MyPage;
+export default Layout;

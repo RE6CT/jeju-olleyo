@@ -3,14 +3,41 @@
 import Image from 'next/image';
 import { Button } from '../../ui/button';
 import { Separator } from '../../ui/separator';
+import { Dispatch, MouseEvent, RefObject, SetStateAction } from 'react';
 
 type MypageModalProps = {
   onLinkClick: (path: string) => void;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
+  modalRef: RefObject<HTMLDivElement>;
 };
 
-const MypageModal = ({ onLinkClick }: MypageModalProps) => {
+/**
+ * nav의 마이페이지 버튼 클릭 시 나타나는 모달
+ * @param onLinkClick - 링크 클릭시 실행되는 이벤트 핸들러
+ */
+const MypageModal = ({
+  onLinkClick,
+  setIsOpen,
+  modalRef,
+}: MypageModalProps) => {
+  /**
+   * 로그아웃 버튼 이벤트 핸들러
+   * @param e - 이벤트
+   */
+  const handleSignout = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    const isConfirmed = confirm('로그아웃하시겠습니까?');
+    if (!isConfirmed) return;
+
+    // 여기에 로그아웃 로직
+    setIsOpen(false);
+  };
+
   return (
-    <div className="absolute right-10 top-full flex flex-col gap-3 border p-3 text-black">
+    <div
+      ref={modalRef}
+      className="absolute right-10 top-full flex flex-col gap-3 border p-3 text-black"
+    >
       <section
         onClick={() => onLinkClick('profile')}
         className="flex cursor-pointer"
@@ -19,7 +46,9 @@ const MypageModal = ({ onLinkClick }: MypageModalProps) => {
         <div className="flex flex-col">
           <div className="flex">
             <h3 className="whitespace-nowrap font-semibold">리왹트</h3>
-            <Button variant="outline">로그아웃</Button>
+            <Button onClick={(e) => handleSignout(e)} variant="outline">
+              로그아웃
+            </Button>
           </div>
           re6ct@email.com
         </div>

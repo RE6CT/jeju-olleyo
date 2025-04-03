@@ -10,7 +10,7 @@ import { LoginFormValues } from '@/types/auth.type';
 const LoginPage = () => {
   const handleSubmit = async (data: LoginFormValues) => {
     try {
-      console.log('회원가입 데이터:', data);
+      console.log('로그인 데이터:', data);
       // 여기에 회원가입 로직 구현
     } catch (error) {
       console.error('로그인 오류:', error);

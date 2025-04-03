@@ -25,6 +25,7 @@ export type MarkerOptions = {
   title: string;
   clickable?: boolean;
   draggable?: boolean;
+  onClick?: () => void;
 };
 
 export type MarkerInstance = {
@@ -33,4 +34,10 @@ export type MarkerInstance = {
   setTitle(title: string): void;
   setClickable(clickable: boolean): void;
   setDraggable(draggable: boolean): void;
+  addListener(event: string, callback: () => void): void;
+};
+
+export type MarkerProps = MarkerOptions & {
+  map?: KakaoMapInstance;
+  onClick?: () => void;
 };

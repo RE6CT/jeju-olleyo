@@ -43,6 +43,7 @@ const MapPage = () => {
             title={marker.title}
             clickable={marker.clickable}
             draggable={marker.draggable}
+            onClick={() => console.log(`${marker.title} 클릭!`)}
           />
         ))}
       <Button

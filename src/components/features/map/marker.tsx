@@ -1,11 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import {
-  KakaoMapInstance,
-  MarkerInstance,
-  MarkerOptions,
-} from '@/types/kakao-map.type';
+import { MarkerInstance, MarkerProps } from '@/types/kakao-map.type';
 
 /**
  * 카카오맵 마커 컴포넌트
@@ -20,7 +16,8 @@ const Marker = ({
   title,
   clickable = true,
   draggable = false,
-}: MarkerOptions & { map?: KakaoMapInstance }) => {
+  onClick,
+}: MarkerProps) => {
   const markerInstance = useRef<MarkerInstance | null>(null);
 
   // 마커 초기화
@@ -35,9 +32,20 @@ const Marker = ({
 
     markerInstance.current = marker;
 
+    if (onClick) {
+      window.kakao.maps.event.addListener(marker, 'click', onClick);
+    }
+
     return () => {
       if (markerInstance.current) {
         markerInstance.current.setMap(null);
+        if (onClick) {
+          window.kakao.maps.event.removeListener(
+            markerInstance.current,
+            'click',
+            onClick,
+          );
+        }
       }
     };
   }, [map]);

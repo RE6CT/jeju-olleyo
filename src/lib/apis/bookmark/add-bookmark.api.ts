@@ -1,6 +1,6 @@
 'use server';
 
-import { createClient } from '../supabase/server';
+import { createClient } from '@/lib/supabase/server';
 
 const fetchAddBookmarkByIdQuery = async (place: number, user_id: string) => {
   const supabase = await createClient();

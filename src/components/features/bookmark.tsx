@@ -1,19 +1,29 @@
 'use client';
 
-import useLike from '@/lib/hooks/use-like';
+import useBookmark from '@/lib/hooks/use-bookmark';
 
-const LikeButton = ({
+const Bookmark = ({
   userId,
-  planId,
-  initialLikes,
+  place,
+  initialBookmarks,
+  place_lat,
+  place_lng,
 }: {
   userId: string;
-  planId: number;
-  initialLikes: number;
+  place: number;
+  initialBookmarks: boolean;
+  place_lat: number;
+  place_lng: number;
 }) => {
-  const { likes, toggleLike } = useLike(planId, userId, initialLikes);
+  const { bookmarks, toggleBookmark } = useBookmark(
+    place,
+    userId,
+    initialBookmarks,
+    place_lat,
+    place_lng,
+  );
 
-  return <button onClick={toggleLike}>좋아요 {likes}</button>;
+  return <button onClick={toggleBookmark}>북마크</button>;
 };
 
-export default LikeButton;
+export default Bookmark;

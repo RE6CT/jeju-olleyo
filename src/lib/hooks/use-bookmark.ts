@@ -6,10 +6,11 @@ import fetchDeleteBookmark from '../apis/bookmark/delete-bookmark.api';
 import fetchAddBookmarkByIdQuery from '../apis/bookmark/add-bookmark.api';
 
 const useBookmark = (
-  bookmark_id: number,
   place: number,
   userId: string,
   initialBookmarks: boolean,
+  place_lat: number,
+  place_lng: number,
 ) => {
   const [bookmarks, setBookmarks] = useState(initialBookmarks);
 
@@ -18,15 +19,14 @@ const useBookmark = (
 
     if (currentBookmark) {
       await fetchDeleteBookmark(currentBookmark.bookmark_id);
+      setBookmarks(false);
     } else {
-      await fetchAddBookmarkByIdQuery(place, userId);
+      await fetchAddBookmarkByIdQuery(place, userId, place_lat, place_lng);
+      setBookmarks(true);
     }
-
-    const updatedCount = await countLike(planId);
-    setBookmarks(updatedCount != null ? updatedCount : likes);
   };
 
-  return { toggleBookmark };
+  return { bookmarks, toggleBookmark };
 };
 
-export default useLike;
+export default useBookmark;

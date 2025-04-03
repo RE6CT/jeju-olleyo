@@ -38,11 +38,6 @@ const Clusterer = ({ map, markers, ...options }: ClustererOptions) => {
   useEffect(() => {
     if (!map) return;
 
-    // 기존 클러스터러 제거
-    if (clustererInstance.current) {
-      clustererInstance.current = {};
-    }
-
     // 새로운 클러스터러 생성
     const clusterer = new window.kakao.maps.MarkerClusterer({
       map,

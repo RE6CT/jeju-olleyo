@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import Providers from '@/config/tq-provider';
-import Header from '@/components/layouts/header-temp';
+import Header from '@/components/layouts/header';
 
 export const metadata: Metadata = {
   title: '제주 올레요',

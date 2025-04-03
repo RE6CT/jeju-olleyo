@@ -8,6 +8,8 @@ import { CardContent } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { AuthFormProps } from '@/types/auth.type';
 import PasswordInput from './auth-password-input';
+import { useForm, SubmitHandler, Controller } from 'react-hook-form';
+import { LoginFormValues, RegisterFormValues } from '@/types/auth.type';
 
 /**
  * 인증 관련 페이지의 폼 컴포넌트
@@ -20,17 +22,50 @@ const AuthForm = ({ type, onSubmit }: AuthFormProps) => {
   const isLogin = type === 'login';
   const buttonText = isLogin ? '로그인' : '회원가입';
 
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+    watch,
+  } = useForm<LoginFormValues | RegisterFormValues>({
+    defaultValues: isLogin
+      ? {
+          email: '',
+          password: '',
+          remember: false,
+        }
+      : {
+          email: '',
+          password: '',
+          confirmPassword: '',
+          nickname: '',
+          phone: '',
+        },
+  });
+
+  const processSubmit: SubmitHandler<LoginFormValues | RegisterFormValues> = (
+    data,
+  ) => {
+    // 폼 데이터를 콘솔에 출력
+    console.log(data);
+
+    // 상위 컴포넌트에 데이터 전달
+    if (typeof onSubmit === 'function') {
+      onSubmit(data as any);
+    }
+  };
+
   return (
     <CardContent>
-      <form onSubmit={onSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit(processSubmit)} className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="email">이메일</Label>
           <Input
             id="email"
-            name="email"
             type="email"
             placeholder="name@example.com"
-            required
+            {...register('email', { required: true })}
           />
         </div>
 
@@ -43,13 +78,23 @@ const AuthForm = ({ type, onSubmit }: AuthFormProps) => {
               <PasswordInput
                 id="password"
                 placeholder="비밀번호를 입력하세요"
-                required
+                register={register('password', { required: true })}
               />
             </div>
 
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <Checkbox id="remember" />
+                <Controller
+                  name="remember"
+                  control={control}
+                  render={({ field }) => (
+                    <Checkbox
+                      id="remember"
+                      checked={field.value as boolean}
+                      onCheckedChange={field.onChange}
+                    />
+                  )}
+                />
                 <Label
                   htmlFor="remember"
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -69,28 +114,36 @@ const AuthForm = ({ type, onSubmit }: AuthFormProps) => {
           </>
         ) : (
           <>
-            <PasswordInput
-              id="password"
-              label="비밀번호"
-              placeholder="비밀번호를 입력하세요"
-              required
-            />
+            <div className="space-y-2">
+              <Label htmlFor="password">비밀번호</Label>
+              <PasswordInput
+                id="password"
+                placeholder="비밀번호를 입력하세요"
+                register={register('password', { required: true })}
+              />
+            </div>
 
-            <PasswordInput
-              id="confirmPassword"
-              label="비밀번호 확인"
-              placeholder="비밀번호를 다시 입력하세요"
-              required
-            />
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword">비밀번호 확인</Label>
+              <PasswordInput
+                id="confirmPassword"
+                placeholder="비밀번호를 다시 입력하세요"
+                register={register('confirmPassword', {
+                  required: true,
+                  validate: (value) =>
+                    value === watch('password') ||
+                    '비밀번호가 일치하지 않습니다',
+                })}
+              />
+            </div>
 
             <div className="space-y-2">
               <Label htmlFor="nickname">닉네임</Label>
               <Input
                 id="nickname"
-                name="nickname"
                 type="text"
                 placeholder="사용할 닉네임을 입력하세요"
-                required
+                {...register('nickname', { required: true })}
               />
             </div>
 
@@ -98,10 +151,9 @@ const AuthForm = ({ type, onSubmit }: AuthFormProps) => {
               <Label htmlFor="phone">전화번호</Label>
               <Input
                 id="phone"
-                name="phone"
                 type="tel"
                 placeholder="01012345678"
-                required
+                {...register('phone', { required: true })}
               />
             </div>
           </>

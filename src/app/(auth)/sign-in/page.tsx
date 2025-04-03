@@ -5,12 +5,13 @@ import AuthHeader from '@/components/features/auth/auth-header';
 import AuthForm from '@/components/features/auth/auth-form';
 import SocialLogin from '@/components/features/auth/auth-social-login';
 import AuthFooter from '@/components/features/auth/auth-footer';
+import { LoginFormValues } from '@/types/auth.type';
 
 const LoginPage = () => {
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async (data: LoginFormValues) => {
     try {
-      // 여기에 로그인 로직 구현
+      console.log('회원가입 데이터:', data);
+      // 여기에 회원가입 로직 구현
     } catch (error) {
       console.error('로그인 오류:', error);
     }

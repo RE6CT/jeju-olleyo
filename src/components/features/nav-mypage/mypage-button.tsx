@@ -6,15 +6,22 @@ import MypageModal from './mypage-modal';
  * 헤더 nav 내부의 마이페이지 모달 오픈 버튼
  */
 const MypageButton = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(true);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const modalRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
   const router = useRouter();
 
-  // 모달 바깥을 눌렀을 때 닫히도록 이벤트 리스너 등록
   useEffect(() => {
+    /**
+     * 모달 바깥을 눌렀을 때 닫히도록 하는 이벤트 리스너
+     * @param event - (클릭) 이벤트
+     */
     const handleClickOutside = (event: Event) => {
+      // 모달, 트리거 버튼 제외 클릭 시 모달 닫기
       if (
         modalRef.current &&
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target as Node) &&
         !modalRef.current.contains(event.target as Node)
       ) {
         setIsOpen(false);
@@ -26,10 +33,6 @@ const MypageButton = () => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
-
-  useEffect(() => {
-    console.log(isOpen);
   }, [isOpen]);
 
   /**
@@ -51,7 +54,11 @@ const MypageButton = () => {
 
   return (
     <>
-      <button onClick={handleMypageModalToggle} className="relative">
+      <button
+        onClick={handleMypageModalToggle}
+        ref={buttonRef}
+        className="relative"
+      >
         마이페이지
       </button>
       {isOpen && (

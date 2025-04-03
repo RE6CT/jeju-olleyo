@@ -12,8 +12,10 @@ type MypageModalProps = {
 };
 
 /**
- * nav의 마이페이지 버튼 클릭 시 나타나는 모달
+ * nav의 마이페이지 버튼 클릭 시 나타나는 모달 컴포넌트
  * @param onLinkClick - 링크 클릭시 실행되는 이벤트 핸들러
+ * @param setIsOpen - 모달 오픈 여부 set 함수
+ * @param modalRef - 모달에 전달할 모달 ref
  */
 const MypageModal = ({
   onLinkClick,

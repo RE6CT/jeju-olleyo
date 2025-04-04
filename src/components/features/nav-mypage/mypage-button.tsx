@@ -2,7 +2,7 @@ import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 import MypageModal from './mypage-modal';
 import { ModalPath } from '@/types/mypage.type';
-import useClickOutside from '@/lib/hooks/useClickOutSide';
+import useClickOutside from '@/lib/hooks/use-click-outside';
 
 /**
  * 헤더 nav 내부의 마이페이지 모달 오픈 버튼

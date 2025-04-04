@@ -15,6 +15,7 @@ export type KakaoMapInstance = {
 
 export type KakaoMapProps = KakaoMapOptions & {
   onMapLoad: (map: KakaoMapInstance) => void;
+  onError: (error: Error) => void;
 };
 
 export type MarkerOptions = {

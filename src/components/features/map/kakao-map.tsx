@@ -10,7 +10,7 @@ import React from 'react';
  * @param KakaoMapProps.level - 지도의 확대 레벨
  * @param KakaoMapProps.onMapLoad - 지도 로드 완료 후 실행할 함수
  */
-const KakaoMap = ({ center, level, onMapLoad }: KakaoMapProps) => {
+const KakaoMap = ({ center, level, onMapLoad, onError }: KakaoMapProps) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<KakaoMapInstance | null>(null);
   const [isMapLoaded, setIsMapLoaded] = useState(false); // 지도 로드 상태
@@ -24,16 +24,22 @@ const KakaoMap = ({ center, level, onMapLoad }: KakaoMapProps) => {
     script.onload = () => {
       window.kakao.maps.load(() => {
         if (mapRef.current && !mapInstance.current) {
-          const options = {
-            center: new window.kakao.maps.LatLng(center.lat, center.lng),
-            level: level,
-          };
-          mapInstance.current = new window.kakao.maps.Map(
-            mapRef.current,
-            options,
-          );
-          setIsMapLoaded(true);
-          if (mapInstance.current) onMapLoad(mapInstance.current); // map 인스턴스를 외부 컴포넌트로 전달
+          try {
+            const options = {
+              center: new window.kakao.maps.LatLng(center.lat, center.lng),
+              level: level,
+            };
+            mapInstance.current = new window.kakao.maps.Map(
+              mapRef.current,
+              options,
+            );
+            setIsMapLoaded(true);
+            if (mapInstance.current) onMapLoad(mapInstance.current); // map 인스턴스를 외부 컴포넌트로 전달
+          } catch (error) {
+            onError?.(
+              error instanceof Error ? error : new Error('지도 로드 실패'),
+            );
+          }
         }
       });
     };
@@ -46,9 +52,15 @@ const KakaoMap = ({ center, level, onMapLoad }: KakaoMapProps) => {
 
   useEffect(() => {
     if (mapInstance.current && isMapLoaded) {
-      const latlng = new window.kakao.maps.LatLng(center.lat, center.lng);
-      mapInstance.current.setCenter(latlng);
-      mapInstance.current.setLevel(level);
+      try {
+        const latlng = new window.kakao.maps.LatLng(center.lat, center.lng);
+        mapInstance.current.setCenter(latlng);
+        mapInstance.current.setLevel(level);
+      } catch (err) {
+        onError?.(
+          err instanceof Error ? err : new Error('지도 위치 변경 중 오류 발생'),
+        );
+      }
     }
   }, [center.lat, center.lng, level]);
 

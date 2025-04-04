@@ -10,6 +10,7 @@ import {
   MarkerProps,
 } from '@/types/kakao-map.type';
 import Loading from '../loading';
+import ErrorMessage from '../error';
 
 // 임시 장소 데이터
 // https://www.jejudatahub.net/data/view/data/TOURISM/674
@@ -64,6 +65,11 @@ const MapPage = () => {
     setError(null);
   }, []);
 
+  const handleMapError = useCallback((error: Error) => {
+    setError(error.message);
+    setIsLoading(false);
+  }, []);
+
   const handleMarkerClick = useCallback((title: string) => {
     console.log(`${title} 클릭!`);
   }, []);
@@ -83,7 +89,7 @@ const MapPage = () => {
   };
 
   /**
-   * Polyline 추가 함수
+   * Polyline(경로) 추가 함수
    */
   const addPolyline = () => {
     setPolylines((prev) => [
@@ -97,12 +103,14 @@ const MapPage = () => {
     <div className="container mx-auto py-6">
       <div className="h-[400px] w-full overflow-hidden">
         {isLoading && <Loading />}
+        {error && <ErrorMessage message={error} />}
         <KakaoMap
           center={{ lat: 33.45, lng: 126.57 }}
           level={3}
           onMapLoad={handleMapLoad}
+          onError={handleMapError}
         />
-        {map && !isLoading && (
+        {map && !isLoading && !error && (
           <>
             <Clusterer map={map} markers={markers} />
             <Polyline

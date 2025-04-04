@@ -10,11 +10,11 @@ import { AuthHeaderProps } from '@/types/auth.type';
 
 const AuthHeader = ({ title, description }: AuthHeaderProps) => {
   return (
-    <CardHeader className="space-y-1">
+    <CardHeader className="space-y-4">
       {/* 페이지 제목 */}
-      <CardTitle className="text-center text-2xl font-bold">{title}</CardTitle>
+      <CardTitle className="text-start text-2xl font-bold">{title}</CardTitle>
       {/* 페이지 설명 */}
-      <CardDescription className="text-center">{description}</CardDescription>
+      <CardDescription className="text-start">{description}</CardDescription>
     </CardHeader>
   );
 };

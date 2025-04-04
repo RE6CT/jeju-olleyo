@@ -2,13 +2,32 @@
 
 import { useState, useCallback } from 'react';
 import KakaoMap from '@/components/features/map/kakao-map';
-import Marker from '@/components/features/map/marker';
+import Clusterer from '@/components/features/map/clusterer';
 import { KakaoMapInstance, MarkerOptions } from '@/types/kakao-map.type';
-import { Button } from '@/components/ui/button';
+
+// 임시 장소 데이터
+const PLACES: MarkerOptions[] = [
+  {
+    position: { lat: 33.450701, lng: 126.570667 },
+    title: '성산일출봉',
+  },
+  {
+    position: { lat: 33.4996213, lng: 126.5311884 },
+    title: '우도',
+  },
+  {
+    position: { lat: 33.248485, lng: 126.570667 },
+    title: '한라산',
+  },
+  {
+    position: { lat: 33.450701, lng: 126.470667 },
+    title: '만장굴',
+  },
+];
 
 const MapPage = () => {
   const [map, setMap] = useState<KakaoMapInstance | null>(null);
-  const [markers, setMarkers] = useState<MarkerOptions[]>([]);
+  const [markers, setMarkers] = useState<MarkerOptions[]>(PLACES);
 
   const handleMapLoad = useCallback((mapInstance: KakaoMapInstance) => {
     setMap(mapInstance);
@@ -34,30 +53,7 @@ const MapPage = () => {
         level={3}
         onMapLoad={handleMapLoad}
       />
-      {map &&
-        markers.map((marker, index) => (
-          <Marker
-            key={index}
-            map={map}
-            position={marker.position}
-            title={marker.title}
-            clickable={marker.clickable}
-            draggable={marker.draggable}
-            onClick={() => console.log(`${marker.title} 클릭!`)}
-          />
-        ))}
-      <Button
-        onClick={addMarker}
-        style={{
-          position: 'absolute',
-          top: '10px',
-          left: '10px',
-          zIndex: 10,
-          padding: '5px 10px',
-        }}
-      >
-        마커 추가
-      </Button>
+      {map && <Clusterer map={map} markers={markers} />}
     </div>
   );
 };

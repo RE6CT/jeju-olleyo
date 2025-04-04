@@ -2,28 +2,91 @@
 
 import { useState, useCallback } from 'react';
 import KakaoMap from '@/components/features/map/kakao-map';
-import Marker from '@/components/features/map/marker';
-import { KakaoMapInstance, MarkerOptions } from '@/types/kakao-map.type';
-import { Button } from '@/components/ui/button';
+import Clusterer from '@/components/features/map/clusterer';
+import Polyline from '@/components/features/map/polyline';
+import {
+  KakaoMapInstance,
+  MarkerOptions,
+  MarkerProps,
+} from '@/types/kakao-map.type';
+
+// 임시 장소 데이터
+// https://www.jejudatahub.net/data/view/data/TOURISM/674
+const PLACES: MarkerOptions[] = [
+  {
+    position: { lat: 33.55121797, lng: 126.69361 },
+    title: '북촌포구 주차장',
+  },
+  {
+    position: { lat: 33.55098302, lng: 126.693698 },
+    title: '화장실',
+  },
+  {
+    position: { lat: 33.55081597, lng: 126.693294 },
+    title: '오르막 경사로',
+  },
+  {
+    position: { lat: 33.54979296, lng: 126.692917 },
+    title: '주차장',
+  },
+  {
+    position: { lat: 33.54987402, lng: 126.692674 },
+    title: '내리막 경사로',
+  },
+  {
+    position: { lat: 33.54845404, lng: 126.686449 },
+    title: '오르막 경사로',
+  },
+  {
+    position: { lat: 33.54834801, lng: 126.686249 },
+    title: '내리막 경사로',
+  },
+];
 
 const MapPage = () => {
   const [map, setMap] = useState<KakaoMapInstance | null>(null);
-  const [markers, setMarkers] = useState<MarkerOptions[]>([]);
+  const [markers, setMarkers] = useState<MarkerProps[]>(
+    PLACES.map((place) => ({
+      ...place,
+      onClick: () => handleMarkerClick(place.title),
+    })),
+  );
+  const [polylines, setPolylines] = useState<
+    { path: { lat: number; lng: number }[] }[]
+  >([]);
 
   const handleMapLoad = useCallback((mapInstance: KakaoMapInstance) => {
     setMap(mapInstance);
+  }, []);
+
+  const handleMarkerClick = useCallback((title: string) => {
+    console.log(`${title} 클릭!`);
   }, []);
 
   /**
    * 마커 추가 함수
    */
   const addMarker = () => {
-    setMarkers((prev) => [
+    setMarkers((prev) => {
+      const newTitle = `테스트 마커 ${prev.length + 1}`;
+      return [
+        ...prev,
+        {
+          position: { lat: 33.45 + prev.length * 0.01, lng: 126.57 },
+          title: newTitle,
+          onClick: () => handleMarkerClick(newTitle),
+        },
+      ];
+    });
+  };
+
+  /**
+   * Polyline 추가 함수
+   */
+  const addPolyline = () => {
+    setPolylines((prev) => [
       ...prev,
-      {
-        position: { lat: 33.45 + prev.length * 0.01, lng: 126.57 },
-        title: `테스트 마커 ${prev.length + 1}`,
-      },
+      { path: PLACES.map((place) => place.position) },
     ]);
   };
 
@@ -31,33 +94,22 @@ const MapPage = () => {
     <div className="h-screen w-full">
       <KakaoMap
         center={{ lat: 33.45, lng: 126.57 }}
-        level={3}
+        level={5}
         onMapLoad={handleMapLoad}
       />
-      {map &&
-        markers.map((marker, index) => (
-          <Marker
-            key={index}
+      {map && (
+        <>
+          <Clusterer map={map} markers={markers} />
+          <Polyline
             map={map}
-            position={marker.position}
-            title={marker.title}
-            clickable={marker.clickable}
-            draggable={marker.draggable}
-            onClick={() => console.log(`${marker.title} 클릭!`)}
+            path={PLACES.map((place) => place.position)}
+            strokeWeight={5}
+            strokeColor="#4CAF50"
+            strokeOpacity={0.8}
+            strokeStyle="solid"
           />
-        ))}
-      <Button
-        onClick={addMarker}
-        style={{
-          position: 'absolute',
-          top: '10px',
-          left: '10px',
-          zIndex: 10,
-          padding: '5px 10px',
-        }}
-      >
-        마커 추가
-      </Button>
+        </>
+      )}
     </div>
   );
 };

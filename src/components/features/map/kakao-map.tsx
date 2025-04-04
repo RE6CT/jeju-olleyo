@@ -9,6 +9,21 @@ import React from 'react';
  * @param KakaoMapProps.center - 지도의 중심 좌표 (위도, 경도)
  * @param KakaoMapProps.level - 지도의 확대 레벨
  * @param KakaoMapProps.onMapLoad - 지도 로드 완료 후 실행할 함수
+ *
+ * @example
+ * ```tsx
+ * const Map = () => {
+ *   return (
+ *     <div className="h-[400px]">
+ *       <KakaoMap
+ *         center={{ lat: 33.450701, lng: 126.570667 }}
+ *         level={3}
+ *         onMapLoad={setMap}
+ *       />
+ *     </div>
+ *   );
+ * };
+ * ```
  */
 const KakaoMap = ({ center, level, onMapLoad }: KakaoMapProps) => {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -17,7 +32,7 @@ const KakaoMap = ({ center, level, onMapLoad }: KakaoMapProps) => {
 
   useEffect(() => {
     const script = document.createElement('script');
-    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_API_KEY}&autoload=false`;
+    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_API_KEY}&libraries=clusterer&autoload=false`;
     script.async = true;
     document.head.appendChild(script);
 
@@ -39,12 +54,13 @@ const KakaoMap = ({ center, level, onMapLoad }: KakaoMapProps) => {
     };
 
     return () => {
+      script.onload = null;
       document.head.removeChild(script);
     };
   }, []); // 의존성 배열 비움
 
   useEffect(() => {
-    if (mapInstance.current) {
+    if (mapInstance.current && isMapLoaded) {
       const latlng = new window.kakao.maps.LatLng(center.lat, center.lng);
       mapInstance.current.setCenter(latlng);
       mapInstance.current.setLevel(level);

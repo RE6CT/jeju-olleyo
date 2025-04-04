@@ -12,6 +12,7 @@ import Image from 'next/image';
  */
 
 const SocialProvider = ({ provider, onClick }: SocialProviderProps) => {
+  // 소셜 로그인 제공자에 따라 버튼 텍스트, 이미지, 클래스 이름 설정
   const config = {
     google: {
       text: '구글 로그인',
@@ -27,17 +28,20 @@ const SocialProvider = ({ provider, onClick }: SocialProviderProps) => {
   }[provider];
 
   return (
+    // 소셜 로그인 버튼
     <Button
       variant="outline"
       className={`flex w-full items-center justify-center gap-2 ${config.className}`}
       onClick={onClick}
     >
+      {/* 소셜 로그인 아이콘 */}
       <Image
         src={config.imageSrc}
         alt={`${provider} Logo`}
         width={24}
         height={24}
       />
+      {/* 소셜 로그인 텍스트 */}
       {config.text}
     </Button>
   );

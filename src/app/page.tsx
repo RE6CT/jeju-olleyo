@@ -1,6 +1,6 @@
 import { getCurrentUser } from '@/lib/apis/auth-server.api';
 
-export default async function Home() {
+const Home = async () => {
   const { user } = await getCurrentUser();
 
   // 사용자 데이터 활용
@@ -17,3 +17,5 @@ export default async function Home() {
     </div>
   );
 }
+
+export default Home;

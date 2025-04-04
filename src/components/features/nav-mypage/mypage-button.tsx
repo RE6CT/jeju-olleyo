@@ -1,5 +1,5 @@
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import MypageModal from './mypage-modal';
 import { ModalPath } from '@/types/mypage.type';
 import useClickOutside from '@/lib/hooks/useClickOutSide';

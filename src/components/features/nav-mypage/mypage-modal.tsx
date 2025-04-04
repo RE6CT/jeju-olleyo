@@ -5,6 +5,7 @@ import { Button } from '../../ui/button';
 import { Separator } from '../../ui/separator';
 import { MouseEvent, RefObject } from 'react';
 import { ModalPath } from '@/types/mypage.type';
+import ProfileImage from '@/components/commons/profile-image';
 
 type MypageModalProps = {
   onLinkClick: (path: ModalPath) => void;
@@ -21,7 +22,7 @@ type MypageModalProps = {
 const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
   // 추후 실제 유저 정보로 수정
   const user = {
-    profileImg: '',
+    profileImg: null,
     nickname: '리왹트',
     email: 're6ct@email.com',
   };
@@ -48,7 +49,7 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
         onClick={() => onLinkClick('profile')}
         className="flex cursor-pointer"
       >
-        <Image src={user.profileImg} alt="" width={58} height={58} />
+        <ProfileImage image={user.profileImg} width={58} height={58} />
         <div className="flex flex-col">
           <div className="flex">
             <h3 className="whitespace-nowrap font-semibold">{user.nickname}</h3>

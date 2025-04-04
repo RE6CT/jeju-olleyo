@@ -91,6 +91,7 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
   return (
     <CardContent>
       {isLogin ? (
+        // 로그인 폼
         <form
           className="space-y-2"
           onSubmit={handleSubmitLogin(
@@ -160,6 +161,7 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
           </Button>
         </form>
       ) : (
+        // 회원가입 폼
         <form
           onSubmit={handleSubmitSignup(
             handleFormSubmit as (data: RegisterFormValues) => void,

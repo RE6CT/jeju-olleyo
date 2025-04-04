@@ -1,6 +1,6 @@
 'use server';
 
-import { createClient } from '@/lib/supabase/server';
+import { getServerClient } from '@/lib/supabase/server';
 
 /**
  * 장소에 대한 북마크 추가
@@ -15,7 +15,7 @@ const fetchAddBookmarkByIdQuery = async (
   place_lat: number,
   place_lng: number,
 ) => {
-  const supabase = await createClient();
+  const supabase = await getServerClient();
 
   const { error } = await supabase.from('bookmarks').insert({
     place,

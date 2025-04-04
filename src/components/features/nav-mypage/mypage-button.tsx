@@ -1,6 +1,7 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import MypageModal from './mypage-modal';
+import { ModalPath } from '@/types/mypage.type';
 
 /**
  * 헤더 nav 내부의 마이페이지 모달 오픈 버튼
@@ -47,7 +48,7 @@ const MypageButton = () => {
    * 모달에서 링크 클릭 시 실행되는 이벤트 핸들러
    * @param path - 해당 링크의 path ("profile", "bookmarks" 등)
    */
-  const handleLinkClick = (path: string) => {
+  const handleLinkClick = (path: ModalPath) => {
     router.push(`/mypage/${path}`);
     setIsOpen(false);
   };

@@ -4,9 +4,10 @@ import Image from 'next/image';
 import { Button } from '../../ui/button';
 import { Separator } from '../../ui/separator';
 import { Dispatch, MouseEvent, RefObject, SetStateAction } from 'react';
+import { ModalPath } from '@/types/mypage.type';
 
 type MypageModalProps = {
-  onLinkClick: (path: string) => void;
+  onLinkClick: (path: ModalPath) => void;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   modalRef: RefObject<HTMLDivElement>;
 };
@@ -94,7 +95,7 @@ const MypageModal = ({
       <Separator />
       <section className="text-center">
         <span
-          onClick={() => onLinkClick('reservation')}
+          onClick={() => onLinkClick('reservations')}
           className="cursor-pointer"
         >
           항공권 예약 내역

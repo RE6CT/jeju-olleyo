@@ -88,25 +88,28 @@ const MapPage = () => {
   };
 
   return (
-    <div className="h-screen w-full">
-      <KakaoMap
-        center={{ lat: 33.45, lng: 126.57 }}
-        level={3}
-        onMapLoad={handleMapLoad}
-      />
-      {map && (
-        <>
-          <Clusterer map={map} markers={markers} />
-          <Polyline
-            map={map}
-            path={PLACES.map((place) => place.position)}
-            strokeWeight={5}
-            strokeColor="#4CAF50"
-            strokeOpacity={0.8}
-            strokeStyle="solid"
-          />
-        </>
-      )}
+    // padding 속성 처리 필요
+    <div className="container mx-auto py-6">
+      <div className="h-[400px] w-full overflow-hidden">
+        <KakaoMap
+          center={{ lat: 33.45, lng: 126.57 }}
+          level={3}
+          onMapLoad={handleMapLoad}
+        />
+        {map && (
+          <>
+            <Clusterer map={map} markers={markers} />
+            <Polyline
+              map={map}
+              path={PLACES.map((place) => place.position)}
+              strokeWeight={5}
+              strokeColor="#4CAF50"
+              strokeOpacity={0.8}
+              strokeStyle="solid"
+            />
+          </>
+        )}
+      </div>
     </div>
   );
 };

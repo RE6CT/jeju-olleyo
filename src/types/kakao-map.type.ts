@@ -45,10 +45,10 @@ export type MarkerProps = MarkerOptions & {
 export type ClustererOptions = {
   map: KakaoMapInstance;
   markers: MarkerProps[];
-  gridSize?: number;
-  minLevel?: number;
-  minClusterSize?: number;
-  disableClickZoom?: boolean;
+  gridSize?: number; // 클러스터의 격자 크기
+  minLevel?: number; // 클러스터가 표시될 최소 지도 레벨
+  minClusterSize?: number; // 클러스터가 생성될 최소 마커 수
+  disableClickZoom?: boolean; // 클러스터 클릭 시 줌 동작 비활성화 여부
   styles?: {
     width: string;
     height: string;

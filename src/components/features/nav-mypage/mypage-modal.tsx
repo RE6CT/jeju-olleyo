@@ -3,12 +3,12 @@
 import Image from 'next/image';
 import { Button } from '../../ui/button';
 import { Separator } from '../../ui/separator';
-import { Dispatch, MouseEvent, RefObject, SetStateAction } from 'react';
+import { MouseEvent, RefObject } from 'react';
 import { ModalPath } from '@/types/mypage.type';
 
 type MypageModalProps = {
   onLinkClick: (path: ModalPath) => void;
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
+  setClose: () => void;
   modalRef: RefObject<HTMLDivElement>;
 };
 
@@ -18,11 +18,7 @@ type MypageModalProps = {
  * @param setIsOpen - 모달 오픈 여부 set 함수
  * @param modalRef - 모달에 전달할 모달 ref
  */
-const MypageModal = ({
-  onLinkClick,
-  setIsOpen,
-  modalRef,
-}: MypageModalProps) => {
+const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
   // 추후 실제 유저 정보로 수정
   const user = {
     profileImg: '',
@@ -40,7 +36,7 @@ const MypageModal = ({
     if (!isConfirmed) return;
 
     // 여기에 로그아웃 로직
-    setIsOpen(false);
+    setClose();
   };
 
   return (

@@ -2,6 +2,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import MypageModal from './mypage-modal';
 import { ModalPath } from '@/types/mypage.type';
+import useClickOutside from '@/lib/hooks/useClickOutSide';
 
 /**
  * 헤더 nav 내부의 마이페이지 모달 오픈 버튼
@@ -12,36 +13,18 @@ const MypageButton = () => {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const router = useRouter();
 
-  useEffect(() => {
-    /**
-     * 모달 바깥을 눌렀을 때 닫히도록 하는 이벤트 리스너
-     * @param event - (클릭) 이벤트
-     */
-    const handleClickOutside = (event: Event) => {
-      // 모달, 트리거 버튼 제외 클릭 시 모달 닫기
-      if (
-        modalRef.current &&
-        buttonRef.current &&
-        !buttonRef.current.contains(event.target as Node) &&
-        !modalRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    };
+  /** 모달을 닫는 함수 (isOpen-false) */
+  const setClose = () => setIsOpen(false);
 
-    document.addEventListener('mousedown', handleClickOutside);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isOpen]);
+  // 모달 바깥 클릭 시 모달 닫기
+  useClickOutside([modalRef, buttonRef], setClose, isOpen);
 
   /**
    * 마이페이지 버튼 클릭 시 실행되는 이벤트 핸들러
    * - 모달이 닫혀있으면 열리고, 열려있으면 닫힙니다.
    */
   const handleMypageModalToggle = () => {
-    setIsOpen(isOpen ? false : true);
+    setIsOpen(!isOpen);
   };
 
   /**
@@ -50,7 +33,7 @@ const MypageButton = () => {
    */
   const handleLinkClick = (path: ModalPath) => {
     router.push(`/mypage/${path}`);
-    setIsOpen(false);
+    setClose();
   };
 
   return (
@@ -65,7 +48,7 @@ const MypageButton = () => {
       {isOpen && (
         <MypageModal
           onLinkClick={handleLinkClick}
-          setIsOpen={setIsOpen}
+          setClose={setClose}
           modalRef={modalRef}
         />
       )}

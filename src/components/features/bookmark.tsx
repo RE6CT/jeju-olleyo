@@ -16,7 +16,7 @@ const Bookmark = ({
   place_lat: number;
   place_lng: number;
 }) => {
-  const { bookmarks, toggleBookmark } = useBookmark(
+  const { toggleBookmark } = useBookmark(
     place,
     userId,
     initialBookmarks,

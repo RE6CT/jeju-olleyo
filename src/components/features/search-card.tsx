@@ -1,12 +1,15 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 
-type categoryCardType = {
+type CategoryCardType = {
   image: string;
   title: string;
   className: string;
+  link: string;
 };
-const SearchCard = ({ image, title, className }: categoryCardType) => {
+
+const SearchCard = ({ image, title, className, link }: CategoryCardType) => {
   return (
     <Card className={className}>
       <Image src={image} alt={title} width={256} height={256} />

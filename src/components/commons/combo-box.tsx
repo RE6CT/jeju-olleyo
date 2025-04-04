@@ -26,7 +26,19 @@ type ComboBoxProp = {
   defaultMessage: string;
 };
 /**
+ * @param list 검색결과 하단에 보여줄 리스트
+ * @param value 검색을 통해 전달할 값
+ * @param setValue value의 useState
+ * @param defaultMessage 검색 결과가 없을 경우 보여줄 메시지
  *
+ * @example
+ * ```
+ * <Combobox list={list}
+ * value = {value}
+ * setValue = {setValue}
+ * defaultMessage = "검색결과가 없습니다"
+ * ></ComboBox>
+ * ```
  */
 export default function Combobox({
   list,

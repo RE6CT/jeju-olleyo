@@ -1,9 +1,9 @@
 'use server';
 
-import { createClient } from '../supabase/server';
+import { getServerClient } from '../supabase/server';
 
 const getLike = async (planId: number, userId: string) => {
-  const supabase = await createClient();
+  const supabase = await getServerClient();
 
   const { data, error } = await supabase
     .from('plan_likes')

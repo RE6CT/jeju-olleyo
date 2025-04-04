@@ -9,12 +9,24 @@ type SearchCardProp = {
   bookmarks: CamelCaseObject<
     Pick<bookmarks, 'user_id' | 'place' | 'place_lat' | 'place_lng'>
   >;
-  className?: string;
+  className: string;
   initialBookmarks: boolean;
   image: string;
   title: string;
 };
 
+/**
+ * @param bookmarks user_id place place_lat place_lng 가 담긴 단일 데이터 객체
+ * @param className 스타일값
+ * @param initialBookmarks 북마크가 되어있는지에 대한 boolean
+ * @param title 카드의 제목
+ *
+ * @example
+ * ```
+ * <SearchCard bookmarks = {bookmarks} className = {className}
+ * initialBookmarks = {initialBookmarks} image = {image} title ={title}/>
+ * ```
+ */
 const SearchCard = ({
   bookmarks,
   className,

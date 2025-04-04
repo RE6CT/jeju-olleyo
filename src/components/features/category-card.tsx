@@ -6,7 +6,6 @@ import {
   CardHeader,
   CardTitle,
 } from '../ui/card';
-import LikeButton from './like-button';
 
 type CategoryCardProp = {
   image: string;
@@ -14,9 +13,28 @@ type CategoryCardProp = {
   description: string;
   className: string;
   location: string;
-  tag: string;
+  tag: string; // 추후에 컴포넌트로 분리할 가능성 있음 카페 명소 등등...
 };
-
+/**
+ * @param image 이미지값 
+ * @param title 장소 이름
+ * @param description 장소 설명
+ * @param className 스타일 값
+ * @param location 실제 주소 값
+ * @param tag 카페 명소 등등...의 label
+ * 
+ * @example
+ * ```
+ *  <CategoryCard
+        image={image}
+        title={title}
+        description={description}
+        className={className}
+        location={location}
+        tag={tag}
+      />
+ * ```
+ */
 const CategoryCard = ({
   image,
   title,
@@ -25,6 +43,7 @@ const CategoryCard = ({
   location,
   tag,
 }: CategoryCardProp) => {
+  //현재 카테고리 카드는 이벤트 없음
   return (
     <Card className={`flex items-center ${className}`}>
       <Image

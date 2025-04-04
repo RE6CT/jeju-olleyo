@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { ERROR_MESSAGES } from '@/constants/auth.constants';
-import { checkEmailExists } from '../apis/auth-server.api';
+import { checkEmailExists, checkNickNameExists } from '../apis/auth-server.api';
 
 /**
  * 이메일 유효성 검사를 위한 스키마
@@ -81,7 +81,14 @@ export const registerSchema = z
       .string()
       .min(1, { message: ERROR_MESSAGES.REQUIRED_NICKNAME })
       .min(2, { message: ERROR_MESSAGES.MIN_NICKNAME_LENGTH })
-      .max(10, { message: ERROR_MESSAGES.MAX_NICKNAME_LENGTH }),
+      .max(10, { message: ERROR_MESSAGES.MAX_NICKNAME_LENGTH })
+      .refine(
+        async (email) => {
+          const exists = await checkNickNameExists(email);
+          return !exists;
+        },
+        { message: '이미 사용 중인 닉네임입니다.' },
+      ),
     phone: phoneSchema,
   })
   .refine((data) => data.password === data.confirmPassword, {

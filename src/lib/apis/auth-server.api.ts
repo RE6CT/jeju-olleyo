@@ -61,12 +61,11 @@ export const logout = async (): Promise<{ error: AuthError | null }> => {
 };
 
 /**
- * 이메일 중복 확인을 위한 서버 액션
- * @param email 사용자 이메일
- * @returns 이메일 존재 여부
+ * 이메일 중복 여부를 확인하는 함수
+ * @param email - 확인할 이메일 주소
+ * @returns 이메일이 이미 존재하면 true, 존재하지 않으면 false
  */
-
-export const checkEmailExists = async (email: string) => {
+export const checkEmailExists = async (email: string): Promise<boolean> => {
   const supabase = await getServerClient();
   const { data, error } = await supabase
     .from('users')
@@ -77,7 +76,28 @@ export const checkEmailExists = async (email: string) => {
     throw error;
   }
 
-  return data!.length > 0;
+  return Boolean(data && data.length > 0);
+};
+
+/**
+ * 닉네임 중복 여부를 확인하는 함수
+ * @param nickname - 확인할 닉네임
+ * @returns 닉네임이 이미 존재하면 true, 존재하지 않으면 false
+ */
+export const checkNickNameExists = async (
+  nickname: string,
+): Promise<boolean> => {
+  const supabase = await getServerClient();
+  const { data, error } = await supabase
+    .from('users')
+    .select('nickname')
+    .eq('nickname', nickname);
+
+  if (error && error.code !== 'PGRST116') {
+    throw error;
+  }
+
+  return Boolean(data && data.length > 0);
 };
 
 /**

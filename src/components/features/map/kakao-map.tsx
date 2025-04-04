@@ -9,6 +9,21 @@ import React from 'react';
  * @param KakaoMapProps.center - 지도의 중심 좌표 (위도, 경도)
  * @param KakaoMapProps.level - 지도의 확대 레벨
  * @param KakaoMapProps.onMapLoad - 지도 로드 완료 후 실행할 함수
+ *
+ * @example
+ * ```tsx
+ * const Map = () => {
+ *   return (
+ *     <div className="h-[400px]">
+ *       <KakaoMap
+ *         center={{ lat: 33.450701, lng: 126.570667 }}
+ *         level={3}
+ *         onMapLoad={setMap}
+ *       />
+ *     </div>
+ *   );
+ * };
+ * ```
  */
 const KakaoMap = ({ center, level, onMapLoad, onError }: KakaoMapProps) => {
   const mapRef = useRef<HTMLDivElement>(null);

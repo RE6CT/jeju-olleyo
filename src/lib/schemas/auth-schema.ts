@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { ERROR_MESSAGES } from '@/constants/auth.constants';
+import { checkEmailExists } from '../apis/auth-server.api';
 
 /**
  * 이메일 유효성 검사를 위한 스키마
@@ -67,7 +68,13 @@ export const loginSchema = z.object({
  */
 export const registerSchema = z
   .object({
-    email: emailSchema,
+    email: emailSchema.refine(
+      async (email) => {
+        const exists = await checkEmailExists(email);
+        return !exists;
+      },
+      { message: '이미 사용 중인 이메일입니다.' },
+    ),
     password: strongPasswordSchema,
     confirmPassword: z.string(),
     nickname: z

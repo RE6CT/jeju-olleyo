@@ -61,6 +61,26 @@ export const logout = async (): Promise<{ error: AuthError | null }> => {
 };
 
 /**
+ * 이메일 중복 확인을 위한 서버 액션
+ * @param email 사용자 이메일
+ * @returns 이메일 존재 여부
+ */
+
+export const checkEmailExists = async (email: string) => {
+  const supabase = await getServerClient();
+  const { data, error } = await supabase
+    .from('users')
+    .select('email')
+    .eq('email', email);
+
+  if (error && error.code !== 'PGRST116') {
+    throw error;
+  }
+
+  return data!.length > 0;
+};
+
+/**
  * 비밀번호 재설정 이메일을 전송하는 서버 액션
  * @param email 사용자 이메일
  * @returns 에러 객체

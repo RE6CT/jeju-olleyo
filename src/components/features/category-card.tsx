@@ -6,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from '../ui/card';
+import LikeButton from './like-button';
 
 type CategoryCardProp = {
   image: string;
@@ -15,6 +16,7 @@ type CategoryCardProp = {
   location: string;
   tag: string;
 };
+
 const CategoryCard = ({
   image,
   title,
@@ -34,12 +36,11 @@ const CategoryCard = ({
       />
       <div className="flex flex-col">
         <CardHeader>
-          <CardTitle>{title}</CardTitle>
           <p>{tag}</p>
+          <CardTitle>{title}</CardTitle>
           <CardDescription>{location}</CardDescription>
         </CardHeader>
         <CardContent>{description}</CardContent>
-        {/* 좋아요 버튼 들어갈 자리 */}
       </div>
     </Card>
   );

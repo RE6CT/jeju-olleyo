@@ -16,13 +16,12 @@ type PlanCardProp = {
 const PlanCard = ({ image, title, description, className }: PlanCardProp) => {
   return (
     <Card className={className}>
+      <Image src={image} alt={title} width={256} height={256} />
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
-      <CardContent>
-        <Image src={image} alt={title} width={256} height={256} />
-      </CardContent>
+      <CardContent></CardContent>
       {/* 좋아요 버튼 들어갈 자리 */}
     </Card>
   );

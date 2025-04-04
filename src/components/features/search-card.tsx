@@ -9,13 +9,12 @@ type categoryCardType = {
 const SearchCard = ({ image, title, className }: categoryCardType) => {
   return (
     <Card className={className}>
+      <Image src={image} alt={title} width={256} height={256} />
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         {/* 북마크 버튼 들어갈 자리 */}
       </CardHeader>
-      <CardContent>
-        <Image src={image} alt={title} width={256} height={256} />
-      </CardContent>
+      <CardContent></CardContent>
     </Card>
   );
 };

@@ -16,3 +16,11 @@ export const ERROR_MESSAGES = {
   REQUIRED_PHONE: '휴대폰 번호를 입력해주세요.',
   INVALID_PHONE: '올바른 형식의 휴대폰 번호를 입력해주세요.',
 };
+
+/**
+ * 로컬 스토리지 키 상수
+ */
+export const STORAGE_KEY = {
+  REMEMBER_EMAIL: 'remember_email',
+  SAVED_EMAIL: 'saved_email',
+};

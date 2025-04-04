@@ -1,9 +1,10 @@
 import { UseFormRegisterReturn } from 'react-hook-form';
 
-export type AuthFormProps<T extends Record<string, unknown>> = {
+export type AuthFormProps<T extends LoginFormValues | RegisterFormValues> = {
   type: 'login' | 'register';
   onSubmit: (data: T) => void;
   isLoading?: boolean;
+  savedEmail?: string;
 };
 
 export type LoginFormValues = {

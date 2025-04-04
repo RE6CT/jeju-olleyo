@@ -5,6 +5,14 @@ import fetchGetBookmarkByIdQuery from '../apis/bookmark/get-bookmark.api';
 import fetchDeleteBookmark from '../apis/bookmark/delete-bookmark.api';
 import fetchAddBookmarkByIdQuery from '../apis/bookmark/add-bookmark.api';
 
+/**
+ * 북마크 조회, 추가, 삭제 기능 제공 훅
+ * @param place 장소 ID
+ * @param userId 사용자 ID
+ * @param initialBookmarks 초기 북마크 여부 상태
+ * @param place_lat 해당 장소의 위도 (카카오맵 좌표 표시)
+ * @param place_lng 해당 장소의 경도 (카카오맵 좌표 표시)
+ */
 const useBookmark = (
   place: number,
   userId: string,

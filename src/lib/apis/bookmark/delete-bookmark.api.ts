@@ -2,6 +2,10 @@
 
 import { createClient } from '@/lib/supabase/server';
 
+/**
+ * 장소에 대한 북마크 추가
+ * @param bookmarkId 북마크 ID
+ */
 const fetchDeleteBookmark = async (bookmarkId: number) => {
   const supabase = await createClient();
 

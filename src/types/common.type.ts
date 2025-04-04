@@ -14,3 +14,11 @@ export type CamelCaseObject<T> =
           >]: CamelCaseObject<T[K]>;
         }
       : T;
+
+// 프로필 이미지 컴포넌트 props 타입
+export type ProfileImageProps = {
+  image: string | null;
+  width: number;
+  height: number;
+  className?: string;
+};

@@ -19,7 +19,7 @@ const Sidebar = () => {
       <Separator />
       <section className="flex flex-col">
         <h3 className="text-lg font-bold">내 예약</h3>
-        <Link href="/mypage/reservation">항공권 예약 내역</Link>
+        <Link href="/mypage/reservations">항공권 예약 내역</Link>
       </section>
     </aside>
   );

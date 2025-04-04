@@ -1,5 +1,3 @@
-import { Combobox } from '../commons/combo-box';
-
 const TicketSearchBar = ({}) => {
   return (
     <>

@@ -9,6 +9,7 @@ import {
   MarkerOptions,
   MarkerProps,
 } from '@/types/kakao-map.type';
+import Loading from '../loading';
 
 // 임시 장소 데이터
 // https://www.jejudatahub.net/data/view/data/TOURISM/674
@@ -54,9 +55,13 @@ const MapPage = () => {
   const [polylines, setPolylines] = useState<
     { path: { lat: number; lng: number }[] }[]
   >([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const handleMapLoad = useCallback((mapInstance: KakaoMapInstance) => {
     setMap(mapInstance);
+    setIsLoading(false);
+    setError(null);
   }, []);
 
   const handleMarkerClick = useCallback((title: string) => {
@@ -91,12 +96,13 @@ const MapPage = () => {
     // padding 속성 처리 필요
     <div className="container mx-auto py-6">
       <div className="h-[400px] w-full overflow-hidden">
+        {isLoading && <Loading />}
         <KakaoMap
           center={{ lat: 33.45, lng: 126.57 }}
           level={3}
           onMapLoad={handleMapLoad}
         />
-        {map && (
+        {map && !isLoading && (
           <>
             <Clusterer map={map} markers={markers} />
             <Polyline

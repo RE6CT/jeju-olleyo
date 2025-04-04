@@ -16,53 +16,53 @@ const KakaoMap = ({ center, level, onMapLoad, onError }: KakaoMapProps) => {
   const [isMapLoaded, setIsMapLoaded] = useState(false); // 지도 로드 상태
 
   useEffect(() => {
+    const handleMapLoad = () => {
+      if (mapRef.current && !mapInstance.current) {
+        try {
+          const options = {
+            center: new window.kakao.maps.LatLng(center.lat, center.lng),
+            level: level,
+          };
+          mapInstance.current = new window.kakao.maps.Map(
+            mapRef.current,
+            options,
+          );
+          setIsMapLoaded(true);
+          if (mapInstance.current) onMapLoad(mapInstance.current); // map 인스턴스를 외부 컴포넌트로 전달
+        } catch (error) {
+          onError?.(
+            error instanceof Error ? error : new Error('지도 로드 실패'),
+          );
+        }
+      }
+    };
+
     const script = document.createElement('script');
     script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_API_KEY}&libraries=clusterer&autoload=false`;
     script.async = true;
     document.head.appendChild(script);
 
     script.onload = () => {
-      window.kakao.maps.load(() => {
-        if (mapRef.current && !mapInstance.current) {
-          try {
-            const options = {
-              center: new window.kakao.maps.LatLng(center.lat, center.lng),
-              level: level,
-            };
-            mapInstance.current = new window.kakao.maps.Map(
-              mapRef.current,
-              options,
-            );
-            setIsMapLoaded(true);
-            if (mapInstance.current) onMapLoad(mapInstance.current); // map 인스턴스를 외부 컴포넌트로 전달
-          } catch (error) {
-            onError?.(
-              error instanceof Error ? error : new Error('지도 로드 실패'),
-            );
-          }
-        }
-      });
+      window.kakao.maps.load(handleMapLoad);
     };
 
     return () => {
       script.onload = null;
       document.head.removeChild(script);
     };
-  }, []); // 의존성 배열 비움
+  }, []); // 마운트시 최초 한번만 실행
 
   useEffect(() => {
-    if (mapInstance.current && isMapLoaded) {
-      try {
-        const latlng = new window.kakao.maps.LatLng(center.lat, center.lng);
-        mapInstance.current.setCenter(latlng);
-        mapInstance.current.setLevel(level);
-      } catch (err) {
-        onError?.(
-          err instanceof Error ? err : new Error('지도 위치 변경 중 오류 발생'),
-        );
-      }
+    if (!isMapLoaded || !mapInstance.current) return;
+
+    try {
+      const latlng = new window.kakao.maps.LatLng(center.lat, center.lng);
+      mapInstance.current.setCenter(latlng);
+      mapInstance.current.setLevel(level);
+    } catch (err) {
+      onError?.(err instanceof Error ? err : new Error('지도 위치 변경 실패'));
     }
-  }, [center.lat, center.lng, level]);
+  }, [center.lat, center.lng, level, isMapLoaded, onError]);
 
   return <div ref={mapRef} style={{ width: '100%', height: '100%' }} />;
 };

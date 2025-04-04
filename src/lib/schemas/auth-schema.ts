@@ -69,9 +69,7 @@ export const registerSchema = z
   .object({
     email: emailSchema,
     password: strongPasswordSchema,
-    confirmPassword: z
-      .string()
-      .min(1, { message: ERROR_MESSAGES.REQUIRED_CONFIRM_PASSWORD }),
+    confirmPassword: z.string(),
     nickname: z
       .string()
       .min(1, { message: ERROR_MESSAGES.REQUIRED_NICKNAME })
@@ -97,9 +95,7 @@ export const forgotPasswordSchema = z.object({
 export const resetPasswordSchema = z
   .object({
     password: strongPasswordSchema,
-    confirmPassword: z
-      .string()
-      .min(1, { message: ERROR_MESSAGES.REQUIRED_CONFIRM_PASSWORD }),
+    confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: ERROR_MESSAGES.PASSWORD_MISMATCH,

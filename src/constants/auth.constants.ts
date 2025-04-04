@@ -15,5 +15,4 @@ export const ERROR_MESSAGES = {
   MAX_NICKNAME_LENGTH: '닉네임은 최대 10자까지 가능합니다.',
   REQUIRED_PHONE: '휴대폰 번호를 입력해주세요.',
   INVALID_PHONE: '올바른 형식의 휴대폰 번호를 입력해주세요.',
-  REQUIRED_CONFIRM_PASSWORD: '비밀번호 확인을 입력해주세요.',
 };

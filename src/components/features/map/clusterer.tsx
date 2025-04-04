@@ -79,7 +79,7 @@ const Clusterer = ({ map, markers, ...options }: ClustererOptions) => {
       map,
       markers: kakaoMarkers,
       gridSize: 60,
-      minLevel: 6,
+      minLevel: 5,
       minClusterSize: 2,
       disableClickZoom: true,
       styles,
@@ -90,7 +90,9 @@ const Clusterer = ({ map, markers, ...options }: ClustererOptions) => {
 
     return () => {
       if (clustererInstance.current) {
-        clustererInstance.current = {};
+        clustererInstance.current.setMap(null);
+        clustererInstance.current = null;
+        kakaoMarkers.forEach((marker) => marker.setMap(null));
       }
     };
   }, [map, markers, options]);

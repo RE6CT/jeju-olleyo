@@ -10,10 +10,6 @@ const Polyline = ({ map, path, ...options }: PolylineProps) => {
   useEffect(() => {
     if (!map) return;
 
-    if (polylineInstance.current) {
-      polylineInstance.current.setMap(null);
-    }
-
     const polyline = new window.kakao.maps.Polyline({
       path: path.map(
         (point) => new window.kakao.maps.LatLng(point.lat, point.lng),
@@ -27,12 +23,12 @@ const Polyline = ({ map, path, ...options }: PolylineProps) => {
     });
 
     polyline.setMap(map);
-
     polylineInstance.current = polyline;
 
     return () => {
       if (polylineInstance.current) {
         polylineInstance.current.setMap(null);
+        polylineInstance.current = null;
       }
     };
   }, [map, path, options]);

@@ -60,7 +60,9 @@ export type ClustererOptions = {
   }[];
 };
 
-export type ClustererInstance = {};
+export type ClustererInstance = {
+  setMap(map: KakaoMapInstance | null): void;
+};
 
 export type PolylineOptions = {
   path: {

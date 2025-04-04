@@ -67,14 +67,17 @@ const MapPage = () => {
    * 마커 추가 함수
    */
   const addMarker = () => {
-    setMarkers((prev) => [
-      ...prev,
-      {
-        position: { lat: 33.45 + prev.length * 0.01, lng: 126.57 },
-        title: `테스트 마커 ${prev.length + 1}`,
-        onClick: () => handleMarkerClick(`테스트 마커 ${prev.length + 1}`),
-      },
-    ]);
+    setMarkers((prev) => {
+      const newTitle = `테스트 마커 ${prev.length + 1}`;
+      return [
+        ...prev,
+        {
+          position: { lat: 33.45 + prev.length * 0.01, lng: 126.57 },
+          title: newTitle,
+          onClick: () => handleMarkerClick(newTitle),
+        },
+      ];
+    });
   };
 
   /**
@@ -91,7 +94,7 @@ const MapPage = () => {
     <div className="h-screen w-full">
       <KakaoMap
         center={{ lat: 33.45, lng: 126.57 }}
-        level={3}
+        level={5}
         onMapLoad={handleMapLoad}
       />
       {map && (

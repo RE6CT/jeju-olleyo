@@ -22,3 +22,8 @@ export type ProfileImageProps = {
   height: number;
   className?: string;
 };
+
+export type List = {
+  value: string;
+  label: string;
+}[];

@@ -1,17 +1,20 @@
 import { UseFormRegisterReturn } from 'react-hook-form';
 
-export type AuthFormProps = {
+export type AuthFormProps<T extends Record<string, unknown>> = {
   type: 'login' | 'register';
-  onSubmit: (data: any) => void;
+  onSubmit: (data: T) => void;
+  isLoading?: boolean;
 };
 
 export type LoginFormValues = {
   email: string;
   password: string;
-  remember?: boolean;
+  remember: boolean;
 };
 
-export type RegisterFormValues = LoginFormValues & {
+export type RegisterFormValues = {
+  email: string;
+  password: string;
   confirmPassword: string;
   nickname: string;
   phone: string;

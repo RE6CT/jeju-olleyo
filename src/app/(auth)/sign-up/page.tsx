@@ -22,8 +22,8 @@ const SignUpPage = () => {
     <AuthLayout>
       {/* 회원가입 페이지 헤더 */}
       <AuthHeader
-        title="회원가입"
-        description="아래 정보를 입력하여 계정을 생성하세요"
+        title="제주 올레요 회원가입"
+        description="회원가입을 위한 정보를 입력해주세요."
       />
       {/* 회원가입 폼 */}
       <AuthForm type="register" onSubmit={handleSubmit} />

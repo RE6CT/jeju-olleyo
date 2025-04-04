@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import SearchBar from './search-bar';
-import MypageModal from './mypage-modal';
+import MypageButton from '../features/nav-mypage/mypage-button';
 
 const Header = () => {
   const currentUserId = 'uuid'; // 유저의 uuid
@@ -19,7 +19,7 @@ const Header = () => {
           <>
             <Link href="/mypage">내 여행</Link>
             <Link href="/shared-plan">커뮤니티</Link>
-            <MypageModal />
+            <MypageButton />
           </>
         ) : (
           <Link href="/login">로그인</Link>

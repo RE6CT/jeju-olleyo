@@ -43,3 +43,7 @@ export type PasswordInputProps = {
   required?: boolean;
   register: UseFormRegisterReturn;
 };
+
+export type EmailFormValues = {
+  email: string;
+};

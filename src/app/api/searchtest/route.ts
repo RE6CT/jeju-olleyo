@@ -10,16 +10,18 @@ import { ApiError } from 'next/dist/server/api-utils';
 import { NextResponse, NextRequest } from 'next/server';
 
 export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url, 'http://localhost:3000');
+  const searchParams = req.nextUrl.searchParams;
   const keyword = searchParams.get('query');
 
   const areaCode = AREA_CODE_JEJU;
   const appName = encodeURIComponent(KOREA_TOUR_APP_NAME);
   const apiKey = encodeURIComponent(KOREA_TOUR_API_KEY);
+
   if (!areaCode || !appName || !apiKey) {
     throw new ApiError(500, 'API 설정 누락');
   }
   const baseUrl = KOREA_TOUR_BASE_URL;
+
   if (!baseUrl) {
     throw new ApiError(500, 'API endpoint URL 설정이 잘못되었습니다.');
   }
@@ -28,6 +30,8 @@ export async function GET(req: NextRequest) {
   const requests = Array.from({ length: TOTAL_PAGES }, (_, idx) => {
     const page = idx + 1;
     const url = `${baseUrl}?numOfRows=${PAGE_SIZE}&pageNo=${page}&MobileOS=ETC&MobileApp=${appName}&areaCode=${areaCode}&_type=json&serviceKey=${apiKey}`;
+    // 여기까지 콘솔 로그 잘 찍히는 거 확인됨.....
+
     return fetch(url)
       .then(async (res) => {
         if (!res.ok) {
@@ -37,9 +41,11 @@ export async function GET(req: NextRequest) {
             `page ${page} 요청 실패: ${errorText}`,
           );
         }
+        console.log(`page ${page} 응답 성공`);
         return res.json();
       })
       .catch((e) => {
+        console.error(`page ${page} fetch 에러:`, e.message);
         throw new ApiError(500, `page ${page} 요청 실패: ${e.message}`);
       });
   });
@@ -47,7 +53,7 @@ export async function GET(req: NextRequest) {
   // 지역기반 관광정보조회 (한국관광공사_국문 관광정보 서비스_GW) - 전체검색
   try {
     const res = await Promise.all(requests);
-
+    console.log('모든 요청 완료:', res.length);
     const allPlaces = res.flatMap((data) => {
       const rawData = data?.response?.body?.items?.item;
       return Array.isArray(rawData) ? rawData : Object.values(rawData ?? {});

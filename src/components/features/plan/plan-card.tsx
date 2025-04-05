@@ -6,6 +6,18 @@ import { PlanCardProps } from '@/types/plan.type';
 import { Button } from '@/components/ui/button';
 import { Pencil, Trash2 } from 'lucide-react';
 
+const CARD = {
+  height: 200,
+  imageWidth: 200,
+} as const;
+
+const TEXT = {
+  noImage: '이미지 없음',
+  noDescription: '설명이 없습니다.',
+  noDate: '날짜 미정',
+  dateSeparator: '~',
+} as const;
+
 /**
  * 일정 카드 컴포넌트
  *
@@ -24,9 +36,9 @@ import { Pencil, Trash2 } from 'lucide-react';
  */
 const PlanCard = ({ plan, onEdit, onDelete }: PlanCardProps) => {
   return (
-    <Card className={`flex h-[200px] p-2`}>
+    <Card className={`flex h-[${CARD.height}px] p-2`}>
       {/* 이미지 영역 */}
-      <div className="relative h-full w-[200px]">
+      <div className={`relative h-full w-[${CARD.imageWidth}px]`}>
         {plan.planImg ? (
           <Image
             src={plan.planImg}
@@ -37,7 +49,7 @@ const PlanCard = ({ plan, onEdit, onDelete }: PlanCardProps) => {
         ) : (
           // 대체 이미지/텍스트
           <div className="flex h-full w-full items-center justify-center bg-muted">
-            <span className="text-muted-foreground">이미지 없음</span>
+            <span className="text-muted-foreground">{TEXT.noImage}</span>
           </div>
         )}
       </div>
@@ -71,20 +83,20 @@ const PlanCard = ({ plan, onEdit, onDelete }: PlanCardProps) => {
             <span>
               {plan.travelStartDate
                 ? new Date(plan.travelStartDate).toLocaleDateString()
-                : '날짜 미정'}
+                : TEXT.noDate}
             </span>
-            <span>~</span>
+            <span>{TEXT.dateSeparator}</span>
             <span>
               {plan.travelEndDate
                 ? new Date(plan.travelEndDate).toLocaleDateString()
-                : '날짜 미정'}
+                : TEXT.noDate}
             </span>
           </div>
         </CardHeader>
 
         <CardContent className="flex flex-1 flex-col justify-between px-4 py-2">
           <p className="line-clamp-2 text-sm text-muted-foreground">
-            {plan.description || '설명이 없습니다.'}
+            {plan.description || TEXT.noDescription}
           </p>
         </CardContent>
       </div>

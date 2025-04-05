@@ -1,14 +1,17 @@
 'use server';
 
 import { getServerClient } from '@/lib/supabase/server';
+import { camelize } from '@/lib/utils/camelize';
 
 /**
  * 장소에 대한 사용자의 북마크 여부 확인
  * @param place 장소 ID
  * @param userId 사용자 ID
- *
  */
-const fetchGetBookmarkByIdQuery = async (place: number, userId: string) => {
+export const fetchGetBookmarkByIdQuery = async (
+  place: number,
+  userId: string,
+) => {
   const supabase = await getServerClient();
 
   const { data, error } = await supabase
@@ -23,4 +26,21 @@ const fetchGetBookmarkByIdQuery = async (place: number, userId: string) => {
   return data;
 };
 
-export default fetchGetBookmarkByIdQuery;
+/**
+ * 사용자의 북마크 목록을 가져오는 함수
+ * @param userId - 사용자 ID
+ * @returns 사용자의 북마크 목록
+ */
+export const fetchGetAllBookmarksByUserId = async (userId: string) => {
+  const supabase = await getServerClient();
+
+  const { data, count, error } = await supabase
+    .from('bookmarks')
+    .select('*', { count: 'exact' })
+    .eq('user_id', userId);
+
+  if (error) throw new Error(error.message);
+
+  const camelizedData = data ? camelize(data) : null;
+  return { data: camelizedData, count };
+};

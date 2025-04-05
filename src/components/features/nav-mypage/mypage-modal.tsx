@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { Button } from '../../ui/button';
 import { Separator } from '../../ui/separator';
-import { MouseEvent } from 'react';
+import { MouseEvent, useState } from 'react';
 import { MypageModalProps } from '@/types/mypage.type';
 import ProfileImage from '@/components/commons/profile-image';
 import { logout } from '@/lib/apis/auth-server.api';

@@ -4,10 +4,16 @@ import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlanCardProps } from '@/types/plan.type';
 import { Button } from '@/components/ui/button';
-import { Pencil, Trash2 } from 'lucide-react';
+import { MoreVertical, Pencil, Trash2 } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 const CARD = {
-  height: 200,
+  height: 300,
   imageWidth: 200,
 } as const;
 
@@ -16,6 +22,8 @@ const TEXT = {
   noDescription: '설명이 없습니다.',
   noDate: '날짜 미정',
   dateSeparator: '~',
+  edit: '수정',
+  delete: '삭제',
 } as const;
 
 /**
@@ -57,26 +65,40 @@ const PlanCard = ({ plan, onEdit, onDelete }: PlanCardProps) => {
       {/* 컨텐츠 영역 */}
       <div className="flex flex-1 flex-col">
         <CardHeader className="relative px-4 py-2">
-          <div className="absolute right-4 top-2 flex">
-            {onEdit && (
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => onEdit(plan.planId)}
-              >
-                <Pencil className="h-4 w-4" />
-              </Button>
-            )}
-            {onDelete && (
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => onDelete(plan.planId)}
-              >
-                <Trash2 className="h-4 w-4" />
-              </Button>
-            )}
-          </div>
+          {/* 드롭다운 메뉴 */}
+          {(onEdit || onDelete) && (
+            <div className="absolute right-4 top-2">
+              <DropdownMenu>
+                // 자체 button 태그를 쓰는 대신 자식 button 컴포넌트 사용
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0" // 포커스 효과 제거
+                  >
+                    <MoreVertical className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {onEdit && (
+                    <DropdownMenuItem onClick={() => onEdit(plan.planId)}>
+                      <Pencil className="mr-2 h-4 w-4" />
+                      {TEXT.edit}
+                    </DropdownMenuItem>
+                  )}
+                  {onDelete && (
+                    <DropdownMenuItem
+                      onClick={() => onDelete(plan.planId)}
+                      className="text-destructive"
+                    >
+                      <Trash2 className="mr-2 h-4 w-4" />
+                      {TEXT.delete}
+                    </DropdownMenuItem>
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          )}
           {/* 한줄로 제한, 넘치면 말줄임표 */}
           <CardTitle className="line-clamp-1 text-xl">{plan.title}</CardTitle>
           <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">

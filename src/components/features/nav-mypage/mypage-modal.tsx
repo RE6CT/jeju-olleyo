@@ -6,6 +6,8 @@ import { Separator } from '../../ui/separator';
 import { MouseEvent } from 'react';
 import { MypageModalProps } from '@/types/mypage.type';
 import ProfileImage from '@/components/commons/profile-image';
+import { logout } from '@/lib/apis/auth-server.api';
+import { useRouter } from 'next/navigation';
 
 /**
  * nav의 마이페이지 버튼 클릭 시 나타나는 모달 컴포넌트
@@ -14,6 +16,8 @@ import ProfileImage from '@/components/commons/profile-image';
  * @param modalRef - 모달에 전달할 모달 ref
  */
 const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
+  const router = useRouter();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   // 추후 실제 유저 정보로 수정
   const user = {
     profileImg: null,
@@ -25,13 +29,37 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
    * 로그아웃 버튼 이벤트 핸들러
    * @param e - 이벤트
    */
-  const handleSignout = (e: MouseEvent<HTMLButtonElement>) => {
+  const handleSignout = async (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
+
     const isConfirmed = confirm('로그아웃하시겠습니까?');
     if (!isConfirmed) return;
 
-    // 여기에 로그아웃 로직
-    setClose();
+    try {
+      setIsLoggingOut(true);
+      const { error } = await logout();
+
+      if (error) {
+        alert('로그아웃에 실패했습니다. 다시 시도해주세요.');
+        console.error('로그아웃 실패:', error);
+        return;
+      }
+
+      // 로그아웃 성공 처리
+      alert('로그아웃 되었습니다.');
+      setClose();
+
+      // 로컬 스토리지나 쿠키에 저장된 사용자 정보가 있다면 제거
+      localStorage.removeItem('userSession');
+
+      // 홈페이지로 리다이렉트
+      router.push('/');
+      router.refresh(); // 페이지 새로고침하여 상태 업데이트
+    } catch (error) {
+      console.error('로그아웃 오류:', error);
+    } finally {
+      setIsLoggingOut(false);
+    }
   };
 
   return (

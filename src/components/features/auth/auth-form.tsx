@@ -10,7 +10,7 @@ import { AuthFormProps } from '@/types/auth.type';
 import PasswordInput from './auth-password-input';
 import { useForm, Controller } from 'react-hook-form';
 import { LoginFormValues, RegisterFormValues } from '@/types/auth.type';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema, registerSchema } from '@/lib/schemas/auth-schema';
 
@@ -20,13 +20,15 @@ import { loginSchema, registerSchema } from '@/lib/schemas/auth-schema';
  * @param type 로그인 또는 회원가입 타입
  * @param onSubmit 폼 제출 핸들러
  * @param isLoading 로딩 상태 여부
+ * @param savedEmail 저장된 이메일 (로그인 페이지에서만 사용)
  */
 
 const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
   type,
   onSubmit,
   isLoading = false,
-}: AuthFormProps<T>) => {
+  savedEmail = '',
+}: AuthFormProps<T> & { saveEmail?: string }) => {
   const isLogin = type === 'login';
 
   // useMemo를 이용한 버튼 텍스트 최적화
@@ -41,6 +43,7 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
     handleSubmit: handleSubmitLogin,
     control: controlLogin,
     formState: { errors: errorsLogin },
+    setValue: setLoginValue,
   } = useForm<LoginFormValues>({
     mode: 'onBlur',
     resolver: zodResolver(loginSchema),
@@ -50,6 +53,14 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
       remember: false,
     },
   });
+
+  // 저장된 이메일이 있을 경우 폼에 설정
+  useEffect(() => {
+    if (isLogin && savedEmail) {
+      setLoginValue('email', savedEmail);
+      setLoginValue('remember', true);
+    }
+  }, [isLogin, savedEmail, setLoginValue]);
 
   // 회원가입 폼 설정
   const {

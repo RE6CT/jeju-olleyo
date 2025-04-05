@@ -1,6 +1,6 @@
 'use server';
 
-import { createClient } from '@/lib/supabase/server';
+import { getServerClient } from '@/lib/supabase/server';
 
 /**
  * 장소에 대한 사용자의 북마크 여부 확인
@@ -9,7 +9,7 @@ import { createClient } from '@/lib/supabase/server';
  *
  */
 const fetchGetBookmarkByIdQuery = async (place: number, userId: string) => {
-  const supabase = await createClient();
+  const supabase = await getServerClient();
 
   const { data, error } = await supabase
     .from('bookmarks')

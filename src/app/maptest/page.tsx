@@ -9,6 +9,8 @@ import {
   MarkerOptions,
   MarkerProps,
 } from '@/types/kakao-map.type';
+import Loading from '../loading';
+import ErrorMessage from '../error';
 
 // 임시 장소 데이터
 // https://www.jejudatahub.net/data/view/data/TOURISM/674
@@ -54,9 +56,18 @@ const MapPage = () => {
   const [polylines, setPolylines] = useState<
     { path: { lat: number; lng: number }[] }[]
   >([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const handleMapLoad = useCallback((mapInstance: KakaoMapInstance) => {
     setMap(mapInstance);
+    setIsLoading(false);
+    setError(null);
+  }, []);
+
+  const handleMapError = useCallback((error: Error) => {
+    setError(error.message);
+    setIsLoading(false);
   }, []);
 
   const handleMarkerClick = useCallback((title: string) => {
@@ -81,7 +92,7 @@ const MapPage = () => {
   };
 
   /**
-   * Polyline 추가 함수
+   * Polyline(경로) 추가 함수
    */
   const addPolyline = () => {
     setPolylines((prev) => [
@@ -91,25 +102,31 @@ const MapPage = () => {
   };
 
   return (
-    <div className="h-screen w-full">
-      <KakaoMap
-        center={{ lat: 33.45, lng: 126.57 }}
-        level={5}
-        onMapLoad={handleMapLoad}
-      />
-      {map && (
-        <>
-          <Clusterer map={map} markers={markers} />
-          <Polyline
-            map={map}
-            path={PLACES.map((place) => place.position)}
-            strokeWeight={5}
-            strokeColor="#4CAF50"
-            strokeOpacity={0.8}
-            strokeStyle="solid"
-          />
-        </>
-      )}
+    // padding 속성 처리 필요
+    <div className="container mx-auto py-6">
+      <div className="h-[400px] w-full overflow-hidden">
+        {isLoading && <Loading />}
+        {error && <ErrorMessage message={error} />}
+        <KakaoMap
+          center={{ lat: 33.45, lng: 126.57 }}
+          level={5}
+          onMapLoad={handleMapLoad}
+          onError={handleMapError}
+        />
+        {map && !isLoading && !error && (
+          <>
+            <Clusterer map={map} markers={markers} />
+            <Polyline
+              map={map}
+              path={PLACES.map((place) => place.position)}
+              strokeWeight={5}
+              strokeColor="#4CAF50"
+              strokeOpacity={0.8}
+              strokeStyle="solid"
+            />
+          </>
+        )}
+      </div>
     </div>
   );
 };

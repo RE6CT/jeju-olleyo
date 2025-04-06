@@ -1,11 +1,11 @@
 import { AuthError, Provider, User } from '@supabase/supabase-js';
 import { getBrowserClient } from '../supabase/client';
-import { UserInfo } from '@/types/auth.type';
+import { SocialUserInfo } from '@/types/auth.type';
 
 /**
  * 사용자 객체를 UserInfo 타입으로 변환하는 함수
  */
-export const formatUser = (user: User | null): UserInfo | null => {
+export const formatUser = (user: User | null): SocialUserInfo | null => {
   if (!user) return null;
 
   // 카카오 또는 구글 로그인의 경우 provider 정보 설정
@@ -153,93 +153,4 @@ export const googleLogin = async () => {
  */
 export const kakaoLogin = async () => {
   return socialLogin('kakao');
-};
-
-/**
- * 로그아웃 처리 함수
- * @returns 로그아웃 결과 (error)
- */
-export const logout = async () => {
-  try {
-    const supabase = await getBrowserClient();
-    const { error } = await supabase.auth.signOut();
-
-    if (error) {
-      throw error;
-    }
-
-    return { error: null };
-  } catch (error: any) {
-    console.error('로그아웃 중 오류 발생:', error);
-    return {
-      error: {
-        message: error.message || '로그아웃 중 오류가 발생했습니다.',
-        status: error.status || 500,
-      },
-    };
-  }
-};
-
-/**
- * 사용자 메타데이터 업데이트 함수
- * @param metadata - 업데이트할 메타데이터 객체
- * @returns 업데이트된 사용자 정보 (user, error)
- */
-export const updateUserMetadata = async (metadata: Record<string, any>) => {
-  try {
-    const supabase = await getBrowserClient();
-
-    const { data, error } = await supabase.auth.updateUser({
-      data: metadata,
-    });
-
-    if (error) {
-      throw error;
-    }
-
-    return {
-      user: data.user ? formatUser(data.user) : null,
-      error: null,
-    };
-  } catch (error: any) {
-    console.error('사용자 메타데이터 업데이트 중 오류 발생:', error);
-    return {
-      user: null,
-      error: {
-        message:
-          error.message || '사용자 정보 업데이트 중 오류가 발생했습니다.',
-        status: error.status || 500,
-      },
-    };
-  }
-};
-
-/**
- * 현재 세션의 사용자 정보 가져오기
- * @returns 사용자 정보 (user, error)
- */
-export const getCurrentUserBrowser = async () => {
-  try {
-    const supabase = await getBrowserClient();
-    const { data, error } = await supabase.auth.getUser();
-
-    if (error) {
-      throw error;
-    }
-
-    return {
-      user: data.user ? formatUser(data.user) : null,
-      error: null,
-    };
-  } catch (error: any) {
-    console.error('사용자 정보 조회 중 오류 발생:', error);
-    return {
-      user: null,
-      error: {
-        message:
-          error.message || '사용자 정보를 가져오는 중 오류가 발생했습니다.',
-        status: error.status || 500,
-      },
-    };
-  }
 };

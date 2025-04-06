@@ -245,7 +245,6 @@ export const getCurrentUser = async () => {
     return {
       user: data.user
         ? {
-            id: data.user.id,
             email: data.user.email,
             profileImage:
               data.user.user_metadata.avatar_url ||

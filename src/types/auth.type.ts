@@ -63,5 +63,16 @@ export type UserInfo = {
   nickname: string | null;
   phone: string | null;
   avatar_url?: string | null;
+};
+
+export type SocialUserInfo = UserInfo & {
   provider?: string | null;
+};
+
+// Zustand를 사용해 인증 상태를 관리할 때 사용할 스토어의 타입
+export type UserState = {
+  user: UserInfo | null;
+  isLogin: boolean;
+  setUser: (user: UserInfo) => void;
+  clearUser: () => void;
 };

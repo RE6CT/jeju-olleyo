@@ -24,3 +24,6 @@ export const STORAGE_KEY = {
   REMEMBER_EMAIL: 'remember_email',
   SAVED_EMAIL: 'saved_email',
 };
+
+// 비밀번호 변경후 로그인 페이지로 리다이렉트 대기 시간
+export const PASSWORD_CHANGE_REDIRECT_DELAY_MS = 3000;

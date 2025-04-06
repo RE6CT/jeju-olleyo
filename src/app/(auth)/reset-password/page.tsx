@@ -15,6 +15,7 @@ import { resetPasswordSchema } from '@/lib/schemas/auth-schema';
 import { ResetPasswordFormValues } from '@/types/auth.type';
 import { updateUserPassword } from '@/lib/apis/auth-browser.api';
 import { getResetPasswordErrorMessage } from '@/lib/utils/auth-error-utils';
+import { PASSWORD_CHANGE_REDIRECT_DELAY_MS } from '@/constants/auth.constants';
 
 /**
  * 비밀번호 재설정 페이지 컴포넌트
@@ -98,9 +99,14 @@ const ResetPasswordPage = () => {
 
       setIsSubmitted(true);
 
-      setTimeout(() => {
-        router.push('/sign-in');
-      }, 3000);
+      useEffect(() => {
+        const redirectTimer = setTimeout(() => {
+          router.push('/sign-in');
+        }, PASSWORD_CHANGE_REDIRECT_DELAY_MS);
+
+        // 컴포넌트 언마운트 시 타이머 제거
+        return () => clearTimeout(redirectTimer);
+      }, []);
     } catch (err) {
       setErrorMessages(
         err instanceof Error

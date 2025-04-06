@@ -2,7 +2,7 @@
 
 import { getServerClient } from '@/lib/supabase/server';
 import { camelize } from '@/lib/utils/camelize';
-import { UserBookmark } from '@/types/mypage.type';
+import { UserBookmarks } from '@/types/mypage.type';
 
 /**
  * 장소에 대한 사용자의 북마크 여부 확인
@@ -30,9 +30,11 @@ export const fetchGetBookmarkByIdQuery = async (
 /**
  * 사용자의 북마크 목록을 가져오는 함수
  * @param userId - 사용자 ID
- * @returns 사용자의 북마크 목록
+ * @returns 사용자의 북마크 목록 또는 null
  */
-export const fetchGetAllBookmarksByUserId = async (userId: string) => {
+export const fetchGetAllBookmarksByUserId = async (
+  userId: string,
+): Promise<UserBookmarks | null> => {
   const supabase = await getServerClient();
 
   const { data, error } = await supabase.rpc('get_user_bookmarks', {
@@ -41,6 +43,6 @@ export const fetchGetAllBookmarksByUserId = async (userId: string) => {
 
   if (error) throw new Error(error.message);
 
-  const camelizedData = data ? camelize(data) : null;
+  const camelizedData: UserBookmarks | null = data ? camelize(data) : null;
   return camelizedData;
 };

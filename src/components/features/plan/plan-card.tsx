@@ -69,7 +69,7 @@ const PlanCard = ({ plan, onEdit, onDelete }: PlanCardProps) => {
           {(onEdit || onDelete) && (
             <div className="absolute right-4 top-2">
               <DropdownMenu>
-                // 자체 button 태그를 쓰는 대신 자식 button 컴포넌트 사용
+                {/* 자체 button 태그를 쓰는 대신 자식 button 컴포넌트 사용 */}
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="ghost"

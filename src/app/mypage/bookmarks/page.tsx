@@ -1,10 +1,20 @@
+import { getCurrentUser } from '@/lib/apis/auth-server.api';
 import { fetchGetAllBookmarksByUserId } from '@/lib/apis/bookmark/get-bookmark.api';
 import { UserBookmarks } from '@/types/mypage.type';
 import Image from 'next/image';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 
 const BookmarksPage = async () => {
-  const userId = '550e8400-e29b-41d4-a716-446655440000';
+  const { user } = await getCurrentUser();
+  const userId = user?.id;
+
+  // 로그인되어있지 않을 경우 로그인 페이지로 리다이렉트
+  if (!userId) {
+    // 이 부분에 alert 삽입
+    redirect('/sign-in');
+  }
+
   const bookmarks: UserBookmarks | null =
     await fetchGetAllBookmarksByUserId(userId);
 

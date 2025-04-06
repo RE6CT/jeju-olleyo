@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import fetchGetBookmarkByIdQuery from '../apis/bookmark/get-bookmark.api';
+import { fetchGetBookmarkByIdQuery } from '../apis/bookmark/get-bookmark.api';
 import fetchDeleteBookmark from '../apis/bookmark/delete-bookmark.api';
 import fetchAddBookmarkByIdQuery from '../apis/bookmark/add-bookmark.api';
 

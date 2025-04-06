@@ -1,12 +1,60 @@
-import { AuthError } from '@supabase/supabase-js';
+import { AuthError, Provider, User } from '@supabase/supabase-js';
 import { getBrowserClient } from '../supabase/client';
+import { UserInfo } from '@/types/auth.type';
+
+/**
+ * 사용자 객체를 UserInfo 타입으로 변환하는 함수
+ */
+export const formatUser = (user: User | null): UserInfo | null => {
+  if (!user) return null;
+
+  // 카카오 또는 구글 로그인의 경우 provider 정보 설정
+  const provider = user.app_metadata?.provider || null;
+
+  // 카카오 로그인의 경우 프로필 이미지, 닉네임 처리
+  let nickname = user.user_metadata?.nickname || null;
+  let avatarUrl = user.user_metadata?.avatar_url || null;
+
+  // 카카오 프로필 정보 처리
+  if (provider === 'kakao') {
+    // 카카오 사용자 메타데이터에서 정보 추출
+    nickname =
+      user.user_metadata?.name ||
+      user.user_metadata?.kakao_name ||
+      user.user_metadata?.preferred_username ||
+      nickname;
+
+    avatarUrl =
+      user.user_metadata?.avatar_url ||
+      user.user_metadata?.picture ||
+      user.user_metadata?.kakao_profile_image ||
+      null;
+  }
+
+  // 구글 프로필 정보 처리
+  if (provider === 'google') {
+    nickname =
+      user.user_metadata?.name || user.user_metadata?.full_name || nickname;
+
+    avatarUrl =
+      user.user_metadata?.avatar_url || user.user_metadata?.picture || null;
+  }
+
+  return {
+    id: user.id,
+    email: user.email as string,
+    nickname: nickname,
+    phone: user.user_metadata?.phone || null,
+    avatar_url: avatarUrl,
+    provider: provider,
+  };
+};
 
 /**
  * 비밀번호 재설정 이메일을 전송하는 클라이언트 액션
  * @param email 사용자 이메일
  * @returns 에러 객체
  */
-
 export const resetPassword = async (
   email: string,
 ): Promise<{ data: any; error: AuthError | null }> => {
@@ -27,8 +75,7 @@ export const resetPassword = async (
  * @param password 새 비밀번호
  * @returns 에러 객체
  */
-
-export const updataUserPassword = async (
+export const updateUserPassword = async (
   password: string,
 ): Promise<{ error: AuthError | null }> => {
   const supabase = await getBrowserClient();
@@ -36,4 +83,163 @@ export const updataUserPassword = async (
     password,
   });
   return { error };
+};
+
+/**
+ * 소셜 로그인 제공자 타입
+ */
+export type SocialProvider = 'google' | 'kakao';
+
+/**
+ * 소셜 로그인을 처리하는 함수
+ * @param provider - 소셜 로그인 제공자 (google, kakao)
+ * @returns 로그인 결과 (data, error)
+ */
+export const socialLogin = async (provider: SocialProvider) => {
+  const supabase = await getBrowserClient();
+
+  try {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: provider as Provider,
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+        // 카카오 로그인 시 프로필 이미지와 닉네임 스코프 추가
+        ...(provider === 'kakao' && {
+          queryParams: {
+            scope: 'profile_nickname,profile_image,account_email',
+          },
+        }),
+        // 구글의 경우 추가 옵션 설정
+        ...(provider === 'google' && {
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+            include_granted_scopes: 'true',
+            scope:
+              'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
+          },
+        }),
+      },
+    });
+
+    if (error) {
+      throw error;
+    }
+
+    return { data, error: null };
+  } catch (error: any) {
+    console.error(`${provider} 로그인 중 오류 발생:`, error);
+    return {
+      data: null,
+      error: {
+        message: error.message || `${provider} 로그인 중 오류가 발생했습니다.`,
+        status: error.status || 500,
+      },
+    };
+  }
+};
+
+/**
+ * 구글 로그인을 처리하는 함수
+ * @returns 로그인 결과 (data, error)
+ */
+export const googleLogin = async () => {
+  return socialLogin('google');
+};
+
+/**
+ * 카카오 로그인을 처리하는 함수
+ * @returns 로그인 결과 (data, error)
+ */
+export const kakaoLogin = async () => {
+  return socialLogin('kakao');
+};
+
+/**
+ * 로그아웃 처리 함수
+ * @returns 로그아웃 결과 (error)
+ */
+export const logout = async () => {
+  try {
+    const supabase = await getBrowserClient();
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      throw error;
+    }
+
+    return { error: null };
+  } catch (error: any) {
+    console.error('로그아웃 중 오류 발생:', error);
+    return {
+      error: {
+        message: error.message || '로그아웃 중 오류가 발생했습니다.',
+        status: error.status || 500,
+      },
+    };
+  }
+};
+
+/**
+ * 사용자 메타데이터 업데이트 함수
+ * @param metadata - 업데이트할 메타데이터 객체
+ * @returns 업데이트된 사용자 정보 (user, error)
+ */
+export const updateUserMetadata = async (metadata: Record<string, any>) => {
+  try {
+    const supabase = await getBrowserClient();
+
+    const { data, error } = await supabase.auth.updateUser({
+      data: metadata,
+    });
+
+    if (error) {
+      throw error;
+    }
+
+    return {
+      user: data.user ? formatUser(data.user) : null,
+      error: null,
+    };
+  } catch (error: any) {
+    console.error('사용자 메타데이터 업데이트 중 오류 발생:', error);
+    return {
+      user: null,
+      error: {
+        message:
+          error.message || '사용자 정보 업데이트 중 오류가 발생했습니다.',
+        status: error.status || 500,
+      },
+    };
+  }
+};
+
+/**
+ * 현재 세션의 사용자 정보 가져오기
+ * @returns 사용자 정보 (user, error)
+ */
+export const getCurrentUserBrowser = async () => {
+  try {
+    const supabase = await getBrowserClient();
+    const { data, error } = await supabase.auth.getUser();
+
+    if (error) {
+      throw error;
+    }
+
+    return {
+      user: data.user ? formatUser(data.user) : null,
+      error: null,
+    };
+  } catch (error: any) {
+    console.error('사용자 정보 조회 중 오류 발생:', error);
+    return {
+      user: null,
+      error: {
+        message:
+          error.message || '사용자 정보를 가져오는 중 오류가 발생했습니다.',
+        status: error.status || 500,
+      },
+    };
+  }
 };

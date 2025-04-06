@@ -130,7 +130,7 @@ export const logout = async () => {
       };
     }
 
-    return { error: null };
+    return { error };
   } catch (error: any) {
     console.error('로그아웃 처리 중 예외 발생:', error);
 
@@ -231,6 +231,7 @@ export const getCurrentUser = async () => {
     const { data, error } = await supabase.auth.getUser();
 
     if (error) {
+      console.log(error);
       return {
         user: null,
         error: {
@@ -246,6 +247,9 @@ export const getCurrentUser = async () => {
         ? {
             id: data.user.id,
             email: data.user.email,
+            profileImage:
+              data.user.user_metadata.avatar_url ||
+              '/images/default-profile.png',
             nickname: data.user.user_metadata.nickname,
             phone: data.user.user_metadata.phone,
           }

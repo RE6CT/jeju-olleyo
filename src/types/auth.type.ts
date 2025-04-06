@@ -56,3 +56,12 @@ export type EmailFormValues = {
 export type AuthMessageProps = {
   message: string;
 };
+
+export type UserInfo = {
+  id: string;
+  email: string | null;
+  nickname: string | null;
+  phone: string | null;
+  avatar_url?: string | null;
+  provider?: string | null;
+};

@@ -13,7 +13,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { resetPasswordSchema } from '@/lib/schemas/auth-schema';
 import { ResetPasswordFormValues } from '@/types/auth.type';
-import { updataUserPassword } from '@/lib/apis/auth-browser.api';
+import { updateUserPassword } from '@/lib/apis/auth-browser.api';
 import { getResetPasswordErrorMessage } from '@/lib/utils/auth-error-utils';
 
 /**
@@ -87,7 +87,7 @@ const ResetPasswordPage = () => {
     try {
       setErrorMessages([]);
 
-      const result = await updataUserPassword(data.password);
+      const result = await updateUserPassword(data.password);
 
       if (result.error) {
         const errorMessage = getResetPasswordErrorMessage(

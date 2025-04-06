@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import PlanCard from '@/components/features/plan/plan-card';
 import { Plan } from '@/types/plan.type';
 
-export default function MyPlanPage() {
+const MyPlanPage = () => {
   const [plans, setPlans] = useState<Plan[]>([]);
 
   // TODO: API 연동 후 실제 데이터로 교체
@@ -71,4 +71,6 @@ export default function MyPlanPage() {
       )}
     </div>
   );
-}
+};
+
+export default MyPlanPage;

@@ -13,8 +13,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 const CARD = {
-  height: 300,
-  imageWidth: 200,
+  height: 'h-[200px]',
+  imageWidth: 'w-[200px]',
 } as const;
 
 const TEXT = {
@@ -44,9 +44,9 @@ const TEXT = {
  */
 const PlanCard = ({ plan, onEdit, onDelete }: PlanCardProps) => {
   return (
-    <Card className={`flex h-[${CARD.height}px] p-2`}>
+    <Card className={`flex ${CARD.height} p-2`}>
       {/* 이미지 영역 */}
-      <div className={`relative h-full w-[${CARD.imageWidth}px]`}>
+      <div className={`relative h-full ${CARD.imageWidth}`}>
         {plan.planImg ? (
           <Image
             src={plan.planImg}

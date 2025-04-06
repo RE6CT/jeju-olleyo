@@ -121,51 +121,6 @@ export const checkPhoneExists = async (phone: string): Promise<boolean> => {
 };
 
 /**
- * 비밀번호 재설정 이메일을 전송하는 서버 액션
- * @param email 사용자 이메일
- * @returns 에러 객체
- */
-export const resetPassword = async (
-  email: string,
-): Promise<{
-  error: { message: string; name: string; status: number } | null;
-}> => {
-  const getURL = () => {
-    let url = process?.env?.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-    url = url?.startsWith('http') ? url : `https://${url}`;
-    url = url?.endsWith('/') ? url : `${url}/`;
-    return `${url}/reset-password`;
-  };
-
-  try {
-    const supabase = await getServerClient();
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: getURL(),
-    });
-    if (error) {
-      return {
-        error: {
-          message: error.message,
-          name: error.name,
-          status: error.status as number,
-        },
-      };
-    }
-
-    return { error: null };
-  } catch (err) {
-    // 오류도 직렬화 가능한 형태로 변환
-    return {
-      error: {
-        message: err instanceof Error ? err.message : '알 수 없는 오류',
-        name: 'ResetPasswordError',
-        status: 500,
-      },
-    };
-  }
-};
-
-/**
  * 현재 로그인한 사용자 정보를 가져오는 서버 액션
  * @returns 사용자 정보와 에러 객체
  */

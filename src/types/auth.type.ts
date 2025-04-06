@@ -44,6 +44,11 @@ export type PasswordInputProps = {
   register: UseFormRegisterReturn;
 };
 
+export type ResetPasswordFormValues = {
+  password: string;
+  confirmPassword: string;
+};
+
 export type EmailFormValues = {
   email: string;
 };

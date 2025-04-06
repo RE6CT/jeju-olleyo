@@ -10,9 +10,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { resetPassword } from '@/lib/apis/auth-server.api';
 import { forgotPasswordSchema } from '@/lib/schemas/auth-schema';
 import { EmailFormValues } from '@/types/auth.type';
+import { resetPassword } from '@/lib/apis/auth-browser.api';
 
 /**
  * 비밀번호 찾기 페이지 컴포넌트
@@ -34,7 +34,8 @@ const ForgotPasswordPage = () => {
   });
 
   /**
-   * 비밀번호 재설정 요청 처리 함수
+   * 비밀번호 재설정 요청 핸들러
+   * @param data - 이메일 데이터
    */
   const onSubmit = async (data: EmailFormValues) => {
     setIsLoading(true);

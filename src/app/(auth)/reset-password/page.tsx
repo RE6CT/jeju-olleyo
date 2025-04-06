@@ -14,13 +14,14 @@ import Link from 'next/link';
 import { resetPasswordSchema } from '@/lib/schemas/auth-schema';
 import { ResetPasswordFormValues } from '@/types/auth.type';
 import { updataUserPassword } from '@/lib/apis/auth-browser.api';
+import { getResetPasswordErrorMessage } from '@/lib/utils/auth-error-utils';
 
 /**
  * 비밀번호 재설정 페이지 컴포넌트
  */
 const ResetPasswordPage = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [errorMessages, setErrorMessages] = useState<string[]>([]);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const router = useRouter();
 
@@ -47,21 +48,29 @@ const ResetPasswordPage = () => {
         const errorDescription = params.get('error_description');
 
         if (error) {
+          let errorMessage;
+
           switch (error) {
             case 'access_denied':
               if (errorDescription?.includes('expired')) {
-                setError(
-                  '비밀번호 재설정 링크가 만료되었습니다. 새 링크를 요청해주세요.',
-                );
+                errorMessage = [
+                  '비밀번호 재설정 링크가 만료되었습니다.',
+                  '새 링크를 요청해주세요.',
+                ];
               } else {
-                setError(
-                  '유효하지 않은 접근입니다. 비밀번호 재설정 링크를 다시 요청해주세요.',
-                );
+                errorMessage = [
+                  '유효하지 않은 접근입니다.',
+                  '비밀번호 재설정 링크를 다시 요청해주세요.',
+                ];
               }
               break;
             default:
-              setError('비밀번호 재설정 중 오류가 발생했습니다.');
+              errorMessage = getResetPasswordErrorMessage(
+                errorDescription || error,
+              );
           }
+
+          setErrorMessages(errorMessage);
         }
       }
     };
@@ -76,14 +85,15 @@ const ResetPasswordPage = () => {
   const onSubmit = async (data: ResetPasswordFormValues) => {
     setIsLoading(true);
     try {
-      setError(null);
+      setErrorMessages([]);
 
       const result = await updataUserPassword(data.password);
 
       if (result.error) {
-        throw new Error(
+        const errorMessage = getResetPasswordErrorMessage(
           result.error.message || '비밀번호 재설정 중 오류가 발생했습니다.',
         );
+        throw new Error(errorMessage.join(''));
       }
 
       setIsSubmitted(true);
@@ -92,11 +102,12 @@ const ResetPasswordPage = () => {
         router.push('/sign-in');
       }, 3000);
     } catch (err) {
-      console.error('Reset password error:', err);
-      setError(
+      setErrorMessages(
         err instanceof Error
-          ? err.message
-          : '비밀번호 재설정 중 오류가 발생했습니다.',
+          ? [err.message]
+          : getResetPasswordErrorMessage(
+              '비밀번호 재설정 중 오류가 발생했습니다.',
+            ),
       );
     } finally {
       setIsLoading(false);
@@ -111,9 +122,6 @@ const ResetPasswordPage = () => {
           description="비밀번호가 성공적으로 변경되었습니다"
         />
         <CardContent>
-          <div className="mb-4 text-sm text-green-500">
-            비밀번호가 성공적으로 변경되었습니다.
-          </div>
           <Button className="w-full" onClick={() => router.push('/sign-in')}>
             로그인 페이지로 이동
           </Button>
@@ -130,7 +138,9 @@ const ResetPasswordPage = () => {
       />
 
       <CardContent>
-        {error && <div className="mb-4 text-sm text-red-500">{error}</div>}
+        {errorMessages.length > 0 && (
+          <div className="mb-4 text-sm text-red-500">{errorMessages}</div>
+        )}
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
@@ -140,7 +150,6 @@ const ResetPasswordPage = () => {
               type="password"
               placeholder="새로운 비밀번호를 입력하세요"
               autoComplete="new-password"
-              disabled={!!error}
               {...register('password')}
             />
             {errors.password && (
@@ -155,7 +164,6 @@ const ResetPasswordPage = () => {
               type="password"
               placeholder="비밀번호를 다시 입력하세요"
               autoComplete="new-password"
-              disabled={!!error}
               {...register('confirmPassword')}
             />
             {errors.confirmPassword && (
@@ -168,14 +176,14 @@ const ResetPasswordPage = () => {
           <Button
             type="submit"
             className="w-full"
-            disabled={!isValid || isLoading || !!error}
+            disabled={!isValid || isLoading}
           >
             {isLoading ? '처리 중...' : '비밀번호 변경하기'}
           </Button>
         </form>
       </CardContent>
 
-      {error && (
+      {errorMessages && (
         <CardFooter className="flex justify-center">
           <div className="text-sm text-gray-600">
             <Link

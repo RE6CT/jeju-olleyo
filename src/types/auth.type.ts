@@ -52,3 +52,7 @@ export type ResetPasswordFormValues = {
 export type EmailFormValues = {
   email: string;
 };
+
+export type AuthMessageProps = {
+  message: string;
+};

@@ -13,6 +13,7 @@ import Link from 'next/link';
 import { forgotPasswordSchema } from '@/lib/schemas/auth-schema';
 import { EmailFormValues } from '@/types/auth.type';
 import { resetPassword } from '@/lib/apis/auth-browser.api';
+import { getForgotPasswordErrorMessage } from '@/lib/utils/auth-error-utils';
 
 /**
  * 비밀번호 찾기 페이지 컴포넌트
@@ -20,6 +21,7 @@ import { resetPassword } from '@/lib/apis/auth-browser.api';
 const ForgotPasswordPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
   const {
     register,
@@ -39,22 +41,26 @@ const ForgotPasswordPage = () => {
    */
   const onSubmit = async (data: EmailFormValues) => {
     setIsLoading(true);
+    setErrorMessages([]);
+
     try {
       const result = await resetPassword(data.email);
 
       if (result.error) {
-        console.error('비밀번호 재설정 오류:', result.error);
-        alert(`비밀번호 재설정 요청 실패: ${result.error.message}`);
+        const errorMessage = getForgotPasswordErrorMessage(
+          result.error.message,
+        );
+        setErrorMessages(errorMessage);
         return;
       }
 
       setIsSubmitted(true);
-      alert('비밀번호 재설정 링크가 이메일로 전송되었습니다');
     } catch (error) {
       console.error('예외 발생:', error);
-      alert(
-        `비밀번호 재설정 요청 중 오류가 발생했습니다: ${error instanceof Error ? error.message : '알 수 없는 오류'}`,
+      const errorMessage = getForgotPasswordErrorMessage(
+        error instanceof Error ? error.message : '알 수 없는 오류',
       );
+      setErrorMessages(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -71,8 +77,8 @@ const ForgotPasswordPage = () => {
         {isSubmitted ? (
           <div className="space-y-4 text-center">
             <p className="text-sm text-gray-600">
-              비밀번호 재설정 링크가 이메일로 전송되었습니다. 이메일을
-              확인해주세요.
+              비밀번호 재설정 링크가 이메일로 전송되었습니다.
+              <br /> 이메일을 확인해주세요.
             </p>
             <Button
               variant="outline"
@@ -84,6 +90,10 @@ const ForgotPasswordPage = () => {
           </div>
         ) : (
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            {errorMessages.length > 0 && (
+              <div className="mb-4 text-sm text-red-500">{errorMessages}</div>
+            )}
+
             <div className="space-y-2">
               <Label htmlFor="email">이메일</Label>
               <Input

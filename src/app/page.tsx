@@ -4,9 +4,9 @@ const Home = async () => {
   const { user } = await getCurrentUser();
 
   // 사용자 데이터 활용
-  const nickname = user?.user_metadata?.nickname;
-  const email = user?.user_metadata?.email;
-  const phone = user?.user_metadata?.phone;
+  const nickname = user?.nickname;
+  const email = user?.email;
+  const phone = user?.phone;
 
   return (
     <div className="flex h-screen w-full flex-col items-center justify-center py-8">
@@ -16,6 +16,6 @@ const Home = async () => {
       <p className="mb-4">전화번호: {phone}</p>
     </div>
   );
-}
+};
 
 export default Home;

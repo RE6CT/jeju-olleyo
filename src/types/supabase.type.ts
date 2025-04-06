@@ -303,7 +303,15 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      get_user_bookmarks: {
+        Args: { user_id_param: string };
+        Returns: {
+          place_id: number;
+          title: string;
+          image: string;
+          created_at: string;
+        }[];
+      };
     };
     Enums: {
       [_ in never]: never;

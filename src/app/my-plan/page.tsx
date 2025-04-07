@@ -18,14 +18,15 @@ const MyPlanPage = () => {
   const [filter, setFilter] = useState<{
     type: 'title' | 'date' | 'public' | null;
     value: string;
-  }>({ type: null, value: '' });
+  }>({ type: null, value: '' }); // 현재 적용된 필터 상태
   const [selectedFilter, setSelectedFilter] = useState<
     'title' | 'date' | 'public' | null
-  >(null);
+  >(null); // popover 내부 메뉴에서 선택된 필터 상태
   const [inputValue, setInputValue] = useState('');
   const [selectedPublicOption, setSelectedPublicOption] = useState<
     '전체' | '공개' | '비공개'
   >('전체');
+  const [isDatePickerFocused, setIsDatePickerFocused] = useState(false); // datepicker 포커스 상태(popover 닫히는 문제 해결을 위해)
 
   const resetFilter = () => {
     setFilter({ type: null, value: '' });
@@ -41,6 +42,13 @@ const MyPlanPage = () => {
       setFilter({ type: selectedFilter, value: inputValue });
     }
     setIsOpen(false);
+  };
+
+  const handleMouseLeave = () => {
+    if (!isDatePickerFocused) {
+      setIsOpen(false);
+      setSelectedFilter(null);
+    }
   };
 
   // TODO: API 연동 후 실제 데이터로 교체
@@ -97,7 +105,7 @@ const MyPlanPage = () => {
             <PopoverTrigger
               asChild
               onMouseEnter={() => setIsOpen(true)}
-              onMouseLeave={() => setIsOpen(false)}
+              onMouseLeave={handleMouseLeave}
             >
               <Button variant="outline" size="sm">
                 <Filter className="mr-2 h-4 w-4" />
@@ -109,7 +117,7 @@ const MyPlanPage = () => {
               align="start"
               sideOffset={5}
               onMouseEnter={() => setIsOpen(true)}
-              onMouseLeave={() => setIsOpen(false)}
+              onMouseLeave={handleMouseLeave}
             >
               <div className="flex w-[120px] flex-col gap-2">
                 <Button
@@ -117,7 +125,7 @@ const MyPlanPage = () => {
                   className="w-full justify-start"
                   onClick={() => {
                     setSelectedFilter('title');
-                    setInputValue('');
+                    setInputValue(filter.type === 'title' ? filter.value : '');
                   }}
                 >
                   제목
@@ -127,7 +135,7 @@ const MyPlanPage = () => {
                   className="w-full justify-start"
                   onClick={() => {
                     setSelectedFilter('date');
-                    setInputValue('');
+                    setInputValue(filter.type === 'date' ? filter.value : '');
                   }}
                 >
                   날짜
@@ -184,6 +192,11 @@ const MyPlanPage = () => {
                         value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)}
                         type={selectedFilter === 'date' ? 'date' : 'text'}
+                        className={
+                          selectedFilter === 'date' ? 'w-[140px]' : 'w-full'
+                        }
+                        onFocus={() => setIsDatePickerFocused(true)}
+                        onBlur={() => setIsDatePickerFocused(false)}
                       />
                     </div>
                   )}
@@ -202,7 +215,7 @@ const MyPlanPage = () => {
               )}
             </PopoverContent>
           </Popover>
-          {filter.type && (
+          {filter.type && filter.value !== '전체' && (
             <Button
               variant="ghost"
               size="sm"

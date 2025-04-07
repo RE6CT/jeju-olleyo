@@ -106,10 +106,44 @@ const AuthProvider = ({ children }: AuthProps) => {
           setLoading(true);
 
           try {
-            switch (
-              event
-              // 나머지 코드는 동일...
-            ) {
+            switch (event) {
+              case 'SIGNED_IN':
+                if (session?.user) {
+                  const formattedUser = formatUser(session.user);
+                  setUser(formattedUser);
+
+                  // URL 파라미터에서 리다이렉트 경로 확인
+                  const params = new URLSearchParams(window.location.search);
+                  const redirectTo = params.get('redirectTo') || '/';
+
+                  // 로그인 페이지나 회원가입 페이지, 콜백 페이지에서 로그인한 경우에만 리다이렉트
+                  const isAuthPage =
+                    pathname.includes('/sign-in') ||
+                    pathname.includes('/sign-up') ||
+                    pathname.includes('/auth/callback');
+
+                  if (isAuthPage) {
+                    router.push(redirectTo);
+                  }
+                }
+                break;
+
+              case 'SIGNED_OUT':
+                clearUser();
+                // 로그아웃 시 로그인 페이지로 강제 리다이렉트
+                router.push('/sign-in');
+                break;
+
+              case 'USER_UPDATED':
+                if (session?.user) {
+                  const formattedUser = formatUser(session.user);
+                  setUser(formattedUser);
+                }
+                break;
+
+              case 'PASSWORD_RECOVERY':
+                router.push('/reset-password');
+                break;
             }
           } catch (err) {
             // 개발 환경에서만 오류 출력

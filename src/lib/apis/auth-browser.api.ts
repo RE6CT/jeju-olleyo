@@ -10,15 +10,9 @@ import { SocialUserInfo } from '@/types/auth.type';
 export const formatUser = (user: User | null): SocialUserInfo | null => {
   if (!user) return null;
 
-  let provider = '';
+  console.log(user);
 
-  // 가장 최근 사용한 제공자 가져오기
-  if (user.app_metadata?.providers && user.app_metadata.providers.length > 0) {
-    provider =
-      user.app_metadata.providers[user.app_metadata.providers.length - 1];
-  } else if (user.app_metadata?.provider) {
-    provider = user.app_metadata.provider;
-  }
+  const provider = user.app_metadata.provider;
 
   // 기본 사용자 정보
   let nickname = user.user_metadata?.nickname || null;

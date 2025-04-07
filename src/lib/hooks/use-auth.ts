@@ -14,7 +14,10 @@ import {
 } from '@/lib/apis/auth-browser.api';
 import useAuthStore from '@/zustand/auth.store';
 import { getBrowserClient } from '@/lib/supabase/client';
-import { getLoginErrorMessage } from '../utils/auth-error.util';
+import {
+  getLoginErrorMessage,
+  getResetPasswordErrorMessage,
+} from '../utils/auth-error.util';
 
 /**
  * 인증 관련 기능을 처리하는 커스텀 훅
@@ -228,6 +231,7 @@ const useAuth = () => {
    * @param password - 새 비밀번호
    * @returns 성공 여부
    */
+  // useAuth 훅의 handleUpdatePassword 함수 수정
   const handleUpdatePassword = useCallback(
     async (password: string) => {
       setIsProcessing(true);
@@ -237,19 +241,26 @@ const useAuth = () => {
         const { error } = await updateUserPassword(password);
 
         if (error) {
-          setError(error.message);
-          return false;
+          return {
+            success: false,
+            errorMessage: error.message,
+          };
         }
 
-        return true;
+        return {
+          success: true,
+        };
       } catch (error: any) {
-        setError('비밀번호 업데이트 중 오류가 발생했습니다.');
-        return false;
+        return {
+          success: false,
+          errorMessage:
+            error.message || '비밀번호 업데이트 중 오류가 발생했습니다.',
+        };
       } finally {
         setIsProcessing(false);
       }
     },
-    [resetError, setError],
+    [resetError],
   );
 
   /**

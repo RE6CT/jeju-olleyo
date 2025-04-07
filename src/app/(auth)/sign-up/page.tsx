@@ -12,6 +12,7 @@ import AuthErrorMessage from '@/components/features/auth/auth-error-message';
 import { RegisterFormValues } from '@/types/auth.type';
 import useAuth from '@/lib/hooks/use-auth';
 import { getSignupErrorMessage } from '@/lib/utils/auth-error.util';
+import { CardContent } from '@/components/ui/card';
 
 /**
  * 회원가입 페이지 컴포넌트
@@ -56,10 +57,12 @@ const SignUpPage = () => {
         description="회원가입을 위한 정보를 입력해주세요."
       />
 
-      {/* 에러 메시지 표시 */}
-      {errorMessages.length > 0 && (
-        <AuthErrorMessage messages={errorMessages} />
-      )}
+      <CardContent className="pb-0">
+        {/* 에러 메시지 표시 - 폼 바로 위에 위치 */}
+        {errorMessages.length > 0 && (
+          <AuthErrorMessage messages={errorMessages} className="mb-6" />
+        )}
+      </CardContent>
 
       <AuthForm type="register" onSubmit={handleSubmit} isLoading={isLoading} />
 

@@ -20,6 +20,7 @@ import { AUTH_TIMEOUTS } from '@/constants/auth.constants';
 import useAuth from '@/lib/hooks/use-auth';
 import useAuthStore from '@/zustand/auth.store';
 import PasswordInput from '@/components/features/auth/auth-password-input';
+import { motion } from 'framer-motion';
 
 const ResetPasswordPage = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -94,12 +95,12 @@ const ResetPasswordPage = () => {
     resetError(); // 이전 에러 메시지 초기화
 
     try {
-      const success = await handleUpdatePassword(data.password);
+      const result = await handleUpdatePassword(data.password);
 
-      if (!success) {
-        // 에러 메시지 변환 후 전역 상태에 저장
+      if (result.success === false) {
+        // 서버에서 반환된 실제 에러 메시지를 사용
         const errorMessages = getResetPasswordErrorMessage(
-          '비밀번호 변경 중 오류가 발생했습니다.',
+          result.errorMessage || '비밀번호 변경 중 오류가 발생했습니다.',
         );
         setError(errorMessages[0]);
         return;
@@ -107,7 +108,7 @@ const ResetPasswordPage = () => {
 
       setIsSubmitted(true);
     } catch (err) {
-      // 에러 메시지 변환 후 전역 상태에 저장
+      // 예외 처리 (네트워크 오류 등)
       const errorMessages = getResetPasswordErrorMessage(
         err instanceof Error
           ? err.message
@@ -126,8 +127,32 @@ const ResetPasswordPage = () => {
           description="비밀번호가 성공적으로 변경되었습니다"
         />
         <CardContent className="text-center">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="mb-6"
+          >
+            <div className="mx-auto mb-4 inline-flex rounded-full bg-green-50 p-4">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="text-green-600"
+              >
+                <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
+                <path d="m9 12 2 2 4-4"></path>
+              </svg>
+            </div>
+          </motion.div>
+
           {!error && (
-            <p className="text-center text-sm text-muted-foreground">
+            <p className="mb-6 text-center text-sm text-muted-foreground">
               {countdown}초 후 메인 페이지로 이동합니다.
             </p>
           )}
@@ -148,8 +173,8 @@ const ResetPasswordPage = () => {
 
       {/* 비밀번호 입력 필드 */}
       <CardContent>
-        {/* auth.store의 error 상태로 에러 메시지 표시 */}
-        {error && <AuthErrorMessage messages={[error]} />}
+        {/* 에러 메시지를 폼 상단에 배치 */}
+        {error && <AuthErrorMessage messages={[error]} className="mb-6" />}
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">

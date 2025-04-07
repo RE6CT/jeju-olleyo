@@ -15,6 +15,7 @@ import { STORAGE_KEY } from '@/constants/auth.constants';
 import useAuth from '@/lib/hooks/use-auth';
 import { getBrowserClient } from '@/lib/supabase/client';
 import { getLoginErrorMessage } from '@/lib/utils/auth-error.util';
+import { CardContent } from '@/components/ui/card';
 
 /**
  * 로그인 페이지 컴포넌트
@@ -105,10 +106,12 @@ const LoginPage = () => {
         description="계정 정보를 입력하여 로그인하세요"
       />
 
-      {/* 에러 메시지 표시 */}
-      {errorMessages.length > 0 && (
-        <AuthErrorMessage messages={errorMessages} />
-      )}
+      <CardContent className="pb-0">
+        {/* 에러 메시지 표시 - 폼 상단에 위치 */}
+        {errorMessages.length > 0 && (
+          <AuthErrorMessage messages={errorMessages} className="mb-6" />
+        )}
+      </CardContent>
 
       <AuthForm
         type="login"

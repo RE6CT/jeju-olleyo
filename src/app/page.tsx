@@ -31,6 +31,7 @@ const Home = async () => {
         <p className="mb-2">전화번호: {user?.phone || '미등록'}</p>
       </div>
 
+      {/* 클라이언트 사이드 유저정보 */}
       <AuthClientInfo />
     </div>
   );

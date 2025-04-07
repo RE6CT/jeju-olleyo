@@ -20,7 +20,6 @@ import { AUTH_TIMEOUTS } from '@/constants/auth.constants';
 import useAuth from '@/lib/hooks/use-auth';
 import useAuthStore from '@/zustand/auth.store';
 import PasswordInput from '@/components/features/auth/auth-password-input';
-import { motion } from 'framer-motion';
 
 const ResetPasswordPage = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -122,44 +121,29 @@ const ResetPasswordPage = () => {
   if (isSubmitted) {
     return (
       <AuthLayout>
-        <AuthHeader
-          title="비밀번호 재설정 완료"
-          description="비밀번호가 성공적으로 변경되었습니다"
-        />
-        <CardContent className="text-center">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="mb-6"
-          >
-            <div className="mx-auto mb-4 inline-flex rounded-full bg-green-50 p-4">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="32"
-                height="32"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="text-green-600"
-              >
-                <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
-                <path d="m9 12 2 2 4-4"></path>
-              </svg>
+        <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+          <div className="w-full max-w-md rounded-md bg-white p-6 shadow-lg">
+            <div className="mb-4 text-center">
+              <h2 className="text-xl font-bold">비밀번호 재설정</h2>
             </div>
-          </motion.div>
-
-          {!error && (
-            <p className="mb-6 text-center text-sm text-muted-foreground">
-              {countdown}초 후 메인 페이지로 이동합니다.
-            </p>
-          )}
-          <Button className="w-full" onClick={() => router.push('/')}>
-            메인 페이지로 이동
-          </Button>
-        </CardContent>
+            <div className="rounded-md bg-white p-6">
+              <div className="text-center">
+                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-md bg-gray-100">
+                  {/* 이미지 대신 빈 공간 (이미지에 보이는 회색 박스) */}
+                </div>
+                <h3 className="mb-2 font-bold">
+                  비밀번호가 성공적으로 재설정되었습니다.
+                </h3>
+                <p className="mb-6 text-sm text-gray-500">
+                  {countdown}초 후 메인페이지로 돌아갑니다.
+                </p>
+                <Button className="w-full" onClick={() => router.push('/')}>
+                  홈으로 돌아가기
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
       </AuthLayout>
     );
   }
@@ -212,20 +196,6 @@ const ResetPasswordPage = () => {
           </Button>
         </form>
       </CardContent>
-
-      {/* 비밀번호 재설정 링크 */}
-      {error && (
-        <CardFooter className="flex justify-center">
-          <div className="text-sm text-gray-600">
-            <Link
-              href="/forgot-password"
-              className="text-blue-600 hover:text-blue-800"
-            >
-              비밀번호 재설정 링크 다시 받기
-            </Link>
-          </div>
-        </CardFooter>
-      )}
     </AuthLayout>
   );
 };

@@ -16,7 +16,6 @@ import { resetPassword } from '@/lib/apis/auth-browser.api';
 import { getForgotPasswordErrorMessage } from '@/lib/utils/auth-error.util';
 import useAuthStore from '@/zustand/auth.store';
 import AuthErrorMessage from '@/components/features/auth/auth-error-message';
-import { motion } from 'framer-motion';
 
 /**
  * 비밀번호 찾기 페이지 컴포넌트
@@ -24,6 +23,7 @@ import { motion } from 'framer-motion';
 const ForgotPasswordPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submittedEmail, setSubmittedEmail] = useState('');
   const { setError, resetError, error } = useAuthStore();
 
   const {
@@ -59,6 +59,7 @@ const ForgotPasswordPage = () => {
         return;
       }
 
+      setSubmittedEmail(data.email);
       setIsSubmitted(true);
     } catch (error) {
       console.error('예외 발생:', error);
@@ -83,40 +84,28 @@ const ForgotPasswordPage = () => {
     <AuthLayout>
       <AuthHeader
         title="비밀번호 찾기"
-        description="계정에 등록된 이메일을 입력하여 비밀번호를 재설정하세요"
+        description={
+          isSubmitted
+            ? '비밀번호 재설정 링크를 이메일로 발송했어요.'
+            : '계정에 등록된 이메일을 입력하여 비밀번호를 재설정하세요'
+        }
       />
 
       <CardContent>
         {isSubmitted ? (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="space-y-4 text-center"
-          >
-            <div className="mx-auto mb-2 inline-flex rounded-full bg-green-50 p-3">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="text-green-600"
-              >
-                <polyline points="20 6 9 17 4 12"></polyline>
-              </svg>
+          <div className="space-y-4">
+            <div className="rounded-md border border-gray-400 p-3">
+              <p className="text-center text-gray-400">
+                {submittedEmail || 'abc123@email.com'}
+              </p>
             </div>
-            <p className="text-sm text-gray-600">
-              비밀번호 재설정 링크가 이메일로 전송되었습니다.
-              <br /> 이메일을 확인해주세요.
-            </p>
-            <Button variant="outline" className="w-full" onClick={handleRetry}>
-              다시 시도하기
-            </Button>
-          </motion.div>
+
+            <div className="mt-4 space-y-2">
+              <Button className="text-balck w-full bg-gray-200" disabled={true}>
+                메일 발송 완료!
+              </Button>
+            </div>
+          </div>
         ) : (
           <>
             {/* 에러 메시지 표시 - 폼 바로 위에 배치 */}
@@ -145,12 +134,8 @@ const ForgotPasswordPage = () => {
 
       <CardFooter className="flex justify-center">
         <div className="text-sm text-gray-600">
-          로그인 페이지로 돌아가기
-          <Link
-            href="/sign-in"
-            className="ml-1 text-blue-600 hover:text-blue-800"
-          >
-            로그인
+          <Link href="/sign-in" className="ml-1 text-black hover:text-blue-800">
+            로그인 페이지로 돌아가기
           </Link>
         </div>
       </CardFooter>

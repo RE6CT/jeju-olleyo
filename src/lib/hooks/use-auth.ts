@@ -63,6 +63,11 @@ const useAuth = () => {
             ...response.user,
             email: response.user.email ?? null,
           });
+
+          await fetch('/api/set-provider?provider=email', {
+            method: 'GET',
+            credentials: 'include',
+          });
         }
 
         // 로그인 성공 후 홈페이지로 강제 리다이렉트

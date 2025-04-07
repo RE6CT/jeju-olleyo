@@ -6,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from '../../ui/card';
+import { CategoryCardProp } from '@/types/card.type';
 
 /**
  * @param image 이미지값 

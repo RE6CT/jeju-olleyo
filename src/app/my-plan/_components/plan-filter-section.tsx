@@ -12,6 +12,21 @@ import {
 import { Filter } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 
+/**
+ * 여행 계획 필터 섹션 컴포넌트
+ * @param initialPlans - 초기 여행 계획 목록
+ *
+ * @example
+ * ```tsx
+ * const MyPlanPage = () => {
+ *   return (
+ *     <div>
+ *       <PlanFilterSection initialPlans={plans} />
+ *     </div>
+ *   );
+ * };
+ * ```
+ */
 const PlanFilterSection = ({ initialPlans }: { initialPlans: Plan[] }) => {
   const [plans, setPlans] = useState<Plan[]>(initialPlans);
   const [isOpen, setIsOpen] = useState(false); // 호버 상태 관리
@@ -28,6 +43,7 @@ const PlanFilterSection = ({ initialPlans }: { initialPlans: Plan[] }) => {
   >('전체');
   const [isDatePickerFocused, setIsDatePickerFocused] = useState(false); // datepicker 포커스 상태(popover 닫히는 문제 해결을 위해)
 
+  // 필터 초기화
   const resetFilter = () => {
     setFilter({ type: null, value: '' });
     setSelectedFilter(null);
@@ -35,6 +51,7 @@ const PlanFilterSection = ({ initialPlans }: { initialPlans: Plan[] }) => {
     setSelectedPublicOption('전체');
   };
 
+  // 필터 적용
   const handleApplyFilter = () => {
     if (selectedFilter === 'public') {
       setFilter({ type: selectedFilter, value: selectedPublicOption });
@@ -44,6 +61,7 @@ const PlanFilterSection = ({ initialPlans }: { initialPlans: Plan[] }) => {
     setIsOpen(false);
   };
 
+  // popover mouseleave 이벤트 핸들러
   const handleMouseLeave = () => {
     if (!isDatePickerFocused) {
       setIsOpen(false);
@@ -51,11 +69,13 @@ const PlanFilterSection = ({ initialPlans }: { initialPlans: Plan[] }) => {
     }
   };
 
+  // 계획 수정 핸들러
   const handleEdit = (planId: number) => {
     console.log('수정할 계획 ID:', planId);
     // TODO: 수정 페이지로 이동
   };
 
+  // 계획 삭제 핸들러
   const handleDelete = (planId: number) => {
     console.log('삭제할 계획 ID:', planId);
     // TODO: 삭제 API 호출

@@ -10,8 +10,6 @@ import { SocialUserInfo } from '@/types/auth.type';
 export const formatUser = (user: User | null): SocialUserInfo | null => {
   if (!user) return null;
 
-  console.log(user);
-
   const provider = user.app_metadata.provider;
 
   // 기본 사용자 정보

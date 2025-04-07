@@ -5,11 +5,10 @@ import PlanCard from '@/components/features/plan/plan-card';
 import { Plan } from '@/types/plan.type';
 import { Button } from '@/components/ui/button';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 import { Filter } from 'lucide-react';
 
 const MyPlanPage = () => {
@@ -18,6 +17,7 @@ const MyPlanPage = () => {
     type: 'title' | 'date' | 'public' | null;
     value: string;
   }>({ type: null, value: '' });
+  const [isOpen, setIsOpen] = useState(false); // 호버 상태 관리
 
   const resetFilter = () => {
     setFilter({ type: null, value: '' });
@@ -73,31 +73,58 @@ const MyPlanPage = () => {
           <Button>새 일정 만들기</Button>
         </div>
         <div className="flex items-center gap-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+          <Popover open={isOpen} onOpenChange={setIsOpen}>
+            <PopoverTrigger
+              asChild
+              onMouseEnter={() => setIsOpen(true)}
+              onMouseLeave={() => setIsOpen(false)}
+            >
               <Button variant="outline" size="sm">
                 <Filter className="mr-2 h-4 w-4" />
                 필터
               </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start">
-              <DropdownMenuItem
-                onClick={() => setFilter({ type: 'title', value: 'title' })}
-              >
-                제목
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => setFilter({ type: 'date', value: 'date' })}
-              >
-                날짜
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => setFilter({ type: 'public', value: 'public' })}
-              >
-                공개 상태
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+            </PopoverTrigger>
+            <PopoverContent
+              className="w-30 mt-[-4px] rounded-md border bg-popover p-1"
+              align="start"
+              sideOffset={5}
+              onMouseEnter={() => setIsOpen(true)}
+              onMouseLeave={() => setIsOpen(false)}
+            >
+              <div className="flex flex-col gap-2">
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start"
+                  onClick={() => {
+                    setFilter({ type: 'title', value: 'title' });
+                    setIsOpen(false);
+                  }}
+                >
+                  제목
+                </Button>
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start"
+                  onClick={() => {
+                    setFilter({ type: 'date', value: 'date' });
+                    setIsOpen(false);
+                  }}
+                >
+                  날짜
+                </Button>
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start"
+                  onClick={() => {
+                    setFilter({ type: 'public', value: 'public' });
+                    setIsOpen(false);
+                  }}
+                >
+                  공개 상태
+                </Button>
+              </div>
+            </PopoverContent>
+          </Popover>
           {filter.type && (
             <Button
               variant="ghost"

@@ -3,7 +3,7 @@
 import { Separator } from '@/components/ui/separator';
 import SocialProvider from './auth-social-provider';
 import { CardContent } from '@/components/ui/card';
-import useAuth from '@/lib/hooks/useAuth';
+import useAuth from '@/lib/hooks/use-auth';
 
 /**
  * 소셜 로그인 섹션 컴포넌트

@@ -14,8 +14,8 @@ import { Button } from '@/components/ui/button';
 
 import { forgotPasswordSchema } from '@/lib/schemas/auth-schema';
 import { EmailFormValues } from '@/types/auth.type';
-import useAuth from '@/lib/hooks/useAuth';
-import { getForgotPasswordErrorMessage } from '@/lib/utils/auth-error-utils';
+import useAuth from '@/lib/hooks/use-auth';
+import { getForgotPasswordErrorMessage } from '@/lib/utils/auth-error.util';
 
 /**
  * 비밀번호 찾기 페이지 컴포넌트

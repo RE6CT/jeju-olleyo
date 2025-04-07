@@ -1,6 +1,10 @@
 import { useState, useCallback } from 'react';
 import { LoginFormValues, RegisterFormValues } from '@/types/auth.type';
-import { login, register, logout } from '@/lib/apis/auth-server.api';
+import {
+  fetchLogin,
+  fetchRegister,
+  fetchLogout,
+} from '@/lib/apis/auth-server.api';
 import {
   googleLogin,
   kakaoLogin,
@@ -8,8 +12,9 @@ import {
   resetPassword,
   updateUserPassword,
 } from '@/lib/apis/auth-browser.api';
-import useAuthStore from '@/zustand/useAuthStore';
+import useAuthStore from '@/zustand/auth.store';
 import { getBrowserClient } from '@/lib/supabase/client';
+import { getLoginErrorMessage } from '../utils/auth-error.util';
 
 /**
  * 인증 관련 기능을 처리하는 커스텀 훅
@@ -39,10 +44,13 @@ const useAuth = () => {
       resetError();
 
       try {
-        const response = await login(values);
+        const response = await fetchLogin(values);
 
         if (response.error) {
-          setError(response.error.message);
+          const errorMessage = getLoginErrorMessage(response.error.message);
+          setError(
+            Array.isArray(errorMessage) ? errorMessage[0] : errorMessage,
+          );
           return false;
         }
 
@@ -66,7 +74,10 @@ const useAuth = () => {
 
         return true;
       } catch (error: any) {
-        setError('로그인 중 오류가 발생했습니다.');
+        const errorMessage = getLoginErrorMessage(
+          error.message || '로그인 중 오류가 발생했습니다.',
+        );
+        setError(Array.isArray(errorMessage) ? errorMessage[0] : errorMessage);
         return false;
       } finally {
         setIsProcessing(false);
@@ -86,7 +97,7 @@ const useAuth = () => {
       resetError();
 
       try {
-        const response = await register(values);
+        const response = await fetchRegister(values);
 
         if (response.error) {
           setError(response.error.message);
@@ -163,7 +174,7 @@ const useAuth = () => {
       clearUser();
 
       // 그 다음 서버에 로그아웃 요청
-      const { error } = await logout();
+      const { error } = await fetchLogout();
 
       if (error) {
         setError(error.message);

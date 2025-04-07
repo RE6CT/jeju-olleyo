@@ -10,8 +10,8 @@ import AuthFooter from '@/components/features/auth/auth-footer';
 import AuthErrorMessage from '@/components/features/auth/auth-error-message';
 
 import { RegisterFormValues } from '@/types/auth.type';
-import useAuth from '@/lib/hooks/useAuth';
-import { getSignupErrorMessage } from '@/lib/utils/auth-error-utils';
+import useAuth from '@/lib/hooks/use-auth';
+import { getSignupErrorMessage } from '@/lib/utils/auth-error.util';
 
 /**
  * 회원가입 페이지 컴포넌트

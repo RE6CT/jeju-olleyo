@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import AuthLayout from '@/components/features/auth/auth-layout';
@@ -12,18 +12,18 @@ import AuthErrorMessage from '@/components/features/auth/auth-error-message';
 
 import { LoginFormValues } from '@/types/auth.type';
 import { STORAGE_KEY } from '@/constants/auth.constants';
-import useAuth from '@/lib/hooks/useAuth';
+import useAuth from '@/lib/hooks/use-auth';
 import { getBrowserClient } from '@/lib/supabase/client';
+import { getLoginErrorMessage } from '@/lib/utils/auth-error.util';
 
 /**
  * 로그인 페이지 컴포넌트
  */
 const LoginPage = () => {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get('redirectTo') || '/';
 
-  const { handleLogin, isLoading, error, isAuthenticated } = useAuth();
+  const { handleLogin, isLoading, error } = useAuth();
   const [savedEmail, setSavedEmail] = useState<string>('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -101,8 +101,8 @@ const LoginPage = () => {
     );
   }
 
-  // 에러 메시지 배열로 변환
-  const errorMessages = error ? [error] : [];
+  // 에러 메시지 처리 - 사용자 친화적인 메시지로 변환
+  const errorMessages = error ? getLoginErrorMessage(error) : [];
 
   return (
     <AuthLayout>

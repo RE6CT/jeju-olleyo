@@ -7,7 +7,7 @@ import { MouseEvent, RefObject, useState, useEffect } from 'react';
 import { ModalPath } from '@/types/mypage.type';
 import ProfileImage from '@/components/commons/profile-image';
 import { useRouter } from 'next/navigation';
-import useAuth from '@/lib/hooks/useAuth';
+import useAuth from '@/lib/hooks/use-auth';
 import { getCurrentSession } from '@/lib/apis/auth-browser.api';
 
 type MypageModalProps = {

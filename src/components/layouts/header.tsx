@@ -1,10 +1,10 @@
 import Link from 'next/link';
 import SearchBar from './search-bar';
 import MypageButton from '../features/nav-mypage/mypage-button';
-import { getCurrentUser } from '@/lib/apis/auth-server.api';
+import { fetchGetCurrentUser } from '@/lib/apis/auth-server.api';
 
 const Header = async () => {
-  const { user } = await getCurrentUser();
+  const { user } = await fetchGetCurrentUser();
 
   return (
     <header className="fixed flex w-full justify-between bg-black p-3 text-white">

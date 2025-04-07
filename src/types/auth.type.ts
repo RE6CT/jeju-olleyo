@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import { UseFormRegisterReturn } from 'react-hook-form';
 
 /**
@@ -67,12 +68,12 @@ export type AuthFooterProps = {
 /**
  * 소셜 로그인 제공자 컴포넌트의 Props 타입
  */
-export interface SocialProviderProps {
+export type SocialProviderProps = {
   /** 소셜 로그인 제공자 (구글, 카카오) */
   provider: 'google' | 'kakao';
   /** 클릭 이벤트 핸들러 */
   onClick: () => Promise<boolean>;
-}
+};
 
 /**
  * 비밀번호 입력 필드 컴포넌트의 Props 타입
@@ -155,7 +156,7 @@ export type UserState = {
 /**
  * 서버에서 반환되는 직렬화된 사용자 정보
  */
-export interface SerializedUser {
+export type SerializedUser = {
   /** 사용자 고유 ID */
   id: string;
   /** 사용자 이메일 */
@@ -168,12 +169,12 @@ export interface SerializedUser {
   avatar_url?: string | null;
   /** 인증 제공자 */
   provider: string;
-}
+};
 
 /**
  * 인증 응답 타입
  */
-export interface AuthResponse {
+export type AuthResponse = {
   /** 사용자 정보 */
   user: SerializedUser | null;
   /** 오류 정보 */
@@ -183,16 +184,37 @@ export interface AuthResponse {
     /** HTTP 상태 코드 */
     status: number;
   } | null;
-}
+};
 
 /**
  * 사용자 프로필 업데이트 데이터 타입
  */
-export interface ProfileUpdateData {
+export type ProfileUpdateData = {
   /** 사용자 닉네임 */
   nickname?: string;
   /** 사용자 전화번호 */
   phone?: string;
   /** 사용자 프로필 이미지 URL */
   avatar_url?: string;
-}
+};
+
+export type AuthProps = {
+  children: ReactNode;
+};
+
+/**
+ * 인증 상태 관리를 위한 Zustand 스토어 타입
+ */
+export type AuthState = {
+  user: SocialUserInfo | null;
+  isLoading: boolean;
+  error: string | null;
+  isAuthenticated: boolean;
+
+  // 액션들
+  setUser: (user: SocialUserInfo | null) => void;
+  clearUser: () => void;
+  setLoading: (isLoading: boolean) => void;
+  setError: (error: string | null) => void;
+  resetError: () => void;
+};

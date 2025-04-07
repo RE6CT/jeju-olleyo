@@ -8,7 +8,7 @@ import { getServerClient } from '@/lib/supabase/server';
  * @param values 로그인 폼 데이터
  * @returns 직렬화 가능한 사용자 정보와 에러 객체
  */
-export const login = async (values: LoginFormValues) => {
+export const fetchLogin = async (values: LoginFormValues) => {
   const supabase = await getServerClient();
 
   try {
@@ -66,7 +66,7 @@ export const login = async (values: LoginFormValues) => {
  * @param values 회원가입 폼 데이터
  * @returns 직렬화 가능한 사용자 정보와 에러 객체
  */
-export const register = async (values: RegisterFormValues) => {
+export const fetchRegister = async (values: RegisterFormValues) => {
   const supabase = await getServerClient();
 
   try {
@@ -124,7 +124,7 @@ export const register = async (values: RegisterFormValues) => {
  * 로그아웃 기능을 처리하는 서버 액션
  * @returns 직렬화 가능한 에러 객체
  */
-export const logout = async () => {
+export const fetchLogout = async () => {
   const supabase = await getServerClient();
 
   try {
@@ -243,7 +243,7 @@ export const checkPhoneExists = async (phone: string): Promise<boolean> => {
  * 현재 로그인한 사용자 정보를 가져오는 서버 액션
  * @returns 직렬화 가능한 사용자 정보와 에러 객체
  */
-export const getCurrentUser = async () => {
+export const fetchGetCurrentUser = async () => {
   const supabase = await getServerClient();
 
   try {

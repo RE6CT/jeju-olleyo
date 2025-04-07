@@ -1,23 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { SocialUserInfo } from '@/types/auth.type';
-
-/**
- * 인증 상태 관리를 위한 Zustand 스토어 타입
- */
-interface AuthState {
-  user: SocialUserInfo | null;
-  isLoading: boolean;
-  error: string | null;
-  isAuthenticated: boolean;
-
-  // 액션들
-  setUser: (user: SocialUserInfo | null) => void;
-  clearUser: () => void;
-  setLoading: (isLoading: boolean) => void;
-  setError: (error: string | null) => void;
-  resetError: () => void;
-}
+import { AuthState } from '@/types/auth.type';
 
 /**
  * 인증 상태 관리를 위한 Zustand 스토어

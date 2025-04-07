@@ -1,9 +1,9 @@
-import { getCurrentUser } from '@/lib/apis/auth-server.api';
+import { fetchGetCurrentUser } from '@/lib/apis/auth-server.api';
 import Image from 'next/image';
 
 const Home = async () => {
   // 서버 컴포넌트에서 사용자 정보 가져오기
-  const { user } = await getCurrentUser();
+  const { user } = await fetchGetCurrentUser();
 
   return (
     <div className="flex h-screen w-full flex-col items-center justify-center py-8">

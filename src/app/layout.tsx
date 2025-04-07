@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import Providers from '@/config/tq-provider';
 import Header from '@/components/layouts/header';
-import AuthProvider from '@/config/AuthProvider';
+import AuthProvider from '@/config/auth-provider';
 
 export const metadata: Metadata = {
   title: '제주 올레요',

@@ -12,8 +12,8 @@ const AuthErrorMessage = ({
   className?: string;
 }) => {
   return (
-    <div className={`mb-4 rounded-md p-3 ${className}`}>
-      <div className="text-red-600">
+    <div className={`mb-4 flex justify-center rounded-md p-3 ${className}`}>
+      <div className="text-sm text-red-600">
         {messages.map((message, index) => (
           <p key={index} className={index > 0 ? 'mt-1' : ''}>
             {message}

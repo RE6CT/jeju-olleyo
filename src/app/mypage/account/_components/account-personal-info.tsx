@@ -1,9 +1,27 @@
-import { Button } from '@/components/ui/button';
+'use client';
 
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { useState } from 'react';
+
+/** 회원정보 수정 페이지의 개인 정보 섹션 컴포넌트 */
 const PersonalInfo = () => {
+  const [isEditMode, setIsEditMode] = useState<boolean>(false);
+
+  /** 휴대폰 수정 버튼 클릭 핸들러 */
+  const handleEditButtonClick = () => {
+    setIsEditMode(true);
+  };
+
+  /** 휴대폰 수정 완료 버튼 클릭 핸들러  */
+  const handleEditCompleteButtonClick = () => {
+    // 휴대폰 번호 수정 로직
+    setIsEditMode(false);
+  };
+
   return (
     <>
-      <li className="flex flex-col gap-3">
+      <section className="flex flex-col gap-3">
         <h3 className="text-lg font-semibold">개인 정보</h3>
         <div className="ml-[176px] flex flex-col">
           <div className="flex w-full items-center">
@@ -12,11 +30,23 @@ const PersonalInfo = () => {
           </div>
           <div className="flex w-full items-center">
             <span className="w-[120px]">휴대폰</span>
-            <span className="flex-grow">010-1111-2222</span>
-            <Button className="w-fit">수정</Button>
+            {isEditMode ? (
+              <Input placeholder="010 1111 2222" />
+            ) : (
+              <span className="flex-grow">010-1111-2222</span>
+            )}
+            {isEditMode ? (
+              <Button onClick={handleEditCompleteButtonClick} className="w-fit">
+                완료
+              </Button>
+            ) : (
+              <Button onClick={handleEditButtonClick} className="w-fit">
+                수정
+              </Button>
+            )}
           </div>
         </div>
-      </li>
+      </section>
     </>
   );
 };

@@ -106,7 +106,7 @@ importers:
         specifier: ^0.6.11
         version: 0.6.11(prettier@3.5.3)
       supabase:
-        specifier: '>=1.8.1'
+        specifier: ^2.20.5
         version: 2.20.5
       tailwindcss:
         specifier: ^3.4.1

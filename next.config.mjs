@@ -12,6 +12,13 @@ const nextConfig = {
         search: '',
       },
     ],
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'tong.visitkorea.or.kr',
+        pathname: '/**',
+      },
+    ],
   },
 };
 

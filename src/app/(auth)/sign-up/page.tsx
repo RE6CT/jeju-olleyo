@@ -1,57 +1,71 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+
 import AuthLayout from '@/components/features/auth/auth-layout';
 import AuthHeader from '@/components/features/auth/auth-header';
 import AuthForm from '@/components/features/auth/auth-form';
 import AuthFooter from '@/components/features/auth/auth-footer';
+import AuthErrorMessage from '@/components/features/auth/auth-error-message';
+
 import { RegisterFormValues } from '@/types/auth.type';
-import { register } from '@/lib/apis/auth-server.api';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import useAuth from '@/lib/hooks/use-auth';
+import { getSignupErrorMessage } from '@/lib/utils/auth-error.util';
+import { CardContent } from '@/components/ui/card';
 
 /**
  * 회원가입 페이지 컴포넌트
+ * - 회원가입 폼 제공
+ * - 오류 메시지 처리
+ * - 회원가입 성공 시 리다이렉트
  */
 const SignUpPage = () => {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  const { handleRegister, isLoading, error, isAuthenticated } = useAuth();
+
+  /**
+   * 이미 로그인되어 있는 경우 홈으로 리다이렉트
+   */
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push('/');
+    }
+  }, [isAuthenticated, router]);
 
   /**
    * 회원가입 폼 제출 핸들러
-   * @param data 회원가입 폼 데이터
+   * @param data - 회원가입 폼 데이터
    */
   const handleSubmit = async (data: RegisterFormValues) => {
-    try {
-      setIsLoading(true);
+    const success = await handleRegister(data);
 
-      // 서버 액션을 직접 호출
-      const result = await register(data);
-
-      // 성공 처리 (예: 로그인 페이지로 리다이렉트 등)
-      if (result.user) {
-        router.push('/');
-      } else if (result.error) {
-        console.error('회원가입 실패:', result.error);
-        // 에러 처리 로직
-      }
-    } catch (error) {
-      console.error('회원가입 오류:', error);
-    } finally {
-      setIsLoading(false);
+    if (success) {
+      // AuthProvider에서 자동으로 홈으로 리다이렉트되지만,
+      // UI 응답성을 위해 명시적으로 처리
+      router.push('/');
     }
   };
 
+  // 에러 메시지 처리 - 사용자 친화적인 메시지로 변환
+  const errorMessages = error ? getSignupErrorMessage(error) : [];
+
   return (
-    // 회원가입 페이지 레이아웃
     <AuthLayout>
-      {/* 회원가입 페이지 헤더 */}
       <AuthHeader
         title="제주 올레요 회원가입"
         description="회원가입을 위한 정보를 입력해주세요."
       />
-      {/* 회원가입 폼 */}
+
+      <CardContent className="pb-0">
+        {/* 에러 메시지 표시 - 폼 바로 위에 위치 */}
+        {errorMessages.length > 0 && (
+          <AuthErrorMessage messages={errorMessages} className="mb-6" />
+        )}
+      </CardContent>
+
       <AuthForm type="register" onSubmit={handleSubmit} isLoading={isLoading} />
-      {/* 소셜 로그인 옵션 */}
+
       <AuthFooter
         question="이미 계정이 있으신가요?"
         linkText="로그인"

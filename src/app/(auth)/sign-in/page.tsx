@@ -1,26 +1,56 @@
 'use client';
 
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
 import AuthLayout from '@/components/features/auth/auth-layout';
 import AuthHeader from '@/components/features/auth/auth-header';
 import AuthForm from '@/components/features/auth/auth-form';
 import SocialLogin from '@/components/features/auth/auth-social-login';
 import AuthFooter from '@/components/features/auth/auth-footer';
-import { LoginFormValues } from '@/types/auth.type';
-import { login } from '@/lib/apis/auth-server.api';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { STORAGE_KEY } from '@/constants/auth.constants';
+import AuthErrorMessage from '@/components/features/auth/auth-error-message';
 
+import { LoginFormValues } from '@/types/auth.type';
+import { STORAGE_KEY } from '@/constants/auth.constants';
+import useAuth from '@/lib/hooks/use-auth';
+import { getBrowserClient } from '@/lib/supabase/client';
+import { getLoginErrorMessage } from '@/lib/utils/auth-error.util';
+import { CardContent } from '@/components/ui/card';
+
+/**
+ * 로그인 페이지 컴포넌트
+ */
 const LoginPage = () => {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get('redirectTo') || '/';
+
+  const { handleLogin, isLoading, error } = useAuth();
   const [savedEmail, setSavedEmail] = useState<string>('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // 이미 로그인되어 있는지 확인
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      try {
+        const supabase = await getBrowserClient();
+        const { data, error } = await supabase.auth.getSession();
+
+        if (data?.session && !error) {
+          setIsLoggedIn(true);
+          window.location.href = redirectTo;
+        }
+      } catch (err) {
+        console.error('세션 확인 오류:', err);
+      }
+    };
+
+    checkAuthStatus();
+  }, [redirectTo]);
 
   /**
    * 컴포넌트 마운트 시 로컬 스토리지에서 저장된 이메일 불러오기
    */
   useEffect(() => {
-    // 클라이언트 사이드에서만 실행되도록 함
     if (typeof window !== 'undefined') {
       const rememberedEmail = localStorage.getItem(STORAGE_KEY.SAVED_EMAIL);
       if (rememberedEmail) {
@@ -31,55 +61,67 @@ const LoginPage = () => {
 
   /**
    * 로그인 폼 제출 핸들러
-   * @param data 로그인 폼 데이터
+   * @param data - 로그인 폼 데이터
    */
   const handleSubmit = async (data: LoginFormValues) => {
-    try {
-      setIsLoading(true);
+    // 아이디 저장 처리
+    if (data.remember) {
+      localStorage.setItem(STORAGE_KEY.REMEMBER_EMAIL, 'true');
+      localStorage.setItem(STORAGE_KEY.SAVED_EMAIL, data.email);
+    } else {
+      localStorage.removeItem(STORAGE_KEY.REMEMBER_EMAIL);
+      localStorage.removeItem(STORAGE_KEY.SAVED_EMAIL);
+    }
 
-      // 아이디 저장 처리
-      if (data.remember) {
-        localStorage.setItem(STORAGE_KEY.REMEMBER_EMAIL, 'true');
-        localStorage.setItem(STORAGE_KEY.SAVED_EMAIL, data.email);
-      } else {
-        localStorage.removeItem(STORAGE_KEY.REMEMBER_EMAIL);
-        localStorage.removeItem(STORAGE_KEY.SAVED_EMAIL);
-      }
+    // useAuth의 handleLogin 사용
+    const success = await handleLogin(data);
 
-      const result = await login(data);
-
-      if (result.user) {
-        // 로그인 성공 시 홈 페이지로 리다이렉트
-        router.push('/');
-      } else if (result.error) {
-        console.error('로그인 실패:', result.error);
-        // 에러 처리 로직
-      }
-    } catch (error) {
-      console.error('로그인 오류:', error);
-    } finally {
-      setIsLoading(false);
+    if (success) {
+      // 성공 시 홈으로 리다이렉트 (useAuth에서도 처리하지만 이중으로 보장)
+      window.location.href = redirectTo;
     }
   };
 
+  // 로딩 중이거나 이미 로그인된 경우 로딩 표시
+  if (isLoggedIn) {
+    return (
+      <AuthLayout>
+        <div className="flex items-center justify-center p-8">
+          <div className="text-center">
+            <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-blue-500"></div>
+            <p>이미 로그인되어 있습니다. 리다이렉트 중...</p>
+          </div>
+        </div>
+      </AuthLayout>
+    );
+  }
+
+  // 에러 메시지 처리 - 사용자 친화적인 메시지로 변환
+  const errorMessages = error ? getLoginErrorMessage(error) : [];
+
   return (
-    // 로그인 페이지 레이아웃
     <AuthLayout>
-      {/* 로그인 페이지 헤더 */}
       <AuthHeader
         title="로그인"
         description="계정 정보를 입력하여 로그인하세요"
       />
-      {/* 로그인 폼 */}
+
+      <CardContent className="pb-0">
+        {/* 에러 메시지 표시 - 폼 상단에 위치 */}
+        {errorMessages.length > 0 && (
+          <AuthErrorMessage messages={errorMessages} className="mb-6" />
+        )}
+      </CardContent>
+
       <AuthForm
         type="login"
         onSubmit={handleSubmit}
         isLoading={isLoading}
         savedEmail={savedEmail}
       />
-      {/* 소셜 로그인 옵션 */}
+
       <SocialLogin />
-      {/* 로그인 페이지 푸터 */}
+
       <AuthFooter
         question="계정이 없으신가요?"
         linkText="회원가입"

@@ -106,13 +106,12 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
             </h3>
             {localUser && localUser.provider && (
               <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs">
-                {localUser.provider === 'google'
-                  ? '구글'
-                  : localUser.provider === 'kakao'
-                    ? '카카오'
-                    : localUser.provider === 'email'
-                      ? '이메일'
-                      : localUser.provider}
+                {localUser.provider === 'google' ||
+                localUser.provider === 'kakao'
+                  ? '소셜'
+                  : localUser.provider === 'email'
+                    ? '이메일'
+                    : localUser.provider}
               </span>
             )}
           </div>

@@ -1,6 +1,6 @@
 'use server';
 
-import { getServerClient } from '../supabase/server';
+import { getServerClient } from '@/lib/supabase/server';
 
 const deleteLike = async (planLikeId: number) => {
   const supabase = await getServerClient();

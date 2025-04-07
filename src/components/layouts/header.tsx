@@ -26,7 +26,7 @@ const Header = () => {
           <>
             {user ? (
               <>
-                <Link href="/mypage">내 여행</Link>
+                <Link href="/my-plan">내 여행</Link>
                 <Link href="/shared-plan">커뮤니티</Link>
                 <MypageButton />
               </>

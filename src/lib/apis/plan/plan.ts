@@ -1,3 +1,4 @@
+'use server';
 import { Plan, PlanFilterOptions } from '@/types/plan.type';
 import { createClient } from '@/lib/supabase/server';
 import { camelize } from '@/lib/utils/camelize';

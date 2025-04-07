@@ -44,6 +44,8 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
     fetchUserInfo();
   }, [user]);
 
+  console.log(localUser?.provider);
+
   /**
    * 로그아웃 버튼 이벤트 핸들러
    * @param e - 이벤트
@@ -110,17 +112,17 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
             <h3 className="whitespace-nowrap font-semibold">
               {userInfo.nickname}
             </h3>
-            {localUser &&
-              localUser.provider &&
-              localUser.provider !== 'email' && (
-                <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs">
-                  {localUser.provider === 'google'
-                    ? '구글'
-                    : localUser.provider === 'kakao'
-                      ? '카카오'
+            {localUser && localUser.provider && (
+              <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs">
+                {localUser.provider === 'google'
+                  ? '구글'
+                  : localUser.provider === 'kakao'
+                    ? '카카오'
+                    : localUser.provider === 'email'
+                      ? '이메일'
                       : localUser.provider}
-                </span>
-              )}
+              </span>
+            )}
           </div>
           <p className="text-sm text-gray-500">{userInfo.email}</p>
           <Button

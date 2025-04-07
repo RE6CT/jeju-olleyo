@@ -68,7 +68,7 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
       className="absolute right-10 top-full flex flex-col gap-3 border p-3 text-black"
     >
       <section
-        onClick={() => onLinkClick('profile')}
+        onClick={() => onLinkClick('account')}
         className="flex cursor-pointer"
       >
         <ProfileImage image={user.profileImg} width={58} height={58} />

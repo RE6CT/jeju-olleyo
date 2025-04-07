@@ -7,7 +7,7 @@ const Sidebar = ({ className }: { className: string }) => {
     <aside className={`flex flex-col gap-5 border bg-white p-5 ${className}`}>
       <section className="flex flex-col">
         <h3 className="text-lg font-bold">내 정보</h3>
-        <Link href="/mypage/profile">회원정보 수정</Link>
+        <Link href="/mypage/account">회원정보 수정</Link>
       </section>
       <Separator />
       <section className="flex flex-col">

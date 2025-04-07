@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { SocialProviderProps } from '@/types/auth.type';
 import Image from 'next/image';
+import { useState } from 'react';
 
 /**
  * 소셜 로그인 버튼 컴포넌트
@@ -10,8 +11,9 @@ import Image from 'next/image';
  * @param provider 소셜 로그인 제공자 (구글, 카카오 등)
  * @param onClick 클릭 이벤트 핸들러
  */
-
 const SocialProvider = ({ provider, onClick }: SocialProviderProps) => {
+  const [isLoading, setIsLoading] = useState(false);
+
   // 소셜 로그인 제공자에 따라 버튼 텍스트, 이미지, 클래스 이름 설정
   const config = {
     google: {
@@ -27,12 +29,29 @@ const SocialProvider = ({ provider, onClick }: SocialProviderProps) => {
     },
   }[provider];
 
+  /**
+   * 소셜 로그인 처리 핸들러
+   */
+  const handleSocialLogin = async () => {
+    try {
+      setIsLoading(true);
+      // useAuth hook에서 제공하는 함수 실행
+      await onClick();
+      // 리다이렉트는 onAuthStateChange 이벤트에서 처리됨
+    } catch (error) {
+      console.error(`${provider} 로그인 중 오류 발생:`, error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     // 소셜 로그인 버튼
     <Button
       variant="outline"
       className={`flex w-full items-center justify-center gap-2 ${config.className}`}
-      onClick={onClick}
+      onClick={handleSocialLogin}
+      disabled={isLoading}
     >
       {/* 소셜 로그인 아이콘 */}
       <Image
@@ -42,7 +61,9 @@ const SocialProvider = ({ provider, onClick }: SocialProviderProps) => {
         height={24}
       />
       {/* 소셜 로그인 텍스트 */}
-      {config.text}
+      {isLoading
+        ? `${provider === 'google' ? '구글' : '카카오'} 로그인 중...`
+        : config.text}
     </Button>
   );
 };

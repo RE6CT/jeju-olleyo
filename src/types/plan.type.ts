@@ -11,3 +11,10 @@ export type PlanCardProps = {
   onEdit?: (id: number) => void;
   onDelete?: (id: number) => void;
 };
+
+export type PlanFilterOptions = {
+  title?: string;
+  startDate?: string;
+  endDate?: string;
+  isPublic?: boolean;
+};

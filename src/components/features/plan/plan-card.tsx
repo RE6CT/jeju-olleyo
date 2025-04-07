@@ -14,7 +14,7 @@ type Props = {
 const PlanCard = ({ title, description, buttons }: Props) => {
   return (
     <>
-      <div className="mt-5 flex h-60 w-60 items-center justify-center rounded-md bg-gray-200">
+      <div className="flex h-60 w-60 items-center justify-center rounded-md bg-gray-200">
         <span className="text-xs text-gray-600">이미지 영역</span>
       </div>
       <h2 className="mt-2 text-xs font-semibold">{title}</h2>

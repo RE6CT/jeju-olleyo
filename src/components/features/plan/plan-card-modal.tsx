@@ -1,4 +1,10 @@
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
 import PlanCard from './plan-card';
 
 type Props = {
@@ -86,6 +92,10 @@ const PlanCardModal = ({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="w-[290px]">
+        <DialogHeader className="m-0 p-0">
+          <DialogTitle className="hidden">{''}</DialogTitle>
+          <DialogDescription className="hidden">{''}</DialogDescription>
+        </DialogHeader>
         <PlanCard title={title} description={description} buttons={buttons} />
       </DialogContent>
     </Dialog>

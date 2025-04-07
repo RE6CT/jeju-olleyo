@@ -5,7 +5,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from '@/components/ui/dialog';
-import PlanCard from './plan-card';
+import PlanCard from './plan-card-in-modal';
 import { PlanCardModalProps } from '@/types/plan-card-modal.type';
 
 /**

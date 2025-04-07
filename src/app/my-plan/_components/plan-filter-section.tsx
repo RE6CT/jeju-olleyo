@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import PlanCard from '@/components/features/plan/plan-card';
+import PlanCard from '@/components/features/plan/plan-card-in-modal';
 import { Plan } from '@/types/plan.type';
 import { Button } from '@/components/ui/button';
 import {

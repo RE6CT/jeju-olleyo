@@ -1,6 +1,10 @@
 import { z } from 'zod';
 import { ERROR_MESSAGES } from '@/constants/auth.constants';
-import { checkEmailExists } from '../apis/auth-server.api';
+import {
+  checkEmailExists,
+  checkNickNameExists,
+  checkPhoneExists,
+} from '../apis/auth-server.api';
 
 /**
  * 이메일 유효성 검사를 위한 스키마
@@ -81,8 +85,21 @@ export const registerSchema = z
       .string()
       .min(1, { message: ERROR_MESSAGES.REQUIRED_NICKNAME })
       .min(2, { message: ERROR_MESSAGES.MIN_NICKNAME_LENGTH })
-      .max(10, { message: ERROR_MESSAGES.MAX_NICKNAME_LENGTH }),
-    phone: phoneSchema,
+      .max(10, { message: ERROR_MESSAGES.MAX_NICKNAME_LENGTH })
+      .refine(
+        async (nickname) => {
+          const exists = await checkNickNameExists(nickname);
+          return !exists;
+        },
+        { message: '이미 사용 중인 닉네임입니다.' },
+      ),
+    phone: phoneSchema.refine(
+      async (phone) => {
+        const exists = await checkPhoneExists(phone);
+        return !exists;
+      },
+      { message: '이미 사용 중인 전화번호입니다.' },
+    ),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: ERROR_MESSAGES.PASSWORD_MISMATCH,
@@ -93,7 +110,13 @@ export const registerSchema = z
  * 비밀번호 찾기 폼 검증 스키마
  */
 export const forgotPasswordSchema = z.object({
-  email: emailSchema,
+  email: emailSchema.refine(
+    async (email) => {
+      const exists = await checkEmailExists(email);
+      return exists; // 이메일이 존재하면 true 반환
+    },
+    { message: '가입되지 않은 이메일입니다.' },
+  ),
 });
 
 /**

@@ -1,8 +1,7 @@
-// providers/AuthProvider.tsx
 'use client';
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 import { getBrowserClient } from '@/lib/supabase/client';
 import useAuthStore from '@/zustand/useAuthStore';
 import { formatUser } from '@/lib/apis/auth-browser.api';
@@ -11,58 +10,137 @@ interface AuthProviderProps {
   children: React.ReactNode;
 }
 
+/**
+ * 인증 상태를 감시하고 관리하는 프로바이더 컴포넌트
+ * - 초기 세션 설정
+ * - 실시간 인증 상태 변경 감지
+ * - 인증 상태에 따른 리다이렉션 처리
+ */
 const AuthProvider = ({ children }: AuthProviderProps) => {
   const router = useRouter();
-  const { setUser, clearUser, setLoading } = useAuthStore();
+  const pathname = usePathname();
+  const { setUser, clearUser, setLoading, user } = useAuthStore();
+  const [isInitialized, setIsInitialized] = useState(false);
 
+  // 공개 페이지 여부 확인 함수
+  const isPublicPage = (path: string): boolean => {
+    const publicPages = [
+      '/',
+      '/sign-in',
+      '/sign-up',
+      '/forgot-password',
+      '/reset-password',
+      '/auth/callback',
+    ];
+
+    return publicPages.some((page) => path.startsWith(page));
+  };
+
+  // 초기 인증 상태 설정
   useEffect(() => {
-    const setupAuthListener = async () => {
+    const initializeAuth = async () => {
+      setLoading(true);
       const supabase = await getBrowserClient();
 
-      // 초기 사용자 상태 확인
-      const { data } = await supabase.auth.getUser();
-      if (data.user) {
-        const formattedUser = formatUser(data.user);
-        setUser(formattedUser);
+      try {
+        // 초기 사용자 상태 확인
+        const { data, error } = await supabase.auth.getUser();
+
+        if (error) {
+          console.error('사용자 정보 로드 오류:', error.message);
+          clearUser();
+
+          // 보호된 페이지에 있는 경우 로그인 페이지로 리다이렉트
+          if (!isPublicPage(pathname)) {
+            router.push('/sign-in');
+          }
+        } else if (data.user) {
+          const formattedUser = formatUser(data.user);
+          setUser(formattedUser);
+
+          // 로그인/회원가입 페이지에 있는 경우 홈으로 리다이렉트
+          if (pathname === '/sign-in' || pathname === '/sign-up') {
+            router.push('/');
+          }
+        } else if (!isPublicPage(pathname)) {
+          // 사용자가 없고 보호된 페이지에 있는 경우 로그인 페이지로 리다이렉트
+          router.push('/sign-in');
+        }
+      } catch (err) {
+        console.error('인증 초기화 오류:', err);
+        clearUser();
+
+        // 보호된 페이지에 있는 경우 로그인 페이지로 리다이렉트
+        if (!isPublicPage(pathname)) {
+          router.push('/sign-in');
+        }
+      } finally {
+        setLoading(false);
+        setIsInitialized(true);
       }
+    };
+
+    initializeAuth();
+  }, [pathname, router, setUser, clearUser, setLoading]);
+
+  // 인증 상태 변경 감지
+  useEffect(() => {
+    if (!isInitialized) return;
+
+    const setupAuthListener = async () => {
+      const supabase = await getBrowserClient();
 
       // 인증 상태 변경 리스너 설정
       const { data: authListener } = supabase.auth.onAuthStateChange(
         async (event, session) => {
-          console.log(event);
+          console.log('인증 상태 변경:', event);
           setLoading(true);
 
-          if (event === 'SIGNED_IN' && session?.user) {
-            // 사용자가 로그인했을 때
-            console.log('2', session.user);
-            const formattedUser = formatUser(session.user);
-            setUser(formattedUser);
+          try {
+            switch (event) {
+              case 'SIGNED_IN':
+                if (session?.user) {
+                  const formattedUser = formatUser(session.user);
+                  setUser(formattedUser);
 
-            // URL 파라미터에서 리다이렉트 경로 확인 (있으면 해당 경로로, 없으면 대시보드로)
-            const params = new URLSearchParams(window.location.search);
-            const redirectTo = params.get('redirectTo') || '/dashboard';
+                  // URL 파라미터에서 리다이렉트 경로 확인
+                  const params = new URLSearchParams(window.location.search);
+                  const redirectTo = params.get('redirectTo') || '/';
 
-            if (
-              window.location.pathname.includes('/auth/callback') ||
-              window.location.pathname.includes('/login') ||
-              window.location.pathname.includes('/register')
-            ) {
-              router.push(redirectTo);
+                  // 로그인 페이지나 회원가입 페이지, 콜백 페이지에서 로그인한 경우에만 리다이렉트
+                  const isAuthPage =
+                    pathname.includes('/sign-in') ||
+                    pathname.includes('/sign-up') ||
+                    pathname.includes('/auth/callback');
+
+                  if (isAuthPage) {
+                    router.push(redirectTo);
+                  }
+                }
+                break;
+
+              case 'SIGNED_OUT':
+                clearUser();
+                // 로그아웃 시 로그인 페이지로 강제 리다이렉트
+                router.push('/sign-in');
+                break;
+
+              case 'USER_UPDATED':
+                if (session?.user) {
+                  const formattedUser = formatUser(session.user);
+                  setUser(formattedUser);
+                }
+                break;
+
+              case 'PASSWORD_RECOVERY':
+                router.push('/reset-password');
+                break;
             }
-          } else if (event === 'SIGNED_OUT') {
-            // 사용자가 로그아웃했을 때
-            clearUser();
-            router.push('/login');
-          } else if (event === 'USER_UPDATED' && session?.user) {
-            // 사용자 정보가 업데이트되었을 때
-            const formattedUser = formatUser(session.user);
-            setUser(formattedUser);
-          } else if (event === 'PASSWORD_RECOVERY' && session?.user) {
-            // 비밀번호 복구 이메일 인증 후
-            router.push('/reset-password');
+          } catch (err) {
+            console.error('인증 상태 변경 처리 오류:', err);
+          } finally {
+            setLoading(false);
           }
-
-          setLoading(false);
         },
       );
 
@@ -73,7 +151,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     };
 
     setupAuthListener();
-  }, []);
+  }, [isInitialized, pathname, router, setUser, clearUser, setLoading]);
 
   return <>{children}</>;
 };

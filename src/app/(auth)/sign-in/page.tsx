@@ -13,6 +13,7 @@ import AuthErrorMessage from '@/components/features/auth/auth-error-message';
 import { LoginFormValues } from '@/types/auth.type';
 import { STORAGE_KEY } from '@/constants/auth.constants';
 import useAuth from '@/lib/hooks/useAuth';
+import { getBrowserClient } from '@/lib/supabase/client';
 
 /**
  * 로그인 페이지 컴포넌트
@@ -22,14 +23,34 @@ const LoginPage = () => {
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get('redirectTo') || '/';
 
-  const { handleLogin, isLoading, error } = useAuth();
+  const { handleLogin, isLoading, error, isAuthenticated } = useAuth();
   const [savedEmail, setSavedEmail] = useState<string>('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // 이미 로그인되어 있는지 확인
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      try {
+        const supabase = await getBrowserClient();
+        const { data, error } = await supabase.auth.getSession();
+
+        if (data?.session && !error) {
+          console.log('이미 로그인되어 있음, 리다이렉트');
+          setIsLoggedIn(true);
+          window.location.href = redirectTo;
+        }
+      } catch (err) {
+        console.error('세션 확인 오류:', err);
+      }
+    };
+
+    checkAuthStatus();
+  }, [redirectTo]);
 
   /**
    * 컴포넌트 마운트 시 로컬 스토리지에서 저장된 이메일 불러오기
    */
   useEffect(() => {
-    // 클라이언트 사이드에서만 실행되도록 함
     if (typeof window !== 'undefined') {
       const rememberedEmail = localStorage.getItem(STORAGE_KEY.SAVED_EMAIL);
       if (rememberedEmail) {
@@ -52,14 +73,33 @@ const LoginPage = () => {
       localStorage.removeItem(STORAGE_KEY.SAVED_EMAIL);
     }
 
+    console.log('로그인 시도');
+
     // useAuth의 handleLogin 사용
     const success = await handleLogin(data);
 
-    // 로그인 성공 시 리다이렉트
+    console.log('로그인 결과:', success);
+
     if (success) {
-      router.push(redirectTo);
+      console.log('로그인 성공, 홈으로 리다이렉트');
+      // 성공 시 홈으로 리다이렉트 (useAuth에서도 처리하지만 이중으로 보장)
+      window.location.href = redirectTo;
     }
   };
+
+  // 로딩 중이거나 이미 로그인된 경우 로딩 표시
+  if (isLoggedIn) {
+    return (
+      <AuthLayout>
+        <div className="flex items-center justify-center p-8">
+          <div className="text-center">
+            <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-blue-500"></div>
+            <p>이미 로그인되어 있습니다. 리다이렉트 중...</p>
+          </div>
+        </div>
+      </AuthLayout>
+    );
+  }
 
   // 에러 메시지 배열로 변환
   const errorMessages = error ? [error] : [];

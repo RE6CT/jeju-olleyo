@@ -3,11 +3,12 @@
 import Image from 'next/image';
 import { Button } from '../../ui/button';
 import { Separator } from '../../ui/separator';
-import { MouseEvent, RefObject, useState } from 'react';
+import { MouseEvent, RefObject, useState, useEffect } from 'react';
 import { ModalPath } from '@/types/mypage.type';
 import ProfileImage from '@/components/commons/profile-image';
 import { useRouter } from 'next/navigation';
 import useAuth from '@/lib/hooks/useAuth';
+import { getCurrentSession } from '@/lib/apis/auth-browser.api';
 
 type MypageModalProps = {
   onLinkClick: (path: ModalPath) => void;
@@ -25,6 +26,23 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
   const router = useRouter();
   const { user, handleLogout, isLoading } = useAuth();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [localUser, setLocalUser] = useState(user);
+
+  // 컴포넌트 마운트 시 세션에서 직접 사용자 정보 가져오기
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      if (!user) {
+        const { user: sessionUser } = await getCurrentSession();
+        if (sessionUser) {
+          setLocalUser(sessionUser);
+        }
+      } else {
+        setLocalUser(user);
+      }
+    };
+
+    fetchUserInfo();
+  }, [user]);
 
   /**
    * 로그아웃 버튼 이벤트 핸들러
@@ -46,11 +64,9 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
       }
 
       // 로그아웃 성공 처리
-      alert('로그아웃 되었습니다.');
       setClose();
-
-      // 홈페이지로 리다이렉트 (onAuthStateChange에서도 처리하지만 UX를 위해 여기서도 처리)
-      router.push('/');
+      // 명시적으로 로그인 페이지로 리다이렉트
+      router.push('/sign-in');
     } catch (error) {
       console.error('로그아웃 오류:', error);
     } finally {
@@ -66,12 +82,12 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
   };
 
   // 실제 사용자 정보 또는 기본값 사용
-  const userInfo = user
+  const userInfo = localUser
     ? {
-        profileImg: user.avatar_url,
-        nickname: user.nickname || '사용자',
-        email: user.email,
-        provider: user.provider,
+        profileImg: localUser.avatar_url,
+        nickname: localUser.nickname || '사용자',
+        email: localUser.email,
+        provider: localUser.provider,
       }
     : defaultUser;
 
@@ -94,15 +110,17 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
             <h3 className="whitespace-nowrap font-semibold">
               {userInfo.nickname}
             </h3>
-            {user && user.provider && user.provider !== 'email' && (
-              <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs">
-                {user.provider === 'google'
-                  ? '구글'
-                  : user.provider === 'kakao'
-                    ? '카카오'
-                    : user.provider}
-              </span>
-            )}
+            {localUser &&
+              localUser.provider &&
+              localUser.provider !== 'email' && (
+                <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs">
+                  {localUser.provider === 'google'
+                    ? '구글'
+                    : localUser.provider === 'kakao'
+                      ? '카카오'
+                      : localUser.provider}
+                </span>
+              )}
           </div>
           <p className="text-sm text-gray-500">{userInfo.email}</p>
           <Button
@@ -110,7 +128,7 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
             variant="outline"
             size="sm"
             className="mt-1"
-            disabled={isLoggingOut || isLoading || !user}
+            disabled={isLoggingOut || isLoading || !localUser}
           >
             {isLoggingOut ? '로그아웃 중...' : '로그아웃'}
           </Button>
@@ -118,7 +136,7 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
       </section>
       <Separator />
 
-      {user ? (
+      {localUser ? (
         <>
           <section>
             <ul className="flex justify-between">
@@ -179,7 +197,7 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
           <Button
             onClick={() => {
               setClose();
-              router.push('/login');
+              router.push('/sign-in');
             }}
             className="w-full"
           >

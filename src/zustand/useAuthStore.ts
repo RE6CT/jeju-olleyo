@@ -2,6 +2,9 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { SocialUserInfo } from '@/types/auth.type';
 
+/**
+ * 인증 상태 관리를 위한 Zustand 스토어 타입
+ */
 interface AuthState {
   user: SocialUserInfo | null;
   isLoading: boolean;
@@ -16,6 +19,11 @@ interface AuthState {
   resetError: () => void;
 }
 
+/**
+ * 인증 상태 관리를 위한 Zustand 스토어
+ * - 세션 스토리지에 사용자 정보를 유지
+ * - 인증 상태, 로딩 상태, 에러 상태 관리
+ */
 const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
@@ -46,8 +54,13 @@ const useAuthStore = create<AuthState>()(
       storage: createJSONStorage(() =>
         typeof window !== 'undefined'
           ? sessionStorage
-          : { getItem: () => null, setItem: () => {}, removeItem: () => {} },
+          : {
+              getItem: () => null,
+              setItem: () => {},
+              removeItem: () => {},
+            },
       ),
+      // 민감한 정보 필터링
       partialize: (state) => ({
         user: state.user
           ? {
@@ -59,6 +72,7 @@ const useAuthStore = create<AuthState>()(
               provider: state.user.provider,
             }
           : null,
+        isAuthenticated: state.isAuthenticated,
       }),
     },
   ),

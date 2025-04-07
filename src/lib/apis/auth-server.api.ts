@@ -1,10 +1,6 @@
 'use server';
 
-import {
-  LoginFormValues,
-  RegisterFormValues,
-  SerializedUser,
-} from '@/types/auth.type';
+import { LoginFormValues, RegisterFormValues } from '@/types/auth.type';
 import { getServerClient } from '@/lib/supabase/server';
 
 /**
@@ -16,12 +12,15 @@ export const login = async (values: LoginFormValues) => {
   const supabase = await getServerClient();
 
   try {
+    console.log('서버: 로그인 시도', values.email);
+
     const { data, error } = await supabase.auth.signInWithPassword({
       email: values.email,
       password: values.password,
     });
 
     if (error) {
+      console.error('서버: 로그인 실패', error.message);
       // 오류 객체를 직렬화 가능한 형태로 변환
       return {
         user: null,
@@ -32,22 +31,24 @@ export const login = async (values: LoginFormValues) => {
       };
     }
 
-    // 사용자 객체에서 필요한 정보만 추출하여 반환 (provider 추가)
+    console.log('서버: 로그인 성공', data.user?.id);
+
+    // 사용자 객체에서 필요한 정보만 추출하여 반환
     return {
       user: data.user
         ? {
             id: data.user.id,
             email: data.user.email,
-            nickname: data.user.user_metadata.nickname,
-            phone: data.user.user_metadata.phone,
-            avatar_url: data.user.user_metadata.avatar_url || null,
-            provider: data.user.app_metadata?.provider || 'email', // provider 정보 추가
+            nickname: data.user.user_metadata?.nickname || '사용자',
+            phone: data.user.user_metadata?.phone || null,
+            avatar_url: data.user.user_metadata?.avatar_url || null,
+            provider: data.user.app_metadata?.provider || 'email',
           }
         : null,
       error: null,
     };
   } catch (error: any) {
-    console.error('로그인 처리 중 예외 발생:', error);
+    console.error('서버: 로그인 처리 중 예외 발생:', error);
 
     // 예외를 직렬화 가능한 형태로 변환
     return {
@@ -91,7 +92,7 @@ export const register = async (values: RegisterFormValues) => {
       };
     }
 
-    // 사용자 객체에서 필요한 정보만 추출하여 반환 (provider 추가)
+    // 사용자 객체에서 필요한 정보만 추출하여 반환
     return {
       user: data.user
         ? {
@@ -99,7 +100,7 @@ export const register = async (values: RegisterFormValues) => {
             email: data.user.email,
             nickname: data.user.user_metadata.nickname,
             phone: data.user.user_metadata.phone,
-            avatar_url: data.user.user_metadata.avatar_url || null,
+            avatar_url: null,
             provider: 'email', // 회원가입은 항상 이메일 방식
           }
         : null,
@@ -127,7 +128,9 @@ export const logout = async () => {
   const supabase = await getServerClient();
 
   try {
-    const { error } = await supabase.auth.signOut();
+    const { error } = await supabase.auth.signOut({
+      scope: 'global', // 모든 디바이스에서 로그아웃
+    });
 
     if (error) {
       return {
@@ -160,16 +163,20 @@ export const checkEmailExists = async (email: string): Promise<boolean> => {
   const supabase = await getServerClient();
 
   try {
+    // 데이터베이스의 users 테이블에서 이메일로 조회
     const { data, error } = await supabase
       .from('users')
       .select('email')
-      .eq('email', email);
+      .eq('email', email)
+      .limit(1);
 
-    if (error && error.code !== 'PGRST116') {
-      throw error;
+    if (error) {
+      console.error('이메일 중복 확인 중 오류:', error);
+      return false;
     }
 
-    return Boolean(data && data.length > 0);
+    // 사용자가 존재하는지 확인
+    return data && data.length > 0;
   } catch (error) {
     console.error('이메일 중복 확인 중 오류:', error);
     return false; // 오류 발생 시 기본적으로 중복 없음으로 처리
@@ -190,13 +197,15 @@ export const checkNickNameExists = async (
     const { data, error } = await supabase
       .from('users')
       .select('nickname')
-      .eq('nickname', nickname);
+      .eq('nickname', nickname)
+      .limit(1);
 
-    if (error && error.code !== 'PGRST116') {
-      throw error;
+    if (error) {
+      console.error('닉네임 중복 확인 중 오류:', error);
+      return false;
     }
 
-    return Boolean(data && data.length > 0);
+    return data && data.length > 0;
   } catch (error) {
     console.error('닉네임 중복 확인 중 오류:', error);
     return false; // 오류 발생 시 기본적으로 중복 없음으로 처리
@@ -215,13 +224,15 @@ export const checkPhoneExists = async (phone: string): Promise<boolean> => {
     const { data, error } = await supabase
       .from('users')
       .select('phone')
-      .eq('phone', phone);
+      .eq('phone', phone)
+      .limit(1);
 
-    if (error && error.code !== 'PGRST116') {
-      throw error;
+    if (error) {
+      console.error('휴대폰 번호 중복 확인 중 오류:', error);
+      return false;
     }
 
-    return Boolean(data && data.length > 0);
+    return data && data.length > 0;
   } catch (error) {
     console.error('휴대폰 번호 중복 확인 중 오류:', error);
     return false; // 오류 발생 시 기본적으로 중복 없음으로 처리
@@ -239,7 +250,6 @@ export const getCurrentUser = async () => {
     const { data, error } = await supabase.auth.getUser();
 
     if (error) {
-      console.log('1234', error);
       return {
         user: null,
         error: {
@@ -249,22 +259,23 @@ export const getCurrentUser = async () => {
       };
     }
 
-    // 사용자 객체에서 필요한 정보만 추출하여 반환 (provider와 id 추가)
-    return {
-      user: data.user
-        ? {
-            id: data.user.id, // id 추가
-            email: data.user.email,
-            avatar_url:
-              data.user.user_metadata.avatar_url ||
-              '/images/default-profile.png', // 키 이름 통일
-            nickname: data.user.user_metadata.nickname,
-            phone: data.user.user_metadata.phone,
-            provider: data.user.app_metadata?.provider || 'email', // provider 정보 추가
-          }
-        : null,
-      error: null,
+    // 사용자가 존재하지 않는 경우
+    if (!data.user) {
+      return { user: null, error: null };
+    }
+
+    // 사용자 정보 형식화
+    const userInfo = {
+      id: data.user.id,
+      email: data.user.email,
+      avatar_url:
+        data.user.user_metadata.avatar_url || '/images/default-profile.png',
+      nickname: data.user.user_metadata.nickname || '사용자',
+      phone: data.user.user_metadata.phone || null,
+      provider: data.user.app_metadata?.provider || 'email',
     };
+
+    return { user: userInfo, error: null };
   } catch (error: any) {
     console.error('사용자 정보 조회 중 예외 발생:', error);
 

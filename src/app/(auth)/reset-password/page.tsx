@@ -4,27 +4,32 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+
 import AuthLayout from '@/components/features/auth/auth-layout';
 import AuthHeader from '@/components/features/auth/auth-header';
 import { CardContent, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
+
 import { resetPasswordSchema } from '@/lib/schemas/auth-schema';
 import { ResetPasswordFormValues } from '@/types/auth.type';
-import { updateUserPassword } from '@/lib/apis/auth-browser.api';
 import { getResetPasswordErrorMessage } from '@/lib/utils/auth-error-utils';
 import { PASSWORD_CHANGE_REDIRECT_DELAY_MS } from '@/constants/auth.constants';
+import useAuth from '@/lib/hooks/useAuth';
 
 /**
  * 비밀번호 재설정 페이지 컴포넌트
+ * - URL 해시에서 토큰 정보 파싱
+ * - 새 비밀번호 입력 폼 제공
+ * - 성공 시 로그인 페이지로 리다이렉트
  */
 const ResetPasswordPage = () => {
-  const [isLoading, setIsLoading] = useState(false);
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const router = useRouter();
+  const { handleUpdatePassword, isLoading } = useAuth();
 
   const {
     register,
@@ -39,6 +44,9 @@ const ResetPasswordPage = () => {
     },
   });
 
+  /**
+   * URL 해시에서 토큰 오류 정보 파싱
+   */
   useEffect(() => {
     const parseHashFragment = () => {
       if (typeof window !== 'undefined') {
@@ -84,29 +92,22 @@ const ResetPasswordPage = () => {
    * @param data - 비밀번호 데이터
    */
   const onSubmit = async (data: ResetPasswordFormValues) => {
-    setIsLoading(true);
+    setErrorMessages([]);
+
     try {
-      setErrorMessages([]);
+      const success = await handleUpdatePassword(data.password);
 
-      const result = await updateUserPassword(data.password);
-
-      if (result.error) {
-        const errorMessage = getResetPasswordErrorMessage(
-          result.error.message || '비밀번호 재설정 중 오류가 발생했습니다.',
-        );
-        throw new Error(errorMessage.join(''));
+      if (!success) {
+        setErrorMessages(['비밀번호 변경 중 오류가 발생했습니다.']);
+        return;
       }
 
       setIsSubmitted(true);
 
-      useEffect(() => {
-        const redirectTimer = setTimeout(() => {
-          router.push('/sign-in');
-        }, PASSWORD_CHANGE_REDIRECT_DELAY_MS);
-
-        // 컴포넌트 언마운트 시 타이머 제거
-        return () => clearTimeout(redirectTimer);
-      }, []);
+      // 일정 시간 후 로그인 페이지로 리다이렉트
+      setTimeout(() => {
+        router.push('/sign-in');
+      }, PASSWORD_CHANGE_REDIRECT_DELAY_MS);
     } catch (err) {
       setErrorMessages(
         err instanceof Error
@@ -115,11 +116,10 @@ const ResetPasswordPage = () => {
               '비밀번호 재설정 중 오류가 발생했습니다.',
             ),
       );
-    } finally {
-      setIsLoading(false);
     }
   };
 
+  // 비밀번호 변경 성공 화면
   if (isSubmitted) {
     return (
       <AuthLayout>
@@ -127,7 +127,11 @@ const ResetPasswordPage = () => {
           title="비밀번호 재설정 완료"
           description="비밀번호가 성공적으로 변경되었습니다"
         />
-        <CardContent>
+        <CardContent className="text-center">
+          <p className="mb-4 text-sm text-gray-600">
+            {PASSWORD_CHANGE_REDIRECT_DELAY_MS / 1000}초 후 로그인 페이지로
+            이동합니다.
+          </p>
           <Button className="w-full" onClick={() => router.push('/sign-in')}>
             로그인 페이지로 이동
           </Button>
@@ -145,7 +149,11 @@ const ResetPasswordPage = () => {
 
       <CardContent>
         {errorMessages.length > 0 && (
-          <div className="mb-4 text-sm text-red-500">{errorMessages}</div>
+          <div className="mb-4 text-sm text-red-500">
+            {errorMessages.map((msg, idx) => (
+              <p key={idx}>{msg}</p>
+            ))}
+          </div>
         )}
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -189,7 +197,7 @@ const ResetPasswordPage = () => {
         </form>
       </CardContent>
 
-      {errorMessages && (
+      {errorMessages.length > 0 && (
         <CardFooter className="flex justify-center">
           <div className="text-sm text-gray-600">
             <Link

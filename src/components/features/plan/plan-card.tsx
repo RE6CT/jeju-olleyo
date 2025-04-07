@@ -11,6 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import dayjs from 'dayjs';
 
 const CARD = {
   height: 'h-[200px]',
@@ -104,13 +105,13 @@ const PlanCard = ({ plan, onEdit, onDelete }: PlanCardProps) => {
           <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
             <span>
               {plan.travelStartDate
-                ? new Date(plan.travelStartDate).toLocaleDateString()
+                ? dayjs(plan.travelStartDate).format('YYYY.MM.DD')
                 : TEXT.noDate}
             </span>
             <span>{TEXT.dateSeparator}</span>
             <span>
               {plan.travelEndDate
-                ? new Date(plan.travelEndDate).toLocaleDateString()
+                ? dayjs(plan.travelEndDate).format('YYYY.MM.DD')
                 : TEXT.noDate}
             </span>
           </div>

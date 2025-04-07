@@ -9,8 +9,8 @@ import {
   MarkerOptions,
   MarkerProps,
 } from '@/types/kakao-map.type';
-import Loading from '../loading';
-import ErrorMessage from '../error';
+import Loading from '@/app/loading';
+import ErrorMessage from '@/app/error';
 
 // 임시 장소 데이터
 // https://www.jejudatahub.net/data/view/data/TOURISM/674

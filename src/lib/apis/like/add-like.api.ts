@@ -1,6 +1,6 @@
 'use server';
 
-import { getServerClient } from '../supabase/server';
+import { getServerClient } from '@/lib/supabase/server';
 
 const addLike = async (plan_id: number, user_id: string) => {
   const supabase = await getServerClient();

@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import PlanCard from '@/components/features/plan/plan-card';
 import { Plan } from '@/types/plan.type';
 import { Button } from '@/components/ui/button';
 import {
@@ -11,6 +10,7 @@ import {
 } from '@/components/ui/popover';
 import { Filter } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import PlanCard from '@/components/features/plan/plan-card';
 
 /**
  * 여행 계획 필터 섹션 컴포넌트

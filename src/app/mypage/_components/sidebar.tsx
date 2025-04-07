@@ -2,9 +2,9 @@ import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
 
 /** 사이드 바 컴포넌트 */
-const Sidebar = () => {
+const Sidebar = ({ className }: { className: string }) => {
   return (
-    <aside className="fixed left-10 top-[10%] flex flex-col gap-5 border p-5">
+    <aside className={`flex flex-col gap-5 border bg-white p-5 ${className}`}>
       <section className="flex flex-col">
         <h3 className="text-lg font-bold">내 정보</h3>
         <Link href="/mypage/profile">회원정보 수정</Link>
@@ -19,7 +19,7 @@ const Sidebar = () => {
       <Separator />
       <section className="flex flex-col">
         <h3 className="text-lg font-bold">내 예약</h3>
-        <Link href="/mypage/reservations">항공권 예약 내역</Link>
+        <Link href="/mypage/reservation">항공권 예약 내역</Link>
       </section>
     </aside>
   );

@@ -1,3 +1,4 @@
+import PlaceImage from '@/components/commons/place-image';
 import { getCurrentUser } from '@/lib/apis/auth-server.api';
 import { fetchGetAllBookmarksByUserId } from '@/lib/apis/bookmark/get-bookmark.api';
 import { UserBookmarks } from '@/types/mypage.type';
@@ -18,6 +19,8 @@ const BookmarksPage = async () => {
   const bookmarks: UserBookmarks | null =
     await fetchGetAllBookmarksByUserId(userId);
 
+  if (!bookmarks) throw new Error('북마크 목록 로드 중 에러가 발생했습니다.');
+
   return (
     <>
       <p>{bookmarks?.length}개의 장소를 북마크했어요</p>
@@ -33,12 +36,7 @@ const BookmarksPage = async () => {
                 className="flex w-full flex-col justify-center"
               >
                 <div className="relative aspect-square">
-                  <Image
-                    src={place.image}
-                    alt={place.title}
-                    fill
-                    className="object-cover"
-                  />
+                  <PlaceImage image={place.image} title={place.title} />
                 </div>
                 <h3 className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-center">
                   {place.title}

@@ -125,7 +125,6 @@ export const socialLogin = async (provider: SocialProvider) => {
 
   // 현재 도메인 기반 리다이렉트 URL 생성
   const redirectUrl = `${window.location.origin}/auth/callback?redirectTo=${encodeURIComponent(redirectPath)}`;
-  console.log('소셜 로그인 리다이렉트 URL:', redirectUrl);
 
   // 기본 옵션
   const baseOptions = {
@@ -156,8 +155,6 @@ export const socialLogin = async (provider: SocialProvider) => {
       ...(provider === 'kakao' ? providerOptions.kakao : {}),
       ...(provider === 'google' ? providerOptions.google : {}),
     };
-
-    console.log(`${provider} 로그인 시작:`, options);
 
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: provider as Provider,

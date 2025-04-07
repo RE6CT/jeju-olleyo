@@ -22,9 +22,13 @@ const AuthClientInfo = () => {
             className="rounded-full"
           />
         </div>
-        <p className="mb-2">이메일: {userClientInfo?.email}</p>
-        <p className="mb-2">닉네임: {userClientInfo?.nickname}</p>
-        <p className="mb-2">전화번호: {userClientInfo?.phone}</p>
+        <p className="mb-2">
+          이메일: {userClientInfo?.email || 'example@example.com'}
+        </p>
+        <p className="mb-2">닉네임: {userClientInfo?.nickname || '사용자'}</p>
+        <p className="mb-2">
+          전화번호: {userClientInfo?.phone || '미등록'}
+        </p>
       </div>
     </>
   );

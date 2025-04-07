@@ -44,8 +44,6 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
     fetchUserInfo();
   }, [user]);
 
-  console.log(localUser?.provider);
-
   /**
    * 로그아웃 버튼 이벤트 핸들러
    * @param e - 이벤트

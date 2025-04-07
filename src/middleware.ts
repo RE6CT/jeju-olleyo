@@ -8,8 +8,6 @@ import { type NextRequest, NextResponse } from 'next/server';
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  console.log('middleware 실행됨:', pathname);
-
   // 정적 리소스 및 API 요청은 바로 통과
   if (
     pathname.startsWith('/_next') ||
@@ -36,7 +34,6 @@ export async function middleware(request: NextRequest) {
   const refreshToken = request.cookies.get(
     'sb-bgznxwfpnvskfzsiisrn-auth-token.1',
   );
-  console.log('쿠키 확인:', authToken, refreshToken);
   const hasAuthTokens = !!authToken || !!refreshToken;
 
   // 인증 상태가 아니고, 보호된 페이지에 접근하려는 경우 로그인 페이지로 리다이렉트

@@ -35,7 +35,6 @@ const LoginPage = () => {
         const { data, error } = await supabase.auth.getSession();
 
         if (data?.session && !error) {
-          console.log('이미 로그인되어 있음, 리다이렉트');
           setIsLoggedIn(true);
           window.location.href = redirectTo;
         }
@@ -73,15 +72,10 @@ const LoginPage = () => {
       localStorage.removeItem(STORAGE_KEY.SAVED_EMAIL);
     }
 
-    console.log('로그인 시도');
-
     // useAuth의 handleLogin 사용
     const success = await handleLogin(data);
 
-    console.log('로그인 결과:', success);
-
     if (success) {
-      console.log('로그인 성공, 홈으로 리다이렉트');
       // 성공 시 홈으로 리다이렉트 (useAuth에서도 처리하지만 이중으로 보장)
       window.location.href = redirectTo;
     }

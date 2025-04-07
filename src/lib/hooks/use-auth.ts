@@ -67,8 +67,6 @@ const useAuth = () => {
           // URL에서 redirectTo 파라미터 추출
           const urlParams = new URLSearchParams(window.location.search);
           const redirectTo = urlParams.get('redirectTo') || '/';
-
-          console.log('이메일 로그인 성공 → 리다이렉트:', redirectTo);
           window.location.href = redirectTo;
         }
 
@@ -180,8 +178,6 @@ const useAuth = () => {
         setError(error.message);
         return false;
       }
-
-      console.log('로그아웃 성공 → 로그인 페이지로 리다이렉트');
 
       // 로그아웃 후 로그인 페이지로 강제 리다이렉트
       if (typeof window !== 'undefined') {

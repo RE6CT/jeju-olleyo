@@ -9,7 +9,7 @@ const Home = async () => {
   return (
     <div className="flex h-screen w-full flex-col items-center justify-center py-8">
       <h1 className="mb-6 text-3xl font-bold">
-        안녕하세요, {user?.nickname}님
+        안녕하세요, {user?.nickname || '비회원'}님
       </h1>
 
       {/* 서버 사이드 데이터 */}
@@ -19,16 +19,16 @@ const Home = async () => {
         </h2>
         <div className="mb-4 flex justify-center">
           <Image
-            src={user?.avatar_url}
+            src={user?.avatar_url || '/images/default-profile.png'}
             alt="User Avatar"
             width={100}
             height={100}
             className="rounded-full"
           />
         </div>
-        <p className="mb-2">이메일: {user?.email}</p>
-        <p className="mb-2">닉네임: {user?.nickname}</p>
-        <p className="mb-2">전화번호: {user?.phone}</p>
+        <p className="mb-2">이메일: {user?.email || 'example@example.com'}</p>
+        <p className="mb-2">닉네임: {user?.nickname || '사용자'}</p>
+        <p className="mb-2">전화번호: {user?.phone || '미등록'}</p>
       </div>
 
       <AuthClientInfo />

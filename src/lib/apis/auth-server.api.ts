@@ -12,8 +12,6 @@ export const fetchLogin = async (values: LoginFormValues) => {
   const supabase = await getServerClient();
 
   try {
-    console.log('서버: 로그인 시도', values.email);
-
     const { data, error } = await supabase.auth.signInWithPassword({
       email: values.email,
       password: values.password,
@@ -30,8 +28,6 @@ export const fetchLogin = async (values: LoginFormValues) => {
         },
       };
     }
-
-    console.log('서버: 로그인 성공', data.user?.id);
 
     // 사용자 객체에서 필요한 정보만 추출하여 반환
     return {

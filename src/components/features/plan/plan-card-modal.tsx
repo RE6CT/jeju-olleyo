@@ -92,10 +92,10 @@ const PlanCardModal = ({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="w-[290px]">
-        <DialogHeader className="m-0 p-0">
+        {/* <DialogHeader className="m-0 p-0">
           <DialogTitle className="hidden">{''}</DialogTitle>
-          <DialogDescription className="hidden">{''}</DialogDescription>
-        </DialogHeader>
+          <DialogDescription className="hidden">{''}</DialogDescription> */}
+        {/* </DialogHeader> */}
         <PlanCard title={title} description={description} buttons={buttons} />
       </DialogContent>
     </Dialog>

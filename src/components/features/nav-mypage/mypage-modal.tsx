@@ -3,17 +3,11 @@
 import Image from 'next/image';
 import { Button } from '../../ui/button';
 import { Separator } from '../../ui/separator';
-import { MouseEvent, RefObject, useState } from 'react';
-import { ModalPath } from '@/types/mypage.type';
+import { MouseEvent, useState } from 'react';
+import { MypageModalProps } from '@/types/mypage.type';
 import ProfileImage from '@/components/commons/profile-image';
 import { logout } from '@/lib/apis/auth-server.api';
 import { useRouter } from 'next/navigation';
-
-type MypageModalProps = {
-  onLinkClick: (path: ModalPath) => void;
-  setClose: () => void;
-  modalRef: RefObject<HTMLDivElement>;
-};
 
 /**
  * nav의 마이페이지 버튼 클릭 시 나타나는 모달 컴포넌트

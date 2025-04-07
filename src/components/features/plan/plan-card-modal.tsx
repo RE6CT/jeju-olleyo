@@ -6,14 +6,7 @@ import {
   DialogDescription,
 } from '@/components/ui/dialog';
 import PlanCard from './plan-card';
-
-type Props = {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  mode: 'success' | 'isBack' | 'select' | 'isDelete';
-  onConfirm?: () => void;
-  onCancel?: () => void;
-};
+import { PlanCardModalProps } from '@/types/plan-card-modal.type';
 
 /**
  *
@@ -38,7 +31,7 @@ const PlanCardModal = ({
   mode,
   onConfirm,
   onCancel,
-}: Props) => {
+}: PlanCardModalProps) => {
   const contentMap = {
     success: {
       title: '일정 생성이 완료되었어요!',

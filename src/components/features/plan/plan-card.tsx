@@ -2,18 +2,9 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { DialogHeader } from '@/components/ui/dialog';
 import { DialogDescription, DialogTitle } from '@radix-ui/react-dialog';
+import { PlanCardProps } from '@/types/plan-card-modal.type';
 
-type Props = {
-  title: string;
-  description: string;
-  buttons: ReadonlyArray<{
-    label: string;
-    onClick: () => void;
-    variant?: 'default' | 'outline';
-  }>;
-};
-
-const PlanCard = ({ title, description, buttons }: Props) => {
+const PlanCard = ({ title, description, buttons }: PlanCardProps) => {
   return (
     <>
       <DialogHeader>

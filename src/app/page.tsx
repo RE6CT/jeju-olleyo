@@ -16,6 +16,6 @@ const Home = async () => {
       <p className="mb-4">전화번호: {phone}</p>
     </div>
   );
-}
+};
 
 export default Home;

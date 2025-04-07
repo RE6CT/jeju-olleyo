@@ -116,7 +116,7 @@ export const socialLogin = async (provider: SocialProvider) => {
   }
 
   // 현재 도메인 기반 리다이렉트 URL 생성
-  const redirectUrl = `${window.location.origin}/auth/callback?redirectTo=${encodeURIComponent(redirectPath)}`;
+  const redirectUrl = `${window.location.origin}/auth/callback?redirectTo=${encodeURIComponent(redirectPath)}&provider=${provider}`;
 
   // 기본 옵션
   const baseOptions = {

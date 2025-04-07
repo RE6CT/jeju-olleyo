@@ -10,6 +10,21 @@ const nextConfig = {
     ],
     remotePatterns: [
       {
+        protocol: 'http', // https에서 http로 변경
+        hostname: 'k.kakaocdn.net',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https', // 혹시 모르니 https도 추가
+        hostname: 'k.kakaocdn.net',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+        pathname: '/**',
+      },
+      {
         protocol: 'http',
         hostname: 'tong.visitkorea.or.kr',
         pathname: '/**',

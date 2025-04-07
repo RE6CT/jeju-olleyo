@@ -1,11 +1,11 @@
 import PlaceImage from '@/components/commons/place-image';
-import { getCurrentUser } from '@/lib/apis/auth-server.api';
+import { fetchGetCurrentUser } from '@/lib/apis/auth-server.api';
 import { fetchGetAllBookmarksByUserId } from '@/lib/apis/bookmark/get-bookmark.api';
 import { UserBookmarks } from '@/types/mypage.type';
 import Link from 'next/link';
 
 const BookmarksPage = async () => {
-  const { user } = await getCurrentUser();
+  const { user } = await fetchGetCurrentUser();
   const userId = user?.id;
 
   // 로그인되어있지 않을 경우 리턴

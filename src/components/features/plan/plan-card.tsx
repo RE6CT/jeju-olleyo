@@ -17,18 +17,18 @@ const PlanCard = ({ title, description, buttons }: Props) => {
   return (
     <>
       <DialogHeader>
-        <div className="flex h-60 w-60 items-center justify-center rounded-md bg-gray-200">
+        <div className="mt-4 flex h-60 w-60 items-center justify-center rounded-md bg-gray-200">
           <span className="text-xs text-gray-600">이미지 영역</span>
         </div>
-        <DialogTitle className="mt-2 text-xs font-semibold">
+        <DialogTitle className="mt-4 text-sm font-semibold">
           {title}
         </DialogTitle>
-        <DialogDescription className="text-xs text-muted-foreground">
+        <DialogDescription className="text-sm text-muted-foreground">
           {description}
         </DialogDescription>
       </DialogHeader>
 
-      <div className="mt-4 flex justify-between gap-2">
+      <div className="mt-1 flex justify-between gap-2">
         {buttons.map((btn, idx) => (
           <Button
             key={idx}

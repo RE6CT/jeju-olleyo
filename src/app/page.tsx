@@ -1,5 +1,6 @@
 import { fetchGetCurrentUser } from '@/lib/apis/auth-server.api';
 import Image from 'next/image';
+import AuthClientInfo from '@/components/features/auth/auth-client-info';
 
 const Home = async () => {
   // 서버 컴포넌트에서 사용자 정보 가져오기
@@ -29,6 +30,8 @@ const Home = async () => {
         <p className="mb-2">닉네임: {user?.nickname}</p>
         <p className="mb-2">전화번호: {user?.phone}</p>
       </div>
+
+      <AuthClientInfo />
     </div>
   );
 };

@@ -18,7 +18,6 @@ import { getResetPasswordErrorMessage } from '@/lib/utils/auth-error.util';
 import { AUTH_TIMEOUTS } from '@/constants/auth.constants';
 import useAuth from '@/lib/hooks/use-auth';
 import PasswordInput from '@/components/features/auth/auth-password-input';
-import useAuthStore from '@/zustand/auth.store';
 
 const ResetPasswordPage = () => {
   const [errorMessages, setErrorMessages] = useState<string[]>([]);

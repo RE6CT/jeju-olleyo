@@ -1,4 +1,3 @@
-// src/middleware.ts
 import { updateSession } from '@/lib/supabase/middleware';
 import { type NextRequest, NextResponse } from 'next/server';
 
@@ -29,15 +28,11 @@ export async function middleware(request: NextRequest) {
   const isPublicPage = isPublicRoute(cleanPath);
   const isHomePage = cleanPath === '' || cleanPath === '/';
 
-  // URL에서 인증 토큰 정보 추출
-  const authToken = request.cookies.get('sb-bgznxwfpnvskfzsiisrn-auth-token.0');
-  const refreshToken = request.cookies.get(
-    'sb-bgznxwfpnvskfzsiisrn-auth-token.1',
-  );
-  const hasAuthTokens = !!authToken || !!refreshToken;
+  // 모든 가능한 인증 토큰 쿠키 패턴 확인
+  const isAuthenticated = checkAuthCookies(request.cookies);
 
   // 인증 상태가 아니고, 보호된 페이지에 접근하려는 경우 로그인 페이지로 리다이렉트
-  if (!hasAuthTokens && !isPublicPage && !isHomePage) {
+  if (!isAuthenticated && !isPublicPage && !isHomePage) {
     const redirectUrl = new URL('/sign-in', request.nextUrl.origin);
     // 원래 접근하려던 경로를 redirectTo 파라미터로 전달
     redirectUrl.searchParams.set('redirectTo', cleanPath);
@@ -45,7 +40,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // 이미 인증된 상태에서 로그인/회원가입 페이지 접근 시 홈으로 리다이렉트
-  if (hasAuthTokens && isAuthPage) {
+  if (isAuthenticated && isAuthPage) {
     return NextResponse.redirect(new URL('/', request.nextUrl.origin));
   }
 
@@ -53,9 +48,31 @@ export async function middleware(request: NextRequest) {
 }
 
 /**
+ * 모든 가능한 Supabase 인증 쿠키를 확인하는 함수
+ * @param cookies - 요청에 포함된 쿠키 객체
+ * @returns 인증된 상태인지 여부
+ */
+const checkAuthCookies = (cookies: NextRequest['cookies']): boolean => {
+  // 쿠키 기본 이름
+  const baseTokenName = 'sb-bgznxwfpnvskfzsiisrn-auth-token';
+
+  // 이메일 로그인 쿠키 확인
+  if (cookies.get(baseTokenName)) {
+    return true;
+  }
+
+  // 소셜 로그인 쿠키 확인 (.0, .1 패턴)
+  if (cookies.get(`${baseTokenName}.0`) || cookies.get(`${baseTokenName}.1`)) {
+    return true;
+  }
+
+  return false;
+};
+
+/**
  * 공개 접근 가능한 경로인지 확인하는 함수
  */
-function isPublicRoute(pathname: string): boolean {
+const isPublicRoute = (pathname: string): boolean => {
   const publicRoutes = [
     '/sign-in',
     '/sign-up',
@@ -65,7 +82,7 @@ function isPublicRoute(pathname: string): boolean {
   ];
 
   return publicRoutes.some((route) => pathname.startsWith(route));
-}
+};
 
 /**
  * 매우 간단한 matcher 패턴 사용

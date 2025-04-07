@@ -1,10 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: [
-      'k.kakaocdn.net', // 카카오 프로필 이미지
-      'lh3.googleusercontent.com', // 구글 프로필 이미지
-    ],
     formats: ['image/avif', 'image/webp'],
     localPatterns: [
       {
@@ -13,6 +9,16 @@ const nextConfig = {
       },
     ],
     remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'k.kakaocdn.net',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+        pathname: '/**',
+      },
       {
         protocol: 'http',
         hostname: 'tong.visitkorea.or.kr',

@@ -1,6 +1,6 @@
 'use server';
 import { Plan, PlanFilterOptions } from '@/types/plan.type';
-import { createClient } from '@/lib/supabase/server';
+import { getServerClient } from '@/lib/supabase/server';
 import { camelize } from '@/lib/utils/camelize';
 
 /**
@@ -9,7 +9,7 @@ import { camelize } from '@/lib/utils/camelize';
  * @returns Promise<Plan[]> - 일정 목록
  */
 export const getPlans = async (userId: string): Promise<Plan[]> => {
-  const supabase = await createClient();
+  const supabase = await getServerClient();
 
   const { data, error } = await supabase
     .from('plans')
@@ -44,7 +44,7 @@ export const getFilteredPlans = async (
   userId: string,
   filterOptions: PlanFilterOptions,
 ): Promise<Plan[]> => {
-  const supabase = await createClient();
+  const supabase = await getServerClient();
   let query = supabase.from('plans').select('*').eq('user_id', userId);
 
   if (filterOptions.title) {

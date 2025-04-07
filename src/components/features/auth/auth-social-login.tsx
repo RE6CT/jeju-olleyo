@@ -3,12 +3,14 @@
 import { Separator } from '@/components/ui/separator';
 import SocialProvider from './auth-social-provider';
 import { CardContent } from '@/components/ui/card';
-import { googleLogin, kakaoLogin } from '@/lib/apis/auth-browser.api';
+import useAuth from '@/lib/hooks/useAuth';
 
 /**
  * 소셜 로그인 섹션 컴포넌트
  */
 const SocialLogin = () => {
+  const { handleGoogleLogin, handleKakaoLogin } = useAuth();
+
   return (
     <CardContent className="pt-0">
       {/* 소셜 로그인 섹션 */}
@@ -25,8 +27,8 @@ const SocialLogin = () => {
         </div>
         {/* 소셜 로그인 버튼 */}
         <div className="flex flex-col space-y-2">
-          <SocialProvider provider="kakao" onClick={kakaoLogin} />
-          <SocialProvider provider="google" onClick={googleLogin} />
+          <SocialProvider provider="kakao" onClick={handleKakaoLogin} />
+          <SocialProvider provider="google" onClick={handleGoogleLogin} />
         </div>
       </div>
     </CardContent>

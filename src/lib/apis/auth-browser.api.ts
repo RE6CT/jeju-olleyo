@@ -4,12 +4,22 @@ import { SocialUserInfo } from '@/types/auth.type';
 
 /**
  * 사용자 객체를 UserInfo 타입으로 변환하는 함수
+ * onAuthStateChange 이벤트에서도 사용됨
  */
 export const formatUser = (user: User | null): SocialUserInfo | null => {
   if (!user) return null;
 
-  // 카카오 또는 구글 로그인의 경우 provider 정보 설정
-  const provider = user.app_metadata?.provider || null;
+  console.log('프로바이더', user.app_metadata.provider);
+  console.log('프로바이더스', user.app_metadata.providers);
+
+  let provider = '';
+
+  if (user.app_metadata?.providers && user.app_metadata.providers.length > 0) {
+    provider =
+      user.app_metadata.providers[user.app_metadata.providers.length - 1];
+  }
+
+  console.log('유저정보', user.app_metadata);
 
   // 카카오 로그인의 경우 프로필 이미지, 닉네임 처리
   let nickname = user.user_metadata?.nickname || null;
@@ -40,6 +50,7 @@ export const formatUser = (user: User | null): SocialUserInfo | null => {
       user.user_metadata?.avatar_url || user.user_metadata?.picture || null;
   }
 
+  // 모든 출처에서 일관된 사용자 객체 형식 반환
   return {
     id: user.id,
     email: user.email as string,
@@ -153,4 +164,25 @@ export const googleLogin = async () => {
  */
 export const kakaoLogin = async () => {
   return socialLogin('kakao');
+};
+
+/**
+ * 현재 세션 정보를 가져오는 함수
+ * @returns 세션과 사용자 정보
+ */
+export const getCurrentSession = async () => {
+  const supabase = await getBrowserClient();
+  const { data: sessionData } = await supabase.auth.getSession();
+
+  if (!sessionData.session) {
+    return { session: null, user: null };
+  }
+
+  const { data: userData } = await supabase.auth.getUser();
+  const formattedUser = formatUser(userData.user);
+
+  return {
+    session: sessionData.session,
+    user: formattedUser,
+  };
 };

@@ -32,10 +32,10 @@ export type AuthFooterProps = {
   linkHref: string;
 };
 
-export type SocialProviderProps = {
+export interface SocialProviderProps {
   provider: 'google' | 'kakao';
-  onClick: () => void;
-};
+  onClick: () => Promise<boolean>;
+}
 
 export type PasswordInputProps = {
   id: string;
@@ -76,3 +76,26 @@ export type UserState = {
   setUser: (user: UserInfo) => void;
   clearUser: () => void;
 };
+
+/**
+ * 서버에서 반환되는 직렬화된 사용자 정보
+ */
+export interface SerializedUser {
+  id: string;
+  email: string;
+  nickname: string | null;
+  phone: string | null;
+  avatar_url?: string | null;
+  provider: string;
+}
+
+/**
+ * 인증 응답 타입
+ */
+export interface AuthResponse {
+  user: SerializedUser | null;
+  error: {
+    message: string;
+    status: number;
+  } | null;
+}

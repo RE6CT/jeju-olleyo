@@ -1,6 +1,10 @@
 'use server';
 
-import { LoginFormValues, RegisterFormValues } from '@/types/auth.type';
+import {
+  LoginFormValues,
+  RegisterFormValues,
+  SerializedUser,
+} from '@/types/auth.type';
 import { getServerClient } from '@/lib/supabase/server';
 
 /**
@@ -28,7 +32,7 @@ export const login = async (values: LoginFormValues) => {
       };
     }
 
-    // 사용자 객체에서 필요한 정보만 추출하여 반환
+    // 사용자 객체에서 필요한 정보만 추출하여 반환 (provider 추가)
     return {
       user: data.user
         ? {
@@ -36,6 +40,8 @@ export const login = async (values: LoginFormValues) => {
             email: data.user.email,
             nickname: data.user.user_metadata.nickname,
             phone: data.user.user_metadata.phone,
+            avatar_url: data.user.user_metadata.avatar_url || null,
+            provider: data.user.app_metadata?.provider || 'email', // provider 정보 추가
           }
         : null,
       error: null,
@@ -85,7 +91,7 @@ export const register = async (values: RegisterFormValues) => {
       };
     }
 
-    // 사용자 객체에서 필요한 정보만 추출하여 반환
+    // 사용자 객체에서 필요한 정보만 추출하여 반환 (provider 추가)
     return {
       user: data.user
         ? {
@@ -93,6 +99,8 @@ export const register = async (values: RegisterFormValues) => {
             email: data.user.email,
             nickname: data.user.user_metadata.nickname,
             phone: data.user.user_metadata.phone,
+            avatar_url: data.user.user_metadata.avatar_url || null,
+            provider: 'email', // 회원가입은 항상 이메일 방식
           }
         : null,
       error: null,
@@ -130,7 +138,7 @@ export const logout = async () => {
       };
     }
 
-    return { error };
+    return { error: null };
   } catch (error: any) {
     console.error('로그아웃 처리 중 예외 발생:', error);
 
@@ -231,7 +239,7 @@ export const getCurrentUser = async () => {
     const { data, error } = await supabase.auth.getUser();
 
     if (error) {
-      console.log(error);
+      console.log('1234', error);
       return {
         user: null,
         error: {
@@ -241,16 +249,18 @@ export const getCurrentUser = async () => {
       };
     }
 
-    // 사용자 객체에서 필요한 정보만 추출하여 반환
+    // 사용자 객체에서 필요한 정보만 추출하여 반환 (provider와 id 추가)
     return {
       user: data.user
         ? {
+            id: data.user.id, // id 추가
             email: data.user.email,
-            profileImage:
+            avatar_url:
               data.user.user_metadata.avatar_url ||
-              '/images/default-profile.png',
+              '/images/default-profile.png', // 키 이름 통일
             nickname: data.user.user_metadata.nickname,
             phone: data.user.user_metadata.phone,
+            provider: data.user.app_metadata?.provider || 'email', // provider 정보 추가
           }
         : null,
       error: null,

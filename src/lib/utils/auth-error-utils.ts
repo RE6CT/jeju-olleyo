@@ -42,10 +42,7 @@ export const getLoginErrorMessage = (errorMessage: string): string[] => {
     return ['네트워크 연결에 문제가 있습니다.', '인터넷 연결을 확인해주세요.'];
   }
 
-  if (
-    lowerCaseMessage.includes('auth session missing') ||
-    lowerCaseMessage.includes('no session')
-  ) {
+  if (lowerCaseMessage.includes('no session')) {
     return ['인증 세션이 만료되었습니다.', '다시 로그인해주세요.'];
   }
 

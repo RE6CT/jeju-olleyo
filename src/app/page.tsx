@@ -18,7 +18,7 @@ const Home = async () => {
         </h2>
         <div className="mb-4 flex justify-center">
           <Image
-            src={user?.profileImage}
+            src={user?.avatar_url}
             alt="User Avatar"
             width={100}
             height={100}

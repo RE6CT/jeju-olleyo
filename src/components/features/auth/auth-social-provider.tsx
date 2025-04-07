@@ -4,13 +4,12 @@ import { Button } from '@/components/ui/button';
 import { SocialProviderProps } from '@/types/auth.type';
 import Image from 'next/image';
 import { useState } from 'react';
-import { googleLogin, kakaoLogin } from '@/lib/apis/auth-browser.api';
 
 /**
  * 소셜 로그인 버튼 컴포넌트
  *
  * @param provider 소셜 로그인 제공자 (구글, 카카오 등)
- * @param onClick 클릭 이벤트 핸들러 (선택적)
+ * @param onClick 클릭 이벤트 핸들러
  */
 const SocialProvider = ({ provider, onClick }: SocialProviderProps) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -21,14 +20,12 @@ const SocialProvider = ({ provider, onClick }: SocialProviderProps) => {
       text: '구글 로그인',
       imageSrc: '/images/google.svg',
       className: 'border-gray-300 bg-white text-gray-800 hover:bg-gray-50',
-      action: googleLogin,
     },
     kakao: {
       text: '카카오 로그인',
       imageSrc: '/images/kakaotalk.svg',
       className:
         'border-yellow-500 bg-yellow-400 text-black hover:bg-yellow-500',
-      action: kakaoLogin,
     },
   }[provider];
 
@@ -38,12 +35,9 @@ const SocialProvider = ({ provider, onClick }: SocialProviderProps) => {
   const handleSocialLogin = async () => {
     try {
       setIsLoading(true);
-
-      // 외부에서 제공된 onClick 핸들러가 있으면 실행
-      if (onClick) {
-        onClick();
-        return;
-      }
+      // useAuth hook에서 제공하는 함수 실행
+      await onClick();
+      // 리다이렉트는 onAuthStateChange 이벤트에서 처리됨
     } catch (error) {
       console.error(`${provider} 로그인 중 오류 발생:`, error);
     } finally {

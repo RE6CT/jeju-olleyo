@@ -3,9 +3,25 @@
 import { useEffect, useState } from 'react';
 import PlanCard from '@/components/features/plan/plan-card';
 import { Plan } from '@/types/plan.type';
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Filter } from 'lucide-react';
 
-export default function MyPlanPage() {
+const MyPlanPage = () => {
   const [plans, setPlans] = useState<Plan[]>([]);
+  const [filter, setFilter] = useState<{
+    type: 'title' | 'date' | 'public' | null;
+    value: string;
+  }>({ type: null, value: '' });
+
+  const resetFilter = () => {
+    setFilter({ type: null, value: '' });
+  };
 
   // TODO: API 연동 후 실제 데이터로 교체
   useEffect(() => {
@@ -51,7 +67,49 @@ export default function MyPlanPage() {
 
   return (
     <div className="container mx-auto py-8">
-      <h1 className="mb-8 text-3xl font-bold">나의 여행 계획</h1>
+      <div className="mb-8 flex flex-col gap-4">
+        <div className="flex items-center justify-between">
+          <h1 className="text-3xl font-bold">내 일정</h1>
+          <Button>새 일정 만들기</Button>
+        </div>
+        <div className="flex items-center gap-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm">
+                <Filter className="mr-2 h-4 w-4" />
+                필터
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start">
+              <DropdownMenuItem
+                onClick={() => setFilter({ type: 'title', value: 'title' })}
+              >
+                제목
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => setFilter({ type: 'date', value: 'date' })}
+              >
+                날짜
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => setFilter({ type: 'public', value: 'public' })}
+              >
+                공개 상태
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          {filter.type && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={resetFilter}
+              className="text-muted-foreground"
+            >
+              필터 초기화
+            </Button>
+          )}
+        </div>
+      </div>
 
       {plans.length === 0 ? (
         <div className="flex h-[400px] items-center justify-center rounded-lg border-2 border-dashed border-foreground/30">
@@ -71,4 +129,6 @@ export default function MyPlanPage() {
       )}
     </div>
   );
-}
+};
+
+export default MyPlanPage;

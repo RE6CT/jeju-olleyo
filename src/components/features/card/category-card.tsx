@@ -5,21 +5,13 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '../ui/card';
+} from '../../ui/card';
 
-type CategoryCardProp = {
-  image: string;
-  title: string;
-  description: string;
-  className: string;
-  location: string;
-  tag: string; // 추후에 컴포넌트로 분리할 가능성 있음 카페 명소 등등...
-};
 /**
  * @param image 이미지값 
  * @param title 장소 이름
  * @param description 장소 설명
- * @param className 스타일 값
+ * @param className 스타일 값 별도 지정없을경우 none
  * @param location 실제 주소 값
  * @param tag 카페 명소 등등...의 label
  * 

@@ -5,24 +5,16 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '../ui/card';
+} from '../../ui/card';
 import { Tables } from '@/types/supabase.type';
 import Link from 'next/link';
-import LikeButton from './like-button';
+import LikeButton from '../like-button';
 import { CamelCaseObject } from '@/types/common.type';
+import { PlanCardProp } from '@/types/card.type';
 
-type Plan = Tables<'plans'>;
-type PlanCardProp = {
-  plan: CamelCaseObject<
-    Pick<Plan, 'plan_img' | 'title' | 'description' | 'plan_id'>
-  >;
-  className?: string;
-  userId: string;
-  initialLikes: number;
-};
 /**
  * @param plan plan_img title description plan_id 의 정보가 담긴 단일 데이터 객체
- * @param className 스타일값
+ * @param className 스타일 값 별도 지정없을경우 none
  * @param userId 유저의 uuid
  * @param initialLikes 좋아요 수
  *

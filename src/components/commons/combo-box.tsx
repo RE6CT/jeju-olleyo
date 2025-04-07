@@ -41,12 +41,12 @@ type ComboBoxProp = {
  * ></ComboBox>
  * ```
  */
-export default function Combobox({
+export const Combobox = ({
   list,
   value,
   setValue,
   defaultMessage,
-}: ComboBoxProp) {
+}: ComboBoxProp) => {
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -59,31 +59,31 @@ export default function Combobox({
           className="w-[200px] justify-between"
         >
           {value
-            ? list.find((list) => list.value === value)?.label
-            : 'Select framework...'}
+            ? list.find((item) => item.value === value)?.label
+            : '검색어를 선택해주세요'}
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
         <Command>
-          <CommandInput placeholder="Search framework..." />
+          <CommandInput placeholder="검색어를 선택해주세요" />
           <CommandList>
             <CommandEmpty>{defaultMessage}</CommandEmpty>
             <CommandGroup>
-              {list.map((list) => (
+              {list.map((item) => (
                 <CommandItem
-                  key={list.value}
-                  value={list.value}
+                  key={item.value}
+                  value={item.value}
                   onSelect={(currentValue) => {
                     setValue(currentValue === value ? '' : currentValue);
                     setOpen(false);
                   }}
                 >
-                  {list.label}
+                  {item.label}
                   <Check
                     className={cn(
                       'ml-auto',
-                      value === list.value ? 'opacity-100' : 'opacity-0',
+                      value === item.value ? 'opacity-100' : 'opacity-0',
                     )}
                   />
                 </CommandItem>
@@ -94,4 +94,4 @@ export default function Combobox({
       </PopoverContent>
     </Popover>
   );
-}
+};

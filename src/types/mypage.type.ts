@@ -4,7 +4,7 @@ import { CamelCaseObject } from './common.type';
 
 /** 모달의 링크 path를 제한하는 타입 */
 export type ModalPath =
-  | 'profile'
+  | 'account'
   | 'bookmarks'
   | 'likes'
   | 'comments'

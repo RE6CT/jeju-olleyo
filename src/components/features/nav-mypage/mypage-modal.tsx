@@ -94,10 +94,10 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
   return (
     <div
       ref={modalRef}
-      className="absolute right-10 top-full flex flex-col gap-3 rounded-lg border bg-white p-4 text-black shadow-lg"
+      className="absolute right-10 top-16 flex flex-col gap-3 rounded-lg border bg-white p-4 text-black shadow-lg"
     >
       <section
-        onClick={() => onLinkClick('profile')}
+        onClick={() => onLinkClick('account')}
         className="flex cursor-pointer items-center gap-3"
       >
         <ProfileImage

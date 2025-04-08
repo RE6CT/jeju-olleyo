@@ -21,6 +21,7 @@ import { FilterInput } from './plan-filter-input';
 import Loading from '@/app/loading';
 import { useFilteredPlans } from '@/lib/queries/use-get-filtered-plans';
 import Pagination from '@/components/ui/pagination';
+import { useDeletePlan } from '@/lib/queries/use-delete-plan';
 
 /**
  * 여행 계획 필터 섹션 컴포넌트
@@ -63,6 +64,7 @@ const PlanFilterSection = ({
 
   const { data: plans = initialPlans, isLoading: isPlansLoading } =
     useFilteredPlans(userId, filter);
+  const { mutate: deletePlan } = useDeletePlan(userId);
 
   // 필터 초기화
   const resetFilter = () => {
@@ -113,8 +115,9 @@ const PlanFilterSection = ({
 
   // 계획 삭제 핸들러
   const handleDelete = (planId: number) => {
-    console.log('삭제할 계획 ID:', planId);
-    // TODO: 삭제 API 호출
+    if (confirm('정말로 이 일정을 삭제하시겠습니까?')) {
+      deletePlan(planId);
+    }
   };
 
   // 페이지네이션 계산

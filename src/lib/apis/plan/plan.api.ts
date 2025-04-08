@@ -84,3 +84,23 @@ export const fetchGetFilteredPlansByUserId = async (
 
   return filteredDataByDate.map(camelize);
 };
+
+/**
+ * 일정을 삭제하는 API
+ * @param planId - 삭제할 일정의 ID
+ *
+ * @example
+ * ```typescript
+ * const { mutate: deletePlan } = useDeletePlan();
+ * deletePlan(planId);
+ * ```
+ */
+export const fetchDeletePlan = async (planId: number) => {
+  const supabase = await getServerClient();
+
+  const { error } = await supabase.from('plans').delete().eq('plan_id', planId);
+
+  if (error) {
+    throw new Error('일정 삭제에 실패했습니다.');
+  }
+};

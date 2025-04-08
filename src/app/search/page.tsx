@@ -1,6 +1,6 @@
 'use client';
 
-import SearchBarTest from '@/components/layouts/search-bar-test';
+import SearchBar from '@/components/layouts/search-bar';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -26,7 +26,7 @@ const SearchTestPage = () => {
     <>
       <div className="pt-20">
         검색 테스트 페이지 입니다.
-        <SearchBarTest />
+        <SearchBar />
         <div>검색 결과는 아래와 같다.</div>
         <ul>
           {Array.isArray(results) ? (

@@ -27,7 +27,7 @@ const CategoryTabs = ({ className }: CategoryTabsProps) => {
             key={category}
             onClick={() => navigateToCategory(category)}
             className={cn(
-              'px-4 py-2 text-sm font-medium transition-all',
+              'px-4 py-2 text-base transition-all',
               activeCategory === category
                 ? 'border-b-2 border-black text-black'
                 : 'text-gray-600 hover:text-gray-800',

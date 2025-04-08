@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
+  const searchParams = req.nextUrl.searchParams;
   const provider = searchParams.get('provider') || 'email';
 
   const response = NextResponse.json({ success: true });

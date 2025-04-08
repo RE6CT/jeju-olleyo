@@ -4,11 +4,10 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 
 import AuthLayout from '@/components/features/auth/auth-layout';
 import AuthHeader from '@/components/features/auth/auth-header';
-import { CardContent, CardFooter } from '@/components/ui/card';
+import { CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import AuthErrorMessage from '@/components/features/auth/auth-error-message';

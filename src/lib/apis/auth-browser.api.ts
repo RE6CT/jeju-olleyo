@@ -223,6 +223,82 @@ export const getCurrentSession = async () => {
 };
 
 /**
+ * 로그아웃을 처리하는 함수 - 쿠키 관련 처리 포함
+ * @returns 로그아웃 결과
+ */
+export const logoutUser = async () => {
+  const supabase = await getBrowserClient();
+
+  try {
+    // Supabase 로그아웃 실행
+    const { error } = await supabase.auth.signOut({ scope: 'global' });
+
+    if (error) {
+      throw error;
+    }
+
+    // 로그아웃 후 관련 쿠키 삭제
+    clearAuthCookies();
+
+    return { success: true, error: null };
+  } catch (error: any) {
+    console.error('로그아웃 중 오류 발생:', error);
+    return {
+      success: false,
+      error: {
+        message: error.message || '로그아웃 중 오류가 발생했습니다.',
+        status: error.status || 500,
+      },
+    };
+  }
+};
+
+/**
+ * 인증 관련 쿠키를 모두 삭제하는 함수
+ */
+export const clearAuthCookies = () => {
+  if (typeof document === 'undefined') return;
+
+  // Supabase 관련 쿠키 목록
+  const cookiesToClear = [
+    'provider', // provider 쿠키
+    'sb-access-token',
+    'sb-refresh-token',
+    'supabase-auth-token',
+    '__client-x-callback',
+    '__supabase_session', // Supabase 세션 쿠키
+  ];
+
+  // 쿠키 삭제 (여러 도메인/경로 패턴에 대해 시도)
+  cookiesToClear.forEach((cookieName) => {
+    // 루트 경로
+    document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;`;
+
+    // 현재 도메인
+    const domain = window.location.hostname;
+    document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=${domain};`;
+
+    // www 포함 도메인 (없는 경우)
+    if (!domain.startsWith('www.')) {
+      document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=www.${domain};`;
+    }
+
+    // 최상위 도메인 (예: example.com에서 .example.com)
+    const parts = domain.split('.');
+    if (parts.length > 1) {
+      const topDomain = `.${parts.slice(-2).join('.')}`;
+      document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=${topDomain};`;
+    }
+  });
+
+  // 로컬 스토리지에서 Supabase 관련 항목 삭제
+  if (typeof localStorage !== 'undefined') {
+    localStorage.removeItem('supabase.auth.token');
+    localStorage.removeItem('supabase.auth.expires_at');
+  }
+};
+
+/**
  * 사용자 정보 업데이트 함수
  * @param userData - 업데이트할 사용자 정보
  * @returns 업데이트 결과

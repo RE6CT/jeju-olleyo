@@ -11,13 +11,11 @@ import {
   formatUser,
   resetPassword,
   updateUserPassword,
+  logoutUser,
 } from '@/lib/apis/auth-browser.api';
 import useAuthStore from '@/zustand/auth.store';
 import { getBrowserClient } from '@/lib/supabase/client';
-import {
-  getLoginErrorMessage,
-  getResetPasswordErrorMessage,
-} from '../utils/auth-error.util';
+import { getLoginErrorMessage } from '../utils/auth-error.util';
 
 /**
  * 인증 관련 기능을 처리하는 커스텀 훅
@@ -179,12 +177,20 @@ const useAuth = () => {
       // 먼저 상태를 정리
       clearUser();
 
-      // 그 다음 서버에 로그아웃 요청
-      const { error } = await fetchLogout();
+      // 브라우저 클라이언트 측 로그아웃 (쿠키 삭제 포함)
+      const { success, error } = await logoutUser();
 
-      if (error) {
+      if (!success && error) {
         setError(error.message);
         return false;
+      }
+
+      // 서버 측 로그아웃 요청도 함께 보냄
+      const serverResponse = await fetchLogout();
+
+      if (serverResponse.error) {
+        // 브라우저에서 이미 로그아웃했으므로 오류를 기록만 하고 계속 진행
+        console.error('서버 로그아웃 오류:', serverResponse.error.message);
       }
 
       // 로그아웃 후 로그인 페이지로 강제 리다이렉트

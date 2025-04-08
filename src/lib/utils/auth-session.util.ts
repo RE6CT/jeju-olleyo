@@ -1,5 +1,5 @@
 import { getBrowserClient } from '@/lib/supabase/client';
-import { formatUser } from '@/lib/apis/auth-browser.api';
+import { formatUser } from '@/lib/apis/auth/auth-browser.api';
 import { SocialUserInfo } from '@/types/auth.type';
 
 /**

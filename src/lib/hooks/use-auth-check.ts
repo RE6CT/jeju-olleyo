@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { getBrowserClient } from '@/lib/supabase/client';
 import useAuthStore from '@/zustand/auth.store';
-import { formatUser } from '@/lib/apis/auth-browser.api';
+import { formatUser } from '@/lib/apis/auth/auth-browser.api';
 
 /**
  * 인증 상태를 체크하고 적절한 리다이렉션을 처리하는 커스텀 훅

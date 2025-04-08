@@ -4,7 +4,7 @@ import {
   fetchLogin,
   fetchRegister,
   fetchLogout,
-} from '@/lib/apis/auth-server.api';
+} from '@/lib/apis/auth/auth-server.api';
 import {
   googleLogin,
   kakaoLogin,
@@ -12,7 +12,7 @@ import {
   resetPassword,
   updateUserPassword,
   logoutUser,
-} from '@/lib/apis/auth-browser.api';
+} from '@/lib/apis/auth/auth-browser.api';
 import useAuthStore from '@/zustand/auth.store';
 import { getBrowserClient } from '@/lib/supabase/client';
 import { getLoginErrorMessage } from '../utils/auth-error.util';

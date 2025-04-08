@@ -1,5 +1,5 @@
 import { AuthError, Provider, User } from '@supabase/supabase-js';
-import { getBrowserClient } from '../supabase/client';
+import { getBrowserClient } from '../../supabase/client';
 import { SocialUserInfo } from '@/types/auth.type';
 
 /**

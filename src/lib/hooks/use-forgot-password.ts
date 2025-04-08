@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { forgotPasswordSchema } from '@/lib/schemas/auth-schema';
 import { EmailFormValues } from '@/types/auth.type';
-import { resetPassword } from '@/lib/apis/auth-browser.api';
+import { resetPassword } from '@/lib/apis/auth/auth-browser.api';
 import { getForgotPasswordErrorMessage } from '@/lib/utils/auth-error.util';
 import useAuthStore from '@/zustand/auth.store';
 

@@ -1,6 +1,6 @@
 import { getBrowserClient } from '@/lib/supabase/client';
 import useAuthStore from '@/zustand/auth.store';
-import { formatUser } from '@/lib/apis/auth-browser.api';
+import { formatUser } from '@/lib/apis/auth/auth-browser.api';
 
 /**
  * 사용자 세션을 새로고침하는 유틸리티 함수

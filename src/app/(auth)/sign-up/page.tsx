@@ -1,7 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-
 import AuthLayout from '@/components/features/auth/auth-layout';
 import AuthHeader from '@/components/features/auth/auth-header';
 import AuthForm from '@/components/features/auth/auth-form';
@@ -18,7 +16,6 @@ import { getSignupErrorMessage } from '@/lib/utils/auth-error.util';
  * 회원가입 페이지 컴포넌트
  */
 const SignUpPage = () => {
-  const router = useRouter();
   const { handleRegister, isLoading, error } = useAuth();
 
   // 이미 로그인되어 있는 경우 홈으로 리다이렉트
@@ -29,11 +26,7 @@ const SignUpPage = () => {
 
   // 회원가입 폼 제출 핸들러
   const handleSubmit = async (data: RegisterFormValues) => {
-    const success = await handleRegister(data);
-
-    if (success) {
-      router.push('/');
-    }
+    await handleRegister(data);
   };
 
   // 인증 체크 중이면 로딩 화면 표시

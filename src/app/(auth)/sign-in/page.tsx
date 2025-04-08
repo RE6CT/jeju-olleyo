@@ -41,13 +41,7 @@ const LoginPage = () => {
 
   // 로그인 폼 제출 핸들러
   const handleSubmit = async (data: LoginFormValues) => {
-    // useRememberEmail 훅을 사용할 수도 있지만 이미 useAuth의 handleLogin 내부에서 관리하고 있음
-    const success = await handleLogin(data);
-
-    if (success) {
-      // 성공 시 홈으로 리다이렉트
-      window.location.href = redirectTo;
-    }
+    await handleLogin(data);
   };
 
   // 로딩 중이거나 이미 로그인된 경우 로딩 표시

@@ -267,8 +267,9 @@ export const fetchGetCurrentUser = async () => {
       avatar_url:
         data.user.user_metadata.avatar_url || '/images/default-profile.png',
       nickname:
-        data.user.user_metadata.full_name ||
         data.user.user_metadata.nickname ||
+        data.user.user_metadata.full_name ||
+        data.user.user_metadata.user_name ||
         '사용자',
       phone: data.user.user_metadata.phone || '미등록',
       provider: data.user.app_metadata?.provider || 'email',

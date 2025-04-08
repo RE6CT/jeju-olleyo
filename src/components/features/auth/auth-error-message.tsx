@@ -36,15 +36,16 @@ const AuthErrorMessage = ({
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0 }}
         transition={{ duration: 0.2 }}
-        className={cn(className)}
+        className={cn('flex items-center justify-center', className)}
       >
-        <Alert variant={variant} className="border-red-200 bg-red-50">
-          <AlertCircle className="h-4 w-4 text-red-600" />
-          <AlertDescription className="text-sm font-medium text-red-600">
-            {errorMessage}
-          </AlertDescription>
+        <Alert variant={variant} className="border-red-200 bg-red-50 p-3">
+          <div className="grid grid-cols-[auto,1fr] items-center gap-2">
+            <AlertCircle className="h-4 w-4 translate-y-[0px] text-red-600" />
+            <span className="text-sm font-medium leading-none text-red-600">
+              {errorMessage}
+            </span>
+          </div>
         </Alert>
       </motion.div>
     </AnimatePresence>

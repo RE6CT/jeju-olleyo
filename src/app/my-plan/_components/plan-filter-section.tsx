@@ -10,9 +10,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Filter } from 'lucide-react';
-import { Input } from '@/components/ui/input';
 import { getFilteredPlans } from '@/lib/apis/plan/plan';
-import { Label } from '@/components/ui/label';
 import { FILTER_TYPES, PUBLIC_OPTIONS } from '@/constants/plan.constants';
 import { FilterType, PublicOption, FilterState } from '@/types/plan.type';
 import { FilterMenu } from './plan-filter-menu';

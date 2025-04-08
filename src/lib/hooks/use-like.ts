@@ -1,10 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import getLike from '@/lib/apis/get-like.api';
-import addLike from '@/lib/apis/add-like.api';
-import deleteLike from '@/lib/apis/delete-like.api';
-import countLike from '@/lib/apis/count-like.api';
+import getLike from '../apis/like/get-like.api';
+import deleteLike from '../apis/like/delete-like.api';
+import addLike from '../apis/like/add-like.api';
+import countLike from '../apis/like/count-like.api';
 
 const useLike = (planId: number, userId: string, initialLikes: number) => {
   const [likes, setLikes] = useState(initialLikes);

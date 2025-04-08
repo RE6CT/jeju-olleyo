@@ -11,7 +11,6 @@ import {
   formatUser,
   resetPassword,
   updateUserPassword,
-  logoutUser,
 } from '@/lib/apis/auth-browser.api';
 import useAuthStore from '@/zustand/auth.store';
 import { getBrowserClient } from '@/lib/supabase/client';
@@ -19,7 +18,6 @@ import { getLoginErrorMessage } from '../utils/auth-error.util';
 
 /**
  * 인증 관련 기능을 처리하는 커스텀 훅
- * @returns 인증 관련 상태와 함수들
  */
 const useAuth = () => {
   const [isProcessing, setIsProcessing] = useState(false);
@@ -36,8 +34,6 @@ const useAuth = () => {
 
   /**
    * 이메일 로그인 처리 함수
-   * @param values - 로그인 폼 값
-   * @returns 로그인 성공 여부
    */
   const handleLogin = useCallback(
     async (values: LoginFormValues) => {
@@ -61,16 +57,10 @@ const useAuth = () => {
             ...response.user,
             email: response.user.email ?? null,
           });
-
-          await fetch('/api/set-provider?provider=email', {
-            method: 'GET',
-            credentials: 'include',
-          });
         }
 
-        // 로그인 성공 후 홈페이지로 강제 리다이렉트
+        // 로그인 성공 후 리다이렉트
         if (typeof window !== 'undefined') {
-          // URL에서 redirectTo 파라미터 추출
           const urlParams = new URLSearchParams(window.location.search);
           const redirectTo = urlParams.get('redirectTo') || '/';
           window.location.href = redirectTo;
@@ -92,8 +82,6 @@ const useAuth = () => {
 
   /**
    * 회원가입 처리 함수
-   * @param values - 회원가입 폼 값
-   * @returns 회원가입 성공 여부
    */
   const handleRegister = useCallback(
     async (values: RegisterFormValues) => {
@@ -121,7 +109,6 @@ const useAuth = () => {
 
   /**
    * 구글 로그인 처리 함수
-   * @returns 로그인 성공 여부
    */
   const handleGoogleLogin = useCallback(async () => {
     setIsProcessing(true);
@@ -144,7 +131,6 @@ const useAuth = () => {
 
   /**
    * 카카오 로그인 처리 함수
-   * @returns 로그인 성공 여부
    */
   const handleKakaoLogin = useCallback(async () => {
     setIsProcessing(true);
@@ -167,7 +153,6 @@ const useAuth = () => {
 
   /**
    * 로그아웃 처리 함수
-   * @returns 로그아웃 성공 여부
    */
   const handleLogout = useCallback(async () => {
     setIsProcessing(true);
@@ -177,25 +162,16 @@ const useAuth = () => {
       // 먼저 상태를 정리
       clearUser();
 
-      // 브라우저 클라이언트 측 로그아웃 (쿠키 삭제 포함)
-      const { success, error } = await logoutUser();
+      // 그 다음 서버에 로그아웃 요청
+      const { error } = await fetchLogout();
 
-      if (!success && error) {
+      if (error) {
         setError(error.message);
         return false;
       }
 
-      // 서버 측 로그아웃 요청도 함께 보냄
-      const serverResponse = await fetchLogout();
-
-      if (serverResponse.error) {
-        // 브라우저에서 이미 로그아웃했으므로 오류를 기록만 하고 계속 진행
-        console.error('서버 로그아웃 오류:', serverResponse.error.message);
-      }
-
-      // 로그아웃 후 로그인 페이지로 강제 리다이렉트
+      // 로그아웃 후 로그인 페이지로 리다이렉트
       if (typeof window !== 'undefined') {
-        // 브라우저 캐시를 무시하고 새로운 페이지 요청을 보내도록 함
         window.location.href = '/sign-in?t=' + new Date().getTime();
       }
 
@@ -210,8 +186,6 @@ const useAuth = () => {
 
   /**
    * 비밀번호 재설정 이메일 발송 함수
-   * @param email - 사용자 이메일
-   * @returns 성공 여부
    */
   const handleResetPassword = useCallback(
     async (email: string) => {
@@ -239,10 +213,7 @@ const useAuth = () => {
 
   /**
    * 비밀번호 업데이트 함수
-   * @param password - 새 비밀번호
-   * @returns 성공 여부
    */
-  // useAuth 훅의 handleUpdatePassword 함수 수정
   const handleUpdatePassword = useCallback(
     async (password: string) => {
       setIsProcessing(true);
@@ -276,7 +247,6 @@ const useAuth = () => {
 
   /**
    * 현재 세션 확인 함수
-   * @returns 유효한 세션 존재 여부
    */
   const checkSession = useCallback(async () => {
     try {

@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import PlanFilterSection from './_components/plan-filter-section';
 import { fetchGetAllPlansByUserId } from '@/lib/apis/plan/plan.api';
-import { fetchGetCurrentUser } from '@/lib/apis/auth-server.api';
+import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 
 const MyPlanPage = async () => {
   const { user } = await fetchGetCurrentUser();

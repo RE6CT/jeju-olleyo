@@ -3,29 +3,11 @@
 import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { MyPlanCardProps } from '@/types/plan.type';
-import { Button } from '@/components/ui/button';
-import { MoreVertical, Pencil, Trash2 } from 'lucide-react';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import dayjs from 'dayjs';
-
-const CARD = {
-  height: 'h-[200px]',
-  imageWidth: 'w-[200px]',
-} as const;
-
-const TEXT = {
-  noImage: '이미지 없음',
-  noDescription: '설명이 없습니다.',
-  noDate: '날짜 미정',
-  dateSeparator: '~',
-  edit: '수정',
-  delete: '삭제',
-} as const;
+import { CARD, TEXT } from '@/constants/plan.constants';
+import PlanDropdown from '../../commons/edit-and-delete-dropdown';
+import { MoreVertical } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 /**
  * 일정 카드 컴포넌트
@@ -67,37 +49,17 @@ const MyPlanCard = ({ plan, onEdit, onDelete }: MyPlanCardProps) => {
       <div className="flex flex-1 flex-col">
         <CardHeader className="relative px-4 py-2">
           {/* 드롭다운 메뉴 */}
-          {(onEdit || onDelete) && (
+          {onEdit && onDelete && (
             <div className="absolute right-4 top-2">
-              <DropdownMenu>
-                {/* 자체 button 태그를 쓰는 대신 자식 button 컴포넌트 사용 */}
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0" // 포커스 효과 제거
-                  >
-                    <MoreVertical className="h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  {onEdit && (
-                    <DropdownMenuItem onClick={() => onEdit(plan.planId)}>
-                      <Pencil className="mr-2 h-4 w-4" />
-                      {TEXT.edit}
-                    </DropdownMenuItem>
-                  )}
-                  {onDelete && (
-                    <DropdownMenuItem
-                      onClick={() => onDelete(plan.planId)}
-                      className="text-destructive"
-                    >
-                      <Trash2 className="mr-2 h-4 w-4" />
-                      {TEXT.delete}
-                    </DropdownMenuItem>
-                  )}
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <PlanDropdown plan={plan} onEdit={onEdit} onDelete={onDelete}>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0" // 포커스 효과 제거
+                >
+                  <MoreVertical className="h-4 w-4" />
+                </Button>
+              </PlanDropdown>
             </div>
           )}
           {/* 한줄로 제한, 넘치면 말줄임표 */}

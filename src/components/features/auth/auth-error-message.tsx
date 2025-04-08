@@ -3,13 +3,14 @@
 import { AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { cn } from '@/lib/utils';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 /**
  * 인증 관련 에러 메시지를 표시하는 컴포넌트
- * @param messages 표시할 에러 메시지 배열
- * @param className 추가 CSS 클래스
- * @param variant 알림 스타일 (default, destructive)
+ * @param props 컴포넌트 속성
+ * @param props.messages 표시할 에러 메시지 배열
+ * @param props.className 추가 CSS 클래스
+ * @param props.variant 알림 스타일 (default, destructive)
  */
 interface AuthErrorMessageProps {
   messages: string[];
@@ -31,19 +32,23 @@ const AuthErrorMessage = ({
   if (errorMessage.length === 0) return null;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: -10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.2 }}
-      className={cn(className)}
-    >
-      <Alert variant={variant} className="border-red-200 bg-red-50">
-        <AlertCircle className="h-4 w-4 text-red-600" />
-        <AlertDescription className="text-sm font-medium text-red-600">
-          {errorMessage}
-        </AlertDescription>
-      </Alert>
-    </motion.div>
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.2 }}
+        className={cn('flex items-center justify-center', className)}
+      >
+        <Alert variant={variant} className="border-red-200 bg-red-50 p-3">
+          <div className="grid grid-cols-[auto,1fr] items-center gap-2">
+            <AlertCircle className="h-4 w-4 translate-y-[0px] text-red-600" />
+            <span className="text-sm font-medium leading-none text-red-600">
+              {errorMessage}
+            </span>
+          </div>
+        </Alert>
+      </motion.div>
+    </AnimatePresence>
   );
 };
 

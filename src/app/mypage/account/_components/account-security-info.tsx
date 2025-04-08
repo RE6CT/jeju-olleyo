@@ -4,10 +4,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
-  ACCOUNT_LABEL,
-  ACCOUNT_MARGIN,
   ACCOUNT_PROFILE_SIZE,
+  ROW_LABEL_STYLE,
+  ROW_VALUE_STYLE,
+  TITLE_STYLE,
 } from '@/constants/mypage.constants';
+import clsx from 'clsx';
 import { useState } from 'react';
 
 /** 회원정보 수정 페이지의 보안 섹션 컴포넌트 */
@@ -30,64 +32,42 @@ const SecurityInfo = () => {
 
   return (
     <>
-      <li className="flex flex-col gap-3">
-        <h3 className="text-lg font-semibold">보안</h3>
-        <div className={`${ACCOUNT_MARGIN.left} flex flex-col`}>
-          <div className="flex w-full items-end">
-            {isEditMode ? (
-              <ul className="flex w-full flex-col">
-                <li className="flex w-full items-center">
-                  <Label
-                    htmlFor="currentPassword"
-                    className={`${ACCOUNT_LABEL.width} flex-shrink-0`}
-                  >
-                    현재 비밀번호
-                  </Label>
-                  <Input id="currentPassword" placeholder="********" />
-                </li>
-                <li className="flex w-full items-center">
-                  <Label
-                    htmlFor="newPassword"
-                    className={`${ACCOUNT_LABEL.width} flex-shrink-0`}
-                  >
-                    새 비밀번호
-                  </Label>
-                  <Input
-                    id="newPassword"
-                    placeholder="숫자, 문자, 특수문자를 포함하여 8자 이상"
-                  />
-                </li>
-                <li className="flex w-full items-center">
-                  <Label
-                    htmlFor="newPasswordCheck"
-                    className={`${ACCOUNT_LABEL.width} flex-shrink-0`}
-                  >
-                    새 비밀번호 확인
-                  </Label>
-                  <Input
-                    id="newPasswordCheck"
-                    placeholder="숫자, 문자, 특수문자를 포함하여 8자 이상"
-                  />
-                </li>
-              </ul>
-            ) : (
-              <>
-                <span className={`${ACCOUNT_LABEL.width} `}>현재 비밀번호</span>
-                <span className="flex-grow">********</span>
-              </>
-            )}
-            {isEditMode ? (
-              <Button onClick={handleEditCompleteButtonClick} className="w-fit">
-                완료
-              </Button>
-            ) : (
-              <Button onClick={handleEditButtonClick} className="w-fit">
-                수정
-              </Button>
-            )}
-          </div>
-        </div>
-      </li>
+      <h3 className={clsx(TITLE_STYLE)}>보안</h3>
+      {isEditMode ? (
+        <>
+          <div className="invisible" />
+          <Label htmlFor="currentPassword" className={clsx(ROW_LABEL_STYLE)}>
+            현재 비밀번호
+          </Label>
+          <Input id="currentPassword" placeholder="********" />
+          <div className="invisible" />
+          <div className="invisible" />
+          <Label htmlFor="newPassword" className={clsx(ROW_LABEL_STYLE)}>
+            새 비밀번호
+          </Label>
+          <Input
+            id="newPassword"
+            placeholder="숫자, 문자, 특수문자를 포함하여 8자 이상"
+          />
+          <div className="invisible" />
+          <div className="invisible" />
+          <Label htmlFor="newPasswordCheck" className={clsx(ROW_LABEL_STYLE)}>
+            새 비밀번호 확인
+          </Label>
+          <Input
+            id="newPasswordCheck"
+            placeholder="숫자, 문자, 특수문자를 포함하여 8자 이상"
+          />
+          <Button onClick={handleEditCompleteButtonClick}>완료</Button>
+        </>
+      ) : (
+        <>
+          <div className="invisible" />
+          <div className={clsx(ROW_VALUE_STYLE)}>현재 비밀번호</div>
+          <div>********</div>
+          <Button onClick={handleEditButtonClick}>수정</Button>
+        </>
+      )}
     </>
   );
 };

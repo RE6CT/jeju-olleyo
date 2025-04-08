@@ -1,10 +1,5 @@
-export const ACCOUNT_LABEL = {
-  width: 'w-[120px]',
-} as const;
-
-export const ACCOUNT_MARGIN = {
-  left: 'ml-[176px]',
-};
-
 export const ACCOUNT_PROFILE_SIZE = 88;
-export const ACCOUNT_PROFILE_MIN_WIDTH = 'min-w-[176px]';
+
+export const TITLE_STYLE = 'my-3 text-lg font-semibold col-span-4 w-full';
+export const ROW_LABEL_STYLE = 'text-md whitespace-nowrap font-normal';
+export const ROW_VALUE_STYLE = 'whitespace-nowrap';

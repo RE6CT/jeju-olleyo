@@ -7,10 +7,12 @@ import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
-  ACCOUNT_LABEL,
-  ACCOUNT_PROFILE_MIN_WIDTH,
   ACCOUNT_PROFILE_SIZE,
+  ROW_LABEL_STYLE,
+  ROW_VALUE_STYLE,
+  TITLE_STYLE,
 } from '@/constants/mypage.constants';
+import clsx from 'clsx';
 
 /** 회원정보 수정 페이지의 프로필 섹션 컴포넌트 */
 const ProfileInfo = () => {
@@ -31,44 +33,34 @@ const ProfileInfo = () => {
   };
 
   return (
-    <section className="flex flex-col gap-3">
-      <h3 className="text-lg font-semibold">프로필</h3>
-      <div className="flex">
-        <div className={`flex ${ACCOUNT_PROFILE_MIN_WIDTH}`}>
-          <div className="relative">
-            <ProfileImage
-              image={null}
-              width={ACCOUNT_PROFILE_SIZE}
-              height={ACCOUNT_PROFILE_SIZE}
-              className="rounded-full"
-            />
-            <ProfileImageButton />
-          </div>
-        </div>
-        <div className="flex w-full items-center">
-          <Label
-            htmlFor="nickname"
-            className={`${ACCOUNT_LABEL.width} flex-shrink-0`}
-          >
-            닉네임
-          </Label>
-          {isEditMode ? (
-            <Input id="nickname" placeholder="부앙이" />
-          ) : (
-            <span className="flex-grow">부앙이</span>
-          )}
-          {isEditMode ? (
-            <Button onClick={handleEditCompleteButtonClick} className="w-fit">
-              완료
-            </Button>
-          ) : (
-            <Button onClick={handleEditButtonClick} className="w-fit">
-              수정
-            </Button>
-          )}
-        </div>
+    <>
+      <h3 className={clsx(TITLE_STYLE)}>프로필</h3>
+      <div
+        className="relative mx-3 w-fit"
+        style={{ minWidth: `${ACCOUNT_PROFILE_SIZE}px` }}
+      >
+        <ProfileImage
+          image={null}
+          width={ACCOUNT_PROFILE_SIZE}
+          height={ACCOUNT_PROFILE_SIZE}
+          className="rounded-full"
+        />
+        <ProfileImageButton />
       </div>
-    </section>
+      <Label htmlFor="nickname" className={clsx(ROW_LABEL_STYLE)}>
+        닉네임
+      </Label>
+      {isEditMode ? (
+        <Input id="nickname" placeholder="부앙이" />
+      ) : (
+        <span className={clsx(ROW_VALUE_STYLE)}>부앙이</span>
+      )}
+      {isEditMode ? (
+        <Button onClick={handleEditCompleteButtonClick}>완료</Button>
+      ) : (
+        <Button onClick={handleEditButtonClick}>수정</Button>
+      )}
+    </>
   );
 };
 

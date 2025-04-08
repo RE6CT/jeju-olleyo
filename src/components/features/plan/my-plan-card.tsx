@@ -47,7 +47,7 @@ const TEXT = {
  */
 const MyPlanCard = ({ plan, nickname, onEdit, onDelete }: MyPlanCardProps) => {
   return (
-    <Card className={`flex p-2`}>
+    <Card className="flex p-2">
       {/* 이미지 영역 */}
       <div className={`relative ${CARD.imageheight} ${CARD.imageWidth}`}>
         {plan.planImg ? (
@@ -101,7 +101,7 @@ const MyPlanCard = ({ plan, nickname, onEdit, onDelete }: MyPlanCardProps) => {
               </DropdownMenu>
             </div>
           )}
-          <div className="flex items-center gap-1 text-sm">
+          <div className="flex items-center gap-1 text-xs sm:text-sm">
             <span>{nickname}</span>
             <span>{TEXT.nameDateSeparator}</span>
             <span>{formatDate(plan.travelStartDate)}</span>
@@ -109,11 +109,13 @@ const MyPlanCard = ({ plan, nickname, onEdit, onDelete }: MyPlanCardProps) => {
             <span>{formatDate(plan.travelEndDate)}</span>
           </div>
           {/* 두줄로 제한, 넘치면 말줄임표 */}
-          <CardTitle className="line-clamp-2 text-xl">{plan.title}</CardTitle>
+          <CardTitle className="mt-1 line-clamp-2 text-lg sm:text-xl">
+            {plan.title}
+          </CardTitle>
         </CardHeader>
 
-        <CardContent className="flex flex-1 flex-col justify-between px-4 py-2">
-          <p className="line-clamp-4 text-sm text-muted-foreground">
+        <CardContent className="flex flex-1 flex-col justify-between px-2 py-2">
+          <p className="line-clamp-4 text-xs text-muted-foreground sm:text-sm">
             {plan.description || TEXT.noDescription}
           </p>
         </CardContent>

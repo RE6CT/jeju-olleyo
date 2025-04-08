@@ -9,7 +9,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { Filter, Loader2 } from 'lucide-react';
+import { Filter } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { getFilteredPlans } from '@/lib/apis/plan/plan';
 import { Label } from '@/components/ui/label';
@@ -17,6 +17,7 @@ import { FILTER_TYPES, PUBLIC_OPTIONS } from '@/constants/plan.constants';
 import { FilterType, PublicOption, FilterState } from '@/types/plan.type';
 import { FilterMenu } from './plan-filter-menu';
 import { FilterInput } from './plan-filter-input';
+import Loading from '@/app/loading';
 
 /**
  * 여행 계획 필터 섹션 컴포넌트
@@ -119,6 +120,10 @@ const PlanFilterSection = ({
     // TODO: 삭제 API 호출
   };
 
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
     <>
       <div className="flex items-center gap-2">
@@ -129,11 +134,7 @@ const PlanFilterSection = ({
             onMouseLeave={handleMouseLeave}
           >
             <Button variant="outline" size="sm" disabled={isLoading}>
-              {isLoading ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              ) : (
-                <Filter className="mr-2 h-4 w-4" />
-              )}
+              <Filter className="mr-2 h-4 w-4" />
               필터
             </Button>
           </PopoverTrigger>
@@ -169,7 +170,7 @@ const PlanFilterSection = ({
             )}
           </PopoverContent>
         </Popover>
-        {filter.type && filter.value !== '전체' && (
+        {filter.type && filter.value !== PUBLIC_OPTIONS.ALL && (
           <Button
             variant="ghost"
             size="sm"

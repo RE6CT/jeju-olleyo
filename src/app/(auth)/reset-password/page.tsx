@@ -4,14 +4,14 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 
 import AuthLayout from '@/components/features/auth/auth-layout';
 import AuthHeader from '@/components/features/auth/auth-header';
-import { CardContent, CardFooter } from '@/components/ui/card';
+import { CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import AuthErrorMessage from '@/components/features/auth/auth-error-message';
+import PasswordInput from '@/components/features/auth/auth-password-input';
 
 import { resetPasswordSchema } from '@/lib/schemas/auth-schema';
 import { ResetPasswordFormValues } from '@/types/auth.type';
@@ -19,13 +19,12 @@ import { getResetPasswordErrorMessage } from '@/lib/utils/auth-error.util';
 import { AUTH_TIMEOUTS } from '@/constants/auth.constants';
 import useAuth from '@/lib/hooks/use-auth';
 import useAuthStore from '@/zustand/auth.store';
-import PasswordInput from '@/components/features/auth/auth-password-input';
 
 const ResetPasswordPage = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [countdown, setCountdown] = useState(
     AUTH_TIMEOUTS.PASSWORD_CHANGE_REDIRECT_DELAY_MS / 1000,
-  ); // 3초 카운트다운
+  );
   const router = useRouter();
   const { handleUpdatePassword, isLoading } = useAuth();
   const { setError, resetError, error } = useAuthStore();
@@ -79,7 +78,7 @@ const ResetPasswordPage = () => {
         setCountdown((prev) => {
           if (prev <= 1) {
             clearInterval(timer);
-            router.push('/'); // 카운트가 끝나면 리다이렉트
+            router.push('/');
             return 0;
           }
           return prev - 1;
@@ -121,15 +120,15 @@ const ResetPasswordPage = () => {
   if (isSubmitted) {
     return (
       <AuthLayout>
-        <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-          <div className="w-full max-w-md rounded-md bg-white p-6 shadow-lg">
+        <div className="flex items-center justify-center p-6">
+          <div className="w-full">
             <div className="mb-4 text-center">
               <h2 className="text-xl font-bold">비밀번호 재설정</h2>
             </div>
-            <div className="rounded-md bg-white p-6">
+            <div className="rounded-md bg-white">
               <div className="text-center">
                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-md bg-gray-100">
-                  {/* 이미지 대신 빈 공간 (이미지에 보이는 회색 박스) */}
+                  {/* 성공 아이콘 */}
                 </div>
                 <h3 className="mb-2 font-bold">
                   비밀번호가 성공적으로 재설정되었습니다.
@@ -155,10 +154,8 @@ const ResetPasswordPage = () => {
         description="새로운 비밀번호를 입력해주세요"
       />
 
-      {/* 비밀번호 입력 필드 */}
       <CardContent>
-        {/* 에러 메시지를 폼 상단에 배치 */}
-        {error && <AuthErrorMessage messages={[error]} className="mb-6" />}
+        {error && <AuthErrorMessage messages={[error]} className="mb-4" />}
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">

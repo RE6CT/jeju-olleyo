@@ -19,7 +19,7 @@ export default function RootLayout({
         <AuthProvider>
           <Providers>
             <Header />
-            <main className="py-[100px]">{children}</main>
+            <main>{children}</main>
           </Providers>
         </AuthProvider>
       </body>

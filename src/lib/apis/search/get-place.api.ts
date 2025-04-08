@@ -2,7 +2,7 @@
 
 import { getServerClient } from '@/lib/supabase/server';
 
-export const fetchGetAllPlaces = async () => {
+const fetchGetAllPlaces = async () => {
   const supabase = await getServerClient();
 
   const { data, error } = await supabase.from('places').select('*');
@@ -11,3 +11,5 @@ export const fetchGetAllPlaces = async () => {
 
   return data;
 };
+
+export default fetchGetAllPlaces;

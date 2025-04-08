@@ -1,6 +1,6 @@
 import PlanCard from '@/components/features/plan/plan-card';
 import { fetchGetCurrentUser } from '@/lib/apis/auth-server.api';
-import { fetchGetAllLikesByUserId } from '@/lib/apis/like/get-like.api';
+import { Plan } from '@/types/plan.type';
 
 const LikesPage = async () => {
   const { user } = await fetchGetCurrentUser();
@@ -9,11 +9,34 @@ const LikesPage = async () => {
   // 로그인되어있지 않을 경우 리턴
   if (!userId) return;
 
-  const likes = await fetchGetAllLikesByUserId(userId);
+  // TODO: 실제 좋아요 목록 fetch 함수 호출
 
-  if (!likes) throw new Error('좋아요 목록 로드 중 에러가 발생했습니다.');
-
-  console.log('likes ➡️', likes);
+  const likes: Plan[] = [
+    {
+      createdAt: '2025-04-08',
+      description: '정말 재밌는 제주 여행이었습니다',
+      planId: 1,
+      planImg: null,
+      public: false,
+      publicAt: null,
+      title: '특별한 일주일',
+      travelEndDate: '2025-02-05',
+      travelStartDate: '2025-02-12',
+      userId: 'abcd-efgh',
+    },
+    {
+      createdAt: '2025-04-08',
+      description: '첫 번째 여행',
+      planId: 1,
+      planImg: null,
+      public: false,
+      publicAt: null,
+      title: '두근두근',
+      travelEndDate: '2025-02-05',
+      travelStartDate: '2025-02-12',
+      userId: 'abcd-efgh',
+    },
+  ];
 
   return (
     <>

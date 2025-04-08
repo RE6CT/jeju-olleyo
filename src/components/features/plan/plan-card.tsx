@@ -8,7 +8,7 @@ import { MoreVertical } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import PlanImage from '@/components/commons/plan-image';
-import Duration from './duration';
+import Duration from '../../commons/duration';
 
 /**
  * 일정 카드 컴포넌트

@@ -43,7 +43,7 @@ const MypageButton = () => {
 
   /**
    * 모달에서 링크 클릭 시 실행되는 이벤트 핸들러
-   * @param path - 해당 링크의 path ("profile", "bookmarks" 등)
+   * @param path - 해당 링크의 path ("account", "bookmarks" 등)
    */
   const handleLinkClick = (path: ModalPath) => {
     if (!isAuthenticated) {

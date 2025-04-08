@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { PlanCardProps } from '@/types/plan.type';
+import { MyPlanCardProps } from '@/types/plan.type';
 import { Button } from '@/components/ui/button';
 import { MoreVertical, Pencil, Trash2 } from 'lucide-react';
 import {
@@ -36,14 +36,14 @@ const TEXT = {
  *
  * @example
  * ```tsx
- * <PlanCard
+ * <MyPlanCard
  *   plan={planData}
  *   onEdit={(id) => handleEdit(id)}
  *   onDelete={(id) => handleDelete(id)}
  * />
  * ```
  */
-const PlanCard = ({ plan, onEdit, onDelete }: PlanCardProps) => {
+const MyPlanCard = ({ plan, onEdit, onDelete }: MyPlanCardProps) => {
   return (
     <Card className={`flex ${CARD.height} p-2`}>
       {/* 이미지 영역 */}
@@ -127,4 +127,4 @@ const PlanCard = ({ plan, onEdit, onDelete }: PlanCardProps) => {
   );
 };
 
-export default PlanCard;
+export default MyPlanCard;

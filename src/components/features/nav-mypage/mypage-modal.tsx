@@ -68,6 +68,12 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
     }
   };
 
+  // 쿠키에 저장된 provider 값을 읽어서 덮어쓰기 (있다면)
+  const cookieProvider = document.cookie
+    .split('; ')
+    .find((row) => row.startsWith('provider='))
+    ?.split('=')[1];
+
   // 사용자 정보가 없는 경우 기본값 설정
   const defaultUser = {
     profileImg: null,
@@ -76,12 +82,12 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
   };
 
   // 실제 사용자 정보 또는 기본값 사용
-  const userInfo = localUser
+  let userInfo = localUser
     ? {
         profileImg: localUser.avatar_url,
         nickname: localUser.nickname || '사용자',
         email: localUser.email,
-        provider: localUser.provider,
+        provider: cookieProvider,
       }
     : defaultUser;
 
@@ -91,7 +97,7 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
       className="absolute right-10 top-full flex flex-col gap-3 rounded-lg border bg-white p-4 text-black shadow-lg"
     >
       <section
-        onClick={() => onLinkClick('profile')}
+        onClick={() => onLinkClick('account')}
         className="flex cursor-pointer items-center gap-3"
       >
         <ProfileImage
@@ -104,14 +110,15 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
             <h3 className="whitespace-nowrap font-semibold">
               {userInfo.nickname}
             </h3>
-            {localUser && localUser.provider && (
+            {localUser && cookieProvider && (
               <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs">
-                {localUser.provider === 'google' ||
-                localUser.provider === 'kakao'
-                  ? '소셜'
-                  : localUser.provider === 'email'
-                    ? '이메일'
-                    : localUser.provider}
+                {cookieProvider === 'google'
+                  ? '구글'
+                  : cookieProvider === 'kakao'
+                    ? '카카오'
+                    : cookieProvider === 'email'
+                      ? '이메일'
+                      : localUser.provider}
               </span>
             )}
           </div>

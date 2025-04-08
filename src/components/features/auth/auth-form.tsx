@@ -54,14 +54,6 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
     },
   });
 
-  // 저장된 이메일이 있을 경우 폼에 설정
-  useEffect(() => {
-    if (isLogin && savedEmail) {
-      setLoginValue('email', savedEmail);
-      setLoginValue('remember', true);
-    }
-  }, [isLogin, savedEmail, setLoginValue]);
-
   // 회원가입 폼 설정
   const {
     register: registerSignup,
@@ -79,6 +71,14 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
     },
   });
 
+  // 저장된 이메일이 있을 경우 폼에 설정
+  useEffect(() => {
+    if (isLogin && savedEmail) {
+      setLoginValue('email', savedEmail);
+      setLoginValue('remember', true);
+    }
+  }, [isLogin, savedEmail, setLoginValue]);
+
   // 제출 핸들러 - 타입에 맞게 처리 (useCallback 사용)
   const handleFormSubmit = useCallback(
     isLogin
@@ -93,10 +93,9 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
    * @param message 표시할 에러 메시지
    * @returns 에러 메시지 컴포넌트
    */
+  // 에러 메시지 컴포넌트
   const ErrorMessage = ({ message }: { message: string | undefined }) => (
-    <div className="h-5">
-      {message && <p className="text-sm text-red-500">{message}</p>}
-    </div>
+    <p className="mt-1 text-xs text-red-500">{message}</p>
   );
 
   return (

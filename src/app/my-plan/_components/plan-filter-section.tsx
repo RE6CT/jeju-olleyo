@@ -10,12 +10,17 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Filter } from 'lucide-react';
-import { FILTER_TYPES, PUBLIC_OPTIONS } from '@/constants/plan.constants';
+import {
+  FILTER_TYPES,
+  ITEMS_PER_PAGE,
+  PUBLIC_OPTIONS,
+} from '@/constants/plan.constants';
 import { FilterType, PublicOption, FilterState } from '@/types/plan.type';
 import { FilterMenu } from './plan-filter-menu';
 import { FilterInput } from './plan-filter-input';
 import Loading from '@/app/loading';
 import { useFilteredPlans } from '@/lib/queries/use-get-filtered-plans';
+import Pagination from '@/components/ui/pagination';
 
 /**
  * 여행 계획 필터 섹션 컴포넌트
@@ -54,6 +59,7 @@ const PlanFilterSection = ({
   const [isDatePickerFocused, setIsDatePickerFocused] = useState(false); // datepicker 포커스 상태(popover 닫히는 문제 해결을 위해)
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
 
   const { data: plans = initialPlans, isLoading: isPlansLoading } =
     useFilteredPlans(userId, filter);
@@ -69,6 +75,7 @@ const PlanFilterSection = ({
     setStartDate('');
     setEndDate('');
     setSelectedPublicOption(PUBLIC_OPTIONS.ALL);
+    setCurrentPage(1);
   };
 
   // 필터 적용
@@ -84,6 +91,7 @@ const PlanFilterSection = ({
               : inputValue,
       });
       setIsOpen(false);
+      setCurrentPage(1);
     } catch (error) {
       console.error('필터링 중 오류 발생:', error);
     }
@@ -107,6 +115,17 @@ const PlanFilterSection = ({
   const handleDelete = (planId: number) => {
     console.log('삭제할 계획 ID:', planId);
     // TODO: 삭제 API 호출
+  };
+
+  // 페이지네이션 계산
+  const totalPages = Math.ceil(plans.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const currentPlans = plans.slice(startIndex, endIndex);
+
+  // 페이지 변경 핸들러
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
   if (isPlansLoading) {
@@ -177,17 +196,25 @@ const PlanFilterSection = ({
           <p className="text-lg text-foreground">여행 계획이 없습니다.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-6">
-          {plans.map((plan) => (
-            <MyPlanCard
-              key={plan.planId}
-              plan={plan}
-              nickname={userNickname}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-            />
-          ))}
-        </div>
+        <>
+          <div className="grid grid-cols-1 gap-6">
+            {currentPlans.map((plan) => (
+              <MyPlanCard
+                key={plan.planId}
+                plan={plan}
+                nickname={userNickname}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
+            ))}
+          </div>
+
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </>
       )}
     </>
   );

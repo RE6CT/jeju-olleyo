@@ -47,7 +47,6 @@ const useAuthStore = create<AuthState>()(
       partialize: (state) => ({
         user: state.user
           ? {
-              id: state.user.id,
               email: state.user.email,
               nickname: state.user.nickname,
               phone: state.user.phone,

@@ -4,7 +4,7 @@ import {
   checkEmailExists,
   checkNickNameExists,
   checkPhoneExists,
-} from '../apis/auth-server.api';
+} from '../apis/auth/auth-server.api';
 
 /**
  * 이메일 유효성 검사를 위한 스키마

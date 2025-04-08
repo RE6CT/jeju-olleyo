@@ -10,12 +10,12 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Filter } from 'lucide-react';
-import { fetchGetFilteredPlansByUserId } from '@/lib/apis/plan/plan.api';
 import { FILTER_TYPES, PUBLIC_OPTIONS } from '@/constants/plan.constants';
 import { FilterType, PublicOption, FilterState } from '@/types/plan.type';
 import { FilterMenu } from './plan-filter-menu';
 import { FilterInput } from './plan-filter-input';
 import Loading from '@/app/loading';
+import { useFilteredPlans } from '@/lib/queries/use-get-filtered-plans';
 
 /**
  * 여행 계획 필터 섹션 컴포넌트
@@ -40,9 +40,7 @@ const PlanFilterSection = ({
   initialPlans: Plan[];
   userId: string;
 }) => {
-  const [plans, setPlans] = useState<Plan[]>(initialPlans);
-  const [isOpen, setIsOpen] = useState(false); // 호버 상태 관리
-  const [isLoading, setIsLoading] = useState(false); // 로딩 상태 추가
+  const [isOpen, setIsOpen] = useState(false);
   const [filter, setFilter] = useState<FilterState>({
     type: FILTER_TYPES.PUBLIC,
     value: PUBLIC_OPTIONS.ALL,
@@ -55,35 +53,25 @@ const PlanFilterSection = ({
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
 
+  const { data: plans = initialPlans, isLoading: isPlansLoading } =
+    useFilteredPlans(userId, filter);
+
   // 필터 초기화
   const resetFilter = () => {
-    setFilter({ type: null, value: '' });
+    setFilter({
+      type: FILTER_TYPES.PUBLIC,
+      value: PUBLIC_OPTIONS.ALL,
+    });
     setSelectedFilter(null);
     setInputValue('');
     setStartDate('');
     setEndDate('');
     setSelectedPublicOption(PUBLIC_OPTIONS.ALL);
-    setPlans(initialPlans);
   };
 
   // 필터 적용
   const handleApplyFilter = async () => {
-    setIsLoading(true);
     try {
-      const filterOptions = {
-        title: selectedFilter === FILTER_TYPES.TITLE ? inputValue : undefined,
-        startDate: selectedFilter === FILTER_TYPES.DATE ? startDate : undefined,
-        endDate: selectedFilter === FILTER_TYPES.DATE ? endDate : undefined,
-        isPublic:
-          selectedFilter === FILTER_TYPES.PUBLIC
-            ? selectedPublicOption === PUBLIC_OPTIONS.PUBLIC
-            : undefined,
-      };
-      const filteredPlans = await fetchGetFilteredPlansByUserId(
-        userId,
-        filterOptions,
-      );
-      setPlans(filteredPlans);
       setFilter({
         type: selectedFilter,
         value:
@@ -96,8 +84,6 @@ const PlanFilterSection = ({
       setIsOpen(false);
     } catch (error) {
       console.error('필터링 중 오류 발생:', error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -121,7 +107,7 @@ const PlanFilterSection = ({
     // TODO: 삭제 API 호출
   };
 
-  if (isLoading) {
+  if (isPlansLoading) {
     return <Loading />;
   }
 
@@ -134,8 +120,8 @@ const PlanFilterSection = ({
             onMouseEnter={() => setIsOpen(true)}
             onMouseLeave={handleMouseLeave}
           >
-            <Button variant="outline" size="sm" disabled={isLoading}>
-              <Filter className="mr-2 h-4 w-4" />
+            <Button variant="outline" size="sm" disabled={isPlansLoading}>
+              <Filter className="mr-2 h-4 w-4 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0" />
               필터
             </Button>
           </PopoverTrigger>
@@ -177,7 +163,7 @@ const PlanFilterSection = ({
             size="sm"
             onClick={resetFilter}
             className="text-muted-foreground"
-            disabled={isLoading}
+            disabled={isPlansLoading}
           >
             필터 초기화
           </Button>

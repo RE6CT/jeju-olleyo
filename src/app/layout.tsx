@@ -19,7 +19,7 @@ export default function RootLayout({
         <AuthProvider>
           <Providers>
             <Header />
-            <main>{children}</main>
+            <main className="pt-[100px]">{children}</main>
           </Providers>
         </AuthProvider>
       </body>

@@ -21,19 +21,26 @@ import { FilterInput } from './plan-filter-input';
 /**
  * 여행 계획 필터 섹션 컴포넌트
  * @param initialPlans - 초기 여행 계획 목록
+ * @param userId - 현재 로그인한 사용자의 ID
  *
  * @example
  * ```tsx
  * const MyPlanPage = () => {
  *   return (
  *     <div>
- *       <PlanFilterSection initialPlans={plans} />
+ *       <PlanFilterSection initialPlans={plans} userId={userId} />
  *     </div>
  *   );
  * };
  * ```
  */
-const PlanFilterSection = ({ initialPlans }: { initialPlans: Plan[] }) => {
+const PlanFilterSection = ({
+  initialPlans,
+  userId,
+}: {
+  initialPlans: Plan[];
+  userId: string;
+}) => {
   const [plans, setPlans] = useState<Plan[]>(initialPlans);
   const [isOpen, setIsOpen] = useState(false); // 호버 상태 관리
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태 추가
@@ -56,7 +63,7 @@ const PlanFilterSection = ({ initialPlans }: { initialPlans: Plan[] }) => {
     setInputValue('');
     setStartDate('');
     setEndDate('');
-    setSelectedPublicOption('전체');
+    setSelectedPublicOption(PUBLIC_OPTIONS.ALL);
     setPlans(initialPlans);
   };
 
@@ -64,7 +71,6 @@ const PlanFilterSection = ({ initialPlans }: { initialPlans: Plan[] }) => {
   const handleApplyFilter = async () => {
     setIsLoading(true);
     try {
-      const userId = '37d2b9de-7a50-4a53-bb9c-b9cccbbe975a'; // TODO: 실제 사용자 ID로 교체
       const filterOptions = {
         title: selectedFilter === FILTER_TYPES.TITLE ? inputValue : undefined,
         startDate: selectedFilter === FILTER_TYPES.DATE ? startDate : undefined,

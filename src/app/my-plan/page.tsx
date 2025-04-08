@@ -1,9 +1,16 @@
 import { Button } from '@/components/ui/button';
 import PlanFilterSection from './_components/plan-filter-section';
 import { getPlans } from '@/lib/apis/plan/plan';
+import { fetchGetCurrentUser } from '@/lib/apis/auth-server.api';
 
 const MyPlanPage = async () => {
-  const userId = '37d2b9de-7a50-4a53-bb9c-b9cccbbe975a'; // TODO: 실제 로그인한 사용자 ID로 교체
+  const { user } = await fetchGetCurrentUser();
+  const userId = user?.id;
+
+  if (!userId) {
+    return <div>로그인이 필요합니다.</div>;
+  }
+
   const plans = await getPlans(userId);
 
   return (
@@ -13,7 +20,7 @@ const MyPlanPage = async () => {
           <h1 className="text-3xl font-bold">내 일정</h1>
           <Button>새 일정 만들기</Button>
         </div>
-        <PlanFilterSection initialPlans={plans} />
+        <PlanFilterSection initialPlans={plans} userId={userId} />
       </div>
     </div>
   );

@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { formatDate } from '@/lib/utils/date';
+import Link from 'next/link';
 
 const CARD = {
   imageheight: 'h-[200px]',
@@ -83,10 +84,12 @@ const MyPlanCard = ({ plan, nickname, onEdit, onDelete }: MyPlanCardProps) => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   {onEdit && (
-                    <DropdownMenuItem onClick={() => onEdit(plan.planId)}>
-                      <Pencil className="mr-2 h-4 w-4" />
-                      {TEXT.edit}
-                    </DropdownMenuItem>
+                    <Link href={`/plan-detail/${plan.planId}`}>
+                      <DropdownMenuItem>
+                        <Pencil className="mr-2 h-4 w-4" />
+                        {TEXT.edit}
+                      </DropdownMenuItem>
+                    </Link>
                   )}
                   {onDelete && (
                     <DropdownMenuItem

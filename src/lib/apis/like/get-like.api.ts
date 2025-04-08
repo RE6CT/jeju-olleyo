@@ -25,16 +25,4 @@ export default getLike;
  * @param userId - 사용자 ID
  * @returns 사용자의 좋아요 목록 또는 null
  */
-export const fetchGetAllLikesByUserId = async (userId: string) => {
-  const supabase = getServerClient();
-
-  const { data, error } = await supabase.rpc('get_user_likes', {
-    user_id_param: userId,
-  });
-
-  if (error) throw new Error(error.message);
-
-  const camelizedData = data ? camelize(data) : null;
-
-  return camelizedData;
-};
+export const fetchGetAllLikesByUserId = async (userId: string) => {};

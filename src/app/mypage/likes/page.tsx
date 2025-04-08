@@ -1,14 +1,7 @@
 import PlanCard from '@/components/features/plan/plan-card';
-import { fetchGetCurrentUser } from '@/lib/apis/auth-server.api';
 import { Plan } from '@/types/plan.type';
 
 const LikesPage = async () => {
-  const { user } = await fetchGetCurrentUser();
-  const userId = user?.id;
-
-  // 로그인되어있지 않을 경우 리턴
-  if (!userId) return;
-
   // TODO: 실제 좋아요 목록 fetch 함수 호출
 
   const likes: Plan[] = [

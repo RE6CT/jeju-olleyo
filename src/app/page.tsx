@@ -1,5 +1,6 @@
 import CategoryTabs from '@/components/features/home/category-tap';
 import { Suspense } from 'react';
+import Loading from '@/app/loading';
 
 /**
  * 메인 홈 페이지 컴포넌트
@@ -7,11 +8,7 @@ import { Suspense } from 'react';
 const Home = () => {
   return (
     <main className="container mx-auto p-4">
-      <Suspense
-        fallback={
-          <div className="h-12 animate-pulse rounded-lg bg-gray-100"></div>
-        }
-      >
+      <Suspense fallback={<Loading />}>
         <CategoryTabs className="mb-12" />
       </Suspense>
     </main>

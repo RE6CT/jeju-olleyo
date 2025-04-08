@@ -11,7 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import dayjs from 'dayjs';
+import { formatDate } from '@/lib/utils/date';
 
 const CARD = {
   height: 'h-[200px]',
@@ -21,7 +21,6 @@ const CARD = {
 const TEXT = {
   noImage: '이미지 없음',
   noDescription: '설명이 없습니다.',
-  noDate: '날짜 미정',
   dateSeparator: '~',
   edit: '수정',
   delete: '삭제',
@@ -56,7 +55,6 @@ const MyPlanCard = ({ plan, onEdit, onDelete }: MyPlanCardProps) => {
             className="object-cover"
           />
         ) : (
-          // 대체 이미지/텍스트
           <div className="flex h-full w-full items-center justify-center bg-muted">
             <span className="text-muted-foreground">{TEXT.noImage}</span>
           </div>
@@ -103,17 +101,9 @@ const MyPlanCard = ({ plan, onEdit, onDelete }: MyPlanCardProps) => {
           {/* 한줄로 제한, 넘치면 말줄임표 */}
           <CardTitle className="line-clamp-1 text-xl">{plan.title}</CardTitle>
           <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
-            <span>
-              {plan.travelStartDate
-                ? dayjs(plan.travelStartDate).format('YYYY.MM.DD')
-                : TEXT.noDate}
-            </span>
+            <span>{formatDate(plan.travelStartDate)}</span>
             <span>{TEXT.dateSeparator}</span>
-            <span>
-              {plan.travelEndDate
-                ? dayjs(plan.travelEndDate).format('YYYY.MM.DD')
-                : TEXT.noDate}
-            </span>
+            <span>{formatDate(plan.travelEndDate)}</span>
           </div>
         </CardHeader>
 

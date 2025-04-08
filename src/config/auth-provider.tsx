@@ -9,9 +9,6 @@ import { AuthProps } from '@/types/auth.type';
 
 /**
  * 인증 상태를 감시하고 관리하는 프로바이더 컴포넌트
- * - 초기 세션 설정
- * - 실시간 인증 상태 변경 감지
- * - 인증 상태에 따른 리다이렉션 처리
  */
 const AuthProvider = ({ children }: AuthProps) => {
   const router = useRouter();
@@ -22,7 +19,6 @@ const AuthProvider = ({ children }: AuthProps) => {
   // 공개 페이지 여부 확인 함수
   const isPublicPage = (path: string): boolean => {
     const publicPages = [
-      '/',
       '/sign-in',
       '/sign-up',
       '/forgot-password',
@@ -44,7 +40,6 @@ const AuthProvider = ({ children }: AuthProps) => {
         const { data, error } = await supabase.auth.getUser();
 
         if (error) {
-          // "Auth session missing" 오류는 로그인하지 않은 정상 상태이므로 출력하지 않음
           if (!error.message.includes('Auth session missing')) {
             console.error('사용자 정보 로드 오류:', error.message);
           }
@@ -52,7 +47,7 @@ const AuthProvider = ({ children }: AuthProps) => {
           clearUser();
 
           // 보호된 페이지에 있는 경우 로그인 페이지로 리다이렉트
-          if (!isPublicPage(pathname)) {
+          if (!isPublicPage(pathname) && pathname !== '/') {
             router.push('/sign-in');
           }
         } else if (data.user) {
@@ -63,20 +58,18 @@ const AuthProvider = ({ children }: AuthProps) => {
           if (pathname === '/sign-in' || pathname === '/sign-up') {
             router.push('/');
           }
-        } else if (!isPublicPage(pathname)) {
+        } else if (!isPublicPage(pathname) && pathname !== '/') {
           // 사용자가 없고 보호된 페이지에 있는 경우 로그인 페이지로 리다이렉트
           router.push('/sign-in');
         }
       } catch (err) {
-        // 개발 환경에서만 오류 출력 (프로덕션에서는 출력하지 않음)
         if (process.env.NODE_ENV === 'development') {
           console.error('인증 초기화 오류:', err);
         }
 
         clearUser();
 
-        // 보호된 페이지에 있는 경우 로그인 페이지로 리다이렉트
-        if (!isPublicPage(pathname)) {
+        if (!isPublicPage(pathname) && pathname !== '/') {
           router.push('/sign-in');
         }
       } finally {
@@ -98,7 +91,6 @@ const AuthProvider = ({ children }: AuthProps) => {
       // 인증 상태 변경 리스너 설정
       const { data: authListener } = supabase.auth.onAuthStateChange(
         async (event, session) => {
-          // 콘솔 로그를 개발 환경에서만 출력
           if (process.env.NODE_ENV === 'development') {
             console.log('인증 상태 변경:', event);
           }
@@ -130,7 +122,6 @@ const AuthProvider = ({ children }: AuthProps) => {
 
               case 'SIGNED_OUT':
                 clearUser();
-                // 로그아웃 시 로그인 페이지로 강제 리다이렉트
                 router.push('/sign-in');
                 break;
 
@@ -146,7 +137,6 @@ const AuthProvider = ({ children }: AuthProps) => {
                 break;
             }
           } catch (err) {
-            // 개발 환경에서만 오류 출력
             if (process.env.NODE_ENV === 'development') {
               console.error('인증 상태 변경 처리 오류:', err);
             }

@@ -47,9 +47,7 @@ const LoginPage = () => {
     checkAuthStatus();
   }, [redirectTo]);
 
-  /**
-   * 컴포넌트 마운트 시 로컬 스토리지에서 저장된 이메일 불러오기
-   */
+  // 컴포넌트 마운트 시 로컬 스토리지에서 저장된 이메일 불러오기
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const rememberedEmail = localStorage.getItem(STORAGE_KEY.SAVED_EMAIL);
@@ -59,10 +57,7 @@ const LoginPage = () => {
     }
   }, []);
 
-  /**
-   * 로그인 폼 제출 핸들러
-   * @param data - 로그인 폼 데이터
-   */
+  // 로그인 폼 제출 핸들러
   const handleSubmit = async (data: LoginFormValues) => {
     // 아이디 저장 처리
     if (data.remember) {
@@ -77,7 +72,7 @@ const LoginPage = () => {
     const success = await handleLogin(data);
 
     if (success) {
-      // 성공 시 홈으로 리다이렉트 (useAuth에서도 처리하지만 이중으로 보장)
+      // 성공 시 홈으로 리다이렉트
       window.location.href = redirectTo;
     }
   };
@@ -96,7 +91,7 @@ const LoginPage = () => {
     );
   }
 
-  // 에러 메시지 처리 - 사용자 친화적인 메시지로 변환
+  // 에러 메시지 처리
   const errorMessages = error ? getLoginErrorMessage(error) : [];
 
   return (
@@ -106,12 +101,11 @@ const LoginPage = () => {
         description="계정 정보를 입력하여 로그인하세요"
       />
 
-      <CardContent className="pb-0">
-        {/* 에러 메시지 표시 - 폼 상단에 위치 */}
-        {errorMessages.length > 0 && (
-          <AuthErrorMessage messages={errorMessages} className="mb-6" />
-        )}
-      </CardContent>
+      {errorMessages.length > 0 && (
+        <CardContent className="pb-0">
+          <AuthErrorMessage messages={errorMessages} className="mb-4" />
+        </CardContent>
+      )}
 
       <AuthForm
         type="login"

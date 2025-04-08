@@ -218,3 +218,9 @@ export type AuthState = {
   setError: (error: string | null) => void;
   resetError: () => void;
 };
+
+export type AuthErrorMessageProps = {
+  messages: string[];
+  className?: string;
+  variant?: 'default' | 'destructive';
+};

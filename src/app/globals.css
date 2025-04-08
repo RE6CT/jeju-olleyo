@@ -11,6 +11,7 @@ body {
   min-height: 100dvh;
   background-color: var(--color-white-light);
   color: var(--color-black);
+  overflow: auto !important;
 }
 
 @layer base {

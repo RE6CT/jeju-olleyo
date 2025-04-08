@@ -7,6 +7,11 @@ import { AlertCircle } from 'lucide-react';
  * 에러 메시지를 표시하는 컴포넌트
  * @param title - 에러 메시지의 제목
  * @param description - 에러 메시지의 상세 설명
+ *
+ * @example
+ * ```tsx
+ * <ErrorMessage title="에러 메시지" description="에러 메시지 상세 설명" />
+ * ```
  */
 const ErrorMessage = ({
   title,

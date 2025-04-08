@@ -1,6 +1,7 @@
 'use server';
 
 import { getServerClient } from '@/lib/supabase/server';
+import { camelize } from '@/lib/utils/camelize';
 
 const getLike = async (planId: number, userId: string) => {
   const supabase = await getServerClient();
@@ -18,3 +19,22 @@ const getLike = async (planId: number, userId: string) => {
 };
 
 export default getLike;
+
+/**
+ * 사용자의 좋아요 목록을 가져오는 함수
+ * @param userId - 사용자 ID
+ * @returns 사용자의 좋아요 목록 또는 null
+ */
+export const fetchGetAllLikesByUserId = async (userId: string) => {
+  const supabase = getServerClient();
+
+  const { data, error } = await supabase.rpc('get_user_likes', {
+    user_id_param: userId,
+  });
+
+  if (error) throw new Error(error.message);
+
+  const camelizedData = data ? camelize(data) : null;
+
+  return camelizedData;
+};

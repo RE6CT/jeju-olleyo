@@ -37,7 +37,11 @@ const MyPlanPage = async () => {
             <h1 className="text-3xl font-bold">내 일정</h1>
             <Button>새 일정 만들기</Button>
           </div>
-          <PlanFilterSection initialPlans={plans} userId={userId} />
+          <PlanFilterSection
+            initialPlans={plans}
+            userId={userId}
+            userNickname={user.nickname}
+          />
         </div>
       </div>
     );

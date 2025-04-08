@@ -21,6 +21,7 @@ const CARD = {
 const TEXT = {
   noImage: '이미지 없음',
   noDescription: '설명이 없습니다.',
+  nameDateSeparator: '|',
   dateSeparator: '~',
   edit: '수정',
   delete: '삭제',
@@ -30,6 +31,7 @@ const TEXT = {
  * 일정 카드 컴포넌트
  *
  * @param plan - 일정 데이터
+ * @param nickname - 사용자 닉네임
  * @param onEdit - 수정 버튼 클릭 시 실행될 함수
  * @param onDelete - 삭제 버튼 클릭 시 실행될 함수
  *
@@ -37,12 +39,13 @@ const TEXT = {
  * ```tsx
  * <MyPlanCard
  *   plan={planData}
+ *   nickname={userData.nickname}
  *   onEdit={(id) => handleEdit(id)}
  *   onDelete={(id) => handleDelete(id)}
  * />
  * ```
  */
-const MyPlanCard = ({ plan, onEdit, onDelete }: MyPlanCardProps) => {
+const MyPlanCard = ({ plan, nickname, onEdit, onDelete }: MyPlanCardProps) => {
   return (
     <Card className={`flex p-2`}>
       {/* 이미지 영역 */}
@@ -98,17 +101,19 @@ const MyPlanCard = ({ plan, onEdit, onDelete }: MyPlanCardProps) => {
               </DropdownMenu>
             </div>
           )}
-          {/* 한줄로 제한, 넘치면 말줄임표 */}
-          <CardTitle className="line-clamp-1 text-xl">{plan.title}</CardTitle>
-          <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
+          <div className="flex items-center gap-1 text-sm">
+            <span>{nickname}</span>
+            <span>{TEXT.nameDateSeparator}</span>
             <span>{formatDate(plan.travelStartDate)}</span>
             <span>{TEXT.dateSeparator}</span>
             <span>{formatDate(plan.travelEndDate)}</span>
           </div>
+          {/* 두줄로 제한, 넘치면 말줄임표 */}
+          <CardTitle className="line-clamp-2 text-xl">{plan.title}</CardTitle>
         </CardHeader>
 
         <CardContent className="flex flex-1 flex-col justify-between px-4 py-2">
-          <p className="line-clamp-2 text-sm text-muted-foreground">
+          <p className="line-clamp-4 text-sm text-muted-foreground">
             {plan.description || TEXT.noDescription}
           </p>
         </CardContent>

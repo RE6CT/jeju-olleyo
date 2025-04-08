@@ -20,14 +20,14 @@ import { useFilteredPlans } from '@/lib/queries/use-get-filtered-plans';
 /**
  * 여행 계획 필터 섹션 컴포넌트
  * @param initialPlans - 초기 여행 계획 목록
- * @param userId - 현재 로그인한 사용자의 ID
+ * @param user - 현재 로그인한 사용자의 정보
  *
  * @example
  * ```tsx
  * const MyPlanPage = () => {
  *   return (
  *     <div>
- *       <PlanFilterSection initialPlans={plans} userId={userId} />
+ *       <PlanFilterSection initialPlans={plans} user={user} />
  *     </div>
  *   );
  * };
@@ -36,9 +36,11 @@ import { useFilteredPlans } from '@/lib/queries/use-get-filtered-plans';
 const PlanFilterSection = ({
   initialPlans,
   userId,
+  userNickname,
 }: {
   initialPlans: Plan[];
   userId: string;
+  userNickname: string;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [filter, setFilter] = useState<FilterState>({
@@ -180,6 +182,7 @@ const PlanFilterSection = ({
             <MyPlanCard
               key={plan.planId}
               plan={plan}
+              nickname={userNickname}
               onEdit={handleEdit}
               onDelete={handleDelete}
             />

@@ -40,3 +40,11 @@ export type EditAndDeleteDropdownProps = {
   onDelete: (id: number) => void;
   children: ReactNode;
 };
+
+// 날짜 기간 표시 컴포넌트의 props
+export type DurationProps = {
+  start: string;
+  end: string;
+  separator: string;
+  className?: string;
+};

@@ -215,9 +215,9 @@ export type Database = {
           plan_img: string | null;
           public: boolean | null;
           public_at: string | null;
-          title: string | null;
-          travel_end_date: string | null;
-          travel_start_date: string | null;
+          title: string;
+          travel_end_date: string;
+          travel_start_date: string;
           user_id: string;
         };
         Insert: {
@@ -227,9 +227,9 @@ export type Database = {
           plan_img?: string | null;
           public?: boolean | null;
           public_at?: string | null;
-          title?: string | null;
-          travel_end_date?: string | null;
-          travel_start_date?: string | null;
+          title?: string;
+          travel_end_date?: string;
+          travel_start_date?: string;
           user_id: string;
         };
         Update: {
@@ -239,9 +239,9 @@ export type Database = {
           plan_img?: string | null;
           public?: boolean | null;
           public_at?: string | null;
-          title?: string | null;
-          travel_end_date?: string | null;
-          travel_start_date?: string | null;
+          title?: string;
+          travel_end_date?: string;
+          travel_start_date?: string;
           user_id?: string;
         };
         Relationships: [

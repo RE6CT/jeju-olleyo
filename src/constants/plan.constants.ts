@@ -11,15 +11,14 @@ export const PUBLIC_OPTIONS = {
 } as const;
 
 export const CARD = {
-  height: 'h-[200px]',
-  imageWidth: 'w-[200px]',
+  imageSize: 'w-[200px] h-[200px]',
 } as const;
 
 export const TEXT = {
   noImage: '이미지 없음',
   noDescription: '설명이 없습니다.',
   noDate: '날짜 미정',
-  dateSeparator: '~',
+  dateSeparator: '-',
   edit: '수정',
   delete: '삭제',
 } as const;

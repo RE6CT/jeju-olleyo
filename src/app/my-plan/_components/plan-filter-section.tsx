@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import MyPlanCard from '@/components/features/plan/my-plan-card';
 import { Plan } from '@/types/plan.type';
 import { Button } from '@/components/ui/button';
 import {
@@ -16,6 +15,7 @@ import { FilterType, PublicOption, FilterState } from '@/types/plan.type';
 import { FilterMenu } from './plan-filter-menu';
 import { FilterInput } from './plan-filter-input';
 import Loading from '@/app/loading';
+import PlanCard from '@/components/features/plan/plan-card';
 
 /**
  * 여행 계획 필터 섹션 컴포넌트
@@ -191,7 +191,7 @@ const PlanFilterSection = ({
       ) : (
         <div className="grid grid-cols-1 gap-6">
           {plans.map((plan) => (
-            <MyPlanCard
+            <PlanCard
               key={plan.planId}
               plan={plan}
               onEdit={handleEdit}

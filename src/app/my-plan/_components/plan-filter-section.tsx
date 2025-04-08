@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import PlanCard from '@/components/features/plan/plan-card';
 import { Plan } from '@/types/plan.type';
 import { Button } from '@/components/ui/button';
@@ -13,6 +13,10 @@ import { Filter, Loader2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { getFilteredPlans } from '@/lib/apis/plan/plan';
 import { Label } from '@/components/ui/label';
+import { FILTER_TYPES, PUBLIC_OPTIONS } from '@/constants/plan.constants';
+import { FilterType, PublicOption, FilterState } from '@/types/plan.type';
+import { FilterMenu } from './plan-filter-menu';
+import { FilterInput } from './plan-filter-input';
 
 /**
  * 여행 계획 필터 섹션 컴포넌트
@@ -33,17 +37,14 @@ const PlanFilterSection = ({ initialPlans }: { initialPlans: Plan[] }) => {
   const [plans, setPlans] = useState<Plan[]>(initialPlans);
   const [isOpen, setIsOpen] = useState(false); // 호버 상태 관리
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태 추가
-  const [filter, setFilter] = useState<{
-    type: 'title' | 'date' | 'public' | null;
-    value: string;
-  }>({ type: 'public', value: '전체' }); // 현재 적용된 필터 상태
-  const [selectedFilter, setSelectedFilter] = useState<
-    'title' | 'date' | 'public' | null
-  >(null); // popover 내부 메뉴에서 선택된 필터 상태
+  const [filter, setFilter] = useState<FilterState>({
+    type: FILTER_TYPES.PUBLIC,
+    value: PUBLIC_OPTIONS.ALL,
+  }); // 현재 적용된 필터 상태
+  const [selectedFilter, setSelectedFilter] = useState<FilterType>(null); // popover 내부 메뉴에서 선택된 필터 상태
   const [inputValue, setInputValue] = useState('');
-  const [selectedPublicOption, setSelectedPublicOption] = useState<
-    '전체' | '공개' | '비공개'
-  >('전체');
+  const [selectedPublicOption, setSelectedPublicOption] =
+    useState<PublicOption>(PUBLIC_OPTIONS.ALL);
   const [isDatePickerFocused, setIsDatePickerFocused] = useState(false); // datepicker 포커스 상태(popover 닫히는 문제 해결을 위해)
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -65,26 +66,25 @@ const PlanFilterSection = ({ initialPlans }: { initialPlans: Plan[] }) => {
     try {
       const userId = '37d2b9de-7a50-4a53-bb9c-b9cccbbe975a'; // TODO: 실제 사용자 ID로 교체
       const filterOptions = {
-        title: selectedFilter === 'title' ? inputValue : undefined,
-        startDate: selectedFilter === 'date' ? startDate : undefined,
-        endDate: selectedFilter === 'date' ? endDate : undefined,
+        title: selectedFilter === FILTER_TYPES.TITLE ? inputValue : undefined,
+        startDate: selectedFilter === FILTER_TYPES.DATE ? startDate : undefined,
+        endDate: selectedFilter === FILTER_TYPES.DATE ? endDate : undefined,
         isPublic:
-          selectedFilter === 'public'
-            ? selectedPublicOption === '공개'
+          selectedFilter === FILTER_TYPES.PUBLIC
+            ? selectedPublicOption === PUBLIC_OPTIONS.PUBLIC
             : undefined,
       };
       const filteredPlans = await getFilteredPlans(userId, filterOptions);
       setPlans(filteredPlans);
-      if (selectedFilter === 'public') {
-        setFilter({ type: selectedFilter, value: selectedPublicOption });
-      } else if (selectedFilter === 'date') {
-        setFilter({
-          type: selectedFilter,
-          value: `${startDate} ~ ${endDate}`,
-        });
-      } else {
-        setFilter({ type: selectedFilter, value: inputValue });
-      }
+      setFilter({
+        type: selectedFilter,
+        value:
+          selectedFilter === FILTER_TYPES.PUBLIC
+            ? selectedPublicOption
+            : selectedFilter === FILTER_TYPES.DATE
+              ? `${startDate} ~ ${endDate}`
+              : inputValue,
+      });
       setIsOpen(false);
     } catch (error) {
       console.error('필터링 중 오류 발생:', error);
@@ -138,122 +138,28 @@ const PlanFilterSection = ({ initialPlans }: { initialPlans: Plan[] }) => {
             onMouseEnter={() => setIsOpen(true)}
             onMouseLeave={handleMouseLeave}
           >
-            <div className="flex w-[120px] flex-col gap-2">
-              <Button
-                variant={selectedFilter === 'title' ? 'default' : 'ghost'}
-                className="w-full justify-start"
-                onClick={() => {
-                  setSelectedFilter('title');
-                  setInputValue(filter.type === 'title' ? filter.value : '');
-                }}
-              >
-                제목
-              </Button>
-              <Button
-                variant={selectedFilter === 'date' ? 'default' : 'ghost'}
-                className="w-full justify-start"
-                onClick={() => {
-                  setSelectedFilter('date');
-                  setInputValue(filter.type === 'date' ? filter.value : '');
-                }}
-              >
-                날짜
-              </Button>
-              <Button
-                variant={selectedFilter === 'public' ? 'default' : 'ghost'}
-                className="w-full justify-start"
-                onClick={() => {
-                  setSelectedFilter('public');
-                  setInputValue('');
-                }}
-              >
-                공개상태
-              </Button>
-            </div>
+            <FilterMenu
+              selectedFilter={selectedFilter}
+              setSelectedFilter={setSelectedFilter}
+              filter={filter}
+              setInputValue={setInputValue}
+            />
             {selectedFilter && (
-              <div className="flex w-[250px] flex-col gap-2 border-l p-2">
-                {selectedFilter === 'public' ? (
-                  <div className="flex flex-col gap-2">
-                    <Button
-                      variant={
-                        selectedPublicOption === '전체' ? 'default' : 'ghost'
-                      }
-                      className="w-full justify-start"
-                      onClick={() => setSelectedPublicOption('전체')}
-                    >
-                      전체
-                    </Button>
-                    <Button
-                      variant={
-                        selectedPublicOption === '공개' ? 'default' : 'ghost'
-                      }
-                      className="w-full justify-start"
-                      onClick={() => setSelectedPublicOption('공개')}
-                    >
-                      공개
-                    </Button>
-                    <Button
-                      variant={
-                        selectedPublicOption === '비공개' ? 'default' : 'ghost'
-                      }
-                      className="w-full justify-start"
-                      onClick={() => setSelectedPublicOption('비공개')}
-                    >
-                      비공개
-                    </Button>
-                  </div>
-                ) : selectedFilter === 'date' ? (
-                  <div className="flex flex-col gap-2">
-                    <div className="flex flex-col gap-1">
-                      <Label>여행 시작 날짜</Label>
-                      <Input
-                        type="date"
-                        value={startDate}
-                        className={
-                          selectedFilter === 'date' ? 'w-[140px]' : 'w-full'
-                        }
-                        onChange={(e) => setStartDate(e.target.value)}
-                        onFocus={() => setIsDatePickerFocused(true)}
-                        onBlur={() => setIsDatePickerFocused(false)}
-                      />
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <Label>여행 종료 날짜</Label>
-                      <Input
-                        type="date"
-                        value={endDate}
-                        className={
-                          selectedFilter === 'date' ? 'w-[140px]' : 'w-full'
-                        }
-                        onChange={(e) => setEndDate(e.target.value)}
-                        onFocus={() => setIsDatePickerFocused(true)}
-                        onBlur={() => setIsDatePickerFocused(false)}
-                      />
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex flex-col gap-2">
-                    <Input
-                      placeholder="제목 입력"
-                      value={inputValue}
-                      onChange={(e) => setInputValue(e.target.value)}
-                    />
-                  </div>
-                )}
-                <Button
-                  className="mt-2"
-                  disabled={
-                    selectedFilter === 'public'
-                      ? filter.value === selectedPublicOption
-                      : selectedFilter === 'date'
-                        ? !startDate || !endDate
-                        : !inputValue
-                  }
-                  onClick={handleApplyFilter}
-                >
-                  적용
-                </Button>
-              </div>
+              <FilterInput
+                selectedFilter={selectedFilter}
+                inputValue={inputValue}
+                setInputValue={setInputValue}
+                selectedPublicOption={selectedPublicOption}
+                setSelectedPublicOption={setSelectedPublicOption}
+                startDate={startDate}
+                setStartDate={setStartDate}
+                endDate={endDate}
+                setEndDate={setEndDate}
+                isDatePickerFocused={isDatePickerFocused}
+                setIsDatePickerFocused={setIsDatePickerFocused}
+                filter={filter}
+                applyFilter={handleApplyFilter}
+              />
             )}
           </PopoverContent>
         </Popover>

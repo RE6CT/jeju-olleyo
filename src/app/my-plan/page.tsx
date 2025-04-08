@@ -3,6 +3,7 @@ import PlanFilterSection from './_components/plan-filter-section';
 import { fetchGetAllPlansByUserId } from '@/lib/apis/plan/plan.api';
 import { fetchGetCurrentUser } from '@/lib/apis/auth-server.api';
 import ErrorMessage from '@/components/ui/error-message';
+import Link from 'next/link';
 
 const MyPlanPage = async () => {
   const { user, error: userError } = await fetchGetCurrentUser();
@@ -35,7 +36,9 @@ const MyPlanPage = async () => {
         <div className="mb-8 flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <h1 className="text-3xl font-bold">내 일정</h1>
-            <Button>새 일정 만들기</Button>
+            <Link href="/plan-detail">
+              <Button>새 일정 만들기</Button>
+            </Link>
           </div>
           <PlanFilterSection
             initialPlans={plans}

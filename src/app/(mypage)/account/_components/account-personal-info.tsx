@@ -3,11 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-  ACCOUNT_LABEL,
-  ACCOUNT_MARGIN,
-  ACCOUNT_PROFILE_SIZE,
-} from '@/constants/mypage.constants';
+import { ACCOUNT_LABEL, ACCOUNT_MARGIN } from '@/constants/mypage.constants';
 import { useState } from 'react';
 
 /** 회원정보 수정 페이지의 개인 정보 섹션 컴포넌트 */

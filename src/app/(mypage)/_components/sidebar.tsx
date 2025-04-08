@@ -7,19 +7,19 @@ const Sidebar = ({ className }: { className: string }) => {
     <aside className={`flex flex-col gap-5 border bg-white p-5 ${className}`}>
       <section className="flex flex-col">
         <h3 className="text-lg font-bold">내 정보</h3>
-        <Link href="/mypage/account">회원정보 수정</Link>
+        <Link href="/account">회원정보 수정</Link>
       </section>
       <Separator />
       <section className="flex flex-col">
         <h3 className="text-lg font-bold">내 활동</h3>
-        <Link href="/mypage/bookmarks">북마크한 장소</Link>
-        <Link href="/mypage/likes">내가 찜한 일정</Link>
-        <Link href="/mypage/comments">내 댓글</Link>
+        <Link href="/bookmarks">북마크한 장소</Link>
+        <Link href="/likes">내가 찜한 일정</Link>
+        <Link href="/comments">내 댓글</Link>
       </section>
       <Separator />
       <section className="flex flex-col">
         <h3 className="text-lg font-bold">내 예약</h3>
-        <Link href="/mypage/reservation">항공권 예약 내역</Link>
+        <Link href="/reservations">항공권 예약 내역</Link>
       </section>
     </aside>
   );

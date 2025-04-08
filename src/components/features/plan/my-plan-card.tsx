@@ -14,7 +14,7 @@ import {
 import { formatDate } from '@/lib/utils/date';
 
 const CARD = {
-  height: 'h-[200px]',
+  imageheight: 'h-[200px]',
   imageWidth: 'w-[200px]',
 } as const;
 
@@ -44,9 +44,9 @@ const TEXT = {
  */
 const MyPlanCard = ({ plan, onEdit, onDelete }: MyPlanCardProps) => {
   return (
-    <Card className={`flex ${CARD.height} p-2`}>
+    <Card className={`flex p-2`}>
       {/* 이미지 영역 */}
-      <div className={`relative h-full ${CARD.imageWidth}`}>
+      <div className={`relative ${CARD.imageheight} ${CARD.imageWidth}`}>
         {plan.planImg ? (
           <Image
             src={plan.planImg}

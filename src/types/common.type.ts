@@ -18,7 +18,14 @@ export type CamelCaseObject<T> =
 // 프로필 이미지 컴포넌트 props 타입
 export type ProfileImageProps = {
   image: string | null;
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
+  className?: string;
+};
+
+// 장소 이미지 컴포넌트 props 타입
+export type PlaceImageProps = {
+  image: string | null;
+  title: string;
   className?: string;
 };

@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import ProfileImageButton from './account-profile-image-button';
 import { useState } from 'react';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 /** 회원정보 수정 페이지의 프로필 섹션 컴포넌트 */
 const ProfileInfo = () => {
@@ -17,6 +18,8 @@ const ProfileInfo = () => {
 
   /** 프로필/닉네임 수정 완료 버튼 클릭 핸들러  */
   const handleEditCompleteButtonClick = () => {
+    const isConfirmed = confirm('프로필 이미지 및 닉네임을 수정하시겠습니까?');
+    if (!isConfirmed) return;
     // 프로필 이미지 수정 로직
     // 닉네임 수정 로직
     setIsEditMode(false);
@@ -38,9 +41,11 @@ const ProfileInfo = () => {
           </div>
         </div>
         <div className="flex w-full items-center">
-          <span className="w-[120px]">닉네임</span>
+          <Label htmlFor="nickname" className="w-[120px] flex-shrink-0">
+            닉네임
+          </Label>
           {isEditMode ? (
-            <Input placeholder="부앙이" />
+            <Input id="nickname" placeholder="부앙이" />
           ) : (
             <span className="flex-grow">부앙이</span>
           )}

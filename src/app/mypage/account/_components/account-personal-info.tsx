@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { useState } from 'react';
 
 /** 회원정보 수정 페이지의 개인 정보 섹션 컴포넌트 */
@@ -15,6 +16,8 @@ const PersonalInfo = () => {
 
   /** 휴대폰 수정 완료 버튼 클릭 핸들러  */
   const handleEditCompleteButtonClick = () => {
+    const isConfirmed = confirm('휴대폰 번호를 수정하시겠습니까?');
+    if (!isConfirmed) return;
     // 휴대폰 번호 수정 로직
     setIsEditMode(false);
   };
@@ -29,9 +32,11 @@ const PersonalInfo = () => {
             <span className="flex-grow">test@test.com</span>
           </div>
           <div className="flex w-full items-center">
-            <span className="w-[120px]">휴대폰</span>
+            <Label htmlFor="phone" className="w-[120px] flex-shrink-0">
+              휴대폰
+            </Label>
             {isEditMode ? (
-              <Input placeholder="010 1111 2222" />
+              <Input id="phone" placeholder="010 1111 2222" />
             ) : (
               <span className="flex-grow">010-1111-2222</span>
             )}

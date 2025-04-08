@@ -9,6 +9,7 @@ import ProfileImage from '@/components/commons/profile-image';
 import { useRouter } from 'next/navigation';
 import useAuth from '@/lib/hooks/use-auth';
 import { getCurrentSession } from '@/lib/apis/auth/auth-browser.api';
+import { MYPAGE_PROVIER_IMAGE_SIZE } from '@/constants/header.constants';
 
 /**
  * nav의 마이페이지 버튼 클릭 시 나타나는 모달 컴포넌트
@@ -116,20 +117,20 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
                   <Image
                     src="/images/google_mypage.png"
                     alt="google"
-                    width={24}
-                    height={24}
+                    width={MYPAGE_PROVIER_IMAGE_SIZE}
+                    height={MYPAGE_PROVIER_IMAGE_SIZE}
                   />
                 ) : cookieProvider === 'kakao' ? (
                   <Image
-                    width={24}
-                    height={24}
+                    width={MYPAGE_PROVIER_IMAGE_SIZE}
+                    height={MYPAGE_PROVIER_IMAGE_SIZE}
                     src="/images/kakaotalk_mypage.png"
                     alt="kakao"
                   />
                 ) : cookieProvider === 'email' ? (
                   <Image
-                    width={24}
-                    height={24}
+                    width={MYPAGE_PROVIER_IMAGE_SIZE}
+                    height={MYPAGE_PROVIER_IMAGE_SIZE}
                     src="/images/mail_mypage.png"
                     alt="email"
                   />

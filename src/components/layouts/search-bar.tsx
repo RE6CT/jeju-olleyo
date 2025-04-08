@@ -1,6 +1,7 @@
 'use client';
 
 import { Command, CommandInput } from '@/components/ui/command';
+import { PATH } from '@/constants/path.constants';
 import { useRouter } from 'next/navigation';
 import { useRef } from 'react';
 
@@ -11,7 +12,7 @@ const SearchBar = () => {
   const handleSearch = () => {
     const query = inputRef.current?.value;
     if (query) {
-      router.push(`/search?query=${query}`);
+      router.push(`${PATH.SEARCH}?query=${query}`);
     }
   };
 

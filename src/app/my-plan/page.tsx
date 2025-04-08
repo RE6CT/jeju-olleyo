@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import PlanFilterSection from './_components/plan-filter-section';
-import { getPlans } from '@/lib/apis/plan/plan';
+import { fetchGetAllPlansByUserId } from '@/lib/apis/plan/plan.api';
 import { fetchGetCurrentUser } from '@/lib/apis/auth-server.api';
 
 const MyPlanPage = async () => {
@@ -11,7 +11,7 @@ const MyPlanPage = async () => {
     return <div>로그인이 필요합니다.</div>;
   }
 
-  const plans = await getPlans(userId);
+  const plans = await fetchGetAllPlansByUserId(userId);
 
   return (
     <div className="container mx-auto py-8">

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import PlanCard from '@/components/features/plan/plan-card';
+import MyPlanCard from '@/components/features/plan/my-plan-card';
 import { Plan } from '@/types/plan.type';
 import { Button } from '@/components/ui/button';
 import {
@@ -10,7 +10,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Filter } from 'lucide-react';
-import { getFilteredPlans } from '@/lib/apis/plan/plan';
+import { fetchGetFilteredPlansByUserId } from '@/lib/apis/plan/plan.api';
 import { FILTER_TYPES, PUBLIC_OPTIONS } from '@/constants/plan.constants';
 import { FilterType, PublicOption, FilterState } from '@/types/plan.type';
 import { FilterMenu } from './plan-filter-menu';
@@ -79,7 +79,10 @@ const PlanFilterSection = ({
             ? selectedPublicOption === PUBLIC_OPTIONS.PUBLIC
             : undefined,
       };
-      const filteredPlans = await getFilteredPlans(userId, filterOptions);
+      const filteredPlans = await fetchGetFilteredPlansByUserId(
+        userId,
+        filterOptions,
+      );
       setPlans(filteredPlans);
       setFilter({
         type: selectedFilter,
@@ -188,7 +191,7 @@ const PlanFilterSection = ({
       ) : (
         <div className="grid grid-cols-1 gap-6">
           {plans.map((plan) => (
-            <PlanCard
+            <MyPlanCard
               key={plan.planId}
               plan={plan}
               onEdit={handleEdit}

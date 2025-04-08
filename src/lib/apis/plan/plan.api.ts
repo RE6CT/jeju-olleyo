@@ -8,7 +8,9 @@ import { camelize } from '@/lib/utils/camelize';
  * @param userId - 사용자 ID
  * @returns Promise<Plan[]> - 일정 목록
  */
-export const getPlans = async (userId: string): Promise<Plan[]> => {
+export const fetchGetAllPlansByUserId = async (
+  userId: string,
+): Promise<Plan[]> => {
   const supabase = await getServerClient();
 
   const { data, error } = await supabase
@@ -40,7 +42,7 @@ export const getPlans = async (userId: string): Promise<Plan[]> => {
  * });
  * ```
  */
-export const getFilteredPlans = async (
+export const fetchGetFilteredPlansByUserId = async (
   userId: string,
   filterOptions: PlanFilterOptions,
 ): Promise<Plan[]> => {

@@ -1,6 +1,6 @@
 'use server';
 
-import { getServerClient } from '../supabase/server';
+import { getServerClient } from '@/lib/supabase/server';
 
 const countLike = async (planId: number) => {
   const supabase = await getServerClient();

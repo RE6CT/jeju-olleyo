@@ -1,7 +1,6 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import AuthLayout from '@/components/features/auth/auth-layout';
 import AuthHeader from '@/components/features/auth/auth-header';
@@ -9,66 +8,40 @@ import AuthForm from '@/components/features/auth/auth-form';
 import SocialLogin from '@/components/features/auth/auth-social-login';
 import AuthFooter from '@/components/features/auth/auth-footer';
 import AuthErrorMessage from '@/components/features/auth/auth-error-message';
+import { CardContent } from '@/components/ui/card';
 
 import { LoginFormValues } from '@/types/auth.type';
-import { STORAGE_KEY } from '@/constants/auth.constants';
 import useAuth from '@/lib/hooks/use-auth';
-import { getBrowserClient } from '@/lib/supabase/client';
+import useAuthCheck from '@/lib/hooks/use-auth-check';
+import useRememberEmail from '@/lib/hooks/use-remember-email';
+import useRedirectParams from '@/lib/hooks/use-redirect-params';
 import { getLoginErrorMessage } from '@/lib/utils/auth-error.util';
-import { CardContent } from '@/components/ui/card';
 
 /**
  * 로그인 페이지 컴포넌트
  */
 const LoginPage = () => {
-  const searchParams = useSearchParams();
-  const redirectTo = searchParams.get('redirectTo') || '/';
-
+  const redirectTo = useRedirectParams();
   const { handleLogin, isLoading, error } = useAuth();
-  const [savedEmail, setSavedEmail] = useState<string>('');
+  const { savedEmail } = useRememberEmail();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // 이미 로그인되어 있는지 확인
+  // 인증 상태 체크
+  const { isLoading: isCheckingAuth, isAuthenticated } = useAuthCheck({
+    redirectIfFound: true,
+    redirectTo,
+  });
+
+  // 인증 체크가 완료되면 로그인 상태 설정
   useEffect(() => {
-    const checkAuthStatus = async () => {
-      try {
-        const supabase = await getBrowserClient();
-        const { data, error } = await supabase.auth.getSession();
-
-        if (data?.session && !error) {
-          setIsLoggedIn(true);
-          window.location.href = redirectTo;
-        }
-      } catch (err) {
-        console.error('세션 확인 오류:', err);
-      }
-    };
-
-    checkAuthStatus();
-  }, [redirectTo]);
-
-  // 컴포넌트 마운트 시 로컬 스토리지에서 저장된 이메일 불러오기
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const rememberedEmail = localStorage.getItem(STORAGE_KEY.SAVED_EMAIL);
-      if (rememberedEmail) {
-        setSavedEmail(rememberedEmail);
-      }
+    if (!isCheckingAuth) {
+      setIsLoggedIn(isAuthenticated);
     }
-  }, []);
+  }, [isCheckingAuth, isAuthenticated]);
 
   // 로그인 폼 제출 핸들러
   const handleSubmit = async (data: LoginFormValues) => {
-    // 아이디 저장 처리
-    if (data.remember) {
-      localStorage.setItem(STORAGE_KEY.REMEMBER_EMAIL, 'true');
-      localStorage.setItem(STORAGE_KEY.SAVED_EMAIL, data.email);
-    } else {
-      localStorage.removeItem(STORAGE_KEY.REMEMBER_EMAIL);
-      localStorage.removeItem(STORAGE_KEY.SAVED_EMAIL);
-    }
-
-    // useAuth의 handleLogin 사용
+    // useRememberEmail 훅을 사용할 수도 있지만 이미 useAuth의 handleLogin 내부에서 관리하고 있음
     const success = await handleLogin(data);
 
     if (success) {
@@ -78,7 +51,7 @@ const LoginPage = () => {
   };
 
   // 로딩 중이거나 이미 로그인된 경우 로딩 표시
-  if (isLoggedIn) {
+  if (isCheckingAuth || isLoggedIn) {
     return (
       <AuthLayout>
         <div className="flex items-center justify-center p-8">

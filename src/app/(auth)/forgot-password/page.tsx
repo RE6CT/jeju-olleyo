@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import AuthErrorMessage from '@/components/features/auth/auth-error-message';
 
 import useForgotPassword from '@/lib/hooks/use-forgot-password';
+import { PATH } from '@/constants/path.constants';
 
 /**
  * 비밀번호 찾기 페이지 컴포넌트
@@ -84,7 +85,10 @@ const ForgotPasswordPage = () => {
 
       <CardFooter className="flex justify-center">
         <div className="text-sm text-gray-600">
-          <Link href="/sign-in" className="ml-1 text-black hover:text-blue-800">
+          <Link
+            href={PATH.SIGNIN}
+            className="ml-1 text-black hover:text-blue-800"
+          >
             로그인 페이지로 돌아가기
           </Link>
         </div>

@@ -6,10 +6,10 @@ import Loading from '@/app/loading';
 
 const AccountPage = () => {
   return (
-    <div className="flex flex-col gap-5">
-      <h2 className="text-2xl">회원정보 수정</h2>
+    <div className="flex flex-col items-center gap-5">
       <Suspense fallback={<Loading />}>
-        <div className="m-1 grid w-full grid-cols-[1fr_1fr_3fr_auto] items-center gap-3">
+        <h2 className="w-full text-2xl">회원정보 수정</h2>
+        <div className="m-1 grid grid-cols-[auto_auto_1fr_auto] items-center gap-3">
           <ProfileInfo />
           <PersonalInfo />
           <SecurityInfo />

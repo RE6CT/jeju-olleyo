@@ -3,13 +3,12 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-  ROW_LABEL_STYLE,
-  ROW_VALUE_STYLE,
-  TITLE_STYLE,
-} from '@/constants/mypage.constants';
 import clsx from 'clsx';
 import { useState } from 'react';
+
+const TITLE_STYLE = 'my-3 text-lg font-semibold col-span-4 w-full';
+const ROW_LABEL_STYLE = 'text-md whitespace-nowrap font-normal';
+const ROW_VALUE_STYLE = 'whitespace-nowrap';
 
 /** 회원정보 수정 페이지의 개인 정보 섹션 컴포넌트 */
 const PersonalInfo = () => {

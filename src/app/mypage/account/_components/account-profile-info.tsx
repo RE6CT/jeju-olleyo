@@ -6,13 +6,12 @@ import ProfileImageButton from './account-profile-image-button';
 import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-  ACCOUNT_PROFILE_SIZE,
-  ROW_LABEL_STYLE,
-  ROW_VALUE_STYLE,
-  TITLE_STYLE,
-} from '@/constants/mypage.constants';
 import clsx from 'clsx';
+
+const ACCOUNT_PROFILE_SIZE = 88;
+const TITLE_STYLE = 'my-3 text-lg font-semibold col-span-4 w-full';
+const ROW_LABEL_STYLE = 'text-md whitespace-nowrap font-normal';
+const ROW_VALUE_STYLE = 'whitespace-nowrap';
 
 /** 회원정보 수정 페이지의 프로필 섹션 컴포넌트 */
 const ProfileInfo = () => {

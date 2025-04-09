@@ -46,7 +46,7 @@ const MypageButton = () => {
       router.push('/sign-in');
       return;
     }
-    router.push(`/mypage/${path}`);
+    router.push(`/${path}`);
     setClose();
   };
 

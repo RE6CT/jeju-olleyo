@@ -1,8 +1,8 @@
-import { CATEGORY_ROUTES } from "@/constants/home.constants";
-import { TravelCategory } from "@/types/home.categoty.type";
-import useCategoryStore from "@/zustand/home.category.store";
-import { usePathname, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { CATEGORY_ROUTES } from '@/constants/home.constants';
+import { TravelCategory } from '@/types/home.categoty.type';
+import useCategoryStore from '@/zustand/home.category.store';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useMemo } from 'react';
 
 /**
  * 카테고리 상태와 라우팅을 함께 관리하는 훅
@@ -12,6 +12,8 @@ export const useCategoryNavigation = () => {
   const router = useRouter();
   const pathname = usePathname();
   const { activeCategory, setActiveCategory } = useCategoryStore();
+
+  const categoryEntries = useMemo(() => Object.entries(CATEGORY_ROUTES), []);
 
   // URL 경로에 따라 활성화된 카테고리 업데이트
   useEffect(() => {
@@ -24,7 +26,7 @@ export const useCategoryNavigation = () => {
     }
 
     // 정확한 경로 일치 검색
-    const exactMatch = Object.entries(CATEGORY_ROUTES).find(
+    const exactMatch = categoryEntries.find(
       ([_, route]) => route === currentPath,
     )?.[0] as TravelCategory | undefined;
 
@@ -34,7 +36,7 @@ export const useCategoryNavigation = () => {
     }
 
     // 부분 경로 일치 검색 (예: /attractions/123 -> '명소' 카테고리로 매핑)
-    for (const [category, route] of Object.entries(CATEGORY_ROUTES)) {
+    for (const [category, route] of categoryEntries) {
       if (route !== '/all' && currentPath.startsWith(route)) {
         setActiveCategory(category as TravelCategory);
         return;

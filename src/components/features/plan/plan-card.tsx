@@ -2,13 +2,17 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlanCardProps } from '@/types/plan.type';
-import { CARD, TEXT } from '@/constants/plan.constants';
+import { TEXT } from '@/constants/plan.constants';
 import PlanDropdown from '../../commons/edit-and-delete-dropdown';
 import { MoreVertical } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import PlanImage from '@/components/commons/plan-image';
 import Duration from '../../commons/duration';
+
+export const CARD = {
+  imageSize: 'w-[200px] h-[200px]',
+} as const;
 
 /**
  * 일정 카드 컴포넌트
@@ -51,9 +55,9 @@ const PlanCard = ({ plan, onEdit, onDelete }: PlanCardProps) => {
               </PlanDropdown>
             </div>
           )}
-          {/* 날짜 영역 */}
+          {/* 닉네임 및 날짜 영역 */}
           <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
-            <span>닉네임 영역</span>
+            <span>{plan.nickname}</span>
             <Separator orientation="vertical" />
             <Duration
               start={plan.travelStartDate}

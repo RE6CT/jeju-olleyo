@@ -1,8 +1,5 @@
 'use client';
 
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 
 import AuthLayout from '@/components/features/auth/auth-layout';
@@ -13,62 +10,22 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import AuthErrorMessage from '@/components/features/auth/auth-error-message';
 
-import { forgotPasswordSchema } from '@/lib/schemas/auth-schema';
-import { EmailFormValues } from '@/types/auth.type';
-import { resetPassword } from '@/lib/apis/auth-browser.api';
-import { getForgotPasswordErrorMessage } from '@/lib/utils/auth-error.util';
-import useAuthStore from '@/zustand/auth.store';
+import useForgotPassword from '@/lib/hooks/use-forgot-password';
 
 /**
  * 비밀번호 찾기 페이지 컴포넌트
  */
 const ForgotPasswordPage = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [submittedEmail, setSubmittedEmail] = useState('');
-  const { setError, resetError, error } = useAuthStore();
-
   const {
+    isLoading,
+    isSubmitted,
+    submittedEmail,
+    error,
     register,
+    errors,
     handleSubmit,
-    formState: { errors },
-  } = useForm<EmailFormValues>({
-    mode: 'onBlur',
-    resolver: zodResolver(forgotPasswordSchema),
-    defaultValues: {
-      email: '',
-    },
-  });
-
-  // 비밀번호 재설정 요청 핸들러
-  const onSubmit = async (data: EmailFormValues) => {
-    setIsLoading(true);
-    resetError(); // 기존 에러 메시지 초기화
-
-    try {
-      const result = await resetPassword(data.email);
-
-      if (result.error) {
-        const errorMessages = getForgotPasswordErrorMessage(
-          result.error.message,
-        );
-        setError(errorMessages[0]);
-        setIsLoading(false);
-        return;
-      }
-
-      setSubmittedEmail(data.email);
-      setIsSubmitted(true);
-    } catch (error) {
-      console.error('예외 발생:', error);
-      const errorMessages = getForgotPasswordErrorMessage(
-        error instanceof Error ? error.message : '알 수 없는 오류',
-      );
-      setError(errorMessages[0]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    handleResetPassword,
+  } = useForgotPassword();
 
   return (
     <AuthLayout>
@@ -102,7 +59,10 @@ const ForgotPasswordPage = () => {
             </div>
           </div>
         ) : (
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <form
+            onSubmit={handleSubmit(handleResetPassword)}
+            className="space-y-4"
+          >
             <div className="space-y-2">
               <Label htmlFor="email">이메일</Label>
               <Input

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { getBrowserClient } from '@/lib/supabase/client';
 import useAuthStore from '@/zustand/auth.store';
-import { formatUser } from '@/lib/apis/auth-browser.api';
+import { formatUser } from '@/lib/apis/auth/auth-browser.api';
 import { AuthProps } from '@/types/auth.type';
 
 /**

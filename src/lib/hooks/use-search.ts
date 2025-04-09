@@ -5,7 +5,7 @@ import Fuse from 'fuse.js';
 import fetchGetAllPlaces from '../apis/search/get-place.api';
 import { Place } from '@/types/search.type';
 
-export const useSearch = (query: string) => {
+const useSearch = (query: string) => {
   const [allPlaces, setAllPlaces] = useState<Place[]>([]);
   const [results, setResults] = useState<Place[]>([]);
   const [loading, setLoading] = useState(true);
@@ -44,3 +44,5 @@ export const useSearch = (query: string) => {
 
   return { results, loading };
 };
+
+export default useSearch;

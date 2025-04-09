@@ -137,7 +137,7 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
                     alt="email"
                   />
                 ) : (
-                  localUser.provider
+                  'email'
                 )}
               </span>
             )}

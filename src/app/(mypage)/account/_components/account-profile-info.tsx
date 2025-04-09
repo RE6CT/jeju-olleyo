@@ -6,11 +6,14 @@ import ProfileImageButton from './account-profile-image-button';
 import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-  ACCOUNT_LABEL,
-  ACCOUNT_PROFILE_MIN_WIDTH,
-  ACCOUNT_PROFILE_SIZE,
-} from '@/constants/mypage.constants';
+
+// TODO - rowLabel에 하드코딩된 width 바꾸기
+const RROFILE_INFO_STYLE = {
+  imageSize: 88,
+  title: 'my-3 text-lg font-semibold col-span-4 w-full',
+  rowLabel: 'text-md whitespace-nowrap font-normal w-[110px]',
+  rowValue: 'whitespace-nowrap',
+};
 
 /** 회원정보 수정 페이지의 프로필 섹션 컴포넌트 */
 const ProfileInfo = () => {
@@ -31,44 +34,31 @@ const ProfileInfo = () => {
   };
 
   return (
-    <section className="flex flex-col gap-3">
-      <h3 className="text-lg font-semibold">프로필</h3>
-      <div className="flex">
-        <div className={`flex ${ACCOUNT_PROFILE_MIN_WIDTH}`}>
-          <div className="relative">
-            <ProfileImage
-              image={null}
-              width={ACCOUNT_PROFILE_SIZE}
-              height={ACCOUNT_PROFILE_SIZE}
-              className="rounded-full"
-            />
-            <ProfileImageButton />
-          </div>
-        </div>
-        <div className="flex w-full items-center">
-          <Label
-            htmlFor="nickname"
-            className={`${ACCOUNT_LABEL.width} flex-shrink-0`}
-          >
-            닉네임
-          </Label>
-          {isEditMode ? (
-            <Input id="nickname" placeholder="부앙이" />
-          ) : (
-            <span className="flex-grow">부앙이</span>
-          )}
-          {isEditMode ? (
-            <Button onClick={handleEditCompleteButtonClick} className="w-fit">
-              완료
-            </Button>
-          ) : (
-            <Button onClick={handleEditButtonClick} className="w-fit">
-              수정
-            </Button>
-          )}
-        </div>
+    <div className="m-1 grid grid-cols-[auto_auto_1fr_auto] items-center gap-3">
+      <h3 className={RROFILE_INFO_STYLE.title}>프로필</h3>
+      <div className="relative w-fit">
+        <ProfileImage
+          image={null}
+          width={RROFILE_INFO_STYLE.imageSize}
+          height={RROFILE_INFO_STYLE.imageSize}
+          className="rounded-full"
+        />
+        <ProfileImageButton />
       </div>
-    </section>
+      <Label htmlFor="nickname" className={RROFILE_INFO_STYLE.rowLabel}>
+        닉네임
+      </Label>
+      {isEditMode ? (
+        <Input id="nickname" placeholder="부앙이" />
+      ) : (
+        <span className={RROFILE_INFO_STYLE.rowValue}>부앙이</span>
+      )}
+      {isEditMode ? (
+        <Button onClick={handleEditCompleteButtonClick}>완료</Button>
+      ) : (
+        <Button onClick={handleEditButtonClick}>수정</Button>
+      )}
+    </div>
   );
 };
 

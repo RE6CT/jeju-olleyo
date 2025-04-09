@@ -8,13 +8,10 @@ import {
 import {
   googleLogin,
   kakaoLogin,
-  formatUser,
-  resetPassword,
   updateUserPassword,
   logoutUser,
 } from '@/lib/apis/auth/auth-browser.api';
 import useAuthStore from '@/zustand/auth.store';
-import { getBrowserClient } from '@/lib/supabase/client';
 import { getLoginErrorMessage } from '../utils/auth-error.util';
 import { fullPageRefresh } from '../utils/auth-refresh.util';
 
@@ -221,33 +218,6 @@ const useAuth = () => {
   }, [resetError, setError, clearUser]);
 
   /**
-   * 비밀번호 재설정 이메일 발송 함수
-   */
-  const handleResetPassword = useCallback(
-    async (email: string) => {
-      setIsProcessing(true);
-      resetError();
-
-      try {
-        const { error } = await resetPassword(email);
-
-        if (error) {
-          setError(error.message);
-          return false;
-        }
-
-        return true;
-      } catch (error: any) {
-        setError('비밀번호 재설정 중 오류가 발생했습니다.');
-        return false;
-      } finally {
-        setIsProcessing(false);
-      }
-    },
-    [resetError, setError],
-  );
-
-  /**
    * 비밀번호 업데이트 함수
    */
   const handleUpdatePassword = useCallback(
@@ -281,33 +251,6 @@ const useAuth = () => {
     [resetError],
   );
 
-  /**
-   * 현재 세션 확인 함수
-   */
-  const checkSession = useCallback(async () => {
-    try {
-      const supabase = await getBrowserClient();
-      const { data, error } = await supabase.auth.getSession();
-
-      if (error || !data.session) {
-        clearUser();
-        return false;
-      }
-
-      const { data: userData } = await supabase.auth.getUser();
-      if (userData.user) {
-        const formattedUser = formatUser(userData.user);
-        setUser(formattedUser);
-        return true;
-      }
-
-      return false;
-    } catch (error) {
-      console.error('세션 확인 중 오류:', error);
-      return false;
-    }
-  }, [clearUser, setUser]);
-
   return {
     user,
     isLoading: isLoading || isProcessing,
@@ -318,9 +261,7 @@ const useAuth = () => {
     handleGoogleLogin,
     handleKakaoLogin,
     handleLogout,
-    handleResetPassword,
     handleUpdatePassword,
-    checkSession,
   };
 };
 

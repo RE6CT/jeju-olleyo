@@ -9,6 +9,8 @@ import ProfileImage from '@/components/commons/profile-image';
 import { useRouter } from 'next/navigation';
 import useAuth from '@/lib/hooks/use-auth';
 import { getCurrentSession } from '@/lib/apis/auth/auth-browser.api';
+import { PATH } from '@/constants/path.constants';
+import { SOCIAL_AUTH } from '@/constants/auth.constants';
 
 /**
  * nav의 마이페이지 버튼 클릭 시 나타나는 모달 컴포넌트
@@ -60,7 +62,7 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
       // 로그아웃 성공 처리
       setClose();
       // 명시적으로 로그인 페이지로 리다이렉트
-      router.push('/sign-in');
+      router.push(PATH.SIGNIN);
     } catch (error) {
       console.error('로그아웃 오류:', error);
     } finally {
@@ -112,13 +114,13 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
             </h3>
             {localUser && cookieProvider && (
               <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs">
-                {cookieProvider === 'google'
+                {cookieProvider === SOCIAL_AUTH.PROVIDERS.GOOGLE
                   ? '구글'
-                  : cookieProvider === 'kakao'
+                  : cookieProvider === SOCIAL_AUTH.PROVIDERS.KAKAO
                     ? '카카오'
                     : cookieProvider === 'email'
                       ? '이메일'
-                      : localUser.provider}
+                      : ''}
               </span>
             )}
           </div>
@@ -197,7 +199,7 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
           <Button
             onClick={() => {
               setClose();
-              router.push('/sign-in');
+              router.push(PATH.SIGNIN);
             }}
             className="w-full"
           >

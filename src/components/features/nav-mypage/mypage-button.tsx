@@ -6,6 +6,7 @@ import MypageModal from './mypage-modal';
 import { ModalPath } from '@/types/mypage.type';
 import useClickOutside from '@/lib/hooks/use-click-outside';
 import useAuth from '@/lib/hooks/use-auth';
+import { PATH } from '@/constants/path.constants';
 
 /**
  * 헤더 nav 내부의 마이페이지 모달 오픈 버튼
@@ -35,7 +36,7 @@ const MypageButton = () => {
   const handleMypageModalToggle = () => {
     if (!isAuthenticated) {
       // 로그인되지 않은 경우 로그인 페이지로 리다이렉트
-      router.push('/sign-in');
+      router.push(PATH.SIGNIN);
       return;
     }
     setIsOpen(!isOpen);
@@ -47,7 +48,7 @@ const MypageButton = () => {
    */
   const handleLinkClick = (path: ModalPath) => {
     if (!isAuthenticated) {
-      router.push('/sign-in');
+      router.push(PATH.SIGNIN);
       return;
     }
     router.push(`/mypage/${path}`);

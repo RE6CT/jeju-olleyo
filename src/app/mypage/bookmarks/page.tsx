@@ -1,5 +1,5 @@
 import PlaceImage from '@/components/commons/place-image';
-import { fetchGetCurrentUser } from '@/lib/apis/auth-server.api';
+import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 import { fetchGetAllBookmarksByUserId } from '@/lib/apis/bookmark/get-bookmark.api';
 import { UserBookmarks } from '@/types/mypage.type';
 import Link from 'next/link';

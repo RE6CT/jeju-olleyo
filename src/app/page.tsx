@@ -1,4 +1,4 @@
-import { fetchGetCurrentUser } from '@/lib/apis/auth-server.api';
+import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 import Image from 'next/image';
 import AuthClientInfo from '@/components/features/auth/auth-client-info';
 

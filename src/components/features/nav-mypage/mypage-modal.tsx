@@ -8,7 +8,7 @@ import { ModalPath, MypageModalProps } from '@/types/mypage.type';
 import ProfileImage from '@/components/commons/profile-image';
 import { useRouter } from 'next/navigation';
 import useAuth from '@/lib/hooks/use-auth';
-import { getCurrentSession } from '@/lib/apis/auth-browser.api';
+import { getCurrentSession } from '@/lib/apis/auth/auth-browser.api';
 
 /**
  * nav의 마이페이지 버튼 클릭 시 나타나는 모달 컴포넌트

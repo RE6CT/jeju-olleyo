@@ -3,12 +3,15 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import clsx from 'clsx';
 import { useState } from 'react';
 
-const TITLE_STYLE = 'my-3 text-lg font-semibold col-span-4 w-full';
-const ROW_LABEL_STYLE = 'text-md whitespace-nowrap font-normal';
-const ROW_VALUE_STYLE = 'whitespace-nowrap';
+// TODO - rowLabel에 하드코딩된 width 바꾸기
+const SECURITY_INFO_STYLE = {
+  imageSize: 88,
+  title: 'my-3 text-lg font-semibold col-span-4 w-full',
+  rowLabel: 'text-md whitespace-nowrap font-normal w-[110px]',
+  rowValue: 'whitespace-nowrap',
+};
 
 /** 회원정보 수정 페이지의 보안 섹션 컴포넌트 */
 const SecurityInfo = () => {
@@ -28,18 +31,21 @@ const SecurityInfo = () => {
   };
 
   return (
-    <>
-      <h3 className={clsx(TITLE_STYLE)}>보안</h3>
+    <div className="m-1 grid grid-cols-[auto_auto_1fr_auto] items-center gap-3">
+      <h3 className={SECURITY_INFO_STYLE.title}>보안</h3>
       {isEditMode ? (
         <>
-          <div className="invisible" />
-          <Label htmlFor="currentPassword" className={clsx(ROW_LABEL_STYLE)}>
+          <div className={`invisible w-[${SECURITY_INFO_STYLE.imageSize}px]`} />
+          <Label
+            htmlFor="currentPassword"
+            className={SECURITY_INFO_STYLE.rowLabel}
+          >
             현재 비밀번호
           </Label>
           <Input id="currentPassword" placeholder="********" />
           <div className="invisible" />
           <div className="invisible" />
-          <Label htmlFor="newPassword" className={clsx(ROW_LABEL_STYLE)}>
+          <Label htmlFor="newPassword" className={SECURITY_INFO_STYLE.rowLabel}>
             새 비밀번호
           </Label>
           <Input
@@ -48,7 +54,10 @@ const SecurityInfo = () => {
           />
           <div className="invisible" />
           <div className="invisible" />
-          <Label htmlFor="newPasswordCheck" className={clsx(ROW_LABEL_STYLE)}>
+          <Label
+            htmlFor="newPasswordCheck"
+            className={SECURITY_INFO_STYLE.rowLabel}
+          >
             새 비밀번호 확인
           </Label>
           <Input
@@ -59,13 +68,13 @@ const SecurityInfo = () => {
         </>
       ) : (
         <>
-          <div className="invisible" />
-          <div className={clsx(ROW_VALUE_STYLE)}>현재 비밀번호</div>
+          <div className={`invisible w-[${SECURITY_INFO_STYLE.imageSize}px]`} />
+          <div className={SECURITY_INFO_STYLE.rowLabel}>현재 비밀번호</div>
           <div>********</div>
           <Button onClick={handleEditButtonClick}>수정</Button>
         </>
       )}
-    </>
+    </div>
   );
 };
 

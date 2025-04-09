@@ -3,12 +3,15 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import clsx from 'clsx';
 import { useState } from 'react';
 
-const TITLE_STYLE = 'my-3 text-lg font-semibold col-span-4 w-full';
-const ROW_LABEL_STYLE = 'text-md whitespace-nowrap font-normal';
-const ROW_VALUE_STYLE = 'whitespace-nowrap';
+// TODO - rowLabel에 하드코딩된 width 바꾸기
+const PERSONAL_INFO_STYLE = {
+  imageSize: 88,
+  title: 'my-3 text-lg font-semibold col-span-4 w-full',
+  rowLabel: 'text-md whitespace-nowrap font-normal w-[110px]',
+  rowValue: 'whitespace-nowrap',
+};
 
 /** 회원정보 수정 페이지의 개인 정보 섹션 컴포넌트 */
 const PersonalInfo = () => {
@@ -28,27 +31,27 @@ const PersonalInfo = () => {
   };
 
   return (
-    <>
-      <h3 className={clsx(TITLE_STYLE)}>개인 정보</h3>
+    <div className="m-1 grid grid-cols-[auto_auto_1fr_auto] items-center gap-3">
+      <h3 className={PERSONAL_INFO_STYLE.title}>개인 정보</h3>
+      <div className={`invisible w-[${PERSONAL_INFO_STYLE.imageSize}px]`} />
+      <div className={PERSONAL_INFO_STYLE.rowLabel}>이메일</div>
+      <div className={PERSONAL_INFO_STYLE.rowValue}>test@test.com</div>
       <div className="invisible" />
-      <div className={clsx(ROW_VALUE_STYLE)}>이메일</div>
-      <div>test@test.com</div>
       <div className="invisible" />
-      <div className="invisible" />
-      <Label htmlFor="phone" className={clsx(ROW_LABEL_STYLE)}>
+      <Label htmlFor="phone" className={PERSONAL_INFO_STYLE.rowLabel}>
         휴대폰
       </Label>
       {isEditMode ? (
         <Input id="phone" placeholder="010 1111 2222" />
       ) : (
-        <span className={clsx(ROW_VALUE_STYLE)}>010-1111-2222</span>
+        <span className={PERSONAL_INFO_STYLE.rowValue}>010-1111-2222</span>
       )}
       {isEditMode ? (
         <Button onClick={handleEditCompleteButtonClick}>완료</Button>
       ) : (
         <Button onClick={handleEditButtonClick}>수정</Button>
       )}
-    </>
+    </div>
   );
 };
 

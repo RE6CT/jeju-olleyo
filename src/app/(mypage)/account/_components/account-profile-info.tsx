@@ -6,12 +6,14 @@ import ProfileImageButton from './account-profile-image-button';
 import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import clsx from 'clsx';
 
-const ACCOUNT_PROFILE_SIZE = 88;
-const TITLE_STYLE = 'my-3 text-lg font-semibold col-span-4 w-full';
-const ROW_LABEL_STYLE = 'text-md whitespace-nowrap font-normal';
-const ROW_VALUE_STYLE = 'whitespace-nowrap';
+// TODO - rowLabel에 하드코딩된 width 바꾸기
+const RROFILE_INFO_STYLE = {
+  imageSize: 88,
+  title: 'my-3 text-lg font-semibold col-span-4 w-full',
+  rowLabel: 'text-md whitespace-nowrap font-normal w-[110px]',
+  rowValue: 'whitespace-nowrap',
+};
 
 /** 회원정보 수정 페이지의 프로필 섹션 컴포넌트 */
 const ProfileInfo = () => {
@@ -32,34 +34,31 @@ const ProfileInfo = () => {
   };
 
   return (
-    <>
-      <h3 className={clsx(TITLE_STYLE)}>프로필</h3>
-      <div
-        className="relative mx-3 w-fit"
-        style={{ minWidth: `${ACCOUNT_PROFILE_SIZE}px` }}
-      >
+    <div className="m-1 grid grid-cols-[auto_auto_1fr_auto] items-center gap-3">
+      <h3 className={RROFILE_INFO_STYLE.title}>프로필</h3>
+      <div className="relative w-fit">
         <ProfileImage
           image={null}
-          width={ACCOUNT_PROFILE_SIZE}
-          height={ACCOUNT_PROFILE_SIZE}
+          width={RROFILE_INFO_STYLE.imageSize}
+          height={RROFILE_INFO_STYLE.imageSize}
           className="rounded-full"
         />
         <ProfileImageButton />
       </div>
-      <Label htmlFor="nickname" className={clsx(ROW_LABEL_STYLE)}>
+      <Label htmlFor="nickname" className={RROFILE_INFO_STYLE.rowLabel}>
         닉네임
       </Label>
       {isEditMode ? (
         <Input id="nickname" placeholder="부앙이" />
       ) : (
-        <span className={clsx(ROW_VALUE_STYLE)}>부앙이</span>
+        <span className={RROFILE_INFO_STYLE.rowValue}>부앙이</span>
       )}
       {isEditMode ? (
         <Button onClick={handleEditCompleteButtonClick}>완료</Button>
       ) : (
         <Button onClick={handleEditButtonClick}>수정</Button>
       )}
-    </>
+    </div>
   );
 };
 

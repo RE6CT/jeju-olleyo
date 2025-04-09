@@ -22,6 +22,8 @@ import { useFilteredPlans } from '@/lib/queries/use-get-filtered-plans';
 import Pagination from '@/components/ui/pagination';
 import { useDeletePlan } from '@/lib/queries/use-delete-plan';
 import PlanCard from '@/components/features/plan/plan-card';
+import { PATH } from '@/constants/path.constants';
+import { useRouter } from 'next/navigation';
 
 /**
  * 여행 계획 필터 섹션 컴포넌트
@@ -48,6 +50,7 @@ const PlanFilterSection = ({
   userId: string;
   userNickname: string;
 }) => {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [filter, setFilter] = useState<FilterState>({
     type: FILTER_TYPES.PUBLIC,
@@ -109,7 +112,7 @@ const PlanFilterSection = ({
 
   // 계획 수정 핸들러
   const handleEdit = (planId: number) => {
-    // TODO:
+    router.push(`${PATH.PLAN_DETAIL}/${planId}`);
   };
 
   // 계획 삭제 핸들러

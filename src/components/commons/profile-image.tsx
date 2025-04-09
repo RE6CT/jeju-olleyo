@@ -28,7 +28,7 @@ const ProfileImage = ({
       width={width}
       height={height}
       alt="프로필 이미지"
-      className={`object-cover ${className}`}
+      className={`rounded-full object-cover ${className}`}
       {...props}
     />
   );

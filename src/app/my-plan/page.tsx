@@ -13,6 +13,8 @@ const MyPlanPage = async () => {
 
   const plans = await fetchGetAllPlansByUserId(userId);
 
+  if (!plans) throw new Error('내 일정 목록 로드 중 에러가 발생했습니다.');
+
   return (
     <div className="container mx-auto py-8">
       <div className="mb-8 flex flex-col gap-4">

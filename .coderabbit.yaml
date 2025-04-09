@@ -2,11 +2,13 @@
 reviews:
   # 기본 설정
     # 리뷰 언어 설정 추가
-  locale: "ko"  # 또는 "ko-KR"
+  language: "korean"  # 최상위 language 설정 추가
+  locale: "ko-KR"
   
   # 또는 다음과 같이 설정할 수도 있습니다
   language_settings:
     review_language: "korean"
+    primary_language: "korean"
   request_changes_threshold: major  # 변경 요청 기준 (minor, major, critical)
   enable_review_guidance: true      # 리뷰 지침 활성화
   auto_review:

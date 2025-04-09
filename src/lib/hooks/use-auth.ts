@@ -5,7 +5,6 @@ import { LoginFormValues, RegisterFormValues } from '@/types/auth.type';
 import { getBrowserClient } from '@/lib/supabase/client';
 import {
   socialLogin,
-  resetPassword,
   updateUserPassword,
   logoutUser,
   setProviderCookie,
@@ -178,33 +177,6 @@ const useAuth = () => {
   }, [resetError, setError, clearUser]);
 
   /**
-   * 비밀번호 재설정 이메일 발송 함수
-   */
-  const handleResetPassword = useCallback(
-    async (email: string) => {
-      setIsProcessing(true);
-      resetError();
-
-      try {
-        const { error } = await resetPassword(email);
-
-        if (error) {
-          setError(error.message);
-          return false;
-        }
-
-        return true;
-      } catch (error: any) {
-        setError('비밀번호 재설정 중 오류가 발생했습니다.');
-        return false;
-      } finally {
-        setIsProcessing(false);
-      }
-    },
-    [resetError, setError],
-  );
-
-  /**
    * 비밀번호 업데이트 함수
    */
   const handleUpdatePassword = useCallback(
@@ -238,25 +210,6 @@ const useAuth = () => {
     [resetError],
   );
 
-  /**
-   * 현재 세션 확인 함수
-   */
-  const checkSession = useCallback(async () => {
-    try {
-      const supabase = await getBrowserClient();
-      const { data, error } = await supabase.auth.getSession();
-
-      if (error || !data.session) {
-        return false;
-      }
-
-      return true;
-    } catch (error) {
-      console.error('세션 확인 중 오류:', error);
-      return false;
-    }
-  }, []);
-
   return {
     user,
     isLoading: isProcessing,
@@ -267,9 +220,7 @@ const useAuth = () => {
     handleGoogleLogin,
     handleKakaoLogin,
     handleLogout,
-    handleResetPassword,
     handleUpdatePassword,
-    checkSession,
   };
 };
 

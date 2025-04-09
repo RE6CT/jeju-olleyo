@@ -25,11 +25,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${pretendard.variable} font-pretendard antialiased`}>
+      <body
+        className={`${pretendard.variable} font-pretendard flex min-h-screen w-full flex-col antialiased`}
+      >
         <AuthProvider>
           <Providers>
             <Header />
-            <main>{children}</main>
+            <main className="flex-1">{children}</main>
             <Footer />
           </Providers>
         </AuthProvider>

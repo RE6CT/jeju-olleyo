@@ -5,8 +5,8 @@ import { useRef, useState, useEffect } from 'react';
 import MypageModal from './mypage-modal';
 import { ModalPath } from '@/types/mypage.type';
 import useClickOutside from '@/lib/hooks/use-click-outside';
-import useAuth from '@/lib/hooks/use-auth';
 import { PATH } from '@/constants/path.constants';
+import useAuthCheck from '@/lib/hooks/use-auth-check';
 
 /**
  * 헤더 nav 내부의 마이페이지 모달 오픈 버튼
@@ -16,12 +16,7 @@ const MypageButton = () => {
   const modalRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const router = useRouter();
-  const { user, isAuthenticated, checkSession } = useAuth();
-
-  // 컴포넌트 마운트 시 세션 확인
-  useEffect(() => {
-    checkSession();
-  }, [checkSession]);
+  const { isAuthenticated } = useAuthCheck();
 
   /** 모달을 닫는 함수 (isOpen-false) */
   const setClose = () => setIsOpen(false);

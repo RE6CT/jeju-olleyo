@@ -7,8 +7,6 @@ body {
   font-family: var(--font-pretendard);
   line-height: 1.5;
   letter-spacing: -0.003em;
-  width: 100%;
-  min-height: 100dvh;
   background-color: var(--color-white-light);
   color: var(--color-black);
 }

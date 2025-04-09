@@ -3,17 +3,11 @@
 import Link from 'next/link';
 import SearchBar from './search-bar';
 import MypageButton from '../features/nav-mypage/mypage-button';
-import { useEffect } from 'react';
-import useAuth from '@/lib/hooks/use-auth';
+import useAuthStore from '@/zustand/auth.store';
 import { PATH } from '@/constants/path.constants';
 
 const Header = () => {
-  const { user, checkSession, isLoading } = useAuth();
-
-  useEffect(() => {
-    // 마운트 및 라우트 변경 시 세션 체크
-    checkSession();
-  }, [checkSession]);
+  const user = useAuthStore((state) => state.user);
 
   return (
     <header className="flex flex-col">
@@ -24,7 +18,7 @@ const Header = () => {
         </div>
 
         <nav className="flex items-center gap-3">
-          {!isLoading && (
+          {
             <>
               {user ? (
                 <>
@@ -36,7 +30,7 @@ const Header = () => {
                 <Link href={PATH.SIGNIN}>로그인</Link>
               )}
             </>
-          )}
+          }
         </nav>
       </div>
     </header>

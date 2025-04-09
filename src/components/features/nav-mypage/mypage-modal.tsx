@@ -4,13 +4,14 @@ import Image from 'next/image';
 import { Button } from '../../ui/button';
 import { Separator } from '../../ui/separator';
 import { MouseEvent, useState, useEffect } from 'react';
-import { ModalPath, MypageModalProps } from '@/types/mypage.type';
+import { MypageModalProps } from '@/types/mypage.type';
 import ProfileImage from '@/components/commons/profile-image';
 import { useRouter } from 'next/navigation';
 import useAuth from '@/lib/hooks/use-auth';
 import { getCurrentSession } from '@/lib/apis/auth/auth-browser.api';
 import { PATH } from '@/constants/path.constants';
 import { SOCIAL_AUTH } from '@/constants/auth.constants';
+import { MYPAGE_PROVIER_IMAGE_SIZE } from '@/constants/header.constants';
 
 /**
  * nav의 마이페이지 버튼 클릭 시 나타나는 모달 컴포넌트
@@ -114,26 +115,34 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
             </h3>
             {localUser && cookieProvider && (
               <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs">
-                {cookieProvider === SOCIAL_AUTH.PROVIDERS.GOOGLE
-                  ? '구글'
-                  : cookieProvider === SOCIAL_AUTH.PROVIDERS.KAKAO
-                    ? '카카오'
-                    : cookieProvider === 'email'
-                      ? '이메일'
-                      : ''}
+                {cookieProvider === SOCIAL_AUTH.PROVIDERS.GOOGLE ? (
+                  <Image
+                    src="/images/google_mypage.png"
+                    alt="google"
+                    width={MYPAGE_PROVIER_IMAGE_SIZE}
+                    height={MYPAGE_PROVIER_IMAGE_SIZE}
+                  />
+                ) : cookieProvider === SOCIAL_AUTH.PROVIDERS.KAKAO ? (
+                  <Image
+                    width={MYPAGE_PROVIER_IMAGE_SIZE}
+                    height={MYPAGE_PROVIER_IMAGE_SIZE}
+                    src="/images/kakaotalk_mypage.png"
+                    alt="kakao"
+                  />
+                ) : cookieProvider === 'email' ? (
+                  <Image
+                    width={MYPAGE_PROVIER_IMAGE_SIZE}
+                    height={MYPAGE_PROVIER_IMAGE_SIZE}
+                    src="/images/mail_mypage.png"
+                    alt="email"
+                  />
+                ) : (
+                  localUser.provider
+                )}
               </span>
             )}
           </div>
           <p className="text-sm text-gray-500">{userInfo.email}</p>
-          <Button
-            onClick={(e) => handleSignout(e)}
-            variant="outline"
-            size="sm"
-            className="mt-1"
-            disabled={isLoggingOut || isLoading || !localUser}
-          >
-            {isLoggingOut ? '로그아웃 중...' : '로그아웃'}
-          </Button>
         </div>
       </section>
       <Separator />
@@ -192,6 +201,16 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
               항공권 예약 내역
             </span>
           </section>
+          <Separator />
+          <Button
+            onClick={(e) => handleSignout(e)}
+            variant="outline"
+            size="sm"
+            className="mt-1"
+            disabled={isLoggingOut || isLoading || !localUser}
+          >
+            {isLoggingOut ? '로그아웃 중...' : '로그아웃'}
+          </Button>
         </>
       ) : (
         <section className="py-2 text-center">

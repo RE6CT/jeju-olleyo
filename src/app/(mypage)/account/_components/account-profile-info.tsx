@@ -16,7 +16,15 @@ const RROFILE_INFO_STYLE = {
 };
 
 /** 회원정보 수정 페이지의 프로필 섹션 컴포넌트 */
-const ProfileInfo = () => {
+const ProfileInfo = ({
+  nickname,
+  profileImage,
+  provider,
+}: {
+  nickname: string;
+  profileImage: string;
+  provider: string;
+}) => {
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
 
   /** 프로필/닉네임 수정 버튼 클릭 핸들러 */
@@ -38,25 +46,31 @@ const ProfileInfo = () => {
       <h3 className={RROFILE_INFO_STYLE.title}>프로필</h3>
       <div className="relative w-fit">
         <ProfileImage
-          image={null}
+          image={profileImage}
           width={RROFILE_INFO_STYLE.imageSize}
           height={RROFILE_INFO_STYLE.imageSize}
           className="rounded-full"
         />
-        <ProfileImageButton />
+        {provider === 'email' && <ProfileImageButton />}
       </div>
       <Label htmlFor="nickname" className={RROFILE_INFO_STYLE.rowLabel}>
         닉네임
       </Label>
       {isEditMode ? (
-        <Input id="nickname" placeholder="부앙이" />
+        <Input id="nickname" placeholder={`${nickname}`} />
       ) : (
-        <span className={RROFILE_INFO_STYLE.rowValue}>부앙이</span>
+        <span className={RROFILE_INFO_STYLE.rowValue}>{nickname}</span>
       )}
       {isEditMode ? (
         <Button onClick={handleEditCompleteButtonClick}>완료</Button>
       ) : (
-        <Button onClick={handleEditButtonClick}>수정</Button>
+        <>
+          {provider !== 'email' ? (
+            <div className="invisible" />
+          ) : (
+            <Button onClick={handleEditButtonClick}>수정</Button>
+          )}
+        </>
       )}
     </div>
   );

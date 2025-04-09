@@ -264,8 +264,7 @@ export const fetchGetCurrentUser = async () => {
     const userInfo = {
       id: data.user.id,
       email: data.user.email,
-      avatar_url:
-        data.user.user_metadata.avatar_url || '/images/default-profile.png',
+      avatar_url: data.user.user_metadata.avatar_url,
       nickname:
         data.user.user_metadata.nickname ||
         data.user.user_metadata.full_name ||

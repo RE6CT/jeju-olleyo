@@ -6,6 +6,11 @@ import ProfileImageButton from './account-profile-image-button';
 import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+  ACCOUNT_LABEL,
+  ACCOUNT_PROFILE_MIN_WIDTH,
+  ACCOUNT_PROFILE_SIZE,
+} from '@/constants/mypage.constants';
 
 /** 회원정보 수정 페이지의 프로필 섹션 컴포넌트 */
 const ProfileInfo = () => {
@@ -29,19 +34,22 @@ const ProfileInfo = () => {
     <section className="flex flex-col gap-3">
       <h3 className="text-lg font-semibold">프로필</h3>
       <div className="flex">
-        <div className="flex min-w-[176px]">
+        <div className={`flex ${ACCOUNT_PROFILE_MIN_WIDTH}`}>
           <div className="relative">
             <ProfileImage
               image={null}
-              width={88}
-              height={88}
-              className="rounded-[44px]"
+              width={ACCOUNT_PROFILE_SIZE}
+              height={ACCOUNT_PROFILE_SIZE}
+              className="rounded-full"
             />
             <ProfileImageButton />
           </div>
         </div>
         <div className="flex w-full items-center">
-          <Label htmlFor="nickname" className="w-[120px] flex-shrink-0">
+          <Label
+            htmlFor="nickname"
+            className={`${ACCOUNT_LABEL.width} flex-shrink-0`}
+          >
             닉네임
           </Label>
           {isEditMode ? (

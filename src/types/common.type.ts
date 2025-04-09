@@ -1,3 +1,6 @@
+import { ReactElement, ReactNode } from 'react';
+import { Plan } from './plan.type';
+
 /** 문자열을 카멜 케이스로 변환하는 타입 */
 type CamelCase<S extends string> = S extends `${infer P}_${infer Q}`
   ? `${P}${Capitalize<CamelCase<Q>>}`
@@ -27,5 +30,21 @@ export type ProfileImageProps = {
 export type PlaceImageProps = {
   image: string | null;
   title: string;
+  className?: string;
+};
+
+// 수정/삭제를 하는 드롭다운 컴포넌트의 props
+export type EditAndDeleteDropdownProps = {
+  plan: Plan;
+  onEdit: (id: number) => void;
+  onDelete: (id: number) => void;
+  children: ReactNode;
+};
+
+// 날짜 기간 표시 컴포넌트의 props
+export type DurationProps = {
+  start: string;
+  end: string;
+  separator: string;
   className?: string;
 };

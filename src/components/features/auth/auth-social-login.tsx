@@ -2,36 +2,16 @@
 
 import { Separator } from '@/components/ui/separator';
 import { CardContent } from '@/components/ui/card';
-import useAuth from '@/lib/hooks/use-auth';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
-import { useState } from 'react';
+import useSocialLogin from '@/lib/hooks/use-social-login';
 
 /**
  * 소셜 로그인 섹션 컴포넌트
  */
 const SocialLogin = () => {
-  const { handleGoogleLogin, handleKakaoLogin } = useAuth();
-  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
-  const [isKakaoLoading, setIsKakaoLoading] = useState(false);
-
-  const handleGoogle = async () => {
-    try {
-      setIsGoogleLoading(true);
-      await handleGoogleLogin();
-    } finally {
-      setIsGoogleLoading(false);
-    }
-  };
-
-  const handleKakao = async () => {
-    try {
-      setIsKakaoLoading(true);
-      await handleKakaoLogin();
-    } finally {
-      setIsKakaoLoading(false);
-    }
-  };
+  const { handleGoogle, handleKakao, isGoogleLoading, isKakaoLoading } =
+    useSocialLogin();
 
   return (
     <CardContent className="pt-0">

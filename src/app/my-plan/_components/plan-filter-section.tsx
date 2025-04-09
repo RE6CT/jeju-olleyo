@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import MyPlanCard from '@/components/features/plan/my-plan-card';
 import { Plan } from '@/types/plan.type';
 import { Button } from '@/components/ui/button';
 import {
@@ -22,6 +21,7 @@ import Loading from '@/app/loading';
 import { useFilteredPlans } from '@/lib/queries/use-get-filtered-plans';
 import Pagination from '@/components/ui/pagination';
 import { useDeletePlan } from '@/lib/queries/use-delete-plan';
+import PlanCard from '@/components/features/plan/plan-card';
 
 /**
  * 여행 계획 필터 섹션 컴포넌트
@@ -109,8 +109,7 @@ const PlanFilterSection = ({
 
   // 계획 수정 핸들러
   const handleEdit = (planId: number) => {
-    console.log('수정할 계획 ID:', planId);
-    // TODO: 수정 페이지로 이동
+    // TODO:
   };
 
   // 계획 삭제 핸들러
@@ -121,10 +120,10 @@ const PlanFilterSection = ({
   };
 
   // 페이지네이션 계산
-  const totalPages = Math.ceil(plans.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil((plans ?? []).length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
-  const currentPlans = plans.slice(startIndex, endIndex);
+  const currentPlans = (plans ?? []).slice(startIndex, endIndex);
 
   // 페이지 변경 핸들러
   const handlePageChange = (page: number) => {
@@ -194,7 +193,7 @@ const PlanFilterSection = ({
         )}
       </div>
 
-      {plans.length === 0 ? (
+      {(plans ?? []).length === 0 ? (
         <div className="flex h-[400px] items-center justify-center rounded-lg border-2 border-dashed border-foreground/30">
           <p className="text-lg text-foreground">여행 계획이 없습니다.</p>
         </div>
@@ -202,7 +201,7 @@ const PlanFilterSection = ({
         <>
           <div className="grid grid-cols-1 gap-6">
             {currentPlans.map((plan) => (
-              <MyPlanCard
+              <PlanCard
                 key={plan.planId}
                 plan={plan}
                 nickname={userNickname}

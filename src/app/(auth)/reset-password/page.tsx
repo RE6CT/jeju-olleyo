@@ -1,10 +1,5 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
-
 import AuthLayout from '@/components/features/auth/auth-layout';
 import AuthHeader from '@/components/features/auth/auth-header';
 import { CardContent } from '@/components/ui/card';
@@ -13,108 +8,21 @@ import { Button } from '@/components/ui/button';
 import AuthErrorMessage from '@/components/features/auth/auth-error-message';
 import PasswordInput from '@/components/features/auth/auth-password-input';
 
-import { resetPasswordSchema } from '@/lib/schemas/auth-schema';
-import { ResetPasswordFormValues } from '@/types/auth.type';
-import { getResetPasswordErrorMessage } from '@/lib/utils/auth-error.util';
-import { AUTH_TIMEOUTS } from '@/constants/auth.constants';
-import useAuth from '@/lib/hooks/use-auth';
-import useAuthStore from '@/zustand/auth.store';
+import useResetPassword from '@/lib/hooks/use-reset-password';
 
 const ResetPasswordPage = () => {
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [countdown, setCountdown] = useState(
-    AUTH_TIMEOUTS.PASSWORD_CHANGE_REDIRECT_DELAY_MS / 1000,
-  );
-  const router = useRouter();
-  const { handleUpdatePassword, isLoading } = useAuth();
-  const { setError, resetError, error } = useAuthStore();
-
   const {
+    isSubmitted,
+    countdown,
+    isLoading,
+    error,
     register,
+    errors,
+    isValid,
     handleSubmit,
-    formState: { errors, isValid },
-  } = useForm<ResetPasswordFormValues>({
-    mode: 'onBlur',
-    resolver: zodResolver(resetPasswordSchema),
-    defaultValues: {
-      password: '',
-      confirmPassword: '',
-    },
-  });
-
-  // URL 해시에서 오류 정보 파싱
-  useEffect(() => {
-    const parseHashFragment = () => {
-      if (typeof window !== 'undefined') {
-        const hash = window.location.hash.substring(1);
-        const params = new URLSearchParams(hash);
-
-        const error = params.get('error');
-        const errorDescription = params.get('error_description');
-
-        if (error) {
-          // 에러 메시지 변환 후 저장
-          const errorMessages = getResetPasswordErrorMessage(
-            errorDescription || error,
-          );
-          setError(errorMessages[0]);
-        }
-      }
-    };
-
-    parseHashFragment();
-
-    // 컴포넌트 언마운트 시 에러 상태 초기화
-    return () => resetError();
-  }, [setError, resetError]);
-
-  // 카운트다운 타이머 효과
-  useEffect(() => {
-    let timer: NodeJS.Timeout;
-
-    if (isSubmitted && countdown > 0) {
-      // 카운트다운 타이머 시작
-      timer = setInterval(() => {
-        setCountdown((prev) => {
-          if (prev <= 1) {
-            clearInterval(timer);
-            router.push('/');
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-    }
-
-    return () => clearInterval(timer); // 컴포넌트 언마운트 시 타이머 클리어
-  }, [isSubmitted, countdown, router]);
-
-  const onSubmit = async (data: ResetPasswordFormValues) => {
-    resetError(); // 이전 에러 메시지 초기화
-
-    try {
-      const result = await handleUpdatePassword(data.password);
-
-      if (result.success === false) {
-        // 서버에서 반환된 실제 에러 메시지를 사용
-        const errorMessages = getResetPasswordErrorMessage(
-          result.errorMessage || '비밀번호 변경 중 오류가 발생했습니다.',
-        );
-        setError(errorMessages[0]);
-        return;
-      }
-
-      setIsSubmitted(true);
-    } catch (err) {
-      // 예외 처리 (네트워크 오류 등)
-      const errorMessages = getResetPasswordErrorMessage(
-        err instanceof Error
-          ? err.message
-          : '비밀번호 재설정 중 오류가 발생했습니다.',
-      );
-      setError(errorMessages[0]);
-    }
-  };
+    handlePasswordUpdate,
+    redirectToHome,
+  } = useResetPassword();
 
   // 비밀번호 변경 성공 화면
   if (isSubmitted) {
@@ -136,7 +44,7 @@ const ResetPasswordPage = () => {
                 <p className="mb-6 text-sm text-gray-500">
                   {countdown}초 후 메인페이지로 돌아갑니다.
                 </p>
-                <Button className="w-full" onClick={() => router.push('/')}>
+                <Button className="w-full" onClick={redirectToHome}>
                   홈으로 돌아가기
                 </Button>
               </div>
@@ -157,7 +65,10 @@ const ResetPasswordPage = () => {
       <CardContent>
         {error && <AuthErrorMessage messages={[error]} className="mb-4" />}
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form
+          onSubmit={handleSubmit(handlePasswordUpdate)}
+          className="space-y-4"
+        >
           <div className="space-y-2">
             <Label htmlFor="password">새 비밀번호</Label>
             <PasswordInput

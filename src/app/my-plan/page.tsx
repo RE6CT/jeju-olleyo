@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import PlanFilterSection from './_components/plan-filter-section';
 import { fetchGetAllPlansByUserId } from '@/lib/apis/plan/plan.api';
-import { fetchGetCurrentUser } from '@/lib/apis/auth-server.api';
+import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 import ErrorMessage from '@/components/ui/error-message';
 import Link from 'next/link';
 
@@ -41,7 +41,7 @@ const MyPlanPage = async () => {
             </Link>
           </div>
           <PlanFilterSection
-            initialPlans={plans}
+            initialPlans={plans ?? []}
             userId={userId}
             userNickname={user.nickname}
           />

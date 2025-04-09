@@ -14,14 +14,12 @@ import {
  */
 export const fetchGetAllPlansByUserId = async (
   userId: string,
-): Promise<Plan[]> => {
+): Promise<Plan[] | null> => {
   const supabase = await getServerClient();
 
-  const { data, error } = await supabase
-    .from('plans')
-    .select('*')
-    .eq('user_id', userId)
-    .order('created_at', { ascending: false });
+  const { data, error } = await supabase.rpc('get_user_plans', {
+    user_id_param: userId,
+  });
 
   if (error) {
     throw new Error('일정 목록을 불러오는데 실패했습니다.');
@@ -49,9 +47,11 @@ export const fetchGetAllPlansByUserId = async (
 export const fetchGetFilteredPlansByUserId = async (
   userId: string,
   filterOptions: PlanFilterOptions,
-): Promise<Plan[]> => {
+) => {
   const supabase = await getServerClient();
-  let query = supabase.from('plans').select('*').eq('user_id', userId);
+  let query = supabase.rpc('get_user_plans', {
+    user_id_param: userId,
+  });
 
   if (filterOptions.title) {
     query = query.or(`title.ilike.%${filterOptions.title}%`);

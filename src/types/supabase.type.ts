@@ -1,3 +1,5 @@
+import { PlansRow, UsersRow } from './plan.type';
+
 export type Json =
   | string
   | number
@@ -215,9 +217,9 @@ export type Database = {
           plan_img: string | null;
           public: boolean | null;
           public_at: string | null;
-          title: string | null;
-          travel_end_date: string | null;
-          travel_start_date: string | null;
+          title: string;
+          travel_end_date: string;
+          travel_start_date: string;
           user_id: string;
         };
         Insert: {
@@ -227,9 +229,9 @@ export type Database = {
           plan_img?: string | null;
           public?: boolean | null;
           public_at?: string | null;
-          title?: string | null;
-          travel_end_date?: string | null;
-          travel_start_date?: string | null;
+          title?: string;
+          travel_end_date?: string;
+          travel_start_date?: string;
           user_id: string;
         };
         Update: {
@@ -239,9 +241,9 @@ export type Database = {
           plan_img?: string | null;
           public?: boolean | null;
           public_at?: string | null;
-          title?: string | null;
-          travel_end_date?: string | null;
-          travel_start_date?: string | null;
+          title?: string;
+          travel_end_date?: string;
+          travel_start_date?: string;
           user_id?: string;
         };
         Relationships: [
@@ -343,6 +345,18 @@ export type Database = {
           image: string;
           created_at: string;
         }[];
+      };
+      get_user_likes: {
+        Args: {
+          user_id_param: string;
+        };
+        Returns: (PlansRow & UsersRow)[];
+      };
+      get_user_plans: {
+        Args: {
+          user_id_param: string;
+        };
+        Returns: (PlansRow & UsersRow)[];
       };
     };
     Enums: {

@@ -8,7 +8,7 @@ import { ModalPath, MypageModalProps } from '@/types/mypage.type';
 import ProfileImage from '@/components/commons/profile-image';
 import { useRouter } from 'next/navigation';
 import useAuth from '@/lib/hooks/use-auth';
-import { getCurrentSession } from '@/lib/apis/auth-browser.api';
+import { getCurrentSession } from '@/lib/apis/auth/auth-browser.api';
 
 /**
  * nav의 마이페이지 버튼 클릭 시 나타나는 모달 컴포넌트
@@ -94,7 +94,7 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
   return (
     <div
       ref={modalRef}
-      className="absolute right-10 top-16 flex flex-col gap-3 rounded-lg border bg-white p-4 text-black shadow-lg"
+      className="absolute right-10 top-16 z-50 flex flex-col gap-3 rounded-lg border bg-white p-4 text-black shadow-lg"
     >
       <section
         onClick={() => onLinkClick('account')}

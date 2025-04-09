@@ -1,3 +1,5 @@
+import { PlansRow, UsersRow } from './plan.type';
+
 export type Json =
   | string
   | number
@@ -343,6 +345,18 @@ export type Database = {
           image: string;
           created_at: string;
         }[];
+      };
+      get_user_likes: {
+        Args: {
+          user_id_param: string;
+        };
+        Returns: (PlansRow & UsersRow)[];
+      };
+      get_user_plans: {
+        Args: {
+          user_id_param: string;
+        };
+        Returns: (PlansRow & UsersRow)[];
       };
     };
     Enums: {

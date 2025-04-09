@@ -10,7 +10,7 @@ const LikesPage = async () => {
   // 로그인되어있지 않을 경우 리턴
   if (!userId) return;
 
-  const likes: Plan[] | null = [];
+  const likes: Plan[] | null = await fetchGetAllLikesByUserId(userId);
 
   if (!likes) throw new Error('좋아요 목록 로드 중 에러가 발생했습니다.');
 

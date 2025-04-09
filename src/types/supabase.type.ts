@@ -12,26 +12,20 @@ export type Database = {
       bookmarks: {
         Row: {
           bookmark_id: number;
-          created_at: string | null;
-          place: number | null;
-          place_lat: number;
-          place_lng: number;
+          created_at: string;
+          place_id: number;
           user_id: string;
         };
         Insert: {
-          bookmark_id?: never;
-          created_at?: string | null;
-          place?: number | null;
-          place_lat: number;
-          place_lng: number;
+          bookmark_id?: number;
+          created_at?: string;
+          place_id: number;
           user_id: string;
         };
         Update: {
-          bookmark_id?: never;
-          created_at?: string | null;
-          place?: number | null;
-          place_lat?: number;
-          place_lng?: number;
+          bookmark_id?: number;
+          created_at?: string;
+          place_id?: number;
           user_id?: string;
         };
         Relationships: [
@@ -101,6 +95,42 @@ export type Database = {
             referencedColumns: ['day_id'];
           },
         ];
+      };
+      places: {
+        Row: {
+          address: string;
+          category: string;
+          content_type_id: number;
+          id: number;
+          image: string | null;
+          lat: number;
+          lng: number;
+          place_id: number;
+          title: string;
+        };
+        Insert: {
+          address: string;
+          category: string;
+          content_type_id: number;
+          id?: never;
+          image?: string | null;
+          lat: number;
+          lng: number;
+          place_id: number;
+          title: string;
+        };
+        Update: {
+          address?: string;
+          category?: string;
+          content_type_id?: number;
+          id?: never;
+          image?: string | null;
+          lat?: number;
+          lng?: number;
+          place_id?: number;
+          title?: string;
+        };
+        Relationships: [];
       };
       plan_comments: {
         Row: {
@@ -185,9 +215,9 @@ export type Database = {
           plan_img: string | null;
           public: boolean | null;
           public_at: string | null;
-          title: string | null;
-          travel_end_date: string | null;
-          travel_start_date: string | null;
+          title: string;
+          travel_end_date: string;
+          travel_start_date: string;
           user_id: string;
         };
         Insert: {
@@ -197,9 +227,9 @@ export type Database = {
           plan_img?: string | null;
           public?: boolean | null;
           public_at?: string | null;
-          title?: string | null;
-          travel_end_date?: string | null;
-          travel_start_date?: string | null;
+          title?: string;
+          travel_end_date?: string;
+          travel_start_date?: string;
           user_id: string;
         };
         Update: {
@@ -209,9 +239,9 @@ export type Database = {
           plan_img?: string | null;
           public?: boolean | null;
           public_at?: string | null;
-          title?: string | null;
-          travel_end_date?: string | null;
-          travel_start_date?: string | null;
+          title?: string;
+          travel_end_date?: string;
+          travel_start_date?: string;
           user_id?: string;
         };
         Relationships: [
@@ -273,7 +303,7 @@ export type Database = {
       };
       users: {
         Row: {
-          created_at: string | null;
+          created_at: string;
           email: string;
           nickname: string | null;
           phone: string | null;
@@ -281,7 +311,7 @@ export type Database = {
           user_id: string;
         };
         Insert: {
-          created_at?: string | null;
+          created_at?: string;
           email: string;
           nickname?: string | null;
           phone?: string | null;
@@ -289,7 +319,7 @@ export type Database = {
           user_id: string;
         };
         Update: {
-          created_at?: string | null;
+          created_at?: string;
           email?: string;
           nickname?: string | null;
           phone?: string | null;
@@ -303,7 +333,17 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      get_user_bookmarks: {
+        Args: {
+          user_id_param: string;
+        };
+        Returns: {
+          place_id: number;
+          title: string;
+          image: string;
+          created_at: string;
+        }[];
+      };
     };
     Enums: {
       [_ in never]: never;

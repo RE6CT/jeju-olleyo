@@ -5,24 +5,14 @@ import { Bookmark as BookmarkButton } from 'lucide-react';
 
 const Bookmark = ({
   userId,
-  place,
+  placeId,
   initialBookmarks,
-  place_lat,
-  place_lng,
 }: {
   userId: string;
-  place: number;
+  placeId: number;
   initialBookmarks: boolean;
-  place_lat: number;
-  place_lng: number;
 }) => {
-  const { toggleBookmark } = useBookmark(
-    place,
-    userId,
-    initialBookmarks,
-    place_lat,
-    place_lng,
-  );
+  const { toggleBookmark } = useBookmark(placeId, userId, initialBookmarks);
 
   return (
     <button onClick={toggleBookmark}>

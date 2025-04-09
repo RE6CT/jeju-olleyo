@@ -1,9 +1,10 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { useSearch } from '@/lib/hooks/use-search';
 import Banner from './_components/banner';
 import PlaceImage from '@/components/commons/place-image';
+import useSearch from '@/lib/hooks/use-search';
+import Loading from '../loading';
 
 // TODO : 카드 컴포넌트 머지 후 div 요소 교체 필요 - 링크, 좋아요, 북마크 다 삽입될 예정
 // TODO : 디자이너님 배너 제작 후 배너 삽입 예정
@@ -15,7 +16,7 @@ const SearchResultsPage = () => {
   const { results, loading } = useSearch(query);
 
   if (loading) {
-    return <div className="px-4 pt-20 text-gray-500">검색 중입니다...</div>;
+    return <Loading />;
   }
 
   return (

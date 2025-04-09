@@ -18,3 +18,5 @@ export const TEXT = {
   edit: '수정',
   delete: '삭제',
 } as const;
+
+export const ITEMS_PER_PAGE = 10; // 페이지당 표시할 일정 수

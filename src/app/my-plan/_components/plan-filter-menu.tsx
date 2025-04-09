@@ -34,7 +34,7 @@ export const FilterMenu = ({
   <div className="flex w-[120px] flex-col gap-2">
     <Button
       variant={selectedFilter === FILTER_TYPES.TITLE ? 'default' : 'ghost'}
-      className="w-full justify-start"
+      className="w-full justify-start focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
       onClick={() =>
         handleFilterClick(
           FILTER_TYPES.TITLE,
@@ -48,7 +48,7 @@ export const FilterMenu = ({
     </Button>
     <Button
       variant={selectedFilter === FILTER_TYPES.DATE ? 'default' : 'ghost'}
-      className="w-full justify-start"
+      className="w-full justify-start focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
       onClick={() =>
         handleFilterClick(
           FILTER_TYPES.DATE,
@@ -62,7 +62,7 @@ export const FilterMenu = ({
     </Button>
     <Button
       variant={selectedFilter === FILTER_TYPES.PUBLIC ? 'default' : 'ghost'}
-      className="w-full justify-start"
+      className="w-full justify-start focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
       onClick={() =>
         handleFilterClick(
           FILTER_TYPES.PUBLIC,

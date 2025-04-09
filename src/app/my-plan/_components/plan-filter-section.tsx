@@ -9,25 +9,33 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Filter } from 'lucide-react';
-import { fetchGetFilteredPlansByUserId } from '@/lib/apis/plan/plan.api';
-import { FILTER_TYPES, PUBLIC_OPTIONS } from '@/constants/plan.constants';
+import {
+  FILTER_TYPES,
+  ITEMS_PER_PAGE,
+  PUBLIC_OPTIONS,
+} from '@/constants/plan.constants';
 import { FilterType, PublicOption, FilterState } from '@/types/plan.type';
 import { FilterMenu } from './plan-filter-menu';
 import { FilterInput } from './plan-filter-input';
 import Loading from '@/app/loading';
+import { useFilteredPlans } from '@/lib/queries/use-get-filtered-plans';
+import Pagination from '@/components/ui/pagination';
+import { useDeletePlan } from '@/lib/queries/use-delete-plan';
 import PlanCard from '@/components/features/plan/plan-card';
+import { PATH } from '@/constants/path.constants';
+import { useRouter } from 'next/navigation';
 
 /**
  * 여행 계획 필터 섹션 컴포넌트
  * @param initialPlans - 초기 여행 계획 목록
- * @param userId - 현재 로그인한 사용자의 ID
+ * @param user - 현재 로그인한 사용자의 정보
  *
  * @example
  * ```tsx
  * const MyPlanPage = () => {
  *   return (
  *     <div>
- *       <PlanFilterSection initialPlans={plans} userId={userId} />
+ *       <PlanFilterSection initialPlans={plans} user={user} />
  *     </div>
  *   );
  * };
@@ -36,13 +44,14 @@ import PlanCard from '@/components/features/plan/plan-card';
 const PlanFilterSection = ({
   initialPlans,
   userId,
+  userNickname,
 }: {
   initialPlans: Plan[];
   userId: string;
+  userNickname: string;
 }) => {
-  const [plans, setPlans] = useState<Plan[]>(initialPlans);
-  const [isOpen, setIsOpen] = useState(false); // 호버 상태 관리
-  const [isLoading, setIsLoading] = useState(false); // 로딩 상태 추가
+  const router = useRouter();
+  const [isOpen, setIsOpen] = useState(false);
   const [filter, setFilter] = useState<FilterState>({
     type: FILTER_TYPES.PUBLIC,
     value: PUBLIC_OPTIONS.ALL,
@@ -54,36 +63,29 @@ const PlanFilterSection = ({
   const [isDatePickerFocused, setIsDatePickerFocused] = useState(false); // datepicker 포커스 상태(popover 닫히는 문제 해결을 위해)
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const { data: plans = initialPlans, isLoading: isPlansLoading } =
+    useFilteredPlans(userId, filter);
+  const { mutate: deletePlan } = useDeletePlan(userId);
 
   // 필터 초기화
   const resetFilter = () => {
-    setFilter({ type: null, value: '' });
+    setFilter({
+      type: FILTER_TYPES.PUBLIC,
+      value: PUBLIC_OPTIONS.ALL,
+    });
     setSelectedFilter(null);
     setInputValue('');
     setStartDate('');
     setEndDate('');
     setSelectedPublicOption(PUBLIC_OPTIONS.ALL);
-    setPlans(initialPlans);
+    setCurrentPage(1);
   };
 
   // 필터 적용
   const handleApplyFilter = async () => {
-    setIsLoading(true);
     try {
-      const filterOptions = {
-        title: selectedFilter === FILTER_TYPES.TITLE ? inputValue : undefined,
-        startDate: selectedFilter === FILTER_TYPES.DATE ? startDate : undefined,
-        endDate: selectedFilter === FILTER_TYPES.DATE ? endDate : undefined,
-        isPublic:
-          selectedFilter === FILTER_TYPES.PUBLIC
-            ? selectedPublicOption === PUBLIC_OPTIONS.PUBLIC
-            : undefined,
-      };
-      const filteredPlans = await fetchGetFilteredPlansByUserId(
-        userId,
-        filterOptions,
-      );
-      setPlans(filteredPlans);
       setFilter({
         type: selectedFilter,
         value:
@@ -94,10 +96,9 @@ const PlanFilterSection = ({
               : inputValue,
       });
       setIsOpen(false);
+      setCurrentPage(1);
     } catch (error) {
       console.error('필터링 중 오류 발생:', error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -111,17 +112,28 @@ const PlanFilterSection = ({
 
   // 계획 수정 핸들러
   const handleEdit = (planId: number) => {
-    console.log('수정할 계획 ID:', planId);
-    // TODO: 수정 페이지로 이동
+    router.push(`${PATH.PLAN_DETAIL}/${planId}`);
   };
 
   // 계획 삭제 핸들러
   const handleDelete = (planId: number) => {
-    console.log('삭제할 계획 ID:', planId);
-    // TODO: 삭제 API 호출
+    if (confirm('정말로 이 일정을 삭제하시겠습니까?')) {
+      deletePlan(planId);
+    }
   };
 
-  if (isLoading) {
+  // 페이지네이션 계산
+  const totalPages = Math.ceil((plans ?? []).length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const currentPlans = (plans ?? []).slice(startIndex, endIndex);
+
+  // 페이지 변경 핸들러
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  if (isPlansLoading) {
     return <Loading />;
   }
 
@@ -134,8 +146,8 @@ const PlanFilterSection = ({
             onMouseEnter={() => setIsOpen(true)}
             onMouseLeave={handleMouseLeave}
           >
-            <Button variant="outline" size="sm" disabled={isLoading}>
-              <Filter className="mr-2 h-4 w-4" />
+            <Button variant="outline" size="sm" disabled={isPlansLoading}>
+              <Filter className="mr-2 h-4 w-4 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0" />
               필터
             </Button>
           </PopoverTrigger>
@@ -177,28 +189,37 @@ const PlanFilterSection = ({
             size="sm"
             onClick={resetFilter}
             className="text-muted-foreground"
-            disabled={isLoading}
+            disabled={isPlansLoading}
           >
             필터 초기화
           </Button>
         )}
       </div>
 
-      {plans.length === 0 ? (
+      {(plans ?? []).length === 0 ? (
         <div className="flex h-[400px] items-center justify-center rounded-lg border-2 border-dashed border-foreground/30">
           <p className="text-lg text-foreground">여행 계획이 없습니다.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-6">
-          {plans.map((plan) => (
-            <PlanCard
-              key={plan.planId}
-              plan={plan}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-            />
-          ))}
-        </div>
+        <>
+          <div className="grid grid-cols-1 gap-6">
+            {currentPlans.map((plan) => (
+              <PlanCard
+                key={plan.planId}
+                plan={plan}
+                nickname={userNickname}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
+            ))}
+          </div>
+
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </>
       )}
     </>
   );

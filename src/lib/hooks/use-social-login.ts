@@ -1,17 +1,16 @@
 import { useState } from 'react';
 import useAuth from '@/lib/hooks/use-auth';
-import useRedirectParams from '@/lib/hooks/use-redirect-params';
+import { useSearchParams } from 'next/navigation';
 
 /**
  * 소셜 로그인 처리를 위한 커스텀 훅
- *
- * @returns {Object} 소셜 로그인 관련 상태와 함수들
  */
 const useSocialLogin = () => {
   const { handleGoogleLogin, handleKakaoLogin } = useAuth();
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [isKakaoLoading, setIsKakaoLoading] = useState(false);
-  const redirectPath = useRedirectParams();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get('redirectTo') || '/';
 
   /**
    * 구글 로그인 처리 함수
@@ -42,7 +41,7 @@ const useSocialLogin = () => {
     handleKakao,
     isGoogleLoading,
     isKakaoLoading,
-    redirectPath,
+    redirectPath: redirectTo,
   };
 };
 

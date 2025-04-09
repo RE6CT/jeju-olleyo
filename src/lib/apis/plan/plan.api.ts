@@ -2,6 +2,10 @@
 import { Plan, PlanFilterOptions } from '@/types/plan.type';
 import { getServerClient } from '@/lib/supabase/server';
 import { camelize } from '@/lib/utils/camelize';
+import {
+  isDateGreaterThanOrEqual,
+  isDateLessThanOrEqual,
+} from '@/lib/utils/date';
 
 /**
  * 사용자의 일정 목록을 가져오는 API
@@ -52,12 +56,6 @@ export const fetchGetFilteredPlansByUserId = async (
   if (filterOptions.title) {
     query = query.or(`title.ilike.%${filterOptions.title}%`);
   }
-  if (filterOptions.startDate) {
-    query = query.gte('travel_start_date', filterOptions.startDate);
-  }
-  if (filterOptions.endDate) {
-    query = query.lte('travel_end_date', filterOptions.endDate);
-  }
   if (filterOptions.isPublic !== undefined) {
     query = query.eq('public', filterOptions.isPublic);
   }
@@ -68,5 +66,41 @@ export const fetchGetFilteredPlansByUserId = async (
     throw new Error('일정 필터링에 실패했습니다.');
   }
 
-  return data.map(camelize);
+  // 날짜 필터링은 클라이언트 측에서 처리
+  let filteredDataByDate = data;
+  if (filterOptions.startDate) {
+    filteredDataByDate = filteredDataByDate.filter((plan) =>
+      isDateGreaterThanOrEqual(
+        plan.travel_start_date,
+        filterOptions.startDate!,
+      ),
+    );
+  }
+  if (filterOptions.endDate) {
+    filteredDataByDate = filteredDataByDate.filter((plan) =>
+      isDateLessThanOrEqual(plan.travel_end_date, filterOptions.endDate!),
+    );
+  }
+
+  return filteredDataByDate.map(camelize);
+};
+
+/**
+ * 일정을 삭제하는 API
+ * @param planId - 삭제할 일정의 ID
+ *
+ * @example
+ * ```typescript
+ * const { mutate: deletePlan } = useDeletePlan();
+ * deletePlan(planId);
+ * ```
+ */
+export const fetchDeletePlan = async (planId: number) => {
+  const supabase = await getServerClient();
+
+  const { error } = await supabase.from('plans').delete().eq('plan_id', planId);
+
+  if (error) {
+    throw new Error('일정 삭제에 실패했습니다.');
+  }
 };

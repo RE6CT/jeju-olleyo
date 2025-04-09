@@ -13,6 +13,7 @@ import { LoginFormValues, RegisterFormValues } from '@/types/auth.type';
 import { useCallback, useEffect, useMemo } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema, registerSchema } from '@/lib/schemas/auth-schema';
+import { PATH } from '@/constants/path.constants';
 
 /**
  * 인증 관련 페이지의 폼 컴포넌트
@@ -45,7 +46,7 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
     formState: { errors: errorsLogin },
     setValue: setLoginValue,
   } = useForm<LoginFormValues>({
-    mode: 'onBlur',
+    mode: 'onSubmit',
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: '',
@@ -157,7 +158,7 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
             <div>
               {/* 비밀번호 찾기 링크 */}
               <Link
-                href="/forgot-password"
+                href={PATH.FORGOT_PASSWORD}
                 className="text-xs text-blue-600 hover:text-blue-800"
               >
                 비밀번호 찾기

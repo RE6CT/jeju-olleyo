@@ -21,6 +21,8 @@ const PasswordInput = ({
 }: PasswordInputProps) => {
   const [showPassword, setShowPassword] = useState(false);
 
+  const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
+
   return (
     <div className="relative">
       <Input
@@ -36,8 +38,9 @@ const PasswordInput = ({
         variant="ghost"
         size="icon"
         className="absolute right-0 top-0 h-full px-3"
-        onClick={() => setShowPassword(!showPassword)}
+        onClick={togglePasswordVisibility}
         tabIndex={-1}
+        aria-label={showPassword ? '비밀번호 숨기기' : '비밀번호 표시'}
       >
         {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
       </Button>

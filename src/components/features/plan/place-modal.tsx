@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
-import { Button } from '../ui/button';
+import { Button } from '../../ui/button';
 import { Bookmark } from 'lucide-react';
 
 const PlaceModal = () => {
@@ -9,8 +9,8 @@ const PlaceModal = () => {
       <DialogTrigger>
         <Button>상세보기</Button>
       </DialogTrigger>
-      <DialogContent className="w-[370px] p-6">
-        <div className="space-y-4">
+      <DialogContent className="max-h-[90vh] w-[370px]">
+        <div className="max-h-[80vh] space-y-4 overflow-y-auto overflow-x-hidden p-4">
           <div className="flex h-80 w-80 items-center justify-center rounded-md bg-gray-200">
             <span className="text-sm text-gray-600">장소 이미지 1개</span>
           </div>
@@ -31,8 +31,6 @@ const PlaceModal = () => {
           </div>
 
           <ul className="mt-2 list-inside list-disc space-y-1 text-xs text-gray-500">
-            <li>이름</li>
-            <li>주소</li>
             <li>전화번호</li>
             <li>영업시간</li>
           </ul>
@@ -40,7 +38,15 @@ const PlaceModal = () => {
           <Button className="mt-4 w-full">내 일정에 추가하기</Button>
 
           <div>
-            <h3 className="mb-2 mt-6 text-sm font-medium">댓글</h3>
+            <h3 className="mb-2 mt-6 text-sm font-medium">
+              해당 장소가 포함된 일정
+            </h3>
+            <div className="text-sm text-muted-foreground">
+              장소 댓글: 카카오 리뷰
+            </div>
+            <div className="text-sm text-muted-foreground">
+              장소 댓글: 카카오 리뷰
+            </div>
             <div className="text-sm text-muted-foreground">
               장소 댓글: 카카오 리뷰
             </div>

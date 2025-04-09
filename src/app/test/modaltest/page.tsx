@@ -1,6 +1,6 @@
 'use client';
 
-import PlaceModal from '@/components/features/place-modal';
+import PlaceModal from '@/components/features/plan/place-modal';
 import PlanCardModal from '@/components/features/plan/plan-card-modal';
 import { useState } from 'react';
 

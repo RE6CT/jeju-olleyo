@@ -2,6 +2,7 @@ import React from 'react';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '../../ui/button';
 import { Bookmark } from 'lucide-react';
+import PlaceImage from '@/components/commons/place-image';
 
 type PlaceType = {
   address: string;
@@ -27,8 +28,8 @@ const PlaceModal = ({ place }: PlaceModalProps) => {
       </DialogTrigger>
       <DialogContent className="max-h-[90vh] w-[370px]">
         <div className="max-h-[80vh] space-y-4 overflow-y-auto overflow-x-hidden p-4">
-          <div className="flex h-80 w-80 items-center justify-center rounded-md bg-gray-200">
-            <span className="text-sm text-gray-600">장소 이미지 1개</span>
+          <div className="relative aspect-square">
+            <PlaceImage image={place.image} title={place.title} />
           </div>
 
           <div className="flex items-start justify-between">
@@ -38,10 +39,6 @@ const PlaceModal = ({ place }: PlaceModalProps) => {
               </span>
               <h2 className="mt-2 text-lg font-semibold">{place.title}</h2>
               <p className="text-sm text-muted-foreground">{place.address}</p>
-              <p className="mt-1 text-xs text-gray-400">
-                야경이 아름다운 어쩌구 명소: 관광공사 api 내 장소 디스크립션
-                가져오면 될듯
-              </p>
             </div>
             <Bookmark className="h-5 w-5 cursor-pointer text-gray-500" />
           </div>

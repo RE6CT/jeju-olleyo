@@ -6,6 +6,7 @@ import { getBrowserClient } from '@/lib/supabase/client';
 import useAuthStore from '@/zustand/auth.store';
 import { formatUser } from '@/lib/apis/auth/auth-browser.api';
 import { AuthProps } from '@/types/auth.type';
+import { PATH } from '@/constants/path.constants';
 
 /**
  * 인증 상태를 감시하고 관리하는 프로바이더 컴포넌트
@@ -13,20 +14,22 @@ import { AuthProps } from '@/types/auth.type';
 const AuthProvider = ({ children }: AuthProps) => {
   const router = useRouter();
   const pathname = usePathname();
-  const { setUser, clearUser, setLoading, user } = useAuthStore();
+  const { setUser, clearUser, setLoading } = useAuthStore();
   const [isInitialized, setIsInitialized] = useState(false);
 
-  // 공개 페이지 여부 확인 함수
+  // 공개 페이지 여부 확인
   const isPublicPage = (path: string): boolean => {
     const publicPages = [
-      '/sign-in',
-      '/sign-up',
-      '/forgot-password',
-      '/reset-password',
-      '/auth/callback',
+      PATH.SIGNIN,
+      PATH.SIGNUP,
+      PATH.FORGOT_PASSWORD,
+      PATH.RESET_PASSWORD,
+      PATH.CALLBACK,
     ];
 
-    return publicPages.some((page) => path.startsWith(page));
+    return (
+      publicPages.some((page) => path.startsWith(page)) || path === PATH.HOME
+    );
   };
 
   // 초기 인증 상태 설정
@@ -37,7 +40,7 @@ const AuthProvider = ({ children }: AuthProps) => {
 
       try {
         // 초기 사용자 상태 확인
-        const { data, error } = await supabase.auth.getUser();
+        const { data, error } = await supabase.auth.getSession();
 
         if (error) {
           if (!error.message.includes('Auth session missing')) {
@@ -47,30 +50,24 @@ const AuthProvider = ({ children }: AuthProps) => {
           clearUser();
 
           // 보호된 페이지에 있는 경우 로그인 페이지로 리다이렉트
-          if (!isPublicPage(pathname) && pathname !== '/') {
-            router.push('/sign-in');
+          if (!isPublicPage(pathname)) {
+            router.push(PATH.SIGNIN);
           }
-        } else if (data.user) {
-          const formattedUser = formatUser(data.user);
-          setUser(formattedUser);
-
+        } else if (data.session) {
           // 로그인/회원가입 페이지에 있는 경우 홈으로 리다이렉트
-          if (pathname === '/sign-in' || pathname === '/sign-up') {
-            router.push('/');
+          if (pathname === PATH.SIGNIN || pathname === PATH.SIGNUP) {
+            router.push(PATH.HOME);
           }
-        } else if (!isPublicPage(pathname) && pathname !== '/') {
+        } else if (!isPublicPage(pathname)) {
           // 사용자가 없고 보호된 페이지에 있는 경우 로그인 페이지로 리다이렉트
-          router.push('/sign-in');
+          router.push(PATH.SIGNIN);
         }
       } catch (err) {
-        if (process.env.NODE_ENV === 'development') {
-          console.error('인증 초기화 오류:', err);
-        }
-
+        console.error('인증 초기화 오류:', err);
         clearUser();
 
-        if (!isPublicPage(pathname) && pathname !== '/') {
-          router.push('/sign-in');
+        if (!isPublicPage(pathname)) {
+          router.push(PATH.SIGNIN);
         }
       } finally {
         setLoading(false);
@@ -79,7 +76,7 @@ const AuthProvider = ({ children }: AuthProps) => {
     };
 
     initializeAuth();
-  }, [pathname, router, setUser, clearUser, setLoading]);
+  }, [pathname, router, clearUser, setLoading]);
 
   // 인증 상태 변경 감지
   useEffect(() => {
@@ -91,55 +88,43 @@ const AuthProvider = ({ children }: AuthProps) => {
       // 인증 상태 변경 리스너 설정
       const { data: authListener } = supabase.auth.onAuthStateChange(
         async (event, session) => {
-          if (process.env.NODE_ENV === 'development') {
-            console.log('인증 상태 변경:', event);
-          }
-
           setLoading(true);
 
           try {
-            switch (event) {
-              case 'SIGNED_IN':
-                if (session?.user) {
-                  const formattedUser = formatUser(session.user);
-                  setUser(formattedUser);
+            // INITIAL_SESSION 이벤트도 처리
+            if (
+              (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') &&
+              session?.user
+            ) {
+              const formattedUser = formatUser(session.user);
+              setUser(formattedUser);
 
-                  // URL 파라미터에서 리다이렉트 경로 확인
-                  const params = new URLSearchParams(window.location.search);
-                  const redirectTo = params.get('redirectTo') || '/';
+              // URL 파라미터에서 리다이렉트 경로 확인
+              if (typeof window !== 'undefined') {
+                const params = new URLSearchParams(window.location.search);
+                const redirectTo = params.get('redirectTo') || PATH.HOME;
 
-                  // 로그인 페이지나 회원가입 페이지, 콜백 페이지에서 로그인한 경우에만 리다이렉트
-                  const isAuthPage =
-                    pathname.includes('/sign-in') ||
-                    pathname.includes('/sign-up') ||
-                    pathname.includes('/auth/callback');
+                // 로그인 페이지나 회원가입 페이지, 콜백 페이지에서 로그인한 경우에만 리다이렉트
+                const isAuthPage =
+                  pathname.includes(PATH.SIGNIN) ||
+                  pathname.includes(PATH.SIGNUP) ||
+                  pathname.includes(PATH.CALLBACK);
 
-                  if (isAuthPage) {
-                    router.push(redirectTo);
-                  }
+                if (isAuthPage) {
+                  window.location.href = redirectTo;
                 }
-                break;
-
-              case 'SIGNED_OUT':
-                clearUser();
-                router.push('/sign-in');
-                break;
-
-              case 'USER_UPDATED':
-                if (session?.user) {
-                  const formattedUser = formatUser(session.user);
-                  setUser(formattedUser);
-                }
-                break;
-
-              case 'PASSWORD_RECOVERY':
-                router.push('/reset-password');
-                break;
+              }
+            } else if (event === 'SIGNED_OUT') {
+              clearUser();
+              router.push(PATH.SIGNIN);
+            } else if (event === 'USER_UPDATED' && session?.user) {
+              const formattedUser = formatUser(session.user);
+              setUser(formattedUser);
+            } else if (event === 'PASSWORD_RECOVERY') {
+              router.push(PATH.RESET_PASSWORD);
             }
           } catch (err) {
-            if (process.env.NODE_ENV === 'development') {
-              console.error('인증 상태 변경 처리 오류:', err);
-            }
+            console.error('인증 상태 변경 처리 오류:', err);
           } finally {
             setLoading(false);
           }

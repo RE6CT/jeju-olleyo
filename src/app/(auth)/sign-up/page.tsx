@@ -11,6 +11,7 @@ import { RegisterFormValues } from '@/types/auth.type';
 import useAuth from '@/lib/hooks/use-auth';
 import useAuthCheck from '@/lib/hooks/use-auth-check';
 import { getSignupErrorMessage } from '@/lib/utils/auth-error.util';
+import { PATH } from '@/constants/path.constants';
 
 /**
  * 회원가입 페이지 컴포넌트
@@ -21,7 +22,7 @@ const SignUpPage = () => {
   // 이미 로그인되어 있는 경우 홈으로 리다이렉트
   const { isLoading: isCheckingAuth } = useAuthCheck({
     redirectIfFound: true,
-    redirectTo: '/',
+    redirectTo: PATH.HOME,
   });
 
   // 회원가입 폼 제출 핸들러
@@ -64,7 +65,7 @@ const SignUpPage = () => {
       <AuthFooter
         question="이미 계정이 있으신가요?"
         linkText="로그인"
-        linkHref="/sign-in"
+        linkHref={PATH.SIGNIN}
       />
     </AuthLayout>
   );

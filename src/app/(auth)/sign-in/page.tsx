@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 import AuthLayout from '@/components/features/auth/auth-layout';
 import AuthHeader from '@/components/features/auth/auth-header';
@@ -16,6 +17,7 @@ import useAuthCheck from '@/lib/hooks/use-auth-check';
 import useRememberEmail from '@/lib/hooks/use-remember-email';
 import useRedirectParams from '@/lib/hooks/use-redirect-params';
 import { getLoginErrorMessage } from '@/lib/utils/auth-error.util';
+import { PATH } from '@/constants/path.constants';
 
 /**
  * 로그인 페이지 컴포넌트
@@ -24,20 +26,24 @@ const LoginPage = () => {
   const redirectTo = useRedirectParams();
   const { handleLogin, isLoading, error } = useAuth();
   const { savedEmail } = useRememberEmail();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [shouldCheckAuth, setShouldCheckAuth] = useState(true);
+  const searchParams = useSearchParams();
 
-  // 인증 상태 체크
+  // 로그아웃 후 접근 여부 확인 (t 파라미터 확인)
+  useEffect(() => {
+    const hasLogoutParam = searchParams.has('t');
+    if (hasLogoutParam) {
+      // 로그아웃 직후 접근한 경우 인증 체크 건너뛰기
+      setShouldCheckAuth(false);
+    }
+  }, [searchParams]);
+
+  // 인증 상태 체크 (로그아웃 직후가 아닌 경우만)
   const { isLoading: isCheckingAuth, isAuthenticated } = useAuthCheck({
     redirectIfFound: true,
     redirectTo,
+    skipCheck: !shouldCheckAuth,
   });
-
-  // 인증 체크가 완료되면 로그인 상태 설정
-  useEffect(() => {
-    if (!isCheckingAuth) {
-      setIsLoggedIn(isAuthenticated);
-    }
-  }, [isCheckingAuth, isAuthenticated]);
 
   // 로그인 폼 제출 핸들러
   const handleSubmit = async (data: LoginFormValues) => {
@@ -45,13 +51,13 @@ const LoginPage = () => {
   };
 
   // 로딩 중이거나 이미 로그인된 경우 로딩 표시
-  if (isCheckingAuth || isLoggedIn) {
+  if (isCheckingAuth && isAuthenticated) {
     return (
       <AuthLayout>
         <div className="flex items-center justify-center p-8">
           <div className="text-center">
             <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-blue-500"></div>
-            <p>이미 로그인되어 있습니다. 리다이렉트 중...</p>
+            <p>이미 로그인되어 있습니다.</p>
           </div>
         </div>
       </AuthLayout>
@@ -86,7 +92,7 @@ const LoginPage = () => {
       <AuthFooter
         question="계정이 없으신가요?"
         linkText="회원가입"
-        linkHref="/sign-up"
+        linkHref={PATH.SIGNUP}
       />
     </AuthLayout>
   );

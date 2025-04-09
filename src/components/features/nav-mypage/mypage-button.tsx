@@ -5,7 +5,7 @@ import { useRef, useState, useEffect } from 'react';
 import MypageModal from './mypage-modal';
 import { ModalPath } from '@/types/mypage.type';
 import useClickOutside from '@/lib/hooks/use-click-outside';
-import useAuth from '@/lib/hooks/use-auth';
+import { PATH } from '@/constants/path.constants';
 import useAuthCheck from '@/lib/hooks/use-auth-check';
 
 /**
@@ -31,7 +31,7 @@ const MypageButton = () => {
   const handleMypageModalToggle = () => {
     if (!isAuthenticated) {
       // 로그인되지 않은 경우 로그인 페이지로 리다이렉트
-      router.push('/sign-in');
+      router.push(PATH.SIGNIN);
       return;
     }
     setIsOpen(!isOpen);
@@ -43,7 +43,7 @@ const MypageButton = () => {
    */
   const handleLinkClick = (path: ModalPath) => {
     if (!isAuthenticated) {
-      router.push('/sign-in');
+      router.push(PATH.SIGNIN);
       return;
     }
     router.push(`/${path}`);

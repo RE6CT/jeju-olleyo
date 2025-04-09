@@ -2,29 +2,31 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { getBrowserClient } from '@/lib/supabase/client';
 import useAuthStore from '@/zustand/auth.store';
-import { formatUser } from '@/lib/apis/auth/auth-browser.api';
 
 /**
  * 인증 상태를 체크하고 적절한 리다이렉션을 처리하는 커스텀 훅
- *
- * @param {Object} options - 옵션 객체
- * @param {string} options.redirectTo - 인증된 경우 리다이렉트할 경로 (기본값: '/')
- * @param {boolean} options.redirectIfFound - true인 경우 인증된 사용자를 리다이렉트 (기본값: false)
- * @returns {Object} 인증 상태 체크 결과
  */
 const useAuthCheck = ({
   redirectTo = '/',
   redirectIfFound = false,
+  skipCheck = false, // 추가: 인증 체크 건너뛰기 옵션
 }: {
   redirectTo?: string;
   redirectIfFound?: boolean;
+  skipCheck?: boolean;
 } = {}) => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(!skipCheck); // skipCheck가 true면 로딩 상태 false로 시작
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const router = useRouter();
-  const { setUser, clearUser } = useAuthStore();
+  const { clearUser } = useAuthStore();
 
   useEffect(() => {
+    // skipCheck가 true면 체크하지 않음
+    if (skipCheck) {
+      setIsLoading(false);
+      return;
+    }
+
     const checkAuthStatus = async () => {
       try {
         const supabase = await getBrowserClient();
@@ -37,38 +39,19 @@ const useAuthCheck = ({
         const hasSession = !!data.session;
         setIsAuthenticated(hasSession);
 
-        if (hasSession) {
-          // 사용자 세션이 있는 경우
-          const { data: userData, error: userError } =
-            await supabase.auth.getUser();
-
-          if (userError) {
-            throw userError;
-          }
-
-          if (userData.user) {
-            const formattedUser = formatUser(userData.user);
-            setUser(formattedUser);
-          }
-
-          // 인증된 상태에서 redirectIfFound가 true인 경우 리다이렉트
-          if (redirectIfFound) {
-            router.push(redirectTo);
-          }
-        } else {
-          // 사용자 세션이 없는 경우
-          clearUser();
-
-          // 인증되지 않은 상태에서 redirectIfFound가 false인 경우 리다이렉트
-          if (!redirectIfFound) {
-            router.push(redirectTo);
-          }
+        // 인증된 상태에서 redirectIfFound가 true인 경우 리다이렉트
+        if (hasSession && redirectIfFound) {
+          router.push(redirectTo);
+        }
+        // 인증되지 않은 상태에서 redirectIfFound가 false인 경우 리다이렉트
+        else if (!hasSession && !redirectIfFound) {
+          router.push(redirectTo);
         }
       } catch (err) {
         console.error('세션 확인 오류:', err);
         clearUser();
 
-        // 에러 발생 시 인증되지 않은 것으로 간주하고, redirectIfFound가 false인 경우 리다이렉트
+        // 에러 발생 시 인증되지 않은 것으로 간주
         if (!redirectIfFound) {
           router.push(redirectTo);
         }
@@ -78,7 +61,7 @@ const useAuthCheck = ({
     };
 
     checkAuthStatus();
-  }, [redirectTo, redirectIfFound, router, setUser, clearUser]);
+  }, [redirectTo, redirectIfFound, router, clearUser, skipCheck]);
 
   return { isLoading, isAuthenticated };
 };

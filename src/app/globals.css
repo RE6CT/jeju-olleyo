@@ -9,6 +9,7 @@ body {
   letter-spacing: -0.003em;
   background-color: var(--color-white-light);
   color: var(--color-black);
+  overflow: auto !important;
 }
 
 @layer base {

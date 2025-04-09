@@ -13,6 +13,7 @@ export type Plan = CamelCaseObject<PlansRow & UsersRow>;
 
 export type PlanCardProps = {
   plan: Plan;
+  nickname?: string;
   onEdit?: (id: number) => void;
   onDelete?: (id: number) => void;
 };

@@ -2,10 +2,14 @@ import { Database } from './supabase.type';
 import { CamelCaseObject } from './common.type';
 import { FILTER_TYPES, PUBLIC_OPTIONS } from '@/constants/plan.constants';
 
-type PlansRow = Database['public']['Tables']['plans']['Row'];
+export type PlansRow = Database['public']['Tables']['plans']['Row'];
+export type UsersRow = Pick<
+  Database['public']['Tables']['users']['Row'],
+  'nickname'
+>;
 
 // PlansRow를 CamelCase로 변환한 타입
-export type Plan = CamelCaseObject<PlansRow>;
+export type Plan = CamelCaseObject<PlansRow & UsersRow>;
 
 export type PlanCardProps = {
   plan: Plan;

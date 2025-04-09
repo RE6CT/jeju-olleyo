@@ -2,6 +2,7 @@
 
 import { getServerClient } from '@/lib/supabase/server';
 import { camelize } from '@/lib/utils/camelize';
+import { Plan } from '@/types/plan.type';
 
 const getLike = async (planId: number, userId: string) => {
   const supabase = await getServerClient();
@@ -25,4 +26,17 @@ export default getLike;
  * @param userId - 사용자 ID
  * @returns 사용자의 좋아요 목록 또는 null
  */
-export const fetchGetAllLikesByUserId = async (userId: string) => {};
+export const fetchGetAllLikesByUserId = async (
+  userId: string,
+): Promise<Plan[] | null> => {
+  const supabase = await getServerClient();
+
+  const { data, error } = await supabase.rpc('get_user_likes', {
+    user_id_param: userId,
+  });
+
+  if (error) throw new Error(error.message);
+
+  const camelizedData: Plan[] | null = data ? camelize(data) : null;
+  return camelizedData;
+};

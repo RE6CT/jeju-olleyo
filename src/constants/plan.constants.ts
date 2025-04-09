@@ -10,10 +10,6 @@ export const PUBLIC_OPTIONS = {
   PRIVATE: '비공개',
 } as const;
 
-export const CARD = {
-  imageSize: 'w-[200px] h-[200px]',
-} as const;
-
 export const TEXT = {
   noImage: '이미지 없음',
   noDescription: '설명이 없습니다.',

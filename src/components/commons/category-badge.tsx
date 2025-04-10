@@ -1,10 +1,4 @@
-type BadgeStyle = 'filled-orange' | 'outline-orange' | 'outline-teal';
-
-type CategoryBadgeProps = {
-  category: '전체' | '명소' | '맛집' | '카페' | '숙박';
-  styleType?: BadgeStyle;
-  className?: string;
-};
+import { CategoryBadgeProps } from '@/types/category-badge.type';
 
 /**
  * 사용 예시

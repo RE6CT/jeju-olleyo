@@ -91,8 +91,30 @@ const config: Config = {
       fontFamily: {
         sans: 'var(--font-pretendard)',
       },
+      fontSize: {
+        '10': ['0.625rem', { lineHeight: '150%' }],
+        '12': ['0.75rem', { lineHeight: '150%' }],
+        '14': ['0.875rem', { lineHeight: '150%' }],
+        '16': ['1rem', { lineHeight: '150%' }],
+        '18': ['1.125rem', { lineHeight: '150%' }],
+        '20': ['1.25rem', { lineHeight: '150%' }],
+        '22': ['1.375rem', { lineHeight: '150%' }],
+        '24': ['1.5rem', { lineHeight: '150%' }],
+        '26': ['1.625rem', { lineHeight: '150%' }],
+        '28': ['1.75rem', { lineHeight: '150%' }],
+      },
+      fontWeight: {
+        regular: '400',
+        medium: '500',
+        semibold: '600',
+        bold: '700',
+      },
+      letterSpacing: {
+        'tight-2': '-0.02em',
+      },
     },
   },
   plugins: [require('tailwindcss-animate')],
 };
+
 export default config;

@@ -3,14 +3,13 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { forgotPasswordSchema } from '@/lib/schemas/auth-schema';
 import { EmailFormValues } from '@/types/auth.type';
-import { resetPassword } from '@/lib/apis/auth/auth-browser.api';
+import { fetchSendPasswordResetEmail } from '@/lib/apis/auth/auth-server.api';
 import { getForgotPasswordErrorMessage } from '@/lib/utils/auth-error.util';
 import useAuthStore from '@/zustand/auth.store';
+import { DEFAULT_FORM_VALUES } from '@/constants/auth.constants';
 
 /**
  * 비밀번호 찾기 기능을 위한 커스텀 훅
- *
- * @returns {Object} 비밀번호 찾기 관련 상태와 함수들
  */
 const useForgotPassword = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -26,22 +25,21 @@ const useForgotPassword = () => {
   } = useForm<EmailFormValues>({
     mode: 'onBlur',
     resolver: zodResolver(forgotPasswordSchema),
-    defaultValues: {
-      email: '',
-    },
+    defaultValues: DEFAULT_FORM_VALUES.FORGOT_PASSWORD,
   });
 
   // 비밀번호 재설정 요청 핸들러
   const handleResetPassword = async (data: EmailFormValues) => {
     setIsLoading(true);
-    resetError(); // 기존 에러 메시지 초기화
+    resetError();
 
     try {
-      const result = await resetPassword(data.email);
+      // 서버 액션 호출
+      const result = await fetchSendPasswordResetEmail(data.email);
 
-      if (result.error) {
+      if (!result.success) {
         const errorMessages = getForgotPasswordErrorMessage(
-          result.error.message,
+          result.error?.message || '알 수 없는 오류',
         );
         setError(errorMessages[0]);
         setIsLoading(false);

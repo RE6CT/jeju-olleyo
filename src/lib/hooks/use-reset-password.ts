@@ -4,21 +4,19 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { resetPasswordSchema } from '@/lib/schemas/auth-schema';
 import { ResetPasswordFormValues } from '@/types/auth.type';
 import { getResetPasswordErrorMessage } from '@/lib/utils/auth-error.util';
-import { AUTH_TIMEOUTS } from '@/constants/auth.constants';
-import useAuth from '@/lib/hooks/use-auth';
+import { AUTH_TIMEOUTS, DEFAULT_FORM_VALUES } from '@/constants/auth.constants';
+import { fetchUpdatePassword } from '@/lib/apis/auth/auth-server.api';
 import useAuthStore from '@/zustand/auth.store';
 
 /**
  * 비밀번호 재설정 기능을 위한 커스텀 훅
- *
- * @returns {Object} 비밀번호 재설정 관련 상태와 함수들
  */
 const useResetPassword = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [countdown, setCountdown] = useState(
     AUTH_TIMEOUTS.PASSWORD_CHANGE_REDIRECT_DELAY_MS / 1000,
   );
-  const { handleUpdatePassword, isLoading } = useAuth();
   const { setError, resetError, error } = useAuthStore();
 
   // 폼 설정
@@ -29,10 +27,7 @@ const useResetPassword = () => {
   } = useForm<ResetPasswordFormValues>({
     mode: 'onBlur',
     resolver: zodResolver(resetPasswordSchema),
-    defaultValues: {
-      password: '',
-      confirmPassword: '',
-    },
+    defaultValues: DEFAULT_FORM_VALUES.RESET_PASSWORD,
   });
 
   // URL 해시에서 오류 정보 파싱
@@ -86,17 +81,20 @@ const useResetPassword = () => {
   // 비밀번호 업데이트 제출 핸들러
   const handlePasswordUpdate = useCallback(
     async (data: ResetPasswordFormValues) => {
-      resetError(); // 이전 에러 메시지 초기화
+      setIsLoading(true);
+      resetError();
 
       try {
-        const result = await handleUpdatePassword(data.password);
+        // 서버 액션 호출
+        const result = await fetchUpdatePassword(data.password);
 
-        if (result.success === false) {
+        if (!result.success) {
           // 서버에서 반환된 실제 에러 메시지를 사용
           const errorMessages = getResetPasswordErrorMessage(
-            result.errorMessage || '비밀번호 변경 중 오류가 발생했습니다.',
+            result.error?.message || '비밀번호 변경 중 오류가 발생했습니다.',
           );
           setError(errorMessages[0]);
+          setIsLoading(false);
           return false;
         }
 
@@ -111,9 +109,11 @@ const useResetPassword = () => {
         );
         setError(errorMessages[0]);
         return false;
+      } finally {
+        setIsLoading(false);
       }
     },
-    [handleUpdatePassword, resetError, setError],
+    [resetError, setError],
   );
 
   // 즉시 홈으로 리다이렉트하는 함수

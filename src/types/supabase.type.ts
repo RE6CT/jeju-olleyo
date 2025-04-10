@@ -349,7 +349,7 @@ export type Database = {
         Insert: {
           created_at?: string;
           email: string;
-          nickname: string;
+          nickname?: string;
           phone?: string | null;
           profile_img?: string | null;
           user_id: string;

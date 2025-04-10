@@ -36,7 +36,7 @@ const passwordSchema = z
 /**
  * 닉네임 유효성 검사를 위한 스키마
  */
-const nicknameSchema = z
+export const nicknameSchema = z
   .string()
   .min(1, { message: ERROR_MESSAGES.REQUIRED_NICKNAME })
   .min(VALIDATION_RULES.NICKNAME.MIN, {
@@ -44,7 +44,14 @@ const nicknameSchema = z
   })
   .max(VALIDATION_RULES.NICKNAME.MAX, {
     message: ERROR_MESSAGES.MAX_NICKNAME_LENGTH,
-  });
+  })
+  .refine(
+    async (nickname) => {
+      const exists = await checkNickNameExists(nickname);
+      return !exists;
+    },
+    { message: ERROR_MESSAGES.NICKNAME_EXISTS },
+  );
 
 /**
  * 전화번호 유효성 검사를 위한 스키마
@@ -80,13 +87,7 @@ export const registerSchema = z
     ),
     password: passwordSchema,
     confirmPassword: z.string(),
-    nickname: nicknameSchema.refine(
-      async (nickname) => {
-        const exists = await checkNickNameExists(nickname);
-        return !exists;
-      },
-      { message: ERROR_MESSAGES.NICKNAME_EXISTS },
-    ),
+    nickname: nicknameSchema,
     phone: phoneSchema.refine(
       async (phone) => {
         const exists = await checkPhoneExists(phone);

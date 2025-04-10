@@ -109,8 +109,6 @@ const useResetPassword = () => {
         );
         setError(errorMessages[0]);
         return false;
-      } finally {
-        setIsLoading(false);
       }
     },
     [resetError, setError],

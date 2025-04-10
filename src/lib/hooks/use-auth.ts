@@ -11,15 +11,16 @@ import {
 } from '@/lib/apis/auth/auth-browser.api';
 import useAuthStore from '@/zustand/auth.store';
 import { PATH } from '@/constants/path.constants';
+import { useRouter } from 'next/navigation';
 
 /**
  * 인증 관련 기능을 처리하는 커스텀 훅
  */
 const useAuth = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
   const { resetError, setError, user, error, isAuthenticated, clearUser } =
     useAuthStore();
-
   /**
    * 이메일 로그인 처리 함수
    */
@@ -102,9 +103,7 @@ const useAuth = () => {
       clearClientAuthData();
 
       // 로그인 페이지로 리다이렉트
-      if (typeof window !== 'undefined') {
-        window.location.href = `${PATH.SIGNIN}?t=${Date.now()}`;
-      }
+      router.push(PATH.SIGNIN);
 
       return true;
     } catch (error: any) {

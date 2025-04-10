@@ -2,6 +2,7 @@ import { STORAGE_KEY, SOCIAL_AUTH } from '@/constants/auth.constants';
 import { User } from '@supabase/supabase-js';
 import { UserInfo } from '@/types/auth.type';
 import { getBrowserClient } from '../../supabase/client';
+import { handleError } from '@/lib/utils/handleError';
 
 /**
  * 사용자 객체를 UserInfo 타입으로 변환하는 함수
@@ -44,65 +45,71 @@ export const formatUser = (user: User | null): UserInfo | null => {
   }
 
   // 일관된 사용자 객체 반환
-  const formattedUser = {
+  return {
     email: user.email ?? null,
     nickname,
     phone,
     avatar_url: avatarUrl,
   };
-  return formattedUser;
 };
 
 /**
  * 로컬 스토리지에 이메일 저장/삭제 함수
+ * @param email - 저장할 이메일 주소
+ * @param remember - 사용자가 "내 이메일 기억하기"를 선택했는지 여부
  */
 export const saveEmailToStorage = (email: string, remember: boolean) => {
   if (typeof window === 'undefined') return;
 
-  if (remember) {
-    localStorage.setItem(STORAGE_KEY.SAVED_EMAIL, email);
-    localStorage.setItem(STORAGE_KEY.REMEMBER_EMAIL, 'true');
-  } else {
-    localStorage.removeItem(STORAGE_KEY.SAVED_EMAIL);
-    localStorage.removeItem(STORAGE_KEY.REMEMBER_EMAIL);
+  try {
+    if (remember) {
+      localStorage.setItem(STORAGE_KEY.SAVED_EMAIL, email);
+      localStorage.setItem(STORAGE_KEY.REMEMBER_EMAIL, 'true');
+    } else {
+      localStorage.removeItem(STORAGE_KEY.SAVED_EMAIL);
+      localStorage.removeItem(STORAGE_KEY.REMEMBER_EMAIL);
+    }
+  } catch (error) {
+    handleError('이메일 저장 또는 삭제', error);
   }
 };
 
 /**
  * 로컬 스토리지에서 저장된 이메일 가져오기
+ * @returns 저장된 이메일 주소 또는 null
  */
 export const getSavedEmailFromStorage = (): string | null => {
   if (typeof window === 'undefined') return null;
 
-  const shouldRemember =
-    localStorage.getItem(STORAGE_KEY.REMEMBER_EMAIL) === 'true';
-  if (!shouldRemember) return null;
+  try {
+    const shouldRemember =
+      localStorage.getItem(STORAGE_KEY.REMEMBER_EMAIL) === 'true';
+    if (!shouldRemember) return null;
 
-  return localStorage.getItem(STORAGE_KEY.SAVED_EMAIL);
+    return localStorage.getItem(STORAGE_KEY.SAVED_EMAIL);
+  } catch (error) {
+    handleError('이메일 불러오기', error);
+    return null;
+  }
 };
 
 /**
  * 현재 세션 정보를 가져오는 함수 (클라이언트)
+ * @returns { session, user, error } 형식의 객체 반환
  */
 export const getCurrentSession = async () => {
   const supabase = await getBrowserClient();
 
   try {
     const { data: sessionData, error } = await supabase.auth.getSession();
-
-    if (error) {
-      throw error;
-    }
+    if (error) throw error;
 
     if (!sessionData.session) {
       return { session: null, user: null };
     }
 
     const { data: userData, error: userError } = await supabase.auth.getUser();
-
-    if (userError) {
-      throw userError;
-    }
+    if (userError) throw userError;
 
     const formattedUser = formatUser(userData.user);
 
@@ -111,8 +118,8 @@ export const getCurrentSession = async () => {
       user: formattedUser,
     };
   } catch (error) {
-    console.error('세션 가져오기 오류:', error);
-    return { session: null, user: null };
+    const { error: formattedError } = handleError('세션 정보 불러오기', error);
+    return { session: null, user: null, error: formattedError };
   }
 };
 
@@ -122,19 +129,23 @@ export const getCurrentSession = async () => {
 export const clearClientAuthData = () => {
   if (typeof window === 'undefined') return;
 
-  // 쿠키 정리
-  const cookiesToClear = [
-    'provider',
-    'sb-access-token',
-    'sb-refresh-token',
-    'supabase-auth-token',
-  ];
+  try {
+    // 쿠키 정리
+    const cookiesToClear = [
+      'provider',
+      'sb-access-token',
+      'sb-refresh-token',
+      'supabase-auth-token',
+    ];
 
-  cookiesToClear.forEach((name) => {
-    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;`;
-  });
+    cookiesToClear.forEach((name) => {
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;`;
+    });
 
-  // 로컬/세션 스토리지 정리
-  localStorage.removeItem('supabase.auth.token');
-  sessionStorage.removeItem('auth-storage');
+    // 로컬/세션 스토리지 정리
+    localStorage.removeItem('supabase.auth.token');
+    sessionStorage.removeItem('auth-storage');
+  } catch (error) {
+    handleError('클라이언트 인증 데이터 정리', error);
+  }
 };

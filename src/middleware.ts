@@ -36,8 +36,6 @@ export async function middleware(request: NextRequest) {
     PATH.SHAREDPLAN,
     PATH.FORGOT_PASSWORD,
     PATH.RESET_PASSWORD,
-    PATH.FORGOT_PASSWORD,
-    PATH.RESET_PASSWORD,
     PATH.CALLBACK,
     PATH.PLAN_NEW,
     PATH.ACCOUNT,

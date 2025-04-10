@@ -8,6 +8,7 @@ import {
 import { getServerClient } from '@/lib/supabase/server';
 import { PATH } from '@/constants/path.constants';
 import { cookies } from 'next/headers';
+import { handleError } from '@/lib/utils/handleError';
 
 /**
  * 로그인 서버 액션
@@ -22,13 +23,7 @@ export const fetchLogin = async (values: LoginFormValues) => {
     });
 
     if (error) {
-      return {
-        user: null,
-        error: {
-          message: error.message,
-          status: error.status || 500,
-        },
-      };
+      return handleError('로그인 처리', error);
     }
 
     // provider 쿠키 설정
@@ -40,14 +35,7 @@ export const fetchLogin = async (values: LoginFormValues) => {
 
     return { error: null };
   } catch (error: any) {
-    console.error('서버: 로그인 처리 중 예외 발생:', error);
-    return {
-      user: null,
-      error: {
-        message: error.message || '로그인 중 오류가 발생했습니다.',
-        status: 500,
-      },
-    };
+    return handleError('로그인 처리', error);
   }
 };
 
@@ -70,13 +58,7 @@ export const fetchRegister = async (values: RegisterFormValues) => {
     });
 
     if (error) {
-      return {
-        user: null,
-        error: {
-          message: error.message,
-          status: error.status || 500,
-        },
-      };
+      return handleError('회원가입 처리', error);
     }
 
     if (!data.user) {
@@ -85,14 +67,7 @@ export const fetchRegister = async (values: RegisterFormValues) => {
 
     return { error: null };
   } catch (error: any) {
-    console.error('회원가입 처리 중 예외 발생:', error);
-    return {
-      user: null,
-      error: {
-        message: error.message || '회원가입 중 오류가 발생했습니다.',
-        status: 500,
-      },
-    };
+    return handleError('회원가입 처리', error);
   }
 };
 
@@ -104,7 +79,9 @@ export const fetchSocialLoginUrl = async (
   redirectTo: string = PATH.HOME,
 ) => {
   const supabase = await getServerClient();
-  const redirectUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback?redirectTo=${encodeURIComponent(redirectTo)}&provider=${provider}`;
+  const redirectUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback?redirectTo=${encodeURIComponent(
+    redirectTo,
+  )}&provider=${provider}`;
 
   try {
     const { data, error } = await supabase.auth.signInWithOAuth({
@@ -115,25 +92,14 @@ export const fetchSocialLoginUrl = async (
     });
 
     if (error) {
-      return {
-        url: null,
-        error: {
-          message: error.message,
-          status: error.status || 500,
-        },
-      };
+      const handled = handleError('소셜 로그인 URL 생성', error);
+      return { url: null, error: handled.error };
     }
 
     return { url: data?.url || null, error: null };
   } catch (error: any) {
-    console.error('소셜 로그인 URL 생성 중 예외 발생:', error);
-    return {
-      url: null,
-      error: {
-        message: error.message || '소셜 로그인 준비 중 오류가 발생했습니다.',
-        status: 500,
-      },
-    };
+    const handled = handleError('소셜 로그인 URL 생성', error);
+    return { url: null, error: handled.error };
   }
 };
 
@@ -153,24 +119,15 @@ export const fetchSendPasswordResetEmail = async (
     if (error) {
       return {
         success: false,
-        error: {
-          message: error.message,
-          status: error.status || 500,
-        },
+        error: { message: error.message, status: error.status || 500 },
       };
     }
 
     return { success: true, error: null };
   } catch (error: any) {
-    console.error('비밀번호 재설정 메일 전송 중 예외 발생:', error);
-    return {
-      success: false,
-      error: {
-        message:
-          error.message || '비밀번호 재설정 메일 전송 중 오류가 발생했습니다.',
-        status: 500,
-      },
-    };
+    // handleError를 호출한 결과의 error 속성을 AuthResult에 맞게 래핑하여 반환합니다.
+    const handled = handleError('비밀번호 재설정 메일 전송', error);
+    return { success: false, error: handled.error };
   }
 };
 
@@ -188,23 +145,14 @@ export const fetchUpdatePassword = async (
     if (error) {
       return {
         success: false,
-        error: {
-          message: error.message,
-          status: error.status || 500,
-        },
+        error: { message: error.message, status: error.status || 500 },
       };
     }
 
     return { success: true, error: null };
   } catch (error: any) {
-    console.error('비밀번호 업데이트 중 예외 발생:', error);
-    return {
-      success: false,
-      error: {
-        message: error.message || '비밀번호 업데이트 중 오류가 발생했습니다.',
-        status: 500,
-      },
-    };
+    const handled = handleError('비밀번호 업데이트', error);
+    return { success: false, error: handled.error };
   }
 };
 
@@ -220,10 +168,7 @@ export const fetchLogout = async (): Promise<AuthResult> => {
     if (error) {
       return {
         success: false,
-        error: {
-          message: error.message,
-          status: error.status || 500,
-        },
+        error: { message: error.message, status: error.status || 500 },
       };
     }
 
@@ -235,14 +180,8 @@ export const fetchLogout = async (): Promise<AuthResult> => {
 
     return { success: true, error: null };
   } catch (error: any) {
-    console.error('로그아웃 처리 중 예외 발생:', error);
-    return {
-      success: false,
-      error: {
-        message: error.message || '로그아웃 중 오류가 발생했습니다.',
-        status: 500,
-      },
-    };
+    const handled = handleError('로그아웃 처리', error);
+    return { success: false, error: handled.error };
   }
 };
 
@@ -256,16 +195,11 @@ export const fetchGetCurrentUser = async () => {
     const { data, error } = await supabase.auth.getUser();
 
     if (error) {
-      return {
-        user: null,
-        error: {
-          message: error.message,
-          status: error.status || 500,
-        },
-      };
+      const handled = handleError('사용자 정보 조회', error);
+      return { user: null, error: handled.error };
     }
 
-    // 사용자가 없는 경우 명시적으로 null 반환
+    // 사용자가 없는 경우 null 반환
     if (!data.user) {
       return { user: null, error: null };
     }
@@ -284,15 +218,8 @@ export const fetchGetCurrentUser = async () => {
 
     return { user: userInfo, error: null };
   } catch (error: any) {
-    console.error('사용자 정보 조회 중 예외 발생:', error);
-    return {
-      user: null,
-      error: {
-        message:
-          error.message || '사용자 정보를 가져오는 중 오류가 발생했습니다.',
-        status: 500,
-      },
-    };
+    const handled = handleError('사용자 정보 조회', error);
+    return { user: null, error: handled.error };
   }
 };
 
@@ -316,7 +243,7 @@ export const checkEmailExists = async (email: string): Promise<boolean> => {
 
     return data && data.length > 0;
   } catch (error) {
-    console.error('이메일 중복 확인 중 오류:', error);
+    console.error('이메일 중복 확인 중 예외:', error);
     return false;
   }
 };
@@ -343,7 +270,7 @@ export const checkNickNameExists = async (
 
     return data && data.length > 0;
   } catch (error) {
-    console.error('닉네임 중복 확인 중 오류:', error);
+    console.error('닉네임 중복 확인 중 예외:', error);
     return false;
   }
 };
@@ -368,7 +295,7 @@ export const checkPhoneExists = async (phone: string): Promise<boolean> => {
 
     return data && data.length > 0;
   } catch (error) {
-    console.error('휴대폰 번호 중복 확인 중 오류:', error);
+    console.error('휴대폰 번호 중복 확인 중 예외:', error);
     return false;
   }
 };

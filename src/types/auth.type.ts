@@ -127,3 +127,11 @@ export type AuthErrorMessageProps = {
   className?: string;
   variant?: 'default' | 'destructive';
 };
+
+/**
+ * 중복 결과를 알려주는 타입
+ */
+export type ExistsResult =
+  | { exists: true }
+  | { exists: false }
+  | { error: { message: string; status: number } };

@@ -9,7 +9,7 @@ export const PATH = {
   FORGOT_PASSWORD: '/forgot-password',
   RESET_PASSWORD: '/reset-password',
   CALLBACK: '/auth/callback',
-  PLAN_NEW: 'plan-detail/new',
+  PLAN_NEW: '/plan-detail/new',
   ACCOUNT: '/account',
   BOOKMARKS: '/bookmarks',
   LIKES: '/likes',

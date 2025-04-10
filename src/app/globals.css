@@ -76,3 +76,66 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .bold-28 {
+    @apply text-28 tracking-tight-2 font-bold;
+  }
+  .bold-24 {
+    @apply text-24 tracking-tight-2 font-bold;
+  }
+  .bold-22 {
+    @apply text-22 tracking-tight-2 font-bold;
+  }
+
+  .semibold-28 {
+    @apply text-28 font-semibold;
+  }
+  .semibold-24 {
+    @apply text-24 font-semibold;
+  }
+  .semibold-22 {
+    @apply text-22 font-semibold;
+  }
+  .semibold-20 {
+    @apply text-20 font-semibold;
+  }
+  .semibold-18 {
+    @apply text-18 font-semibold;
+  }
+  .semibold-16 {
+    @apply text-16 font-semibold;
+  }
+
+  .medium-20 {
+    @apply text-20 font-medium;
+  }
+  .medium-18 {
+    @apply text-18 font-medium;
+  }
+  .medium-16 {
+    @apply text-16 font-medium;
+  }
+  .medium-14 {
+    @apply text-14 font-medium;
+  }
+  .medium-12 {
+    @apply text-12 font-medium;
+  }
+
+  .regular-18 {
+    @apply text-18 font-regular;
+  }
+  .regular-16 {
+    @apply text-16 font-regular;
+  }
+  .regular-14 {
+    @apply text-14 font-regular;
+  }
+  .regular-12 {
+    @apply text-12 font-regular;
+  }
+  .regular-10 {
+    @apply text-10 font-regular;
+  }
+}

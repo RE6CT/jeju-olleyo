@@ -2,16 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
-body {
-  font-family: var(--font-pretendard);
-  line-height: 1.5;
-  letter-spacing: -0.003em;
-  background-color: var(--color-white-light);
-  color: var(--color-black);
-  overflow: auto !important;
-}
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -66,14 +56,10 @@ body {
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
-}
 
-@layer base {
-  * {
-    @apply border-border;
-  }
+  html,
   body {
-    @apply bg-background text-foreground;
+    @apply overflow-auto bg-gray-50 font-sans leading-normal text-gray-900 !important;
   }
 }
 

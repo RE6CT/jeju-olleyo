@@ -7,6 +7,7 @@ import useAuthStore from '@/zustand/auth.store';
 import { formatUser } from '@/lib/apis/auth/auth-browser.api';
 import { AuthProps } from '@/types/auth.type';
 import { PATH } from '@/constants/path.constants';
+import { AUTH_ROUTES } from '@/constants/auth.constants';
 
 /**
  * 인증 상태를 감시하고 관리하는 프로바이더 컴포넌트
@@ -19,16 +20,9 @@ const AuthProvider = ({ children }: AuthProps) => {
 
   // 공개 페이지 여부 확인
   const isPublicPage = (path: string): boolean => {
-    const publicPages = [
-      PATH.SIGNIN,
-      PATH.SIGNUP,
-      PATH.FORGOT_PASSWORD,
-      PATH.RESET_PASSWORD,
-      PATH.CALLBACK,
-    ];
-
     return (
-      publicPages.some((page) => path.startsWith(page)) || path === PATH.HOME
+      AUTH_ROUTES.PUBLIC_ROUTES.some((page) => path.startsWith(page)) ||
+      path === PATH.HOME
     );
   };
 
@@ -51,16 +45,29 @@ const AuthProvider = ({ children }: AuthProps) => {
 
           // 보호된 페이지에 있는 경우 로그인 페이지로 리다이렉트
           if (!isPublicPage(pathname)) {
-            router.push(PATH.SIGNIN);
+            router.push(
+              `${PATH.SIGNIN}?redirectTo=${encodeURIComponent(pathname)}`,
+            );
           }
         } else if (data.session) {
-          // 로그인/회원가입 페이지에 있는 경우 홈으로 리다이렉트
-          if (pathname === PATH.SIGNIN || pathname === PATH.SIGNUP) {
-            router.push(PATH.HOME);
+          // 사용자 정보를 가져오기 위한 추가 호출
+          const { data: userData } = await supabase.auth.getUser();
+
+          // 사용자 정보 저장
+          if (userData.user) {
+            const formattedUser = formatUser(userData.user);
+            setUser(formattedUser);
+
+            // 로그인/회원가입 페이지에 있는 경우 홈으로 리다이렉트
+            if (pathname === PATH.SIGNIN || pathname === PATH.SIGNUP) {
+              router.push(PATH.HOME);
+            }
           }
         } else if (!isPublicPage(pathname)) {
           // 사용자가 없고 보호된 페이지에 있는 경우 로그인 페이지로 리다이렉트
-          router.push(PATH.SIGNIN);
+          router.push(
+            `${PATH.SIGNIN}?redirectTo=${encodeURIComponent(pathname)}`,
+          );
         }
       } catch (err) {
         console.error('인증 초기화 오류:', err);
@@ -76,7 +83,7 @@ const AuthProvider = ({ children }: AuthProps) => {
     };
 
     initializeAuth();
-  }, [pathname, router, clearUser, setLoading]);
+  }, [pathname, router, clearUser, setLoading, setUser]);
 
   // 인증 상태 변경 감지
   useEffect(() => {

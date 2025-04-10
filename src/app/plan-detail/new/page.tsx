@@ -9,6 +9,9 @@ import { ko } from 'date-fns/locale';
 import { formatTravelPeriod } from '@/lib/utils/date';
 import { Label } from '@/components/ui/label';
 import TextareaWithCount from '@/components/ui/textarea-with-count';
+import KakaoMap from '@/components/features/map/kakao-map';
+import Loading from '@/app/loading';
+import ErrorMessage from '@/app/error';
 
 const PlanDetailNewPage = () => {
   const [title, setTitle] = useState('');
@@ -16,6 +19,11 @@ const PlanDetailNewPage = () => {
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [description, setDescription] = useState('');
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+
+  // 지도 관련 상태
+  const [map, setMap] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleDateChange = (dates: [Date | null, Date | null]) => {
     const [start, end] = dates;
@@ -26,11 +34,21 @@ const PlanDetailNewPage = () => {
     }
   };
 
+  const handleMapLoad = (map: any) => {
+    setMap(map);
+    setIsLoading(false);
+  };
+
+  const handleMapError = (error: Error) => {
+    setError(error.message);
+    setIsLoading(false);
+  };
+
   return (
     <div className="flex flex-col">
-      <div className="border-b">
+      <div className="border-b px-9">
         {/* 헤더 영역 */}
-        <div className="px-9 py-6">
+        <div className="pt-6">
           <div className="flex gap-3">
             <span className="font-pretendard text-28 font-bold leading-[130%]">
               내 일정 만들기
@@ -115,16 +133,28 @@ const PlanDetailNewPage = () => {
           </div>
 
           {/* 일정 설명 입력 */}
-          <div className="mt-4 h-[160px]">
+          <div className="mt-4">
             {/* TODO: 입력 아이콘 추가 예정 */}
             <TextareaWithCount
               placeholder="특별히 적어 두고 싶은 메모를 입력하세요"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               maxLength={500}
-              className="h-full w-full resize-none rounded-[12px] border-[#C7D5DC] p-5 text-sm"
+              className="h-[160px] w-full resize-none rounded-[12px] border-[#C7D5DC] p-5 text-sm focus-visible:ring-0 focus-visible:ring-offset-0"
             />
           </div>
+        </div>
+
+        {/* 지도 영역 */}
+        <div className="mt-4 h-[326px] w-full overflow-hidden rounded-[12px]">
+          {isLoading && <Loading />}
+          {error && <ErrorMessage message={error} />}
+          <KakaoMap
+            center={{ lat: 33.3616666, lng: 126.5291666 }}
+            level={10}
+            onMapLoad={handleMapLoad}
+            onError={handleMapError}
+          />
         </div>
       </div>
     </div>

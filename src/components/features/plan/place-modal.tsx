@@ -28,6 +28,17 @@ type PlaceModalProps = {
 };
 
 const PlaceModal = ({ place, detailInfo }: PlaceModalProps) => {
+  const isHotel = place.content_type_id === 32;
+
+  const openSummary = isHotel
+    ? detailInfo
+      ? `${detailInfo.openTime || '체크인/아웃 시간 정보 없음'}`
+      : '정보 없음'
+    : detailInfo
+      ? `${detailInfo.openTime || '운영 시간 정보 없음'}${
+          detailInfo.closeDay ? ` (휴무: ${detailInfo.closeDay})` : ''
+        }`
+      : '정보 없음';
   return (
     <Dialog>
       <DialogTrigger>
@@ -52,12 +63,7 @@ const PlaceModal = ({ place, detailInfo }: PlaceModalProps) => {
 
           <ul className="mt-2 list-inside list-disc space-y-1 text-xs text-gray-500">
             <li>
-              운영시간:{' '}
-              {detailInfo
-                ? `${detailInfo.openTime || '영업시간 미제공'}${
-                    detailInfo.closeDay ? ` (휴무: ${detailInfo.closeDay})` : ''
-                  }`
-                : '휴무일 미제공'}
+              {isHotel ? '체크인/체크아웃' : '운영시간'}: {openSummary}
             </li>
             <li>{detailInfo?.phone || '전화번호 미제공'}</li>
           </ul>

@@ -28,7 +28,7 @@ const TestPage = () => {
         const { data, error } = await supabase
           .from('places')
           .select('*')
-          .eq('place_id', 2850913)
+          .eq('place_id', 3076375)
           .single();
 
         if (error || !data) {

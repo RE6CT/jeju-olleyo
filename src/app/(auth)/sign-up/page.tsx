@@ -12,6 +12,7 @@ import useAuth from '@/lib/hooks/use-auth';
 import useAuthCheck from '@/lib/hooks/use-auth-check';
 import { getSignupErrorMessage } from '@/lib/utils/auth-error.util';
 import { PATH } from '@/constants/path.constants';
+import Loading from '@/app/loading';
 
 /**
  * 회원가입 페이지 컴포넌트
@@ -32,16 +33,7 @@ const SignUpPage = () => {
 
   // 인증 체크 중이면 로딩 화면 표시
   if (isCheckingAuth) {
-    return (
-      <AuthLayout>
-        <div className="flex items-center justify-center p-8">
-          <div className="text-center">
-            <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-blue-500"></div>
-            <p>인증 상태 확인 중...</p>
-          </div>
-        </div>
-      </AuthLayout>
-    );
+    return <Loading />;
   }
 
   // 에러 메시지 처리

@@ -1,8 +1,9 @@
+import { AUTH_PAGE_META } from '@/constants/auth.constants';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: '비밀번호 재설정',
-  description: '새로운 비밀번호를 설정해주세요',
+  title: AUTH_PAGE_META.RESET_PASSWORD.title,
+  description: AUTH_PAGE_META.RESET_PASSWORD.description,
 };
 
 export default function ResetPasswordLayout({

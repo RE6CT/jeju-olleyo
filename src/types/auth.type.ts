@@ -119,6 +119,17 @@ export type UserInfo = {
 };
 
 /**
+ * 인증 API 결과 타입
+ */
+export type AuthResult = {
+  success: boolean;
+  error?: {
+    message: string;
+    status: number;
+  } | null;
+};
+
+/**
  * 인증 상태 관리를 위한 Zustand 스토어 타입
  */
 export type AuthState = {
@@ -135,6 +146,9 @@ export type AuthState = {
   resetError: () => void;
 };
 
+/**
+ * 에러 메시지 컴포넌트의 Props 타입
+ */
 export type AuthErrorMessageProps = {
   messages: string[];
   className?: string;

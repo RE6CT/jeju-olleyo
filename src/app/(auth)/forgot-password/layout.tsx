@@ -1,8 +1,9 @@
+import { AUTH_PAGE_META } from '@/constants/auth.constants';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: '비밀번호 찾기',
-  description: '가입시 입력한 이메일로 비밀번호를 재설정하세요',
+  title: AUTH_PAGE_META.FORGOT_PASSWORD.title,
+  description: AUTH_PAGE_META.FORGOT_PASSWORD.description,
 };
 
 export default function AuthLayout({

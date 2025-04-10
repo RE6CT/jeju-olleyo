@@ -4,6 +4,7 @@ import {
   KOREA_TOUR_APP_NAME,
   KOREA_TOUR_BASE_URL,
 } from '@/constants/korea-tour-api';
+import { DetailIntroRaw } from '@/types/\bkorea-tour.type';
 import { ApiError } from 'next/dist/server/api-utils';
 import { NextResponse, NextRequest } from 'next/server';
 
@@ -41,7 +42,8 @@ export async function GET(req: NextRequest) {
     }
 
     const data = await res.json();
-    const rawData = data?.response?.body?.items?.item?.[0] || {};
+    const rawData: DetailIntroRaw =
+      data?.response?.body?.items?.item?.[0] || {};
 
     let phone = '';
     let openTime = '';

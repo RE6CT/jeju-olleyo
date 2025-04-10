@@ -2,23 +2,15 @@
 
 import PlaceModal from '@/components/features/plan/place-modal';
 import { getBrowserClient } from '@/lib/supabase/client';
+import { DetailIntroRaw } from '@/types/\bkorea-tour.type';
+import { Place } from '@/types/place-modal.type';
 import { useState, useEffect } from 'react';
-
-type Place = {
-  address: string;
-  category: string;
-  content_type_id: number;
-  id: number;
-  image: string | null;
-  lat: number;
-  lng: number;
-  place_id: number;
-  title: string;
-};
 
 const TestPage = () => {
   const [place, setPlace] = useState<Place | null>(null);
-  const [detailInfo, setDetailInfo] = useState<any | null>(null);
+  const [detailInfo, setDetailInfo] = useState<DetailIntroRaw | undefined>(
+    undefined,
+  );
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {

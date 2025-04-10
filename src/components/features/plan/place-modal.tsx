@@ -3,29 +3,7 @@ import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '../../ui/button';
 import { Bookmark } from 'lucide-react';
 import PlaceImage from '@/components/commons/place-image';
-
-type PlaceType = {
-  address: string;
-  category: string;
-  content_type_id: number;
-  id: number;
-  image: string | null;
-  lat: number;
-  lng: number;
-  place_id: number;
-  title: string;
-};
-
-type DetailInfoType = {
-  phone?: string;
-  openTime?: string;
-  closeDay?: string;
-};
-
-type PlaceModalProps = {
-  place: PlaceType;
-  detailInfo?: DetailInfoType;
-};
+import { PlaceModalProps } from '@/types/place-modal.type';
 
 const PlaceModal = ({ place, detailInfo }: PlaceModalProps) => {
   const isHotel = place.content_type_id === 32;

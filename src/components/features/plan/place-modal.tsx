@@ -5,7 +5,7 @@ import { Bookmark } from 'lucide-react';
 import PlaceImage from '@/components/commons/place-image';
 import { PlaceModalProps } from '@/types/place-modal.type';
 import CategoryBadge from '@/components/commons/category-badge';
-import { CategoryBadgeProps } from '@/types/category-badge.type';
+import { CategoryType } from '@/types/category-badge.type';
 
 const PlaceModal = ({ place, detailInfo }: PlaceModalProps) => {
   const isHotel = place.content_type_id === 32;
@@ -35,8 +35,8 @@ const PlaceModal = ({ place, detailInfo }: PlaceModalProps) => {
           <div className="flex items-start justify-between">
             <div>
               <CategoryBadge
-                category={place.category as CategoryBadgeProps['category']}
-                styleType="outline-teal"
+                category={place.category as CategoryType}
+                badgeType="modal"
               />
               <h2 className="mt-2 text-lg font-semibold">{place.title}</h2>
               <p className="text-sm text-muted-foreground">{place.address}</p>

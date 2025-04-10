@@ -14,12 +14,19 @@ import { z } from 'zod';
 import useProviderFromCookie from '@/lib/hooks/use-get-provider';
 import { ERROR_MESSAGES } from '@/constants/mypage.constants';
 
-// TODO - rowLabel에 하드코딩된 width 바꾸기
+// ! label에는 글씨 크기 다르게 적용되는 문제
+// ! input에 rounded-12 적용되지 않는 문제
+// ! placeholder-gray-200도 important 없이는 적용되지 않는 문제
 const PROFILE_INFO_STYLE = {
   imageSize: 88,
-  title: 'my-3 text-lg font-semibold col-span-4 w-full',
-  rowLabel: 'text-md whitespace-nowrap font-normal w-[110px]',
-  rowValue: 'whitespace-nowrap',
+  container:
+    'px-8 py-6 rounded-24 bg-white border-gray-100 border border-gray-100',
+  title: 'semibold-18 col-span-4 w-full',
+  input:
+    'rounded-[12px] border border-gray-200 px-4 py-[10px] !placeholder-gray-200',
+  rowLabel: 'medium-16 text-16 whitespace-nowrap w-[107px] p-[10px]',
+  rowValue: 'whitespace-nowrap medium-16 p-[10px]',
+  button: 'medium-16 bg-transparent text-secondary-300 hover:bg-gray-100',
 };
 
 /** 회원정보 수정 페이지의 프로필 섹션 컴포넌트 */
@@ -84,16 +91,20 @@ const ProfileInfo = ({
   };
 
   return (
-    <div className="m-1 grid grid-cols-[auto_auto_1fr_auto] items-center gap-3">
+    <div
+      className={`m-1 grid grid-cols-[auto_auto_1fr_auto] items-center gap-3 ${PROFILE_INFO_STYLE.container}`}
+    >
       <h3 className={PROFILE_INFO_STYLE.title}>프로필</h3>
-      <div className="relative w-fit">
-        <ProfileImage
-          image={profileImage}
-          width={PROFILE_INFO_STYLE.imageSize}
-          height={PROFILE_INFO_STYLE.imageSize}
-          className="rounded-full"
-        />
-        {provider === 'email' && <ProfileImageButton />}
+      <div className="w-[120px] py-[14px]">
+        <div className="relative w-fit">
+          <ProfileImage
+            image={profileImage}
+            width={PROFILE_INFO_STYLE.imageSize}
+            height={PROFILE_INFO_STYLE.imageSize}
+            className="rounded-full"
+          />
+          {provider === 'email' && <ProfileImageButton />}
+        </div>
       </div>
       <form className="contents" onSubmit={handleSubmit(handleEditComplete)}>
         <Label htmlFor="nickname" className={PROFILE_INFO_STYLE.rowLabel}>
@@ -105,9 +116,10 @@ const ProfileInfo = ({
               id="nickname"
               placeholder={`${nickname}`}
               {...register('nickname')}
+              className={PROFILE_INFO_STYLE.input}
             />
             {errors.nickname && (
-              <p className="absolute m-2 text-sm text-red-500">
+              <p className="regular-14 absolute m-2 text-destructive">
                 {errors.nickname.message}
               </p>
             )}
@@ -119,6 +131,7 @@ const ProfileInfo = ({
           <Button
             type="submit"
             disabled={!isValid || currentNickname === nickname}
+            className={PROFILE_INFO_STYLE.button}
           >
             완료
           </Button>
@@ -127,7 +140,12 @@ const ProfileInfo = ({
             {provider !== 'email' ? (
               <div className="invisible" />
             ) : (
-              <Button onClick={handleEditButtonClick}>수정</Button>
+              <Button
+                className={PROFILE_INFO_STYLE.button}
+                onClick={handleEditButtonClick}
+              >
+                수정
+              </Button>
             )}
           </>
         )}

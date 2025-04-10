@@ -307,7 +307,7 @@ export type Database = {
         Row: {
           created_at: string;
           email: string;
-          nickname: string | null;
+          nickname: string;
           phone: string | null;
           profile_img: string | null;
           user_id: string;
@@ -315,7 +315,7 @@ export type Database = {
         Insert: {
           created_at?: string;
           email: string;
-          nickname?: string | null;
+          nickname?: string;
           phone?: string | null;
           profile_img?: string | null;
           user_id: string;
@@ -323,7 +323,7 @@ export type Database = {
         Update: {
           created_at?: string;
           email?: string;
-          nickname?: string | null;
+          nickname?: string;
           phone?: string | null;
           profile_img?: string | null;
           user_id?: string;

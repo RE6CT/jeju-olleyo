@@ -12,9 +12,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { nicknameSchema } from '@/lib/schemas/auth-schema';
 import { z } from 'zod';
 import useProviderFromCookie from '@/lib/hooks/use-get-provider';
+import { ERROR_MESSAGES } from '@/constants/mypage.constants';
 
 // TODO - rowLabel에 하드코딩된 width 바꾸기
-const RROFILE_INFO_STYLE = {
+const PROFILE_INFO_STYLE = {
   imageSize: 88,
   title: 'my-3 text-lg font-semibold col-span-4 w-full',
   rowLabel: 'text-md whitespace-nowrap font-normal w-[110px]',
@@ -62,7 +63,11 @@ const ProfileInfo = ({
     setIsEditMode(true);
   };
 
-  /** 닉네임 수정 완료 버튼 클릭 핸들러 */
+  /**
+   * 닉네임 수정 폼 제출 핸들러
+   * @param data - 유효성 검사를 통과한 닉네임 데이터
+   * data.nickname: 사용자가 입력한 새 닉네임 값
+   */
   const handleEditComplete = async (data: NicknameValues) => {
     const isConfirmed = confirm('닉네임을 수정하시겠습니까?');
     if (!isConfirmed) return;
@@ -71,7 +76,7 @@ const ProfileInfo = ({
       const result = await fetchUpdateNickname(userId, data.nickname);
       alert(result.message);
     } catch (error: unknown) {
-      alert('닉네임 변경 중 오류가 발생했습니다.');
+      alert(ERROR_MESSAGES.NICKNAME_UPDATE_FAILED);
     } finally {
       setIsEditMode(false);
       reset();
@@ -80,18 +85,18 @@ const ProfileInfo = ({
 
   return (
     <div className="m-1 grid grid-cols-[auto_auto_1fr_auto] items-center gap-3">
-      <h3 className={RROFILE_INFO_STYLE.title}>프로필</h3>
+      <h3 className={PROFILE_INFO_STYLE.title}>프로필</h3>
       <div className="relative w-fit">
         <ProfileImage
           image={profileImage}
-          width={RROFILE_INFO_STYLE.imageSize}
-          height={RROFILE_INFO_STYLE.imageSize}
+          width={PROFILE_INFO_STYLE.imageSize}
+          height={PROFILE_INFO_STYLE.imageSize}
           className="rounded-full"
         />
         {provider === 'email' && <ProfileImageButton />}
       </div>
       <form className="contents" onSubmit={handleSubmit(handleEditComplete)}>
-        <Label htmlFor="nickname" className={RROFILE_INFO_STYLE.rowLabel}>
+        <Label htmlFor="nickname" className={PROFILE_INFO_STYLE.rowLabel}>
           닉네임
         </Label>
         {isEditMode ? (
@@ -108,7 +113,7 @@ const ProfileInfo = ({
             )}
           </div>
         ) : (
-          <span className={RROFILE_INFO_STYLE.rowValue}>{nickname}</span>
+          <span className={PROFILE_INFO_STYLE.rowValue}>{nickname}</span>
         )}
         {isEditMode ? (
           <Button

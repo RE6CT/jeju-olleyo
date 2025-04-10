@@ -1,6 +1,7 @@
 import { createServerClient } from '@supabase/ssr';
 import { type NextRequest, NextResponse } from 'next/server';
 import { PATH } from './constants/path.constants';
+import { AUTH_ROUTES } from './constants/auth.constants';
 
 /**
  * 인증 상태를 확인하고 접근 제어를 수행하는 미들웨어
@@ -23,6 +24,59 @@ export async function middleware(request: NextRequest) {
       headers: request.headers,
     },
   });
+
+  // 알려진 페이지 경로 목록 (존재하는 페이지들)
+  // 여기에 애플리케이션의 모든 유효한 경로를 추가해야 합니다
+  const validPaths = [
+    PATH.HOME,
+    PATH.SIGNIN,
+    PATH.SIGNUP,
+    PATH.MYPLAN,
+    PATH.SEARCH,
+    PATH.SHAREDPLAN,
+    PATH.FORGOT_PASSWORD,
+    PATH.RESET_PASSWORD,
+    PATH.FORGOT_PASSWORD,
+    PATH.RESET_PASSWORD,
+    PATH.CALLBACK,
+    PATH.PLAN_NEW,
+    PATH.ACCOUNT,
+    PATH.BOOKMARKS,
+    PATH.LIKES,
+    PATH.COMMENTS,
+  ];
+
+  // 유효한 경로 패턴을 더 세밀하게 정의
+  // 동적 ID 경로의 경우, 유효한 ID 패턴을 정규식으로 정의
+  // 예: 숫자로만 이루어진 ID만 허용
+  const validPathPatterns = [
+    {
+      PLAN_DETAIL: PATH.PLAN_DETAIL,
+      pattern: /^\/plan-detail\/\d+$/,
+    },
+    // 다른 경로들
+  ];
+
+  // 경로가 유효한지 확인
+  const isValidPath =
+    validPaths.some((path) => {
+      if (path === '/') {
+        return pathname === '/';
+      }
+      return pathname === path;
+    }) ||
+    validPathPatterns.some(({ PLAN_DETAIL, pattern }) => {
+      if (pathname === PLAN_DETAIL) return true;
+      if (pattern && pattern.test(pathname)) return true;
+      return false;
+    });
+
+  // 경로가 유효하지 않으면 Next.js의 not-found로 처리
+  if (!isValidPath) {
+    // 미들웨어에서는 직접 notFound()를 호출할 수 없으므로,
+    // 대신 404 페이지로 리다이렉트하거나 Next.js가 처리하도록 함
+    return NextResponse.rewrite(new URL('/not-found', request.url));
+  }
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -47,21 +101,20 @@ export async function middleware(request: NextRequest) {
     data: { session },
   } = await supabase.auth.getSession();
 
-  // 공개 페이지 목록
-  const publicPages = [
-    PATH.HOME,
-    PATH.SIGNIN,
-    PATH.FORGOT_PASSWORD,
-    PATH.RESET_PASSWORD,
-    PATH.CALLBACK,
-  ];
+  // 공개 페이지 확인 (루트 경로 특별 처리)
+  const isPublicPage = AUTH_ROUTES.PUBLIC_ROUTES.some((page) => {
+    // 루트 경로('/')는 정확히 일치할 때만 true
+    if (page === '/') {
+      return pathname === '/';
+    }
+    // 다른 경로는 startsWith 사용
+    return pathname.startsWith(page);
+  });
 
-  const isPublicPage = publicPages.some((page) => pathname.startsWith(page));
-  const isHomePage = pathname === PATH.HOME;
   const isAuthPage = pathname === PATH.SIGNIN || pathname === PATH.SIGNUP;
 
-  // 인증 체크
-  if (!session && !isPublicPage && !isHomePage) {
+  // 유효한 경로이면서 인증이 필요한 페이지에 로그인 없이 접근 시
+  if (!session && !isPublicPage) {
     // 인증되지 않은 사용자가 보호된 경로에 접근, 로그인 페이지로 리다이렉트
     const url = request.nextUrl.clone();
     url.pathname = PATH.SIGNIN;

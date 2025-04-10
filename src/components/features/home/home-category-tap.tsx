@@ -14,63 +14,27 @@ const CategoryTabs = ({ className }: CategoryTabsProps) => {
   const { activeCategory, navigateToCategory } = useCategoryNavigation();
 
   // 카테고리별 아이콘 매핑
+  const categoryIconMap: Record<string, string> = {
+    전체: 'all',
+    명소: 'toursite',
+    숙박: 'accomodation',
+    맛집: 'restaurant',
+    카페: 'cafe',
+    항공권: 'flight',
+  };
+
   const getCategoryIcon = (category: string) => {
-    switch (category) {
-      case '전체':
-        return (
-          <img
-            src="/icons/all.svg"
-            width={20}
-            height={20}
-            className="h-5 w-5"
-          />
-        );
-      case '명소':
-        return (
-          <img
-            src="/icons/toursite.svg"
-            width={20}
-            height={20}
-            className="h-5 w-5"
-          />
-        );
-      case '숙박':
-        return (
-          <img
-            src="/icons/accomodation.svg"
-            width={20}
-            height={20}
-            className="h-5 w-5"
-          />
-        );
-      case '맛집':
-        return (
-          <img
-            src="/icons/restaurant.svg"
-            width={20}
-            height={20}
-            className="h-5 w-5"
-          />
-        );
-      case '카페':
-        return (
-          <img
-            src="/icons/cafe.svg"
-            width={20}
-            height={20}
-            className="h-5 w-5"
-          />
-        );
-      case '항공권':
-        return (
-          <img
-            src="/icons/flight.svg"
-            width={20}
-            height={20}
-            className="h-5 w-5"
-          />
-        );
-    }
+    const iconName = categoryIconMap[category];
+    if (!iconName) return null;
+
+    return (
+      <img
+        src={`/icons/${iconName}.svg`}
+        width={20}
+        height={20}
+        className="h-5 w-5"
+      />
+    );
   };
 
   return (

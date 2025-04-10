@@ -7,10 +7,10 @@ import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 
 import { NavigationButton } from '@/components/features/home/home-navigation-button';
-import { ProgressIndicator } from '@/components/features/home/home-progress-Indicator';
 import { useCarouselProgress } from '@/lib/hooks/use-carousel-progress';
 import { MAIN_CAROUSEL_OPTIONS } from '@/constants/home.constants';
 import { MainCarouselProps } from '@/types/home.carousel.type';
+import { ProgressIndicator } from './home-progress-indicator';
 
 const MainCarousel = ({ imageList }: MainCarouselProps) => {
   // 호버 상태 관리

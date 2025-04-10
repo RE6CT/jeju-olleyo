@@ -15,7 +15,9 @@ export const fetchGetImagesByMainCarousel = async (): Promise<
   const supabase = getServerClient();
   const { data, error } = await supabase
     .from('main_carousel_images')
-    .select('*');
+    .select('*')
+    .eq('is_active', true)
+    .order('display_order', { ascending: true });
 
   if (error) {
     console.error(

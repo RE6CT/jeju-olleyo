@@ -4,7 +4,7 @@ import { AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AuthErrorMessageProps } from '@/constants/auth.constants';
+import { AuthErrorMessageProps } from '@/types/auth.type';
 
 /**
  * 인증 관련 에러 메시지를 표시하는 컴포넌트

@@ -18,6 +18,7 @@ import useRememberEmail from '@/lib/hooks/use-remember-email';
 import useRedirectParams from '@/lib/hooks/use-redirect-params';
 import { getLoginErrorMessage } from '@/lib/utils/auth-error.util';
 import { PATH } from '@/constants/path.constants';
+import { AUTH_PAGE_META } from '@/constants/auth.constants';
 import Loading from '@/app/loading';
 
 /**
@@ -62,8 +63,8 @@ const LoginPage = () => {
   return (
     <AuthLayout>
       <AuthHeader
-        title="로그인"
-        description="계정 정보를 입력하여 로그인하세요"
+        title={AUTH_PAGE_META.SIGNIN.title}
+        description={AUTH_PAGE_META.SIGNIN.description}
       />
 
       {errorMessages.length > 0 && (

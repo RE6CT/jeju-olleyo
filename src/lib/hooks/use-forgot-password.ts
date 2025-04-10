@@ -3,9 +3,9 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { forgotPasswordSchema } from '@/lib/schemas/auth-schema';
 import { EmailFormValues } from '@/types/auth.type';
-import { resetPassword } from '@/lib/apis/auth/auth-browser.api';
 import { getForgotPasswordErrorMessage } from '@/lib/utils/auth-error.util';
 import useAuthStore from '@/zustand/auth.store';
+import { fetchSendPasswordResetEmail } from '../apis/auth/auth-browser.api';
 
 /**
  * 비밀번호 찾기 기능을 위한 커스텀 훅
@@ -37,7 +37,7 @@ const useForgotPassword = () => {
     resetError(); // 기존 에러 메시지 초기화
 
     try {
-      const result = await resetPassword(data.email);
+      const result = await fetchSendPasswordResetEmail(data.email);
 
       if (result.error) {
         const errorMessages = getForgotPasswordErrorMessage(

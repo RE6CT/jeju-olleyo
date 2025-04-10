@@ -62,8 +62,11 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
 
       // 로그아웃 성공 처리
       setClose();
-      // 명시적으로 로그인 페이지로 리다이렉트
-      router.push(PATH.SIGNIN);
+
+      // 명시적인 페이지 전환 (인증 체크 건너뛰도록 t 파라미터 추가)
+      if (typeof window !== 'undefined') {
+        window.location.href = `${PATH.SIGNIN}?t=${Date.now()}`;
+      }
     } catch (error) {
       console.error('로그아웃 오류:', error);
     } finally {

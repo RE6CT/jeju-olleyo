@@ -1,8 +1,9 @@
-import { PATH } from '@/constants/path.constants';
-import { AuthError, Provider, User } from '@supabase/supabase-js';
+import { STORAGE_KEY, SOCIAL_AUTH } from '@/constants/auth.constants';
+import { User } from '@supabase/supabase-js';
+import { AuthResult, UserInfo } from '@/types/auth.type';
 import { getBrowserClient } from '../../supabase/client';
-import { UserInfo } from '@/types/auth.type';
-import { SOCIAL_AUTH } from '@/constants/auth.constants';
+import { handleError } from '@/lib/utils/handleError';
+import { PATH } from '@/constants/path.constants';
 
 /**
  * 사용자 객체를 UserInfo 타입으로 변환하는 함수
@@ -45,101 +46,124 @@ export const formatUser = (user: User | null): UserInfo | null => {
   }
 
   // 일관된 사용자 객체 반환
-  const formattedUser = {
+  return {
     email: user.email ?? null,
     nickname,
     phone,
     avatar_url: avatarUrl,
   };
-  return formattedUser;
 };
 
 /**
- * 비밀번호 재설정 이메일을 전송하는 함수
+ * 비밀번호 재설정 이메일 전송 서버 액션
  */
-export const resetPassword = async (
+export const fetchSendPasswordResetEmail = async (
   email: string,
-): Promise<{ data: any; error: AuthError | null }> => {
-  const browserClient = await getBrowserClient();
-
-  return browserClient.auth.resetPasswordForEmail(email, {
-    redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}${PATH.RESET_PASSWORD}`,
-  });
-};
-
-/**
- * 비밀번호 재설정 요청을 처리하는 함수
- */
-export const updateUserPassword = async (
-  password: string,
-): Promise<{ error: AuthError | null }> => {
-  const supabase = await getBrowserClient();
-  return supabase.auth.updateUser({ password });
-};
-
-/**
- * 소셜 로그인 함수
- */
-export const socialLogin = async (provider: 'google' | 'kakao') => {
-  const supabase = await getBrowserClient();
-
-  // 현재 URL에서 redirectTo 파라미터 추출
-  let redirectPath = '/';
-  if (typeof window !== 'undefined') {
-    const urlParams = new URLSearchParams(window.location.search);
-    const redirectParam = urlParams.get('redirectTo');
-    if (redirectParam) {
-      redirectPath = redirectParam;
-    }
-  }
-
-  // 리다이렉트 URL 생성
-  const redirectUrl = `${window.location.origin}/auth/callback?redirectTo=${encodeURIComponent(redirectPath)}&provider=${provider}`;
-
-  // 기본 옵션
-  const options = {
-    redirectTo: redirectUrl,
-  };
+): Promise<AuthResult> => {
+  const supabase = getBrowserClient();
 
   try {
-    return await supabase.auth.signInWithOAuth({
-      provider: provider as Provider,
-      options,
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}${PATH.RESET_PASSWORD}`,
     });
+
+    if (error) {
+      return {
+        success: false,
+        error: { message: error.message, status: error.status || 500 },
+      };
+    }
+
+    return { success: true, error: null };
   } catch (error: any) {
-    console.error(`${provider} 로그인 중 오류 발생:`, error);
-    return {
-      data: null,
-      error: {
-        message: error.message || `${provider} 로그인 중 오류가 발생했습니다.`,
-        status: error.status || 500,
-      },
-    };
+    // handleError를 호출한 결과의 error 속성을 AuthResult에 맞게 래핑하여 반환합니다.
+    const handled = handleError('비밀번호 재설정 메일 전송', error);
+    return { success: false, error: handled.error };
   }
 };
 
 /**
- * 현재 세션 정보를 가져오는 함수
+ * 비밀번호 업데이트 서버 액션
+ */
+export const fetchUpdatePassword = async (
+  password: string,
+): Promise<AuthResult> => {
+  const supabase = getBrowserClient();
+
+  try {
+    const { error } = await supabase.auth.updateUser({ password });
+
+    if (error) {
+      return {
+        success: false,
+        error: { message: error.message, status: error.status || 500 },
+      };
+    }
+
+    return { success: true, error: null };
+  } catch (error: any) {
+    const handled = handleError('비밀번호 업데이트', error);
+    return { success: false, error: handled.error };
+  }
+};
+
+/**
+ * 로컬 스토리지에 이메일 저장/삭제 함수
+ * @param email - 저장할 이메일 주소
+ * @param remember - 사용자가 "내 이메일 기억하기"를 선택했는지 여부
+ */
+export const saveEmailToStorage = (email: string, remember: boolean) => {
+  if (typeof window === 'undefined') return;
+
+  try {
+    if (remember) {
+      localStorage.setItem(STORAGE_KEY.SAVED_EMAIL, email);
+      localStorage.setItem(STORAGE_KEY.REMEMBER_EMAIL, 'true');
+    } else {
+      localStorage.removeItem(STORAGE_KEY.SAVED_EMAIL);
+      localStorage.removeItem(STORAGE_KEY.REMEMBER_EMAIL);
+    }
+  } catch (error) {
+    handleError('이메일 저장 또는 삭제', error);
+  }
+};
+
+/**
+ * 로컬 스토리지에서 저장된 이메일 가져오기
+ * @returns 저장된 이메일 주소 또는 null
+ */
+export const getSavedEmailFromStorage = (): string | null => {
+  if (typeof window === 'undefined') return null;
+
+  try {
+    const shouldRemember =
+      localStorage.getItem(STORAGE_KEY.REMEMBER_EMAIL) === 'true';
+    if (!shouldRemember) return null;
+
+    return localStorage.getItem(STORAGE_KEY.SAVED_EMAIL);
+  } catch (error) {
+    handleError('이메일 불러오기', error);
+    return null;
+  }
+};
+
+/**
+ * 현재 세션 정보를 가져오는 함수 (클라이언트)
+ * @returns { session, user, error } 형식의 객체 반환
  */
 export const getCurrentSession = async () => {
   const supabase = await getBrowserClient();
 
   try {
     const { data: sessionData, error } = await supabase.auth.getSession();
-
-    if (error) {
-      throw error;
-    }
+    if (error) throw error;
 
     if (!sessionData.session) {
       return { session: null, user: null };
     }
 
     const { data: userData, error: userError } = await supabase.auth.getUser();
-
-    if (userError) {
-      throw userError;
-    }
+    if (userError) throw userError;
 
     const formattedUser = formatUser(userData.user);
 
@@ -148,103 +172,34 @@ export const getCurrentSession = async () => {
       user: formattedUser,
     };
   } catch (error) {
-    console.error('세션 가져오기 오류:', error);
-    return { session: null, user: null };
+    const { error: formattedError } = handleError('세션 정보 불러오기', error);
+    return { session: null, user: null, error: formattedError };
   }
 };
 
 /**
- * provider 정보를 쿠키에 저장하는 함수
+ * 인증 관련 쿠키 및 스토리지 데이터 정리
  */
-export const setProviderCookie = async (provider: string) => {
+export const clearClientAuthData = () => {
+  if (typeof window === 'undefined') return;
+
   try {
-    await fetch(`/api/set-provider?provider=${provider}`, {
-      method: 'GET',
-      credentials: 'include',
+    // 쿠키 정리
+    const cookiesToClear = [
+      'provider',
+      'sb-access-token',
+      'sb-refresh-token',
+      'supabase-auth-token',
+    ];
+
+    cookiesToClear.forEach((name) => {
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;`;
     });
+
+    // 로컬/세션 스토리지 정리
+    localStorage.removeItem('supabase.auth.token');
+    sessionStorage.removeItem('auth-storage');
   } catch (error) {
-    console.error('쿠키 설정 오류:', error);
-  }
-};
-
-/**
- * 인증 관련 쿠키를 모두 삭제하는 함수
- */
-export const clearAuthCookies = () => {
-  if (typeof document === 'undefined') return;
-
-  // Supabase 관련 쿠키 목록
-  const cookiesToClear = [
-    'provider',
-    'sb-access-token',
-    'sb-refresh-token',
-    'supabase-auth-token',
-    '__client-x-callback',
-    '__supabase_session',
-    'sb-bgznxwfpnvskfzsiisrn-auth-token',
-  ];
-
-  // 쿠키 삭제 (여러 도메인/경로 패턴에 대해 시도)
-  cookiesToClear.forEach((cookieName) => {
-    // 루트 경로
-    document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;`;
-
-    // 루트 경로, SameSite 속성 추가
-    document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; SameSite=Lax;`;
-    document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; SameSite=None; Secure;`;
-
-    // 현재 도메인
-    const domain = window.location.hostname;
-    document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=${domain};`;
-
-    // 최상위 도메인
-    if (domain.indexOf('.') !== -1) {
-      const topDomain = domain.substring(domain.indexOf('.'));
-      document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=${topDomain};`;
-    }
-  });
-};
-
-/**
- * 로그아웃 함수
- */
-export const logoutUser = async () => {
-  const supabase = await getBrowserClient();
-
-  try {
-    // Supabase 로그아웃 (global scope로 모든 디바이스에서 로그아웃)
-    const { error } = await supabase.auth.signOut({ scope: 'global' });
-
-    if (error) {
-      throw error;
-    }
-
-    // 쿠키 삭제
-    clearAuthCookies();
-
-    // 로컬 스토리지/세션 스토리지 정리
-    if (typeof window !== 'undefined') {
-      // Supabase 관련 로컬 스토리지 항목 삭제
-      localStorage.removeItem('supabase.auth.token');
-      localStorage.removeItem('supabase.auth.expires_at');
-
-      // 세션 스토리지 항목 삭제
-      sessionStorage.removeItem('auth-storage');
-
-      // 기타 인증 관련 항목 삭제
-      localStorage.removeItem('sb-bgznxwfpnvskfzsiisrn-auth-token');
-      sessionStorage.removeItem('sb-bgznxwfpnvskfzsiisrn-auth-token');
-    }
-
-    return { success: true, error: null };
-  } catch (error: any) {
-    console.error('로그아웃 중 오류 발생:', error);
-    return {
-      success: false,
-      error: {
-        message: error.message || '로그아웃 중 오류가 발생했습니다.',
-        status: error.status || 500,
-      },
-    };
+    handleError('클라이언트 인증 데이터 정리', error);
   }
 };

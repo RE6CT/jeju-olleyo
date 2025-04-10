@@ -2,7 +2,7 @@
 
 import { cn } from '@/lib/utils';
 import { useCategoryNavigation } from '@/lib/hooks/use-category-navigation';
-import { CategoryTabsProps } from '@/types/home.categoty.type';
+import { CategoryTabsProps } from '@/types/home.category.type';
 import { CATEGORIES } from '@/constants/home.constants';
 
 /**

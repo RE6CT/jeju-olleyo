@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import useProviderFromCookie from '@/lib/hooks/use-get-provider';
 import { useState } from 'react';
 
 // TODO - rowLabel에 하드코딩된 width 바꾸기
@@ -15,8 +16,9 @@ const SECURITY_INFO_STYLE = {
 };
 
 /** 회원정보 수정 페이지의 보안 섹션 컴포넌트 */
-const SecurityInfo = ({ provider }: { provider: string }) => {
+const SecurityInfo = ({ userId }: { userId: string }) => {
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
+  const provider = useProviderFromCookie(userId);
 
   /** 비밀번호 수정 버튼 클릭 핸들러 */
   const handleEditButtonClick = () => {

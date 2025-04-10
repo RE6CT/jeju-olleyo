@@ -244,8 +244,6 @@ export const fetchGetCurrentUser = async () => {
     // 캐시 방지를 위한 옵션 추가
     const { data, error } = await supabase.auth.getUser();
 
-    console.log('서버에서 가져온 데이터', data);
-
     if (error) {
       return {
         user: null,

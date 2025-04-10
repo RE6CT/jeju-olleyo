@@ -5,7 +5,6 @@ import { Suspense } from 'react';
 import Loading from '@/app/loading';
 import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 
-// TODO - 이메일 없을 경우 하드코딩 제거
 const AccountPage = async () => {
   const { user } = await fetchGetCurrentUser();
 
@@ -16,12 +15,12 @@ const AccountPage = async () => {
       <Suspense fallback={<Loading />}>
         <h2 className="w-full text-2xl">회원정보 수정</h2>
         <ProfileInfo
+          userId={user.id}
           nickname={user.nickname}
           profileImage={user.avatar_url}
-          provider={user.provider}
         />
         <PersonalInfo email={user.email ?? '이메일 없음'} phone={user.phone} />
-        <SecurityInfo provider={user.provider} />
+        <SecurityInfo userId={user.id} />
       </Suspense>
     </div>
   );

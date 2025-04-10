@@ -36,7 +36,7 @@ const passwordSchema = z
 /**
  * 닉네임 유효성 검사를 위한 스키마
  */
-const nicknameSchema = z
+export const nicknameSchema = z
   .string()
   .min(1, { message: ERROR_MESSAGES.REQUIRED_NICKNAME })
   .min(VALIDATION_RULES.NICKNAME.MIN, {

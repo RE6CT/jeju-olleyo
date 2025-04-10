@@ -6,6 +6,12 @@ import ProfileImageButton from './account-profile-image-button';
 import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { fetchUpdateNickname } from '@/lib/apis/profile/update-profile.api';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { nicknameSchema } from '@/lib/schemas/auth-schema';
+import { z } from 'zod';
+import useProviderFromCookie from '@/lib/hooks/use-get-provider';
 
 // TODO - rowLabel에 하드코딩된 width 바꾸기
 const RROFILE_INFO_STYLE = {
@@ -17,28 +23,59 @@ const RROFILE_INFO_STYLE = {
 
 /** 회원정보 수정 페이지의 프로필 섹션 컴포넌트 */
 const ProfileInfo = ({
+  userId,
   nickname,
   profileImage,
-  provider,
 }: {
+  userId: string;
   nickname: string;
   profileImage: string;
-  provider: string;
 }) => {
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
+  const provider = useProviderFromCookie(userId);
 
-  /** 프로필/닉네임 수정 버튼 클릭 핸들러 */
+  const formSchema = z.object({
+    nickname: nicknameSchema,
+  });
+
+  type NicknameValues = z.infer<typeof formSchema>;
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+    watch,
+    reset,
+  } = useForm<NicknameValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      nickname: '',
+    },
+    mode: 'onChange',
+  });
+
+  // nickname 필드의 현재 값 감시
+  const currentNickname = watch('nickname');
+
+  /** 닉네임 수정 버튼 클릭 핸들러 */
   const handleEditButtonClick = () => {
     setIsEditMode(true);
   };
 
-  /** 프로필/닉네임 수정 완료 버튼 클릭 핸들러  */
-  const handleEditCompleteButtonClick = () => {
-    const isConfirmed = confirm('프로필 이미지 및 닉네임을 수정하시겠습니까?');
+  /** 닉네임 수정 완료 버튼 클릭 핸들러 */
+  const handleEditComplete = async (data: NicknameValues) => {
+    const isConfirmed = confirm('닉네임을 수정하시겠습니까?');
     if (!isConfirmed) return;
-    // 프로필 이미지 수정 로직
-    // 닉네임 수정 로직
-    setIsEditMode(false);
+
+    try {
+      const result = await fetchUpdateNickname(userId, data.nickname);
+      alert(result.message);
+    } catch (error: unknown) {
+      alert('닉네임 변경 중 오류가 발생했습니다.');
+    } finally {
+      setIsEditMode(false);
+      reset();
+    }
   };
 
   return (
@@ -53,25 +90,43 @@ const ProfileInfo = ({
         />
         {provider === 'email' && <ProfileImageButton />}
       </div>
-      <Label htmlFor="nickname" className={RROFILE_INFO_STYLE.rowLabel}>
-        닉네임
-      </Label>
-      {isEditMode ? (
-        <Input id="nickname" placeholder={`${nickname}`} />
-      ) : (
-        <span className={RROFILE_INFO_STYLE.rowValue}>{nickname}</span>
-      )}
-      {isEditMode ? (
-        <Button onClick={handleEditCompleteButtonClick}>완료</Button>
-      ) : (
-        <>
-          {provider !== 'email' ? (
-            <div className="invisible" />
-          ) : (
-            <Button onClick={handleEditButtonClick}>수정</Button>
-          )}
-        </>
-      )}
+      <form className="contents" onSubmit={handleSubmit(handleEditComplete)}>
+        <Label htmlFor="nickname" className={RROFILE_INFO_STYLE.rowLabel}>
+          닉네임
+        </Label>
+        {isEditMode ? (
+          <div className="relative">
+            <Input
+              id="nickname"
+              placeholder={`${nickname}`}
+              {...register('nickname')}
+            />
+            {errors.nickname && (
+              <p className="absolute m-2 text-sm text-red-500">
+                {errors.nickname.message}
+              </p>
+            )}
+          </div>
+        ) : (
+          <span className={RROFILE_INFO_STYLE.rowValue}>{nickname}</span>
+        )}
+        {isEditMode ? (
+          <Button
+            type="submit"
+            disabled={!isValid || currentNickname === nickname}
+          >
+            완료
+          </Button>
+        ) : (
+          <>
+            {provider !== 'email' ? (
+              <div className="invisible" />
+            ) : (
+              <Button onClick={handleEditButtonClick}>수정</Button>
+            )}
+          </>
+        )}
+      </form>
     </div>
   );
 };

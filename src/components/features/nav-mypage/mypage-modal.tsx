@@ -4,11 +4,14 @@ import Image from 'next/image';
 import { Button } from '../../ui/button';
 import { Separator } from '../../ui/separator';
 import { MouseEvent, useState, useEffect } from 'react';
-import { ModalPath, MypageModalProps } from '@/types/mypage.type';
+import { MypageModalProps } from '@/types/mypage.type';
 import ProfileImage from '@/components/commons/profile-image';
 import { useRouter } from 'next/navigation';
 import useAuth from '@/lib/hooks/use-auth';
 import { getCurrentSession } from '@/lib/apis/auth/auth-browser.api';
+import { PATH } from '@/constants/path.constants';
+import { SOCIAL_AUTH } from '@/constants/auth.constants';
+import { MYPAGE_PROVIER_IMAGE_SIZE } from '@/constants/header.constants';
 
 /**
  * nav의 마이페이지 버튼 클릭 시 나타나는 모달 컴포넌트
@@ -60,7 +63,7 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
       // 로그아웃 성공 처리
       setClose();
       // 명시적으로 로그인 페이지로 리다이렉트
-      router.push('/sign-in');
+      router.push(PATH.SIGNIN);
     } catch (error) {
       console.error('로그아웃 오류:', error);
     } finally {
@@ -94,7 +97,7 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
   return (
     <div
       ref={modalRef}
-      className="absolute right-10 top-16 flex flex-col gap-3 rounded-lg border bg-white p-4 text-black shadow-lg"
+      className="absolute right-10 top-16 z-50 flex flex-col gap-3 rounded-lg border bg-white p-4 text-black shadow-lg"
     >
       <section
         onClick={() => onLinkClick('account')}
@@ -112,26 +115,34 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
             </h3>
             {localUser && cookieProvider && (
               <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs">
-                {cookieProvider === 'google'
-                  ? '구글'
-                  : cookieProvider === 'kakao'
-                    ? '카카오'
-                    : cookieProvider === 'email'
-                      ? '이메일'
-                      : localUser.provider}
+                {cookieProvider === SOCIAL_AUTH.PROVIDERS.GOOGLE ? (
+                  <Image
+                    src="/images/google_mypage.png"
+                    alt="google"
+                    width={MYPAGE_PROVIER_IMAGE_SIZE}
+                    height={MYPAGE_PROVIER_IMAGE_SIZE}
+                  />
+                ) : cookieProvider === SOCIAL_AUTH.PROVIDERS.KAKAO ? (
+                  <Image
+                    width={MYPAGE_PROVIER_IMAGE_SIZE}
+                    height={MYPAGE_PROVIER_IMAGE_SIZE}
+                    src="/images/kakaotalk_mypage.png"
+                    alt="kakao"
+                  />
+                ) : cookieProvider === 'email' ? (
+                  <Image
+                    width={MYPAGE_PROVIER_IMAGE_SIZE}
+                    height={MYPAGE_PROVIER_IMAGE_SIZE}
+                    src="/images/mail_mypage.png"
+                    alt="email"
+                  />
+                ) : (
+                  'email'
+                )}
               </span>
             )}
           </div>
           <p className="text-sm text-gray-500">{userInfo.email}</p>
-          <Button
-            onClick={(e) => handleSignout(e)}
-            variant="outline"
-            size="sm"
-            className="mt-1"
-            disabled={isLoggingOut || isLoading || !localUser}
-          >
-            {isLoggingOut ? '로그아웃 중...' : '로그아웃'}
-          </Button>
         </div>
       </section>
       <Separator />
@@ -190,6 +201,16 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
               항공권 예약 내역
             </span>
           </section>
+          <Separator />
+          <Button
+            onClick={(e) => handleSignout(e)}
+            variant="outline"
+            size="sm"
+            className="mt-1"
+            disabled={isLoggingOut || isLoading || !localUser}
+          >
+            {isLoggingOut ? '로그아웃 중...' : '로그아웃'}
+          </Button>
         </>
       ) : (
         <section className="py-2 text-center">
@@ -197,7 +218,7 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
           <Button
             onClick={() => {
               setClose();
-              router.push('/sign-in');
+              router.push(PATH.SIGNIN);
             }}
             className="w-full"
           >

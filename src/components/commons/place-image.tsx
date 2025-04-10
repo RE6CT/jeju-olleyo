@@ -1,4 +1,4 @@
-import { getImageWithFallback } from '@/lib/utils/get-image-with-fallback';
+import { getPlaceImageWithFallback } from '@/lib/utils/get-image-with-fallback';
 import { PlaceImageProps } from '@/types/common.type';
 import Image from 'next/image';
 
@@ -10,15 +10,15 @@ import Image from 'next/image';
  * - 반응형 고려하여 높이와 너비를 받지 않고 fill로 설정하였습니다.
  *
  * @example
- *
+ * <PlaceImage image={place.image} title={place.title} />
  */
 const PlaceImage = ({ image, className, title, ...props }: PlaceImageProps) => {
   // null 여부 판단해서 디폴트 이미지 추가
-  const profileImage = getImageWithFallback(image);
+  const placeImage = getPlaceImageWithFallback(image);
 
   return (
     <Image
-      src={profileImage}
+      src={placeImage}
       alt={title}
       fill
       className={`object-cover ${className}`}

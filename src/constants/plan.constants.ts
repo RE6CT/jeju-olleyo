@@ -9,3 +9,14 @@ export const PUBLIC_OPTIONS = {
   PUBLIC: '공개',
   PRIVATE: '비공개',
 } as const;
+
+export const TEXT = {
+  noImage: '이미지 없음',
+  noDescription: '설명이 없습니다.',
+  noDate: '날짜 미정',
+  dateSeparator: '-',
+  edit: '수정',
+  delete: '삭제',
+} as const;
+
+export const ITEMS_PER_PAGE = 10; // 페이지당 표시할 일정 수

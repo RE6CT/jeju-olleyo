@@ -15,15 +15,18 @@ const PlanHeader = ({
   endDate,
   setStartDate,
   setEndDate,
+  isCalendarOpen,
+  setIsCalendarOpen,
 }: {
   startDate: Date | null;
   endDate: Date | null;
   setStartDate: (date: Date | null) => void;
   setEndDate: (date: Date | null) => void;
+  isCalendarOpen: boolean;
+  setIsCalendarOpen: (isCalendarOpen: boolean) => void;
 }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   const handleDateChange = (dates: [Date | null, Date | null]) => {
     const [start, end] = dates;

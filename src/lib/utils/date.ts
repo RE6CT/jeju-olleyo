@@ -78,3 +78,31 @@ export const calculateTotalDays = (
   const diffTime = endDate.getTime() - startDate.getTime();
   return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
 };
+
+/**
+ * 날짜를 YYYY.MM.DD (요일) 형식으로 포맷팅하는 함수
+ * @param date - 포맷팅할 날짜
+ * @returns 포맷팅된 날짜 문자열
+ */
+export const formatDateWithKoreanDay = (date: Date): string => {
+  const KOREAN_DAYS = ['일', '월', '화', '수', '목', '금', '토'];
+  const dayOfWeek = KOREAN_DAYS[date.getDay()];
+  return dayjs(date).format('YYYY.MM.DD') + ` (${dayOfWeek})`;
+};
+
+/**
+ * 시작일로부터 특정 일차의 날짜를 계산하고 포맷팅하는 함수
+ * @param startDate - 시작 날짜
+ * @param dayIndex - 일차 (1부터 시작)
+ * @returns 포맷팅된 날짜 문자열 또는 null
+ */
+export const formatDayDate = (
+  startDate: Date | null,
+  dayIndex: number,
+): string | null => {
+  if (!startDate) return null;
+  const date = dayjs(startDate)
+    .add(dayIndex - 1, 'day')
+    .toDate();
+  return formatDateWithKoreanDay(date);
+};

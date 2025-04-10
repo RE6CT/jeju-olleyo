@@ -34,6 +34,30 @@ const passwordSchema = z
   });
 
 /**
+ * 닉네임 유효성 검사를 위한 스키마
+ */
+const nicknameSchema = z
+  .string()
+  .min(1, { message: ERROR_MESSAGES.REQUIRED_NICKNAME })
+  .min(VALIDATION_RULES.NICKNAME.MIN, {
+    message: ERROR_MESSAGES.MIN_NICKNAME_LENGTH,
+  })
+  .max(VALIDATION_RULES.NICKNAME.MAX, {
+    message: ERROR_MESSAGES.MAX_NICKNAME_LENGTH,
+  });
+
+/**
+ * 전화번호 유효성 검사를 위한 스키마
+ */
+const phoneSchema = z
+  .string()
+  .min(1, { message: ERROR_MESSAGES.REQUIRED_PHONE })
+  .transform((val) => val.replace(/\D/g, ''))
+  .refine((val) => VALIDATION_RULES.PHONE_REGEX.test(val), {
+    message: ERROR_MESSAGES.INVALID_PHONE,
+  });
+
+/**
  * 로그인 폼 검증 스키마
  */
 export const loginSchema = z.object({
@@ -56,32 +80,20 @@ export const registerSchema = z
     ),
     password: passwordSchema,
     confirmPassword: z.string(),
-    nickname: z
-      .string()
-      .min(1, { message: ERROR_MESSAGES.REQUIRED_NICKNAME })
-      .min(2, { message: ERROR_MESSAGES.MIN_NICKNAME_LENGTH })
-      .max(10, { message: ERROR_MESSAGES.MAX_NICKNAME_LENGTH })
-      .refine(
-        async (nickname) => {
-          const exists = await checkNickNameExists(nickname);
-          return !exists;
-        },
-        { message: ERROR_MESSAGES.NICKNAME_EXISTS },
-      ),
-    phone: z
-      .string()
-      .min(1, { message: ERROR_MESSAGES.REQUIRED_PHONE })
-      .transform((val) => val.replace(/\D/g, ''))
-      .refine((val) => /^010\d{8}$/.test(val), {
-        message: ERROR_MESSAGES.INVALID_PHONE,
-      })
-      .refine(
-        async (phone) => {
-          const exists = await checkPhoneExists(phone);
-          return !exists;
-        },
-        { message: ERROR_MESSAGES.PHONE_EXISTS },
-      ),
+    nickname: nicknameSchema.refine(
+      async (nickname) => {
+        const exists = await checkNickNameExists(nickname);
+        return !exists;
+      },
+      { message: ERROR_MESSAGES.NICKNAME_EXISTS },
+    ),
+    phone: phoneSchema.refine(
+      async (phone) => {
+        const exists = await checkPhoneExists(phone);
+        return !exists;
+      },
+      { message: ERROR_MESSAGES.PHONE_EXISTS },
+    ),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: ERROR_MESSAGES.PASSWORD_MISMATCH,

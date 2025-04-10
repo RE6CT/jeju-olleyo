@@ -1,8 +1,9 @@
+import { AUTH_PAGE_META } from '@/constants/auth.constants';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: '회원가입',
-  description: '이용정보를 입력하여 회원가입하세요',
+  title: AUTH_PAGE_META.SIGNUP.title,
+  description: AUTH_PAGE_META.SIGNUP.description,
 };
 
 export default function AuthLayout({

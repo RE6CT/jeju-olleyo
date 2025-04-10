@@ -18,6 +18,7 @@ import useRememberEmail from '@/lib/hooks/use-remember-email';
 import useRedirectParams from '@/lib/hooks/use-redirect-params';
 import { getLoginErrorMessage } from '@/lib/utils/auth-error.util';
 import { PATH } from '@/constants/path.constants';
+import Loading from '@/app/loading';
 
 /**
  * 로그인 페이지 컴포넌트
@@ -52,16 +53,7 @@ const LoginPage = () => {
 
   // 로딩 중이거나 이미 로그인된 경우 로딩 표시
   if (isCheckingAuth && isAuthenticated) {
-    return (
-      <AuthLayout>
-        <div className="flex items-center justify-center p-8">
-          <div className="text-center">
-            <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-blue-500"></div>
-            <p>이미 로그인되어 있습니다.</p>
-          </div>
-        </div>
-      </AuthLayout>
-    );
+    return <Loading />;
   }
 
   // 에러 메시지 처리

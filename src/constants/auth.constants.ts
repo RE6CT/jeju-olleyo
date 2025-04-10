@@ -20,6 +20,7 @@ export const ERROR_MESSAGES = {
   PASSWORD_MISMATCH: '비밀번호가 일치하지 않습니다.',
   PASSWORD_REQUIREMENTS_ERROR: '비밀번호가 보안 요구사항을 충족하지 않습니다.',
   PASSWORD_RESET_LINK_EXPIRED_ERROR: '비밀번호 재설정 링크가 만료되었습니다.',
+  PASSWORD_SAME_AS_OLD: '이전과 동일한 비밀번호는 사용할 수 없습니다.',
 
   // 닉네임 관련
   REQUIRED_NICKNAME: '닉네임을 입력해주세요.',
@@ -38,6 +39,58 @@ export const ERROR_MESSAGES = {
   TOO_MANY_REQUESTS: '요청이 너무 많습니다. 잠시 후 다시 시도해주세요.',
   SESSION_EXPIRED: '세션이 만료되었습니다. 다시 로그인해주세요.',
   INVALID_EMAIL_OR_PASSWORD_ERROR: '이메일 또는 비밀번호가 올바르지 않습니다.',
+};
+
+/**
+ * 인증 페이지 메타데이터
+ */
+export const AUTH_PAGE_META = {
+  SIGNIN: {
+    title: '로그인',
+    description: '계정 정보를 입력하여 로그인하세요',
+  },
+  SIGNUP: {
+    title: '회원가입',
+    description: '이용정보를 입력하여 회원가입하세요',
+  },
+  FORGOT_PASSWORD: {
+    title: '비밀번호 찾기',
+    description: '가입시 입력한 이메일로 비밀번호를 재설정하세요',
+  },
+  RESET_PASSWORD: {
+    title: '비밀번호 재설정',
+    description: '새로운 비밀번호를 설정해주세요',
+  },
+};
+
+/**
+ * 폼 버튼 텍스트
+ */
+export const AUTH_BUTTON_TEXT = {
+  LOGIN: {
+    DEFAULT: '로그인',
+  },
+  REGISTER: {
+    DEFAULT: '회원가입',
+  },
+  FORGOT_PASSWORD: {
+    DEFAULT: '비밀번호 재설정 링크 받기',
+    COMPLETE: '메일 발송 완료!',
+  },
+  RESET_PASSWORD: {
+    DEFAULT: '비밀번호 변경하기',
+  },
+  SOCIAL: {
+    GOOGLE: {
+      DEFAULT: '구글 로그인',
+      LOADING: '구글 로그인 중...',
+    },
+    KAKAO: {
+      DEFAULT: '카카오 로그인',
+      LOADING: '카카오 로그인 중...',
+    },
+  },
+  LOADING: '처리 중...',
 };
 
 /**
@@ -115,5 +168,30 @@ export const VALIDATION_RULES = {
   PASSWORD: {
     NO: 1,
     MIN: 8,
+  },
+};
+
+/**
+ * 폼 기본값 상수
+ */
+export const DEFAULT_FORM_VALUES = {
+  LOGIN: {
+    email: '',
+    password: '',
+    remember: false,
+  },
+  REGISTER: {
+    email: '',
+    password: '',
+    confirmPassword: '',
+    nickname: '',
+    phone: '',
+  },
+  FORGOT_PASSWORD: {
+    email: '',
+  },
+  RESET_PASSWORD: {
+    password: '',
+    confirmPassword: '',
   },
 };

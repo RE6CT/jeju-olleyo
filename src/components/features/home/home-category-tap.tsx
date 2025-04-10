@@ -19,7 +19,7 @@ const CategoryTabs = ({ className }: CategoryTabsProps) => {
       case '전체':
         return (
           <img
-            src="/images/category_all.svg"
+            src="/icons/all.svg"
             width={20}
             height={20}
             className="h-5 w-5"
@@ -28,7 +28,7 @@ const CategoryTabs = ({ className }: CategoryTabsProps) => {
       case '명소':
         return (
           <img
-            src="/images/category_attractions.svg"
+            src="/public/icons/toursite.svg"
             width={20}
             height={20}
             className="h-5 w-5"
@@ -37,7 +37,7 @@ const CategoryTabs = ({ className }: CategoryTabsProps) => {
       case '숙박':
         return (
           <img
-            src="/images/category_accommodation.svg"
+            src="/icons/accomodation.svg"
             width={20}
             height={20}
             className="h-5 w-5"
@@ -46,7 +46,7 @@ const CategoryTabs = ({ className }: CategoryTabsProps) => {
       case '맛집':
         return (
           <img
-            src="/images/category_restaurant.svg"
+            src="/icons/restaurant.svg"
             width={20}
             height={20}
             className="h-5 w-5"
@@ -55,7 +55,7 @@ const CategoryTabs = ({ className }: CategoryTabsProps) => {
       case '카페':
         return (
           <img
-            src="/images/category_cafe.svg"
+            src="/icons/cafe.svg"
             width={20}
             height={20}
             className="h-5 w-5"
@@ -64,7 +64,7 @@ const CategoryTabs = ({ className }: CategoryTabsProps) => {
       case '항공권':
         return (
           <img
-            src="/images/category_air.svg"
+            src="/icons/flight.svg"
             width={20}
             height={20}
             className="h-5 w-5"

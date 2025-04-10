@@ -13,11 +13,11 @@ type TabType = '전체보기' | number;
 // #182126 색상이 --Gray-900이 될 예정
 // #E7EDF0 색상이 --Gray-100이 될 예정
 const BASE_TAB_STYLE =
-  'flex items-center justify-center gap-[10px] rounded-[28px] border px-5 py-2 text-sm font-medium transition-colors';
+  'flex items-center justify-center gap-[10px] rounded-[28px] border px-5 py-2 text-14 font-medium transition-colors';
 const ACTIVE_TAB_STYLE =
-  'border-[#F60] bg-[#FFE0CC] text-[#F60] hover:bg-[#FFE0CC] hover:text-[#F60]';
+  'border-primary-500 bg-primary-100 text-primary-500 hover:bg-primary-100 hover:text-primary-500';
 const INACTIVE_TAB_STYLE =
-  'border-[0.6px] border-[#537384] bg-white text-[#182126] hover:bg-[#E7EDF0] hover:text-[#182126]';
+  'border-[0.6px] border-gray-600 bg-white text-gray-900 hover:bg-gray-100 hover:text-gray-900';
 
 const PlanSchedule = ({
   startDate,
@@ -58,7 +58,7 @@ const PlanSchedule = ({
         ))}
         <Button
           variant="outline"
-          className="rounded-full border-[#C7D5DC] px-4 py-2 text-sm font-medium"
+          className="rounded-full border-gray-200 px-4 py-2 text-14 font-medium"
         >
           +
         </Button>
@@ -75,22 +75,26 @@ const PlanSchedule = ({
                 {Array.from({ length: dayCount }, (_, i) => i + 1).map(
                   (day) => (
                     <div key={day}>
-                      <div className="mb-4 flex items-center justify-between border-b border-[#E7EDF0] pb-4">
+                      <div className="mb-4 flex items-center justify-between border-b border-gray-100 pb-4">
                         <div className="flex items-center gap-2">
-                          <span className="text-lg font-bold text-[#182126]">
+                          <span className="text-18 font-bold text-gray-900">
                             DAY {day}
                           </span>
-                          <span className="text-sm text-[#537384]">
+                          <span className="text-14 text-gray-600">
                             {formatDayDate(startDate, day)}
                           </span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className="text-sm text-[#537384]">복사</span>
-                          <span className="text-sm text-[#537384]">삭제</span>
+                          <button className="text-14 font-medium text-gray-600 hover:text-gray-900">
+                            복사
+                          </button>
+                          <button className="text-14 font-medium text-gray-600 hover:text-gray-900">
+                            삭제
+                          </button>
                         </div>
                       </div>
                       {/* 여기에 장소 카드 컴포넌트들이 들어갈 예정 */}
-                      <div className="flex items-center justify-center rounded-[12px] border border-dashed border-[#C7D5DC] py-4 text-sm text-[#A7BDC8]">
+                      <div className="flex items-center justify-center rounded-[12px] border border-dashed border-gray-200 py-4 text-14 text-gray-300">
                         + 장소 추가하기
                       </div>
                     </div>
@@ -100,28 +104,32 @@ const PlanSchedule = ({
             ) : (
               // 특정 일자 탭에서는 해당 일자의 일정만 보여줌
               <div>
-                <div className="mb-4 flex items-center justify-between border-b border-[#E7EDF0] pb-4">
+                <div className="mb-4 flex items-center justify-between border-b border-gray-100 pb-4">
                   <div className="flex items-center gap-2">
-                    <span className="text-lg font-bold text-[#182126]">
+                    <span className="text-18 font-bold text-gray-900">
                       DAY {activeTab}
                     </span>
-                    <span className="text-sm text-[#537384]">
+                    <span className="text-14 text-gray-600">
                       {formatDayDate(startDate, activeTab as number)}
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm text-[#537384]">복사</span>
-                    <span className="text-sm text-[#537384]">삭제</span>
+                    <button className="text-14 font-medium text-gray-600 hover:text-gray-900">
+                      복사
+                    </button>
+                    <button className="text-14 font-medium text-gray-600 hover:text-gray-900">
+                      삭제
+                    </button>
                   </div>
                 </div>
                 {/* 여기에 장소 카드 컴포넌트들이 들어갈 예정 */}
-                <div className="flex items-center justify-center rounded-[12px] border border-dashed border-[#C7D5DC] py-4 text-sm text-[#A7BDC8]">
+                <div className="flex items-center justify-center rounded-[12px] border border-dashed border-gray-200 py-4 text-14 text-gray-300">
                   + 장소 추가하기
                 </div>
               </div>
             )
           ) : (
-            <div className="flex items-center justify-center rounded-[12px] border border-dashed border-[#C7D5DC] py-4 text-sm text-[#A7BDC8]">
+            <div className="flex items-center justify-center rounded-[12px] border border-dashed border-gray-200 py-4 text-14 text-gray-300">
               여행 기간을 선택해 주세요
             </div>
           )}
@@ -130,37 +138,37 @@ const PlanSchedule = ({
         {/* 사이드바 영역 */}
         <div className="flex w-[320px] flex-col gap-6">
           {/* 북마크한 장소 */}
-          <div className="rounded-[12px] border border-[#C7D5DC] p-5">
+          <div className="rounded-[12px] border border-gray-200 p-5">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-bold text-[#182126]">
+              <span className="text-14 font-bold text-gray-900">
                 내가 북마크한 장소
               </span>
               <Button
                 variant="ghost"
-                className="h-auto p-0 text-sm font-medium text-[#537384] hover:bg-transparent hover:text-[#182126]"
+                className="h-auto p-0 text-14 font-medium text-gray-600 hover:bg-transparent hover:text-gray-900"
               >
                 더보기
               </Button>
             </div>
-            <div className="mt-4 flex items-center justify-center rounded-[8px] border border-dashed border-[#C7D5DC] py-4 text-sm text-[#A7BDC8]">
+            <div className="mt-4 flex items-center justify-center rounded-[8px] border border-dashed border-gray-200 py-4 text-14 text-gray-300">
               장소를 검색해 주세요
             </div>
           </div>
 
           {/* 추천 장소 */}
-          <div className="rounded-[12px] border border-[#C7D5DC] p-5">
+          <div className="rounded-[12px] border border-gray-200 p-5">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-bold text-[#182126]">
+              <span className="text-14 font-bold text-gray-900">
                 이런 장소는 어떠세요?
               </span>
               <Button
                 variant="ghost"
-                className="h-auto p-0 text-sm font-medium text-[#537384] hover:bg-transparent hover:text-[#182126]"
+                className="h-auto p-0 text-14 font-medium text-gray-600 hover:bg-transparent hover:text-gray-900"
               >
                 더보기
               </Button>
             </div>
-            <div className="mt-4 flex items-center justify-center rounded-[8px] border border-dashed border-[#C7D5DC] py-4 text-sm text-[#A7BDC8]">
+            <div className="mt-4 flex items-center justify-center rounded-[8px] border border-dashed border-gray-200 py-4 text-14 text-gray-300">
               장소를 검색해 주세요
             </div>
           </div>

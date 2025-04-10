@@ -40,7 +40,7 @@ const TextareaWithCount = forwardRef<
         ref={ref}
         value={value}
         maxLength={maxLength}
-        className={cn('pr-12', className)} // 글자 수 표시 공간 확보
+        className={cn('pr-16', className)} // 글자 수 표시 공간 확보, 외부에서 padding right 방향 속성 주면 이상해짐
         {...props}
       />
 

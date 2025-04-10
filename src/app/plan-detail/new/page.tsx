@@ -2,13 +2,13 @@
 
 import { useState } from 'react';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { ko } from 'date-fns/locale';
 import { formatTravelPeriod } from '@/lib/utils/date';
 import { Label } from '@/components/ui/label';
+import TextareaWithCount from '@/components/ui/textarea-with-count';
 
 const PlanDetailNewPage = () => {
   const [title, setTitle] = useState('');
@@ -42,9 +42,10 @@ const PlanDetailNewPage = () => {
             {/* 썸네일 업로드 영역 */}
             {/* #C7D5DC 색상이 --Gray-200이 될 예정 */}
             {/* #A7BDC8 색상이 --Gray-300이 될 예정 */}
+            {/* #F9FAFB 색상이 --Gray-50이 될 예정 */}
             <Label
               htmlFor="thumbnail"
-              className="flex w-[252px] cursor-pointer flex-col items-center gap-3 rounded-xl border border-solid border-[#C7D5DC] px-[58px] py-7"
+              className="flex w-[252px] cursor-pointer flex-col items-center gap-3 rounded-[12px] border border-solid border-[#C7D5DC] px-[58px] py-7"
             >
               <Input
                 type="file"
@@ -70,26 +71,31 @@ const PlanDetailNewPage = () => {
             </Label>
 
             {/* 입력 영역 */}
-            <div className="flex h-[160px] flex-1 flex-col items-start gap-7 rounded-xl border border-solid border-[#C7D5DC] p-5">
+            <div className="flex h-[160px] flex-1 flex-col items-start gap-7 rounded-[12px] border border-solid border-[#C7D5DC]">
               {/* TODO: 입력 아이콘 추가 예정 */}
-              <Input
-                type="text"
-                maxLength={50}
-                placeholder="나만의 일정을 제목을 지어주세요"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="h-10 w-full border-0 bg-transparent text-sm focus-visible:ring-0 focus-visible:ring-offset-0"
-              />
+              <div className="w-full">
+                <TextareaWithCount
+                  maxLength={50}
+                  placeholder="나만의 일정을 제목을 지어주세요"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  className="w-full resize-none border-0 bg-transparent px-5 pt-5 text-sm focus-visible:ring-0 focus-visible:ring-offset-0"
+                />
+              </div>
 
-              <div className="relative">
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="h-10 w-full justify-start border-transparent px-3 text-left text-sm font-normal"
-                  onClick={() => setIsCalendarOpen(!isCalendarOpen)}
-                >
-                  {formatTravelPeriod(startDate, endDate)}
-                </Button>
+              <div className="relative w-full">
+                <div className="flex items-center gap-7 px-5 pb-5 text-sm">
+                  <span className="text-gray-500">여행 기간</span>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="h-7 w-fit justify-start border-transparent bg-[#F9FAFB] px-5 py-1 text-left text-sm font-normal hover:bg-[#E7EDF0]"
+                    onClick={() => setIsCalendarOpen(!isCalendarOpen)}
+                  >
+                    {formatTravelPeriod(startDate, endDate)}
+                  </Button>
+                </div>
+                {/* TODO: zIndex 속성 하드코딩이 되어 있음 */}
                 {isCalendarOpen && (
                   <div className="absolute left-0 top-full z-10 mt-1">
                     <DatePicker
@@ -109,13 +115,14 @@ const PlanDetailNewPage = () => {
           </div>
 
           {/* 일정 설명 입력 */}
-          <div className="mt-4">
+          <div className="mt-4 h-[160px]">
             {/* TODO: 입력 아이콘 추가 예정 */}
-            <Textarea
+            <TextareaWithCount
               placeholder="특별히 적어 두고 싶은 메모를 입력하세요"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="min-h-[100px] resize-none border-gray-300 text-sm"
+              maxLength={500}
+              className="h-full w-full resize-none rounded-[12px] border-[#C7D5DC] p-5 text-sm"
             />
           </div>
         </div>

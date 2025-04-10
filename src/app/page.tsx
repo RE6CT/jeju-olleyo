@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import Loading from '@/app/loading';
-import CategoryTabs from '@/components/features/home/home-category-tap';
 import MainCarouselContainer from '@/components/features/home/home-main-carousel-container';
+import CategoryTabs from '@/components/features/home/home-category-tap';
 
 /**
  * 메인 홈 페이지 컴포넌트

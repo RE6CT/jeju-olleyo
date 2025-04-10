@@ -9,7 +9,7 @@ export const CATEGORY_ROUTES: Record<TravelCategory, string> = {
   숙박: '/',
   맛집: '/',
   카페: '/',
-  항공: '/',
+  항공권: '/',
 };
 
 export const CATEGORIES: TravelCategory[] = [
@@ -18,7 +18,7 @@ export const CATEGORIES: TravelCategory[] = [
   '숙박',
   '맛집',
   '카페',
-  '항공',
+  '항공권',
 ];
 
 export const QUERY_KEYS = {

@@ -30,7 +30,7 @@ type PlaceModalProps = {
 const PlaceModal = ({ place, detailInfo }: PlaceModalProps) => {
   const isHotel = place.content_type_id === 32;
 
-  const openSummary = isHotel
+  const rawSummary = isHotel
     ? detailInfo
       ? `${detailInfo.openTime || '체크인/아웃 시간 정보 없음'}`
       : '정보 없음'
@@ -39,6 +39,8 @@ const PlaceModal = ({ place, detailInfo }: PlaceModalProps) => {
           detailInfo.closeDay ? ` (휴무: ${detailInfo.closeDay})` : ''
         }`
       : '정보 없음';
+
+  const openSummary = rawSummary.replace(/<br\s*\/?>/gi, '\n');
   return (
     <Dialog>
       <DialogTrigger>

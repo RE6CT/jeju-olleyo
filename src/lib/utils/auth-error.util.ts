@@ -105,10 +105,7 @@ export const getAuthErrorMessage = (errorMessage: string): string[] => {
       'New password should be different from the old password',
     )
   ) {
-    return [
-      '이전과 동일한 비밀번호는 사용할 수 없습니다.',
-      '다른 비밀번호를 입력해주세요.',
-    ];
+    return [ERROR_MESSAGES.PASSWORD_SAME_AS_OLD];
   }
 
   // 기타 오류는 그대로 표시

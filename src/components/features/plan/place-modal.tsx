@@ -16,11 +16,18 @@ type PlaceType = {
   title: string;
 };
 
-type PlaceModalProps = {
-  place: PlaceType;
+type DetailInfoType = {
+  phone?: string;
+  openTime?: string;
+  closeDay?: string;
 };
 
-const PlaceModal = ({ place }: PlaceModalProps) => {
+type PlaceModalProps = {
+  place: PlaceType;
+  detailInfo?: DetailInfoType;
+};
+
+const PlaceModal = ({ place, detailInfo }: PlaceModalProps) => {
   return (
     <Dialog>
       <DialogTrigger>
@@ -44,8 +51,15 @@ const PlaceModal = ({ place }: PlaceModalProps) => {
           </div>
 
           <ul className="mt-2 list-inside list-disc space-y-1 text-xs text-gray-500">
-            <li>전화번호</li>
-            <li>영업시간</li>
+            <li>
+              운영시간:{' '}
+              {detailInfo
+                ? `${detailInfo.openTime || '영업시간 미제공'}${
+                    detailInfo.closeDay ? ` (휴무: ${detailInfo.closeDay})` : ''
+                  }`
+                : '휴무일 미제공'}
+            </li>
+            <li>{detailInfo?.phone || '전화번호 미제공'}</li>
           </ul>
 
           <Button className="mt-4 w-full">내 일정에 추가하기</Button>
@@ -54,6 +68,9 @@ const PlaceModal = ({ place }: PlaceModalProps) => {
             <h3 className="mb-2 mt-6 text-sm font-medium">
               해당 장소가 포함된 일정
             </h3>
+            <div className="text-sm text-muted-foreground">
+              장소 댓글: 카카오 리뷰
+            </div>
             <div className="text-sm text-muted-foreground">
               장소 댓글: 카카오 리뷰
             </div>

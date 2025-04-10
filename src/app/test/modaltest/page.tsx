@@ -1,49 +1,13 @@
 'use client';
 
-import PlaceModal from '@/components/features/plan/place-modal';
 import PlanCardModal from '@/components/features/plan/plan-card-modal';
-import { getBrowserClient } from '@/lib/supabase/client';
-import { useState, useEffect } from 'react';
-
-type Place = {
-  address: string;
-  category: string;
-  content_type_id: number;
-  id: number;
-  image: string | null;
-  lat: number;
-  lng: number;
-  place_id: number;
-  title: string;
-};
+import { useState } from 'react';
 
 const TestPage = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [mode, setMode] = useState<
     'success' | 'isBack' | 'select' | 'isDelete'
   >('success');
-
-  const [place, setPlace] = useState<Place | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchPlace = async () => {
-      const supabase = getBrowserClient();
-      const { data, error } = await supabase
-        .from('places')
-        .select('*')
-        .eq('place_id', 2850913)
-        .single();
-
-      if (error) {
-        setError('장소 불러오기 실패');
-      } else {
-        setPlace(data);
-      }
-    };
-
-    fetchPlace();
-  }, []);
 
   const handleOpenModal = (selectedMode: typeof mode) => {
     setMode(selectedMode);
@@ -52,14 +16,6 @@ const TestPage = () => {
 
   return (
     <>
-      <div>
-        플레이스모달테스트
-        <div>
-          {error && <div>{error}</div>}
-          {place && <PlaceModal place={place} />}
-        </div>
-      </div>
-
       <div>
         알람모달테스트
         <div>

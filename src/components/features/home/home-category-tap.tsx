@@ -17,7 +17,7 @@ const CategoryTabs = ({ className }: CategoryTabsProps) => {
   const categoryIconMap: Record<string, string> = {
     전체: 'all',
     명소: 'toursite',
-    숙박: 'accomodation',
+    숙박: 'accommodation',
     맛집: 'restaurant',
     카페: 'cafe',
     항공권: 'flight',
@@ -33,6 +33,7 @@ const CategoryTabs = ({ className }: CategoryTabsProps) => {
         width={20}
         height={20}
         className="h-5 w-5"
+        alt={category}
       />
     );
   };

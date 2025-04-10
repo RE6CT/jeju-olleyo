@@ -63,3 +63,18 @@ export const formatTravelPeriod = (
 
   return `${start.format('YYYY년 MM월 DD일')} ~ ${end.format('YYYY년 MM월 DD일')} | ${days}박 ${days + 1}일`;
 };
+
+/**
+ * 시작일과 종료일로부터 총 일수를 계산하는 함수
+ * @param startDate - 시작 날짜
+ * @param endDate - 종료 날짜
+ * @returns 총 일수 (일자가 선택되지 않은 경우 0 반환)
+ */
+export const calculateTotalDays = (
+  startDate: Date | null,
+  endDate: Date | null,
+): number => {
+  if (!startDate || !endDate) return 0;
+  const diffTime = endDate.getTime() - startDate.getTime();
+  return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+};

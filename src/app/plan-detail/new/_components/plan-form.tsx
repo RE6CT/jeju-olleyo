@@ -24,10 +24,9 @@ const PlanForm = () => {
       <PlanHeader
         startDate={startDate}
         endDate={endDate}
-        setStartDate={setStartDate}
-        setEndDate={setEndDate}
         isCalendarOpen={isCalendarOpen}
         setIsCalendarOpen={setIsCalendarOpen}
+        handleDateChange={handleDateChange}
       />
       <PlanMap />
       <PlanSchedule startDate={startDate} endDate={endDate} />

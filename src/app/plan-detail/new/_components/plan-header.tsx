@@ -13,29 +13,18 @@ import TextareaWithCount from '@/components/ui/textarea-with-count';
 const PlanHeader = ({
   startDate,
   endDate,
-  setStartDate,
-  setEndDate,
   isCalendarOpen,
   setIsCalendarOpen,
+  handleDateChange,
 }: {
   startDate: Date | null;
   endDate: Date | null;
-  setStartDate: (date: Date | null) => void;
-  setEndDate: (date: Date | null) => void;
   isCalendarOpen: boolean;
   setIsCalendarOpen: (isCalendarOpen: boolean) => void;
+  handleDateChange: (dates: [Date | null, Date | null]) => void;
 }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-
-  const handleDateChange = (dates: [Date | null, Date | null]) => {
-    const [start, end] = dates;
-    setStartDate(start);
-    setEndDate(end);
-    if (start && end) {
-      setIsCalendarOpen(false);
-    }
-  };
 
   return (
     <>
@@ -44,6 +33,7 @@ const PlanHeader = ({
         {/* #C7D5DC 색상이 --Gray-200이 될 예정 */}
         {/* #A7BDC8 색상이 --Gray-300이 될 예정 */}
         {/* #F9FAFB 색상이 --Gray-50이 될 예정 */}
+        {/* #E7EDF0 색상이 --Gray-100이 될 예정 */}
         <Label
           htmlFor="thumbnail"
           className="flex w-[252px] cursor-pointer flex-col items-center gap-3 rounded-[12px] border border-solid border-[#C7D5DC] px-[58px] py-7"

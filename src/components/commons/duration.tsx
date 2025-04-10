@@ -1,4 +1,4 @@
-import { formatDate } from '@/lib/utils/format-date';
+import { formatDate } from '@/lib/utils/date';
 import { DurationProps } from '@/types/common.type';
 
 /**

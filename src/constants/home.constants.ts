@@ -37,7 +37,7 @@ export const MAIN_CAROUSEL_OPTIONS = {
   /** 이미지 원본 높이 */
   HEIGHT: 340,
   /** 네비게이션 아이콘 크기 */
-  NAVIGATION_ICON_SIZE: 52,
+  NAVIGATION_ICON_SIZE: 96,
   /** 네비게이션 아이콘 두께 */
-  NAVIGATION_ICON_STROKE_WIDTH: 2.2,
+  NAVIGATION_ICON_STROKE_WIDTH: 4,
 };

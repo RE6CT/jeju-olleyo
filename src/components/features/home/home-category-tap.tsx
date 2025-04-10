@@ -28,7 +28,7 @@ const CategoryTabs = ({ className }: CategoryTabsProps) => {
       case '명소':
         return (
           <img
-            src="/public/icons/toursite.svg"
+            src="/icons/toursite.svg"
             width={20}
             height={20}
             className="h-5 w-5"
@@ -83,18 +83,14 @@ const CategoryTabs = ({ className }: CategoryTabsProps) => {
             key={category}
             onClick={() => navigateToCategory(category)}
             className={cn(
-              'mr-6 flex min-w-fit items-center transition-all',
+              'mr-6 flex min-w-fit items-center border-b-2 transition-all',
               activeCategory === category
-                ? 'font-medium text-orange-500'
-                : 'text-gray-600 hover:text-gray-800',
+                ? 'border-black text-black'
+                : 'border-transparent text-gray-600 hover:text-gray-800',
             )}
             aria-current={activeCategory === category ? 'page' : undefined}
           >
-            <div
-              className={cn(
-                'mr-2 flex items-center justify-center rounded-full p-2',
-              )}
-            >
+            <div className="mr-2 flex items-center justify-center rounded-full p-2">
               {getCategoryIcon(category)}
             </div>
             <span className="text-sm">{category}</span>

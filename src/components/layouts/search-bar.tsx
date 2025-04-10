@@ -18,9 +18,9 @@ const SearchBar = () => {
 
   return (
     <>
-      <Command className="w-[300px] rounded-lg border">
+      <Command className="mt-1 w-[400px] rounded-full border">
         <CommandInput
-          placeholder="검색어를 입력해 주세요"
+          placeholder="제주 여행, 어디부터 시작할까요?"
           ref={inputRef}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {

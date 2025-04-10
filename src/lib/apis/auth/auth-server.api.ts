@@ -33,7 +33,17 @@ export const fetchLogin = async (values: LoginFormValues) => {
       httpOnly: false,
     });
 
-    return { error: null };
+    // 중요: 사용자 정보도 함께 반환
+    const userInfo = data.user
+      ? {
+          email: data.user.email ?? null,
+          nickname: data.user.user_metadata?.nickname || null,
+          phone: data.user.user_metadata?.phone || null,
+          avatar_url: data.user.user_metadata?.avatar_url || null,
+        }
+      : null;
+
+    return { user: userInfo, error: null };
   } catch (error: any) {
     return handleError('로그인 처리', error);
   }
@@ -100,59 +110,6 @@ export const fetchSocialLoginUrl = async (
   } catch (error: any) {
     const handled = handleError('소셜 로그인 URL 생성', error);
     return { url: null, error: handled.error };
-  }
-};
-
-/**
- * 비밀번호 재설정 이메일 전송 서버 액션
- */
-export const fetchSendPasswordResetEmail = async (
-  email: string,
-): Promise<AuthResult> => {
-  const supabase = await getServerClient();
-
-  try {
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}${PATH.RESET_PASSWORD}`,
-    });
-
-    if (error) {
-      return {
-        success: false,
-        error: { message: error.message, status: error.status || 500 },
-      };
-    }
-
-    return { success: true, error: null };
-  } catch (error: any) {
-    // handleError를 호출한 결과의 error 속성을 AuthResult에 맞게 래핑하여 반환합니다.
-    const handled = handleError('비밀번호 재설정 메일 전송', error);
-    return { success: false, error: handled.error };
-  }
-};
-
-/**
- * 비밀번호 업데이트 서버 액션
- */
-export const fetchUpdatePassword = async (
-  password: string,
-): Promise<AuthResult> => {
-  const supabase = await getServerClient();
-
-  try {
-    const { error } = await supabase.auth.updateUser({ password });
-
-    if (error) {
-      return {
-        success: false,
-        error: { message: error.message, status: error.status || 500 },
-      };
-    }
-
-    return { success: true, error: null };
-  } catch (error: any) {
-    const handled = handleError('비밀번호 업데이트', error);
-    return { success: false, error: handled.error };
   }
 };
 

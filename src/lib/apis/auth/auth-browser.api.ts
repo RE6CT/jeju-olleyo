@@ -1,8 +1,9 @@
 import { STORAGE_KEY, SOCIAL_AUTH } from '@/constants/auth.constants';
 import { User } from '@supabase/supabase-js';
-import { UserInfo } from '@/types/auth.type';
+import { AuthResult, UserInfo } from '@/types/auth.type';
 import { getBrowserClient } from '../../supabase/client';
 import { handleError } from '@/lib/utils/handleError';
+import { PATH } from '@/constants/path.constants';
 
 /**
  * 사용자 객체를 UserInfo 타입으로 변환하는 함수
@@ -51,6 +52,59 @@ export const formatUser = (user: User | null): UserInfo | null => {
     phone,
     avatar_url: avatarUrl,
   };
+};
+
+/**
+ * 비밀번호 재설정 이메일 전송 서버 액션
+ */
+export const fetchSendPasswordResetEmail = async (
+  email: string,
+): Promise<AuthResult> => {
+  const supabase = getBrowserClient();
+
+  try {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}${PATH.RESET_PASSWORD}`,
+    });
+
+    if (error) {
+      return {
+        success: false,
+        error: { message: error.message, status: error.status || 500 },
+      };
+    }
+
+    return { success: true, error: null };
+  } catch (error: any) {
+    // handleError를 호출한 결과의 error 속성을 AuthResult에 맞게 래핑하여 반환합니다.
+    const handled = handleError('비밀번호 재설정 메일 전송', error);
+    return { success: false, error: handled.error };
+  }
+};
+
+/**
+ * 비밀번호 업데이트 서버 액션
+ */
+export const fetchUpdatePassword = async (
+  password: string,
+): Promise<AuthResult> => {
+  const supabase = getBrowserClient();
+
+  try {
+    const { error } = await supabase.auth.updateUser({ password });
+
+    if (error) {
+      return {
+        success: false,
+        error: { message: error.message, status: error.status || 500 },
+      };
+    }
+
+    return { success: true, error: null };
+  } catch (error: any) {
+    const handled = handleError('비밀번호 업데이트', error);
+    return { success: false, error: handled.error };
+  }
 };
 
 /**

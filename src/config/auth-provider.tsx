@@ -45,16 +45,23 @@ const AuthProvider = ({ children }: AuthProps) => {
 
           // 보호된 페이지에 있는 경우 로그인 페이지로 리다이렉트
           if (!isPublicPage(pathname)) {
-            router.push(PATH.SIGNIN);
+            router.push(
+              `${PATH.SIGNIN}?redirectTo=${encodeURIComponent(pathname)}`,
+            );
           }
         } else if (data.session) {
-          // 사용자 정보 저장
-          const formattedUser = formatUser(data.session.user);
-          setUser(formattedUser);
+          // 사용자 정보를 가져오기 위한 추가 호출
+          const { data: userData } = await supabase.auth.getUser();
 
-          // 로그인/회원가입 페이지에 있는 경우 홈으로 리다이렉트
-          if (pathname === PATH.SIGNIN || pathname === PATH.SIGNUP) {
-            router.push(PATH.HOME);
+          // 사용자 정보 저장
+          if (userData.user) {
+            const formattedUser = formatUser(userData.user);
+            setUser(formattedUser);
+
+            // 로그인/회원가입 페이지에 있는 경우 홈으로 리다이렉트
+            if (pathname === PATH.SIGNIN || pathname === PATH.SIGNUP) {
+              router.push(PATH.HOME);
+            }
           }
         } else if (!isPublicPage(pathname)) {
           // 사용자가 없고 보호된 페이지에 있는 경우 로그인 페이지로 리다이렉트

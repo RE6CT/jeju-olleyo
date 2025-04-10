@@ -25,7 +25,10 @@ export const getAuthErrorMessage = (errorMessage: string): string[] => {
   // 요청 제한
   if (
     lowerCaseMessage.includes('too many requests') ||
-    lowerCaseMessage.includes('rate limit')
+    lowerCaseMessage.includes('rate limit') ||
+    lowerCaseMessage.includes(
+      'For security purposes, you can only request this after',
+    )
   ) {
     return [ERROR_MESSAGES.TOO_MANY_REQUESTS];
   }

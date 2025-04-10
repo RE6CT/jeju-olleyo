@@ -5,8 +5,8 @@ import { resetPasswordSchema } from '@/lib/schemas/auth-schema';
 import { ResetPasswordFormValues } from '@/types/auth.type';
 import { getResetPasswordErrorMessage } from '@/lib/utils/auth-error.util';
 import { AUTH_TIMEOUTS, DEFAULT_FORM_VALUES } from '@/constants/auth.constants';
-import { fetchUpdatePassword } from '@/lib/apis/auth/auth-server.api';
 import useAuthStore from '@/zustand/auth.store';
+import { fetchUpdatePassword } from '../apis/auth/auth-browser.api';
 
 /**
  * 비밀번호 재설정 기능을 위한 커스텀 훅
@@ -85,10 +85,10 @@ const useResetPassword = () => {
       resetError();
 
       try {
-        // 서버 액션 호출
+        // 클라이언트 호출
         const result = await fetchUpdatePassword(data.password);
 
-        if (!result.success) {
+        if (result.error) {
           // 서버에서 반환된 실제 에러 메시지를 사용
           const errorMessages = getResetPasswordErrorMessage(
             result.error?.message || '비밀번호 변경 중 오류가 발생했습니다.',

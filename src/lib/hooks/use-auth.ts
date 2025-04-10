@@ -21,6 +21,7 @@ const useAuth = () => {
   const router = useRouter();
   const { resetError, setError, user, error, isAuthenticated, clearUser } =
     useAuthStore();
+
   /**
    * 이메일 로그인 처리 함수
    */
@@ -40,6 +41,13 @@ const useAuth = () => {
 
         // 이메일 저장 처리
         saveEmailToStorage(values.email, values.remember);
+
+        // 명시적 리다이렉션 추가
+        if (typeof window !== 'undefined') {
+          const params = new URLSearchParams(window.location.search);
+          const redirectTo = params.get('redirectTo') || PATH.HOME;
+          window.location.href = redirectTo;
+        }
 
         return true;
       } catch (error: any) {
@@ -67,6 +75,13 @@ const useAuth = () => {
         if (error) {
           setError(error.message);
           return false;
+        }
+
+        // 자동 로그인 정책에 따라 홈페이지로 리다이렉션
+        if (typeof window !== 'undefined') {
+          if (user) {
+            window.location.href = PATH.HOME;
+          }
         }
 
         return true;

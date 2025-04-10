@@ -21,10 +21,10 @@ const CategoryTabs = ({ className }: CategoryTabsProps) => {
             key={category}
             onClick={() => navigateToCategory(category)}
             className={cn(
-              'px-4 py-2 text-base transition-all',
+              'border-b-2 px-4 py-2 text-base transition-all',
               activeCategory === category
-                ? 'border-b-2 border-black text-black'
-                : 'text-gray-600 hover:text-gray-800',
+                ? 'border-black text-black'
+                : 'border-transparent text-gray-600 hover:text-gray-800',
             )}
             aria-current={activeCategory === category ? 'page' : undefined}
           >

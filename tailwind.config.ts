@@ -59,6 +59,9 @@ const config: Config = {
       fontFamily: {
         sans: 'var(--font-pretendard)',
       },
+      fontSize: {
+        '28': '1.75rem',
+      },
     },
   },
   plugins: [require('tailwindcss-animate')],

@@ -44,3 +44,22 @@ export const isDateLessThanOrEqual = (
     dayjs(formatDate(date)).isSame(formatDate(targetDate), 'day')
   );
 };
+
+/**
+ * 일정 생성 및 수정 페이지에서 여행 기간을 포맷팅하는 함수
+ * @param startDate - 시작 날짜
+ * @param endDate - 종료 날짜
+ * @returns 포맷팅된 여행 기간 문자열
+ */
+export const formatTravelPeriod = (
+  startDate: Date | null,
+  endDate: Date | null,
+): string => {
+  if (!startDate || !endDate) return '여행 기간을 선택해주세요';
+
+  const start = dayjs(startDate);
+  const end = dayjs(endDate);
+  const days = end.diff(start, 'day');
+
+  return `${start.format('YYYY년 MM월 DD일')} ~ ${end.format('YYYY년 MM월 DD일')} | ${days}박 ${days + 1}일`;
+};

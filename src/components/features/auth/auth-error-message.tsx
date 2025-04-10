@@ -4,6 +4,7 @@ import { AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
+import { AuthErrorMessageProps } from '@/constants/auth.constants';
 
 /**
  * 인증 관련 에러 메시지를 표시하는 컴포넌트
@@ -12,11 +13,6 @@ import { motion, AnimatePresence } from 'framer-motion';
  * @param props.className 추가 CSS 클래스
  * @param props.variant 알림 스타일 (default, destructive)
  */
-interface AuthErrorMessageProps {
-  messages: string[];
-  className?: string;
-  variant?: 'default' | 'destructive';
-}
 
 const AuthErrorMessage = ({
   messages,

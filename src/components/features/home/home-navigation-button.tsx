@@ -17,7 +17,7 @@ export const NavigationButton = ({
       onClick={onClick}
       className={`absolute top-1/2 z-10 -translate-y-1/2 ${
         isLeft ? 'left-4 md:left-6' : 'right-4 md:right-6'
-      }`}
+      } opacity-60 transition-opacity duration-300 hover:opacity-100`}
       aria-label={isLeft ? '이전 슬라이드' : '다음 슬라이드'}
       style={{
         background: 'transparent', // 버튼 배경 제거
@@ -25,11 +25,7 @@ export const NavigationButton = ({
         padding: 0, // 패딩 제거
       }}
     >
-      <Icon
-        size={48}
-        strokeWidth={2}
-        color="#ffffff"
-      />
+      <Icon size={48} strokeWidth={2} color="#ffffff" />
     </button>
   );
 };

@@ -8,3 +8,14 @@ export type CarouselImages = {
 export type MainCarouselProps = {
   imageList: CarouselImages[] | undefined;
 };
+
+export type NavigationButtonProps = {
+  direction: 'left' | 'right';
+  onClick: () => void;
+};
+
+export type ProgressIndicatorProps = {
+  current: number;
+  total: number;
+  progress: number;
+};

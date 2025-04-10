@@ -1,8 +1,4 @@
-interface ProgressIndicatorProps {
-  current: number;
-  total: number;
-  progress: number;
-}
+import { ProgressIndicatorProps } from '@/types/home.carousel.type';
 
 export const ProgressIndicator = ({
   current,

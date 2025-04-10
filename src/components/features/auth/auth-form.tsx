@@ -15,6 +15,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema, registerSchema } from '@/lib/schemas/auth-schema';
 import { PATH } from '@/constants/path.constants';
 import ErrorMessage from './auth-form-error-message';
+import { AUTH_BUTTON_TEXT } from '@/constants/auth.constants';
 
 /**
  * 인증 관련 페이지의 폼 컴포넌트
@@ -158,7 +159,7 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
 
           {/* 폼 제출 버튼 영역 */}
           <Button type="submit" className="mt-4 w-full" disabled={isLoading}>
-            {isLoading ? '처리 중...' : buttonText}
+            {isLoading ? AUTH_BUTTON_TEXT.LOADING : buttonText}
           </Button>
         </form>
       ) : (
@@ -228,7 +229,7 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
 
           {/* 폼 제출 버튼 영역 */}
           <Button type="submit" className="mt-2 w-full" disabled={isLoading}>
-            {isLoading ? '처리 중...' : buttonText}
+            {isLoading ? AUTH_BUTTON_TEXT.LOADING : buttonText}
           </Button>
         </form>
       )}

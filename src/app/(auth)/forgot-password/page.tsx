@@ -12,6 +12,7 @@ import AuthErrorMessage from '@/components/features/auth/auth-error-message';
 
 import useForgotPassword from '@/lib/hooks/use-forgot-password';
 import { PATH } from '@/constants/path.constants';
+import { AUTH_BUTTON_TEXT } from '@/constants/auth.constants';
 
 /**
  * 비밀번호 찾기 페이지 컴포넌트
@@ -77,7 +78,9 @@ const ForgotPasswordPage = () => {
               )}
             </div>
             <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? '처리 중...' : '비밀번호 재설정 링크 받기'}
+              {isLoading
+                ? AUTH_BUTTON_TEXT.LOADING
+                : AUTH_BUTTON_TEXT.FORGOT_PASSWORD.DEFAULT}
             </Button>
           </form>
         )}

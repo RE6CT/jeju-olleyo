@@ -69,20 +69,16 @@ export const AUTH_PAGE_META = {
 export const AUTH_BUTTON_TEXT = {
   LOGIN: {
     DEFAULT: '로그인',
-    LOADING: '처리 중...',
   },
   REGISTER: {
     DEFAULT: '회원가입',
-    LOADING: '처리 중...',
   },
-  RESET_PASSWORD: {
+  FORGOT_PASSWORD: {
     DEFAULT: '비밀번호 재설정 링크 받기',
-    LOADING: '처리 중...',
     COMPLETE: '메일 발송 완료!',
   },
-  UPDATE_PASSWORD: {
+  RESET_PASSWORD: {
     DEFAULT: '비밀번호 변경하기',
-    LOADING: '처리 중...',
   },
   SOCIAL: {
     GOOGLE: {
@@ -94,6 +90,7 @@ export const AUTH_BUTTON_TEXT = {
       LOADING: '카카오 로그인 중...',
     },
   },
+  LOADING: '처리 중...',
 };
 
 /**

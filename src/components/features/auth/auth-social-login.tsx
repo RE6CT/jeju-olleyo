@@ -5,6 +5,7 @@ import { CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import useSocialLogin from '@/lib/hooks/use-social-login';
+import { AUTH_BUTTON_TEXT } from '@/constants/auth.constants';
 
 /**
  * 소셜 로그인 섹션 컴포넌트
@@ -39,7 +40,9 @@ const SocialLogin = () => {
               width={24}
               height={24}
             />
-            {isKakaoLoading ? '카카오 로그인 중...' : '카카오 로그인'}
+            {isKakaoLoading
+              ? AUTH_BUTTON_TEXT.SOCIAL.KAKAO.LOADING
+              : AUTH_BUTTON_TEXT.SOCIAL.KAKAO.DEFAULT}
           </Button>
 
           {/* 구글 로그인 버튼 */}
@@ -55,7 +58,9 @@ const SocialLogin = () => {
               width={24}
               height={24}
             />
-            {isGoogleLoading ? '구글 로그인 중...' : '구글 로그인'}
+            {isGoogleLoading
+              ? AUTH_BUTTON_TEXT.SOCIAL.GOOGLE.LOADING
+              : AUTH_BUTTON_TEXT.SOCIAL.GOOGLE.DEFAULT}
           </Button>
         </div>
       </div>

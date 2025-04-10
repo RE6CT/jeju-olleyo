@@ -9,6 +9,7 @@ import AuthErrorMessage from '@/components/features/auth/auth-error-message';
 import PasswordInput from '@/components/features/auth/auth-password-input';
 
 import useResetPassword from '@/lib/hooks/use-reset-password';
+import { AUTH_BUTTON_TEXT } from '@/constants/auth.constants';
 
 const ResetPasswordPage = () => {
   const {
@@ -100,7 +101,9 @@ const ResetPasswordPage = () => {
             className="w-full"
             disabled={!isValid || isLoading}
           >
-            {isLoading ? '처리 중...' : '비밀번호 변경하기'}
+            {isLoading
+              ? AUTH_BUTTON_TEXT.LOADING
+              : AUTH_BUTTON_TEXT.RESET_PASSWORD.DEFAULT}
           </Button>
         </form>
       </CardContent>

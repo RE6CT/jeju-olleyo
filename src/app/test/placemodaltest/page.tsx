@@ -2,7 +2,7 @@
 
 import PlaceModal from '@/components/features/plan/place-modal';
 import { getBrowserClient } from '@/lib/supabase/client';
-import { DetailIntroRaw } from '@/types/\bkorea-tour.type';
+import { DetailIntroRaw } from '@/types/korea-tour.type';
 import { Place } from '@/types/place-modal.type';
 import { useState, useEffect } from 'react';
 

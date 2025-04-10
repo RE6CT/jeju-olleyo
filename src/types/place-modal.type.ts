@@ -1,4 +1,4 @@
-import { DetailIntroRaw } from './\bkorea-tour.type';
+import { DetailIntroRaw } from './korea-tour.type';
 
 export type Place = {
   address: string;

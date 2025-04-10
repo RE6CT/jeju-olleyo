@@ -1,17 +1,27 @@
-import CategoryTabs from '@/components/features/home/category-tap';
 import { Suspense } from 'react';
 import Loading from '@/app/loading';
+import CategoryTabs from '@/components/features/home/home-category-tap';
+import MainCarouselContainer from '@/components/features/home/home-main-carousel-container';
 
 /**
  * 메인 홈 페이지 컴포넌트
+ * 올레요 스타일로 개선됨
  */
 const Home = () => {
   return (
-    <main className="container mx-auto p-4">
-      <Suspense fallback={<Loading />}>
-        <CategoryTabs className="mb-12" />
-      </Suspense>
-    </main>
+    <div className="flex min-h-screen flex-col bg-gray-50">
+      {/* 카테고리 탭 영역 */}
+      <section className="sticky top-0 z-40 w-full">
+        <Suspense fallback={<Loading />}>
+          <CategoryTabs />
+        </Suspense>
+      </section>
+
+      {/* 캐러셀 영역 */}
+      <section className="w-full">
+        <MainCarouselContainer />
+      </section>
+    </div>
   );
 };
 

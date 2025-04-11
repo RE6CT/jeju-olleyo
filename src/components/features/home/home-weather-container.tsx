@@ -97,7 +97,7 @@ const WeatherSection = () => {
         </p>
       </div>
 
-      <div className="flex items-center gap-7">
+      <div className="flex flex-wrap items-center justify-center gap-7 md:flex-nowrap overflow-x-auto pb-2">
         {/* 요일 헤더 */}
         {weatherData.map((day, index) => (
           <div

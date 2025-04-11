@@ -23,16 +23,6 @@ const Home = () => {
       <section className="mt-12">
         <WeatherSection />
       </section>
-
-      <section className="mt-12">
-        <WeatherSection />
-      </section>
-      <section className="mt-12">
-        <WeatherSection />
-      </section>
-      <section className="mt-12">
-        <WeatherSection />
-      </section>
     </div>
   );
 };

@@ -20,7 +20,7 @@ const Home = () => {
       </section>
 
       {/* 날씨 섹션 */}
-      <section className="mt-12">
+      <section className="mt-4 sm:mt-6 md:mt-8">
         <WeatherSection />
       </section>
     </div>

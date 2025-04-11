@@ -30,39 +30,40 @@ const CategoryTabs = ({ className }: CategoryTabsProps) => {
     return (
       <img
         src={`/icons/${iconName}.svg`}
-        width={20}
-        height={20}
-        className="h-5 w-5"
         alt={category}
+        className="h-4 w-4 sm:h-5 sm:w-5"
       />
     );
   };
 
   return (
     <div
-      className={cn('w-full border-b border-gray-200 bg-white px-4', className)}
+      className={cn(
+        'w-full border-b border-gray-200 bg-white px-2 sm:px-4',
+        className,
+      )}
     >
-      <div className="flex overflow-x-auto py-2 pl-2">
+      <div className="flex overflow-x-auto py-2 pl-1 sm:pl-2">
         {CATEGORIES.map((category, index) => (
           <div key={category} className="flex items-center">
             {/* 구분선 - 카페와 항공권 사이에만 표시 */}
             {index > 0 && category === '항공권' && (
-              <div className="mx-2 h-6 w-px bg-gray-300"></div>
+              <div className="mx-1 h-5 w-px bg-gray-300 sm:mx-2 sm:h-6"></div>
             )}
             <button
               onClick={() => navigateToCategory(category)}
               className={cn(
-                'mr-6 flex min-w-fit items-center border-b-2 transition-all',
+                'mr-3 flex items-center border-b-2 transition-all sm:mr-6',
                 activeCategory === category
                   ? 'border-primary-500 text-black'
                   : 'border-transparent text-gray-600 hover:text-gray-800',
               )}
               aria-current={activeCategory === category ? 'page' : undefined}
             >
-              <div className="mr-2 flex items-center justify-center rounded-full p-2">
+              <div className="mr-1 flex items-center justify-center rounded-full p-1 sm:mr-2 sm:p-2">
                 {getCategoryIcon(category)}
               </div>
-              <span className="text-sm">{category}</span>
+              <span className="text-xs sm:text-sm">{category}</span>
             </button>
           </div>
         ))}

@@ -12,7 +12,7 @@ export const ProgressIndicator = ({
           <span className="rounded-full px-3 py-1 text-sm font-semibold text-black md:text-base">
             {current} / {total}
           </span>
-          <div className="relative h-1.5 flex-1 overflow-hidden rounded-full bg-white/50">
+          <div className="relative h-[1px] flex-1 overflow-hidden rounded-full bg-white/50">
             <div
               className="absolute left-0 top-0 h-full rounded-full bg-black"
               style={{ width: `${progress}%` }}

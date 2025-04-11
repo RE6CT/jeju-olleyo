@@ -40,6 +40,18 @@ const MainCarousel = ({ imageList }: MainCarouselProps) => {
     >
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex">
+          {imageList?.length === 0 && (
+            <div
+              className="relative min-w-full"
+              style={{
+                paddingTop: `${(MAIN_CAROUSEL_OPTIONS.HEIGHT / MAIN_CAROUSEL_OPTIONS.WIDTH) * 100}%`,
+              }}
+            >
+              <div className="flex h-full w-full items-center justify-center bg-gray-100">
+                <p className="text-gray-500">이미지가 없습니다.</p>
+              </div>
+            </div>
+          )}
           {imageList?.map((image) => (
             <div
               className="relative min-w-full"
@@ -51,6 +63,7 @@ const MainCarousel = ({ imageList }: MainCarouselProps) => {
               <Link
                 href={image.link_url || '#'}
                 className="block h-full w-full"
+                aria-label={`${image.title || '슬라이드'} 상세 보기`}
               >
                 <Image
                   src={image.image_url}

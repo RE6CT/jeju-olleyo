@@ -1,4 +1,4 @@
-import { getServerClient } from '@/lib/supabase/server';
+import { getBrowserClient } from '@/lib/supabase/client';
 import { CarouselImages } from '@/types/home.carousel.type';
 
 /**
@@ -12,7 +12,7 @@ import { CarouselImages } from '@/types/home.carousel.type';
 export const fetchGetImagesByMainCarousel = async (): Promise<
   CarouselImages[]
 > => {
-  const supabase = getServerClient();
+  const supabase = getBrowserClient();
   const { data, error } = await supabase
     .from('main_carousel_images')
     .select('*')

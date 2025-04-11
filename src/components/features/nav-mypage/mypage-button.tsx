@@ -46,7 +46,7 @@ const MypageButton = () => {
       router.push(PATH.SIGNIN);
       return;
     }
-    router.push(`/${path}`);
+    router.push(path);
     setClose();
   };
 

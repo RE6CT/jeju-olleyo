@@ -13,7 +13,7 @@ import { DurationProps } from '@/types/common.type';
 const Duration = ({ start, end, separator, className }: DurationProps) => {
   return (
     <div
-      className={`font-pretendard flex gap-1 text-xs font-medium leading-[150%] text-gray-500 ${className}`}
+      className={`font-pretendard flex gap-1 text-xs font-medium text-gray-500 ${className}`}
     >
       <span>{formatDate(start)}</span>
       <span>{separator}</span>

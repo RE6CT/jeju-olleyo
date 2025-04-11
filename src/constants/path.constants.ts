@@ -15,4 +15,5 @@ export const PATH = {
   LIKES: '/likes',
   COMMENTS: '/comments',
   CATEGORIES: '/categories',
+  RESERVATIONS: '/reservations',
 } as const;

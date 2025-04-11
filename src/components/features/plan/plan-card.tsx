@@ -9,9 +9,10 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import PlanImage from '@/components/commons/plan-image';
 import Duration from '../../commons/duration';
+import Image from 'next/image';
 
 export const CARD = {
-  imageSize: 'w-[200px] h-[200px]',
+  imageSize: 'w-[238px] h-[144px]',
 } as const;
 
 /**
@@ -32,7 +33,7 @@ export const CARD = {
  */
 const PlanCard = ({ plan, onEdit, onDelete }: PlanCardProps) => {
   return (
-    <Card className={`flex p-2`}>
+    <Card className="flex gap-4 border-0">
       {/* 이미지 영역 */}
       <div className={`relative ${CARD.imageSize}`}>
         <PlanImage image={plan.planImg} title={plan.title} />
@@ -40,7 +41,7 @@ const PlanCard = ({ plan, onEdit, onDelete }: PlanCardProps) => {
 
       {/* 컨텐츠 영역 */}
       <div className="flex flex-1 flex-col">
-        <CardHeader className="relative px-4 py-2">
+        <CardHeader className="relative px-2 py-2">
           {/* 드롭다운 메뉴 */}
           {onEdit && onDelete && (
             <div className="absolute right-4 top-2">
@@ -50,7 +51,12 @@ const PlanCard = ({ plan, onEdit, onDelete }: PlanCardProps) => {
                   size="icon"
                   className="focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0" // 포커스 효과 제거
                 >
-                  <MoreVertical className="h-4 w-4" />
+                  <Image
+                    src="/icons/option.svg"
+                    alt="option"
+                    width={24}
+                    height={24}
+                  />
                 </Button>
               </PlanDropdown>
             </div>
@@ -70,7 +76,7 @@ const PlanCard = ({ plan, onEdit, onDelete }: PlanCardProps) => {
         </CardHeader>
 
         {/* description 영역 */}
-        <CardContent className="flex flex-1 flex-col justify-between px-4 py-2">
+        <CardContent className="flex flex-1 flex-col justify-between px-2 py-2">
           <p className="line-clamp-4 text-sm text-muted-foreground">
             {plan.description || TEXT.noDescription}
           </p>

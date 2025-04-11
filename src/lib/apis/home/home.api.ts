@@ -28,8 +28,16 @@ export const fetchGetImagesByMainCarousel = async (): Promise<
   }
 
   if (!data || data.length === 0) {
-    console.info('활성화된 메인 캐러셀 이미지가 없습니다.')
+    console.info('활성화된 메인 캐러셀 이미지가 없습니다.');
+    return [];
   }
 
-  return data as CarouselImages[];
+  return (
+    data?.map((item) => {
+      if (!item.id || !item.title || !item.image_url || !item.link_url) {
+        console.warn('Carousel image data missing required fields:', item);
+      }
+      return item as CarouselImages;
+    }) || []
+  );
 };

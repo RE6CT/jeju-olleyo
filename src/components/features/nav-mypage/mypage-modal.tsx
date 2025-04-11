@@ -12,6 +12,7 @@ import { getCurrentSession } from '@/lib/apis/auth/auth-browser.api';
 import { PATH } from '@/constants/path.constants';
 import { SOCIAL_AUTH } from '@/constants/auth.constants';
 import { MYPAGE_PROVIER_IMAGE_SIZE } from '@/constants/header.constants';
+import useAuthStore from '@/zustand/auth.store';
 
 /**
  * nav의 마이페이지 버튼 클릭 시 나타나는 모달 컴포넌트
@@ -21,7 +22,8 @@ import { MYPAGE_PROVIER_IMAGE_SIZE } from '@/constants/header.constants';
  */
 const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
   const router = useRouter();
-  const { user, handleLogout, isLoading } = useAuth();
+  const { handleLogout, isLoading } = useAuth();
+  const user = useAuthStore((state) => state.user);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [localUser, setLocalUser] = useState(user);
 
@@ -37,7 +39,6 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
         setLocalUser(user);
       }
     };
-
     fetchUserInfo();
   }, [user]);
 
@@ -106,11 +107,7 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
         onClick={() => onLinkClick('account')}
         className="flex cursor-pointer items-center gap-3"
       >
-        <ProfileImage
-          image={(userInfo.profileImg as string) || '/character/happy.svg'}
-          width={58}
-          height={58}
-        />
+        <ProfileImage image={userInfo.profileImg} width={58} height={58} />
         <div className="flex flex-col">
           <div className="flex items-center gap-2">
             <h3 className="whitespace-nowrap font-semibold">
@@ -199,7 +196,7 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
           <section className="text-center">
             <span
               onClick={() => onLinkClick('reservations')}
-              className="hover:text-blue-500 cursor-pointer transition-colors"
+              className="cursor-pointer transition-colors hover:text-blue-500"
             >
               항공권 예약 내역
             </span>

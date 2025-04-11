@@ -6,6 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/modal';
+import { fetchUpdateProfileImage } from '@/lib/apis/profile/update-profile.api';
 import { ProfileModalProps } from '@/types/mypage.type';
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 
@@ -63,9 +64,20 @@ const ProfileModal = ({
     const isConfirmed = confirm('프로필 이미지를 변경하시겠습니까?');
     if (!isConfirmed) return;
 
-    // TODO - 이미지 저장 로직
+    // 데이터 추가
+    try {
+      // formData 생성 및 파일 추가
+      const formData = new FormData();
+      formData.append('profileImage', selectImage);
+      formData.append('userId', userId);
 
-    setModalOpen(false);
+      const result = await fetchUpdateProfileImage(formData);
+      alert(result.message);
+    } catch (error: unknown) {
+      alert('에러 발생');
+    } finally {
+      setModalOpen(false);
+    }
   };
 
   return (

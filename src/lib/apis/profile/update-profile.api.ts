@@ -47,3 +47,124 @@ export const fetchUpdateNickname = async (userId: string, nickname: string) => {
     };
   }
 };
+
+/**
+ * 프로필 이미지를 변경하는 함수
+ * @param formData 프로필 이미지 변경 핸들러로부터 전달된 폼 데이터 (userId, profileImage)
+ */
+export const fetchUpdateProfileImage = async (formData: FormData) => {
+  try {
+    const supabase = await getServerClient();
+
+    const file = formData.get('profileImage') as File;
+    const userId = formData.get('userId') as string;
+
+    if (!file) {
+      throw new Error(ERROR_MESSAGES.IMAGE_DATA_MISSING);
+    }
+
+    // 확장자 추출 및 이름 지정
+    const fileExtension = file.name.split('.').pop();
+    const fileName = `${userId}/profile_${Date.now()}.${fileExtension}`;
+
+    // Supabase Storage에 이미지 업로드
+    const { error: imageUploadError } = await supabase.storage
+      .from('profile-images')
+      .upload(fileName, file);
+
+    if (imageUploadError) {
+      console.log(imageUploadError.message);
+      throw new Error(ERROR_MESSAGES.PROFILE_UPDATE_FAILED);
+    }
+
+    // URL 생성
+    const { data: urlData } = supabase.storage
+      .from('profile-images')
+      .getPublicUrl(fileName);
+
+    // 유저 테이블에 이미지 저장
+    const { error: dataUpdateError } = await supabase
+      .from('users')
+      .update({
+        profile_img: urlData.publicUrl,
+      })
+      .eq('user_id', userId);
+
+    if (dataUpdateError) {
+      throw new Error(ERROR_MESSAGES.USER_UPDATE_FAILED);
+    }
+
+    revalidatePath(PATH.ACCOUNT);
+    return {
+      success: true,
+      message: SUCCESS_MESSAGES.PROFILE_UPDATED,
+    };
+  } catch (error: unknown) {
+    // 에러 메시지 없을 경우의 디폴트 메시지
+    let errorMessage = ERROR_MESSAGES.PROFILE_UPDATE_FAILED;
+
+    // 에러 객체라면 해당 에러 메시지를 적용
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+
+    return {
+      success: false,
+      message: errorMessage,
+    };
+  }
+};
+
+/**
+ * 유저의 프로필 이미지를 초기화하는 함수
+ * @param userId 유저의 uuid
+ */
+export const fetchDeleteProfileImage = async (
+  userId: string,
+  profileImage: string,
+) => {
+  try {
+    const supabase = await getServerClient();
+
+    // 유저의 프로필 이미지 모두 삭제
+    const imagePath = profileImage.split('/').pop();
+    const { error: imageDeleteError } = await supabase.storage
+      .from('profile-images')
+      .remove([`${userId}/${imagePath}`]);
+
+    if (imageDeleteError) {
+      throw new Error(ERROR_MESSAGES.PROFILE_UPDATE_FAILED);
+    }
+
+    // 유저 테이블의 프로필 이미지 빈 문자열로 업데이트
+    const { error: dataUpdateError } = await supabase
+      .from('users')
+      .update({
+        profile_img: '',
+      })
+      .eq('user_id', userId);
+
+    if (dataUpdateError) {
+      throw new Error(ERROR_MESSAGES.USER_UPDATE_FAILED);
+    }
+
+    revalidatePath(PATH.ACCOUNT);
+    return {
+      success: true,
+      message: SUCCESS_MESSAGES.PROFILE_UPDATED,
+    };
+  } catch (error: unknown) {
+    // 에러 메시지 없을 경우의 디폴트 메시지
+    let errorMessage = ERROR_MESSAGES.PROFILE_UPDATE_FAILED;
+
+    // 에러 객체라면 해당 에러 메시지를 적용
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+
+    return {
+      success: false,
+      message: errorMessage,
+    };
+  }
+};

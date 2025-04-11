@@ -59,7 +59,7 @@
 
   html,
   body {
-    @apply overflow-auto bg-gray-50 font-sans leading-normal text-gray-900 !important;
+    @apply bg-gray-50 font-sans leading-normal text-gray-900;
   }
 }
 

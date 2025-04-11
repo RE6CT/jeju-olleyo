@@ -84,11 +84,22 @@ const config: Config = {
           '5': 'hsl(var(--chart-5))',
         },
       },
+
+      // 모양 관련
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+        '12': '12px',
+        '24': '24px',
       },
+      boxShadow: {
+        button:
+          '0px -2px 4px 0px rgba(0, 0, 0, 0.04), 0px 2px 4px 0px rgba(0, 0, 0, 0.04)',
+        dropdown: '1px 1px 8px 1px rgba(213, 187, 169, 0.20)',
+      },
+
+      // 폰트 관련
       fontFamily: {
         sans: 'var(--font-pretendard)',
       },

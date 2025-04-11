@@ -1,4 +1,4 @@
-import { RefObject } from 'react';
+import { Dispatch, RefObject, SetStateAction } from 'react';
 import { Database } from './supabase.type';
 import { CamelCaseObject } from './common.type';
 
@@ -21,3 +21,14 @@ export type MypageModalProps = {
 type UserBookmarkRows =
   Database['public']['Functions']['get_user_bookmarks']['Returns'];
 export type UserBookmarks = CamelCaseObject<UserBookmarkRows>;
+
+export type ProfileImageButtonProps = {
+  onEdit: () => void;
+  onDelete: () => void;
+};
+
+export type ProfileModalProps = {
+  userId: string;
+  isModalOpen: boolean;
+  setModalOpen: Dispatch<SetStateAction<boolean>>;
+};

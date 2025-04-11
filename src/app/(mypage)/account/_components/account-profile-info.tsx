@@ -1,8 +1,6 @@
 'use client';
 
-import ProfileImage from '@/components/commons/profile-image';
 import { Button } from '@/components/ui/button';
-import ProfileImageButton from './account-profile-image-button';
 import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -13,23 +11,27 @@ import { nicknameSchema } from '@/lib/schemas/auth-schema';
 import { z } from 'zod';
 import useProviderFromCookie from '@/lib/hooks/use-get-provider';
 import { ERROR_MESSAGES } from '@/constants/mypage.constants';
+import AccountProfileImage from './account-profile-image';
 
 // ! label에는 글씨 크기 다르게 적용되는 문제
 // ! input에 rounded-12 적용되지 않는 문제
-// ! placeholder-gray-200도 important 없이는 적용되지 않는 문제
 const PROFILE_INFO_STYLE = {
-  imageSize: 88,
   container:
     'px-8 py-6 rounded-24 bg-white border-gray-100 border border-gray-100',
   title: 'semibold-18 col-span-4 w-full',
   input:
     'rounded-[12px] border border-gray-200 px-4 py-[10px] !placeholder-gray-200',
-  rowLabel: 'medium-16 text-16 whitespace-nowrap w-[107px] p-[10px]',
+  rowLabel: 'medium-16 text-[16px] whitespace-nowrap w-[107px] p-[10px]',
   rowValue: 'whitespace-nowrap medium-16 p-[10px]',
   button: 'medium-16 bg-transparent text-secondary-300 hover:bg-gray-100',
 };
 
-/** 회원정보 수정 페이지의 프로필 섹션 컴포넌트 */
+/**
+ * 회원정보 수정 페이지의 프로필 섹션 컴포넌트
+ * @param userId - 유저의 uuid
+ * @param nickname - 유저의 현재 닉네임
+ * @param profileImage - 유저의 현재 프로필 이미지
+ */
 const ProfileInfo = ({
   userId,
   nickname,
@@ -96,15 +98,11 @@ const ProfileInfo = ({
     >
       <h3 className={PROFILE_INFO_STYLE.title}>프로필</h3>
       <div className="w-[120px] py-[14px]">
-        <div className="relative w-fit">
-          <ProfileImage
-            image={profileImage}
-            width={PROFILE_INFO_STYLE.imageSize}
-            height={PROFILE_INFO_STYLE.imageSize}
-            className="rounded-full"
-          />
-          {provider === 'email' && <ProfileImageButton />}
-        </div>
+        <AccountProfileImage
+          userId={userId}
+          profileImage={profileImage}
+          provider={provider}
+        />
       </div>
       <form className="contents" onSubmit={handleSubmit(handleEditComplete)}>
         <Label htmlFor="nickname" className={PROFILE_INFO_STYLE.rowLabel}>

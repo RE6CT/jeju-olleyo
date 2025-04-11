@@ -11,7 +11,7 @@ const SIDEBAR_STYLE = {
 };
 
 /** 사이드 바 컴포넌트 */
-const Sidebar = ({ className }: { className: string }) => {
+const MypageSidebar = ({ className }: { className: string }) => {
   return (
     <aside
       className={`rounded-24 flex min-w-[200px] flex-col gap-5 border border-gray-100 bg-white p-6 ${className}`}
@@ -52,4 +52,4 @@ const NavLink = ({ href, children }: { href: string; children: string }) => {
   );
 };
 
-export default Sidebar;
+export default MypageSidebar;

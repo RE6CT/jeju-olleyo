@@ -12,6 +12,7 @@ import { getCurrentSession } from '@/lib/apis/auth/auth-browser.api';
 import { PATH } from '@/constants/path.constants';
 import { SOCIAL_AUTH } from '@/constants/auth.constants';
 import { MYPAGE_PROVIER_IMAGE_SIZE } from '@/constants/header.constants';
+import useAuthStore from '@/zustand/auth.store';
 
 /**
  * nav의 마이페이지 버튼 클릭 시 나타나는 모달 컴포넌트
@@ -21,7 +22,8 @@ import { MYPAGE_PROVIER_IMAGE_SIZE } from '@/constants/header.constants';
  */
 const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
   const router = useRouter();
-  const { user, handleLogout, isLoading } = useAuth();
+  const { handleLogout, isLoading } = useAuth();
+  const user = useAuthStore((state) => state.user);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [localUser, setLocalUser] = useState(user);
 
@@ -37,7 +39,6 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
         setLocalUser(user);
       }
     };
-
     fetchUserInfo();
   }, [user]);
 

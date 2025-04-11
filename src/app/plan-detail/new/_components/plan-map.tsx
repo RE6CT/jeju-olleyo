@@ -29,15 +29,18 @@ const PlanMap = () => {
   };
 
   return (
-    <div className="mt-4 h-[326px] w-full overflow-hidden rounded-[12px]">
-      {isLoading && <Loading />}
-      {error && <ErrorMessage message={error} />}
-      <KakaoMap
-        {...DEFAULT_MAP_OPTIONS}
-        onMapLoad={handleMapLoad}
-        onError={handleMapError}
-      />
-    </div>
+    <>
+      <div className="sticky top-0 h-8 bg-slate-50"></div>
+      <div className="sticky top-8 z-40 mt-4 h-[326px] w-full overflow-hidden rounded-[12px]">
+        {isLoading && <Loading />}
+        {error && <ErrorMessage message={error} />}
+        <KakaoMap
+          {...DEFAULT_MAP_OPTIONS}
+          onMapLoad={handleMapLoad}
+          onError={handleMapError}
+        />
+      </div>
+    </>
   );
 };
 

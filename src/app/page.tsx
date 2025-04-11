@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import Loading from '@/app/loading';
 import MainCarouselContainer from '@/components/features/home/home-main-carousel-container';
 import CategoryTabs from '@/components/features/home/home-category-tap';
+import WeatherSection from '@/components/features/home/home-weather-container';
 
 const Home = () => {
   return (
@@ -16,6 +17,11 @@ const Home = () => {
       {/* 캐러셀 영역 */}
       <section>
         <MainCarouselContainer />
+      </section>
+
+      {/* 날씨 섹션 */}
+      <section className="mt-12">
+        <WeatherSection />
       </section>
     </div>
   );

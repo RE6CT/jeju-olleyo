@@ -8,6 +8,11 @@ import { PATH } from '@/constants/path.constants';
 import Image from 'next/image';
 
 const MyPlanPage = async () => {
+  const SUNGLASSES_IMAGE = {
+    width: 37,
+    height: 36,
+  };
+
   const { user, error: userError } = await fetchGetCurrentUser();
 
   if (userError) {
@@ -43,9 +48,9 @@ const MyPlanPage = async () => {
               </span>
               <Image
                 src="/character/sunglasses.svg"
-                alt="happy icon"
-                width={37}
-                height={36}
+                alt="sunglasses icon"
+                width={SUNGLASSES_IMAGE.width}
+                height={SUNGLASSES_IMAGE.height}
               />
             </div>
             <Link href={PATH.PLAN_NEW}>

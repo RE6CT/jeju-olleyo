@@ -3,16 +3,15 @@
 import Image from 'next/image';
 import CategoryBadge from '@/components/commons/category-badge';
 
-const PLACE_IMAGE_SIZE = 120;
-const INDEX_BADGE_SIZE = {
+const PLACE_IMAGE_SIZE = {
+  width: 120,
+  height: 120,
+};
+const BUTTON_SIZE = {
   width: 24,
   height: 24,
 };
 const ICON_SIZE = {
-  width: 20,
-  height: 20,
-};
-const SMALL_INDEX_BADGE_SIZE = {
   width: 20,
   height: 20,
 };
@@ -42,24 +41,21 @@ const PlaceCard = ({
       {/* 카드 본문 */}
       <div className="flex items-center gap-5 rounded-lg border border-gray-100 bg-white p-4 shadow-[0px_2px_4px_1px_rgba(0,0,0,0.10)]">
         {/* 장소 이미지 */}
-        <div
-          className={`h-[${PLACE_IMAGE_SIZE}px] w-[${PLACE_IMAGE_SIZE}px] overflow-hidden`}
-        >
-          <div
-            style={{
-              background: `url(${imageUrl}) lightgray 50% / cover no-repeat`,
-              width: '100%',
-              height: '100%',
-            }}
-            role="img"
-            aria-label={title}
+        <div className={`overflow-hidden`}>
+          <Image
+            src={imageUrl}
+            alt={title}
+            width={PLACE_IMAGE_SIZE.width}
+            height={PLACE_IMAGE_SIZE.height}
+            className="h-full w-full object-cover"
           />
         </div>
 
         {/* 장소 정보 */}
         <div className="flex flex-1 flex-col gap-1">
+          {/* TODO: 예시 코드 - 삭제 예정 */}
           <CategoryBadge
-            category="카페"
+            category="카페" // 추후 상수로 관리
             badgeType="card"
             variant="primary"
             className="text-10 leading-[150%]"
@@ -73,9 +69,7 @@ const PlaceCard = ({
             </span>
           </div>
           <div className="flex items-center gap-1 text-12">
-            <div
-              className={`flex aspect-square h-[${SMALL_INDEX_BADGE_SIZE.height}px] w-[${SMALL_INDEX_BADGE_SIZE.width}px] shrink-0 flex-col items-center justify-center gap-[10px] rounded-[12px] bg-primary-500 p-[3px_9px] text-10 font-regular leading-[150%] text-white`}
-            >
+            <div className="flex aspect-square h-[20px] w-[20px] shrink-0 flex-col items-center justify-center gap-[10px] rounded-[12px] bg-primary-500 p-[3px_9px] text-10 font-regular leading-[150%] text-white">
               {index + 1}
             </div>
             <div className="flex">
@@ -98,8 +92,8 @@ const PlaceCard = ({
           <Image
             src="/icons/cancel.svg"
             alt="삭제"
-            width={INDEX_BADGE_SIZE.width}
-            height={INDEX_BADGE_SIZE.height}
+            width={BUTTON_SIZE.width}
+            height={BUTTON_SIZE.height}
             className="text-gray-300"
           />
         </button>

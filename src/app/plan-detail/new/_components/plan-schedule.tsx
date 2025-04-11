@@ -96,12 +96,12 @@ const PlanSchedule = ({
                           </span>
                         </div>
                         <div className="flex items-center">
-                          <button className="font-pretendard px-3 py-1 text-xs font-medium leading-[150%] text-gray-500 hover:text-gray-900">
+                          <Button className="font-pretendard px-3 py-1 text-xs font-medium leading-[150%] text-gray-500 hover:text-gray-900">
                             복사
-                          </button>
-                          <button className="font-pretendard px-3 py-1 text-xs font-medium leading-[150%] text-red hover:text-red">
+                          </Button>
+                          <Button className="font-pretendard px-3 py-1 text-xs font-medium leading-[150%] text-red hover:text-red">
                             삭제
-                          </button>
+                          </Button>
                         </div>
                       </div>
                       {/* 여기에 장소 카드 컴포넌트들이 들어간다. */}

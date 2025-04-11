@@ -127,12 +127,6 @@ export const AUTH_ROUTES = {
   ],
 };
 
-export type AuthErrorMessageProps = {
-  messages: string[];
-  className?: string;
-  variant?: 'default' | 'destructive';
-};
-
 /**
  * 소셜 로그인 관련 상수
  */

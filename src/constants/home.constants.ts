@@ -1,4 +1,4 @@
-import { TravelCategory } from '@/types/home.categoty.type';
+import { TravelCategory } from '@/types/home.category.type';
 
 /**
  * 카테고리와 해당 라우트 경로 매핑

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { CategoryState } from '@/types/home.categoty.type';
+import { CategoryState } from '@/types/home.category.type';
 
 /**
  * 카테고리 상태를 관리하는 Zustand 스토어

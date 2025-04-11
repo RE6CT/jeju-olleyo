@@ -39,6 +39,7 @@ const MainCarousel = ({ imageList }: MainCarouselProps) => {
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="overflow-hidden" ref={emblaRef}>
+        {/* 이미지가 없거나 못불러왔을시 대체 화면 */}
         <div className="flex">
           {imageList?.length === 0 && (
             <div
@@ -52,6 +53,7 @@ const MainCarousel = ({ imageList }: MainCarouselProps) => {
               </div>
             </div>
           )}
+          {/* 캐러셀 이미지 */}
           {imageList?.map((image) => (
             <div
               className="relative min-w-full"

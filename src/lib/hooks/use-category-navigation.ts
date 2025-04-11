@@ -1,5 +1,5 @@
 import { CATEGORY_ROUTES } from '@/constants/home.constants';
-import { TravelCategory } from '@/types/home.categoty.type';
+import { TravelCategory } from '@/types/home.category.type';
 import useCategoryStore from '@/zustand/home.category.store';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useMemo } from 'react';

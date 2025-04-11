@@ -29,6 +29,16 @@ const nextConfig = {
         hostname: 'tong.visitkorea.or.kr',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'bgznxwfpnvskfzsiisrn.supabase.co',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        pathname: '/**',
+      },
     ],
   },
 };

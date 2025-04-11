@@ -12,7 +12,7 @@ import { AuthProps } from '@/types/auth.type';
 const AuthLayout = ({ children }: AuthProps) => {
   return (
     // 인증 페이지 레이아웃
-    <div className="flex min-h-screen items-center justify-center bg-slate-50">
+    <div className="flex min-h-screen items-center justify-center">
       <Card className="w-full max-w-md">{children}</Card>
     </div>
   );

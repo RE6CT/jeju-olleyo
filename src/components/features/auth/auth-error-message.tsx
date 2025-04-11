@@ -1,9 +1,10 @@
 'use client';
 
 import { AlertCircle } from 'lucide-react';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Alert } from '@/components/ui/alert';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
+import { AuthErrorMessageProps } from '@/types/auth.type';
 
 /**
  * 인증 관련 에러 메시지를 표시하는 컴포넌트
@@ -12,11 +13,6 @@ import { motion, AnimatePresence } from 'framer-motion';
  * @param props.className 추가 CSS 클래스
  * @param props.variant 알림 스타일 (default, destructive)
  */
-interface AuthErrorMessageProps {
-  messages: string[];
-  className?: string;
-  variant?: 'default' | 'destructive';
-}
 
 const AuthErrorMessage = ({
   messages,
@@ -41,8 +37,8 @@ const AuthErrorMessage = ({
       >
         <Alert variant={variant} className="border-red-200 bg-red-50 p-3">
           <div className="grid grid-cols-[auto,1fr] items-center gap-2">
-            <AlertCircle className="h-4 w-4 translate-y-[0px] text-red-600" />
-            <span className="text-sm font-medium leading-none text-red-600">
+            <AlertCircle className="text-red-600 h-4 w-4 translate-y-[0px]" />
+            <span className="text-red-600 text-sm font-medium leading-none">
               {errorMessage}
             </span>
           </div>

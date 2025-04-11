@@ -43,6 +43,13 @@ const MainCarousel = ({ imageList }: MainCarouselProps) => {
       className="relative overflow-hidden"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onKeyDown={(e) => {
+        if (e.key === 'ArrowLeft') emblaApi?.scrollPrev();
+        if (e.key === 'ArrowRight') emblaApi?.scrollNext();
+      }}
+      tabIndex={0}
+      role="region"
+      aria-label="이미지 캐러셀"
     >
       <div className="overflow-hidden" ref={emblaRef}>
         {/* 이미지가 없거나 못불러왔을시 대체 화면 */}
@@ -60,52 +67,38 @@ const MainCarousel = ({ imageList }: MainCarouselProps) => {
             </div>
           )}
           {/* 캐러셀 이미지 */}
-          {imageList &&
-            imageList.map((image) => (
-              <div
-                className="relative min-w-full"
-                key={image.id}
-                style={{
-                  paddingTop: `${(MAIN_CAROUSEL_OPTIONS.HEIGHT / MAIN_CAROUSEL_OPTIONS.WIDTH) * 100}%`,
-                }}
+          {imageList?.map((image) => (
+            <div
+              className="relative min-w-full"
+              key={image.id}
+              style={{
+                paddingTop: `${(MAIN_CAROUSEL_OPTIONS.HEIGHT / MAIN_CAROUSEL_OPTIONS.WIDTH) * 100}%`,
+              }}
+            >
+              <Link
+                href={image.link_url || '#'}
+                className="block h-full w-full"
+                aria-label={`${image.title || '슬라이드'} 상세 보기`}
               >
-                <Link
-                  href={image.link_url || '#'}
-                  className="block h-full w-full"
-                  aria-label={`${image.title || '슬라이드'} 상세 보기`}
-                >
-                  <Image
-                    src={image.image_url}
-                    alt={image.title || '슬라이드 이미지'}
-                    fill
-                    priority
-                    sizes="100vw"
-                    className="object-cover"
-                    onLoad={handleImageLoad}
-                  />
-                  +{' '}
-                  {!imagesLoaded && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
-                      <p className="text-gray-500">이미지 로딩 중...</p>
-                    </div>
-                  )}
-                </Link>
-              </div>
-            ))}
+                <Image
+                  src={image.image_url}
+                  alt={image.title || '슬라이드 이미지'}
+                  fill
+                  priority
+                  sizes="100vw"
+                  className="object-cover"
+                  onLoad={handleImageLoad}
+                />
+                {!imagesLoaded && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+                    <p className="text-gray-500">이미지 로딩 중...</p>
+                  </div>
+                )}
+              </Link>
+            </div>
+          ))}
         </div>
       </div>
-      <div
-        className="relative overflow-hidden"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        onKeyDown={(e) => {
-          if (e.key === 'ArrowLeft') emblaApi?.scrollPrev();
-          if (e.key === 'ArrowRight') emblaApi?.scrollNext();
-        }}
-        tabIndex={0}
-        role="region"
-        aria-label="이미지 캐러셀"
-      ></div>
 
       {/* 화살표 버튼 */}
       <NavigationButton

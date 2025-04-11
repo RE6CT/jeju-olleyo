@@ -27,5 +27,9 @@ export const fetchGetImagesByMainCarousel = async (): Promise<
     throw new Error(`메인 캐러셀 이미지 로딩 실패: ${error.message}`);
   }
 
+  if (!data || data.length === 0) {
+    console.info('활성화된 메인 캐러셀 이미지가 없습니다.')
+  }
+
   return data as CarouselImages[];
 };

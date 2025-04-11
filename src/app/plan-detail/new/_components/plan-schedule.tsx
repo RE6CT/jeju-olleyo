@@ -19,6 +19,17 @@ const ACTIVE_TAB_STYLE =
 const INACTIVE_TAB_STYLE =
   'border-[0.6px] border-gray-600 bg-white text-gray-900 hover:bg-gray-100 hover:text-gray-900';
 
+const AddPlacePrompt = () => (
+  <div className="mt-4 flex items-center gap-3">
+    <div className="flex h-[24px] w-[24px] flex-col items-center justify-center gap-[10px] rounded-[12px] bg-primary-500 px-2 text-white">
+      +
+    </div>
+    <span className="font-pretendard pointer-events-none flex w-full items-center rounded-lg bg-gray-50 px-4 py-3 text-12 font-medium leading-[150%] text-gray-400">
+      검색을 통해 새로운 장소를 추가하세요
+    </span>
+  </div>
+);
+
 const PlanSchedule = ({
   startDate,
   endDate,
@@ -93,7 +104,8 @@ const PlanSchedule = ({
                           </button>
                         </div>
                       </div>
-                      {/* 여기에 장소 카드 컴포넌트들이 들어갈 예정 */}
+                      {/* 여기에 장소 카드 컴포넌트들이 들어간다. */}
+                      <AddPlacePrompt />
                     </div>
                   ),
                 )}
@@ -120,6 +132,7 @@ const PlanSchedule = ({
                   </div>
                 </div>
                 {/* 여기에 장소 카드 컴포넌트들이 들어갈 예정 */}
+                <AddPlacePrompt />
               </div>
             )
           ) : (

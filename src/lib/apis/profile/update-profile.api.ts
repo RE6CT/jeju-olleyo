@@ -48,6 +48,10 @@ export const fetchUpdateNickname = async (userId: string, nickname: string) => {
   }
 };
 
+/**
+ * 프로필 이미지를 변경하는 함수
+ * @param formData 프로필 이미지 변경 핸들러로부터 전달된 폼 데이터 (userId, profileImage)
+ */
 export const fetchUpdateProfileImage = async (formData: FormData) => {
   try {
     const supabase = await getServerClient();
@@ -56,7 +60,7 @@ export const fetchUpdateProfileImage = async (formData: FormData) => {
     const userId = formData.get('userId') as string;
 
     if (!file) {
-      throw new Error('이미지 파일이 제공되지 않았습니다.');
+      throw new Error(ERROR_MESSAGES.IMAGE_DATA_MISSING);
     }
 
     // 확장자 추출 및 이름 지정
@@ -70,7 +74,7 @@ export const fetchUpdateProfileImage = async (formData: FormData) => {
 
     if (imageUploadError) {
       console.log(imageUploadError.message);
-      throw new Error(`이미지 업로드 도중 오류가 발생했습니다.`);
+      throw new Error(ERROR_MESSAGES.PROFILE_UPDATE_FAILED);
     }
 
     // URL 생성
@@ -87,18 +91,17 @@ export const fetchUpdateProfileImage = async (formData: FormData) => {
       .eq('user_id', userId);
 
     if (dataUpdateError) {
-      throw new Error(`사용자 정보 업데이트 중 오류가 발생했습니다.`);
+      throw new Error(ERROR_MESSAGES.USER_UPDATE_FAILED);
     }
 
     revalidatePath(PATH.ACCOUNT);
-
     return {
       success: true,
-      message: '프로필 이미지가 성공적으로 변경되었습니다.',
+      message: SUCCESS_MESSAGES.PROFILE_UPDATED,
     };
   } catch (error: unknown) {
     // 에러 메시지 없을 경우의 디폴트 메시지
-    let errorMessage = '프로필 이미지 변경 중 오류가 발생했습니다.';
+    let errorMessage = ERROR_MESSAGES.PROFILE_UPDATE_FAILED;
 
     // 에러 객체라면 해당 에러 메시지를 적용
     if (error instanceof Error) {

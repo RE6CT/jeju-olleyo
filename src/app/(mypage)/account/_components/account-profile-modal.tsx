@@ -6,6 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/modal';
+import { ERROR_MESSAGES } from '@/constants/mypage.constants';
 import { fetchUpdateProfileImage } from '@/lib/apis/profile/update-profile.api';
 import { ProfileModalProps } from '@/types/mypage.type';
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
@@ -57,7 +58,7 @@ const ProfileModal = ({
   ) => {
     e.preventDefault();
     if (!selectImage) {
-      alert('이미지가 선택되지 않았습니다.');
+      alert(ERROR_MESSAGES.IMAGE_DATA_MISSING);
       return;
     }
 
@@ -74,7 +75,7 @@ const ProfileModal = ({
       const result = await fetchUpdateProfileImage(formData);
       alert(result.message);
     } catch (error: unknown) {
-      alert('에러 발생');
+      alert(ERROR_MESSAGES.PROFILE_UPDATE_FAILED);
     } finally {
       setModalOpen(false);
     }

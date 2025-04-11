@@ -13,7 +13,6 @@ import { ProfileImageButtonProps } from '@/types/mypage.type';
 const BUTTON_STYLE =
   "absolute bottom-0 right-0 h-8 w-8 rounded-full bg-[url('/icons/edit.svg')] bg-center bg-no-repeat [background-size:18px_18px] bg-white hover:bg-gray-50 shadow-button focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0";
 
-// ! rounded-12 적용되지 않는 문제
 const DROPDOWN_STYLE = {
   box: 'border-none rounded-[12px] py-2 px-2 shadow-dropdown',
   item: 'm-0 py-2 px-2',

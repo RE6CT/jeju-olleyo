@@ -2,8 +2,6 @@
 
 import ErrorMessage from '@/app/error';
 import Loading from '@/app/loading';
-import fetchGetPlacesByCategory from '@/lib/apis/search/get-place-by-categories.api';
-import fetchGetAllPlaces from '@/lib/apis/search/get-place.api';
 import { useQuery } from '@tanstack/react-query';
 
 const CategoryClient = ({ category }: { category: string }) => {

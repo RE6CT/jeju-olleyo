@@ -6,7 +6,7 @@
  */
 
 const ErrorMessage = ({ message }: { message: string | undefined }) => (
-  <p className="mt-1 text-xs text-red-500">{message}</p>
+  <p className="mt-1 text-xs text-red">{message}</p>
 );
 
 export default ErrorMessage;

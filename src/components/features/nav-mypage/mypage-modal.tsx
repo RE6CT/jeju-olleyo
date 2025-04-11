@@ -200,7 +200,7 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
           <section className="text-center">
             <span
               onClick={() => onLinkClick('reservations')}
-              className="hover:text-blue-500 cursor-pointer transition-colors"
+              className="cursor-pointer transition-colors hover:text-blue"
             >
               항공권 예약 내역
             </span>

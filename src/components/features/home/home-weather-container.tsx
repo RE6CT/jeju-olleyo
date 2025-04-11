@@ -76,7 +76,7 @@ const WeatherSection = () => {
         <h2 className="mb-2 text-xl font-semibold text-gray-800">
           {weatherMessage.title}
         </h2>
-        <p className="text-red-600">{error}</p>
+        <p className="text-red">{error}</p>
       </div>
     );
   }
@@ -113,7 +113,7 @@ const WeatherSection = () => {
 
             {/* 최저/최고 온도 */}
             <div className="flex items-center gap-2">
-              <div className="text-blue-600 flex flex-col items-center">
+              <div className="flex flex-col items-center text-blue">
                 <div className="text-center text-[10px] font-normal not-italic leading-[150%] text-gray-900">
                   최저
                 </div>
@@ -121,7 +121,7 @@ const WeatherSection = () => {
                   {day.minTemp}°
                 </div>
               </div>
-              <div className="text-blue-600 flex flex-col items-center">
+              <div className="flex flex-col items-center text-blue">
                 <div className="text-center text-[10px] font-normal not-italic leading-[150%] text-gray-900">
                   최고
                 </div>

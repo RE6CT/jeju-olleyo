@@ -107,7 +107,7 @@ const ProfileInfo = ({
               {...register('nickname')}
             />
             {errors.nickname && (
-              <p className="absolute m-2 text-sm text-red-500">
+              <p className="absolute m-2 text-sm text-red">
                 {errors.nickname.message}
               </p>
             )}

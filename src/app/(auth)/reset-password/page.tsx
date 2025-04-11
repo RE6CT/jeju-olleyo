@@ -78,7 +78,7 @@ const ResetPasswordPage = () => {
               register={register('password')}
             />
             {errors.password && (
-              <p className="text-sm text-red-500">{errors.password.message}</p>
+              <p className="text-sm text-red">{errors.password.message}</p>
             )}
           </div>
 
@@ -90,7 +90,7 @@ const ResetPasswordPage = () => {
               register={register('confirmPassword')}
             />
             {errors.confirmPassword && (
-              <p className="text-sm text-red-500">
+              <p className="text-sm text-red">
                 {errors.confirmPassword.message}
               </p>
             )}

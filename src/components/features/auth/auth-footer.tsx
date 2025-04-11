@@ -14,7 +14,7 @@ const AuthFooter = ({ question, linkText, linkHref }: AuthFooterProps) => {
     <CardFooter className="flex justify-center">
       <div className="text-sm text-gray-600">
         {question}{' '}
-        <Link href={linkHref} className="text-blue-600 hover:text-blue-800">
+        <Link href={linkHref} className="text-blue hover:text-blue">
           {linkText}
         </Link>
       </div>

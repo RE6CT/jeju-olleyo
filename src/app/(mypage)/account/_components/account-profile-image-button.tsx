@@ -24,7 +24,7 @@ const ProfileImageButton = () => {
       <DropdownMenuContent>
         <DropdownMenuGroup>
           <DropdownMenuItem>수정</DropdownMenuItem>
-          <DropdownMenuItem className="text-red-500">삭제</DropdownMenuItem>
+          <DropdownMenuItem className="text-red">삭제</DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>

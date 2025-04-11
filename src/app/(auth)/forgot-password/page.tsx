@@ -74,7 +74,7 @@ const ForgotPasswordPage = () => {
                 {...register('email')}
               />
               {errors.email && (
-                <p className="text-sm text-red-500">{errors.email.message}</p>
+                <p className="text-sm text-red">{errors.email.message}</p>
               )}
             </div>
             <Button type="submit" className="w-full" disabled={isLoading}>
@@ -90,7 +90,7 @@ const ForgotPasswordPage = () => {
         <div className="text-sm text-gray-600">
           <Link
             href={PATH.SIGNIN}
-            className="ml-1 text-black hover:text-blue-800"
+            className="ml-1 text-black hover:text-blue"
           >
             로그인 페이지로 돌아가기
           </Link>

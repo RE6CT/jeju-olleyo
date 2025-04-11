@@ -34,7 +34,7 @@ const PlaceCard = ({
   return (
     <div className="flex flex-col gap-3">
       {/* 원형으로 인덱스 표시 */}
-      <div className="flex h-6 w-6 -translate-y-1/2 flex-col items-center justify-center gap-[10px] rounded-[12px] bg-primary-500 px-2 text-10 font-regular leading-[150%] text-white">
+      <div className="flex h-6 w-6 -translate-y-1/2 flex-col items-center justify-center gap-[10px] rounded-[12px] bg-primary-500 px-2 text-10 font-regular text-white">
         {index}
       </div>
 
@@ -58,18 +58,18 @@ const PlaceCard = ({
             category="카페" // 추후 상수로 관리
             badgeType="card"
             variant="primary"
-            className="text-10 leading-[150%]"
+            className="text-10"
           />
           <div className="flex flex-col">
-            <span className="font-pretendard text-20 font-semibold leading-[150%] text-gray-900">
+            <span className="font-pretendard text-20 font-semibold text-gray-900">
               {title}
             </span>
-            <span className="font-pretendard text-16 font-regular leading-[150%] text-gray-400">
+            <span className="font-pretendard text-16 font-regular  text-gray-400">
               {address}
             </span>
           </div>
           <div className="flex items-center gap-1 text-12">
-            <div className="flex aspect-square h-[20px] w-[20px] shrink-0 flex-col items-center justify-center gap-[10px] rounded-[12px] bg-primary-500 p-[3px_9px] text-10 font-regular leading-[150%] text-white">
+            <div className="flex aspect-square h-[20px] w-[20px] shrink-0 flex-col items-center justify-center gap-[10px] rounded-[12px] bg-primary-500 p-[3px_9px] text-10 font-regular  text-white">
               {index + 1}
             </div>
             <div className="flex">

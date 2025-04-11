@@ -32,7 +32,7 @@ const ResetPasswordPage = () => {
         <div className="flex items-center justify-center p-6">
           <div className="w-full">
             <div className="mb-4 text-center">
-              <h2 className="text-xl font-bold">비밀번호 재설정</h2>
+              <h2 className="bold-22">비밀번호 재설정</h2>
             </div>
             <div className="rounded-md bg-white">
               <div className="text-center">

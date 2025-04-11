@@ -50,7 +50,7 @@ const PlanHeader = ({
           <div className="flex h-full flex-col items-center justify-center gap-3">
             {/* svg 대체 필요 */}
             <p className="text-24 text-gray-300">+</p>
-            <p className="text-center text-14 font-medium leading-[150%] text-gray-300">
+            <p className="text-center text-14 font-medium text-gray-300">
               내 일정을 대표할
               <br />
               이미지를 추가하세요

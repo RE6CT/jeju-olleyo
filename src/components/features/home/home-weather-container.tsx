@@ -73,7 +73,7 @@ const WeatherSection = () => {
   if (error) {
     return (
       <div className="mx-auto w-full max-w-4xl rounded-lg p-4">
-        <h2 className="mb-2 text-xl font-semibold text-gray-800">
+        <h2 className="mb-2 text-20 font-semibold text-gray-800">
           {weatherMessage.title}
         </h2>
         <p className="text-red">{error}</p>
@@ -85,14 +85,14 @@ const WeatherSection = () => {
   return (
     <div className="flex flex-col items-center justify-center gap-9 self-stretch">
       <div className="flex flex-col items-start justify-center gap-2">
-        <div className="flex w-full justify-center text-center text-base font-semibold not-italic leading-[150%]">
+        <div className="flex w-full justify-center text-center text-base font-semibold not-italic">
           <h2 className="text-primary-500/60">
             {month}월 {day}일
           </h2>
           <span className="text-secondary-300">,</span>
           <h2 className="text-gray-900">{weatherMessage.title}</h2>
         </div>
-        <p className="self-stretch text-center text-xl font-semibold not-italic leading-[150%] text-gray-900">
+        <p className="semibold-20 self-stretch text-center not-italic text-gray-900">
           {weatherMessage.subtitle}
         </p>
       </div>

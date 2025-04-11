@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState } from 'react';
 import MypageModal from './mypage-modal';
 import { ModalPath } from '@/types/mypage.type';
 import useClickOutside from '@/lib/hooks/use-click-outside';
@@ -10,6 +10,7 @@ import useAuthCheck from '@/lib/hooks/use-auth-check';
 
 /**
  * 헤더 nav 내부의 마이페이지 모달 오픈 버튼
+ * 화면 크기에 맞게 텍스트 크기가 조정됨
  */
 const MypageButton = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -55,7 +56,7 @@ const MypageButton = () => {
       <button
         onClick={handleMypageModalToggle}
         ref={buttonRef}
-        className="relative"
+        className="relative whitespace-nowrap text-xs font-medium sm:text-xs md:text-sm lg:text-base"
       >
         마이페이지
       </button>

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { CardFooter } from '@/components/ui/card';
 import { AuthFooterProps } from '@/types/auth.type';
+import useAuthStore from '@/zustand/auth.store';
 
 /**
  * 인증 관련 페이지의 푸터 컴포넌트

@@ -12,6 +12,7 @@ import { getCurrentSession } from '@/lib/apis/auth/auth-browser.api';
 import { PATH } from '@/constants/path.constants';
 import { SOCIAL_AUTH } from '@/constants/auth.constants';
 import { MYPAGE_PROVIER_IMAGE_SIZE } from '@/constants/header.constants';
+import useAuthStore from '@/zustand/auth.store';
 
 /**
  * nav의 마이페이지 버튼 클릭 시 나타나는 모달 컴포넌트
@@ -21,7 +22,8 @@ import { MYPAGE_PROVIER_IMAGE_SIZE } from '@/constants/header.constants';
  */
 const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
   const router = useRouter();
-  const { user, handleLogout, isLoading } = useAuth();
+  const { handleLogout, isLoading } = useAuth();
+  const user = useAuthStore((state) => state.user);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [localUser, setLocalUser] = useState(user);
 
@@ -37,7 +39,6 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
         setLocalUser(user);
       }
     };
-
     fetchUserInfo();
   }, [user]);
 
@@ -107,7 +108,7 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
         className="flex cursor-pointer items-center gap-3"
       >
         <ProfileImage
-          image={userInfo.profileImg as string}
+          image={(userInfo.profileImg as string) || '/character/happy.svg'}
           width={58}
           height={58}
         />
@@ -117,7 +118,7 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
               {userInfo.nickname}
             </h3>
             {localUser && cookieProvider && (
-              <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs">
+              <span className="px-2 py-0.5 text-xs">
                 {cookieProvider === SOCIAL_AUTH.PROVIDERS.GOOGLE ? (
                   <Image
                     src="/images/google_mypage.png"
@@ -160,7 +161,7 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
               >
                 <h5>장소</h5>
                 <Image
-                  src="/images/default-profile.png"
+                  src="/icons/mypage-location.svg"
                   alt="장소 아이콘"
                   width={50}
                   height={50}
@@ -173,7 +174,7 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
               >
                 <h5>일정</h5>
                 <Image
-                  src="/images/default-profile.png"
+                  src="/icons/mypage-schedule.svg"
                   alt="일정 아이콘"
                   width={50}
                   height={50}
@@ -186,7 +187,7 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
               >
                 <h5>댓글</h5>
                 <Image
-                  src="/images/default-profile.png"
+                  src="/icons/mypage-comment.svg"
                   alt="댓글 아이콘"
                   width={50}
                   height={50}
@@ -199,7 +200,7 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
           <section className="text-center">
             <span
               onClick={() => onLinkClick('reservations')}
-              className="cursor-pointer transition-colors hover:text-blue-500"
+              className="hover:text-blue-500 cursor-pointer transition-colors"
             >
               항공권 예약 내역
             </span>

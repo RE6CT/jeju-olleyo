@@ -15,8 +15,8 @@ export const TEXT = {
   noDescription: '설명이 없습니다.',
   noDate: '날짜 미정',
   dateSeparator: '-',
-  edit: '수정',
-  delete: '삭제',
+  edit: '수정하기',
+  delete: '삭제하기',
 } as const;
 
 export const ITEMS_PER_PAGE = 10; // 페이지당 표시할 일정 수

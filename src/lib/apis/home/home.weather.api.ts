@@ -16,7 +16,7 @@ export const weatherService = {
       const API_BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || '';
       const res = await fetch(`${API_BASE_URL}/api/weather`, {
         next: {
-          revalidate: 86400, // 24시간마다 갱신
+          revalidate: 21600, // 6시간마다 갱신
           tags: ['weather'],
         },
       });

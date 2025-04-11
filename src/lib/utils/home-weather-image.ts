@@ -18,7 +18,7 @@ const getWeatherIconSrc = (icon: string): string => {
     'thunder-showers-night': '/weather/thunderstorm.jpg',
   };
 
-  return iconMap[icon];
+  return iconMap[icon] || '/weather/cloudy.jpg';
 };
 
 export default getWeatherIconSrc;

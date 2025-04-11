@@ -32,7 +32,7 @@ const ResetPasswordPage = () => {
         <div className="flex items-center justify-center p-6">
           <div className="w-full">
             <div className="mb-4 text-center">
-              <h2 className="text-xl font-bold">비밀번호 재설정</h2>
+              <h2 className="bold-22">비밀번호 재설정</h2>
             </div>
             <div className="rounded-md bg-white">
               <div className="text-center">
@@ -78,7 +78,7 @@ const ResetPasswordPage = () => {
               register={register('password')}
             />
             {errors.password && (
-              <p className="text-sm text-red-500">{errors.password.message}</p>
+              <p className="text-sm text-red">{errors.password.message}</p>
             )}
           </div>
 
@@ -90,7 +90,7 @@ const ResetPasswordPage = () => {
               register={register('confirmPassword')}
             />
             {errors.confirmPassword && (
-              <p className="text-sm text-red-500">
+              <p className="text-sm text-red">
                 {errors.confirmPassword.message}
               </p>
             )}

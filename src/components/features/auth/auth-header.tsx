@@ -9,7 +9,7 @@ import { AuthHeaderProps } from '@/types/auth.type';
 const AuthHeader = ({ title, description }: AuthHeaderProps) => {
   return (
     <CardHeader className="space-y-2">
-      <CardTitle className="text-start text-2xl font-bold">{title}</CardTitle>
+      <CardTitle className="text-start">{title}</CardTitle>
       <CardDescription className="text-start text-sm">
         {description}
       </CardDescription>

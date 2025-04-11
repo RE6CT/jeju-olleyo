@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import DatePicker from 'react-datepicker';
@@ -59,15 +60,23 @@ const PlanHeader = ({
 
         {/* 입력 영역 */}
         <div className="flex h-[160px] flex-1 flex-col items-start gap-7 rounded-[12px] border border-solid border-gray-200">
-          {/* TODO: 입력 아이콘 추가 예정 */}
           <div className="w-full">
-            <TextareaWithCount
-              maxLength={50}
-              placeholder="나만의 일정을 제목을 지어주세요"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="w-full resize-none border-0 bg-transparent py-5 pl-5 text-14 focus-visible:ring-0 focus-visible:ring-offset-0"
-            />
+            <div className="relative">
+              <Image
+                src="/icons/edit.svg"
+                alt="edit icon"
+                width={24}
+                height={24}
+                className="absolute left-4 top-5 z-10"
+              />
+              <TextareaWithCount
+                maxLength={50}
+                placeholder="나만의 일정을 제목을 지어주세요"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="w-full resize-none border-0 bg-transparent py-5 pl-12 text-14 focus-visible:ring-0 focus-visible:ring-offset-0"
+              />
+            </div>
           </div>
 
           <div className="relative w-full">
@@ -102,13 +111,22 @@ const PlanHeader = ({
 
       {/* 일정 설명 입력 */}
       <div className="mt-4">
-        <TextareaWithCount
-          placeholder="특별히 적어 두고 싶은 메모를 입력하세요"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          maxLength={500}
-          className="h-[160px] w-full resize-none rounded-[12px] border-gray-200 py-5 pl-5 text-14 focus-visible:ring-0 focus-visible:ring-offset-0"
-        />
+        <div className="relative">
+          <Image
+            src="/icons/edit.svg"
+            alt="edit icon"
+            width={24}
+            height={24}
+            className="absolute left-4 top-5 z-10"
+          />
+          <TextareaWithCount
+            placeholder="특별히 적어 두고 싶은 메모를 입력하세요"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            maxLength={500}
+            className="h-[160px] w-full resize-none rounded-[12px] border-gray-200 py-5 pl-12 text-14 focus-visible:ring-0 focus-visible:ring-offset-0"
+          />
+        </div>
       </div>
     </>
   );

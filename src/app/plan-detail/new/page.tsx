@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import PlanForm from './_components/plan-form';
 
 const PlanDetailNewPage = () => {
@@ -9,7 +10,12 @@ const PlanDetailNewPage = () => {
           <span className="font-pretendard text-28 font-bold leading-[130%]">
             내 일정 만들기
           </span>
-          {/* TODO: 이미지 추가 */}
+          <Image
+            src="/character/happy_color.svg"
+            alt="happy icon"
+            width={37}
+            height={36}
+          />
         </div>
         <PlanForm />
       </div>

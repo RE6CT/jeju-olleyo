@@ -5,6 +5,7 @@ import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 import ErrorMessage from '@/components/ui/error-message';
 import Link from 'next/link';
 import { PATH } from '@/constants/path.constants';
+import Image from 'next/image';
 
 const MyPlanPage = async () => {
   const { user, error: userError } = await fetchGetCurrentUser();
@@ -36,7 +37,17 @@ const MyPlanPage = async () => {
       <div className="container mx-auto py-8">
         <div className="mb-8 flex flex-col gap-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-3xl font-bold">내 일정</h1>
+            <div className="flex gap-3">
+              <span className="font-pretendard text-28 font-bold leading-[130%]">
+                지난 일정 보기
+              </span>
+              <Image
+                src="/character/sunglasses.svg"
+                alt="happy icon"
+                width={37}
+                height={36}
+              />
+            </div>
             <Link href={PATH.PLAN_NEW}>
               <Button>새 일정 만들기</Button>
             </Link>

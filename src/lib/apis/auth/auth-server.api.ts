@@ -63,7 +63,7 @@ export const fetchRegister = async (values: RegisterFormValues) => {
         data: {
           nickname: values.nickname,
           phone: values.phone,
-          profile_img: 'null',
+          profile_img: '',
         },
       },
     });

@@ -114,3 +114,57 @@ export const fetchUpdateProfileImage = async (formData: FormData) => {
     };
   }
 };
+
+/**
+ * 유저의 프로필 이미지를 초기화하는 함수
+ * @param userId 유저의 uuid
+ */
+export const fetchDeleteProfileImage = async (
+  userId: string,
+  profileImage: string,
+) => {
+  try {
+    const supabase = await getServerClient();
+
+    // 유저의 프로필 이미지 모두 삭제
+    const imagePath = profileImage.split('/').pop();
+    const { error: imageDeleteError } = await supabase.storage
+      .from('profile-images')
+      .remove([`${userId}/${imagePath}`]);
+
+    if (imageDeleteError) {
+      throw new Error(ERROR_MESSAGES.PROFILE_UPDATE_FAILED);
+    }
+
+    // 유저 테이블의 프로필 이미지 빈 문자열로 업데이트
+    const { error: dataUpdateError } = await supabase
+      .from('users')
+      .update({
+        profile_img: '',
+      })
+      .eq('user_id', userId);
+
+    if (dataUpdateError) {
+      throw new Error(ERROR_MESSAGES.USER_UPDATE_FAILED);
+    }
+
+    revalidatePath(PATH.ACCOUNT);
+    return {
+      success: true,
+      message: SUCCESS_MESSAGES.PROFILE_UPDATED,
+    };
+  } catch (error: unknown) {
+    // 에러 메시지 없을 경우의 디폴트 메시지
+    let errorMessage = ERROR_MESSAGES.PROFILE_UPDATE_FAILED;
+
+    // 에러 객체라면 해당 에러 메시지를 적용
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+
+    return {
+      success: false,
+      message: errorMessage,
+    };
+  }
+};

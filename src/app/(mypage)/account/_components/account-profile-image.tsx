@@ -2,6 +2,8 @@ import ProfileImage from '@/components/commons/profile-image';
 import ProfileImageButton from './account-profile-image-button';
 import { useState } from 'react';
 import ProfileModal from './account-profile-modal';
+import { fetchDeleteProfileImage } from '@/lib/apis/profile/update-profile.api';
+import { ERROR_MESSAGES } from '@/constants/mypage.constants';
 
 const IMAGE_SIZE = 88;
 
@@ -28,11 +30,24 @@ const AccountProfileImage = ({
   };
 
   /** 프로필 사진 초기화 핸들러 */
-  const handleProfileImageDelete = () => {
+  const handleProfileImageDelete = async () => {
     const isConfirmed = confirm(
       '프로필 사진을 기본 이미지로 변경하시겠습니까?',
     );
     if (!isConfirmed) return;
+
+    try {
+      const result = await fetchDeleteProfileImage(userId, profileImage);
+      alert(result.message);
+    } catch (error: unknown) {
+      let errorMessage = ERROR_MESSAGES.PROFILE_UPDATE_FAILED;
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+      alert(errorMessage);
+    } finally {
+      setModalOpen(false);
+    }
   };
 
   return (

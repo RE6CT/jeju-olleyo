@@ -107,11 +107,7 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
         onClick={() => onLinkClick('account')}
         className="flex cursor-pointer items-center gap-3"
       >
-        <ProfileImage
-          image={(userInfo.profileImg as string) || '/character/happy.svg'}
-          width={58}
-          height={58}
-        />
+        <ProfileImage image={userInfo.profileImg} width={58} height={58} />
         <div className="flex flex-col">
           <div className="flex items-center gap-2">
             <h3 className="whitespace-nowrap font-semibold">
@@ -200,7 +196,7 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
           <section className="text-center">
             <span
               onClick={() => onLinkClick('reservations')}
-              className="hover:text-blue-500 cursor-pointer transition-colors"
+              className="cursor-pointer transition-colors hover:text-blue-500"
             >
               항공권 예약 내역
             </span>

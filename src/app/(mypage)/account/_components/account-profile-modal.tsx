@@ -75,7 +75,11 @@ const ProfileModal = ({
       const result = await fetchUpdateProfileImage(formData);
       alert(result.message);
     } catch (error: unknown) {
-      alert(ERROR_MESSAGES.PROFILE_UPDATE_FAILED);
+      let errorMessage = ERROR_MESSAGES.PROFILE_UPDATE_FAILED;
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+      alert(errorMessage);
     } finally {
       setModalOpen(false);
     }

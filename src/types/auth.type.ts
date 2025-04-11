@@ -36,7 +36,7 @@ export type RegisterFormValues = {
   confirmPassword: string;
   nickname: string;
   phone: string;
-  avatar_url: string;
+  avatar_url?: string;
 };
 
 /**

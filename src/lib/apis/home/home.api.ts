@@ -24,7 +24,7 @@ export const fetchGetImagesByMainCarousel = async (): Promise<
       '메인 캐러셀 이미지를 가져오는 중 오류가 발생했습니다:',
       error,
     );
-    throw error;
+    throw new Error(`메인 캐러셀 이미지 로딩 실패: ${error.message}`);
   }
 
   return data as CarouselImages[];

@@ -166,7 +166,10 @@ export const fetchGetCurrentUser = async () => {
     const userInfo = {
       id: data.user.id,
       email: data.user.email,
-      avatar_url: data.user.user_metadata.avatar_url || null,
+      avatar_url:
+        data.user.user_metadata.profile_img ||
+        data.user.user_metadata.avatar_url ||
+        null,
       nickname:
         data.user.user_metadata.nickname ||
         data.user.user_metadata.full_name ||

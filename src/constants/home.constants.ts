@@ -4,12 +4,12 @@ import { TravelCategory } from '@/types/home.category.type';
  * 카테고리와 해당 라우트 경로 매핑
  */
 export const CATEGORY_ROUTES: Record<TravelCategory, string> = {
-  전체: '/',
-  명소: '/',
-  숙박: '/',
-  맛집: '/',
-  카페: '/',
-  항공권: '/',
+  전체: '/categories/all',
+  명소: '/categories/toursite',
+  숙박: '/categories/accomodation',
+  맛집: '/categories/restaurant',
+  카페: '/categories/cafe',
+  항공권: '/categories/flight',
 };
 
 export const CATEGORIES: TravelCategory[] = [

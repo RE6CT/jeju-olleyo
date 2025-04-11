@@ -12,6 +12,7 @@ export type ModalPath =
 
 /** 모달의 props 타입 */
 export type MypageModalProps = {
+  userId: string;
   onLinkClick: (path: ModalPath) => void;
   setClose: () => void;
   modalRef: RefObject<HTMLDivElement>;

@@ -391,6 +391,14 @@ export type Database = {
         Args: { user_id_param: string };
         Returns: (CommentsRow & CommentPlanRow)[];
       };
+      get_user_data_counts: {
+        Args: { user_id_param: string };
+        Returns: {
+          bookmark_count: number;
+          like_count: number;
+          comment_count: number;
+        };
+      };
     };
     Enums: {
       [_ in never]: never;

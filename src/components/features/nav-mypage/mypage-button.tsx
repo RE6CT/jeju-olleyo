@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState } from 'react';
 import MypageModal from './mypage-modal';
 import { ModalPath } from '@/types/mypage.type';
 import useClickOutside from '@/lib/hooks/use-click-outside';
@@ -11,7 +11,7 @@ import useAuthCheck from '@/lib/hooks/use-auth-check';
 /**
  * 헤더 nav 내부의 마이페이지 모달 오픈 버튼
  */
-const MypageButton = () => {
+const MypageButton = ({ userId }: { userId: string }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const modalRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -61,6 +61,7 @@ const MypageButton = () => {
       </button>
       {isOpen && (
         <MypageModal
+          userId={userId}
           onLinkClick={handleLinkClick}
           setClose={setClose}
           modalRef={modalRef}

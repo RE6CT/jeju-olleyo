@@ -11,6 +11,7 @@ import useAuth from '@/lib/hooks/use-auth';
 import { getCurrentSession } from '@/lib/apis/auth/auth-browser.api';
 import { PATH } from '@/constants/path.constants';
 import useAuthStore from '@/zustand/auth.store';
+import { useGetDataCount } from '@/lib/queries/use-get-data-count';
 
 const ICON_STYLE = {
   title: 'medium-14 text-gray-500',
@@ -25,10 +26,16 @@ const ICON_STYLE = {
  * @param setClose - 모달 오픈 여부 set 함수
  * @param modalRef - 모달에 전달할 모달 ref
  */
-const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
+const MypageModal = ({
+  onLinkClick,
+  setClose,
+  modalRef,
+  userId,
+}: MypageModalProps) => {
   const router = useRouter();
-  const { handleLogout, isLoading } = useAuth();
   const user = useAuthStore((state) => state.user);
+  const { data } = useGetDataCount(userId);
+  const { handleLogout, isLoading: isAuthLoading } = useAuth();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [localUser, setLocalUser] = useState(user);
 
@@ -106,7 +113,7 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
   return (
     <div
       ref={modalRef}
-      className="absolute right-10 top-16 z-50 flex flex-col gap-3 rounded-lg bg-white p-4 text-black shadow-lg"
+      className="shadow-dropdown rounded-12 absolute right-10 top-16 z-50 flex flex-col gap-3 bg-white p-4"
     >
       {/* 섹션1 - 프로필 영역 */}
       <section
@@ -145,7 +152,9 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
                   height={48}
                   className={ICON_STYLE.icon}
                 />
-                <span className={ICON_STYLE.description}>0개</span>
+                <span className={ICON_STYLE.description}>
+                  {data?.bookmarkCount || 0}개
+                </span>
               </button>
               <button
                 onClick={() => onLinkClick(PATH.LIKES)}
@@ -159,7 +168,9 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
                   height={48}
                   className={ICON_STYLE.icon}
                 />
-                <span className={ICON_STYLE.description}>0개</span>
+                <span className={ICON_STYLE.description}>
+                  {data?.likeCount || 0}개
+                </span>
               </button>
               <button
                 onClick={() => onLinkClick(PATH.COMMENTS)}
@@ -173,7 +184,9 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
                   height={48}
                   className={ICON_STYLE.icon}
                 />
-                <span className={ICON_STYLE.description}>0개</span>
+                <span className={ICON_STYLE.description}>
+                  {data?.commentCount || 0}개
+                </span>
               </button>
             </div>
           </section>
@@ -194,7 +207,7 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
           <section className="text-center">
             <button
               onClick={(e) => handleSignout(e)}
-              disabled={isLoggingOut || isLoading || !localUser}
+              disabled={isLoggingOut || isAuthLoading || !localUser}
               className="medium-12 hover:text-secondary-300"
             >
               {isLoggingOut ? '로그아웃 중...' : '로그아웃'}

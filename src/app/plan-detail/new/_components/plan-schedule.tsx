@@ -30,7 +30,7 @@ const PlanSchedule = ({
   const dayCount = calculateTotalDays(startDate, endDate);
 
   return (
-    <div className="mb-6 mt-4">
+    <div className="my-6">
       {/* 탭 네비게이션 */}
       <div className="flex gap-2">
         <Button
@@ -65,7 +65,7 @@ const PlanSchedule = ({
       </div>
 
       {/* 일정 콘텐츠 영역 */}
-      <div className="mt-4 flex gap-6">
+      <div className="mt-8 flex gap-6">
         {/* 메인 콘텐츠 */}
         <div className="flex-1">
           {startDate && endDate ? (
@@ -75,28 +75,25 @@ const PlanSchedule = ({
                 {Array.from({ length: dayCount }, (_, i) => i + 1).map(
                   (day) => (
                     <div key={day}>
-                      <div className="mb-4 flex items-center justify-between border-b border-gray-100 pb-4">
-                        <div className="flex items-center gap-2">
-                          <span className="text-18 font-bold text-gray-900">
+                      <div className="mb-4 flex items-center justify-between pb-4">
+                        <div className="flex items-center gap-3">
+                          <span className="font-pretendard text-16 font-medium leading-[150%] text-[#182126]">
                             DAY {day}
                           </span>
-                          <span className="text-14 text-gray-600">
+                          <span className="font-pretendard flex items-center text-12 font-normal leading-[150%] text-[#182126]">
                             {formatDayDate(startDate, day)}
                           </span>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <button className="text-14 font-medium text-gray-600 hover:text-gray-900">
+                        <div className="flex items-center">
+                          <button className="font-pretendard px-3 py-1 text-xs font-medium leading-[150%] text-gray-500 hover:text-gray-900">
                             복사
                           </button>
-                          <button className="text-14 font-medium text-gray-600 hover:text-gray-900">
+                          <button className="font-pretendard px-3 py-1 text-xs font-medium leading-[150%] text-red hover:text-red">
                             삭제
                           </button>
                         </div>
                       </div>
                       {/* 여기에 장소 카드 컴포넌트들이 들어갈 예정 */}
-                      <div className="flex items-center justify-center rounded-[12px] border border-dashed border-gray-200 py-4 text-14 text-gray-300">
-                        + 장소 추가하기
-                      </div>
                     </div>
                   ),
                 )}
@@ -104,7 +101,7 @@ const PlanSchedule = ({
             ) : (
               // 특정 일자 탭에서는 해당 일자의 일정만 보여줌
               <div>
-                <div className="mb-4 flex items-center justify-between border-b border-gray-100 pb-4">
+                <div className="mb-4 flex items-center justify-between pb-4">
                   <div className="flex items-center gap-2">
                     <span className="text-18 font-bold text-gray-900">
                       DAY {activeTab}
@@ -113,19 +110,16 @@ const PlanSchedule = ({
                       {formatDayDate(startDate, activeTab as number)}
                     </span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <button className="text-14 font-medium text-gray-600 hover:text-gray-900">
+                  <div className="flex items-center gap-4">
+                    <button className="text-14 font-medium text-gray-600 hover:text-gray-900 hover:underline">
                       복사
                     </button>
-                    <button className="text-14 font-medium text-gray-600 hover:text-gray-900">
+                    <button className="text-14 font-medium text-red hover:text-red/80">
                       삭제
                     </button>
                   </div>
                 </div>
                 {/* 여기에 장소 카드 컴포넌트들이 들어갈 예정 */}
-                <div className="flex items-center justify-center rounded-[12px] border border-dashed border-gray-200 py-4 text-14 text-gray-300">
-                  + 장소 추가하기
-                </div>
               </div>
             )
           ) : (

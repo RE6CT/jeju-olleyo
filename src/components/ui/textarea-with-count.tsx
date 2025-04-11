@@ -29,32 +29,36 @@ const TextareaWithCount = forwardRef<
   TextareaHTMLAttributes<HTMLTextAreaElement> & {
     value: string;
     maxLength: number;
+    onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   }
->(({ value, maxLength, className, ...props }, ref) => {
+>(({ value, maxLength, className, onChange, ...props }, ref) => {
   const currentLength = value.length;
   const isExceeded = currentLength >= maxLength;
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (e.target.value.length <= maxLength) {
+      onChange?.(e);
+    }
+  };
 
   return (
     <div className="relative">
       <Textarea
         ref={ref}
         value={value}
-        maxLength={maxLength}
         className={cn('pr-16', className)} // 글자 수 표시 공간 확보, 외부에서 padding right 방향 속성 주면 이상해짐
+        onChange={handleChange}
         {...props}
       />
 
-      {/* #A7BDC8 색상이 --Gray-300이 될 예정 */}
-      {/* #FF0A0A 색상이 --red가 될 예정 */}
-      {/* #182126 색상이 --Gray-900이 될 예정 */}
       <div
         className={cn(
           'absolute bottom-2 right-4 text-xs',
           currentLength === 0
-            ? 'text-[#A7BDC8]'
+            ? 'text-gray-300'
             : isExceeded
-              ? 'text-[#FF0A0A]'
-              : 'text-[#182126]',
+              ? 'text-red'
+              : 'text-gray-900',
         )}
       >
         {currentLength}/{maxLength}

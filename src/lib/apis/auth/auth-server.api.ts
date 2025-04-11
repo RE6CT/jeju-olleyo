@@ -14,7 +14,7 @@ import { handleError } from '@/lib/utils/handleError';
  * 로그인 서버 액션
  */
 export const fetchLogin = async (values: LoginFormValues) => {
-  const supabase = await getServerClient();
+  const supabase = getServerClient();
 
   try {
     const { data, error } = await supabase.auth.signInWithPassword({
@@ -63,6 +63,7 @@ export const fetchRegister = async (values: RegisterFormValues) => {
         data: {
           nickname: values.nickname,
           phone: values.phone,
+          profile_img: 'null',
         },
       },
     });

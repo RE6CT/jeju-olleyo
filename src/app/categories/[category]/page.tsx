@@ -4,7 +4,7 @@ import fetchGetAllPlaces from '@/lib/apis/search/get-place.api';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import CategoryClient from './category-client';
 
-const CategoryPage = async ({ params }: { category: string }) => {
+const CategoryPage = async ({ params }: { params: { category: string } }) => {
   const queryClient = getQueryClient();
   const category = params.category;
 

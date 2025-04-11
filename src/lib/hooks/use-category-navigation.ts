@@ -8,7 +8,7 @@ import { useEffect, useMemo } from 'react';
  * 카테고리 상태와 라우팅을 함께 관리하는 훅
  * 컴포넌트에서 사용하기 위한 편의 함수
  */
-export const useCategoryNavigation = () => {
+const useCategoryNavigation = () => {
   const router = useRouter();
   const pathname = usePathname();
   const { activeCategory, setActiveCategory } = useCategoryStore();
@@ -56,3 +56,5 @@ export const useCategoryNavigation = () => {
     navigateToCategory,
   };
 };
+
+export default useCategoryNavigation;

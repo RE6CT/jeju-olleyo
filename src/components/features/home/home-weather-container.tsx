@@ -104,32 +104,8 @@ const WeatherSection = () => {
             key={`day-${index}`}
             className="flex w-20 flex-col items-center justify-center gap-2"
           >
-            <div className="self-stretch text-center text-xs font-medium not-italic leading-[150%] text-gray-900">
-              {index === 0 ? '오늘' : day.dayOfWeek + '요일'}
-            </div>
-
             {/* 날씨 카드 */}
             <WeatherCard weather={day} isToday={index === 0} />
-
-            {/* 최저/최고 온도 */}
-            <div className="flex items-center gap-2">
-              <div className="flex flex-col items-center text-blue">
-                <div className="text-center text-[10px] font-normal not-italic leading-[150%] text-gray-900">
-                  최저
-                </div>
-                <div className="flex items-center justify-center gap-2.5 self-stretch text-blue">
-                  {day.minTemp}°
-                </div>
-              </div>
-              <div className="flex flex-col items-center text-blue">
-                <div className="text-center text-[10px] font-normal not-italic leading-[150%] text-gray-900">
-                  최고
-                </div>
-                <div className="flex items-center justify-center gap-2.5 self-stretch text-red">
-                  {day.maxTemp}°
-                </div>
-              </div>
-            </div>
           </div>
         ))}
       </div>

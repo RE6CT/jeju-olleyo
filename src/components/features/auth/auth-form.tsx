@@ -148,7 +148,7 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
             </div>
             <div>
               {/* 비밀번호 찾기 링크 */}
-              <Link href={PATH.FORGOT_PASSWORD} className="text-xs text-blue">
+              <Link href={PATH.FORGOT_PASSWORD} className="text-xs text-black hover:text-blue">
                 비밀번호 찾기
               </Link>
             </div>

@@ -8,7 +8,7 @@ const Home = () => {
   return (
     <div className="flex min-h-screen flex-col bg-gray-50">
       {/* 카테고리 탭 영역 */}
-      <section className="sticky top-0 z-40 w-full">
+      <section className="w-full">
         <Suspense fallback={<Loading />}>
           <CategoryTabs />
         </Suspense>
@@ -20,6 +20,16 @@ const Home = () => {
       </section>
 
       {/* 날씨 섹션 */}
+      <section className="mt-12">
+        <WeatherSection />
+      </section>
+
+      <section className="mt-12">
+        <WeatherSection />
+      </section>
+      <section className="mt-12">
+        <WeatherSection />
+      </section>
       <section className="mt-12">
         <WeatherSection />
       </section>

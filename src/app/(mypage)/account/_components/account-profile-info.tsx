@@ -93,6 +93,7 @@ const ProfileInfo = ({
       if (error instanceof Error) {
         errorMessage = error.message;
       }
+      alert(errorMessage);
     } finally {
       setIsEditMode(false);
       reset();

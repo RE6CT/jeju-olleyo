@@ -22,9 +22,6 @@ const ICON_STYLE = {
 
 /**
  * nav의 마이페이지 버튼 클릭 시 나타나는 모달 컴포넌트
- * - 모바일에서는 작은 크기로 표시 (두 번째 코드 기준)
- * - 데스크탑에서는 원래 크기로 표시 (첫 번째 코드 기준)
- *
  * @param onLinkClick - 링크 클릭시 실행되는 이벤트 핸들러
  * @param setClose - 모달 오픈 여부 set 함수
  * @param modalRef - 모달에 전달할 모달 ref
@@ -116,7 +113,7 @@ const MypageModal = ({
   return (
     <div
       ref={modalRef}
-      className="shadow-dropdown rounded-12 absolute right-10 top-16 z-50 flex flex-col gap-3 bg-white p-4"
+      className="absolute right-10 top-16 z-50 flex flex-col gap-3 rounded-12 bg-white p-4 shadow-dropdown"
     >
       {/* 섹션1 - 프로필 영역 */}
       <section
@@ -230,88 +227,7 @@ const MypageModal = ({
             로그인하기
           </Button>
         </section>
-        <Separator />
-
-        {localUser ? (
-          <>
-            <section>
-              <ul className="flex justify-between">
-                <li
-                  onClick={() => onLinkClick('bookmarks')}
-                  className="flex cursor-pointer flex-col items-center"
-                >
-                  <h5>장소</h5>
-                  <Image
-                    src="/icons/mypage-location.svg"
-                    alt="장소 아이콘"
-                    width={50}
-                    height={50}
-                  />
-                  <span>0개</span>
-                </li>
-                <li
-                  onClick={() => onLinkClick('likes')}
-                  className="flex cursor-pointer flex-col items-center"
-                >
-                  <h5>일정</h5>
-                  <Image
-                    src="/icons/mypage-schedule.svg"
-                    alt="일정 아이콘"
-                    width={50}
-                    height={50}
-                  />
-                  <span>0개</span>
-                </li>
-                <li
-                  onClick={() => onLinkClick('comments')}
-                  className="flex cursor-pointer flex-col items-center"
-                >
-                  <h5>댓글</h5>
-                  <Image
-                    src="/icons/mypage-comment.svg"
-                    alt="댓글 아이콘"
-                    width={50}
-                    height={50}
-                  />
-                  <span>0개</span>
-                </li>
-              </ul>
-            </section>
-            <Separator />
-            <section className="text-center">
-              <span
-                onClick={() => onLinkClick('reservations')}
-                className="cursor-pointer transition-colors hover:text-blue"
-              >
-                항공권 예약 내역
-              </span>
-            </section>
-            <Separator />
-            <Button
-              onClick={(e) => handleSignout(e)}
-              variant="outline"
-              size="sm"
-              className="mt-1"
-              disabled={isLoggingOut || isLoading || !localUser}
-            >
-              {isLoggingOut ? '로그아웃 중...' : '로그아웃'}
-            </Button>
-          </>
-        ) : (
-          <section className="py-2 text-center">
-            <p className="mb-2 text-gray-500">로그인 후 이용할 수 있습니다</p>
-            <Button
-              onClick={() => {
-                setClose();
-                router.push(PATH.SIGNIN);
-              }}
-              className="w-full"
-            >
-              로그인하기
-            </Button>
-          </section>
-        )}
-      </div>
+      )}
     </div>
   );
 };

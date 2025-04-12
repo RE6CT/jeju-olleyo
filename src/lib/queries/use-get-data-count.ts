@@ -8,8 +8,8 @@ import { fetchGetProfileDataCountByUserId } from '../apis/profile/get-profile-da
  */
 export const useGetDataCount = (userId: string) => {
   return useQuery({
-    queryKey: ['dataCount'],
+    queryKey: ['dataCount', userId],
     queryFn: async () => await fetchGetProfileDataCountByUserId(userId),
-    staleTime: 60000,
+    staleTime: 30000,
   });
 };

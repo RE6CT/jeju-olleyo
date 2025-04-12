@@ -7,8 +7,7 @@ const LikesPage = async () => {
   const { user } = await fetchGetCurrentUser();
   const userId = user?.id;
 
-  // 로그인되어있지 않을 경우 리턴
-  if (!userId) return;
+  if (!userId) return null;
 
   const likes: Plan[] | null = await fetchGetAllLikesByUserId(userId);
 

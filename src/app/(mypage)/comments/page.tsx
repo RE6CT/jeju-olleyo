@@ -6,7 +6,7 @@ const CommentsPage = async () => {
   const { user } = await fetchGetCurrentUser();
   const userId = user?.id;
 
-  if (!userId) return;
+  if (!userId) return null;
 
   const comments = await fetchAllCommentsByUserId(userId);
 
@@ -16,11 +16,13 @@ const CommentsPage = async () => {
   return (
     <div className="flex w-full flex-col gap-5">
       <div className="flex flex-col gap-4">
-        <p className="medium-16 text-secondary-300">3개의 댓글을 남겼어요</p>
+        <p className="medium-16 text-secondary-300">
+          {comments.length}개의 댓글을 남겼어요
+        </p>
         <h2 className="semibold-28 w-full">내가 쓴 댓글</h2>
         <ul className="flex flex-col gap-5">
           {comments.map((comment) => (
-            <MyComment comment={comment} />
+            <MyComment key={comment.planId} comment={comment} />
           ))}
         </ul>
       </div>

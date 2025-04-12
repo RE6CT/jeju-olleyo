@@ -19,7 +19,11 @@ const AccountPage = async () => {
           nickname={user.nickname}
           profileImage={user.avatar_url}
         />
-        <PersonalInfo email={user.email ?? '이메일 없음'} phone={user.phone} />
+        <PersonalInfo
+          userId={user.id}
+          email={user.email ?? '이메일 없음'}
+          phone={user.phone}
+        />
         <SecurityInfo userId={user.id} />
       </Suspense>
     </div>

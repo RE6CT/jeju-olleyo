@@ -168,3 +168,48 @@ export const fetchDeleteProfileImage = async (
     };
   }
 };
+
+/**
+ * 유저의 휴대폰 번호를 업데이트하는 서버 액션 함수
+ * @param userId - 유저의 uuid
+ * @param phone - 새 휴대폰 번호
+ */
+export const fetchUpdatePhoneByUserId = async (
+  userId: string,
+  phone: string,
+) => {
+  try {
+    const supabase = await getServerClient();
+
+    if (!phone) throw new Error(ERROR_MESSAGES.PHONE_DATA_MISSING);
+
+    const { error } = await supabase
+      .from('users')
+      .update({ phone })
+      .eq('user_id', userId);
+
+    if (error) {
+      if (error.code === ERROR_CODES.UNIQUE_VIOLATION) {
+        throw new Error(ERROR_MESSAGES.PHONE_DUPLICATE);
+      } else {
+        throw new Error(error.message);
+      }
+    }
+
+    revalidatePath(PATH.ACCOUNT);
+    return { success: true, message: SUCCESS_MESSAGES.PHONE_UPDATED };
+  } catch (error: unknown) {
+    // 에러 메시지 없을 경우의 디폴트 메시지
+    let errorMessage = ERROR_MESSAGES.PHONE_UPDATE_FAILED;
+
+    // 에러 객체라면 해당 에러 메시지를 적용
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+
+    return {
+      success: false,
+      message: errorMessage,
+    };
+  }
+};

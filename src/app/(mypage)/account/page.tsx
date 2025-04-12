@@ -8,7 +8,7 @@ import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 const AccountPage = async () => {
   const { user } = await fetchGetCurrentUser();
 
-  if (!user) return;
+  if (!user) return null;
 
   return (
     <div className="flex w-full flex-col gap-9">

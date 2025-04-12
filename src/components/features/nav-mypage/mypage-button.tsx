@@ -12,7 +12,7 @@ import useAuthCheck from '@/lib/hooks/use-auth-check';
  * 헤더 nav 내부의 마이페이지 모달 오픈 버튼
  * 화면 크기에 맞게 텍스트 크기가 조정됨
  */
-const MypageButton = () => {
+const MypageButton = ({ userId }: { userId: string }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const modalRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -47,7 +47,7 @@ const MypageButton = () => {
       router.push(PATH.SIGNIN);
       return;
     }
-    router.push(`/${path}`);
+    router.push(path);
     setClose();
   };
 
@@ -62,6 +62,7 @@ const MypageButton = () => {
       </button>
       {isOpen && (
         <MypageModal
+          userId={userId}
           onLinkClick={handleLinkClick}
           setClose={setClose}
           modalRef={modalRef}

@@ -30,6 +30,8 @@ const PlanForm = () => {
       />
       <PlanMap />
       <PlanSchedule startDate={startDate} endDate={endDate} />
+      <PlanSchedule startDate={startDate} endDate={endDate} />
+      <PlanSchedule startDate={startDate} endDate={endDate} />
     </div>
   );
 };

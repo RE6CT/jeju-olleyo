@@ -35,10 +35,10 @@ const AuthErrorMessage = ({
         transition={{ duration: 0.2 }}
         className={cn('flex items-center justify-center', className)}
       >
-        <Alert variant={variant} className="border-red-200 bg-red-50 p-3">
+        <Alert variant={variant} className="bg-red-50 border-red p-3">
           <div className="grid grid-cols-[auto,1fr] items-center gap-2">
-            <AlertCircle className="text-red-600 h-4 w-4 translate-y-[0px]" />
-            <span className="text-red-600 text-sm font-medium leading-none">
+            <AlertCircle className="text-red h-4 w-4 translate-y-[0px]" />
+            <span className="text-sm font-medium leading-none text-red">
               {errorMessage}
             </span>
           </div>

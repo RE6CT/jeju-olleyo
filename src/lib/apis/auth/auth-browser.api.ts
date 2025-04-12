@@ -101,6 +101,11 @@ export const fetchUpdatePassword = async (
       };
     }
 
+    // 비밀번호 변경 성공 시 provider 쿠키 설정
+    if (typeof window !== 'undefined') {
+      document.cookie = 'provider=email; max-age=604800; path=/;'; // 7일간 유지
+    }
+
     return { success: true, error: null };
   } catch (error: any) {
     const handled = handleError('비밀번호 업데이트', error);

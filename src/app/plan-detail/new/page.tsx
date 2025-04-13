@@ -12,7 +12,7 @@ const PlanDetailNewPage = () => {
       <div className="border-b px-9">
         {/* 헤더 영역 */}
         <div className="flex gap-3 pt-6">
-          <span className="font-pretendard text-28 font-bold leading-[130%]">
+          <span className="text-28 font-bold leading-[130%]">
             내 일정 만들기
           </span>
           <Image

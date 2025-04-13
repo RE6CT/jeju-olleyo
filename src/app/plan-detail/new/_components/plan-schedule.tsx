@@ -25,7 +25,7 @@ const AddPlacePrompt = () => (
     <div className="flex h-[24px] w-[24px] flex-col items-center justify-center gap-[10px] rounded-[12px] bg-primary-500 px-2 text-white">
       +
     </div>
-    <span className="font-pretendard pointer-events-none flex w-full items-center rounded-lg bg-gray-50 px-4 py-3 text-12 font-medium text-gray-400">
+    <span className="pointer-events-none flex w-full items-center rounded-lg bg-gray-50 px-4 py-3 text-12 font-medium text-gray-400">
       검색을 통해 새로운 장소를 추가하세요
     </span>
   </div>
@@ -89,23 +89,23 @@ const PlanSchedule = ({
                     <div key={day}>
                       <div className="mb-4 flex items-center justify-between pb-4">
                         <div className="flex items-center gap-3">
-                          <span className="font-pretendard text-16 font-medium text-[#182126]">
+                          <span className="text-16 font-medium text-[#182126]">
                             DAY {day}
                           </span>
-                          <span className="font-pretendard flex items-center text-12 font-normal text-[#182126]">
+                          <span className="flex items-center text-12 font-normal text-[#182126]">
                             {formatDayDate(startDate, day)}
                           </span>
                         </div>
                         <div className="flex items-center">
                           <Button
                             variant="ghost"
-                            className="font-pretendard text-12 font-medium text-gray-500 hover:bg-transparent hover:text-[#698EA1]"
+                            className="text-12 font-medium text-gray-500 hover:bg-transparent hover:text-[#698EA1]"
                           >
                             복사
                           </Button>
                           <Button
                             variant="ghost"
-                            className="font-pretendard text-12 font-medium text-red hover:bg-transparent hover:text-red"
+                            className="text-12 font-medium text-red hover:bg-transparent hover:text-red"
                           >
                             삭제
                           </Button>
@@ -132,13 +132,13 @@ const PlanSchedule = ({
                   <div className="flex items-center gap-4">
                     <Button
                       variant="ghost"
-                      className="font-pretendard text-12 font-medium text-[#698EA1] hover:bg-transparent hover:text-[#698EA1]"
+                      className="text-12 font-medium text-gray-600 hover:bg-transparent hover:text-gray-900"
                     >
                       복사
                     </Button>
                     <Button
                       variant="ghost"
-                      className="font-pretendard text-12 font-medium text-[#FF0A0A] hover:bg-transparent hover:text-[#FF0A0A]"
+                      className="text-12 font-medium text-red hover:bg-transparent hover:text-red/80"
                     >
                       삭제
                     </Button>

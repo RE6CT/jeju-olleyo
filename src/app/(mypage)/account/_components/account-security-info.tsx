@@ -3,7 +3,9 @@
 import PasswordInput from '@/components/features/auth/auth-password-input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { ERROR_MESSAGES } from '@/constants/auth.constants';
+import { ERROR_MESSAGES as FORM_ERROR_MESSAGE } from '@/constants/auth.constants';
+import { ERROR_MESSAGES as UPDATE_ERROR_MESSAGE } from '@/constants/mypage.constants';
+import { fetchUpdatePassword } from '@/lib/apis/profile/update-profile.api';
 import useProviderFromCookie from '@/lib/hooks/use-get-provider';
 import { passwordSchema } from '@/lib/schemas/auth-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -36,11 +38,11 @@ const SecurityInfo = ({ userId }: { userId: string }) => {
       confirmNewPassword: z.string(),
     })
     .refine((data) => data.newPassword === data.confirmNewPassword, {
-      message: ERROR_MESSAGES.PASSWORD_MISMATCH,
+      message: FORM_ERROR_MESSAGE.PASSWORD_MISMATCH,
       path: ['confirmNewPassword'],
     })
     .refine((data) => data.password !== '', {
-      message: ERROR_MESSAGES.REQUIRED_PASSWORD,
+      message: FORM_ERROR_MESSAGE.REQUIRED_PASSWORD,
       path: ['password'],
     });
 
@@ -73,11 +75,24 @@ const SecurityInfo = ({ userId }: { userId: string }) => {
   };
 
   /** 비밀번호 수정 완료 버튼 클릭 핸들러  */
-  const handleEditCompleteButtonClick = (data: passwordValues) => {
+  const handleEditCompleteButtonClick = async (data: passwordValues) => {
     const isConfirmed = confirm('비밀번호를 수정하시겠습니까?');
     if (!isConfirmed) return;
-    // 비밀번호 번호 수정 로직
-    setIsEditMode(false);
+
+    // 비밀번호 번호 수정
+    try {
+      const result = await fetchUpdatePassword(data.password, data.newPassword);
+      alert(result.message);
+    } catch (error: unknown) {
+      let errorMessage = UPDATE_ERROR_MESSAGE.PASSWORD_UPDATE_FAILED;
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+      alert(errorMessage);
+    } finally {
+      setIsEditMode(false);
+      reset();
+    }
   };
 
   return (

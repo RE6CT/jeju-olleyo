@@ -6,7 +6,7 @@ import { useState } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 
-import { NavigationButton } from '@/components/features/home/home-navigation-button';
+import NavigationButton from '@/components/features/home/home-navigation-button';
 import { ProgressIndicator } from '@/components/features/home/home-progress';
 import { useCarouselProgress } from '@/lib/hooks/use-carousel-progress';
 import { MAIN_CAROUSEL_OPTIONS } from '@/constants/home.constants';

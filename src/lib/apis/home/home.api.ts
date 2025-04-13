@@ -9,9 +9,7 @@ import { CarouselImages } from '@/types/home.carousel.type';
  * @async
  * @returns {Promise<CarouselImages[]>} 메인 캐러셀 이미지 데이터 배열을 담은 Promise
  */
-export const fetchGetImagesByMainCarousel = async (): Promise<
-  CarouselImages[]
-> => {
+const fetchGetImagesByMainCarousel = async (): Promise<CarouselImages[]> => {
   const supabase = getBrowserClient();
   const { data, error } = await supabase
     .from('main_carousel_images')
@@ -41,3 +39,5 @@ export const fetchGetImagesByMainCarousel = async (): Promise<
     }) || []
   );
 };
+
+export default fetchGetImagesByMainCarousel;

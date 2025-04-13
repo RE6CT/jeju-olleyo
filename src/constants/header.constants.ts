@@ -1,1 +1,0 @@
-export const MYPAGE_PROVIER_IMAGE_SIZE = 24;

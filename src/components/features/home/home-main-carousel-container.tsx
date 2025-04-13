@@ -1,5 +1,5 @@
 import MainCarousel from './home-main-carousel';
-import { fetchGetImagesByMainCarousel } from '@/lib/apis/home/home.api';
+import fetchGetImagesByMainCarousel from '@/lib/apis/home/home.api';
 
 const MainCarouselContainer = async () => {
   const data = await fetchGetImagesByMainCarousel();

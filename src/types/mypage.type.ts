@@ -4,14 +4,15 @@ import { CamelCaseObject } from './common.type';
 
 /** 모달의 링크 path를 제한하는 타입 */
 export type ModalPath =
-  | 'account'
-  | 'bookmarks'
-  | 'likes'
-  | 'comments'
-  | 'reservations';
+  | '/account'
+  | '/bookmarks'
+  | '/likes'
+  | '/comments'
+  | '/reservations';
 
 /** 모달의 props 타입 */
 export type MypageModalProps = {
+  userId: string;
   onLinkClick: (path: ModalPath) => void;
   setClose: () => void;
   modalRef: RefObject<HTMLDivElement>;

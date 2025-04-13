@@ -6,7 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/modal';
-import { ERROR_MESSAGES } from '@/constants/mypage.constants';
+import { ERROR_MESSAGES, MAX_FILE_SIZE } from '@/constants/mypage.constants';
 import { fetchUpdateProfileImage } from '@/lib/apis/profile/update-profile.api';
 import { ProfileModalProps } from '@/types/mypage.type';
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
@@ -35,6 +35,15 @@ const ProfileModal = ({
     }
   }, [isModalOpen]);
 
+  // URL 객체 해제
+  useEffect(() => {
+    if (preview) {
+      return () => {
+        URL.revokeObjectURL(preview);
+      };
+    }
+  }, [preview]);
+
   /** 이미지 파일 피커 트리거 */
   const handleSelectFile = () => {
     fileInputRef.current?.click();
@@ -46,6 +55,11 @@ const ProfileModal = ({
 
     const file = e.target.files[0];
     if (file) {
+      if (file.size > MAX_FILE_SIZE) {
+        alert('파일의 크기는 5MB를 넘을 수 없습니다.');
+        return;
+      }
+
       setSelectImage(file);
       const imageUrl = URL.createObjectURL(file);
       setPreview(imageUrl);
@@ -100,7 +114,7 @@ const ProfileModal = ({
         />
         <button
           onClick={handleSelectFile}
-          className="rounded-12 border-gray-10 mb-4 mt-3 flex aspect-square w-[296px] items-center justify-center border bg-gray-50"
+          className="border-gray-10 mb-4 mt-3 flex aspect-square w-[296px] items-center justify-center rounded-12 border bg-gray-50"
           style={
             preview
               ? {
@@ -126,7 +140,7 @@ const ProfileModal = ({
           />
           <Button
             type="submit"
-            className="text-primary-500 border-primary-500 semibold-16 w-full rounded-[12px] border bg-white font-semibold hover:bg-white"
+            className="semibold-16 w-full rounded-[12px] border border-primary-500 bg-white font-semibold text-primary-500 hover:bg-white"
           >
             완료
           </Button>

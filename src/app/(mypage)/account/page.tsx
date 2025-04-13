@@ -8,7 +8,7 @@ import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 const AccountPage = async () => {
   const { user } = await fetchGetCurrentUser();
 
-  if (!user) return;
+  if (!user) return null;
 
   return (
     <div className="flex w-full flex-col gap-9">
@@ -19,7 +19,11 @@ const AccountPage = async () => {
           nickname={user.nickname}
           profileImage={user.avatar_url}
         />
-        <PersonalInfo email={user.email ?? '이메일 없음'} phone={user.phone} />
+        <PersonalInfo
+          userId={user.id}
+          email={user.email ?? '이메일 없음'}
+          phone={user.phone}
+        />
         <SecurityInfo userId={user.id} />
       </Suspense>
     </div>

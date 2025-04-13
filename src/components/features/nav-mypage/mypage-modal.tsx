@@ -10,20 +10,35 @@ import { useRouter } from 'next/navigation';
 import useAuth from '@/lib/hooks/use-auth';
 import { getCurrentSession } from '@/lib/apis/auth/auth-browser.api';
 import { PATH } from '@/constants/path.constants';
-import { SOCIAL_AUTH } from '@/constants/auth.constants';
-import { MYPAGE_PROVIER_IMAGE_SIZE } from '@/constants/header.constants';
 import useAuthStore from '@/zustand/auth.store';
+import { useGetDataCount } from '@/lib/queries/use-get-data-count';
+
+const ICON_STYLE = {
+  title: 'medium-14 text-gray-500',
+  description: 'medium-12 text-gray-500',
+  icon: 'mb-3 mt-1',
+  button: 'flex flex-col items-center px-2 hover:bg-gray-50',
+};
 
 /**
  * nav의 마이페이지 버튼 클릭 시 나타나는 모달 컴포넌트
+ * - 모바일에서는 작은 크기로 표시 (두 번째 코드 기준)
+ * - 데스크탑에서는 원래 크기로 표시 (첫 번째 코드 기준)
+ *
  * @param onLinkClick - 링크 클릭시 실행되는 이벤트 핸들러
  * @param setClose - 모달 오픈 여부 set 함수
  * @param modalRef - 모달에 전달할 모달 ref
  */
-const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
+const MypageModal = ({
+  onLinkClick,
+  setClose,
+  modalRef,
+  userId,
+}: MypageModalProps) => {
   const router = useRouter();
-  const { handleLogout, isLoading } = useAuth();
   const user = useAuthStore((state) => state.user);
+  const { data } = useGetDataCount(userId);
+  const { handleLogout, isLoading: isAuthLoading } = useAuth();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [localUser, setLocalUser] = useState(user);
 
@@ -101,132 +116,137 @@ const MypageModal = ({ onLinkClick, setClose, modalRef }: MypageModalProps) => {
   return (
     <div
       ref={modalRef}
-      className="absolute right-10 top-16 z-50 flex flex-col gap-3 rounded-lg border bg-white p-4 text-black shadow-lg"
+      className="sm:scale-80 absolute right-2 top-10 z-50 origin-top-right scale-75 rounded-12 bg-white p-4 text-black shadow-dropdown sm:right-4 sm:top-12 md:right-7 md:top-14 md:scale-90 lg:right-10 lg:top-16 lg:w-auto lg:scale-100 lg:gap-3 lg:p-4"
     >
-      <section
-        onClick={() => onLinkClick('account')}
-        className="flex cursor-pointer items-center gap-3"
-      >
-        <ProfileImage image={userInfo.profileImg} width={58} height={58} />
-        <div className="flex flex-col">
-          <div className="flex items-center gap-2">
-            <h3 className="whitespace-nowrap font-semibold">
-              {userInfo.nickname}
-            </h3>
-            {localUser && cookieProvider && (
-              <span className="px-2 py-0.5 text-xs">
-                {cookieProvider === SOCIAL_AUTH.PROVIDERS.GOOGLE ? (
-                  <Image
-                    src="/images/google_mypage.png"
-                    alt="google"
-                    width={MYPAGE_PROVIER_IMAGE_SIZE}
-                    height={MYPAGE_PROVIER_IMAGE_SIZE}
-                  />
-                ) : cookieProvider === SOCIAL_AUTH.PROVIDERS.KAKAO ? (
-                  <Image
-                    width={MYPAGE_PROVIER_IMAGE_SIZE}
-                    height={MYPAGE_PROVIER_IMAGE_SIZE}
-                    src="/images/kakaotalk_mypage.png"
-                    alt="kakao"
-                  />
-                ) : cookieProvider === 'email' ? (
-                  <Image
-                    width={MYPAGE_PROVIER_IMAGE_SIZE}
-                    height={MYPAGE_PROVIER_IMAGE_SIZE}
-                    src="/images/mail_mypage.png"
-                    alt="email"
-                  />
-                ) : (
-                  'email'
-                )}
-              </span>
-            )}
+      {/* 섹션1 - 프로필 영역 */}
+      <div className="md:w-68 flex w-60 flex-col gap-3 sm:w-64 lg:w-auto">
+        <section
+          onClick={() => onLinkClick(PATH.ACCOUNT)}
+          className="flex cursor-pointer items-center gap-3"
+        >
+          <ProfileImage image={userInfo.profileImg} width={58} height={58} />
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-2">
+              <h3 className="semibold-20 whitespace-nowrap">
+                {userInfo.nickname}
+              </h3>
+              {localUser && cookieProvider && (
+                <ProviderIcon provider={cookieProvider ?? 'email'} />
+              )}
+            </div>
+            <p className="regular-14">{userInfo.email}</p>
           </div>
-          <p className="text-sm text-gray-500">{userInfo.email}</p>
-        </div>
-      </section>
-      <Separator />
-
-      {localUser ? (
-        <>
-          <section>
-            <ul className="flex justify-between">
-              <li
-                onClick={() => onLinkClick('bookmarks')}
-                className="flex cursor-pointer flex-col items-center"
-              >
-                <h5>장소</h5>
-                <Image
-                  src="/icons/mypage-location.svg"
-                  alt="장소 아이콘"
-                  width={50}
-                  height={50}
-                />
-                <span>0개</span>
-              </li>
-              <li
-                onClick={() => onLinkClick('likes')}
-                className="flex cursor-pointer flex-col items-center"
-              >
-                <h5>일정</h5>
-                <Image
-                  src="/icons/mypage-schedule.svg"
-                  alt="일정 아이콘"
-                  width={50}
-                  height={50}
-                />
-                <span>0개</span>
-              </li>
-              <li
-                onClick={() => onLinkClick('comments')}
-                className="flex cursor-pointer flex-col items-center"
-              >
-                <h5>댓글</h5>
-                <Image
-                  src="/icons/mypage-comment.svg"
-                  alt="댓글 아이콘"
-                  width={50}
-                  height={50}
-                />
-                <span>0개</span>
-              </li>
-            </ul>
-          </section>
-          <Separator />
-          <section className="text-center">
-            <span
-              onClick={() => onLinkClick('reservations')}
-              className="cursor-pointer transition-colors hover:text-blue-500"
-            >
-              항공권 예약 내역
-            </span>
-          </section>
-          <Separator />
-          <Button
-            onClick={(e) => handleSignout(e)}
-            variant="outline"
-            size="sm"
-            className="mt-1"
-            disabled={isLoggingOut || isLoading || !localUser}
-          >
-            {isLoggingOut ? '로그아웃 중...' : '로그아웃'}
-          </Button>
-        </>
-      ) : (
-        <section className="py-2 text-center">
-          <p className="mb-2 text-gray-500">로그인 후 이용할 수 있습니다</p>
-          <Button
-            onClick={() => {
-              setClose();
-              router.push(PATH.SIGNIN);
-            }}
-            className="w-full"
-          >
-            로그인하기
-          </Button>
         </section>
-      )}
+        <Separator />
+
+        {localUser ? (
+          <>
+            {/* 섹션 2 - 장소, 일정, 댓글 아이콘 영역 */}
+            <section className="py-1">
+              <div className="flex justify-between">
+                <button
+                  onClick={() => onLinkClick(PATH.BOOKMARKS)}
+                  className={ICON_STYLE.button}
+                >
+                  <h5 className={ICON_STYLE.title}>장소</h5>
+                  <Image
+                    src="/icons/mypage-location.svg"
+                    alt="장소 아이콘"
+                    width={48}
+                    height={48}
+                    className={ICON_STYLE.icon}
+                  />
+                  <span className={ICON_STYLE.description}>
+                    {data?.bookmarkCount || 0}개
+                  </span>
+                </button>
+                <button
+                  onClick={() => onLinkClick(PATH.LIKES)}
+                  className={ICON_STYLE.button}
+                >
+                  <h5 className={ICON_STYLE.title}>일정</h5>
+                  <Image
+                    src="/icons/mypage-schedule.svg"
+                    alt="일정 아이콘"
+                    width={48}
+                    height={48}
+                    className={ICON_STYLE.icon}
+                  />
+                  <span className={ICON_STYLE.description}>
+                    {data?.likeCount || 0}개
+                  </span>
+                </button>
+                <button
+                  onClick={() => onLinkClick(PATH.COMMENTS)}
+                  className={ICON_STYLE.button}
+                >
+                  <h5 className={ICON_STYLE.title}>댓글</h5>
+                  <Image
+                    src="/icons/mypage-comment.svg"
+                    alt="댓글 아이콘"
+                    width={48}
+                    height={48}
+                    className={ICON_STYLE.icon}
+                  />
+                  <span className={ICON_STYLE.description}>
+                    {data?.commentCount || 0}개
+                  </span>
+                </button>
+              </div>
+            </section>
+            <Separator />
+
+            {/* 섹션 3 - 항공권 예약 내역 */}
+            <section className="text-center">
+              <button
+                onClick={() => onLinkClick(PATH.RESERVATIONS)}
+                className="medium-12 hover:text-secondary-300"
+              >
+                항공권 예약 내역
+              </button>
+            </section>
+            <Separator />
+
+            {/* 섹션 4 - 로그아웃 버튼 영역 */}
+            <section className="text-center">
+              <button
+                onClick={(e) => handleSignout(e)}
+                disabled={isLoggingOut || isAuthLoading || !localUser}
+                className="medium-12 hover:text-secondary-300"
+              >
+                {isLoggingOut ? '로그아웃 중...' : '로그아웃'}
+              </button>
+            </section>
+          </>
+        ) : (
+          <section className="py-2 text-center">
+            <p className="mb-2 text-gray-500">로그인 후 이용할 수 있습니다</p>
+            <Button
+              onClick={() => {
+                setClose();
+                router.push(PATH.SIGNIN);
+              }}
+              className="w-full"
+            >
+              로그인하기
+            </Button>
+          </section>
+        )}
+      </div>
     </div>
+  );
+};
+
+const MYPAGE_PROVIER_IMAGE_SIZE = 24;
+
+const ProviderIcon = ({ provider }: { provider: string }) => {
+  return (
+    <Image
+      src={`/images/${provider}_mypage.png`}
+      alt={provider}
+      width={MYPAGE_PROVIER_IMAGE_SIZE}
+      height={MYPAGE_PROVIER_IMAGE_SIZE}
+    />
   );
 };
 

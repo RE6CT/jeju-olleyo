@@ -10,8 +10,8 @@ const PLACE_IMAGE_SIZE = {
   height: 40,
 };
 const ADD_PLACE_ICON_SIZE = {
-  width: 24,
-  height: 24,
+  width: 20,
+  height: 20,
 };
 
 const handleImageLoadError = (e: React.SyntheticEvent<HTMLImageElement>) => {

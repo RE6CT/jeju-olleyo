@@ -61,15 +61,13 @@ const PlaceCard = ({
             className="text-10"
           />
           <div className="flex flex-col">
-            <span className="font-pretendard text-20 font-semibold text-gray-900">
-              {title}
-            </span>
-            <span className="font-pretendard text-16 font-regular  text-gray-400">
+            <span className="text-20 font-semibold text-gray-900">{title}</span>
+            <span className="text-16 font-regular text-gray-400">
               {address}
             </span>
           </div>
           <div className="flex items-center gap-1 text-12">
-            <div className="flex aspect-square h-[20px] w-[20px] shrink-0 flex-col items-center justify-center gap-[10px] rounded-[12px] bg-primary-500 p-[3px_9px] text-10 font-regular  text-white">
+            <div className="flex aspect-square h-[20px] w-[20px] shrink-0 flex-col items-center justify-center gap-[10px] rounded-[12px] bg-primary-500 p-[3px_9px] text-10 font-regular text-white">
               {index + 1}
             </div>
             <div className="flex">

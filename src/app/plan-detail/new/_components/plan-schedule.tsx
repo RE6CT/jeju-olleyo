@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { calculateTotalDays, formatDayDate } from '@/lib/utils/date';
+import PlaceSidemenu from './place-sidemenu';
 
 type TabType = '전체보기' | number;
 
@@ -143,43 +144,7 @@ const PlanSchedule = ({
         </div>
 
         {/* 사이드바 영역 */}
-        <div className="flex w-[320px] flex-col gap-6">
-          {/* 북마크한 장소 */}
-          <div className="rounded-[12px] border border-gray-200 p-5">
-            <div className="flex items-center justify-between">
-              <span className="text-14 font-bold text-gray-900">
-                내가 북마크한 장소
-              </span>
-              <Button
-                variant="ghost"
-                className="h-auto p-0 text-14 font-medium text-gray-600 hover:bg-transparent hover:text-gray-900"
-              >
-                더보기
-              </Button>
-            </div>
-            <div className="mt-4 flex items-center justify-center rounded-[8px] border border-dashed border-gray-200 py-4 text-14 text-gray-300">
-              장소를 검색해 주세요
-            </div>
-          </div>
-
-          {/* 추천 장소 */}
-          <div className="rounded-[12px] border border-gray-200 p-5">
-            <div className="flex items-center justify-between">
-              <span className="text-14 font-bold text-gray-900">
-                이런 장소는 어떠세요?
-              </span>
-              <Button
-                variant="ghost"
-                className="h-auto p-0 text-14 font-medium text-gray-600 hover:bg-transparent hover:text-gray-900"
-              >
-                더보기
-              </Button>
-            </div>
-            <div className="mt-4 flex items-center justify-center rounded-[8px] border border-dashed border-gray-200 py-4 text-14 text-gray-300">
-              장소를 검색해 주세요
-            </div>
-          </div>
-        </div>
+        <PlaceSidemenu />
       </div>
     </div>
   );

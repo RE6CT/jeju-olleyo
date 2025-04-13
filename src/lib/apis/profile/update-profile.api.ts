@@ -4,6 +4,7 @@ import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/constants/mypage.constants';
 import { PATH } from '@/constants/path.constants';
 import { ERROR_CODES } from '@/constants/supabase.constant';
 import { getServerClient } from '@/lib/supabase/server';
+import dayjs from 'dayjs';
 import { revalidatePath } from 'next/cache';
 
 /**
@@ -15,6 +16,7 @@ export const fetchUpdateNickname = async (userId: string, nickname: string) => {
   try {
     const supabase = await getServerClient();
 
+    if (!userId) throw new Error(ERROR_MESSAGES.USER_DATA_MISSING);
     if (!nickname) throw new Error(ERROR_MESSAGES.NICKNAME_DATA_MISSING);
 
     const { error } = await supabase
@@ -59,13 +61,14 @@ export const fetchUpdateProfileImage = async (formData: FormData) => {
     const file = formData.get('profileImage') as File;
     const userId = formData.get('userId') as string;
 
+    if (!userId) throw new Error(ERROR_MESSAGES.USER_DATA_MISSING);
     if (!file) {
       throw new Error(ERROR_MESSAGES.IMAGE_DATA_MISSING);
     }
 
     // 확장자 추출 및 이름 지정
     const fileExtension = file.name.split('.').pop();
-    const fileName = `${userId}/profile_${Date.now()}.${fileExtension}`;
+    const fileName = `${userId}/profile_${dayjs().valueOf()}.${fileExtension}`;
 
     // Supabase Storage에 이미지 업로드
     const { error: imageUploadError } = await supabase.storage
@@ -126,6 +129,9 @@ export const fetchDeleteProfileImage = async (
   try {
     const supabase = await getServerClient();
 
+    if (!userId) throw new Error(ERROR_MESSAGES.USER_DATA_MISSING);
+    if (!profileImage) throw new Error(ERROR_MESSAGES.IMAGE_DATA_MISSING);
+
     // 유저의 프로필 이미지 모두 삭제
     const imagePath = profileImage.split('/').pop();
     const { error: imageDeleteError } = await supabase.storage
@@ -156,6 +162,52 @@ export const fetchDeleteProfileImage = async (
   } catch (error: unknown) {
     // 에러 메시지 없을 경우의 디폴트 메시지
     let errorMessage = ERROR_MESSAGES.PROFILE_UPDATE_FAILED;
+
+    // 에러 객체라면 해당 에러 메시지를 적용
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+
+    return {
+      success: false,
+      message: errorMessage,
+    };
+  }
+};
+
+/**
+ * 유저의 휴대폰 번호를 업데이트하는 서버 액션 함수
+ * @param userId - 유저의 uuid
+ * @param phone - 새 휴대폰 번호
+ */
+export const fetchUpdatePhoneByUserId = async (
+  userId: string,
+  phone: string,
+) => {
+  try {
+    const supabase = await getServerClient();
+
+    if (!userId) throw new Error(ERROR_MESSAGES.USER_DATA_MISSING);
+    if (!phone) throw new Error(ERROR_MESSAGES.PHONE_DATA_MISSING);
+
+    const { error } = await supabase
+      .from('users')
+      .update({ phone })
+      .eq('user_id', userId);
+
+    if (error) {
+      if (error.code === ERROR_CODES.UNIQUE_VIOLATION) {
+        throw new Error(ERROR_MESSAGES.PHONE_DUPLICATE);
+      } else {
+        throw new Error(error.message);
+      }
+    }
+
+    revalidatePath(PATH.ACCOUNT);
+    return { success: true, message: SUCCESS_MESSAGES.PHONE_UPDATED };
+  } catch (error: unknown) {
+    // 에러 메시지 없을 경우의 디폴트 메시지
+    let errorMessage = ERROR_MESSAGES.PHONE_UPDATE_FAILED;
 
     // 에러 객체라면 해당 에러 메시지를 적용
     if (error instanceof Error) {

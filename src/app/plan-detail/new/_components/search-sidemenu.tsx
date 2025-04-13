@@ -3,6 +3,35 @@
 import { Button } from '@/components/ui/button';
 import PlaceSidemenuLayout from '../../_components/place-sidemenu-layout';
 import { Input } from '@/components/ui/input';
+import PlaceCardCategory from '../../_components/place-card-category';
+
+// 예시 데이터
+const MOCK_PLACES = [
+  {
+    id: 1,
+    title: '제주 해변 카페',
+    address: '제주시 해변로 123-45',
+    category: '맛집',
+    imageUrl: '/images/default-place.jpg',
+    isBookmarked: false,
+  },
+  {
+    id: 2,
+    title: '제주 리조트',
+    address: '제주시 중문관광로 567-89',
+    category: '숙소',
+    imageUrl: '/images/default-place.jpg',
+    isBookmarked: true,
+  },
+  {
+    id: 3,
+    title: '성산일출봉',
+    address: '서귀포시 성산읍 123',
+    category: '명소',
+    imageUrl: '/logo/color_logo.svg',
+    isBookmarked: false,
+  },
+];
 
 const SearchSidemenu = ({
   filterTabs,
@@ -13,6 +42,14 @@ const SearchSidemenu = ({
   activeFilterTab: string;
   onFilterTabChange: (tab: string) => void;
 }) => {
+  const handleBookmarkToggle = (id: number) => {
+    //console.log('북마크 토글:', id);
+  };
+
+  const handleAddPlace = (id: number) => {
+    //console.log('장소 추가:', id);
+  };
+
   const searchBar = (
     <div className="rounded-[12px] bg-gray-100 px-3 py-2">
       <div className="flex items-center gap-[12px]">
@@ -35,8 +72,19 @@ const SearchSidemenu = ({
       topContent={searchBar}
     >
       {/* 검색 결과 */}
-      <div className="mt-4 flex items-center justify-center rounded-[8px] border border-dashed border-gray-200 py-4 text-14 text-gray-300">
-        장소가 존재하지 않습니다
+      <div className="space-y-2">
+        {MOCK_PLACES.map((place) => (
+          <PlaceCardCategory
+            key={place.id}
+            title={place.title}
+            category={place.category as any}
+            imageUrl={place.imageUrl}
+            isBookmarked={place.isBookmarked}
+            isSearchSection
+            onBookmarkToggle={() => handleBookmarkToggle(place.id)}
+            onAddPlace={() => handleAddPlace(place.id)}
+          />
+        ))}
       </div>
     </PlaceSidemenuLayout>
   );

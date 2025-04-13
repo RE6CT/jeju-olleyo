@@ -97,10 +97,16 @@ const PlanSchedule = ({
                           </span>
                         </div>
                         <div className="flex items-center">
-                          <Button className="font-pretendard px-3 py-1 text-xs font-medium text-gray-500 hover:text-gray-900">
+                          <Button
+                            variant="ghost"
+                            className="font-pretendard text-12 font-medium text-gray-500 hover:bg-transparent hover:text-[#698EA1]"
+                          >
                             복사
                           </Button>
-                          <Button className="font-pretendard px-3 py-1 text-xs font-medium text-red hover:text-red">
+                          <Button
+                            variant="ghost"
+                            className="font-pretendard text-12 font-medium text-red hover:bg-transparent hover:text-red"
+                          >
                             삭제
                           </Button>
                         </div>
@@ -124,12 +130,18 @@ const PlanSchedule = ({
                     </span>
                   </div>
                   <div className="flex items-center gap-4">
-                    <button className="text-14 font-medium text-gray-600 hover:text-gray-900 hover:underline">
+                    <Button
+                      variant="ghost"
+                      className="font-pretendard text-12 font-medium text-[#698EA1] hover:bg-transparent hover:text-[#698EA1]"
+                    >
                       복사
-                    </button>
-                    <button className="text-14 font-medium text-red hover:text-red/80">
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      className="font-pretendard text-12 font-medium text-[#FF0A0A] hover:bg-transparent hover:text-[#FF0A0A]"
+                    >
                       삭제
-                    </button>
+                    </Button>
                   </div>
                 </div>
                 {/* 여기에 장소 카드 컴포넌트들이 들어갈 예정 */}

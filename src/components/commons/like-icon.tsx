@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import LikeSvg from '../../../public/icons/like.svg';
 import { Button } from '../ui/button';
 
 /**
@@ -7,23 +6,45 @@ import { Button } from '../ui/button';
  * @returns 좋아요 아이콘 SVG 컴포넌트
  *
  * @example
- * <LikeIcon />
+ * <LikeIcon isLiked={false} onToggle={() => {}} />
  */
-const LikeIcon = () => {
-  const [isLiked, setIsLiked] = useState(false);
+const LikeIcon = ({
+  isLiked,
+  onToggle,
+}: {
+  isLiked: boolean;
+  onToggle: () => void;
+}) => {
+  const [isLikedState, setIsLikedState] = useState(isLiked);
 
   const toggleLike = () => {
-    setIsLiked(!isLiked);
+    setIsLikedState(!isLikedState);
+    onToggle();
     // TODO: 서버 액션 호출 추가
   };
 
   return (
     <Button
       onClick={toggleLike}
-      className="rounded-12 flex aspect-square h-[56px] w-[56px] cursor-pointer items-center justify-center gap-[10px] border-none bg-[rgba(255,255,255,0.1)] p-[10px]"
-      aria-label={isLiked ? '좋아요 취소' : '좋아요'}
+      variant="ghost"
+      className="flex h-6 w-6 cursor-pointer items-center justify-center border-none bg-transparent p-0 hover:bg-transparent"
+      aria-label={isLikedState ? '좋아요 취소' : '좋아요'}
     >
-      <LikeSvg fill={isLiked ? 'primary-500' : 'gray-200'} />
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 48 48"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M15.0855 7C9.06817 7 4.18994 11.8782 4.18994 17.8955C4.18994 28.7911 17.0665 38.6961 24 41C30.9335 38.6961 43.81 28.7911 43.81 17.8955C43.81 11.8782 38.9318 7 32.9145 7C29.2298 7 25.9711 8.82946 24 11.6296C22.9951 10.1987 21.6604 9.03094 20.1087 8.22508C18.557 7.41923 16.834 6.99901 15.0855 7Z"
+          stroke="currentColor"
+          fill={isLikedState ? 'currentColor' : 'none'}
+          strokeWidth="2"
+          className={isLikedState ? 'text-primary-500' : 'text-gray-200'}
+        />
+      </svg>
     </Button>
   );
 };

@@ -12,7 +12,7 @@ const MOCK_PLACES = [
     title: '제주 해변 카페',
     address: '제주시 해변로 123-45',
     category: '맛집',
-    imageUrl: '/images/default-place.jpg',
+    imageUrl: '/images/default_place_image.svg',
     isBookmarked: false,
   },
   {
@@ -20,7 +20,7 @@ const MOCK_PLACES = [
     title: '제주 리조트',
     address: '제주시 중문관광로 567-89',
     category: '숙소',
-    imageUrl: '/images/default-place.jpg',
+    imageUrl: '/images/default_place_image.svg',
     isBookmarked: true,
   },
   {

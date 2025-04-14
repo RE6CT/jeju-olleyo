@@ -22,7 +22,7 @@ const PlaceCard = ({
   address,
   distance,
   duration,
-  imageUrl = '/images/default-place.jpg',
+  imageUrl = '/images/default_place_image.svg',
 }: {
   index: number;
   title: string;

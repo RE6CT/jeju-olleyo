@@ -3,12 +3,12 @@
 import { useState } from 'react';
 import BookmarkSidemenu from './bookmark-sidemenu';
 import SearchSidemenu from './search-sidemenu';
-
-const FILTER_TABS = ['전체', '명소', '숙박', '맛집', '기타'];
+import { CategoryType } from '@/types/category-badge.type';
 
 const PlaceSidemenu = ({ userId }: { userId: string }) => {
-  const [activeBookmarkTab, setActiveBookmarkTab] = useState(FILTER_TABS[0]);
-  const [activeSearchTab, setActiveSearchTab] = useState(FILTER_TABS[0]);
+  const [activeBookmarkTab, setActiveBookmarkTab] =
+    useState<CategoryType>('전체');
+  const [activeSearchTab, setActiveSearchTab] = useState<CategoryType>('전체');
 
   return (
     <div className="w-[320px] space-y-6">
@@ -16,7 +16,9 @@ const PlaceSidemenu = ({ userId }: { userId: string }) => {
       <div className="rounded-[12px] border border-gray-200 p-5">
         <BookmarkSidemenu
           userId={userId}
-          filterTabs={FILTER_TABS}
+          filterTabs={
+            ['전체', '명소', '맛집', '카페', '숙박'] as CategoryType[]
+          }
           activeFilterTab={activeBookmarkTab}
           onFilterTabChange={setActiveBookmarkTab}
         />
@@ -25,7 +27,9 @@ const PlaceSidemenu = ({ userId }: { userId: string }) => {
       {/* 검색 섹션 */}
       <div className="rounded-[12px] border border-gray-200 p-5">
         <SearchSidemenu
-          filterTabs={FILTER_TABS}
+          filterTabs={
+            ['전체', '명소', '맛집', '카페', '숙박'] as CategoryType[]
+          }
           activeFilterTab={activeSearchTab}
           onFilterTabChange={setActiveSearchTab}
         />

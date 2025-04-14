@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
+import { CategoryType } from '@/types/category-badge.type';
 
 const CategoryFilterTabs = ({
   tabs,
@@ -10,15 +11,15 @@ const CategoryFilterTabs = ({
   tabsGapClass = 'gap-[10px]',
   tabPaddingClass = 'px-2',
 }: {
-  tabs: string[];
-  defaultTab: string;
-  onTabChange: (tab: string) => void;
+  tabs: CategoryType[];
+  defaultTab: CategoryType;
+  onTabChange: (tab: CategoryType) => void;
   tabsGapClass?: string;
   tabPaddingClass?: string;
 }) => {
   const [activeTab, setActiveTab] = useState(defaultTab);
 
-  const handleTabClick = (tab: string) => {
+  const handleTabClick = (tab: CategoryType) => {
     setActiveTab(tab);
     onTabChange(tab);
   };

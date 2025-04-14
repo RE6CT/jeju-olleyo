@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import PlaceSidemenuLayout from '../../_components/place-sidemenu-layout';
 import { Input } from '@/components/ui/input';
 import PlaceCardCategory from '../../_components/place-card-category';
+import { CategoryType } from '@/types/category-badge.type';
 
 // 예시 데이터
 const MOCK_PLACES = [
@@ -38,9 +39,9 @@ const SearchSidemenu = ({
   activeFilterTab,
   onFilterTabChange,
 }: {
-  filterTabs: string[];
-  activeFilterTab: string;
-  onFilterTabChange: (tab: string) => void;
+  filterTabs: CategoryType[];
+  activeFilterTab: CategoryType;
+  onFilterTabChange: (tab: CategoryType) => void;
 }) => {
   const handleBookmarkToggle = (id: number) => {
     //console.log('북마크 토글:', id);

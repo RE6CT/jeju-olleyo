@@ -3,6 +3,7 @@
 import { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import CategoryFilterTabs from '@/components/commons/category-filter-tabs';
+import { CategoryType } from '@/types/category-badge.type';
 
 const PlaceSidemenuLayout = ({
   isBookmarkSection,
@@ -13,9 +14,9 @@ const PlaceSidemenuLayout = ({
   topContent,
 }: {
   isBookmarkSection: boolean;
-  filterTabs: string[];
-  activeFilterTab: string;
-  onFilterTabChange: (tab: string) => void;
+  filterTabs: CategoryType[];
+  activeFilterTab: CategoryType;
+  onFilterTabChange: (tab: CategoryType) => void;
   children: ReactNode;
   topContent?: ReactNode;
 }) => {

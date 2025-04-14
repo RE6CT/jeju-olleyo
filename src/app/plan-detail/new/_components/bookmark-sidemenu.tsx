@@ -37,9 +37,9 @@ const BookmarkSidemenu = ({
   onFilterTabChange,
 }: {
   userId: string;
-  filterTabs: string[];
-  activeFilterTab: string;
-  onFilterTabChange: (tab: string) => void;
+  filterTabs: CategoryType[];
+  activeFilterTab: CategoryType;
+  onFilterTabChange: (tab: CategoryType) => void;
 }) => {
   const [bookmarkedPlaces, setBookmarkedPlaces] = useState<BookmarkedPlace[]>(
     [],

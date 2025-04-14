@@ -52,6 +52,10 @@ export async function middleware(request: NextRequest) {
       PLAN_DETAIL: PATH.PLAN_DETAIL,
       pattern: /^\/plan-detail\/\d+$/,
     },
+    {
+      CATEGORIES: PATH.CATEGORIES,
+      pattern: /^\/categories\/[a-z]+$/,
+    },
     // 다른 경로들
   ];
 

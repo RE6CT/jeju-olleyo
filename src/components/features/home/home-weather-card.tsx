@@ -16,7 +16,7 @@ const WeatherCard = memo(({ weather, isToday = false }: WeatherCardProps) => {
   const iconSrc = weatherUtil.getWeatherIconSrc(weather.weatherIcon);
 
   return (
-    <div className="flex w-full flex-1 flex-col items-center">
+    <div className="flex flex-1 flex-col items-center">
       {/* 날짜 */}
       <div className="md:text-11 flex justify-center self-stretch text-center text-10 font-medium not-italic text-gray-900 sm:text-10 lg:text-12">
         {isToday ? '오늘' : weather.dayOfWeek + '요일'}{' '}
@@ -26,7 +26,7 @@ const WeatherCard = memo(({ weather, isToday = false }: WeatherCardProps) => {
       </div>
 
       {/* 날씨 아이콘 */}
-      <div className="md:h-18 md:w-18 relative my-2 h-14 w-14 sm:my-2.5 sm:h-16 sm:w-16 md:my-3 lg:my-3 lg:h-20 lg:w-20">
+      <div className="relative my-2 h-10 w-10 sm:my-2.5 sm:h-10 sm:w-10 md:my-3 md:h-12 md:w-12 lg:my-3 lg:h-14 lg:w-14">
         <Image
           src={iconSrc}
           alt={weather.weatherCondition}

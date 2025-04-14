@@ -12,24 +12,24 @@ export const weatherUtil = {
    */
   getWeatherIconSrc(icon: string): string {
     const iconMap: Record<string, string> = {
-      'clear-day': '/weather/clear.jpg',
-      'clear-night': '/weather/clear.jpg',
-      'partly-cloudy-day': '/weather/partly-cloudy-day.jpg',
-      'partly-cloudy-night': '/weather/partly-cloudy-day.jpg',
-      cloudy: '/weather/cloudy.jpg',
-      rain: '/weather/rain.jpg',
-      'showers-day': '/weather/rain.jpg',
-      'showers-night': '/weather/rain.jpg',
-      fog: '/weather/cloudy.jpg',
-      wind: '/weather/cloudy.jpg',
-      snow: '/weather/snow.jpg',
-      thunder: '/weather/thunderstorm.jpg',
-      'thunder-rain': '/weather/thunderstorm.jpg',
-      'thunder-showers-day': '/weather/thunderstorm.jpg',
-      'thunder-showers-night': '/weather/thunderstorm.jpg',
+      'clear-day': '/weather/clear.svg',
+      'clear-night': '/weather/clear.svg',
+      'partly-cloudy-day': '/weather/partly-cloudy-day.svg',
+      'partly-cloudy-night': '/weather/partly-cloudy-day.svg',
+      cloudy: '/weather/cloudy.svg',
+      rain: '/weather/rain.svg',
+      'showers-day': '/weather/rain.svg',
+      'showers-night': '/weather/rain.svg',
+      fog: '/weather/cloudy.svg',
+      wind: '/weather/wind.svg',
+      snow: '/weather/snow.svg',
+      thunder: '/weather/thunderstorm.svg',
+      'thunder-rain': '/weather/thunderstorm.svg',
+      'thunder-showers-day': '/weather/thunderstorm.svg',
+      'thunder-showers-night': '/weather/thunderstorm.svg',
     };
 
-    return iconMap[icon] || '/weather/cloudy.jpg';
+    return iconMap[icon] || '/weather/cloudy.svg';
   },
 
   /**

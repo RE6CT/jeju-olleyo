@@ -59,19 +59,19 @@
 
   html,
   body {
-    @apply bg-gray-50 font-sans leading-normal text-gray-900;
+    @apply font-sans leading-normal text-gray-900;
   }
 }
 
 @layer components {
   .bold-28 {
-    @apply text-28 tracking-tight-2 font-bold;
+    @apply text-28 font-bold tracking-tight-2;
   }
   .bold-24 {
-    @apply text-24 tracking-tight-2 font-bold;
+    @apply text-24 font-bold tracking-tight-2;
   }
   .bold-22 {
-    @apply text-22 tracking-tight-2 font-bold;
+    @apply text-22 font-bold tracking-tight-2;
   }
 
   .semibold-28 {

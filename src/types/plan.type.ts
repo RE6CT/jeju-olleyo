@@ -23,7 +23,7 @@ export type PlanCardType = {
   isLiked: boolean;
 };
 
-export type PlanCardProps = {
+export type PlanHorizontalCardProps = {
   plan: Plan;
   nickname?: string;
   onEdit?: (id: number) => void;

@@ -11,6 +11,18 @@ export type UsersRow = Pick<
 // PlansRow를 CamelCase로 변환한 타입
 export type Plan = CamelCaseObject<PlansRow & UsersRow>;
 
+// 플랜 카드에서 쓰는 타입 (좋아요 포함)
+export type PlanCardType = {
+  planId: number;
+  planImg: string;
+  title: string;
+  description: string;
+  nickname: string;
+  travelStartDate: string;
+  travelEndDate: string;
+  isLiked: boolean;
+};
+
 export type PlanCardProps = {
   plan: Plan;
   nickname?: string;
@@ -58,4 +70,9 @@ export type FilterInputProps = {
   setIsDatePickerFocused: (focused: boolean) => void;
   filter: FilterState;
   applyFilter: () => void;
+};
+
+export type PlanVerticalCardProps = {
+  plan: PlanCardType;
+  userId: string | null;
 };

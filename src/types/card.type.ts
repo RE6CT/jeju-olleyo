@@ -1,13 +1,21 @@
-import { CamelCaseObject } from './common.type';
+import { CamelCaseObject, List } from './common.type';
+import { PlanCardType } from './plan.type';
 import { Tables } from './supabase.type';
 
 type bookmarks = Tables<'bookmarks'>;
 export type SearchCardProp = {
   bookmarks: CamelCaseObject<Pick<bookmarks, 'user_id' | 'place_id'>>;
-  className: string | 'none';
+  className?: string | 'none';
   initialBookmarks: boolean;
   image: string;
   title: string;
+};
+
+export type ComboBoxProp = {
+  list: List;
+  value: string;
+  setValue: (newValue: string) => void;
+  defaultMessage: string;
 };
 
 type Plan = Tables<'plans'>;

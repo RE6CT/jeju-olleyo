@@ -18,14 +18,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { List } from '@/types/common.type';
+import { ComboBoxProp } from '@/types/card.type';
 
-type ComboBoxProp = {
-  list: List;
-  value: string;
-  setValue: (newValue: string) => void;
-  defaultMessage: string;
-};
 /**
  * @param list 검색결과 하단에 보여줄 리스트
  * @param value 검색을 통해 전달할 값
@@ -41,12 +35,7 @@ type ComboBoxProp = {
  * ></ComboBox>
  * ```
  */
-export const Combobox = ({
-  list,
-  value,
-  setValue,
-  defaultMessage,
-}: ComboBoxProp) => {
+const Combobox = ({ list, value, setValue, defaultMessage }: ComboBoxProp) => {
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -95,3 +84,5 @@ export const Combobox = ({
     </Popover>
   );
 };
+
+export default Combobox;

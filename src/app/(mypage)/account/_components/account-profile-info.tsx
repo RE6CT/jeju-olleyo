@@ -13,8 +13,6 @@ import useProviderFromCookie from '@/lib/hooks/use-get-provider';
 import { ERROR_MESSAGES } from '@/constants/mypage.constants';
 import AccountProfileImage from './account-profile-image';
 
-// ! label에는 글씨 크기 다르게 적용되는 문제
-// ! input에 rounded-12 적용되지 않는 문제
 const PROFILE_INFO_STYLE = {
   container:
     'px-8 py-6 rounded-24 bg-white border-gray-100 border border-gray-100',
@@ -72,6 +70,12 @@ const ProfileInfo = ({
     setIsEditMode(true);
   };
 
+  /** 수정 취소 버튼 클릭 핸들러 */
+  const handleEditCancelButtonClick = () => {
+    setIsEditMode(false);
+    reset();
+  };
+
   /**
    * 닉네임 수정 폼 제출 핸들러
    * @param data - 유효성 검사를 통과한 닉네임 데이터
@@ -85,7 +89,11 @@ const ProfileInfo = ({
       const result = await fetchUpdateNickname(userId, data.nickname);
       alert(result.message);
     } catch (error: unknown) {
-      alert(ERROR_MESSAGES.NICKNAME_UPDATE_FAILED);
+      let errorMessage = ERROR_MESSAGES.NICKNAME_UPDATE_FAILED;
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+      alert(errorMessage);
     } finally {
       setIsEditMode(false);
       reset();
@@ -94,7 +102,7 @@ const ProfileInfo = ({
 
   return (
     <div
-      className={`m-1 grid grid-cols-[auto_auto_1fr_auto] items-center gap-3 ${PROFILE_INFO_STYLE.container}`}
+      className={`m-1 grid grid-cols-[auto_auto_1fr_auto] gap-3 ${PROFILE_INFO_STYLE.container}`}
     >
       <h3 className={PROFILE_INFO_STYLE.title}>프로필</h3>
       <div className="w-[120px] py-[14px]">
@@ -126,13 +134,21 @@ const ProfileInfo = ({
           <span className={PROFILE_INFO_STYLE.rowValue}>{nickname}</span>
         )}
         {isEditMode ? (
-          <Button
-            type="submit"
-            disabled={!isValid || currentNickname === nickname}
-            className={PROFILE_INFO_STYLE.button}
-          >
-            완료
-          </Button>
+          <div>
+            <Button
+              type="submit"
+              disabled={!isValid || currentNickname === nickname}
+              className={PROFILE_INFO_STYLE.button}
+            >
+              완료
+            </Button>
+            <Button
+              onClick={handleEditCancelButtonClick}
+              className={PROFILE_INFO_STYLE.button}
+            >
+              취소
+            </Button>
+          </div>
         ) : (
           <>
             {provider !== 'email' ? (

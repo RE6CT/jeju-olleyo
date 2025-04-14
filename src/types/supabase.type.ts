@@ -1,3 +1,4 @@
+import { CommentPlanRow, CommentsRow } from './comment.type';
 import { PlansRow, UsersRow } from './plan.type';
 
 export type Json =
@@ -171,21 +172,21 @@ export type Database = {
       plan_comments: {
         Row: {
           content: string;
-          created_at: string | null;
+          created_at: string;
           plan_comment_id: number;
           plan_id: number;
           user_id: string;
         };
         Insert: {
           content: string;
-          created_at?: string | null;
+          created_at?: string;
           plan_comment_id?: never;
           plan_id: number;
           user_id: string;
         };
         Update: {
           content?: string;
-          created_at?: string | null;
+          created_at?: string;
           plan_comment_id?: never;
           plan_id?: number;
           user_id?: string;
@@ -385,6 +386,18 @@ export type Database = {
       get_user_plans: {
         Args: { user_id_param: string };
         Returns: (PlansRow & UsersRow)[];
+      };
+      get_user_comments: {
+        Args: { user_id_param: string };
+        Returns: (CommentsRow & CommentPlanRow)[];
+      };
+      get_user_data_counts: {
+        Args: { user_id_param: string };
+        Returns: {
+          bookmark_count: number;
+          like_count: number;
+          comment_count: number;
+        };
       };
     };
     Enums: {

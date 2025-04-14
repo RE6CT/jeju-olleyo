@@ -56,7 +56,7 @@ export const nicknameSchema = z
 /**
  * 전화번호 유효성 검사를 위한 스키마
  */
-const phoneSchema = z
+export const phoneSchema = z
   .string()
   .min(1, { message: ERROR_MESSAGES.REQUIRED_PHONE })
   .transform((val) => val.replace(/\D/g, ''))

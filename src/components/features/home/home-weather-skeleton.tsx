@@ -4,7 +4,7 @@
  * 날씨 섹션의 로딩 상태를 표시하는 스켈레톤 컴포넌트
  * 날씨 데이터가 로딩 중일 때 보여지는 스켈레톤 UI입니다.
  */
-const WeatherSkeleton = () => {
+const WeatherSkeleton: React.FC = () => {
   return (
     <div className="mx-auto w-full max-w-4xl rounded-lg p-4">
       <div className="animate-pulse">

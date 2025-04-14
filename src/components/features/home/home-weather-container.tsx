@@ -6,6 +6,7 @@ import WeatherCard from '@/components/features/home/home-weather-card';
 /**
  * 날씨 카드들을 담는 컨테이너 컴포넌트
  * 여러 날씨 카드를 가로로 스크롤 가능하게 표시합니다.
+ * @param 날씨데이터
  */
 const WeatherCardsContainer = ({ weatherData }: WeatherCardsContainerProps) => {
   return (

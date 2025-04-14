@@ -12,7 +12,7 @@ import { weatherUtil } from '@/lib/utils/home.weather.util';
  * 자정에 자동으로 데이터가 갱신됩니다.
  * @returns 날씨 관련 상태와 데이터
  */
-export function useJejuWeatherQuery(): UseJejuWeatherReturn {
+const useJejuWeatherQuery = (): UseJejuWeatherReturn => {
   const [weatherData, setWeatherData] = useState<ProcessedDayWeather[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -40,7 +40,7 @@ export function useJejuWeatherQuery(): UseJejuWeatherReturn {
       const data = await weatherApi.getJejuWeather({ skipCache: true });
 
       if (data.length === 0) {
-        setError('날씨 데이터를 가져오는데 실패했습니다');
+        setError('날씨 데이터가 없습니다. 잠시 후 다시 시도해주세요.');
       } else {
         setWeatherData(data);
 
@@ -54,7 +54,11 @@ export function useJejuWeatherQuery(): UseJejuWeatherReturn {
         setError(null);
       }
     } catch (err) {
-      setError('날씨 데이터를 가져오는데 오류가 발생했습니다');
+      const errorMessage =
+        err instanceof Error
+          ? `날씨 데이터를 가져오는데 오류가 발생했습니다: ${err.message}`
+          : '날씨 데이터를 가져오는데 오류가 발생했습니다';
+      setError(errorMessage);
       console.error(err);
     } finally {
       setIsLoading(false);
@@ -76,7 +80,11 @@ export function useJejuWeatherQuery(): UseJejuWeatherReturn {
     // 자정에 실행할 타이머 설정
     midnightTimerRef.current = setTimeout(async () => {
       // 데이터 새로고침
-      await fetchWeatherData();
+      try {
+        await fetchWeatherData();
+      } catch (err) {
+        console.error('Midnight refresh failed:', err);
+      }
 
       // 다음 자정에 대한 타이머 설정
       setupMidnightRefresh();
@@ -106,4 +114,6 @@ export function useJejuWeatherQuery(): UseJejuWeatherReturn {
       day,
     },
   };
-}
+};
+
+export default useJejuWeatherQuery;

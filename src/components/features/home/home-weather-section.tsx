@@ -1,9 +1,9 @@
 'use client';
 
-import { useJejuWeatherQuery } from '@/lib/queries/use-get-weather-query';
-import WeatherSkeleton from '@/components/features/home/homt-weather-skeleton';
+import useJejuWeatherQuery from '@/lib/queries/use-get-weather-query';
+import WeatherSkeleton from '@/components/features/home/home-weather-skeleton';
 import WeatherError from '@/components/features/home/home-weather-error';
-import WeatherHeader from '@/components/features/home/homr-weather-header';
+import WeatherHeader from '@/components/features/home/home-weather-header';
 import WeatherCardsContainer from '@/components/features/home/home-weather-container';
 
 /**
@@ -12,6 +12,13 @@ import WeatherCardsContainer from '@/components/features/home/home-weather-conta
  * 자정 12시에 자동으로 갱신되며, 시스템에 의해 하루 최대 4번 갱신됩니다.
  */
 const WeatherSection = () => {
+  /**
+   * @param weatherData 날씨데이터
+   * @param isLoading 로딩여부
+   * @param error 에러여부
+   * @param weatherMessage 날씨에 따른 텍스트 메세지
+   * @param currentDate 일주일 날짜
+   */
   const { weatherData, isLoading, error, weatherMessage, currentDate } =
     useJejuWeatherQuery();
 

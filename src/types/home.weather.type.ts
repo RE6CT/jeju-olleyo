@@ -1,3 +1,5 @@
+import { QueryFunction, UseQueryOptions } from '@tanstack/react-query';
+
 /**
  * Visual Crossing API 응답 구조
  */
@@ -126,4 +128,14 @@ export type UseJejuWeatherReturn = {
     month: number;
     day: number;
   };
+};
+
+// Tanstack query
+export type QueryOptions = UseQueryOptions<ProcessedDayWeather[], Error> & {
+  queryKey: ['jejuWeather'];
+  queryFn: QueryFunction<ProcessedDayWeather[]>;
+  staleTime: number;
+  refetchOnWindowFocus: boolean;
+  retry: number;
+  onSuccess: (data: ProcessedDayWeather[]) => void;
 };

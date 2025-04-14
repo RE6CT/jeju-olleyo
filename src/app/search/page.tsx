@@ -5,6 +5,7 @@ import Banner from './_components/banner';
 import PlaceImage from '@/components/commons/place-image';
 import useSearch from '@/lib/hooks/use-search';
 import Loading from '../loading';
+import EmptyResult from './_components/empty-result';
 
 // TODO : 카드 컴포넌트 머지 후 div 요소 교체 필요 - 링크, 좋아요, 북마크 다 삽입될 예정
 // TODO : 디자이너님 배너 제작 후 배너 삽입 예정
@@ -20,11 +21,11 @@ const SearchResultsPage = () => {
   }
 
   return (
-    <div className="px-4 pt-20">
+    <div className="px-4">
       <div className="mb-6 text-2xl font-bold">'{query}'의 검색 결과</div>
 
       {results.length === 0 ? (
-        <div className="text-gray-500">검색 결과가 없습니다.</div>
+        <EmptyResult />
       ) : (
         (() => {
           const grouped: JSX.Element[] = [];

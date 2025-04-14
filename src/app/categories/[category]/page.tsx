@@ -5,8 +5,9 @@ import {
   HydrationBoundary,
   QueryClient,
 } from '@tanstack/react-query';
-import CategoryClient from './category-client';
+
 import { usePrefetchPlacesByCategory } from '@/lib/queries/use-prefetch-places';
+import CategoryClient from './category-client';
 
 const CategoryPage = async ({ params }: { params: { category: string } }) => {
   const queryClient = new QueryClient();

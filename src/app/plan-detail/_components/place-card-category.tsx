@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { CategoryType } from '@/types/category-badge.type';
 import { Button } from '@/components/ui/button';
 import BookmarkIcon from '@/components/commons/bookmark-icon';
+import useBookmark from '@/lib/hooks/use-bookmark';
 
 const PLACE_IMAGE_SIZE = {
   width: 40,
@@ -28,14 +29,18 @@ const PlaceCardCategory = ({
   isSearchSection = false,
   onBookmarkToggle,
   onAddPlace,
+  placeId,
+  userId,
 }: {
   title: string;
   imageUrl: string;
   category: CategoryType;
   isBookmarked: boolean;
   isSearchSection?: boolean;
-  onBookmarkToggle: () => void;
+  onBookmarkToggle?: () => void;
   onAddPlace?: () => void;
+  placeId?: number;
+  userId?: string;
 }) => {
   return (
     <div className="flex w-full items-center justify-between py-3">

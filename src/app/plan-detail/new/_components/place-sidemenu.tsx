@@ -32,6 +32,7 @@ const PlaceSidemenu = ({ userId }: { userId: string }) => {
           }
           activeFilterTab={activeSearchTab}
           onFilterTabChange={setActiveSearchTab}
+          userId={userId}
         />
       </div>
     </div>

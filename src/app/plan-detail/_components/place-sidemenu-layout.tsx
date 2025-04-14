@@ -12,6 +12,7 @@ const PlaceSidemenuLayout = ({
   onFilterTabChange,
   children,
   topContent,
+  isExpanded = true,
 }: {
   isBookmarkSection: boolean;
   filterTabs: CategoryType[];
@@ -19,6 +20,7 @@ const PlaceSidemenuLayout = ({
   onFilterTabChange: (tab: CategoryType) => void;
   children: ReactNode;
   topContent?: ReactNode;
+  isExpanded?: boolean;
 }) => {
   return (
     <div className="w-full space-y-4">

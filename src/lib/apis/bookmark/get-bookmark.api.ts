@@ -20,7 +20,7 @@ export const fetchGetBookmarkByIdQuery = async (
     .select('bookmark_id')
     .eq('place_id', place)
     .eq('user_id', userId)
-    .single();
+    .maybeSingle();
 
   if (error) throw new Error(error.message);
 

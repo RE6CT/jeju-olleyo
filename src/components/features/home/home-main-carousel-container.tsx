@@ -1,10 +1,8 @@
-import MainCarousel from './home-main-carousel';
-import fetchGetImagesByMainCarousel from '@/lib/apis/home/home.api';
+import MainCarousel from '@/components/features/home/home-main-carousel';
+import carouselData from '@/data/carousel-data.json';
 
-const MainCarouselContainer = async () => {
-  const data = await fetchGetImagesByMainCarousel();
-
-  return <MainCarousel imageList={data} />;
+const MainCarouselContainer = () => {
+  return <MainCarousel imageList={carouselData} />;
 };
 
 export default MainCarouselContainer;

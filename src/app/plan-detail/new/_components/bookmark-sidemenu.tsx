@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import PlaceSidemenuLayout from '../../_components/place-sidemenu-layout';
 import PlaceCardCategory from '../../_components/place-card-category';
 import {
@@ -13,14 +13,8 @@ import useAuth from '@/lib/hooks/use-auth';
 import { CategoryType } from '@/types/category-badge.type';
 import useBookmark from '@/lib/hooks/use-bookmark';
 import { getPlaceImageWithFallback } from '@/lib/utils/get-image-with-fallback';
-
-interface BookmarkedPlace {
-  place_id: number;
-  title: string;
-  category: CategoryType;
-  image: string;
-  created_at: string;
-}
+import ErrorMessage from '@/components/ui/error-message';
+import { BookmarkedPlace } from '@/types/plan-detail.type';
 
 /**
  * 북마크된 장소들을 사이드메뉴에 표시하는 컴포넌트
@@ -45,32 +39,37 @@ const BookmarkSidemenu = ({
     [],
   );
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchBookmarks = async () => {
-      try {
-        setIsLoading(true);
-        const data = await fetchGetAllBookmarksByUserId(userId);
+  // 북마크가 최신 상태 유지를 보장하기 때문에, useCallback을 사용하여 메모이제이션
+  const fetchBookmarks = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      const data = await fetchGetAllBookmarksByUserId(userId);
 
-        const transformedData =
-          data?.map((item) => ({
-            place_id: item.placeId,
-            title: item.title,
-            category: item.category as CategoryType,
-            image: getPlaceImageWithFallback(item.image),
-            created_at: item.createdAt,
-          })) ?? [];
-        setBookmarkedPlaces(transformedData);
-        //console.log('북마크 데이터:', transformedData);
-      } catch (error) {
-        console.error('북마크 데이터 불러오기 실패:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+      const transformedData =
+        data?.map((item) => ({
+          place_id: item.placeId,
+          title: item.title,
+          category: item.category as CategoryType,
+          image: getPlaceImageWithFallback(item.image),
+          created_at: item.createdAt,
+        })) ?? [];
 
+      setBookmarkedPlaces(transformedData);
+    } catch (err) {
+      setError('북마크 데이터를 불러오는데 실패했습니다.');
+      console.error('북마크 데이터 불러오기 실패:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [userId]);
+
+  // 컴포넌트 마운트 시 북마크 데이터 로드
+  useState(() => {
     fetchBookmarks();
-  }, []);
+  });
 
   /**
    * 북마크 토글 핸들러 함수
@@ -84,18 +83,18 @@ const BookmarkSidemenu = ({
       const currentBookmark = await fetchGetBookmarkByIdQuery(placeId, userId);
 
       if (currentBookmark) {
-        await fetchDeleteBookmark(currentBookmark.bookmark_id); // 북마크 삭제
+        await fetchDeleteBookmark(currentBookmark.bookmark_id);
       } else {
-        await fetchAddBookmarkByIdQuery(placeId, userId); // 북마크 추가
+        await fetchAddBookmarkByIdQuery(placeId, userId);
       }
 
-      // 북마크 리스트 ui 상에서 업데이트
-      const updatedPlaces = bookmarkedPlaces.filter(
-        (place) => place.place_id !== placeId,
+      // 북마크 리스트 업데이트
+      setBookmarkedPlaces((prevPlaces) =>
+        prevPlaces.filter((place) => place.place_id !== placeId),
       );
-      setBookmarkedPlaces(updatedPlaces);
-    } catch (error) {
-      console.error('북마크 토글 실패:', error);
+    } catch (err) {
+      setError('북마크 토글에 실패했습니다.');
+      console.error('북마크 토글 실패:', err);
     }
   };
 
@@ -104,6 +103,15 @@ const BookmarkSidemenu = ({
     activeFilterTab === '전체'
       ? bookmarkedPlaces
       : bookmarkedPlaces.filter((place) => place.category === activeFilterTab);
+
+  if (error) {
+    return (
+      <ErrorMessage
+        title={'북마크 데이터를 불러오는데 실패했습니다.'}
+        description={error}
+      />
+    );
+  }
 
   return (
     <PlaceSidemenuLayout

@@ -21,9 +21,10 @@ import Loading from '@/app/loading';
 import { useFilteredPlans } from '@/lib/queries/use-get-filtered-plans';
 import Pagination from '@/components/ui/pagination';
 import { useDeletePlan } from '@/lib/queries/use-delete-plan';
-import PlanCard from '@/components/features/plan/plan-card';
 import { PATH } from '@/constants/path.constants';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import PlanHorizontalCard from '@/components/features/card/plan-horizontal_card';
 
 /**
  * 여행 계획 필터 섹션 컴포넌트
@@ -147,7 +148,13 @@ const PlanFilterSection = ({
             onMouseLeave={handleMouseLeave}
           >
             <Button variant="outline" size="sm" disabled={isPlansLoading}>
-              <Filter className="mr-2 h-4 w-4 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0" />
+              <Image
+                src="/icons/mdi_filter.svg"
+                alt="filter icon"
+                width={20}
+                height={20}
+                className="mr-2"
+              />
               필터
             </Button>
           </PopoverTrigger>
@@ -188,7 +195,7 @@ const PlanFilterSection = ({
             variant="ghost"
             size="sm"
             onClick={resetFilter}
-            className="text-muted-foreground"
+            className="medium-14 text-gray-500 hover:text-gray-900"
             disabled={isPlansLoading}
           >
             필터 초기화
@@ -197,14 +204,14 @@ const PlanFilterSection = ({
       </div>
 
       {(plans ?? []).length === 0 ? (
-        <div className="flex h-[400px] items-center justify-center rounded-lg border-2 border-dashed border-foreground/30">
-          <p className="text-lg text-foreground">여행 계획이 없습니다.</p>
+        <div className="flex h-[400px] items-center justify-center rounded-lg border-2 border-dashed border-gray-200 bg-gray-50">
+          <p className="medium-16 text-gray-500">여행 계획이 없습니다.</p>
         </div>
       ) : (
         <>
           <div className="grid grid-cols-1 gap-6">
             {currentPlans.map((plan) => (
-              <PlanCard
+              <PlanHorizontalCard
                 key={plan.planId}
                 plan={plan}
                 nickname={userNickname}

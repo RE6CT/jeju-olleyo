@@ -12,17 +12,13 @@ import { useCarouselProgress } from '@/lib/hooks/use-carousel-progress';
 import { MAIN_CAROUSEL_OPTIONS } from '@/constants/home.constants';
 import { MainCarouselProps } from '@/types/home.carousel.type';
 
+/**
+ * 메인 캐러셀 컴포넌트
+ * @param imageList - 캐러셀에 표시할 이미지 목록
+ */
 const MainCarousel = ({ imageList }: MainCarouselProps) => {
-  // 호버 상태 관리
   const [isHovered, setIsHovered] = useState(false);
-  // 로드 상태 관리
-  const [imagesLoaded, setImagesLoaded] = useState(false);
 
-  const handleImageLoad = () => {
-    setImagesLoaded(true);
-  };
-
-  // embla-carousel 설정 (자동 재생이 호버 시 멈추도록 Autoplay 옵션 사용)
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [
     Autoplay({
       delay: MAIN_CAROUSEL_OPTIONS.AUTO_ROLLING_TIME,
@@ -31,11 +27,10 @@ const MainCarousel = ({ imageList }: MainCarouselProps) => {
     }),
   ]);
 
-  // 호버 상태(isHovered)를 useCarouselProgress에 전달
   const { currentIndex, totalCount, progressWidth } = useCarouselProgress(
     emblaApi ?? null,
     MAIN_CAROUSEL_OPTIONS.AUTO_ROLLING_TIME,
-    isHovered, // 프로그래스 바 업데이트 일시정지 여부
+    isHovered,
   );
 
   return (
@@ -52,27 +47,21 @@ const MainCarousel = ({ imageList }: MainCarouselProps) => {
       aria-label="이미지 캐러셀"
     >
       <div className="overflow-hidden" ref={emblaRef}>
-        {/* 이미지가 없거나 못불러왔을시 대체 화면 */}
         <div className="flex">
           {(!imageList || imageList.length === 0) && (
-            <div
-              className="relative min-w-full"
-              style={{
-                paddingTop: `${(MAIN_CAROUSEL_OPTIONS.HEIGHT / MAIN_CAROUSEL_OPTIONS.WIDTH) * 100}%`,
-              }}
-            >
+            <div className="relative h-[340px] max-h-[340px] min-w-full lg:h-[340px]">
               <div className="flex h-full w-full items-center justify-center bg-gray-100">
                 <p className="text-gray-500">이미지가 없습니다.</p>
               </div>
             </div>
           )}
-          {/* 캐러셀 이미지 */}
-          {imageList?.map((image) => (
+          {imageList?.map((image, index) => (
             <div
-              className="relative min-w-full"
+              className="relative h-0 min-w-full"
               key={image.id}
               style={{
-                paddingTop: `${(MAIN_CAROUSEL_OPTIONS.HEIGHT / MAIN_CAROUSEL_OPTIONS.WIDTH) * 100}%`,
+                paddingTop: 'calc(340 / 1024 * 100%)', // 1024px 너비에서 340px 높이 비율 유지
+                maxHeight: '340px',
               }}
             >
               <Link
@@ -84,23 +73,18 @@ const MainCarousel = ({ imageList }: MainCarouselProps) => {
                   src={image.image_url}
                   alt={image.title || '슬라이드 이미지'}
                   fill
-                  priority
+                  priority={index === 0} // 첫번째 이미지는 우선 로딩
                   sizes="100vw"
+                  placeholder="blur"
+                  blurDataURL="/placeholder.jpg" // Next.js public 폴더 내 블러 대체 이미지
                   className="object-cover"
-                  onLoad={handleImageLoad}
                 />
-                {!imagesLoaded && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
-                    <p className="text-gray-500">이미지 로딩 중...</p>
-                  </div>
-                )}
               </Link>
             </div>
           ))}
         </div>
       </div>
 
-      {/* 화살표 버튼 */}
       <NavigationButton
         direction="left"
         onClick={() => emblaApi?.scrollPrev()}
@@ -110,7 +94,6 @@ const MainCarousel = ({ imageList }: MainCarouselProps) => {
         onClick={() => emblaApi?.scrollNext()}
       />
 
-      {/* 페이지 번호 및 프로그래스 바 */}
       <ProgressIndicator
         current={currentIndex + 1}
         total={totalCount}

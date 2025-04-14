@@ -1,18 +1,23 @@
+'use client';
+
+import { useCallback, useEffect, useMemo } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import { CATEGORY_ROUTES } from '@/constants/home.constants';
 import { TravelCategory } from '@/types/home.category.type';
 import useCategoryStore from '@/zustand/home.category.store';
-import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useMemo } from 'react';
 
 /**
  * 카테고리 상태와 라우팅을 함께 관리하는 훅
- * 컴포넌트에서 사용하기 위한 편의 함수
+ * 최적화된 네비게이션 기능을 제공합니다.
+ *
+ * @returns {Object} 카테고리 상태와 네비게이션 함수를 포함한 객체
  */
 const useCategoryNavigation = () => {
   const router = useRouter();
   const pathname = usePathname();
   const { activeCategory, setActiveCategory } = useCategoryStore();
 
+  // 카테고리 항목을 메모이제이션하여 불필요한 재계산 방지
   const categoryEntries = useMemo(() => Object.entries(CATEGORY_ROUTES), []);
 
   // URL 경로에 따라 활성화된 카테고리 업데이트
@@ -20,8 +25,9 @@ const useCategoryNavigation = () => {
     // URL 경로를 기반으로 현재 활성화된 카테고리 찾기
     const currentPath = pathname || '/';
 
-    // 홈페이지인 경우 활성 카테고리를 설정하지 않음 (전체가 선택된 상태로 유지)
+    // 홈페이지인 경우 '전체' 카테고리 유지
     if (currentPath === '/') {
+      setActiveCategory('전체');
       return;
     }
 
@@ -37,18 +43,24 @@ const useCategoryNavigation = () => {
 
     // 부분 경로 일치 검색 (예: /attractions/123 -> '명소' 카테고리로 매핑)
     for (const [category, route] of categoryEntries) {
-      if (route !== '/all' && currentPath.startsWith(route)) {
+      if (route !== '/categories/all' && currentPath.startsWith(route)) {
         setActiveCategory(category as TravelCategory);
         return;
       }
     }
-  }, [pathname, setActiveCategory]);
+  }, [pathname, setActiveCategory, categoryEntries]);
 
-  // 카테고리 변경 및 해당 페이지로 이동
-  const navigateToCategory = (category: TravelCategory) => {
-    setActiveCategory(category);
-    router.push(CATEGORY_ROUTES[category]);
-  };
+  // 카테고리 변경 및 해당 페이지로 이동 (최적화)
+  const navigateToCategory = useCallback(
+    (category: TravelCategory) => {
+      setActiveCategory(category);
+      // 부드러운 전환 처리를 위해 setTimeout 사용
+      setTimeout(() => {
+        router.push(CATEGORY_ROUTES[category]);
+      }, 0);
+    },
+    [router, setActiveCategory],
+  );
 
   return {
     activeCategory,

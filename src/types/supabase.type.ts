@@ -377,6 +377,7 @@ export type Database = {
           title: string;
           image: string;
           created_at: string;
+          category: string;
         }[];
       };
       get_user_likes: {
@@ -398,6 +399,19 @@ export type Database = {
           like_count: number;
           comment_count: number;
         };
+      };
+      get_plans: {
+        Args: { user_id_param: string | null };
+        Returns: {
+          plan_id: number;
+          plan_img: string;
+          title: string;
+          description: string;
+          nickname: string;
+          travel_start_date: string;
+          travel_end_date: string;
+          is_liked: boolean;
+        }[];
       };
     };
     Enums: {

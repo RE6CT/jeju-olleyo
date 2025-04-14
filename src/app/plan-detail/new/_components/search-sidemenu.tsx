@@ -6,11 +6,10 @@ import { Input } from '@/components/ui/input';
 import PlaceCardCategory from '../../_components/place-card-category';
 import { CategoryType } from '@/types/category-badge.type';
 import fetchGetAllPlaces from '@/lib/apis/search/get-place.api';
-import fetchDeleteBookmark from '@/lib/apis/bookmark/delete-bookmark.api';
-import { fetchGetAllBookmarksByUserId } from '@/lib/apis/bookmark/get-bookmark.api';
 import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { Place } from '@/types/search.type';
 import DynamicPagination from '@/components/ui/dynamic-pagination';
+import { useBookmarkQuery } from '@/lib/hooks/use-bookmark-query';
 
 const ITEMS_PER_PAGE = 7;
 const INITIAL_ITEMS = 3;
@@ -30,14 +29,15 @@ const SearchSidemenu = ({
   userId: string;
 }) => {
   const [places, setPlaces] = useState<Place[]>([]);
-  const [bookmarkedPlaces, setBookmarkedPlaces] = useState<number[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [maxVisiblePages, setMaxVisiblePages] = useState(3);
   const containerRef = useRef<HTMLDivElement>(null);
-  const resizeTimeoutRef = useRef<NodeJS.Timeout>(); // 디바운스 타임아웃 참조
+  const resizeTimeoutRef = useRef<NodeJS.Timeout>();
+
+  const { isBookmarked, toggleBookmark } = useBookmarkQuery(userId);
 
   const filteredPlaces = places.filter((place) => {
     const matchesCategory =
@@ -102,16 +102,8 @@ const SearchSidemenu = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log('데이터 로딩 시작');
-        const [placesResponse, bookmarksResponse] = await Promise.all([
-          fetchGetAllPlaces(),
-          fetchGetAllBookmarksByUserId(userId),
-        ]);
-
+        const placesResponse = await fetchGetAllPlaces();
         setPlaces(placesResponse || []);
-        setBookmarkedPlaces(
-          bookmarksResponse?.map((bookmark) => bookmark.placeId) ?? [],
-        );
       } catch (error) {
         console.error('데이터를 가져오는데 실패했습니다:', error);
       } finally {
@@ -122,15 +114,10 @@ const SearchSidemenu = ({
     fetchData();
   }, [userId]);
 
-  const handleBookmarkToggle = async (id: number) => {
+  const handleBookmarkToggle = async (placeId: number) => {
     try {
-      if (bookmarkedPlaces.includes(id)) {
-        await fetchDeleteBookmark(id);
-        setBookmarkedPlaces((prev) => prev.filter((placeId) => placeId !== id));
-      } else {
-        // TODO: 북마크 추가 API 구현 필요
-        console.log('북마크 추가:', id);
-      }
+      console.log(`SearchSidemenu: Toggling bookmark for placeId: ${placeId}`);
+      await toggleBookmark(placeId);
     } catch (error) {
       console.error('북마크 토글에 실패했습니다:', error);
     }
@@ -210,10 +197,10 @@ const SearchSidemenu = ({
                 title={place.title}
                 category={place.category as CategoryType}
                 imageUrl={place.image || ''}
-                isBookmarked={bookmarkedPlaces.includes(place.id)}
+                isBookmarked={isBookmarked(place.place_id)}
                 isSearchSection
-                onBookmarkToggle={() => handleBookmarkToggle(place.id)}
-                onAddPlace={() => handleAddPlace(place.id)}
+                onBookmarkToggle={() => handleBookmarkToggle(place.place_id)}
+                onAddPlace={() => handleAddPlace(place.place_id)}
               />
             ))}
             {currentPageItems.length > INITIAL_ITEMS && (

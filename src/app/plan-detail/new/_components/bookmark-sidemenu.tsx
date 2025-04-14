@@ -15,6 +15,7 @@ import useBookmark from '@/lib/hooks/use-bookmark';
 import { getPlaceImageWithFallback } from '@/lib/utils/get-image-with-fallback';
 import ErrorMessage from '@/components/ui/error-message';
 import { BookmarkedPlace } from '@/types/plan-detail.type';
+import { useBookmarkQuery } from '@/lib/hooks/use-bookmark-query';
 
 /**
  * 북마크된 장소들을 사이드메뉴에 표시하는 컴포넌트
@@ -35,47 +36,29 @@ const BookmarkSidemenu = ({
   activeFilterTab: CategoryType;
   onFilterTabChange: (tab: CategoryType) => void;
 }) => {
-  const [bookmarkedPlaces, setBookmarkedPlaces] = useState<BookmarkedPlace[]>(
-    [],
-  );
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // 북마크가 최신 상태 유지를 보장하기 때문에, useCallback을 사용하여 메모이제이션
-  const fetchBookmarks = useCallback(async () => {
+  const { isBookmarked, toggleBookmark, bookmarks } = useBookmarkQuery(userId);
+
+  const handleBookmarkToggle = async (place_id: number) => {
     try {
-      setIsLoading(true);
-      setError(null);
-      const data = await fetchGetAllBookmarksByUserId(userId);
-
-      const transformedData =
-        data?.map((item) => ({
-          place_id: item.placeId,
-          title: item.title,
-          category: item.category as CategoryType,
-          image: getPlaceImageWithFallback(item.image),
-          created_at: item.createdAt,
-        })) ?? [];
-
-      setBookmarkedPlaces(transformedData);
-    } catch (err) {
-      setError('북마크 데이터를 불러오는데 실패했습니다.');
-      console.error('북마크 데이터 불러오기 실패:', err);
-    } finally {
-      setIsLoading(false);
+      await toggleBookmark(place_id);
+    } catch (error) {
+      setError('북마크를 업데이트하는 데 실패했습니다.');
     }
-  }, [userId]);
+  };
 
-  // 컴포넌트 마운트 시 북마크 데이터 로드
   useEffect(() => {
-    fetchBookmarks();
-  }, [fetchBookmarks]);
+    setIsLoading(false);
+  }, [bookmarks]);
 
   /* 카테고리별 필터링 */
-  const filteredPlaces =
-    activeFilterTab === '전체'
-      ? bookmarkedPlaces
-      : bookmarkedPlaces.filter((place) => place.category === activeFilterTab);
+  const filteredPlaces = bookmarks
+    ? activeFilterTab === '전체'
+      ? bookmarks
+      : bookmarks.filter((place) => place.category === activeFilterTab)
+    : [];
 
   if (error) {
     return (
@@ -108,18 +91,14 @@ const BookmarkSidemenu = ({
         ) : (
           filteredPlaces.map((place) => (
             <PlaceCardCategory
-              key={place.place_id}
+              key={place.placeId}
               title={place.title}
-              category={place.category}
+              category={place.category as CategoryType}
               imageUrl={place.image}
-              isBookmarked={true}
-              placeId={place.place_id}
+              isBookmarked={isBookmarked(place.placeId)}
+              placeId={place.placeId}
               userId={userId}
-              onBookmarkToggle={() => {
-                setBookmarkedPlaces((prevPlaces) =>
-                  prevPlaces.filter((p) => p.place_id !== place.place_id),
-                );
-              }}
+              onBookmarkToggle={() => handleBookmarkToggle(place.placeId)}
             />
           ))
         )}

@@ -10,9 +10,12 @@ import { AuthFormProps } from '@/types/auth.type';
 import PasswordInput from './auth-password-input';
 import { useForm, Controller } from 'react-hook-form';
 import { LoginFormValues, RegisterFormValues } from '@/types/auth.type';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema, registerSchema } from '@/lib/schemas/auth-schema';
+import { PATH } from '@/constants/path.constants';
+import ErrorMessage from './auth-form-error-message';
+import { AUTH_BUTTON_TEXT } from '@/constants/auth.constants';
 
 /**
  * 인증 관련 페이지의 폼 컴포넌트
@@ -20,13 +23,15 @@ import { loginSchema, registerSchema } from '@/lib/schemas/auth-schema';
  * @param type 로그인 또는 회원가입 타입
  * @param onSubmit 폼 제출 핸들러
  * @param isLoading 로딩 상태 여부
+ * @param savedEmail 저장된 이메일 (로그인 페이지에서만 사용)
  */
 
 const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
   type,
   onSubmit,
   isLoading = false,
-}: AuthFormProps<T>) => {
+  savedEmail = '',
+}: AuthFormProps<T> & { saveEmail?: string }) => {
   const isLogin = type === 'login';
 
   // useMemo를 이용한 버튼 텍스트 최적화
@@ -41,8 +46,9 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
     handleSubmit: handleSubmitLogin,
     control: controlLogin,
     formState: { errors: errorsLogin },
+    setValue: setLoginValue,
   } = useForm<LoginFormValues>({
-    mode: 'onBlur',
+    mode: 'onSubmit',
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: '',
@@ -68,24 +74,20 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
     },
   });
 
+  // 저장된 이메일이 있을 경우 폼에 설정
+  useEffect(() => {
+    if (isLogin && savedEmail) {
+      setLoginValue('email', savedEmail);
+      setLoginValue('remember', true);
+    }
+  }, [isLogin, savedEmail, setLoginValue]);
+
   // 제출 핸들러 - 타입에 맞게 처리 (useCallback 사용)
   const handleFormSubmit = useCallback(
     isLogin
       ? (data: LoginFormValues) => onSubmit(data as T)
       : (data: RegisterFormValues) => onSubmit(data as T),
     [isLogin, onSubmit],
-  );
-
-  /**
-   * 에러 메시지를 표시하는 컴포넌트
-   *
-   * @param message 표시할 에러 메시지
-   * @returns 에러 메시지 컴포넌트
-   */
-  const ErrorMessage = ({ message }: { message: string | undefined }) => (
-    <div className="h-5">
-      {message && <p className="text-sm text-red-500">{message}</p>}
-    </div>
   );
 
   return (
@@ -146,10 +148,7 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
             </div>
             <div>
               {/* 비밀번호 찾기 링크 */}
-              <Link
-                href="/forgot-password"
-                className="text-xs text-blue-600 hover:text-blue-800"
-              >
+              <Link href={PATH.FORGOT_PASSWORD} className="text-xs text-black hover:text-blue">
                 비밀번호 찾기
               </Link>
             </div>
@@ -157,7 +156,7 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
 
           {/* 폼 제출 버튼 영역 */}
           <Button type="submit" className="mt-4 w-full" disabled={isLoading}>
-            {isLoading ? '처리 중...' : buttonText}
+            {isLoading ? AUTH_BUTTON_TEXT.LOADING : buttonText}
           </Button>
         </form>
       ) : (
@@ -227,7 +226,7 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
 
           {/* 폼 제출 버튼 영역 */}
           <Button type="submit" className="mt-2 w-full" disabled={isLoading}>
-            {isLoading ? '처리 중...' : buttonText}
+            {isLoading ? AUTH_BUTTON_TEXT.LOADING : buttonText}
           </Button>
         </form>
       )}

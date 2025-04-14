@@ -59,7 +59,7 @@
 
   html,
   body {
-    @apply font-sans leading-normal text-gray-900;
+    @apply bg-white font-sans leading-normal text-gray-900;
   }
 }
 

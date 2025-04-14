@@ -5,7 +5,7 @@ export const PATH = {
   MYPLAN: '/my-plan',
   PLAN_DETAIL: '/plan-detail',
   SEARCH: '/search',
-  SHAREDPLAN: '/shared-plan',
+  COMMUNITY: '/community',
   FORGOT_PASSWORD: '/forgot-password',
   RESET_PASSWORD: '/reset-password',
   CALLBACK: '/auth/callback',

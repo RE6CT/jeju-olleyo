@@ -42,11 +42,11 @@ export const MAIN_CAROUSEL_OPTIONS = {
   /** 자동 롤링 시간 (ms) */
   AUTO_ROLLING_TIME: 5000,
   /** 이미지 원본 너비 */
-  WIDTH: 1890,
+  WIDTH: 1024,
   /** 이미지 원본 높이 */
   HEIGHT: 340,
   /** 네비게이션 아이콘 크기 */
-  NAVIGATION_ICON_SIZE: 96,
+  NAVIGATION_ICON_SIZE: 48,
   /** 네비게이션 아이콘 두께 */
-  NAVIGATION_ICON_STROKE_WIDTH: 4,
+  NAVIGATION_ICON_STROKE_WIDTH: 2,
 };

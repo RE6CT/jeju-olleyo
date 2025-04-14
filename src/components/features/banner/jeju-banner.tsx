@@ -1,6 +1,7 @@
 'use client';
 
 import { JejuBannerProps } from '@/types/common.type';
+import useAuthStore from '@/zustand/auth.store';
 import { useRouter } from 'next/navigation';
 
 /**
@@ -12,18 +13,17 @@ import { useRouter } from 'next/navigation';
  * @param buttonUrl - 버튼 클릭 시 이동할 URL
  */
 const JejuBanner = ({
-  imageUrl = '/images/jeju-banner.png',
+  imageUrl = '/banner-images/plan-banner.svg',
   title = '나만의 제주 여행 계획하기',
   buttonText = '내 일정 만들러 가기 >',
   buttonUrl = '/planner',
 }: JejuBannerProps) => {
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const router = useRouter();
 
   /** 일정 만들기 버튼 클릭 시의 이벤트 핸들러 */
   const handleGotoNewPlan = () => {
-    const user = 'user';
-
-    if (user) {
+    if (!isAuthenticated) {
       alert('로그인이 필요합니다.');
       return;
     }

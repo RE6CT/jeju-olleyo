@@ -36,6 +36,7 @@ export const fetchLogin = async (values: LoginFormValues) => {
     // 중요: 사용자 정보도 함께 반환
     const userInfo = data.user
       ? {
+          id: data.user.id,
           email: data.user.email ?? null,
           nickname: data.user.user_metadata?.nickname || null,
           phone: data.user.user_metadata?.phone || null,

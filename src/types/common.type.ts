@@ -48,3 +48,8 @@ export type DurationProps = {
   separator: string;
   className?: string;
 };
+
+export type List = {
+  value: string;
+  label: string;
+}[];

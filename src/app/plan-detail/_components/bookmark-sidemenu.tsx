@@ -95,8 +95,6 @@ const BookmarkSidemenu = ({
               category={place.category as CategoryType}
               imageUrl={place.image}
               isBookmarked={isBookmarked(place.placeId)}
-              placeId={place.placeId}
-              userId={userId}
               onBookmarkToggle={() => handleBookmarkToggle(place.placeId)}
             />
           ))

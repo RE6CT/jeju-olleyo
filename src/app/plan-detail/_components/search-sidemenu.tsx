@@ -169,7 +169,6 @@ const SearchSidemenu = ({
         activeFilterTab={activeFilterTab}
         onFilterTabChange={onFilterTabChange}
         topContent={searchBar}
-        isExpanded={false}
       >
         <div className="flex items-center justify-center p-4">
           <p>로딩 중...</p>
@@ -185,7 +184,6 @@ const SearchSidemenu = ({
       activeFilterTab={activeFilterTab}
       onFilterTabChange={onFilterTabChange}
       topContent={searchBar}
-      isExpanded={isExpanded}
     >
       {/* 검색 결과 */}
       <div className="space-y-2" ref={containerRef}>

@@ -8,11 +8,6 @@ import PlaceSidemenu from './place-sidemenu';
 
 type TabType = '전체보기' | number;
 
-// #F60 색상이 --primary-500이 될 예정
-// #FFE0CC 색상이 --Primary-100이 될 예정
-// #537384 색상이 --Gray-600이 될 예정
-// #182126 색상이 --Gray-900이 될 예정
-// #E7EDF0 색상이 --Gray-100이 될 예정
 const BASE_TAB_STYLE =
   'flex items-center justify-center gap-[10px] rounded-[28px] border px-5 py-2 text-14 font-medium transition-colors';
 const ACTIVE_TAB_STYLE =
@@ -42,6 +37,11 @@ const PlanSchedule = ({
 }) => {
   const [activeTab, setActiveTab] = useState<TabType>('전체보기');
   const dayCount = calculateTotalDays(startDate, endDate);
+
+  const handleAddPlace = (placeId: number) => {
+    if (activeTab === '전체보기') return;
+    // TODO: 선택된 장소를 해당 DAY의 일정에 추가하는 로직 구현
+  };
 
   return (
     <div className="my-6">
@@ -158,7 +158,11 @@ const PlanSchedule = ({
         </div>
 
         {/* 사이드바 영역 */}
-        <PlaceSidemenu userId={userId} />
+        <PlaceSidemenu
+          userId={userId}
+          selectedDay={activeTab === '전체보기' ? null : activeTab}
+          onAddPlace={handleAddPlace}
+        />
       </div>
     </div>
   );

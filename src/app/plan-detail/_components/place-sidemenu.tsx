@@ -5,7 +5,15 @@ import BookmarkSidemenu from './bookmark-sidemenu';
 import SearchSidemenu from './search-sidemenu';
 import { CategoryType } from '@/types/category-badge.type';
 
-const PlaceSidemenu = ({ userId }: { userId: string }) => {
+const PlaceSidemenu = ({
+  userId,
+  selectedDay,
+  onAddPlace,
+}: {
+  userId: string;
+  selectedDay: number | null;
+  onAddPlace: (placeId: number) => void;
+}) => {
   const [activeBookmarkTab, setActiveBookmarkTab] =
     useState<CategoryType>('전체');
   const [activeSearchTab, setActiveSearchTab] = useState<CategoryType>('전체');
@@ -33,6 +41,8 @@ const PlaceSidemenu = ({ userId }: { userId: string }) => {
           activeFilterTab={activeSearchTab}
           onFilterTabChange={setActiveSearchTab}
           userId={userId}
+          onAddPlace={onAddPlace}
+          selectedDay={selectedDay}
         />
       </div>
     </div>

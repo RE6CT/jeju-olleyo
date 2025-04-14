@@ -42,19 +42,6 @@ const PlaceCardCategory = ({
   placeId?: number;
   userId?: string;
 }) => {
-  const { bookmarks, toggleBookmark } = useBookmark(
-    placeId || 0,
-    userId || '',
-    isBookmarked,
-  );
-
-  const handleBookmarkClick = async () => {
-    if (placeId && userId) {
-      await toggleBookmark();
-    }
-    onBookmarkToggle?.();
-  };
-
   return (
     <div className="flex w-full items-center justify-between py-3">
       <div className="flex gap-3">
@@ -87,8 +74,8 @@ const PlaceCardCategory = ({
       <div className="flex items-center gap-1">
         {onBookmarkToggle && (
           <BookmarkIcon
-            isBookmarked={placeId && userId ? bookmarks : isBookmarked}
-            onToggle={handleBookmarkClick}
+            isBookmarked={isBookmarked}
+            onToggle={onBookmarkToggle}
           />
         )}
         {(isSearchSection || !onBookmarkToggle) && onAddPlace && (

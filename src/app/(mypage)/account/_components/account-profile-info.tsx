@@ -125,7 +125,7 @@ const ProfileInfo = ({
               className={PROFILE_INFO_STYLE.input}
             />
             {errors.nickname && (
-              <p className="regular-14 absolute m-2 text-destructive">
+              <p className="regular-14 absolute m-2 text-red">
                 {errors.nickname.message}
               </p>
             )}

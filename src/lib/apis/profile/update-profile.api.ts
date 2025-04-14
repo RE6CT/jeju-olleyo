@@ -6,6 +6,7 @@ import { ERROR_CODES } from '@/constants/supabase.constant';
 import { getServerClient } from '@/lib/supabase/server';
 import dayjs from 'dayjs';
 import { revalidatePath } from 'next/cache';
+import { fetchGetCurrentUser } from '../auth/auth-server.api';
 
 /**
  * 유저의 닉네임을 업데이트하는 서버 액션 함수
@@ -210,6 +211,55 @@ export const fetchUpdatePhoneByUserId = async (
     let errorMessage = ERROR_MESSAGES.PHONE_UPDATE_FAILED;
 
     // 에러 객체라면 해당 에러 메시지를 적용
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+
+    return {
+      success: false,
+      message: errorMessage,
+    };
+  }
+};
+
+/**
+ * 비밀번호 변경 함수
+ * @param oldPassword - 현재 비밀번호
+ * @param newPassword - 새로운 비밀번호
+ */
+export const fetchUpdatePassword = async (
+  oldPassword: string,
+  newPassword: string,
+) => {
+  try {
+    const supabase = await getServerClient();
+
+    // 유저 정보 가져오기
+    const user = await fetchGetCurrentUser();
+    if (!user.user || !user.user.email)
+      throw new Error(ERROR_MESSAGES.USER_DATA_MISSING);
+
+    // 현재 비밀번호 검증
+    const { error: passwordCheckError } =
+      await supabase.auth.signInWithPassword({
+        email: user.user.email,
+        password: oldPassword,
+      });
+
+    if (passwordCheckError) throw new Error(ERROR_MESSAGES.PASSWORD_INVALID);
+
+    // 비밀번호 업데이트
+    const { error: passwordUpdateError } = await supabase.auth.updateUser({
+      password: newPassword,
+    });
+
+    if (passwordUpdateError) throw new Error(passwordUpdateError.message);
+
+    revalidatePath(PATH.ACCOUNT);
+    return { success: true, message: SUCCESS_MESSAGES.PASSWORD_UPDATED };
+  } catch (error: unknown) {
+    let errorMessage = ERROR_MESSAGES.PASSWORD_UPDATE_FAILED;
+
     if (error instanceof Error) {
       errorMessage = error.message;
     }

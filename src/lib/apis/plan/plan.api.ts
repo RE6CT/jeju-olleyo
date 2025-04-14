@@ -1,4 +1,5 @@
 'use server';
+
 import { Plan, PlanFilterOptions } from '@/types/plan.type';
 import { getServerClient } from '@/lib/supabase/server';
 import { camelize } from '@/lib/utils/camelize';
@@ -6,6 +7,7 @@ import {
   isDateGreaterThanOrEqual,
   isDateLessThanOrEqual,
 } from '@/lib/utils/date';
+import { fetchGetCurrentUser } from '../auth/auth-server.api';
 
 /**
  * 사용자의 일정 목록을 가져오는 API
@@ -103,4 +105,21 @@ export const fetchDeletePlan = async (planId: number) => {
   if (error) {
     throw new Error('일정 삭제에 실패했습니다.');
   }
+};
+
+/**
+ * 전체 일정을 가져오는 함수
+ * @param userId - 사용자의 userId
+ * @returns 좋아요 여부가 포함된 전체 일정 목록
+ */
+export const fetchAllPlans = async (userId: string | null) => {
+  const supabase = await getServerClient();
+
+  const { data, error } = await supabase.rpc('get_plans', {
+    user_id_param: userId,
+  });
+
+  if (error) throw new Error(error.message);
+
+  return data.map(camelize);
 };

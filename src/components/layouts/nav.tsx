@@ -14,13 +14,13 @@ const Nav = () => {
       {user ? (
         <div className="flex gap-12">
           <Link href={PATH.MYPLAN}>내 여행</Link>
-          <Link href={PATH.SHAREDPLAN}>커뮤니티</Link>
+          <Link href={PATH.COMMUNITY}>커뮤니티</Link>
           <MypageButton userId={user?.id} />
         </div>
       ) : (
         <div className="flex gap-12">
           <Link href={PATH.MYPLAN}>내 여행</Link>
-          <Link href={PATH.SHAREDPLAN}>커뮤니티</Link>
+          <Link href={PATH.COMMUNITY}>커뮤니티</Link>
           <Link href={PATH.SIGNIN}>로그인</Link>
         </div>
       )}

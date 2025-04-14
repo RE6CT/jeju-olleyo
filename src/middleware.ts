@@ -33,7 +33,7 @@ export async function middleware(request: NextRequest) {
     PATH.SIGNUP,
     PATH.MYPLAN,
     PATH.SEARCH,
-    PATH.SHAREDPLAN,
+    PATH.COMMUNITY,
     PATH.FORGOT_PASSWORD,
     PATH.RESET_PASSWORD,
     PATH.CALLBACK,

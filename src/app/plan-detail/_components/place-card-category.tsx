@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { CategoryType } from '@/types/category-badge.type';
 import { Button } from '@/components/ui/button';
 import BookmarkIcon from '@/components/commons/bookmark-icon';
+import useBookmark from '@/lib/hooks/use-bookmark';
 
 const PLACE_IMAGE_SIZE = {
   width: 40,
@@ -28,15 +29,32 @@ const PlaceCardCategory = ({
   isSearchSection = false,
   onBookmarkToggle,
   onAddPlace,
+  placeId,
+  userId,
 }: {
   title: string;
   imageUrl: string;
   category: CategoryType;
   isBookmarked: boolean;
   isSearchSection?: boolean;
-  onBookmarkToggle: () => void;
+  onBookmarkToggle?: () => void;
   onAddPlace?: () => void;
+  placeId?: number;
+  userId?: string;
 }) => {
+  const { bookmarks, toggleBookmark } = useBookmark(
+    placeId || 0,
+    userId || '',
+    isBookmarked,
+  );
+
+  const handleBookmarkClick = async () => {
+    if (placeId && userId) {
+      await toggleBookmark();
+    }
+    onBookmarkToggle?.();
+  };
+
   return (
     <div className="flex w-full items-center justify-between py-3">
       <div className="flex gap-3">
@@ -69,8 +87,8 @@ const PlaceCardCategory = ({
       <div className="flex items-center gap-1">
         {onBookmarkToggle && (
           <BookmarkIcon
-            isBookmarked={isBookmarked}
-            onToggle={onBookmarkToggle}
+            isBookmarked={placeId && userId ? bookmarks : isBookmarked}
+            onToggle={handleBookmarkClick}
           />
         )}
         {(isSearchSection || !onBookmarkToggle) && onAddPlace && (

@@ -71,33 +71,6 @@ const BookmarkSidemenu = ({
     fetchBookmarks();
   }, [fetchBookmarks]);
 
-  /**
-   * 북마크 토글 핸들러 함수
-   * 장소의 북마크 상태를 토글하고 북마크 리스트를 업데이트
-   *
-   * @param placeId - 북마크를 토글할 장소의 ID
-   * @throws {Error} 북마크 토글 작업 실패 시 에러를 throw
-   */
-  const handleBookmarkToggle = async (placeId: number) => {
-    try {
-      const currentBookmark = await fetchGetBookmarkByIdQuery(placeId, userId);
-
-      if (currentBookmark) {
-        await fetchDeleteBookmark(currentBookmark.bookmark_id);
-      } else {
-        await fetchAddBookmarkByIdQuery(placeId, userId);
-      }
-
-      // 북마크 리스트 업데이트
-      setBookmarkedPlaces((prevPlaces) =>
-        prevPlaces.filter((place) => place.place_id !== placeId),
-      );
-    } catch (err) {
-      setError('북마크 토글에 실패했습니다.');
-      console.error('북마크 토글 실패:', err);
-    }
-  };
-
   /* 카테고리별 필터링 */
   const filteredPlaces =
     activeFilterTab === '전체'
@@ -140,7 +113,13 @@ const BookmarkSidemenu = ({
               category={place.category}
               imageUrl={place.image}
               isBookmarked={true}
-              onBookmarkToggle={() => handleBookmarkToggle(place.place_id)}
+              placeId={place.place_id}
+              userId={userId}
+              onBookmarkToggle={() => {
+                setBookmarkedPlaces((prevPlaces) =>
+                  prevPlaces.filter((p) => p.place_id !== place.place_id),
+                );
+              }}
             />
           ))
         )}

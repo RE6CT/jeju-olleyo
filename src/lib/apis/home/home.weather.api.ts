@@ -2,7 +2,9 @@ import {
   ProcessedDayWeather,
   WeatherIcon,
   VisualCrossingResponse,
+  StaticWeatherResult,
 } from '@/types/home.weather.type';
+import { cache } from 'react';
 
 /**
  * 날씨 API 관련 함수들
@@ -31,6 +33,11 @@ export const weatherApi = {
       // 캐시를 건너뛰는 옵션 (새로고침 시)
       if (options.skipCache) {
         fetchOptions.cache = 'no-store';
+      } else {
+        // 성능 최적화를 위한 캐시 설정
+        fetchOptions.next = {
+          revalidate: 3600, // 1시간마다 재검증
+        };
       }
 
       const res = await fetch(apiUrl, fetchOptions);
@@ -82,7 +89,8 @@ export const weatherApi = {
         fetchOptions.cache = 'no-store';
       } else {
         fetchOptions.next = {
-          revalidate: 86400, // 24시간
+          revalidate: 21600, // 6시간 (하루 4번)
+          tags: ['weather-data'],
         };
       }
 
@@ -151,3 +159,54 @@ export const weatherApi = {
     return conditionMap[condition] || condition;
   },
 };
+
+/**
+ * 정적 페이지 생성 시 날씨 데이터를 가져오는 함수
+ * React의 cache를 활용하여 동일한 요청에 대해 중복 호출을 방지합니다.
+ *
+ * @returns 날씨 데이터 또는 에러 정보를 포함한 객체
+ */
+export const getStaticWeatherData = cache(
+  async (): Promise<StaticWeatherResult> => {
+    try {
+      // 서버 환경에서 환경 변수 직접 사용
+      const API_KEY = process.env.VISUALCROSSING_API_KEY;
+      const LOCATION = 'Jeju,KR';
+
+      // API 키가 없는 경우 에러 처리
+      if (!API_KEY) {
+        return {
+          weatherData: [],
+          error: 'API 키가 설정되지 않았습니다',
+        };
+      }
+
+      // 날씨 데이터 가져오기
+      const weatherData = await weatherApi.fetchWeatherFromAPI(
+        API_KEY,
+        LOCATION,
+        false,
+      );
+
+      // 데이터가 없는 경우 에러 처리
+      if (weatherData.length === 0) {
+        return {
+          weatherData: [],
+          error: '날씨 데이터를 가져오는데 실패했습니다',
+        };
+      }
+
+      // 정상적으로 데이터를 가져온 경우
+      return {
+        weatherData,
+        error: null,
+      };
+    } catch (error) {
+      console.error('날씨 데이터 가져오기 오류:', error);
+      return {
+        weatherData: [],
+        error: '날씨 데이터를 가져오는데 오류가 발생했습니다',
+      };
+    }
+  },
+);

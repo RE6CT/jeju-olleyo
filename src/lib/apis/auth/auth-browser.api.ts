@@ -48,6 +48,7 @@ export const formatUser = (user: User | null): UserInfo | null => {
 
   // 일관된 사용자 객체 반환
   return {
+    id: user.id,
     email: user.email ?? null,
     nickname,
     phone,

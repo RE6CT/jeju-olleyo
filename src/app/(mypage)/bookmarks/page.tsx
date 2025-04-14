@@ -1,8 +1,7 @@
-import PlaceImage from '@/components/commons/place-image';
+import PlaceCard from '@/components/features/card/place-card';
 import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 import { fetchGetAllBookmarksByUserId } from '@/lib/apis/bookmark/get-bookmark.api';
 import { UserBookmarks } from '@/types/mypage.type';
-import Link from 'next/link';
 
 const BookmarksPage = async () => {
   const { user } = await fetchGetCurrentUser();
@@ -16,31 +15,29 @@ const BookmarksPage = async () => {
   if (!bookmarks) throw new Error('북마크 목록 로드 중 에러가 발생했습니다.');
 
   return (
-    <>
-      <p>{bookmarks?.length}개의 장소를 북마크했어요</p>
-      <h2 className="text-2xl">내가 북마크한 장소</h2>
+    <div className="flex w-full flex-col gap-5">
+      <div className="flex flex-col gap-4">
+        <p className="medium-16 text-secondary-300">
+          {bookmarks?.length}개의 장소를 북마크했어요
+        </p>
+        <h2 className="semibold-28 w-full">내가 북마크한 장소</h2>
+      </div>
       {bookmarks?.length === 0 ? (
         <div>아직 북마크한 장소가 없습니다.</div>
       ) : (
-        <ul className="grid w-full grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 gap-x-3 gap-y-5 sm:grid-cols-2 md:grid-cols-3">
           {bookmarks?.map((place) => (
-            <li key={place.placeId}>
-              <Link
-                href={`/place/${place.placeId}`}
-                className="flex w-full flex-col justify-center"
-              >
-                <div className="relative aspect-square">
-                  <PlaceImage image={place.image} title={place.title} />
-                </div>
-                <h3 className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-center">
-                  {place.title}
-                </h3>
-              </Link>
-            </li>
+            <PlaceCard
+              key={place.placeId}
+              placeId={place.placeId}
+              image={place.image}
+              title={place.title}
+              isLiked={true}
+            />
           ))}
-        </ul>
+        </div>
       )}
-    </>
+    </div>
   );
 };
 

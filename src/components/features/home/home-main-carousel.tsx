@@ -12,6 +12,10 @@ import { useCarouselProgress } from '@/lib/hooks/use-carousel-progress';
 import { MAIN_CAROUSEL_OPTIONS } from '@/constants/home.constants';
 import { MainCarouselProps } from '@/types/home.carousel.type';
 
+/**
+ * 메인 캐러셀 컴포넌트
+ * @param imageList - 캐러셀에 표시할 이미지 목록
+ */
 const MainCarousel = ({ imageList }: MainCarouselProps) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -45,15 +49,7 @@ const MainCarousel = ({ imageList }: MainCarouselProps) => {
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex">
           {(!imageList || imageList.length === 0) && (
-            <div
-              className="relative min-w-full"
-              style={{
-                paddingTop: `${
-                  (MAIN_CAROUSEL_OPTIONS.HEIGHT / MAIN_CAROUSEL_OPTIONS.WIDTH) *
-                  100
-                }%`,
-              }}
-            >
+            <div className="relative h-[340px] max-h-[340px] min-w-full lg:h-[340px]">
               <div className="flex h-full w-full items-center justify-center bg-gray-100">
                 <p className="text-gray-500">이미지가 없습니다.</p>
               </div>
@@ -61,13 +57,11 @@ const MainCarousel = ({ imageList }: MainCarouselProps) => {
           )}
           {imageList?.map((image, index) => (
             <div
-              className="relative min-w-full"
+              className="relative h-0 min-w-full"
               key={image.id}
               style={{
-                paddingTop: `${
-                  (MAIN_CAROUSEL_OPTIONS.HEIGHT / MAIN_CAROUSEL_OPTIONS.WIDTH) *
-                  100
-                }%`,
+                paddingTop: 'calc(340 / 1024 * 100%)', // 1024px 너비에서 340px 높이 비율 유지
+                maxHeight: '340px',
               }}
             >
               <Link

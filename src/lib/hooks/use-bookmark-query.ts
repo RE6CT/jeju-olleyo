@@ -88,7 +88,7 @@ export const useBookmarkQuery = (userId: string) => {
 
       return { previousBookmarks };
     },
-    onError: (err, newBookmark, context) => {
+    onError: (_err, _newBookmark, context) => {
       if (context?.previousBookmarks) {
         queryClient.setQueryData(
           ['bookmarks', userId],
@@ -163,7 +163,9 @@ export const useBookmarkQuery = (userId: string) => {
    * 북마크 추가/삭제를 토글하는 함수
    * @param placeId - 토글할 장소의 ID
    */
-  const toggleBookmark = async (placeId: number) => {
+  const toggleBookmark = async (
+    placeId: number,
+  ): Promise<{ success: boolean; error?: Error }> => {
     const isCurrentlyBookmarked = isBookmarked(placeId);
     try {
       if (isCurrentlyBookmarked) {
@@ -177,8 +179,9 @@ export const useBookmarkQuery = (userId: string) => {
         type: 'active',
         exact: true,
       });
+      return { success: true };
     } catch (error) {
-      console.error('북마크 토글 중 오류 발생:', error);
+      return { success: false, error: error as Error };
     }
   };
 

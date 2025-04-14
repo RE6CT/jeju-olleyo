@@ -48,3 +48,11 @@ export type DurationProps = {
   separator: string;
   className?: string;
 };
+
+// 제주 여행 배너 컴포넌트 props
+export type JejuBannerProps = {
+  imageUrl: string;
+  title: string;
+  buttonText: string;
+  buttonUrl: string;
+};

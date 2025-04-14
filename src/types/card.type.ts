@@ -3,9 +3,7 @@ import { Tables } from './supabase.type';
 
 type bookmarks = Tables<'bookmarks'>;
 export type SearchCardProp = {
-  bookmarks: CamelCaseObject<
-    Pick<bookmarks, 'user_id' | 'place' | 'place_lat' | 'place_lng'>
-  >;
+  bookmarks: CamelCaseObject<Pick<bookmarks, 'user_id' | 'place_id'>>;
   className: string | 'none';
   initialBookmarks: boolean;
   image: string;

@@ -10,15 +10,15 @@ const Nav = () => {
   const user = useAuthStore((state) => state.user);
 
   return (
-    <nav className="mr-4 flex items-center">
+    <nav className="flex items-center">
       {user ? (
-        <div className="flex gap-12">
+        <div className="flex gap-6 whitespace-nowrap text-xs font-medium sm:text-xs md:text-sm lg:text-base">
           <Link href={PATH.MYPLAN}>내 여행</Link>
           <Link href={PATH.COMMUNITY}>커뮤니티</Link>
           <MypageButton userId={user?.id} />
         </div>
       ) : (
-        <div className="flex gap-12">
+        <div className="flex gap-6 whitespace-nowrap text-xs font-medium sm:text-xs md:text-sm lg:text-base">
           <Link href={PATH.MYPLAN}>내 여행</Link>
           <Link href={PATH.COMMUNITY}>커뮤니티</Link>
           <Link href={PATH.SIGNIN}>로그인</Link>

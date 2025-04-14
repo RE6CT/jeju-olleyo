@@ -1,20 +1,10 @@
 'use client';
 
-import { useCallback, useState, useEffect } from 'react';
-import PlaceSidemenuLayout from '../../_components/place-sidemenu-layout';
-import PlaceCardCategory from '../../_components/place-card-category';
-import {
-  fetchGetAllBookmarksByUserId,
-  fetchGetBookmarkByIdQuery,
-} from '@/lib/apis/bookmark/get-bookmark.api';
-import fetchAddBookmarkByIdQuery from '@/lib/apis/bookmark/add-bookmark.api';
-import fetchDeleteBookmark from '@/lib/apis/bookmark/delete-bookmark.api';
-import useAuth from '@/lib/hooks/use-auth';
+import { useState, useEffect } from 'react';
+import PlaceSidemenuLayout from './place-sidemenu-layout';
+import PlaceCardCategory from './place-card-category';
 import { CategoryType } from '@/types/category-badge.type';
-import useBookmark from '@/lib/hooks/use-bookmark';
-import { getPlaceImageWithFallback } from '@/lib/utils/get-image-with-fallback';
 import ErrorMessage from '@/components/ui/error-message';
-import { BookmarkedPlace } from '@/types/plan-detail.type';
 import { useBookmarkQuery } from '@/lib/hooks/use-bookmark-query';
 
 /**

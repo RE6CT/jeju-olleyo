@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import TextareaWithCount from '@/components/ui/textarea-with-count';
 import KakaoMap from '@/components/features/map/kakao-map';
 import Loading from '@/app/loading';
 import ErrorMessage from '@/app/error';

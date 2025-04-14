@@ -4,7 +4,6 @@ import Image from 'next/image';
 import { CategoryType } from '@/types/category-badge.type';
 import { Button } from '@/components/ui/button';
 import BookmarkIcon from '@/components/commons/bookmark-icon';
-import useBookmark from '@/lib/hooks/use-bookmark';
 
 const PLACE_IMAGE_SIZE = {
   width: 40,

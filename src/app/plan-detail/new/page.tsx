@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import PlanForm from './_components/plan-form';
+import PlanForm from '../_components/plan-form';
 import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 
 const PlanDetailNewPage = async () => {

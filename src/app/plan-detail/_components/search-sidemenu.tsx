@@ -1,9 +1,9 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import PlaceSidemenuLayout from '../../_components/place-sidemenu-layout';
+import PlaceSidemenuLayout from './place-sidemenu-layout';
 import { Input } from '@/components/ui/input';
-import PlaceCardCategory from '../../_components/place-card-category';
+import PlaceCardCategory from './place-card-category';
 import { CategoryType } from '@/types/category-badge.type';
 import fetchGetAllPlaces from '@/lib/apis/search/get-place.api';
 import { useEffect, useState, useRef, useCallback, useMemo } from 'react';

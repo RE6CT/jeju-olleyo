@@ -1,19 +1,28 @@
-import { getCurrentUser } from '@/lib/apis/auth-server.api';
+import { Suspense } from 'react';
+import Loading from '@/app/loading';
+import MainCarouselContainer from '@/components/features/home/home-main-carousel-container';
+import CategoryTabs from '@/components/features/home/home-category-tap';
+import WeatherSection from '@/components/features/home/home-weather-container';
 
-const Home = async () => {
-  const { user } = await getCurrentUser();
-
-  // 사용자 데이터 활용
-  const nickname = user?.user_metadata?.nickname;
-  const email = user?.user_metadata?.email;
-  const phone = user?.user_metadata?.phone;
-
+const Home = () => {
   return (
-    <div className="flex h-screen w-full flex-col items-center justify-center py-8">
-      <h1 className="mb-6 text-3xl font-bold">안녕하세요, {nickname}님</h1>
-      <p className="mb-4">대시보드에 오신 것을 환영합니다.</p>
-      <p className="mb-4">이메일: {email}</p>
-      <p className="mb-4">전화번호: {phone}</p>
+    <div className="flex min-h-screen flex-col bg-gray-50">
+      {/* 카테고리 탭 영역 */}
+      <section className="w-full">
+        <Suspense fallback={<Loading />}>
+          <CategoryTabs />
+        </Suspense>
+      </section>
+
+      {/* 캐러셀 영역 */}
+      <section>
+        <MainCarouselContainer />
+      </section>
+
+      {/* 날씨 섹션 */}
+      <section className="mt-4 sm:mt-6 md:mt-8">
+        <WeatherSection />
+      </section>
     </div>
   );
 };

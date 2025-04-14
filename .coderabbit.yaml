@@ -1,0 +1,160 @@
+# .coderabbit.yaml - Next.js 14.2.26 + TypeScript 환경용 Coderabbit 설정 (완성본)
+reviews:
+  locale: "ko-KR"
+  language_settings:
+    review_language: "korean"
+  request_changes_threshold: minor
+  enable_review_guidance: true
+  auto_review:
+    enabled: true
+    auto_incremental_review: true
+  depth: high
+  code_generation_language: "typescript"
+
+  language:
+    - typescript
+    - javascript
+    - css
+    - html
+  framework:
+    - nextjs
+
+  path_filters:
+    - "src/**"
+    - "pages/**"
+    - "app/**"
+    - "components/**"
+    - "lib/**"
+    - "utils/**"
+    - "hooks/**"
+    - "store/**"
+    - "types/**"
+    - "**/*.{ts,tsx,js,jsx}"
+    - "!node_modules/**"
+    - "!.next/**"
+    - "!public/**"
+
+  # 기존 + 최신 경로 기반 리뷰 지침
+  path_instructions:
+    - path: "components/**"
+      instructions: >
+        컴포넌트 검토 기준: 재사용성, 유지보수성, 성능 최적화, 컴포넌트 분리 및 책임 분리,
+        shadcn UI 컴포넌트 사용 시 가이드라인 준수, 화살표 함수 사용, export default 위치(파일 하단),
+        Props 타입 명확 정의, TS Doc 주석 적절성.
+    - path: "components/ui/**"
+      instructions: >
+        Shadcn UI 커스텀 여부, 스타일 충돌 없는지, Tailwind와의 일관성 있는 조합 사용 여부 확인.
+    - path: "pages/**"
+      instructions: >
+        Next.js 페이지 컴포넌트 규칙 준수: getServerSideProps, getStaticProps 등 데이터 페칭 함수 사용 적절성,
+        SEO 최적화(Head, title 등), 화살표 함수 사용 및 export default 위치 점검, 불필요한 리렌더링 방지.
+    - path: "app/**"
+      instructions: >
+        Next.js 14 App Router 규칙 준수: Server와 Client 컴포넌트 구분, fetch 함수 사용 등 데이터 페칭 패턴,
+        성능 최적화(Suspense, 스트리밍), 병렬 라우트 및 인터셉트 라우트 사용 검토.
+    - path: "store/**"
+      instructions: >
+        Zustand 스토어 검토 기준: 상태 및 액션 분리, 불변성 보장, 미들웨어 활용 여부, 리렌더 최적화.
+    - path: "lib/supabase/**"
+      instructions: >
+        Supabase 관련 코드: 보안 모범 사례 준수, 에러 처리, 타입 안전성 확보, 퍼포먼스 최적화.
+    - path: "hooks/**"
+      instructions: >
+        커스텀 훅의 역할 분리, 재사용 가능성, 네이밍 컨벤션, 종속성 배열 누락 방지 여부.
+    - path: "**/*.test.{ts,tsx}"
+      instructions: >
+        테스트 코드 검토: 테스트 범위, 케이스 명확성, 모킹 사용 적절성.
+    - path: "**/queries/**"
+      instructions: >
+        Tanstack Query의 캐싱, 의존성 배열, 쿼리키 구성, 에러 핸들링, suspense 사용 여부 확인.
+    - path: "**/*.{ts,tsx}"
+      instructions: "TypeScript와 React 코드가 모범 사례를 준수하는지 확인해주세요."
+
+  tools:
+    eslint:
+      enabled: true
+    prettier:
+      enabled: true
+
+  technology_map:
+    - name: "nextjs"
+      version: "14.2.26"
+    - name: "typescript"
+    - name: "react"
+    - name: "zustand"
+    - name: "supabase"
+    - name: "react-hook-form"
+    - name: "zod"
+    - name: "shadcn-ui"
+    - name: "tanstack-query"
+
+  style:
+    typescript:
+      prefer_arrow_functions: true
+      export_style: "bottom"
+    naming:
+      components: "PascalCase"
+      functions: "camelCase"
+      variables: "camelCase"
+      interfaces: "PascalCase"
+      types: "PascalCase"
+
+  naming_conventions:
+    folder_and_file: "kebab-case"
+    component_files:
+      description: "파일명에 도메인 접두어를 추가하여 다른 컴포넌트와 구분 (예: post-card.tsx ⇒ PostCard)"
+      require_prefix: true
+      prefix_examples:
+        - "card.tsx → post-card.tsx"
+        - "sign-in-form.tsx → auth-sign-in-form.tsx"
+      match_component_name: true
+    module_files:
+      file_suffixes:
+        util: "util"
+        api: "api"
+        type: "type"
+        constant: "constant"
+        store: "store"
+    variable_naming:
+      component: "PascalCase"
+      type: "PascalCase"
+      constant: "UPPER_SNAKE_CASE"
+      default: "camelCase"
+    api_naming:
+      pattern: "fetch<동작><엔티티><조건>(파라미터)"
+      query_hook: "use<동작><엔티티><조건>Query()"
+      suspense_hook: "use<동작><엔티티><조건>SuspenseQuery()"
+      mutation_hook: "use<동작><엔티티><조건>Mutation()"
+      examples:
+        - "fetchGetPostById(id: string)"
+        - "useGetAllPostsQuery()"
+    event_handler:
+      function_prefix: "handle"
+      prop_prefix: "on"
+    additional:
+      arrow_function_export: "Arrow Function 작성 후 export default는 파일 하단에 위치"
+      preferred_type_definition: "TS 타입 작성 시 'type' 사용 (interface 대신)"
+
+  documentation:
+    require_ts_doc: true
+    ts_doc_required_for:
+      - "functions"
+      - "interfaces"
+      - "classes"
+      - "type_aliases"
+
+  ignore:
+    - "**/*.d.ts"
+    - "**/*.config.js"
+    - "**/*.config.ts"
+    - "package.json"
+    - "package-lock.json"
+    - "yarn.lock"
+    - "pnpm-lock.yaml"
+    - ".eslintrc.*"
+    - "tsconfig.json"
+    - ".prettierrc.*"
+    - "next.config.*"
+
+chat:
+  auto_reply: true

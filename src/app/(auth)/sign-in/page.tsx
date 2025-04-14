@@ -1,89 +1,91 @@
 'use client';
 
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
+
 import AuthLayout from '@/components/features/auth/auth-layout';
 import AuthHeader from '@/components/features/auth/auth-header';
 import AuthForm from '@/components/features/auth/auth-form';
 import SocialLogin from '@/components/features/auth/auth-social-login';
 import AuthFooter from '@/components/features/auth/auth-footer';
+import AuthErrorMessage from '@/components/features/auth/auth-error-message';
+import { CardContent } from '@/components/ui/card';
+
 import { LoginFormValues } from '@/types/auth.type';
-import { login } from '@/lib/apis/auth-server.api';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { STORAGE_KEY } from '@/constants/auth.constants';
+import useAuth from '@/lib/hooks/use-auth';
+import useAuthCheck from '@/lib/hooks/use-auth-check';
+import useRememberEmail from '@/lib/hooks/use-remember-email';
+import useRedirectParams from '@/lib/hooks/use-redirect-params';
+import { getLoginErrorMessage } from '@/lib/utils/auth-error.util';
+import { PATH } from '@/constants/path.constants';
+import { AUTH_PAGE_META } from '@/constants/auth.constants';
+import Loading from '@/app/loading';
 
+/**
+ * 로그인 페이지 컴포넌트
+ */
 const LoginPage = () => {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [savedEmail, setSavedEmail] = useState<string>('');
+  const redirectTo = useRedirectParams();
+  const { handleLogin, isLoading, error } = useAuth();
+  const { savedEmail } = useRememberEmail();
+  const [shouldCheckAuth, setShouldCheckAuth] = useState(true);
+  const searchParams = useSearchParams();
 
-  /**
-   * 컴포넌트 마운트 시 로컬 스토리지에서 저장된 이메일 불러오기
-   */
+  // 로그아웃 후 접근 여부 확인 (t 파라미터 확인)
   useEffect(() => {
-    // 클라이언트 사이드에서만 실행되도록 함
-    if (typeof window !== 'undefined') {
-      const rememberedEmail = localStorage.getItem(STORAGE_KEY.SAVED_EMAIL);
-      if (rememberedEmail) {
-        setSavedEmail(rememberedEmail);
-      }
+    const hasLogoutParam = searchParams.has('t');
+    if (hasLogoutParam) {
+      // 로그아웃 직후 접근한 경우 인증 체크 건너뛰기
+      setShouldCheckAuth(false);
     }
-  }, []);
+  }, [searchParams]);
 
-  /**
-   * 로그인 폼 제출 핸들러
-   * @param data 로그인 폼 데이터
-   */
+  // 인증 상태 체크 (로그아웃 직후가 아닌 경우만)
+  const { isLoading: isCheckingAuth, isAuthenticated } = useAuthCheck({
+    redirectIfFound: true,
+    redirectTo,
+    skipCheck: !shouldCheckAuth,
+  });
+
+  // 로그인 폼 제출 핸들러
   const handleSubmit = async (data: LoginFormValues) => {
-    try {
-      setIsLoading(true);
-
-      // 아이디 저장 처리
-      if (data.remember) {
-        localStorage.setItem(STORAGE_KEY.REMEMBER_EMAIL, 'true');
-        localStorage.setItem(STORAGE_KEY.SAVED_EMAIL, data.email);
-      } else {
-        localStorage.removeItem(STORAGE_KEY.REMEMBER_EMAIL);
-        localStorage.removeItem(STORAGE_KEY.SAVED_EMAIL);
-      }
-
-      const result = await login(data);
-
-      if (result.user) {
-        // 로그인 성공 시 홈 페이지로 리다이렉트
-        router.push('/');
-      } else if (result.error) {
-        console.error('로그인 실패:', result.error);
-        // 에러 처리 로직
-      }
-    } catch (error) {
-      console.error('로그인 오류:', error);
-    } finally {
-      setIsLoading(false);
-    }
+    await handleLogin(data);
   };
 
+  // 로딩 중이거나 이미 로그인된 경우 로딩 표시
+  if (isCheckingAuth && isAuthenticated) {
+    return <Loading />;
+  }
+
+  // 에러 메시지 처리
+  const errorMessages = error ? getLoginErrorMessage(error) : [];
+
   return (
-    // 로그인 페이지 레이아웃
     <AuthLayout>
-      {/* 로그인 페이지 헤더 */}
       <AuthHeader
-        title="로그인"
-        description="계정 정보를 입력하여 로그인하세요"
+        title={AUTH_PAGE_META.SIGNIN.title}
+        description={AUTH_PAGE_META.SIGNIN.description}
       />
-      {/* 로그인 폼 */}
+
+      {errorMessages.length > 0 && (
+        <CardContent className="pb-0">
+          <AuthErrorMessage messages={errorMessages} className="mb-4" />
+        </CardContent>
+      )}
+
       <AuthForm
         type="login"
         onSubmit={handleSubmit}
         isLoading={isLoading}
         savedEmail={savedEmail}
       />
-      {/* 소셜 로그인 옵션 */}
+
       <SocialLogin />
-      {/* 로그인 페이지 푸터 */}
+
       <AuthFooter
         question="계정이 없으신가요?"
         linkText="회원가입"
-        linkHref="/sign-up"
+        linkHref={PATH.SIGNUP}
       />
     </AuthLayout>
   );

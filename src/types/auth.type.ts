@@ -63,6 +63,7 @@ export type PasswordInputProps = {
   id: string;
   placeholder: string;
   required?: boolean;
+  className?: string;
   /** react-hook-form의 register 반환값 */
   register: UseFormRegisterReturn;
 };

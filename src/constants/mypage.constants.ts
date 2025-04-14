@@ -10,12 +10,15 @@ export const ERROR_MESSAGES = {
   PHONE_UPDATE_FAILED: '휴대폰 번호 변경 중 오류가 발생했습니다.',
   PHONE_DATA_MISSING: '휴대폰 번호 데이터가 전달되지 않았습니다.',
   PHONE_DUPLICATE: '이미 사용중인 번호입니다.',
+  PASSWORD_UPDATE_FAILED: '비밀번호 변경 중 오류가 발생했습니다.',
+  PASSWORD_INVALID: '현재 비밀번호가 올바르지 않습니다.',
 };
 
 export const SUCCESS_MESSAGES = {
-  NICKNAME_UPDATED: '닉네임이 성공적으로 변경되었습니다.',
-  PROFILE_UPDATED: '프로필 이미지가 성공적으로 변경되었습니다.',
-  PHONE_UPDATED: '휴대폰 번호가 성공적으로 변경되었습니다.',
+  NICKNAME_UPDATED: '닉네임이 변경되었습니다.',
+  PROFILE_UPDATED: '프로필 이미지가 변경되었습니다.',
+  PHONE_UPDATED: '휴대폰 번호가 변경되었습니다.',
+  PASSWORD_UPDATED: '비밀번호가 변경되었습니다.',
 };
 
 export const MAX_FILE_SIZE = 5 * 1024 * 1024;

@@ -17,7 +17,7 @@ const emailSchema = z
 /**
  * 비밀번호 유효성 검사를 위한 스키마
  */
-const passwordSchema = z
+export const passwordSchema = z
   .string()
   .min(1, { message: ERROR_MESSAGES.REQUIRED_PASSWORD })
   .min(VALIDATION_RULES.PASSWORD.MIN, {

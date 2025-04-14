@@ -29,7 +29,7 @@ const SearchCard = ({
         <CardTitle>{title}</CardTitle>
         <Bookmark
           userId={bookmarks.userId}
-          place={bookmarks.place ? bookmarks.place : 0}
+          placeId={bookmarks.placeId ? bookmarks.placeId : 0}
           initialBookmarks={initialBookmarks}
           place_lat={bookmarks.placeLat}
           place_lng={bookmarks.placeLng}

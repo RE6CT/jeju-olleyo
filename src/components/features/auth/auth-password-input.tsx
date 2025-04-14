@@ -18,6 +18,7 @@ const PasswordInput = ({
   placeholder,
   required = false,
   register,
+  className,
 }: PasswordInputProps) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -29,7 +30,7 @@ const PasswordInput = ({
         id={id}
         type={showPassword ? 'text' : 'password'}
         placeholder={placeholder}
-        className="pr-10"
+        className={`pr-10 ${className}`}
         required={required}
         {...register}
       />

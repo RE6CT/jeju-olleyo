@@ -105,11 +105,14 @@ const PersonalInfo = ({
         </Label>
         {isEditMode ? (
           <div className="flex flex-col">
-            <Input id="phone" placeholder={`${phone}`} {...register('phone')} />
+            <Input
+              id="phone"
+              placeholder={`${phone}`}
+              {...register('phone')}
+              className={PERSONAL_INFO_STYLE.input}
+            />
             {errors.phone && (
-              <p className="regular-14 m-2 text-destructive">
-                {errors.phone.message}
-              </p>
+              <p className="regular-14 m-2 text-red">{errors.phone.message}</p>
             )}
           </div>
         ) : (

@@ -31,8 +31,6 @@ const SearchCard = ({
           userId={bookmarks.userId}
           placeId={bookmarks.placeId ? bookmarks.placeId : 0}
           initialBookmarks={initialBookmarks}
-          place_lat={bookmarks.placeLat}
-          place_lng={bookmarks.placeLng}
         />
       </CardHeader>
       <CardContent></CardContent>

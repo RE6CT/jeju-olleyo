@@ -15,4 +15,5 @@ export const PATH = {
   LIKES: '/likes',
   COMMENTS: '/comments',
   RESERVATIONS: '/reservations',
+  TICKET: '/air-ticket',
 } as const;

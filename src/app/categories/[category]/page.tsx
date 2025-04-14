@@ -6,19 +6,14 @@ import {
   QueryClient,
 } from '@tanstack/react-query';
 import CategoryClient from './category-client';
+import { usePrefetchPlacesByCategory } from '@/lib/queries/use-prefetch-places';
 
 const CategoryPage = async ({ params }: { params: { category: string } }) => {
   const queryClient = new QueryClient();
 
   const urlCategory = params.category;
 
-  await queryClient.prefetchQuery({
-    queryKey: ['places', urlCategory],
-    queryFn:
-      urlCategory === 'all'
-        ? fetchGetAllPlaces
-        : () => fetchGetPlacesByCategory(urlCategory),
-  });
+  await usePrefetchPlacesByCategory(queryClient, urlCategory);
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

@@ -2,13 +2,10 @@
 
 import ErrorMessage from '@/app/error';
 import Loading from '@/app/loading';
-import { useQuery } from '@tanstack/react-query';
+import { useGetPlacesByCategoryQuery } from '@/lib/queries/use-get-places';
 
 const CategoryClient = ({ category }: { category: string }) => {
-  const { data, isPending, isError } = useQuery({
-    queryKey: ['places', category],
-    enabled: false,
-  });
+  const { data, isPending, isError } = useGetPlacesByCategoryQuery(category);
 
   if (isPending) return <Loading />;
   if (isError) return <ErrorMessage message="장소 불러오기 오류 발생" />;

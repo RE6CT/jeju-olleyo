@@ -2,11 +2,13 @@
 
 import ErrorMessage from '@/app/error';
 import Loading from '@/app/loading';
+import { CATEGORY_KR_MAP } from '@/constants/home.constants';
 import { useQuery } from '@tanstack/react-query';
 
 const CategoryClient = ({ category }: { category: string }) => {
+  const krCategory = CATEGORY_KR_MAP[category];
   const { data, isPending, isError } = useQuery({
-    queryKey: ['places', category],
+    queryKey: ['places', krCategory],
   });
 
   if (isPending) return <Loading />;

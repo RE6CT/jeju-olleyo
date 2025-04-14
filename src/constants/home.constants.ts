@@ -12,6 +12,15 @@ export const CATEGORY_ROUTES: Record<TravelCategory, string> = {
   항공권: '/categories/flight',
 };
 
+export const CATEGORY_KR_MAP: Record<string, TravelCategory> = {
+  all: '전체',
+  toursite: '명소',
+  accomodation: '숙박',
+  restaurant: '맛집',
+  cafe: '카페',
+  flight: '항공권',
+};
+
 export const CATEGORIES: TravelCategory[] = [
   '전체',
   '명소',

@@ -6,23 +6,30 @@ import {
   QueryClient,
 } from '@tanstack/react-query';
 import CategoryClient from './category-client';
+import { CATEGORY_KR_MAP } from '@/constants/home.constants';
 
 const CategoryPage = async ({ params }: { params: { category: string } }) => {
   const queryClient = new QueryClient();
-  const category = params.category;
+
+  const urlCategory = params.category;
+  const krCategory = CATEGORY_KR_MAP[urlCategory];
+
+  if (!krCategory) {
+    throw new Error('유효하지 않은 카테고리입니다.');
+  }
 
   await queryClient.prefetchQuery({
-    queryKey: ['places', category],
+    queryKey: ['places', krCategory],
     queryFn:
-      category === 'all'
+      krCategory === '전체'
         ? fetchGetAllPlaces
-        : () => fetchGetPlacesByCategory(category),
+        : () => fetchGetPlacesByCategory(krCategory),
   });
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <section className="flex flex-col gap-6 p-10">
-        <CategoryClient category={category} />
+        <CategoryClient category={krCategory} />
       </section>
     </HydrationBoundary>
   );

@@ -21,9 +21,9 @@ import Loading from '@/app/loading';
 import { useFilteredPlans } from '@/lib/queries/use-get-filtered-plans';
 import Pagination from '@/components/ui/pagination';
 import { useDeletePlan } from '@/lib/queries/use-delete-plan';
-import PlanCard from '@/components/features/plan/plan-card';
 import { PATH } from '@/constants/path.constants';
 import { useRouter } from 'next/navigation';
+import PlanHorizontalCard from '@/components/features/card/plan-horizontal_card';
 
 /**
  * 여행 계획 필터 섹션 컴포넌트
@@ -204,7 +204,7 @@ const PlanFilterSection = ({
         <>
           <div className="grid grid-cols-1 gap-6">
             {currentPlans.map((plan) => (
-              <PlanCard
+              <PlanHorizontalCard
                 key={plan.planId}
                 plan={plan}
                 nickname={userNickname}

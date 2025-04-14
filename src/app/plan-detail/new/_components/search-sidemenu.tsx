@@ -8,12 +8,15 @@ import { CategoryType } from '@/types/category-badge.type';
 import fetchGetAllPlaces from '@/lib/apis/search/get-place.api';
 import fetchDeleteBookmark from '@/lib/apis/bookmark/delete-bookmark.api';
 import { fetchGetAllBookmarksByUserId } from '@/lib/apis/bookmark/get-bookmark.api';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { Place } from '@/types/search.type';
-import Pagination from '@/components/ui/pagination';
+import DynamicPagination from '@/components/ui/dynamic-pagination';
 
 const ITEMS_PER_PAGE = 7;
 const INITIAL_ITEMS = 3;
+const NAVIGATION_BUTTON_WIDTH = 42.4;
+const NAVIGATION_BUTTON_GAP = 4;
+const DEBOUNCE_TIME = 200;
 
 const SearchSidemenu = ({
   filterTabs,
@@ -32,6 +35,69 @@ const SearchSidemenu = ({
   const [isLoading, setIsLoading] = useState(true);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [maxVisiblePages, setMaxVisiblePages] = useState(3);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const resizeTimeoutRef = useRef<NodeJS.Timeout>(); // 디바운스 타임아웃 참조
+
+  const filteredPlaces = places.filter((place) => {
+    const matchesCategory =
+      activeFilterTab === '전체' || place.category === activeFilterTab;
+    const matchesSearch =
+      place.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      place.address.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
+  const totalPages = Math.ceil(filteredPlaces.length / ITEMS_PER_PAGE);
+
+  // 버튼의 width: 한자리 숫자일 때 27px, 두자리 숫자일 때 33px, 세자리 숫자일 때 39px(예상) + gap 4px
+  // 이전, 다음 버튼: 42px
+  // 버튼 너비 계산: 숫자 자릿수별 너비 + 패딩(8px) + 갭(4px)
+  const getButtonWidth = useMemo(
+    () => (numLength: number) => {
+      const digitWidth = 6; // 숫자 1자당 약 6px
+      return numLength * digitWidth + 21;
+    },
+    [],
+  );
+
+  const calculateMaxVisiblePages = useCallback(() => {
+    if (!containerRef.current) return 3;
+
+    const containerWidth = containerRef.current.offsetWidth;
+
+    // 총 페이지 수에 따른 최대 버튼 수 계산
+    const maxButtons = Math.floor(
+      (containerWidth - NAVIGATION_BUTTON_WIDTH * 2) / // 이전/다음 버튼 공간 제외
+        (NAVIGATION_BUTTON_GAP +
+          getButtonWidth(Math.min(3, totalPages.toString().length))), // gap 포함 + 최대 3자리수까지 고려
+    );
+    return Math.max(1, maxButtons);
+  }, [getButtonWidth, totalPages]);
+
+  const updateMaxVisiblePages = useCallback(() => {
+    if (resizeTimeoutRef.current) {
+      clearTimeout(resizeTimeoutRef.current);
+    }
+
+    resizeTimeoutRef.current = setTimeout(() => {
+      setMaxVisiblePages(calculateMaxVisiblePages());
+    }, DEBOUNCE_TIME); // 200ms 디바운스 -> resize 이벤트가 빈번하게 일어나 계산이 너무 자주 일어나지 않도록 구현
+  }, [calculateMaxVisiblePages]);
+
+  useEffect(() => {
+    // 초기 계산
+    setMaxVisiblePages(calculateMaxVisiblePages());
+
+    window.addEventListener('resize', updateMaxVisiblePages);
+
+    return () => {
+      window.removeEventListener('resize', updateMaxVisiblePages);
+      if (resizeTimeoutRef.current) {
+        clearTimeout(resizeTimeoutRef.current);
+      }
+    };
+  }, [calculateMaxVisiblePages, updateMaxVisiblePages]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -73,17 +139,6 @@ const SearchSidemenu = ({
   const handleAddPlace = (id: number) => {
     console.log('장소 추가:', id);
   };
-
-  const filteredPlaces = places.filter((place) => {
-    const matchesCategory =
-      activeFilterTab === '전체' || place.category === activeFilterTab;
-    const matchesSearch =
-      place.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      place.address.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
-
-  const totalPages = Math.ceil(filteredPlaces.length / ITEMS_PER_PAGE);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -146,7 +201,7 @@ const SearchSidemenu = ({
       isExpanded={isExpanded}
     >
       {/* 검색 결과 */}
-      <div className="space-y-2">
+      <div className="space-y-2" ref={containerRef}>
         {displayedPlaces.length > 0 ? (
           <>
             {displayedPlaces.map((place) => (
@@ -171,10 +226,11 @@ const SearchSidemenu = ({
               </Button>
             )}
             {isExpanded && totalPages > 1 && (
-              <Pagination
+              <DynamicPagination
                 currentPage={currentPage}
                 totalPages={totalPages}
                 onPageChange={handlePageChange}
+                maxVisiblePages={maxVisiblePages}
               />
             )}
           </>

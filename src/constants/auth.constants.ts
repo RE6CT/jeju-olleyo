@@ -123,7 +123,7 @@ export const AUTH_ROUTES = {
     PATH.RESET_PASSWORD,
     PATH.CALLBACK,
     PATH.SEARCH,
-    PATH.SHAREDPLAN,
+    PATH.COMMUNITY,
   ],
 };
 

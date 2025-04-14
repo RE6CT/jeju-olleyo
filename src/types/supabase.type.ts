@@ -399,6 +399,19 @@ export type Database = {
           comment_count: number;
         };
       };
+      get_plans: {
+        Args: { user_id_param: string | null };
+        Returns: {
+          plan_id: number;
+          plan_img: string;
+          title: string;
+          description: string;
+          nickname: string;
+          travel_start_date: string;
+          travel_end_date: string;
+          is_liked: boolean;
+        }[];
+      };
     };
     Enums: {
       [_ in never]: never;

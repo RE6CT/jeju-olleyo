@@ -10,6 +10,10 @@ import fetchDeleteBookmark from '@/lib/apis/bookmark/delete-bookmark.api';
 import { fetchGetAllBookmarksByUserId } from '@/lib/apis/bookmark/get-bookmark.api';
 import { useEffect, useState } from 'react';
 import { Place } from '@/types/search.type';
+import Pagination from '@/components/ui/pagination';
+
+const ITEMS_PER_PAGE = 7;
+const INITIAL_ITEMS = 3;
 
 const SearchSidemenu = ({
   filterTabs,
@@ -26,6 +30,8 @@ const SearchSidemenu = ({
   const [bookmarkedPlaces, setBookmarkedPlaces] = useState<number[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -77,6 +83,27 @@ const SearchSidemenu = ({
     return matchesCategory && matchesSearch;
   });
 
+  const totalPages = Math.ceil(filteredPlaces.length / ITEMS_PER_PAGE);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const toggleExpand = () => {
+    setIsExpanded(!isExpanded);
+  };
+
+  // 현재 페이지의 아이템들을 가져옴
+  const currentPageItems = filteredPlaces.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE,
+  );
+
+  // 접힌 상태일 때는 현재 페이지 아이템 중 처음 3개만, 펼친 상태일 때는 모든 아이템이 보이도록 현재 페이지 아이템을 가져옴
+  const displayedPlaces = isExpanded
+    ? currentPageItems
+    : currentPageItems.slice(0, INITIAL_ITEMS);
+
   const searchBar = (
     <div className="rounded-[12px] bg-gray-100 px-3 py-2">
       <div className="flex items-center gap-[12px]">
@@ -100,6 +127,7 @@ const SearchSidemenu = ({
         activeFilterTab={activeFilterTab}
         onFilterTabChange={onFilterTabChange}
         topContent={searchBar}
+        isExpanded={false}
       >
         <div className="flex items-center justify-center p-4">
           <p>로딩 중...</p>
@@ -108,8 +136,6 @@ const SearchSidemenu = ({
     );
   }
 
-  console.log('필터링된 장소:', filteredPlaces);
-
   return (
     <PlaceSidemenuLayout
       isBookmarkSection={false}
@@ -117,22 +143,41 @@ const SearchSidemenu = ({
       activeFilterTab={activeFilterTab}
       onFilterTabChange={onFilterTabChange}
       topContent={searchBar}
+      isExpanded={isExpanded}
     >
       {/* 검색 결과 */}
       <div className="space-y-2">
-        {filteredPlaces.length > 0 ? (
-          filteredPlaces.map((place) => (
-            <PlaceCardCategory
-              key={place.id}
-              title={place.title}
-              category={place.category as CategoryType}
-              imageUrl={place.image || ''}
-              isBookmarked={bookmarkedPlaces.includes(place.id)}
-              isSearchSection
-              onBookmarkToggle={() => handleBookmarkToggle(place.id)}
-              onAddPlace={() => handleAddPlace(place.id)}
-            />
-          ))
+        {displayedPlaces.length > 0 ? (
+          <>
+            {displayedPlaces.map((place) => (
+              <PlaceCardCategory
+                key={place.id}
+                title={place.title}
+                category={place.category as CategoryType}
+                imageUrl={place.image || ''}
+                isBookmarked={bookmarkedPlaces.includes(place.id)}
+                isSearchSection
+                onBookmarkToggle={() => handleBookmarkToggle(place.id)}
+                onAddPlace={() => handleAddPlace(place.id)}
+              />
+            ))}
+            {currentPageItems.length > INITIAL_ITEMS && (
+              <Button
+                variant="ghost"
+                className="w-full text-gray-500"
+                onClick={toggleExpand}
+              >
+                {isExpanded ? '접기' : '더보기'}
+              </Button>
+            )}
+            {isExpanded && totalPages > 1 && (
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
+            )}
+          </>
         ) : (
           <div className="flex items-center justify-center p-4">
             <p>검색 결과가 없습니다.</p>

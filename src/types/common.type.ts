@@ -56,3 +56,8 @@ export type JejuBannerProps = {
   buttonText: string;
   buttonUrl: string;
 };
+
+export type List = {
+  value: string;
+  label: string;
+}[];

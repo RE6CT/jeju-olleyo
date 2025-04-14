@@ -36,16 +36,17 @@ const BookmarkSidemenu = ({
       try {
         setIsLoading(true);
         const data = await fetchGetAllBookmarksByUserId(userId);
-        // API 응답을 컴포넌트에서 사용하는 형식으로 변환
+
         const transformedData =
           data?.map((item) => ({
             place_id: item.placeId,
             title: item.title,
-            category: '관광' as CategoryType, // TODO: API에서 category 정보 받아오기
+            category: item.category as CategoryType,
             image: item.image,
             created_at: item.createdAt,
           })) ?? [];
         setBookmarkedPlaces(transformedData);
+        //console.log('북마크 데이터:', transformedData);
       } catch (error) {
         console.error('북마크 데이터 불러오기 실패:', error);
       } finally {

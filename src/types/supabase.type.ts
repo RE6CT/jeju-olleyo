@@ -377,6 +377,7 @@ export type Database = {
           title: string;
           image: string;
           created_at: string;
+          category: string;
         }[];
       };
       get_user_likes: {

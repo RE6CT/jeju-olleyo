@@ -1,14 +1,13 @@
-import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
+'use client';
+
 import MypageButton from '../features/nav-mypage/mypage-button';
 import Link from 'next/link';
 import { PATH } from '@/constants/path.constants';
+import useAuthStore from '@/zustand/auth.store';
 
 /** 헤더의 nav 영역 컴포넌트 */
-const Nav = async () => {
-  const { user } = await fetchGetCurrentUser();
-  const userId = user?.id;
-
-  if (!userId) return;
+const Nav = () => {
+  const user = useAuthStore((state) => state.user);
 
   return (
     <nav className="mr-4 flex items-center">
@@ -16,7 +15,7 @@ const Nav = async () => {
         <div className="flex gap-12">
           <Link href={PATH.MYPLAN}>내 여행</Link>
           <Link href={PATH.SHAREDPLAN}>커뮤니티</Link>
-          <MypageButton userId={userId} />
+          <MypageButton userId={user?.id} />
         </div>
       ) : (
         <div className="flex gap-12">

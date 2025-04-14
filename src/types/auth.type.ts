@@ -87,6 +87,7 @@ export type EmailFormValues = {
  * 사용자 정보 타입
  */
 export type UserInfo = {
+  id: string;
   email: string | null;
   nickname: string | null;
   phone: string | null;
@@ -137,3 +138,15 @@ export type ExistsResult =
   | { exists: true }
   | { exists: false }
   | { error: { message: string; status: number } };
+
+/**
+ * 중복 결과를 알려주는 타입
+ */
+
+export type SeverUserInfo = {
+  id: string;
+  email?: string;
+  avatar_url: string;
+  nickname: string;
+  phone: string;
+};

@@ -3,6 +3,12 @@
 import { CATEGORY_KR_MAP } from '@/constants/home.constants';
 import { getServerClient } from '@/lib/supabase/server';
 
+/**
+ *
+ * @param urlcategory - params로 받아온 toursite, restaurant, cafe, accomodation
+ * krCategory - 위 urlcategory를 수파베이스 컬럼 분류에 맞게 교체.
+ *
+ */
 const fetchGetPlacesByCategory = async (urlcategory: string) => {
   const supabase = await getServerClient();
 

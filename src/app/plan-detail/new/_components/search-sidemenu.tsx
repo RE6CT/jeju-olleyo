@@ -5,51 +5,77 @@ import PlaceSidemenuLayout from '../../_components/place-sidemenu-layout';
 import { Input } from '@/components/ui/input';
 import PlaceCardCategory from '../../_components/place-card-category';
 import { CategoryType } from '@/types/category-badge.type';
-
-// 예시 데이터
-const MOCK_PLACES = [
-  {
-    id: 1,
-    title: '제주 해변 카페',
-    address: '제주시 해변로 123-45',
-    category: '맛집',
-    imageUrl: '/images/default_place_image.svg',
-    isBookmarked: false,
-  },
-  {
-    id: 2,
-    title: '제주 리조트',
-    address: '제주시 중문관광로 567-89',
-    category: '숙소',
-    imageUrl: '/images/default_place_image.svg',
-    isBookmarked: true,
-  },
-  {
-    id: 3,
-    title: '성산일출봉',
-    address: '서귀포시 성산읍 123',
-    category: '명소',
-    imageUrl: '/logo/color_logo.svg',
-    isBookmarked: false,
-  },
-];
+import fetchGetAllPlaces from '@/lib/apis/search/get-place.api';
+import fetchDeleteBookmark from '@/lib/apis/bookmark/delete-bookmark.api';
+import { fetchGetAllBookmarksByUserId } from '@/lib/apis/bookmark/get-bookmark.api';
+import { useEffect, useState } from 'react';
+import { Place } from '@/types/search.type';
 
 const SearchSidemenu = ({
   filterTabs,
   activeFilterTab,
   onFilterTabChange,
+  userId,
 }: {
   filterTabs: CategoryType[];
   activeFilterTab: CategoryType;
   onFilterTabChange: (tab: CategoryType) => void;
+  userId: string;
 }) => {
-  const handleBookmarkToggle = (id: number) => {
-    //console.log('북마크 토글:', id);
+  const [places, setPlaces] = useState<Place[]>([]);
+  const [bookmarkedPlaces, setBookmarkedPlaces] = useState<number[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        console.log('데이터 로딩 시작');
+        const [placesResponse, bookmarksResponse] = await Promise.all([
+          fetchGetAllPlaces(),
+          fetchGetAllBookmarksByUserId(userId),
+        ]);
+
+        setPlaces(placesResponse || []);
+        setBookmarkedPlaces(
+          bookmarksResponse?.map((bookmark) => bookmark.placeId) ?? [],
+        );
+      } catch (error) {
+        console.error('데이터를 가져오는데 실패했습니다:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [userId]);
+
+  const handleBookmarkToggle = async (id: number) => {
+    try {
+      if (bookmarkedPlaces.includes(id)) {
+        await fetchDeleteBookmark(id);
+        setBookmarkedPlaces((prev) => prev.filter((placeId) => placeId !== id));
+      } else {
+        // TODO: 북마크 추가 API 구현 필요
+        console.log('북마크 추가:', id);
+      }
+    } catch (error) {
+      console.error('북마크 토글에 실패했습니다:', error);
+    }
   };
 
   const handleAddPlace = (id: number) => {
-    //console.log('장소 추가:', id);
+    console.log('장소 추가:', id);
   };
+
+  const filteredPlaces = places.filter((place) => {
+    const matchesCategory =
+      activeFilterTab === '전체' || place.category === activeFilterTab;
+    const matchesSearch =
+      place.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      place.address.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   const searchBar = (
     <div className="rounded-[12px] bg-gray-100 px-3 py-2">
@@ -58,11 +84,31 @@ const SearchSidemenu = ({
         <Input
           type="text"
           placeholder="장소를 검색해 추가하세요"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
           className="w-full border-none bg-transparent text-14 font-medium leading-[150%] text-[#698EA1] placeholder:text-gray-400 focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
         />
       </div>
     </div>
   );
+
+  if (isLoading) {
+    return (
+      <PlaceSidemenuLayout
+        isBookmarkSection={false}
+        filterTabs={filterTabs}
+        activeFilterTab={activeFilterTab}
+        onFilterTabChange={onFilterTabChange}
+        topContent={searchBar}
+      >
+        <div className="flex items-center justify-center p-4">
+          <p>로딩 중...</p>
+        </div>
+      </PlaceSidemenuLayout>
+    );
+  }
+
+  console.log('필터링된 장소:', filteredPlaces);
 
   return (
     <PlaceSidemenuLayout
@@ -74,18 +120,24 @@ const SearchSidemenu = ({
     >
       {/* 검색 결과 */}
       <div className="space-y-2">
-        {MOCK_PLACES.map((place) => (
-          <PlaceCardCategory
-            key={place.id}
-            title={place.title}
-            category={place.category as any}
-            imageUrl={place.imageUrl}
-            isBookmarked={place.isBookmarked}
-            isSearchSection
-            onBookmarkToggle={() => handleBookmarkToggle(place.id)}
-            onAddPlace={() => handleAddPlace(place.id)}
-          />
-        ))}
+        {filteredPlaces.length > 0 ? (
+          filteredPlaces.map((place) => (
+            <PlaceCardCategory
+              key={place.id}
+              title={place.title}
+              category={place.category as CategoryType}
+              imageUrl={place.image || ''}
+              isBookmarked={bookmarkedPlaces.includes(place.id)}
+              isSearchSection
+              onBookmarkToggle={() => handleBookmarkToggle(place.id)}
+              onAddPlace={() => handleAddPlace(place.id)}
+            />
+          ))
+        ) : (
+          <div className="flex items-center justify-center p-4">
+            <p>검색 결과가 없습니다.</p>
+          </div>
+        )}
       </div>
     </PlaceSidemenuLayout>
   );

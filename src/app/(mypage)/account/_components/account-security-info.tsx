@@ -3,11 +3,10 @@
 import PasswordInput from '@/components/features/auth/auth-password-input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { ERROR_MESSAGES as FORM_ERROR_MESSAGE } from '@/constants/auth.constants';
-import { ERROR_MESSAGES as UPDATE_ERROR_MESSAGE } from '@/constants/mypage.constants';
+import { ERROR_MESSAGES } from '@/constants/mypage.constants';
 import { fetchUpdatePassword } from '@/lib/apis/profile/update-profile.api';
 import useProviderFromCookie from '@/lib/hooks/use-get-provider';
-import { passwordSchema } from '@/lib/schemas/auth-schema';
+import { changePasswordSchema } from '@/lib/schemas/change-password-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -29,22 +28,6 @@ const SECURITY_INFO_STYLE = {
 const SecurityInfo = ({ userId }: { userId: string }) => {
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const provider = useProviderFromCookie(userId);
-
-  // 비밀번호 스키마 정의
-  const changePasswordSchema = z
-    .object({
-      password: z.string(),
-      newPassword: passwordSchema,
-      confirmNewPassword: z.string(),
-    })
-    .refine((data) => data.newPassword === data.confirmNewPassword, {
-      message: FORM_ERROR_MESSAGE.PASSWORD_MISMATCH,
-      path: ['confirmNewPassword'],
-    })
-    .refine((data) => data.password !== '', {
-      message: FORM_ERROR_MESSAGE.REQUIRED_PASSWORD,
-      path: ['password'],
-    });
 
   type passwordValues = z.infer<typeof changePasswordSchema>;
 
@@ -84,7 +67,7 @@ const SecurityInfo = ({ userId }: { userId: string }) => {
       const result = await fetchUpdatePassword(data.password, data.newPassword);
       alert(result.message);
     } catch (error: unknown) {
-      let errorMessage = UPDATE_ERROR_MESSAGE.PASSWORD_UPDATE_FAILED;
+      let errorMessage = ERROR_MESSAGES.PASSWORD_UPDATE_FAILED;
       if (error instanceof Error) {
         errorMessage = error.message;
       }

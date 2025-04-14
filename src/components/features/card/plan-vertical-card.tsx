@@ -10,7 +10,7 @@ import Link from 'next/link';
  */
 const PlanVerticalCard = ({ plan, userId }: PlanVerticalCardProps) => {
   return (
-    <Link href={`/plan-detail/${plan.planId}`} key={plan.planId}>
+    <Link href={`/plan-detail/${plan.planId}`}>
       <div className="relative">
         <div className="relative aspect-[310/216]">
           <PlanImage

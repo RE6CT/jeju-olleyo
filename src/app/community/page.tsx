@@ -1,10 +1,7 @@
 import JejuBanner from '@/components/features/banner/jeju-banner';
 import { PATH } from '@/constants/path.constants';
-import Link from 'next/link';
-import Duration from '@/components/commons/duration';
 import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 import { fetchAllPlans } from '@/lib/apis/plan/plan.api';
-import PlanImage from '@/components/commons/plan-image';
 import PlanVerticalCard from '@/components/features/card/plan-vertical-card';
 
 const Community = async () => {

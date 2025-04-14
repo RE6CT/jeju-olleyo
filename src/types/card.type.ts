@@ -1,5 +1,4 @@
 import { CamelCaseObject, List } from './common.type';
-import { PlanCardType } from './plan.type';
 import { Tables } from './supabase.type';
 
 type bookmarks = Tables<'bookmarks'>;
@@ -28,11 +27,10 @@ export type PlanCardProp = {
   initialLikes: number;
 };
 
-export type CategoryCardProp = {
+export type PlaceCardProps = {
+  placeId: number;
   image: string;
   title: string;
-  description: string;
-  className: string | 'none';
-  location: string;
-  tag: string; // 추후에 컴포넌트로 분리할 가능성 있음 카페 명소 등등...
+  isLiked: boolean;
+  className?: string;
 };

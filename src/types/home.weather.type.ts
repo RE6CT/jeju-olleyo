@@ -129,13 +129,3 @@ export type UseJejuWeatherReturn = {
     day: number;
   };
 };
-
-// Tanstack query
-export type QueryOptions = UseQueryOptions<ProcessedDayWeather[], Error> & {
-  queryKey: ['jejuWeather'];
-  queryFn: QueryFunction<ProcessedDayWeather[]>;
-  staleTime: number;
-  refetchOnWindowFocus: boolean;
-  retry: number;
-  onSuccess: (data: ProcessedDayWeather[]) => void;
-};

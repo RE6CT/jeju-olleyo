@@ -7,6 +7,7 @@ import { CategoryType } from '@/types/category-badge.type';
 import ErrorMessage from '@/components/ui/error-message';
 import { useBookmarkQuery } from '@/lib/hooks/use-bookmark-query';
 import DynamicPagination from '@/components/ui/dynamic-pagination';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const ITEMS_PER_PAGE = 7;
 const INITIAL_ITEMS = 3;
@@ -40,12 +41,26 @@ const BookmarkSidemenu = ({
   const [maxVisiblePages, setMaxVisiblePages] = useState(3);
   const containerRef = useRef<HTMLDivElement>(null);
   const resizeTimeoutRef = useRef<NodeJS.Timeout>();
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const listRef = useRef<HTMLDivElement>(null);
 
   const { isBookmarked, toggleBookmark, bookmarks } = useBookmarkQuery(userId);
 
   const handleBookmarkToggle = async (place_id: number) => {
     try {
+      // 현재 스크롤 위치 저장
+      if (listRef.current) {
+        setScrollPosition(listRef.current.scrollTop);
+      }
+
       await toggleBookmark(place_id);
+
+      // 북마크 상태 변경 후 스크롤 위치 복원
+      setTimeout(() => {
+        if (listRef.current) {
+          listRef.current.scrollTop = scrollPosition;
+        }
+      }, 0);
     } catch (error) {
       setError('북마크를 업데이트하는 데 실패했습니다.');
     }
@@ -161,17 +176,26 @@ const BookmarkSidemenu = ({
               : `북마크한 ${activeFilterTab} 장소가 없습니다.`}
           </div>
         ) : (
-          <>
-            {displayedPlaces.map((place) => (
-              <PlaceCardCategory
-                key={place.placeId}
-                title={place.title}
-                category={place.category as CategoryType}
-                imageUrl={place.image}
-                isBookmarked={isBookmarked(place.placeId)}
-                onBookmarkToggle={() => handleBookmarkToggle(place.placeId)}
-              />
-            ))}
+          <div ref={listRef} className="overflow-y-auto">
+            <AnimatePresence initial={false}>
+              {displayedPlaces.map((place) => (
+                <motion.div
+                  key={place.placeId}
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <PlaceCardCategory
+                    title={place.title}
+                    category={place.category as CategoryType}
+                    imageUrl={place.image}
+                    isBookmarked={isBookmarked(place.placeId)}
+                    onBookmarkToggle={() => handleBookmarkToggle(place.placeId)}
+                  />
+                </motion.div>
+              ))}
+            </AnimatePresence>
             {currentPageItems.length > INITIAL_ITEMS && (
               <button
                 className="w-full text-gray-500 hover:text-gray-700"
@@ -188,7 +212,7 @@ const BookmarkSidemenu = ({
                 maxVisiblePages={maxVisiblePages}
               />
             )}
-          </>
+          </div>
         )}
       </div>
     </PlaceSidemenuLayout>

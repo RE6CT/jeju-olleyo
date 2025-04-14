@@ -10,6 +10,7 @@ import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { Place } from '@/types/search.type';
 import DynamicPagination from '@/components/ui/dynamic-pagination';
 import { useBookmarkQuery } from '@/lib/hooks/use-bookmark-query';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const ITEMS_PER_PAGE = 7;
 const INITIAL_ITEMS = 3;
@@ -36,6 +37,8 @@ const SearchSidemenu = ({
   const [maxVisiblePages, setMaxVisiblePages] = useState(3);
   const containerRef = useRef<HTMLDivElement>(null);
   const resizeTimeoutRef = useRef<NodeJS.Timeout>();
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const listRef = useRef<HTMLDivElement>(null);
 
   const { isBookmarked, toggleBookmark } = useBookmarkQuery(userId);
 
@@ -116,15 +119,26 @@ const SearchSidemenu = ({
 
   const handleBookmarkToggle = async (placeId: number) => {
     try {
-      console.log(`SearchSidemenu: Toggling bookmark for placeId: ${placeId}`);
+      // 현재 스크롤 위치 저장
+      if (listRef.current) {
+        setScrollPosition(listRef.current.scrollTop);
+      }
+
       await toggleBookmark(placeId);
+
+      // 북마크 상태 변경 후 스크롤 위치 복원
+      setTimeout(() => {
+        if (listRef.current) {
+          listRef.current.scrollTop = scrollPosition;
+        }
+      }, 0);
     } catch (error) {
       console.error('북마크 토글에 실패했습니다:', error);
     }
   };
 
   const handleAddPlace = (id: number) => {
-    console.log('장소 추가:', id);
+    //console.log('장소 추가:', id);
   };
 
   const handlePageChange = (page: number) => {
@@ -188,19 +202,30 @@ const SearchSidemenu = ({
       {/* 검색 결과 */}
       <div className="space-y-2" ref={containerRef}>
         {displayedPlaces.length > 0 ? (
-          <>
-            {displayedPlaces.map((place) => (
-              <PlaceCardCategory
-                key={place.id}
-                title={place.title}
-                category={place.category as CategoryType}
-                imageUrl={place.image || ''}
-                isBookmarked={isBookmarked(place.place_id)}
-                isSearchSection
-                onBookmarkToggle={() => handleBookmarkToggle(place.place_id)}
-                onAddPlace={() => handleAddPlace(place.place_id)}
-              />
-            ))}
+          <div ref={listRef} className="overflow-y-auto">
+            <AnimatePresence initial={false}>
+              {displayedPlaces.map((place) => (
+                <motion.div
+                  key={place.id}
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <PlaceCardCategory
+                    title={place.title}
+                    category={place.category as CategoryType}
+                    imageUrl={place.image || ''}
+                    isBookmarked={isBookmarked(place.place_id)}
+                    isSearchSection
+                    onBookmarkToggle={() =>
+                      handleBookmarkToggle(place.place_id)
+                    }
+                    onAddPlace={() => handleAddPlace(place.place_id)}
+                  />
+                </motion.div>
+              ))}
+            </AnimatePresence>
             {currentPageItems.length > INITIAL_ITEMS && (
               <Button
                 variant="ghost"
@@ -218,7 +243,7 @@ const SearchSidemenu = ({
                 maxVisiblePages={maxVisiblePages}
               />
             )}
-          </>
+          </div>
         ) : (
           <div className="flex items-center justify-center p-4">
             <p>검색 결과가 없습니다.</p>

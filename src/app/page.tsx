@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import Loading from '@/app/loading';
 import MainCarouselContainer from '@/components/features/home/home-main-carousel-container';
 import CategoryTabs from '@/components/features/home/home-category-tap';
-import WeatherSection from '@/components/features/home/home-weather-container';
+import WeatherSection from '@/components/features/home/home-weather-section';
 
 const Home = () => {
   return (

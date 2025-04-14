@@ -1,11 +1,17 @@
 import Image from 'next/image';
 import PlanForm from './_components/plan-form';
+import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 
-const PlanDetailNewPage = () => {
+const PlanDetailNewPage = async () => {
   const HAPPY_IMAGE = {
     width: 37,
     height: 36,
   };
+
+  const { user } = await fetchGetCurrentUser();
+  const userId = user?.id;
+
+  if (!userId) return null;
 
   return (
     <div className="flex flex-col">
@@ -22,7 +28,7 @@ const PlanDetailNewPage = () => {
             height={HAPPY_IMAGE.height}
           />
         </div>
-        <PlanForm />
+        <PlanForm userId={userId} />
       </div>
     </div>
   );

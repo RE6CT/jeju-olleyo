@@ -34,9 +34,11 @@ const AddPlacePrompt = () => (
 const PlanSchedule = ({
   startDate,
   endDate,
+  userId,
 }: {
   startDate: Date | null;
   endDate: Date | null;
+  userId: string;
 }) => {
   const [activeTab, setActiveTab] = useState<TabType>('전체보기');
   const dayCount = calculateTotalDays(startDate, endDate);
@@ -156,7 +158,7 @@ const PlanSchedule = ({
         </div>
 
         {/* 사이드바 영역 */}
-        <PlaceSidemenu />
+        <PlaceSidemenu userId={userId} />
       </div>
     </div>
   );

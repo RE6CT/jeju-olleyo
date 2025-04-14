@@ -76,3 +76,22 @@ export type PlanVerticalCardProps = {
   plan: PlanCardType;
   userId: string | null;
 };
+
+/**
+ * 여행 계획 데이터 타입
+ */
+export interface PlanType {
+  planId: number;
+  planImg: string;
+  title: string;
+  description: string;
+  nickname: string;
+  travelStartDate: string;
+  travelEndDate: string;
+  isLiked: boolean;
+}
+
+/**
+ * 인기 일정 쿼리 응답 타입
+ */
+export type PopularPlansResponse = PlanType[];

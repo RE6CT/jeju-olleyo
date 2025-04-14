@@ -6,7 +6,7 @@ import PlaceImage from '@/components/commons/place-image';
 import useSearch from '@/lib/hooks/use-search';
 import Loading from '../loading';
 import EmptyResult from './_components/empty-result';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 
 // TODO : 카드 컴포넌트 머지 후 div 요소 교체 필요 - 링크, 좋아요, 북마크 다 삽입될 예정
 // TODO : 디자이너님 배너 제작 후 배너 삽입 예정
@@ -63,8 +63,11 @@ const SearchResultsPage = () => {
                 {slice.map((place) => (
                   <li key={place.place_id}>
                     <div className="relative aspect-square">
-                      <PlaceImage image={place.image} title={place.title} />
+                      <Suspense fallback={<Loading />}>
+                        <PlaceImage image={place.image} title={place.title} />
+                      </Suspense>
                     </div>
+
                     <div className="text-sm font-semibold">{place.title}</div>
                   </li>
                 ))}

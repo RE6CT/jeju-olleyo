@@ -1,9 +1,14 @@
 'use client';
 
-import { Command, CommandInput } from '@/components/ui/command';
+import {
+  Command,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from '@/components/ui/command';
 import { PATH } from '@/constants/path.constants';
 import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 /**
  * 반응형 검색바 컴포넌트
@@ -14,18 +19,44 @@ const SearchBar = () => {
   const router = useRouter();
   const path = usePathname();
 
+  const [keywords, setKeywords] = useState<string[]>([]);
+
   const handleSearch = () => {
     const query = inputRef.current?.value;
     if (query) {
       router.push(`${PATH.SEARCH}?query=${query}`);
+      addKeyword(query);
     }
   };
+  const addKeyword = (text: string) => {
+    const updated = [text, ...keywords.filter((k) => k !== text)];
+    const limited = updated.slice(0, 5);
+    setKeywords(limited);
+  };
 
+  const removeKeyword = (text: string) => {
+    setKeywords(keywords.filter((k) => k !== text));
+  };
+
+  const clearKeywords = () => {
+    setKeywords([]);
+  };
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.value = '';
     }
   }, [path]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('keywords');
+    if (saved) {
+      setKeywords(JSON.parse(saved));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('keywords', JSON.stringify(keywords));
+  }, [keywords]);
 
   return (
     <Command className="mt-1 w-full rounded-full border">
@@ -40,6 +71,42 @@ const SearchBar = () => {
           }
         }}
       />
+      <CommandGroup heading="최근검색어">
+        {keywords.length > 0 && (
+          <button
+            onClick={clearKeywords}
+            className="ml-auto mr-4 text-xs text-gray-500 hover:underline"
+          >
+            전체 삭제
+          </button>
+        )}
+        <ul>
+          {keywords.length > 0 ? (
+            keywords.map((text) => (
+              <CommandItem key={text} className="flex justify-between">
+                <span
+                  onClick={() => {
+                    if (inputRef.current) inputRef.current.value = text;
+                    handleSearch();
+                  }}
+                  className="cursor-pointer"
+                >
+                  {text}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => removeKeyword(text)}
+                  className="text-red-500 ml-2 text-xs"
+                >
+                  삭제
+                </button>
+              </CommandItem>
+            ))
+          ) : (
+            <span>최근 검색어가 없습니다.</span>
+          )}
+        </ul>
+      </CommandGroup>
     </Command>
   );
 };

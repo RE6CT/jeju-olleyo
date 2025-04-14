@@ -31,7 +31,7 @@ const SearchSidemenu = ({
   activeFilterTab: CategoryType;
   onFilterTabChange: (tab: CategoryType) => void;
   userId: string;
-  onAddPlace: (placeId: number) => void;
+  onAddPlace: (place: Place) => void;
   selectedDay: number | null;
 }) => {
   const [places, setPlaces] = useState<Place[]>([]);
@@ -143,12 +143,12 @@ const SearchSidemenu = ({
     }
   };
 
-  const handleAddPlace = (placeId: number) => {
+  const handleAddPlace = (place: Place) => {
     if (selectedDay === null) {
       setIsDaySelectModalOpen(true);
       return;
     }
-    onAddPlace(placeId);
+    onAddPlace(place);
   };
 
   const handlePageChange = (page: number) => {
@@ -231,7 +231,7 @@ const SearchSidemenu = ({
                     onBookmarkToggle={() =>
                       handleBookmarkToggle(place.place_id)
                     }
-                    onAddPlace={() => handleAddPlace(place.place_id)}
+                    onAddPlace={() => handleAddPlace(place)}
                   />
                 </motion.div>
               ))}

@@ -5,8 +5,9 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { calculateTotalDays, formatDayDate } from '@/lib/utils/date';
 import PlaceSidemenu from './place-sidemenu';
-
-type TabType = '전체보기' | number;
+import PlaceCard from './place-card';
+import { Place } from '@/types/search.type';
+import { DayPlaces, TabType } from '@/types/plan-detail.type';
 
 const BASE_TAB_STYLE =
   'flex items-center justify-center gap-[10px] rounded-[28px] border px-5 py-2 text-14 font-medium transition-colors';
@@ -37,10 +38,43 @@ const PlanSchedule = ({
 }) => {
   const [activeTab, setActiveTab] = useState<TabType>('전체보기');
   const dayCount = calculateTotalDays(startDate, endDate);
+  const [dayPlaces, setDayPlaces] = useState<DayPlaces>({});
 
-  const handleAddPlace = (placeId: number) => {
-    if (activeTab === '전체보기') return;
-    // TODO: 선택된 장소를 해당 DAY의 일정에 추가하는 로직 구현
+  const handleAddPlace = (newPlace: Place) => {
+    if (activeTab === '전체보기') return; // 모달 표시
+
+    setDayPlaces((prev: DayPlaces) => {
+      const dayNumber = activeTab as number;
+      const currentDayPlaces = prev[dayNumber] || [];
+
+      return {
+        ...prev,
+        [dayNumber]: [...currentDayPlaces, newPlace],
+      };
+    });
+  };
+
+  /**
+   * 일정 리스트 콘텐츠 렌더링
+   */
+  const renderPlaces = (day: number) => {
+    const places = dayPlaces[day] || [];
+    if (places.length === 0) return <AddPlacePrompt />;
+
+    return (
+      <>
+        {places.map((place: Place, index: number) => (
+          <PlaceCard
+            key={place.id}
+            index={index + 1}
+            title={place.title}
+            address={place.address}
+            imageUrl={place.image || undefined}
+          />
+        ))}
+        <AddPlacePrompt />
+      </>
+    );
   };
 
   return (
@@ -57,6 +91,7 @@ const PlanSchedule = ({
         >
           전체보기
         </Button>
+        // 원하는 개수만큼 반복해서 컴포넌트 렌더링
         {Array.from({ length: dayCount }, (_, i) => i + 1).map((day) => (
           <Button
             key={day}
@@ -113,8 +148,7 @@ const PlanSchedule = ({
                           </Button>
                         </div>
                       </div>
-                      {/* 여기에 장소 카드 컴포넌트들이 들어간다. */}
-                      <AddPlacePrompt />
+                      {renderPlaces(day)}
                     </div>
                   ),
                 )}
@@ -146,8 +180,7 @@ const PlanSchedule = ({
                     </Button>
                   </div>
                 </div>
-                {/* 여기에 장소 카드 컴포넌트들이 들어갈 예정 */}
-                <AddPlacePrompt />
+                {renderPlaces(activeTab as number)}
               </div>
             )
           ) : (

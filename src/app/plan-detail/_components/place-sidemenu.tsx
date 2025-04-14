@@ -4,6 +4,7 @@ import { useState } from 'react';
 import BookmarkSidemenu from './bookmark-sidemenu';
 import SearchSidemenu from './search-sidemenu';
 import { CategoryType } from '@/types/category-badge.type';
+import { Place } from '@/types/search.type';
 
 const PlaceSidemenu = ({
   userId,
@@ -12,7 +13,7 @@ const PlaceSidemenu = ({
 }: {
   userId: string;
   selectedDay: number | null;
-  onAddPlace: (placeId: number) => void;
+  onAddPlace: (place: Place) => void;
 }) => {
   const [activeBookmarkTab, setActiveBookmarkTab] =
     useState<CategoryType>('전체');

@@ -1,4 +1,5 @@
 import { CategoryType } from './category-badge.type';
+import { Place } from './search.type';
 
 export type CommentType = {
   planCommentId: number;
@@ -14,4 +15,10 @@ export type BookmarkedPlace = {
   category: CategoryType;
   image: string;
   created_at: string;
+};
+
+export type TabType = '전체보기' | number;
+
+export type DayPlaces = {
+  [key: number]: Place[];
 };

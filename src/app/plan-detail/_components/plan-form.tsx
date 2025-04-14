@@ -5,7 +5,7 @@ import PlanHeader from './plan-header';
 import PlanMap from './plan-map';
 import PlanSchedule from './plan-schedule';
 
-const PlanForm = () => {
+const PlanForm = ({ userId }: { userId: string }) => {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
@@ -29,9 +29,7 @@ const PlanForm = () => {
         handleDateChange={handleDateChange}
       />
       <PlanMap />
-      <PlanSchedule startDate={startDate} endDate={endDate} />
-      <PlanSchedule startDate={startDate} endDate={endDate} />
-      <PlanSchedule startDate={startDate} endDate={endDate} />
+      <PlanSchedule startDate={startDate} endDate={endDate} userId={userId} />
     </div>
   );
 };

@@ -18,9 +18,9 @@ export const fetchGetBookmarkByIdQuery = async (
   const { data, error } = await supabase
     .from('bookmarks')
     .select('bookmark_id')
-    .eq('place', place)
+    .eq('place_id', place)
     .eq('user_id', userId)
-    .single();
+    .maybeSingle();
 
   if (error) throw new Error(error.message);
 

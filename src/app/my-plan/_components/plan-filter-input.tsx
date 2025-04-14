@@ -19,14 +19,18 @@ export const FilterInput = ({
   filter,
   applyFilter,
 }: FilterInputProps) => (
-  <div className="flex w-[250px] flex-col gap-2 border-l p-2">
+  <div className="flex w-[250px] flex-col gap-2 border-l border-gray-200 p-2">
     {selectedFilter === FILTER_TYPES.PUBLIC ? (
       <div className="flex flex-col gap-2">
         {Object.values(PUBLIC_OPTIONS).map((option) => (
           <Button
             key={option}
             variant={selectedPublicOption === option ? 'default' : 'ghost'}
-            className="w-full justify-start"
+            className={`medium-14 w-full justify-start bg-transparent hover:bg-transparent hover:text-primary-300 ${
+              selectedPublicOption === option
+                ? 'text-primary-500'
+                : 'text-gray-500'
+            }`}
             onClick={() => setSelectedPublicOption(option)}
           >
             {option}
@@ -36,22 +40,22 @@ export const FilterInput = ({
     ) : selectedFilter === FILTER_TYPES.DATE ? (
       <div className="flex flex-col gap-2">
         <div className="flex flex-col gap-1">
-          <Label>여행 시작 날짜</Label>
+          <Label className="medium-14 text-gray-900">여행 시작 날짜</Label>
           <Input
             type="date"
             value={startDate}
-            className="w-[140px]"
+            className="medium-14 w-[140px] border-gray-200 text-gray-900"
             onChange={(e) => setStartDate(e.target.value)}
             onFocus={() => setIsDatePickerFocused(true)}
             onBlur={() => setIsDatePickerFocused(false)}
           />
         </div>
         <div className="flex flex-col gap-1">
-          <Label>여행 종료 날짜</Label>
+          <Label className="medium-14 text-gray-900">여행 종료 날짜</Label>
           <Input
             type="date"
             value={endDate}
-            className="w-[140px]"
+            className="medium-14 w-[140px] border-gray-200 text-gray-900"
             onChange={(e) => setEndDate(e.target.value)}
             onFocus={() => setIsDatePickerFocused(true)}
             onBlur={() => setIsDatePickerFocused(false)}
@@ -63,12 +67,13 @@ export const FilterInput = ({
         <Input
           placeholder="제목 입력"
           value={inputValue}
+          className="medium-14 border-gray-200 text-gray-900"
           onChange={(e) => setInputValue(e.target.value)}
         />
       </div>
     )}
     <Button
-      className="mt-2"
+      className="semibold-16 mt-2 flex items-center justify-center rounded-[20px] bg-primary-500 px-5 py-1 font-['Pretendard'] leading-[150%] text-white hover:bg-primary-600"
       disabled={
         selectedFilter === FILTER_TYPES.PUBLIC
           ? filter.value === selectedPublicOption

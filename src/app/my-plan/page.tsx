@@ -43,9 +43,7 @@ const MyPlanPage = async () => {
         <div className="mb-8 flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <div className="flex gap-3">
-              <span className="font-pretendard text-28 font-bold leading-[130%]">
-                지난 일정 보기
-              </span>
+              <span className="bold-28 leading-[130%]">지난 일정 보기</span>
               <Image
                 src="/character/sunglasses.svg"
                 alt="sunglasses icon"
@@ -54,7 +52,19 @@ const MyPlanPage = async () => {
               />
             </div>
             <Link href={PATH.PLAN_NEW}>
-              <Button>새 일정 만들기</Button>
+              <Button className="flex items-center gap-2 rounded-[20px] border border-primary-500 bg-white px-3 py-2 hover:bg-primary-100">
+                <span className="mr-1 flex h-[20px] w-[20px] items-center justify-center">
+                  <Image
+                    src="/icons/add.svg"
+                    alt="plus icon"
+                    width={20}
+                    height={20}
+                  />
+                </span>
+                <span className="text-center text-16 font-medium leading-[150%] text-primary-500">
+                  새 일정 만들기
+                </span>
+              </Button>
             </Link>
           </div>
           <PlanFilterSection

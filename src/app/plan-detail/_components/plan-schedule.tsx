@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { calculateTotalDays, formatDayDate } from '@/lib/utils/date';
+import PlaceSidemenu from './place-sidemenu';
 
 type TabType = '전체보기' | number;
 
@@ -24,7 +25,7 @@ const AddPlacePrompt = () => (
     <div className="flex h-[24px] w-[24px] flex-col items-center justify-center gap-[10px] rounded-[12px] bg-primary-500 px-2 text-white">
       +
     </div>
-    <span className="font-pretendard pointer-events-none flex w-full items-center rounded-lg bg-gray-50 px-4 py-3 text-12 font-medium text-gray-400">
+    <span className="pointer-events-none flex w-full items-center rounded-lg bg-gray-50 px-4 py-3 text-12 font-medium text-gray-400">
       검색을 통해 새로운 장소를 추가하세요
     </span>
   </div>
@@ -33,9 +34,11 @@ const AddPlacePrompt = () => (
 const PlanSchedule = ({
   startDate,
   endDate,
+  userId,
 }: {
   startDate: Date | null;
   endDate: Date | null;
+  userId: string;
 }) => {
   const [activeTab, setActiveTab] = useState<TabType>('전체보기');
   const dayCount = calculateTotalDays(startDate, endDate);
@@ -88,18 +91,24 @@ const PlanSchedule = ({
                     <div key={day}>
                       <div className="mb-4 flex items-center justify-between pb-4">
                         <div className="flex items-center gap-3">
-                          <span className="font-pretendard text-16 font-medium text-[#182126]">
+                          <span className="text-16 font-medium text-[#182126]">
                             DAY {day}
                           </span>
-                          <span className="font-pretendard flex items-center text-12 font-normal text-[#182126]">
+                          <span className="flex items-center text-12 font-normal text-[#182126]">
                             {formatDayDate(startDate, day)}
                           </span>
                         </div>
                         <div className="flex items-center">
-                          <Button className="font-pretendard px-3 py-1 text-xs font-medium text-gray-500 hover:text-gray-900">
+                          <Button
+                            variant="ghost"
+                            className="text-12 font-medium text-gray-500 hover:bg-transparent hover:text-[#698EA1]"
+                          >
                             복사
                           </Button>
-                          <Button className="font-pretendard px-3 py-1 text-xs font-medium text-red hover:text-red">
+                          <Button
+                            variant="ghost"
+                            className="text-12 font-medium text-red hover:bg-transparent hover:text-red"
+                          >
                             삭제
                           </Button>
                         </div>
@@ -123,12 +132,18 @@ const PlanSchedule = ({
                     </span>
                   </div>
                   <div className="flex items-center gap-4">
-                    <button className="text-14 font-medium text-gray-600 hover:text-gray-900 hover:underline">
+                    <Button
+                      variant="ghost"
+                      className="text-12 font-medium text-gray-600 hover:bg-transparent hover:text-gray-900"
+                    >
                       복사
-                    </button>
-                    <button className="text-14 font-medium text-red hover:text-red/80">
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      className="text-12 font-medium text-red hover:bg-transparent hover:text-red/80"
+                    >
                       삭제
-                    </button>
+                    </Button>
                   </div>
                 </div>
                 {/* 여기에 장소 카드 컴포넌트들이 들어갈 예정 */}
@@ -143,43 +158,7 @@ const PlanSchedule = ({
         </div>
 
         {/* 사이드바 영역 */}
-        <div className="flex w-[320px] flex-col gap-6">
-          {/* 북마크한 장소 */}
-          <div className="rounded-[12px] border border-gray-200 p-5">
-            <div className="flex items-center justify-between">
-              <span className="text-14 font-bold text-gray-900">
-                내가 북마크한 장소
-              </span>
-              <Button
-                variant="ghost"
-                className="h-auto p-0 text-14 font-medium text-gray-600 hover:bg-transparent hover:text-gray-900"
-              >
-                더보기
-              </Button>
-            </div>
-            <div className="mt-4 flex items-center justify-center rounded-[8px] border border-dashed border-gray-200 py-4 text-14 text-gray-300">
-              장소를 검색해 주세요
-            </div>
-          </div>
-
-          {/* 추천 장소 */}
-          <div className="rounded-[12px] border border-gray-200 p-5">
-            <div className="flex items-center justify-between">
-              <span className="text-14 font-bold text-gray-900">
-                이런 장소는 어떠세요?
-              </span>
-              <Button
-                variant="ghost"
-                className="h-auto p-0 text-14 font-medium text-gray-600 hover:bg-transparent hover:text-gray-900"
-              >
-                더보기
-              </Button>
-            </div>
-            <div className="mt-4 flex items-center justify-center rounded-[8px] border border-dashed border-gray-200 py-4 text-14 text-gray-300">
-              장소를 검색해 주세요
-            </div>
-          </div>
-        </div>
+        <PlaceSidemenu userId={userId} />
       </div>
     </div>
   );

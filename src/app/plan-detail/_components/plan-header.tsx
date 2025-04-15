@@ -17,16 +17,25 @@ const PlanHeader = ({
   isCalendarOpen,
   setIsCalendarOpen,
   handleDateChange,
+  planTitle,
+  setPlanTitle,
+  planDescription,
+  setPlanDescription,
+  planImage,
+  setPlanImage,
 }: {
   startDate: Date | null;
   endDate: Date | null;
   isCalendarOpen: boolean;
   setIsCalendarOpen: (isCalendarOpen: boolean) => void;
   handleDateChange: (dates: [Date | null, Date | null]) => void;
+  planTitle: string;
+  setPlanTitle: (title: string) => void;
+  planDescription: string;
+  setPlanDescription: (description: string) => void;
+  planImage: string | null;
+  setPlanImage: (image: string | null) => void;
 }) => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-
   return (
     <>
       <div className="mt-6 flex gap-4">
@@ -44,17 +53,27 @@ const PlanHeader = ({
               const file = e.target.files?.[0];
               if (file) {
                 // TODO: 이미지 업로드 처리
+                setPlanImage(URL.createObjectURL(file));
               }
             }}
           />
           <div className="flex h-full flex-col items-center justify-center gap-3">
-            {/* svg 대체 필요 */}
-            <p className="text-24 text-gray-300">+</p>
-            <p className="text-center text-14 font-medium text-gray-300">
-              내 일정을 대표할
-              <br />
-              이미지를 추가하세요
-            </p>
+            {planImage ? (
+              <img
+                src={planImage}
+                alt="썸네일"
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <>
+                <p className="text-24 text-gray-300">+</p>
+                <p className="text-center text-14 font-medium text-gray-300">
+                  내 일정을 대표할
+                  <br />
+                  이미지를 추가하세요
+                </p>
+              </>
+            )}
           </div>
         </Label>
 
@@ -72,8 +91,8 @@ const PlanHeader = ({
               <TextareaWithCount
                 maxLength={50}
                 placeholder="나만의 일정을 제목을 지어주세요"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                value={planTitle}
+                onChange={(e) => setPlanTitle(e.target.value)}
                 className="w-full resize-none border-0 bg-transparent py-5 pl-12 text-14 focus-visible:ring-0 focus-visible:ring-offset-0"
               />
             </div>
@@ -121,8 +140,8 @@ const PlanHeader = ({
           />
           <TextareaWithCount
             placeholder="특별히 적어 두고 싶은 메모를 입력하세요"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            value={planDescription}
+            onChange={(e) => setPlanDescription(e.target.value)}
             maxLength={500}
             className="h-[160px] w-full resize-none rounded-[12px] border-gray-200 py-5 pl-12 text-14 focus-visible:ring-0 focus-visible:ring-offset-0"
           />

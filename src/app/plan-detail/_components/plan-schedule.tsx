@@ -94,37 +94,44 @@ const PlanSchedule = ({
   return (
     <div className="my-6">
       {/* 탭 네비게이션 */}
-      <div className="flex gap-2">
-        <Button
-          variant="outline"
-          className={cn(
-            BASE_TAB_STYLE,
-            activeTab === '전체보기' ? ACTIVE_TAB_STYLE : INACTIVE_TAB_STYLE,
-          )}
-          onClick={() => setActiveTab('전체보기')}
-        >
-          전체보기
-        </Button>
-        {/* 원하는 개수만큼 반복해서 컴포넌트 렌더링 */}
-        {Array.from({ length: dayCount }, (_, i) => i + 1).map((day) => (
-          <Button
-            key={day}
-            variant="outline"
-            className={cn(
-              BASE_TAB_STYLE,
-              activeTab === day ? ACTIVE_TAB_STYLE : INACTIVE_TAB_STYLE,
-            )}
-            onClick={() => setActiveTab(day)}
-          >
-            DAY {day}
-          </Button>
-        ))}
-        <Button
-          variant="outline"
-          className="rounded-full border-gray-200 px-4 py-2 text-14 font-medium"
-        >
-          +
-        </Button>
+      <div className="sticky top-[370px] z-10">
+        {/* 탭 네비게이션 마스킹 영역 */}
+        <div className="absolute -top-[370px] left-0 right-0 h-[370px] bg-white" />
+        <div className="bg-white py-4">
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              className={cn(
+                BASE_TAB_STYLE,
+                activeTab === '전체보기'
+                  ? ACTIVE_TAB_STYLE
+                  : INACTIVE_TAB_STYLE,
+              )}
+              onClick={() => setActiveTab('전체보기')}
+            >
+              전체보기
+            </Button>
+            {Array.from({ length: dayCount }, (_, i) => i + 1).map((day) => (
+              <Button
+                key={day}
+                variant="outline"
+                className={cn(
+                  BASE_TAB_STYLE,
+                  activeTab === day ? ACTIVE_TAB_STYLE : INACTIVE_TAB_STYLE,
+                )}
+                onClick={() => setActiveTab(day)}
+              >
+                DAY {day}
+              </Button>
+            ))}
+            <Button
+              variant="outline"
+              className="rounded-full border-gray-200 px-4 py-2 text-14 font-medium"
+            >
+              +
+            </Button>
+          </div>
+        </div>
       </div>
 
       {/* 일정 콘텐츠 영역 */}

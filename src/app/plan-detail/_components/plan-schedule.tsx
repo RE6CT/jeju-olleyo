@@ -15,7 +15,7 @@ import PlaceSidemenu from './place-sidemenu';
 import PlaceCard from './place-card';
 import { Place } from '@/types/search.type';
 import { DayPlaces, TabType } from '@/types/plan-detail.type';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { DragDropContext } from 'react-beautiful-dnd';
 import ScheduleDeleteModal from './schedule-delete-modal';
 
 const BASE_TAB_STYLE =

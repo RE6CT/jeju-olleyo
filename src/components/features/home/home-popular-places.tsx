@@ -4,7 +4,7 @@ import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { usePopularPlaces } from '@/lib/hooks/use-popular-places';
 import { Category } from '@/types/home.popular-place.type';
-import { BOTTOM_CATEGORIES } from '@/constants/home.constants';
+import { CATEGORIES } from '@/constants/home.constants';
 import useDragScroll from '@/lib/hooks/use-drag-scroll';
 import PlaceCard from '../card/place-card';
 
@@ -45,14 +45,14 @@ const PopularPlaces = () => {
         </div>
         {/* 카테고리 탭 */}
         <div className="mb-6 flex space-x-2 overflow-x-auto">
-          {BOTTOM_CATEGORIES.map((category) => (
+          {CATEGORIES.map((category) => (
             <button
               key={category}
               onClick={() => handleCategoryChange(category)}
-              className={`rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
+              className={`rounded-[28px] border-[0.6px] border-solid border-[color:var(--Gray-600,#537384)] px-3 py-1.5 text-sm font-medium transition-colors ${
                 activeCategory === category
-                  ? 'bg-orange-500 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  ? 'border-[#F60] bg-primary-100 text-primary-800'
+                  : 'border-[color:var(--Gray-600,#537384)] text-gray-600'
               }`}
             >
               {category}

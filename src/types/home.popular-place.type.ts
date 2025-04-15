@@ -1,4 +1,4 @@
-import { BOTTOM_CATEGORIES } from '@/constants/home.constants';
+import { CATEGORIES } from '@/constants/home.constants';
 
 export type PlaceWithLiked = {
   place_id: number;
@@ -25,7 +25,7 @@ export type BookmarkStore = {
   isBookmarked: (id: number) => boolean;
 };
 
-export type Category = (typeof BOTTOM_CATEGORIES)[number];
+export type Category = (typeof CATEGORIES)[number];
 
 export type PlaceResponse = {
   place_id: number;

@@ -36,7 +36,10 @@ const PopularSchedules = () => {
     <div className="flex w-full max-w-[1024px] flex-col gap-3 p-9">
       <div className="flex items-center justify-between">
         <h2 className="semibold-22">올레 인기 일정</h2>
-        <Link href={'/community'} className="regular-16">
+        <Link
+          href={'/community'}
+          className="regular-16 text-gray-600 hover:text-black"
+        >
           더보기
         </Link>
       </div>
@@ -46,7 +49,7 @@ const PopularSchedules = () => {
       ) : (
         <div className="grid w-full grid-cols-1 gap-x-3 gap-y-5 sm:grid-cols-2 md:grid-cols-3">
           {plans.map((plan: PlanType) => (
-            <PlanVerticalCard key={plan.planId} plan={plan} userId={userId} />
+            <PlanVerticalCard key={plan.planId} plan={plan} />
           ))}
         </div>
       )}

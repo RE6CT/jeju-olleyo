@@ -2,8 +2,8 @@
 
 import { Command, CommandInput } from '@/components/ui/command';
 import { PATH } from '@/constants/path.constants';
-import { useRouter } from 'next/navigation';
-import { useRef } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
 
 /**
  * 반응형 검색바 컴포넌트
@@ -12,6 +12,7 @@ import { useRef } from 'react';
 const SearchBar = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+  const path = usePathname();
 
   const handleSearch = () => {
     const query = inputRef.current?.value;
@@ -19,6 +20,12 @@ const SearchBar = () => {
       router.push(`${PATH.SEARCH}?query=${query}`);
     }
   };
+
+  useEffect(() => {
+    if ((path === PATH.HOME || path !== PATH.SEARCH) && inputRef.current) {
+      inputRef.current.value = '';
+    }
+  }, [path]);
 
   return (
     <Command className="mt-1 w-full rounded-full border">

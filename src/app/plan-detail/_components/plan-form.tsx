@@ -9,18 +9,17 @@ import { Plan } from '@/types/plan.type';
 const PlanForm = ({ userId }: { userId: string }) => {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
-  const [plan, setPlan] = useState<Plan>({
+  const [plan, setPlan] = useState<
+    Omit<Plan, 'nickname' | 'createdAt' | 'publicAt' | 'isLiked'>
+  >({
     planId: 0,
     planImg: '',
     title: '',
     description: '',
-    nickname: '',
     travelStartDate: '',
     travelEndDate: '',
     userId: userId,
     public: false,
-    publicAt: null,
-    createdAt: new Date().toISOString(),
   });
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 

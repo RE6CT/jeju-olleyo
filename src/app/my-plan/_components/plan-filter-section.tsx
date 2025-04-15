@@ -8,7 +8,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { Filter } from 'lucide-react';
 import {
   FILTER_TYPES,
   ITEMS_PER_PAGE,

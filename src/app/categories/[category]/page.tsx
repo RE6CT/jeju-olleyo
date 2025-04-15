@@ -1,5 +1,3 @@
-import fetchGetPlacesByCategory from '@/lib/apis/search/get-place-by-categories.api';
-import fetchGetAllPlaces from '@/lib/apis/search/get-place.api';
 import {
   dehydrate,
   HydrationBoundary,
@@ -18,7 +16,7 @@ const CategoryPage = async ({ params }: { params: { category: string } }) => {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <section className="flex flex-col gap-6 p-10">
+      <section className="flex flex-col items-center justify-center gap-[11px] p-9">
         <CategoryClient category={urlCategory} />
       </section>
     </HydrationBoundary>

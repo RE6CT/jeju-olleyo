@@ -7,6 +7,7 @@ import { TEXT } from '@/constants/plan.constants';
 import { PlanHorizontalCardProps } from '@/types/plan.type';
 import Image from 'next/image';
 import Link from 'next/link';
+import LikeButton from '../like-button';
 
 export const CARD = {
   imageSize: 'w-[310px] h-[216px]',
@@ -36,11 +37,18 @@ const PlanHorizontalCard = ({
   return (
     <Link href={`/plan-detail/${plan.planId}`} className="flex gap-4">
       {/* 이미지 영역 */}
-      <div className={`relative ${CARD.imageSize}`}>
-        <PlanImage
-          image={plan.planImg}
-          title={plan.title}
-          className="rounded-12"
+      <div className="relative">
+        <div className={`relative ${CARD.imageSize}`}>
+          <PlanImage
+            image={plan.planImg}
+            title={plan.title}
+            className="rounded-12"
+          />
+        </div>
+        <LikeButton
+          planId={plan.planId}
+          isLiked={plan.isLiked}
+          className="absolute right-4 top-4"
         />
       </div>
 
@@ -80,7 +88,7 @@ const PlanHorizontalCard = ({
         </div>
         {/* 제목 및 description 영역 */}
         <p className="medium-16 line-clamp-1">{plan.title}</p>
-        <p className="regular-14 text-description line-clamp-2">
+        <p className="regular-14 line-clamp-2 text-description">
           {plan.description || TEXT.noDescription}
         </p>
       </div>

@@ -34,19 +34,24 @@ export const fetchAllPlans = async (userId: string | null, limit?: number) => {
  *
  */
 const fetchGetPlacesByCategory = async (urlcategory: string) => {
-  const supabase = getBrowserClient();
+  try {
+    const supabase = getBrowserClient();
 
-  const krCategory = CATEGORY_KR_MAP[urlcategory];
-  if (!krCategory) throw new Error('유효하지 않은 카테고리입니다.');
+    const krCategory = CATEGORY_KR_MAP[urlcategory];
+    if (!krCategory) throw new Error('유효하지 않은 카테고리입니다.');
 
-  const { data, error } = await supabase
-    .from('places')
-    .select('*')
-    .eq('category', krCategory);
+    const { data, error } = await supabase
+      .from('places')
+      .select('*')
+      .eq('category', krCategory);
 
-  if (error) throw new Error(error.message);
+    if (error) throw new Error(error.message);
 
-  return data;
+    return data;
+  } catch (error) {
+    console.error('Error fetching places by category:', error);
+    throw error;
+  }
 };
 
 export default fetchGetPlacesByCategory;
@@ -68,13 +73,16 @@ export const getPopularPlaces = async (category: string = '전체') => {
     const { data, error } = await query;
 
     if (error) {
-      console.error('Error fetching places:', error);
+      console.error(`Error fetching places for category "${category}":`, error);
       return [];
     }
 
     return data;
   } catch (error) {
-    console.error('Error:', error);
+    console.error(
+      `Unexpected error fetching places for category "${category}":`,
+      error,
+    );
     return [];
   }
 };

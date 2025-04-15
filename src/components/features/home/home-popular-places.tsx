@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { usePopularPlaces } from '@/lib/hooks/use-popular-places';
 import { Category } from '@/types/home.popular-place.type';
 import { CATEGORIES } from '@/constants/home.constants';
 import PlaceCard from '../card/place-card';
+import useDragScroll from '@/lib/hooks/use-drag-scroll';
 
 /**
  * 인기 장소를 카테고리별로 표시하는 컴포넌트
@@ -17,67 +18,7 @@ const PopularPlaces = () => {
   const { places, isLoading, isFirstLoading } =
     usePopularPlaces(activeCategory);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const [isDragging, setIsDragging] = useState(false);
-
-  // 마우스 드래그 스크롤 기능 구현
-  useEffect(() => {
-    const slider = scrollContainerRef.current;
-    if (!slider) return;
-
-    let isDown = false;
-    let startX: number;
-    let scrollLeft: number;
-    let moveDistance = 0;
-
-    const onMouseDown = (e: MouseEvent) => {
-      isDown = true;
-      moveDistance = 0;
-      slider.classList.add('active');
-      startX = e.pageX - slider.offsetLeft;
-      scrollLeft = slider.scrollLeft;
-    };
-
-    const onMouseLeave = () => {
-      if (isDown) {
-        setIsDragging(moveDistance > 5); // 5px 이상 움직였으면 드래그로 간주
-      }
-      isDown = false;
-      slider.classList.remove('active');
-    };
-
-    const onMouseUp = () => {
-      setIsDragging(moveDistance > 5); // 5px 이상 움직였으면 드래그로 간주
-      isDown = false;
-      slider.classList.remove('active');
-
-      // 짧은 시간 후 드래그 상태 초기화 (클릭 이벤트를 위해)
-      setTimeout(() => {
-        setIsDragging(false);
-      }, 50);
-    };
-
-    const onMouseMove = (e: MouseEvent) => {
-      if (!isDown) return;
-      e.preventDefault();
-      const x = e.pageX - slider.offsetLeft;
-      const walk = x - startX;
-      moveDistance = Math.abs(walk); // 움직인 거리 저장
-      setIsDragging(true); // 움직이는 즉시 드래그 상태로 설정
-      slider.scrollLeft = scrollLeft - walk;
-    };
-
-    slider.addEventListener('mousedown', onMouseDown);
-    slider.addEventListener('mouseleave', onMouseLeave);
-    slider.addEventListener('mouseup', onMouseUp);
-    slider.addEventListener('mousemove', onMouseMove);
-
-    return () => {
-      slider.removeEventListener('mousedown', onMouseDown);
-      slider.removeEventListener('mouseleave', onMouseLeave);
-      slider.removeEventListener('mouseup', onMouseUp);
-      slider.removeEventListener('mousemove', onMouseMove);
-    };
-  }, []);
+  const { isDragging } = useDragScroll(scrollContainerRef, { threshold: 5 });
 
   const handleViewMore = () => {
     router.push('/categories/all');

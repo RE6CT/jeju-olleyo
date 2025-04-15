@@ -16,14 +16,19 @@ export type Place = {
 };
 
 export type BookmarkStore = {
-  bookmarks: string[];
-  addBookmark: (id: string) => void;
-  removeBookmark: (id: string) => void;
-  isBookmarked: (id: string) => boolean;
+  bookmarks: number[];
+  addBookmark: (id: number) => void;
+  removeBookmark: (id: number) => void;
+  isBookmarked: (id: number) => boolean;
 };
 
 export type PlaceCardProps = {
-  place: Place;
+  placeId: number;
+  image: string;
+  title: string;
+  isLiked: boolean;
+  className?: string;
+  isDragging?: boolean;
 };
 
 export type Category = (typeof CATEGORIES)[number];

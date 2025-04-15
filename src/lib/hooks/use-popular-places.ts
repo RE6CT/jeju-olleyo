@@ -47,7 +47,7 @@ export const usePopularPlaces = (category: string = '전체') => {
   const placesWithBookmarks = data
     ? data.map((place) => ({
         ...place,
-        isBookmarked: isBookmarked(place.id as any),
+        isBookmarked: isBookmarked(place.id),
       }))
     : [];
 

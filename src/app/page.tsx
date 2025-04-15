@@ -37,7 +37,9 @@ const Home = () => {
 
       {/* 인기 일정 섹션 */}
       <section>
-        <PopularSchedules />
+        <Suspense fallback={<Loading />}>
+          <PopularSchedules />
+        </Suspense>
       </section>
 
       {/* 인기 장소 섹션 */}
@@ -48,7 +50,7 @@ const Home = () => {
       </section>
 
       {/* 내 일정 만들러 가기 배너 섹션*/}
-      <section className="mt-8">
+      <section>
         <JejuBanner
           imageUrl="/banner-images/plan-banner.svg"
           title="나만의 제주 여행 계획하기"

@@ -10,6 +10,8 @@ import { ko } from 'date-fns/locale';
 import { formatTravelPeriod } from '@/lib/utils/date';
 import { Label } from '@/components/ui/label';
 import TextareaWithCount from '@/components/ui/textarea-with-count';
+import { fetchUploadPlanImage } from '@/lib/apis/plan/plan.api';
+import Loading from '@/app/loading';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
@@ -38,14 +40,54 @@ const PlanHeader = ({
   planImage: string | null;
   setPlanImage: (image: string | null) => void;
 }) => {
+  const [isUploading, setIsUploading] = useState(false);
+
   // 컴포넌트가 언마운트될 때 객체 URL 해제
   useEffect(() => {
     return () => {
-      if (planImage) {
+      if (planImage && planImage.startsWith('blob:')) {
         URL.revokeObjectURL(planImage);
       }
     };
   }, [planImage]);
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // 파일 크기 제한 (5MB)
+    if (file.size > MAX_FILE_SIZE) {
+      alert('이미지 크기는 5MB를 초과할 수 없습니다.');
+      return;
+    }
+
+    const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    if (!validTypes.includes(file.type)) {
+      alert('JPEG, PNG, GIF 형식의 이미지만 업로드 가능합니다.');
+      return;
+    }
+
+    try {
+      setIsUploading(true);
+      // 임시 미리보기를 위해 blob URL 생성
+      const tempUrl = URL.createObjectURL(file);
+      setPlanImage(tempUrl);
+
+      // FormData 생성 및 파일 추가
+      const formData = new FormData();
+      formData.append('file', file);
+
+      // Supabase Storage에 이미지 업로드
+      const uploadedImageUrl = await fetchUploadPlanImage(formData);
+      setPlanImage(uploadedImageUrl);
+    } catch (error) {
+      console.error('이미지 업로드 실패:', error);
+      alert('이미지 업로드에 실패했습니다.');
+      setPlanImage(null);
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
   return (
     <>
@@ -60,24 +102,8 @@ const PlanHeader = ({
             id="thumbnail"
             accept="image/*"
             className="hidden"
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (file) {
-                // 파일 크기 제한 (5MB)
-                if (file.size > MAX_FILE_SIZE) {
-                  alert('이미지 크기는 5MB를 초과할 수 없습니다.');
-                  return;
-                }
-
-                const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
-                if (!validTypes.includes(file.type)) {
-                  alert('JPEG, PNG, GIF 형식의 이미지만 업로드 가능합니다.');
-                  return;
-                }
-
-                setPlanImage(URL.createObjectURL(file));
-              }
-            }}
+            onChange={handleFileChange}
+            disabled={isUploading}
           />
           {planImage ? (
             <Image
@@ -95,6 +121,11 @@ const PlanHeader = ({
                 <br />
                 이미지를 추가하세요
               </p>
+            </div>
+          )}
+          {isUploading && (
+            <div className="absolute inset-0 flex items-center justify-center rounded-[12px] bg-black bg-opacity-50">
+              <Loading />
             </div>
           )}
         </Label>

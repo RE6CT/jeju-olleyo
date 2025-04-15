@@ -28,7 +28,8 @@ const CategoryClient = ({ category }: { category: string }) => {
             placeId={place.id}
             image={place.image}
             title={place.title}
-            isLiked
+            isLiked={false}
+            isDragging={false}
           />
         ))}
       </div>,

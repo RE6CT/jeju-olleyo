@@ -64,6 +64,7 @@ const SearchResultsPage = () => {
                     image={place.image}
                     title={place.title}
                     isLiked={false}
+                    isDragging={false}
                   />
                 ))}
               </div>,

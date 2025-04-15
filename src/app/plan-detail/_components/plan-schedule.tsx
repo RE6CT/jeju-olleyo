@@ -62,18 +62,19 @@ const PlanSchedule = ({
     if (places.length === 0) return <AddPlacePrompt />;
 
     return (
-      <>
+      <div className="flex flex-col gap-4">
         {places.map((place: Place, index: number) => (
           <PlaceCard
             key={place.id}
             index={index + 1}
+            category={place.category}
             title={place.title}
             address={place.address}
             imageUrl={place.image || undefined}
           />
         ))}
         <AddPlacePrompt />
-      </>
+      </div>
     );
   };
 
@@ -91,7 +92,7 @@ const PlanSchedule = ({
         >
           전체보기
         </Button>
-        // 원하는 개수만큼 반복해서 컴포넌트 렌더링
+        {/* 원하는 개수만큼 반복해서 컴포넌트 렌더링 */}
         {Array.from({ length: dayCount }, (_, i) => i + 1).map((day) => (
           <Button
             key={day}

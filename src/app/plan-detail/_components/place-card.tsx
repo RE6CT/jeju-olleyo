@@ -57,7 +57,7 @@ const PlaceCard = ({
   const dayColorSet = dayNumber % 2 === 1 ? COLORS.ODD : COLORS.EVEN;
 
   return (
-    <div className="flex w-full gap-3">
+    <div className="flex w-full cursor-grab gap-3 active:cursor-grabbing">
       {/* 원형으로 인덱스 표시 */}
       <div
         className={`regular-12 flex h-6 w-6 flex-col items-center justify-center gap-[10px] rounded-[12px] ${dayColorSet.bg} px-2 text-white`}
@@ -66,10 +66,10 @@ const PlaceCard = ({
       </div>
 
       {/* 카드 본문 */}
-      <div className="flex w-full items-center gap-5 rounded-lg border border-gray-100 bg-white p-4 shadow-[0px_2px_4px_1px_rgba(0,0,0,0.10)]">
+      <div className="flex w-full items-center gap-5 rounded-lg border border-gray-100 bg-white p-4 shadow-[0px_2px_4px_1px_rgba(0,0,0,0.10)] transition-shadow duration-200 hover:shadow-[0px_4px_8px_2px_rgba(0,0,0,0.15)]">
         {/* 장소 이미지 */}
         <div
-          className={`h-[${PLACE_IMAGE_SIZE.height}px] w-[${PLACE_IMAGE_SIZE.width}px] shrink-0 overflow-hidden`}
+          className={`h-[${PLACE_IMAGE_SIZE.height}px] w-[${PLACE_IMAGE_SIZE.width}px] shrink-0 overflow-hidden rounded-lg bg-gray-100`}
         >
           <Image
             src={imageUrl}

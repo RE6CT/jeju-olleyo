@@ -361,14 +361,13 @@ const PlanSchedule = ({
 
       // 일정을 공개로 설정하여 저장
       const planId = await fetchSavePlan({
-        userId,
+        userId: userId,
         title: planTitle,
         description: planDescription,
-        travelStartDate: startDate.toISOString(),
-        travelEndDate: endDate.toISOString(),
+        travelStartDate: startDate?.toISOString() || '',
+        travelEndDate: endDate?.toISOString() || '',
         planImg: planImage || null,
         public: true,
-        publicAt: null,
       });
 
       // 일정 상세 장소 저장
@@ -392,14 +391,13 @@ const PlanSchedule = ({
 
       // 일정을 비공개로 설정하여 저장
       const planId = await fetchSavePlan({
-        userId,
+        userId: userId,
         title: planTitle,
         description: planDescription,
-        travelStartDate: startDate.toISOString(),
-        travelEndDate: endDate.toISOString(),
+        travelStartDate: startDate?.toISOString() || '',
+        travelEndDate: endDate?.toISOString() || '',
         planImg: planImage || null,
         public: false,
-        publicAt: null,
       });
 
       // 일정 상세 장소 저장

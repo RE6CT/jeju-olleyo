@@ -9,6 +9,7 @@ import {
 } from '@/lib/utils/date';
 import dayjs from 'dayjs';
 import { DayPlaces } from '@/types/plan-detail.type';
+import { CommunitySortType } from '@/types/community.type';
 
 /**
  * 사용자의 일정 목록을 가져오는 API
@@ -144,7 +145,10 @@ export const fetchGetAllPlans = async (
  * @returns Promise<number> - 저장된 일정의 ID
  */
 export const fetchSavePlan = async (
-  plan: Omit<Plan, 'planId' | 'nickname' | 'createdAt'>,
+  plan: Omit<
+    Plan,
+    'planId' | 'nickname' | 'createdAt' | 'publicAt' | 'isLiked'
+  >,
 ): Promise<number> => {
   const supabase = await getServerClient();
 
@@ -158,7 +162,6 @@ export const fetchSavePlan = async (
       travel_end_date: plan.travelEndDate,
       plan_img: plan.planImg,
       public: plan.public,
-      public_at: plan.public ? dayjs().toISOString() : null,
     })
     .select('plan_id')
     .single();

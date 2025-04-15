@@ -11,7 +11,6 @@ import { formatTravelPeriod } from '@/lib/utils/date';
 import { Label } from '@/components/ui/label';
 import TextareaWithCount from '@/components/ui/textarea-with-count';
 import { fetchUploadPlanImage } from '@/lib/apis/plan/plan.api';
-import Loading from '@/app/loading';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
@@ -125,7 +124,7 @@ const PlanHeader = ({
           )}
           {isUploading && (
             <div className="absolute inset-0 flex items-center justify-center rounded-[12px] bg-black bg-opacity-50">
-              <Loading />
+              <div className="h-8 w-8 animate-spin rounded-full border-4 border-white border-t-transparent" />
             </div>
           )}
         </Label>

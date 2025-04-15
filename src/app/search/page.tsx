@@ -7,44 +7,42 @@ import Loading from '../loading';
 import EmptyResult from './_components/empty-result';
 import { useState } from 'react';
 import PlaceCard from '@/components/features/card/place-card';
+import CategoryFilterTabs from '@/components/commons/category-filter-tabs';
+import { CategoryType } from '@/types/category-badge.type';
 
-// TODO : 디자이너님 배너 제작 후 배너 삽입 예정
-
-const CATEGORIES = ['전체', '명소', '숙박', '맛집', '카페'];
+const filterTabs: CategoryType[] = ['전체', '명소', '숙박', '맛집', '카페'];
 
 const SearchResultsPage = () => {
   const searchParams = useSearchParams();
   const query = searchParams.get('query') ?? '';
   const { results, loading } = useSearch(query);
 
-  const [activeCategory, setActiveCategory] = useState<string>('전체');
+  const [activeFilterTab, setActiveFilterTab] = useState<CategoryType>('전체');
+
+  const onFilterTabChange = (tab: CategoryType) => {
+    setActiveFilterTab(tab);
+  };
 
   if (loading) {
     return <Loading />;
   }
 
   const filteredResults =
-    activeCategory === '전체'
+    activeFilterTab === '전체'
       ? results
-      : results.filter((place) => place.category === activeCategory);
+      : results.filter((place) => place.category === activeFilterTab);
 
   return (
     <div className="px-4">
       <div className="mb-6 text-2xl font-bold">'{query}'의 검색 결과</div>
-      <div className="mb-[17px] mt-5 space-x-3">
-        {CATEGORIES.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setActiveCategory(cat)}
-            className={`rounded-md px-4 py-2 ${
-              activeCategory === cat
-                ? 'bg-black text-white'
-                : 'bg-gray-100 text-gray-700'
-            }`}
-          >
-            {cat}
-          </button>
-        ))}
+      <div className="mb-[17px] mt-5 h-[40px] w-[388px]">
+        <CategoryFilterTabs
+          tabs={filterTabs}
+          defaultTab={activeFilterTab}
+          onTabChange={onFilterTabChange}
+          tabsGapClass="gap-[10px]"
+          tabPaddingClass="px-1 py-1"
+        />
       </div>
 
       {filteredResults.length === 0 ? (
@@ -65,7 +63,7 @@ const SearchResultsPage = () => {
                     placeId={place.id}
                     image={place.image}
                     title={place.title}
-                    isLiked
+                    isLiked={false}
                   />
                 ))}
               </div>,

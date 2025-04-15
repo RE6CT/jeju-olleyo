@@ -18,7 +18,7 @@ const CategoryPage = async ({ params }: { params: { category: string } }) => {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <section className="flex flex-col gap-6 p-10">
+      <section className="flex flex-col items-center justify-center gap-[11px] p-9">
         <CategoryClient category={urlCategory} />
       </section>
     </HydrationBoundary>

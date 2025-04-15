@@ -8,6 +8,7 @@ import PlaceSidemenu from './place-sidemenu';
 import PlaceCard from './place-card';
 import { Place } from '@/types/search.type';
 import { DayPlaces, TabType } from '@/types/plan-detail.type';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 const BASE_TAB_STYLE =
   'flex items-center justify-center gap-[10px] rounded-[28px] border px-5 py-2 text-14 font-medium transition-colors';
@@ -50,19 +51,31 @@ const PlanSchedule = ({
   const [activeTab, setActiveTab] = useState<TabType>('전체보기');
   const dayCount = calculateTotalDays(startDate, endDate);
   const [dayPlaces, setDayPlaces] = useState<DayPlaces>({});
+  const [placeCount, setPlaceCount] = useState(0);
 
+  /**
+   * 장소 추가 핸들러
+   * @param newPlace 추가할 장소 데이터
+   * @example
+   * handleAddPlace({
+   *   id: 1,
+   *   title: '장소 제목',...
+   * })
+   */
   const handleAddPlace = (newPlace: Place) => {
     if (activeTab === '전체보기') return;
 
     setDayPlaces((prev: DayPlaces) => {
       const dayNumber = activeTab as number;
       const currentDayPlaces = prev[dayNumber] || [];
+      const uniqueId = `${newPlace.id}-${placeCount}`;
 
       return {
         ...prev,
-        [dayNumber]: [...currentDayPlaces, newPlace],
+        [dayNumber]: [...currentDayPlaces, { ...newPlace, uniqueId }],
       };
     });
+    setPlaceCount((prev) => prev + 1);
   };
 
   /**
@@ -78,171 +91,268 @@ const PlanSchedule = ({
       const currentDayPlaces = [...(prev[dayNumber] || [])];
       currentDayPlaces.splice(placeIndex, 1);
 
-      const newState = {
+      return {
         ...prev,
         [dayNumber]: currentDayPlaces,
       };
-
-      return newState;
     });
   };
 
   /**
+   * 드래그 앤 드랍 핸들러
+   * @param result 드래그 앤 드랍 결과
+   * @example
+   * handleDragEnd({
+   *   source: {
+   *     droppableId: '1',
+   *     index: 0,
+   *   },
+   *   destination: {
+   *     droppableId: '2',
+   *     index: 1,
+   *   },
+   * })
+   */
+  const handleDragEnd = (result: any) => {
+    if (!result.destination) return; // 드래그 종료가 제대로 되지 않았다면 종료
+
+    const { source, destination } = result; // {droppableId: string, index: number} 형태의 객체 두 개
+
+    // 같은 날짜 내에서 이동
+    if (source.droppableId === destination.droppableId) {
+      setDayPlaces((prev: DayPlaces) => {
+        const dayNumber = parseInt(source.droppableId);
+        const places = [...(prev[dayNumber] || [])];
+        const [removed] = places.splice(source.index, 1); // 원본 배열에서 제거
+        places.splice(destination.index, 0, removed); // 새로운 위치에 추가
+
+        return {
+          ...prev,
+          [dayNumber]: places,
+        };
+      });
+    }
+
+    // 다른 날짜로 이동
+    else {
+      setDayPlaces((prev: DayPlaces) => {
+        const sourceDay = parseInt(source.droppableId);
+        const destDay = parseInt(destination.droppableId);
+        const sourcePlaces = [...(prev[sourceDay] || [])];
+        const destPlaces = [...(prev[destDay] || [])];
+        const [removed] = sourcePlaces.splice(source.index, 1); // 원본 배열에서 제거
+        destPlaces.splice(destination.index, 0, removed); // 새로운 위치에 추가
+
+        return {
+          ...prev,
+          [sourceDay]: sourcePlaces,
+          [destDay]: destPlaces,
+        };
+      });
+    }
+  };
+
+  /**
    * 일정 리스트 콘텐츠 렌더링
+   * @param day 일자
+   * @example
+   * renderPlaces(1)
+   * 1일차 일정 리스트 렌더링
    */
   const renderPlaces = (day: number) => {
     const places = dayPlaces[day] || [];
+    if (places.length === 0) return null;
 
-    if (places.length === 0) return <AddPlacePrompt dayNumber={day} />;
-
-    return (
-      <div className="flex flex-col gap-4">
-        {places.map((place: Place, index: number) => (
-          <PlaceCard
-            key={place.id}
-            index={index + 1}
-            dayNumber={day}
-            category={place.category}
-            title={place.title}
-            address={place.address}
-            imageUrl={place.image || undefined}
-            isLastItem={index === places.length - 1}
-            onDelete={() => handleDeletePlace(day, index)}
-          />
-        ))}
-        <AddPlacePrompt dayNumber={day} />
+    return places.map((place: Place & { uniqueId: string }, index: number) => (
+      <div
+        key={place.uniqueId}
+        draggable
+        onDragStart={(e) => {
+          e.dataTransfer.setData(
+            'text/plain',
+            JSON.stringify({
+              day,
+              index,
+              placeId: place.uniqueId,
+            }),
+          );
+        }}
+        onDragOver={(e) => {
+          e.preventDefault();
+          e.currentTarget.style.opacity = '0.5';
+        }}
+        onDragLeave={(e) => {
+          e.currentTarget.style.opacity = '1';
+        }}
+        onDrop={(e) => {
+          e.preventDefault();
+          e.currentTarget.style.opacity = '1';
+          const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+          if (data.placeId !== place.uniqueId) {
+            handleDragEnd({
+              source: {
+                droppableId: data.day.toString(),
+                index: data.index,
+              },
+              destination: {
+                droppableId: day.toString(),
+                index,
+              },
+            });
+          }
+        }}
+        className="cursor-move transition-opacity duration-200"
+      >
+        <PlaceCard
+          index={index + 1}
+          dayNumber={day}
+          category={place.category}
+          title={place.title}
+          address={place.address}
+          imageUrl={place.image || undefined}
+          isLastItem={index === places.length - 1}
+          onDelete={() => handleDeletePlace(day, index)}
+        />
       </div>
-    );
+    ));
   };
 
   return (
-    <div className="my-6">
-      {/* 탭 네비게이션 */}
-      <div className="sticky top-[370px] z-10">
-        {/* 탭 네비게이션 마스킹 영역 */}
-        <div className="absolute -top-[370px] left-0 right-0 h-[370px] bg-white" />
-        <div className="bg-white py-4">
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              className={cn(
-                BASE_TAB_STYLE,
-                activeTab === '전체보기'
-                  ? ACTIVE_TAB_STYLE
-                  : INACTIVE_TAB_STYLE,
-              )}
-              onClick={() => setActiveTab('전체보기')}
-            >
-              전체보기
-            </Button>
-            {Array.from({ length: dayCount }, (_, i) => i + 1).map((day) => (
+    <DragDropContext onDragEnd={handleDragEnd}>
+      <div className="my-6">
+        {/* 탭 네비게이션 */}
+        <div className="sticky top-[370px] z-10">
+          {/* 탭 네비게이션 마스킹 영역 */}
+          <div className="absolute -top-[370px] left-0 right-0 h-[370px] bg-white" />
+          <div className="bg-white py-4">
+            <div className="flex gap-2">
               <Button
-                key={day}
                 variant="outline"
                 className={cn(
                   BASE_TAB_STYLE,
-                  activeTab === day ? ACTIVE_TAB_STYLE : INACTIVE_TAB_STYLE,
+                  activeTab === '전체보기'
+                    ? ACTIVE_TAB_STYLE
+                    : INACTIVE_TAB_STYLE,
                 )}
-                onClick={() => setActiveTab(day)}
+                onClick={() => setActiveTab('전체보기')}
               >
-                DAY {day}
+                전체보기
               </Button>
-            ))}
-            <Button
-              variant="outline"
-              className="rounded-full border-gray-200 px-4 py-2 text-14 font-medium"
-            >
-              +
-            </Button>
+              {Array.from({ length: dayCount }, (_, i) => i + 1).map((day) => (
+                <Button
+                  key={day}
+                  variant="outline"
+                  className={cn(
+                    BASE_TAB_STYLE,
+                    activeTab === day ? ACTIVE_TAB_STYLE : INACTIVE_TAB_STYLE,
+                  )}
+                  onClick={() => setActiveTab(day)}
+                >
+                  DAY {day}
+                </Button>
+              ))}
+              <Button
+                variant="outline"
+                className="rounded-full border-gray-200 px-4 py-2 text-14 font-medium"
+              >
+                +
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* 일정 콘텐츠 영역 */}
-      <div className="mt-8 flex gap-6">
-        {/* 메인 콘텐츠 */}
-        <div className="flex-1">
-          {startDate && endDate ? (
-            activeTab === '전체보기' ? (
-              // 전체보기 탭에서는 모든 날짜의 일정을 보여줌
-              <div className="flex flex-col gap-6">
-                {Array.from({ length: dayCount }, (_, i) => i + 1).map(
-                  (day) => (
-                    <div key={day}>
-                      <div className="mb-4 flex items-center justify-between pb-4">
-                        <div className="flex items-center gap-3">
-                          <span className="text-16 font-medium text-[#182126]">
-                            DAY {day}
-                          </span>
-                          <span className="flex items-center text-12 font-normal text-[#182126]">
-                            {formatDayDate(startDate, day)}
-                          </span>
+        {/* 일정 콘텐츠 영역 */}
+        <div className="mt-8 flex gap-6">
+          {/* 메인 콘텐츠 */}
+          <div className="flex-1">
+            {startDate && endDate ? (
+              activeTab === '전체보기' ? (
+                // 전체보기 탭에서는 모든 날짜의 일정을 보여줌
+                <div className="flex flex-col gap-6">
+                  {Array.from({ length: dayCount }, (_, i) => i + 1).map(
+                    (day) => (
+                      <div key={day}>
+                        <div className="mb-4 flex items-center justify-between pb-4">
+                          <div className="flex items-center gap-3">
+                            <span className="text-16 font-medium text-[#182126]">
+                              DAY {day}
+                            </span>
+                            <span className="flex items-center text-12 font-normal text-[#182126]">
+                              {formatDayDate(startDate, day)}
+                            </span>
+                          </div>
+                          <div className="flex items-center">
+                            <Button
+                              variant="ghost"
+                              className="text-12 font-medium text-gray-500 hover:bg-transparent hover:text-[#698EA1]"
+                            >
+                              복사
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              className="text-12 font-medium text-red hover:bg-transparent hover:text-red"
+                            >
+                              삭제
+                            </Button>
+                          </div>
                         </div>
-                        <div className="flex items-center">
-                          <Button
-                            variant="ghost"
-                            className="text-12 font-medium text-gray-500 hover:bg-transparent hover:text-[#698EA1]"
-                          >
-                            복사
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            className="text-12 font-medium text-red hover:bg-transparent hover:text-red"
-                          >
-                            삭제
-                          </Button>
+                        <div className="flex flex-col gap-4">
+                          {renderPlaces(day)}
+                          <AddPlacePrompt dayNumber={day} />
                         </div>
                       </div>
-                      {renderPlaces(day)}
+                    ),
+                  )}
+                </div>
+              ) : (
+                // 특정 일자 탭에서는 해당 일자의 일정만 보여줌
+                <div>
+                  <div className="mb-4 flex items-center justify-between pb-4">
+                    <div className="flex items-center gap-2">
+                      <span className="text-18 font-bold text-gray-900">
+                        DAY {activeTab}
+                      </span>
+                      <span className="text-14 text-gray-600">
+                        {formatDayDate(startDate, activeTab as number)}
+                      </span>
                     </div>
-                  ),
-                )}
-              </div>
-            ) : (
-              // 특정 일자 탭에서는 해당 일자의 일정만 보여줌
-              <div>
-                <div className="mb-4 flex items-center justify-between pb-4">
-                  <div className="flex items-center gap-2">
-                    <span className="text-18 font-bold text-gray-900">
-                      DAY {activeTab}
-                    </span>
-                    <span className="text-14 text-gray-600">
-                      {formatDayDate(startDate, activeTab as number)}
-                    </span>
+                    <div className="flex items-center gap-4">
+                      <Button
+                        variant="ghost"
+                        className="text-12 font-medium text-gray-600 hover:bg-transparent hover:text-gray-900"
+                      >
+                        복사
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        className="text-12 font-medium text-red hover:bg-transparent hover:text-red/80"
+                      >
+                        삭제
+                      </Button>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-4">
-                    <Button
-                      variant="ghost"
-                      className="text-12 font-medium text-gray-600 hover:bg-transparent hover:text-gray-900"
-                    >
-                      복사
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      className="text-12 font-medium text-red hover:bg-transparent hover:text-red/80"
-                    >
-                      삭제
-                    </Button>
+                  <div className="flex flex-col gap-4">
+                    {renderPlaces(activeTab as number)}
+                    <AddPlacePrompt dayNumber={activeTab as number} />
                   </div>
                 </div>
-                {renderPlaces(activeTab as number)}
+              )
+            ) : (
+              <div className="flex items-center justify-center rounded-[12px] border border-dashed border-gray-200 py-4 text-14 text-gray-300">
+                여행 기간을 선택해 주세요
               </div>
-            )
-          ) : (
-            <div className="flex items-center justify-center rounded-[12px] border border-dashed border-gray-200 py-4 text-14 text-gray-300">
-              여행 기간을 선택해 주세요
-            </div>
-          )}
-        </div>
+            )}
+          </div>
 
-        {/* 사이드바 영역 */}
-        <PlaceSidemenu
-          userId={userId}
-          selectedDay={activeTab === '전체보기' ? null : activeTab}
-          onAddPlace={handleAddPlace}
-        />
+          {/* 사이드바 영역 */}
+          <PlaceSidemenu
+            userId={userId}
+            selectedDay={activeTab === '전체보기' ? null : activeTab}
+            onAddPlace={handleAddPlace}
+          />
+        </div>
       </div>
-    </div>
+    </DragDropContext>
   );
 };
 

@@ -22,7 +22,7 @@ export const CATEGORY_KR_MAP: Record<string, TravelCategory> = {
 };
 
 /**
- * 모든 카테고리 (항공권 포함)
+ * 메인 카테고리 (항공권 제외)
  */
 export const CATEGORIES: TravelCategory[] = [
   '전체',

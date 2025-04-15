@@ -49,7 +49,7 @@ const PopularPlaces = () => {
             <button
               key={category}
               onClick={() => handleCategoryChange(category)}
-              className={`border-solid; rounded-[28px] border-[0.6px] border-[color:var(--Gray-600,#537384)] px-3 py-1.5 text-sm font-medium transition-colors ${
+              className={`rounded-[28px] border-[0.6px] border-solid border-[color:var(--Gray-600,#537384)] px-3 py-1.5 text-sm font-medium transition-colors ${
                 activeCategory === category
                   ? 'border-[#F60] bg-primary-100 text-primary-800'
                   : 'border-[color:var(--Gray-600,#537384)] text-gray-600'

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -38,6 +38,15 @@ const PlanHeader = ({
   planImage: string | null;
   setPlanImage: (image: string | null) => void;
 }) => {
+  // 컴포넌트가 언마운트될 때 객체 URL 해제
+  useEffect(() => {
+    return () => {
+      if (planImage) {
+        URL.revokeObjectURL(planImage);
+      }
+    };
+  }, [planImage]);
+
   return (
     <>
       <div className="mt-6 flex gap-4">

@@ -74,7 +74,7 @@ const CharacterModal = ({
             {secondaryButton && (
               <Button
                 onClick={secondaryButton.onClick}
-                className="semibold-20 flex flex-[1_0_0] items-center justify-center gap-[10px] self-stretch rounded-[12px] border-[1.5px] border-secondary-300 bg-white px-4 py-[10px] text-secondary-300 hover:bg-white hover:text-secondary-300"
+                className="semibold-20 flex flex-[1_0_0] items-center justify-center gap-[10px] self-stretch rounded-[12px] border-[1.5px] border-secondary-300 bg-white px-4 py-[10px] text-secondary-300 hover:bg-gray-50"
               >
                 {secondaryButton.text}
               </Button>
@@ -82,7 +82,7 @@ const CharacterModal = ({
             {primaryButton && (
               <Button
                 onClick={primaryButton.onClick}
-                className="semibold-20 flex flex-[1_0_0] items-center justify-center gap-[10px] self-stretch rounded-[12px] border-[1.5px] border-primary-500 bg-primary-500 px-4 py-[10px] text-white hover:bg-primary-500 hover:text-white"
+                className="semibold-20 flex flex-[1_0_0] items-center justify-center gap-[10px] self-stretch rounded-[12px] border-[1.5px] border-primary-500 bg-primary-500 px-4 py-[10px] text-white hover:bg-primary-600 hover:text-white"
               >
                 {primaryButton.text}
               </Button>

@@ -401,7 +401,7 @@ export type Database = {
         };
       };
       get_plans: {
-        Args: { user_id_param: string | null };
+        Args: { user_id_param: string | null; sort_option: string | undefined };
         Returns: {
           plan_id: number;
           plan_img: string;

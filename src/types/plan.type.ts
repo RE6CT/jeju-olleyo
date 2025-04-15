@@ -74,7 +74,6 @@ export type FilterInputProps = {
 
 export type PlanVerticalCardProps = {
   plan: PlanCardType;
-  userId: string | null;
 };
 
 /**

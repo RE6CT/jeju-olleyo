@@ -110,14 +110,27 @@ export const fetchDeletePlan = async (planId: number) => {
 /**
  * 전체 일정을 가져오는 함수
  * @param userId - 사용자의 userId
+ * @param limit - 개수 제한
+ * @param sortOption - 정렬 옵션
  * @returns 좋아요 여부가 포함된 전체 일정 목록
  */
-export const fetchAllPlans = async (userId: string | null) => {
+export const fetchAllPlans = async (
+  userId: string | null = null,
+  sortOption: string = 'popular',
+  limit?: number,
+) => {
   const supabase = await getServerClient();
 
-  const { data, error } = await supabase.rpc('get_plans', {
+  let query = supabase.rpc('get_plans', {
     user_id_param: userId,
+    sort_option: sortOption,
   });
+
+  if (limit) {
+    query = query.limit(limit);
+  }
+
+  const { data, error } = await query;
 
   if (error) throw new Error(error.message);
 

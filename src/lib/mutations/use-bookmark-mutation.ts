@@ -36,6 +36,10 @@ export const useBookmarkMutation = () => {
         queryClient.invalidateQueries({ queryKey: ['popularPlaces'] });
       }
     },
+    onError: (error) => {
+      console.error('북마크 작업 실패:', error);
+      alert('북마크 작업 중 오류가 발생했습니다.');
+      },
   });
 
   return {

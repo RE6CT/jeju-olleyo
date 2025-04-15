@@ -5,7 +5,7 @@ export type PlaceWithLiked = {
   title: string;
   image: string;
   address: string;
-  category: string;
+  category: Category;
   is_liked: boolean;
 };
 
@@ -14,7 +14,7 @@ export type Place = {
   title: string;
   image: string | null;
   address: string;
-  category: string;
+  category: Category;
   isBookmarked: boolean;
 };
 
@@ -32,7 +32,7 @@ export type PlaceResponse = {
   title: string;
   image: string;
   address: string;
-  category: string;
+  category: Category;
   content_type: number;
   is_liked: boolean;
 };

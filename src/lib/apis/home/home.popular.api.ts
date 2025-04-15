@@ -2,6 +2,7 @@ import { getBrowserClient } from '@/lib/supabase/client';
 import { camelize } from '@/lib/utils/camelize';
 import { CATEGORY_KR_MAP } from '@/constants/home.constants';
 import { Place, PlaceResponse } from '@/types/home.popular-place.type';
+import { TravelCategory } from '@/types/home.category.type';
 
 /**
  * 전체 일정을 가져오는 함수
@@ -60,12 +61,6 @@ export const fetchGetPlacesByCategory = async (urlcategory: string) => {
  * @param userId - 현재 로그인한 사용자의 ID (선택적)
  * @returns 장소 목록 데이터
  */
-/**
- * 인기 장소 목록을 가져오는 함수
- * @param category - 장소 카테고리 (기본값: '전체')
- * @param userId - 현재 로그인한 사용자의 ID (선택적)
- * @returns 장소 목록 데이터
- */
 export const getPopularPlaces = async (
   category: string = '전체',
   userId?: string,
@@ -85,7 +80,7 @@ export const getPopularPlaces = async (
 
     if (error) {
       console.error('인기 장소를 가져오는데 실패했습니다:', error);
-      return [];
+      throw new Error(`인기 장소를 가져오는데 실패했습니다: ${error.message}`);
     }
 
     return (data as PlaceResponse[]).map((place) => ({
@@ -98,7 +93,7 @@ export const getPopularPlaces = async (
     }));
   } catch (err) {
     console.error('데이터 처리 중 오류:', err);
-    return [];
+    throw err;
   }
 };
 
@@ -108,11 +103,18 @@ export const getPopularPlaces = async (
  * @param userId - 사용자 ID
  * @returns 성공 여부와 에러 객체
  */
-export const addBookmark = async (placeId: number, userId: string) => {
+export const addBookmark = async (
+  placeId: number,
+  userId: string,
+): Promise<{ success: boolean; data: any; error: any }> => {
   const supabase = getBrowserClient();
   const { data, error } = await supabase
     .from('bookmarks')
     .insert([{ place_id: placeId, user_id: userId }]);
+
+  if (error) {
+    console.error('북마크 추가 중 오류:', error);
+  }
 
   return { success: !error, data, error };
 };
@@ -123,13 +125,18 @@ export const addBookmark = async (placeId: number, userId: string) => {
  * @param userId - 사용자 ID
  * @returns 성공 여부와 에러 객체
  */
-export const removeBookmark = async (placeId: number, userId: string) => {
+export const removeBookmark = async (
+  placeId: number,
+  userId: string,
+): Promise<{ success: boolean; data: any; error: any }> => {
   const supabase = getBrowserClient();
   const { data, error } = await supabase
     .from('bookmarks')
     .delete()
     .eq('place_id', placeId)
     .eq('user_id', userId);
-
+  if (error) {
+    console.error('북마크 삭제 중 오류:', error);
+  }
   return { success: !error, data, error };
 };

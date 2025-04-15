@@ -41,6 +41,7 @@ const PlaceCard = ({
   duration,
   imageUrl = '/images/default_place_image.svg',
   isLastItem = false,
+  onDelete,
 }: {
   index: number;
   dayNumber: number;
@@ -51,6 +52,7 @@ const PlaceCard = ({
   duration?: number;
   imageUrl?: string;
   isLastItem?: boolean;
+  onDelete?: () => void;
 }) => {
   const dayColorSet = dayNumber % 2 === 1 ? COLORS.ODD : COLORS.EVEN;
 
@@ -66,7 +68,9 @@ const PlaceCard = ({
       {/* 카드 본문 */}
       <div className="flex w-full items-center gap-5 rounded-lg border border-gray-100 bg-white p-4 shadow-[0px_2px_4px_1px_rgba(0,0,0,0.10)]">
         {/* 장소 이미지 */}
-        <div className="shrink-0 overflow-hidden">
+        <div
+          className={`h-[${PLACE_IMAGE_SIZE.height}px] w-[${PLACE_IMAGE_SIZE.width}px] shrink-0 overflow-hidden`}
+        >
           <Image
             src={imageUrl}
             alt={title}
@@ -123,13 +127,12 @@ const PlaceCard = ({
         </div>
 
         {/* 삭제 버튼 */}
-        <button className="shrink-0 self-start p-1">
+        <button className="shrink-0 self-start p-1" onClick={onDelete}>
           <Image
             src="/icons/close.svg"
             alt="삭제"
             width={BUTTON_SIZE.width}
             height={BUTTON_SIZE.height}
-            className="text-gray-300"
           />
         </button>
       </div>

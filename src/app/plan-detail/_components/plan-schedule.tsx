@@ -66,10 +66,33 @@ const PlanSchedule = ({
   };
 
   /**
+   * 장소 삭제 핸들러
+   * @param dayNumber 일자
+   * @param placeIndex 장소 인덱스
+   * @example
+   * handleDeletePlace(1, 0)
+   * 1일차 장소 중 첫 번째 장소를 삭제
+   */
+  const handleDeletePlace = (dayNumber: number, placeIndex: number) => {
+    setDayPlaces((prev: DayPlaces) => {
+      const currentDayPlaces = [...(prev[dayNumber] || [])];
+      currentDayPlaces.splice(placeIndex, 1);
+
+      const newState = {
+        ...prev,
+        [dayNumber]: currentDayPlaces,
+      };
+
+      return newState;
+    });
+  };
+
+  /**
    * 일정 리스트 콘텐츠 렌더링
    */
   const renderPlaces = (day: number) => {
     const places = dayPlaces[day] || [];
+
     if (places.length === 0) return <AddPlacePrompt dayNumber={day} />;
 
     return (
@@ -84,6 +107,7 @@ const PlanSchedule = ({
             address={place.address}
             imageUrl={place.image || undefined}
             isLastItem={index === places.length - 1}
+            onDelete={() => handleDeletePlace(day, index)}
           />
         ))}
         <AddPlacePrompt dayNumber={day} />

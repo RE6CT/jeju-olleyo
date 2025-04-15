@@ -9,7 +9,7 @@ export type UsersRow = Pick<
 >;
 
 // PlansRow를 CamelCase로 변환한 타입
-export type Plan = CamelCaseObject<PlansRow & UsersRow>;
+export type Plan = CamelCaseObject<PlansRow & UsersRow & { is_liked: boolean }>;
 
 // 플랜 카드에서 쓰는 타입 (좋아요 포함)
 export type PlanCardType = {

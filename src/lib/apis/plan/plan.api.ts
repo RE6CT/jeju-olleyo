@@ -7,7 +7,6 @@ import {
   isDateGreaterThanOrEqual,
   isDateLessThanOrEqual,
 } from '@/lib/utils/date';
-import { fetchGetCurrentUser } from '../auth/auth-server.api';
 import { CommunitySortType } from '@/types/community.type';
 
 /**

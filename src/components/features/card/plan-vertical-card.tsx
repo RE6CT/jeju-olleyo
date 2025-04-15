@@ -3,6 +3,7 @@ import PlanImage from '@/components/commons/plan-image';
 import { Separator } from '@/components/ui/separator';
 import { PlanVerticalCardProps } from '@/types/plan.type';
 import Link from 'next/link';
+import LikeButton from '../like-button';
 
 /**
  * vertical한 플랜 카드 컴포넌트
@@ -19,20 +20,11 @@ const PlanVerticalCard = ({ plan }: PlanVerticalCardProps) => {
             className="rounded-12"
           />
         </div>
-        {/* 추후 기능 추가된 좋아요 버튼이 생긴다면 이 부분을 대체하면 됩니다. */}
-        <button className="absolute right-4 top-4">
-          <svg
-            width="40"
-            height="40"
-            viewBox="0 0 48 48"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M15.0855 7C9.06817 7 4.18994 11.8782 4.18994 17.8955C4.18994 28.7911 17.0665 38.6961 24 41C30.9335 38.6961 43.81 28.7911 43.81 17.8955C43.81 11.8782 38.9318 7 32.9145 7C29.2298 7 25.9711 8.82946 24 11.6296C22.9951 10.1987 21.6604 9.03094 20.1087 8.22508C18.557 7.41923 16.834 6.99901 15.0855 7Z"
-              className={`${plan.isLiked ? 'fill-primary-500' : 'fill-gray-200'}`}
-            />
-          </svg>
-        </button>
+        <LikeButton
+          planId={plan.planId}
+          isLiked={plan.isLiked}
+          className="absolute right-4 top-4"
+        />
       </div>
 
       <div className="flex flex-col gap-1 p-2">

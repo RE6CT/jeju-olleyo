@@ -1,12 +1,17 @@
 const Loading = () => {
   return (
     <>
-      <div className="animate-rollAcross fixed left-0 top-1/4 h-[400px] w-[300px] -translate-y-1/2">
+      <div
+        className="fixed left-0 top-1/4 h-[400px] w-[300px] -translate-y-1/2 animate-rollAcross"
+        role="status"
+        aria-label="로딩 중"
+      >
         <svg
           viewBox="0 0 129 125"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           className="h-full w-full"
+          aria-hidden="true"
         >
           <g clipPath="url(#clip0_261_202)">
             <path
@@ -101,6 +106,7 @@ const Loading = () => {
             </clipPath>
           </defs>
         </svg>
+        <span className="sr-only">로딩 중...</span>
       </div>
     </>
   );

@@ -4,7 +4,11 @@ const EmptyResult = () => {
   return (
     <>
       <div className="flex min-h-screen flex-col items-center justify-center bg-white px-4 text-center">
-        <div className="w-full max-w-[625px]">
+        <div
+          className="w-full max-w-[625px]"
+          role="img"
+          aria-label="검색 결과가 없습니다"
+        >
           <svg
             width="625"
             height="331"

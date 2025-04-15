@@ -4,6 +4,7 @@ import { fetchgetSingleLike } from '../apis/like/get-like.api';
 import { getCurrentSession } from '../apis/auth/auth-browser.api';
 import fetchDeleteLike from '../apis/like/delete-like.api';
 import fetchUpdateLikeByUserId from '../apis/like/add-like.api';
+import { useInvalidateLikes } from '../mutations/use-like-mutation';
 
 /**
  * 좋아요 토글 함수를 반환하는 커스텀 훅
@@ -11,6 +12,8 @@ import fetchUpdateLikeByUserId from '../apis/like/add-like.api';
  * @returns
  */
 const useToggleLike = (planId: number) => {
+  const { invalidateLikes } = useInvalidateLikes();
+
   const toggleLike = async () => {
     const { user: sessionUser } = await getCurrentSession();
     const userId = sessionUser?.id;
@@ -27,6 +30,8 @@ const useToggleLike = (planId: number) => {
     } else {
       await fetchUpdateLikeByUserId(planId, userId);
     }
+
+    invalidateLikes();
   };
 
   return { toggleLike };

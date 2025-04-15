@@ -22,7 +22,7 @@ const LikeButton = ({
   const { toggleLike } = useToggleLike(planId);
 
   return (
-    <div className={`${className}`}>
+    <div className={`hover:scale-105 active:scale-95 ${className}`}>
       <LikeIcon isLiked={isLiked} onToggle={toggleLike} />
     </div>
   );

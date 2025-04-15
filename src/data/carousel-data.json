@@ -2,7 +2,7 @@
   {
     "id": 1,
     "title": "명소 배너",
-    "image_url": "/banner-images/olleyo-banner1.svg",
+    "image_url": "/banner-images/olleyo-banner1.jpg",
     "link_url": "/",
     "display_order": 1,
     "is_active": true
@@ -10,7 +10,7 @@
   {
     "id": 2,
     "title": "유채꽃 배너",
-    "image_url": "/banner-images/olleyo-banner2.svg",
+    "image_url": "/banner-images/olleyo-banner2.jpg",
     "link_url": "/",
     "display_order": 2,
     "is_active": true
@@ -18,7 +18,7 @@
   {
     "id": 3,
     "title": "올레 렌트 배너",
-    "image_url": "/banner-images/olleyo-banner3.svg",
+    "image_url": "/banner-images/olleyo-banner3.jpg",
     "link_url": "/",
     "display_order": 3,
     "is_active": true
@@ -26,7 +26,7 @@
   {
     "id": 4,
     "title": "제주 오름 완전 정복",
-    "image_url": "/banner-images/olleyo-banner4.svg",
+    "image_url": "/banner-images/olleyo-banner4.jpg",
     "link_url": "/",
     "display_order": 4,
     "is_active": true

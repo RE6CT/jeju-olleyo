@@ -13,7 +13,7 @@ import { useRouter } from 'next/navigation';
  * @param buttonUrl - 버튼 클릭 시 이동할 URL
  */
 const JejuBanner = ({
-  imageUrl = '/banner-images/plan-banner.svg',
+  imageUrl = '/banner-images/plan-banner.jpg',
   title = '나만의 제주 여행 계획하기',
   buttonText = '내 일정 만들러 가기 >',
   buttonUrl = '/planner',

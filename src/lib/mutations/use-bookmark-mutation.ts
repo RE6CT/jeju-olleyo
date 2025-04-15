@@ -26,20 +26,24 @@ export const useBookmarkMutation = () => {
 
       // 로그인한 경우에만 북마크 기능 사용
       if (isBookmarked) {
-        return removeBookmark(placeId, user.id);
+        await removeBookmark(placeId, user.id);
+        return { success: true };
       } else {
-        return addBookmark(placeId, user.id);
+        await addBookmark(placeId, user.id);
+        return { success: true };
       }
     },
     onSuccess: (result) => {
       if (result.success) {
         queryClient.invalidateQueries({ queryKey: ['popularPlaces'] });
+        queryClient.invalidateQueries({ queryKey: ['bookmarks'] });
+        queryClient.invalidateQueries({ queryKey: ['dataCount'] });
       }
     },
     onError: (error) => {
       console.error('북마크 작업 실패:', error);
       alert('북마크 작업 중 오류가 발생했습니다.');
-      },
+    },
   });
 
   return {

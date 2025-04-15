@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -21,6 +21,8 @@ import ScheduleSaveModal from './schedule-save-modal';
 import { fetchSavePlan, fetchSavePlanPlaces } from '@/lib/apis/plan/plan.api';
 import PlanCardModal from '@/components/features/plan/plan-card-modal';
 import ScheduleCreatedModal from './schedule-created-modal';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { AlertCircle } from 'lucide-react';
 
 const BASE_TAB_STYLE =
   'flex items-center justify-center gap-[10px] rounded-[28px] border px-5 py-2 text-14 font-medium transition-colors';
@@ -80,6 +82,21 @@ const PlanSchedule = ({
   const [dayToDelete, setDayToDelete] = useState<number | null>(null);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const [isPublicModalOpen, setIsPublicModalOpen] = useState(false);
+  const [alert, setAlert] = useState<{
+    title: string;
+    description: string;
+  } | null>(null);
+
+  // Alert를 자동으로 제거하는 useEffect 추가
+  useEffect(() => {
+    if (alert) {
+      const timer = setTimeout(() => {
+        setAlert(null);
+      }, 3000); // 3초 후에 Alert 제거
+
+      return () => clearTimeout(timer);
+    }
+  }, [alert]);
 
   /**
    * 장소 추가 핸들러
@@ -300,7 +317,10 @@ const PlanSchedule = ({
 
   const handleSaveButtonClick = () => {
     if (!planTitle) {
-      alert('일정 제목을 입력해주세요.');
+      setAlert({
+        title: '일정 제목 누락',
+        description: '일정 제목을 입력해주세요.',
+      });
       return;
     }
     setIsSaveModalOpen(false);
@@ -328,11 +348,13 @@ const PlanSchedule = ({
       // 일정 상세 장소 저장
       await fetchSavePlanPlaces(planId, dayPlaces);
 
-      alert('일정이 공개로 저장되었습니다.');
       setIsPublicModalOpen(false);
     } catch (error) {
       console.error('일정 공개 설정 실패:', error);
-      alert('일정 공개 설정에 실패했습니다.');
+      setAlert({
+        title: '일정 저장 실패',
+        description: '일정 공개 설정에 실패했습니다.',
+      });
     }
   };
 
@@ -357,16 +379,30 @@ const PlanSchedule = ({
       // 일정 상세 장소 저장
       await fetchSavePlanPlaces(planId, dayPlaces);
 
-      alert('일정이 비공개로 저장되었습니다.');
       setIsPublicModalOpen(false);
     } catch (error) {
       console.error('일정 비공개 설정 실패:', error);
-      alert('일정 비공개 설정에 실패했습니다.');
+      setAlert({
+        title: '일정 저장 실패',
+        description: '일정 비공개 설정에 실패했습니다.',
+      });
     }
   };
 
   return (
     <div className="relative min-h-screen pb-32">
+      {alert && (
+        <Alert
+          variant={alert.title.includes('실패') ? 'destructive' : 'default'}
+          className="text-red-500 border-red-500 fixed bottom-4 left-4 z-50 w-auto animate-in fade-in slide-in-from-bottom-4"
+        >
+          <AlertCircle className="text-red-500 h-4 w-4" />
+          <AlertTitle className="text-red-500">{alert.title}</AlertTitle>
+          <AlertDescription className="text-red-500">
+            {alert.description}
+          </AlertDescription>
+        </Alert>
+      )}
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className="my-6">
           {/* 탭 네비게이션 */}

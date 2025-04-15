@@ -29,7 +29,7 @@ export type PlanCardProp = {
 
 export type PlaceCardProps = {
   placeId: number;
-  image: string;
+  image: string | null;
   title: string;
   isLiked: boolean;
   className?: string;

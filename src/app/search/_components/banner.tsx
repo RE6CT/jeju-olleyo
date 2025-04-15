@@ -1,10 +1,26 @@
-import React from 'react';
+'use client';
+
+import { useMemo } from 'react';
+
+const bannerImages = [
+  '/line-banner-images/farm_ad.png',
+  '/line-banner-images/resort_ad.png',
+];
 
 const Banner = () => {
+  const randomImage = useMemo(() => {
+    const index = Math.floor(Math.random() * bannerImages.length);
+    return bannerImages[index];
+  }, []);
+
   return (
-    <div className="mb-4 mt-4 flex h-20 w-full items-center justify-center rounded-md bg-gray-200">
-      <span className="text-xs text-gray-600">배너 영역</span>
-    </div>
+    <>
+      <img
+        src={randomImage}
+        alt="랜덤 배너"
+        className="mt-[42px] h-[120px] w-full"
+      />
+    </>
   );
 };
 

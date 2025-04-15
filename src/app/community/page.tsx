@@ -20,7 +20,7 @@ const Community = async ({
   return (
     <>
       <JejuBanner
-        imageUrl="/banner-images/plan-banner.svg"
+        imageUrl="/banner-images/plan-banner.jpg"
         title="나만의 제주 여행 계획하기"
         buttonText="내 일정 만들러 가기"
         buttonUrl={PATH.PLAN_NEW}

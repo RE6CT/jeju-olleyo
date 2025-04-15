@@ -16,16 +16,27 @@ const ACTIVE_TAB_STYLE =
 const INACTIVE_TAB_STYLE =
   'border-[0.6px] border-gray-600 bg-white text-gray-900 hover:bg-gray-100 hover:text-gray-900';
 
-const AddPlacePrompt = () => (
-  <div className="mt-4 flex items-center gap-3">
-    <div className="flex h-[24px] w-[24px] flex-col items-center justify-center gap-[10px] rounded-[12px] bg-primary-500 px-2 text-white">
-      +
+const COLORS = {
+  ODD: 'bg-primary-500',
+  EVEN: 'bg-secondary-300',
+} as const;
+
+const AddPlacePrompt = ({ dayNumber }: { dayNumber: number }) => {
+  const dayColor = dayNumber % 2 === 1 ? COLORS.ODD : COLORS.EVEN;
+
+  return (
+    <div className="mt-4 flex items-center gap-3">
+      <div
+        className={`flex h-[24px] w-[24px] flex-col items-center justify-center gap-[10px] rounded-[12px] ${dayColor} px-2 text-white`}
+      >
+        +
+      </div>
+      <span className="pointer-events-none flex w-full items-center rounded-lg bg-gray-50 px-4 py-3 text-12 font-medium text-gray-400">
+        검색을 통해 새로운 장소를 추가하세요
+      </span>
     </div>
-    <span className="pointer-events-none flex w-full items-center rounded-lg bg-gray-50 px-4 py-3 text-12 font-medium text-gray-400">
-      검색을 통해 새로운 장소를 추가하세요
-    </span>
-  </div>
-);
+  );
+};
 
 const PlanSchedule = ({
   startDate,
@@ -41,7 +52,7 @@ const PlanSchedule = ({
   const [dayPlaces, setDayPlaces] = useState<DayPlaces>({});
 
   const handleAddPlace = (newPlace: Place) => {
-    if (activeTab === '전체보기') return; // 모달 표시
+    if (activeTab === '전체보기') return;
 
     setDayPlaces((prev: DayPlaces) => {
       const dayNumber = activeTab as number;
@@ -59,7 +70,7 @@ const PlanSchedule = ({
    */
   const renderPlaces = (day: number) => {
     const places = dayPlaces[day] || [];
-    if (places.length === 0) return <AddPlacePrompt />;
+    if (places.length === 0) return <AddPlacePrompt dayNumber={day} />;
 
     return (
       <div className="flex flex-col gap-4">
@@ -67,13 +78,15 @@ const PlanSchedule = ({
           <PlaceCard
             key={place.id}
             index={index + 1}
+            dayNumber={day}
             category={place.category}
             title={place.title}
             address={place.address}
             imageUrl={place.image || undefined}
+            isLastItem={index === places.length - 1}
           />
         ))}
-        <AddPlacePrompt />
+        <AddPlacePrompt dayNumber={day} />
       </div>
     );
   };

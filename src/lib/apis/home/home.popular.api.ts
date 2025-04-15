@@ -1,7 +1,7 @@
 import { getBrowserClient } from '@/lib/supabase/client';
 import { camelize } from '@/lib/utils/camelize';
 import { CATEGORY_KR_MAP } from '@/constants/home.constants';
-import { Place, PlaceWithLiked } from '@/types/home.popular-place.type';
+import { Place, PlaceResponse } from '@/types/home.popular-place.type';
 
 /**
  * 전체 일정을 가져오는 함수
@@ -88,8 +88,7 @@ export const getPopularPlaces = async (
       return [];
     }
 
-    // 응답 데이터를 any로 처리하고 명시적으로 매핑
-    return (data as any[]).map((place) => ({
+    return (data as PlaceResponse[]).map((place) => ({
       id: place.place_id,
       title: place.title,
       image: place.image,

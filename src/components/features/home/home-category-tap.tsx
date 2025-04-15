@@ -3,7 +3,7 @@
 import { memo, useCallback, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import useCategoryNavigation from '@/lib/hooks/use-category-navigation';
-import { CategoryTabsProps } from '@/types/home.category.type';
+import { CategoryTabsProps, TravelCategory } from '@/types/home.category.type';
 import { CATEGORIES } from '@/constants/home.constants';
 
 /**
@@ -54,7 +54,7 @@ const CategoryTabs = memo(({ className }: CategoryTabsProps) => {
   // 카테고리 버튼 클릭 핸들러 생성 - 성능 최적화
   const createCategoryClickHandler = useCallback(
     (category: string) => {
-      return () => navigateToCategory(category as any);
+      return () => navigateToCategory(category as TravelCategory);
     },
     [navigateToCategory],
   );

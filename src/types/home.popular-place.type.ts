@@ -26,3 +26,13 @@ export type BookmarkStore = {
 };
 
 export type Category = (typeof BOTTOM_CATEGORIES)[number];
+
+export type PlaceResponse = {
+  place_id: number;
+  title: string;
+  image: string;
+  address: string;
+  category: string;
+  content_type: number;
+  is_liked: boolean;
+};

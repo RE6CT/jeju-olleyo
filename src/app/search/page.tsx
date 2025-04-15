@@ -2,15 +2,13 @@
 
 import { useSearchParams } from 'next/navigation';
 import Banner from './_components/banner';
-import PlaceImage from '@/components/commons/place-image';
 import useSearch from '@/lib/hooks/use-search';
 import Loading from '../loading';
 import EmptyResult from './_components/empty-result';
-import { Suspense, useState } from 'react';
+import { useState } from 'react';
+import PlaceCard from '@/components/features/card/place-card';
 
-// TODO : 카드 컴포넌트 머지 후 div 요소 교체 필요 - 링크, 좋아요, 북마크 다 삽입될 예정
 // TODO : 디자이너님 배너 제작 후 배너 삽입 예정
-// TODO : 검색 중 상태일 때 사용될 수 있는 이미지 있는지 디자이너님께 문의 필요.
 
 const CATEGORIES = ['전체', '명소', '숙박', '맛집', '카페'];
 
@@ -59,26 +57,25 @@ const SearchResultsPage = () => {
             const slice = filteredResults.slice(i, i + 8);
 
             grouped.push(
-              <ul key={`group-${i}`} className="mb-6 grid grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 {slice.map((place) => (
-                  <li key={place.place_id}>
-                    <div className="relative aspect-square">
-                      <Suspense fallback={<Loading />}>
-                        <PlaceImage image={place.image} title={place.title} />
-                      </Suspense>
-                    </div>
-
-                    <div className="text-sm font-semibold">{place.title}</div>
-                  </li>
+                  <PlaceCard
+                    key={place.id}
+                    className="m-[11px] h-[230px] w-[230px]"
+                    placeId={place.id}
+                    image={place.image}
+                    title={place.title}
+                    isLiked
+                  />
                 ))}
-              </ul>,
+              </div>,
             );
 
             // 8개마다 배너 삽입
             if (i + 8 < results.length) {
               grouped.push(
-                <div key={`banner-${i}`}>
-                  <Banner />
+                <div className="mt-4">
+                  <Banner key={`banner-${i}`} />
                 </div>,
               );
             }

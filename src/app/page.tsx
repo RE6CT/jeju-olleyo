@@ -6,6 +6,7 @@ import Loading from '@/app/loading';
 import JejuBanner from '@/components/features/banner/jeju-banner';
 import { PATH } from '@/constants/path.constants';
 import PopularSchedules from '@/components/features/home/home-popular-schedules';
+import PopularPlaces from '@/components/features/home/home-popular-places';
 
 /**
  * 홈 페이지 컴포넌트
@@ -37,6 +38,13 @@ const Home = () => {
       {/* 인기 일정 섹션 */}
       <section>
         <PopularSchedules />
+      </section>
+
+      {/* 인기 장소 섹션 */}
+      <section>
+        <Suspense fallback={<Loading />}>
+          <PopularPlaces />
+        </Suspense>
       </section>
 
       {/* 내 일정 만들러 가기 배너 섹션*/}

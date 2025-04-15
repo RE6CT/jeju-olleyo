@@ -125,3 +125,12 @@
     @apply text-10 font-regular;
   }
 }
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* 드래그 중일 때 스타일 */
+.active {
+  cursor: grabbing !important;
+}

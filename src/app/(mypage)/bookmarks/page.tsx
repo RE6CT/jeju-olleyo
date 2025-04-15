@@ -33,6 +33,7 @@ const BookmarksPage = async () => {
               image={place.image}
               title={place.title}
               isLiked={true}
+              isDragging={false}
             />
           ))}
         </div>

@@ -323,6 +323,32 @@ const PlanSchedule = ({
       });
       return;
     }
+
+    if (!startDate || !endDate) {
+      setAlert({
+        title: '여행 기간 누락',
+        description: '여행 기간을 선택해주세요.',
+      });
+      return;
+    }
+
+    if (startDate > endDate) {
+      setAlert({
+        title: '여행 기간 오류',
+        description: '여행 종료일은 시작일보다 이후여야 합니다.',
+      });
+      return;
+    }
+
+    // 일정 일자 데이터가 없는 경우
+    if (Object.keys(dayPlaces).length === 0) {
+      setAlert({
+        title: '일정 데이터 누락',
+        description: '일정에 최소 하나 이상의 장소를 추가해주세요.',
+      });
+      return;
+    }
+
     setIsSaveModalOpen(false);
     setIsPublicModalOpen(true);
   };

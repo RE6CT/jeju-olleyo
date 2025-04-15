@@ -99,6 +99,18 @@ const PlanSchedule = ({
   };
 
   /**
+   * 특정 일자의 모든 장소를 삭제하는 핸들러
+   * @param dayNumber 삭제할 일자
+   */
+  const handleDeleteDayPlaces = (dayNumber: number) => {
+    setDayPlaces((prev: DayPlaces) => {
+      const newDayPlaces = { ...prev };
+      delete newDayPlaces[dayNumber]; // 특정 일자의 장소를 삭제
+      return newDayPlaces;
+    });
+  };
+
+  /**
    * 드래그 앤 드랍 핸들러
    * @param result 드래그 앤 드랍 결과
    * @example
@@ -291,6 +303,7 @@ const PlanSchedule = ({
                             <Button
                               variant="ghost"
                               className="text-12 font-medium text-red hover:bg-transparent hover:text-red"
+                              onClick={() => handleDeleteDayPlaces(day)}
                             >
                               삭제
                             </Button>
@@ -326,6 +339,9 @@ const PlanSchedule = ({
                       <Button
                         variant="ghost"
                         className="text-12 font-medium text-red hover:bg-transparent hover:text-red/80"
+                        onClick={() =>
+                          handleDeleteDayPlaces(activeTab as number)
+                        }
                       >
                         삭제
                       </Button>

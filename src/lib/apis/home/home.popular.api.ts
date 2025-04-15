@@ -12,7 +12,6 @@ export const fetchAllPlans = async (userId: string | null, limit?: number) => {
 
   let query = supabase.rpc('get_plans', {
     user_id_param: userId,
-    sort_option: 'popular',
   });
 
   if (limit) {

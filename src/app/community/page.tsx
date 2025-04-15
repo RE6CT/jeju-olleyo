@@ -1,8 +1,9 @@
 import JejuBanner from '@/components/features/banner/jeju-banner';
 import { PATH } from '@/constants/path.constants';
 import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
-import { fetchAllPlans } from '@/lib/apis/plan/plan.api';
+import { fetchGetAllPlans } from '@/lib/apis/plan/plan.api';
 import CommunityPlanList from './_components/community-plan-list';
+import { CommunitySortType } from '@/types/community.type';
 
 const Community = async ({
   searchParams,
@@ -13,8 +14,8 @@ const Community = async ({
   const userId = user.user?.id || null;
 
   // 쿼리 파라미터에서 sort 값 가져오기
-  const sort = searchParams.sort || 'popular';
-  const plans = await fetchAllPlans(userId, sort);
+  const sort = (searchParams.sort as CommunitySortType) || 'popular';
+  const plans = await fetchGetAllPlans(userId, sort);
 
   return (
     <>

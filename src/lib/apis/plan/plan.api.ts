@@ -8,6 +8,7 @@ import {
   isDateLessThanOrEqual,
 } from '@/lib/utils/date';
 import { fetchGetCurrentUser } from '../auth/auth-server.api';
+import { CommunitySortType } from '@/types/community.type';
 
 /**
  * 사용자의 일정 목록을 가져오는 API
@@ -114,9 +115,9 @@ export const fetchDeletePlan = async (planId: number) => {
  * @param sortOption - 정렬 옵션
  * @returns 좋아요 여부가 포함된 전체 일정 목록
  */
-export const fetchAllPlans = async (
+export const fetchGetAllPlans = async (
   userId: string | null = null,
-  sortOption: string = 'popular',
+  sortOption: CommunitySortType = 'popular',
   limit?: number,
 ) => {
   const supabase = await getServerClient();

@@ -15,13 +15,13 @@ const BookmarkIcon = ({
     <Button
       onClick={onToggle}
       variant="ghost"
-      className="flex h-6 w-6 cursor-pointer items-center justify-center border-none bg-transparent p-0 hover:bg-transparent"
+      className="flex h-8 w-8 cursor-pointer items-center justify-center border-none bg-transparent p-0 hover:bg-transparent"
       aria-label={isBookmarked ? '북마크 해제' : '북마크'}
     >
       <svg
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
+        width="20"
+        height="20"
+        viewBox="0 0 20 20"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >

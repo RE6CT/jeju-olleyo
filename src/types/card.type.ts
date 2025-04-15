@@ -33,4 +33,5 @@ export type PlaceCardProps = {
   title: string;
   isLiked: boolean;
   className?: string;
+  isDragging: boolean;
 };

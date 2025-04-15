@@ -21,6 +21,7 @@ const PlaceImage = ({ image, className, title, ...props }: PlaceImageProps) => {
       src={placeImage}
       alt={title}
       fill
+      draggable="false"
       className={`object-cover ${className}`}
       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
       {...props}

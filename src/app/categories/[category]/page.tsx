@@ -1,5 +1,3 @@
-import fetchGetPlacesByCategory from '@/lib/apis/search/get-place-by-categories.api';
-import fetchGetAllPlaces from '@/lib/apis/search/get-place.api';
 import {
   dehydrate,
   HydrationBoundary,

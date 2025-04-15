@@ -29,12 +29,13 @@ export const fetchAllPlans = async (userId: string | null, limit?: number) => {
 };
 
 /**
- *
- * @param urlcategory - params로 받아온 toursite, restaurant, cafe, accomodation
- * krCategory - 위 urlcategory를 수파베이스 컬럼 분류에 맞게 교체.
- *
+ * URL 카테고리에 해당하는 장소 목록을 가져오는 함수
+ * @param urlcategory - URL에서 받아온 카테고리 (toursite, restaurant, cafe, accomodation 등)
+ * @returns 해당 카테고리의 장소 목록
  */
-export const fetchGetPlacesByCategory = async (urlcategory: string) => {
+export const fetchGetPlacesByCategory = async (
+  urlcategory: string,
+): Promise<any[]> => {
   try {
     const supabase = getBrowserClient();
 
@@ -106,7 +107,11 @@ export const getPopularPlaces = async (
 export const addBookmark = async (
   placeId: number,
   userId: string,
-): Promise<{ success: boolean; data: any; error: any }> => {
+): Promise<{
+  success: boolean;
+  data: null | { place_id: number; user_id: string }[];
+  error: null | { message: string; code: string };
+}> => {
   const supabase = getBrowserClient();
   const { data, error } = await supabase
     .from('bookmarks')
@@ -128,7 +133,11 @@ export const addBookmark = async (
 export const removeBookmark = async (
   placeId: number,
   userId: string,
-): Promise<{ success: boolean; data: any; error: any }> => {
+): Promise<{
+  success: boolean;
+  data: null | { place_id: number; user_id: string }[];
+  error: null | { message: string; code: string };
+}> => {
   const supabase = getBrowserClient();
   const { data, error } = await supabase
     .from('bookmarks')

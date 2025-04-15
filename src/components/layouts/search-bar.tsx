@@ -22,7 +22,7 @@ const SearchBar = () => {
   };
 
   useEffect(() => {
-    if (inputRef.current) {
+    if ((path === PATH.HOME || path !== PATH.SEARCH) && inputRef.current) {
       inputRef.current.value = '';
     }
   }, [path]);

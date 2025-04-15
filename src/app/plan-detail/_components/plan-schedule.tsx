@@ -353,19 +353,19 @@ const PlanSchedule = ({
                     (day) => (
                       <div key={day}>
                         <div className="mb-4 flex items-center justify-between pb-4">
-                          <div className="flex items-center gap-3">
-                            <span className="text-16 font-medium text-[#182126]">
+                          <div className="flex items-center gap-2">
+                            <span className="text-18 font-bold text-gray-900">
                               DAY {day}
                             </span>
-                            <span className="flex items-center text-12 font-normal text-[#182126]">
+                            <span className="text-14 text-gray-600">
                               {formatDayDate(startDate, day)}
                             </span>
                           </div>
-                          <div className="flex items-center">
+                          <div className="flex items-center gap-4">
                             {copiedDay !== null && copiedDay !== day ? (
                               <Button
                                 variant="ghost"
-                                className="medium-12 text-gray-500 hover:text-gray-500"
+                                className="text-12 font-medium text-gray-500 hover:text-gray-900"
                                 onClick={() => handlePasteDayPlaces(day)}
                               >
                                 붙여넣기
@@ -374,10 +374,10 @@ const PlanSchedule = ({
                               <Button
                                 variant="ghost"
                                 className={cn(
-                                  'medium-12',
+                                  'text-12 font-medium',
                                   copiedDay === day
                                     ? 'cursor-not-allowed text-gray-400'
-                                    : 'text-gray-500 hover:text-gray-500',
+                                    : 'text-gray-500 hover:text-gray-900',
                                 )}
                                 onClick={() => handleCopyDayPlaces(day)}
                                 disabled={copiedDay === day}
@@ -391,7 +391,7 @@ const PlanSchedule = ({
                                 'text-12 font-medium',
                                 !dayPlaces[day] || dayPlaces[day].length === 0
                                   ? 'cursor-not-allowed text-gray-400'
-                                  : 'text-red hover:bg-transparent hover:text-red',
+                                  : 'text-red hover:bg-transparent hover:text-red/80',
                               )}
                               onClick={() => handleDeleteDayPlaces(day)}
                               disabled={
@@ -426,7 +426,7 @@ const PlanSchedule = ({
                       {copiedDay !== null && copiedDay !== activeTab ? (
                         <Button
                           variant="ghost"
-                          className="medium-12 text-gray-500 hover:text-gray-500"
+                          className="text-12 font-medium text-gray-500 hover:text-gray-900"
                           onClick={() =>
                             handlePasteDayPlaces(activeTab as number)
                           }
@@ -437,10 +437,10 @@ const PlanSchedule = ({
                         <Button
                           variant="ghost"
                           className={cn(
-                            'medium-12',
+                            'text-12 font-medium',
                             copiedDay === activeTab
                               ? 'cursor-not-allowed text-gray-400'
-                              : 'text-gray-600 hover:text-gray-900',
+                              : 'text-gray-500 hover:text-gray-900',
                           )}
                           onClick={() =>
                             handleCopyDayPlaces(activeTab as number)

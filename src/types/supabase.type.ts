@@ -1,4 +1,5 @@
 import { CommentPlanRow, CommentsRow } from './comment.type';
+import { CommunitySortType } from './community.type';
 import { PlansRow, UsersRow } from './plan.type';
 
 export type Json =
@@ -401,7 +402,10 @@ export type Database = {
         };
       };
       get_plans: {
-        Args: { user_id_param: string | null };
+        Args: {
+          user_id_param: string | null;
+          sort_option?: CommunitySortType;
+        };
         Returns: {
           plan_id: number;
           plan_img: string;

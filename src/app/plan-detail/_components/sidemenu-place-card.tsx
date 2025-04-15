@@ -57,7 +57,7 @@ const SideMenuPlaceCard = ({
       </div>
 
       {/* 버튼 영역 */}
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-2">
         {onBookmarkToggle && (
           <BookmarkIcon
             isBookmarked={isBookmarked}

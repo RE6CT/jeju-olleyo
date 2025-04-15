@@ -20,6 +20,7 @@ const fetchUpdateLikeByUserId = async (plan_id: number, user_id: string) => {
   if (error) throw new Error(error.message);
 
   revalidatePath(PATH.COMMUNITY);
+  revalidatePath(PATH.LIKES);
 };
 
 export default fetchUpdateLikeByUserId;

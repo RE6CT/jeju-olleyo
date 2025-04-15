@@ -12,6 +12,9 @@ export const useInvalidateLikes = () => {
     queryClient.invalidateQueries({
       queryKey: ['dataCount'],
     });
+    queryClient.invalidateQueries({
+      queryKey: ['filteredPlans'],
+    });
   };
 
   return {

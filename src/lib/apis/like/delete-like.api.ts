@@ -19,6 +19,7 @@ const fetchDeleteLike = async (planLikeId: number) => {
   if (error) throw new Error(error.message);
 
   revalidatePath(PATH.COMMUNITY);
+  revalidatePath(PATH.LIKES);
 };
 
 export default fetchDeleteLike;

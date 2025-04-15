@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Plan } from '@/types/plan.type';
 import { Button } from '@/components/ui/button';
 import {
@@ -69,6 +69,8 @@ const PlanFilterSection = ({
   const { data: plans = initialPlans, isLoading: isPlansLoading } =
     useFilteredPlans(userId, filter);
   const { mutate: deletePlan } = useDeletePlan(userId);
+
+  useEffect(() => {}, [initialPlans]);
 
   // 필터 초기화
   const resetFilter = () => {

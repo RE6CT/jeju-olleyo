@@ -383,11 +383,11 @@ export type Database = {
       };
       get_user_likes: {
         Args: { user_id_param: string };
-        Returns: (PlansRow & UsersRow)[];
+        Returns: (PlansRow & UsersRow & { is_liked: boolean })[];
       };
       get_user_plans: {
         Args: { user_id_param: string };
-        Returns: (PlansRow & UsersRow)[];
+        Returns: (PlansRow & UsersRow & { is_liked: boolean })[];
       };
       get_user_comments: {
         Args: { user_id_param: string };

@@ -70,6 +70,7 @@ const useDragScroll = (
 
     const handleTouchMove = (e: TouchEvent) => {
       if (!isDown) return;
+      e.preventDefault();
       const x = e.touches[0].pageX - element.offsetLeft;
       const walk = x - startX;
       moveDistance = Math.abs(walk);

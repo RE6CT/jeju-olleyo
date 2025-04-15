@@ -11,7 +11,6 @@ export type Place = {
   lng: number;
   place_id: number;
   isBookmarked: boolean;
-  name: string;
   bookmarkCount: number;
 };
 
@@ -20,15 +19,6 @@ export type BookmarkStore = {
   addBookmark: (id: number) => void;
   removeBookmark: (id: number) => void;
   isBookmarked: (id: number) => boolean;
-};
-
-export type PlaceCardProps = {
-  placeId: number;
-  image: string;
-  title: string;
-  isLiked: boolean;
-  className?: string;
-  isDragging?: boolean;
 };
 
 export type Category = (typeof CATEGORIES)[number];

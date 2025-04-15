@@ -83,18 +83,21 @@ export type Database = {
           created_at: string | null;
           day_id: number;
           location_id: number;
+          place_id: number;
           visit_order: number | null;
         };
         Insert: {
           created_at?: string | null;
           day_id: number;
           location_id?: never;
+          place_id: number;
           visit_order?: number | null;
         };
         Update: {
           created_at?: string | null;
           day_id?: number;
           location_id?: never;
+          place_id?: number;
           visit_order?: number | null;
         };
         Relationships: [
@@ -104,6 +107,13 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: 'days';
             referencedColumns: ['day_id'];
+          },
+          {
+            foreignKeyName: 'locations_place_id_fkey';
+            columns: ['place_id'];
+            isOneToOne: false;
+            referencedRelation: 'places';
+            referencedColumns: ['place_id'];
           },
         ];
       };

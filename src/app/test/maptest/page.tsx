@@ -71,7 +71,7 @@ const MapPage = () => {
   }, []);
 
   const handleMarkerClick = useCallback((title: string) => {
-    console.log(`${title} 클릭!`);
+    //console.log(`${title} 클릭!`);
   }, []);
 
   /**

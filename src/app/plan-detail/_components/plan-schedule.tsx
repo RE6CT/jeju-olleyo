@@ -603,20 +603,20 @@ const PlanSchedule = ({
             </div>
 
             {/* 사이드바 영역 */}
-            {activeTab !== '전체보기' && (
-              <PlaceSidemenu
-                userId={userId}
-                selectedDay={activeTab as number}
-                onAddPlace={handleAddPlace}
-              />
-            )}
+            <PlaceSidemenu
+              userId={userId}
+              selectedDay={
+                activeTab === '전체보기' ? null : (activeTab as number)
+              }
+              onAddPlace={handleAddPlace}
+            />
           </div>
         </div>
       </DragDropContext>
-      <div className="fixed bottom-10 right-10">
+      <div className="absolute bottom-10 right-10">
         <Button
           onClick={handleSaveButtonClick}
-          className="flex items-center justify-center rounded-[12px] border border-primary-400 bg-primary-500 px-7 py-4 text-24 font-bold text-[#F8F8F8] shadow-[2px_4px_4px_0px_rgba(153,61,0,0.20)] backdrop-blur-[10px]"
+          className="flex items-center justify-center rounded-[12px] border border-primary-400 bg-primary-500 px-7 py-4 text-24 font-bold text-[#F8F8F8] shadow-[2px_4px_4px_0px_rgba(153,61,0,0.20)] backdrop-blur-[10px] hover:bg-primary-600"
         >
           저장하기
         </Button>

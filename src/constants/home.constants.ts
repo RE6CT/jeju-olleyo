@@ -21,16 +21,10 @@ export const CATEGORY_KR_MAP: Record<string, TravelCategory> = {
   flight: '항공권',
 };
 
+/**
+ * 메인 카테고리 (항공권 제외)
+ */
 export const CATEGORIES: TravelCategory[] = [
-  '전체',
-  '명소',
-  '숙박',
-  '맛집',
-  '카페',
-  '항공권',
-];
-
-export const BOTTOM_CATEGORIES: TravelCategory[] = [
   '전체',
   '명소',
   '숙박',

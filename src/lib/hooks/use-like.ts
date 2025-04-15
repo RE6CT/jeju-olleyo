@@ -15,23 +15,28 @@ const useToggleLike = (planId: number) => {
   const { invalidateLikes } = useInvalidateLikes();
 
   const toggleLike = async () => {
-    const { user: sessionUser } = await getCurrentSession();
-    const userId = sessionUser?.id;
+    try {
+      const { user: sessionUser } = await getCurrentSession();
+      const userId = sessionUser?.id;
 
-    if (!userId) {
-      alert('로그인이 필요합니다.');
-      return;
+      if (!userId) {
+        alert('로그인이 필요합니다.');
+        return;
+      }
+
+      const currentLike = await fetchgetSingleLike(planId, userId);
+
+      if (currentLike) {
+        await fetchDeleteLike(currentLike.plan_like_id);
+      } else {
+        await fetchUpdateLikeByUserId(planId, userId);
+      }
+
+      invalidateLikes();
+    } catch (error) {
+      console.error('Error toggling like:', error);
+      alert('좋아요 처리 중 오류가 발생했습니다.');
     }
-
-    const currentLike = await fetchgetSingleLike(planId, userId);
-
-    if (currentLike) {
-      await fetchDeleteLike(currentLike.plan_like_id);
-    } else {
-      await fetchUpdateLikeByUserId(planId, userId);
-    }
-
-    invalidateLikes();
   };
 
   return { toggleLike };

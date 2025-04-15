@@ -95,13 +95,12 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
       {isLogin ? (
         // 로그인 폼
         <form
-          className="space-y-2"
           onSubmit={handleSubmitLogin(
             handleFormSubmit as (data: LoginFormValues) => void,
           )}
         >
           {/* 이메일 입력 필드 */}
-          <div className="space-y-2">
+          <div>
             <Label htmlFor="email">이메일</Label>
             <Input
               id="email"
@@ -112,7 +111,7 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
             <ErrorMessage message={errorsLogin.email?.message} />
           </div>
 
-          <div className="space-y-2">
+          <div>
             {/* 비밀번호 입력 필드 */}
             <div className="flex items-center justify-between">
               <Label htmlFor="password">비밀번호</Label>
@@ -125,8 +124,8 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
             <ErrorMessage message={errorsLogin.password?.message} />
           </div>
 
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
+          <div className="flex items-center justify-between pb-3">
+            <div className="flex items-center gap-2">
               {/* 아이디 저장 체크박스 */}
               <Controller
                 name="remember"
@@ -136,28 +135,39 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
                     id="remember"
                     checked={field.value}
                     onCheckedChange={field.onChange}
+                    className="flex h-5 w-5 items-center justify-center border border-solid border-[color:var(--gray-100,#E7EDF0)] bg-white"
                   />
                 )}
               />
-              <Label
-                htmlFor="remember"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
+              <Label htmlFor="remember" className="regular-12 color-[#797979]">
                 아이디 저장
               </Label>
-            </div>
-            <div>
-              {/* 비밀번호 찾기 링크 */}
-              <Link href={PATH.FORGOT_PASSWORD} className="text-xs text-black hover:text-blue">
-                비밀번호 찾기
-              </Link>
             </div>
           </div>
 
           {/* 폼 제출 버튼 영역 */}
-          <Button type="submit" className="mt-4 w-full" disabled={isLoading}>
+          <Button
+            type="submit"
+            className="flex h-11 w-full items-center justify-center gap-2.5 rounded-xl bg-primary-500 p-2.5 pt-3 hover:bg-primary-600"
+            disabled={isLoading}
+          >
             {isLoading ? AUTH_BUTTON_TEXT.LOADING : buttonText}
           </Button>
+          <div className="flex flex-row justify-center">
+            {/* 비밀번호 찾기 링크 */}
+            <Link
+              href={PATH.FORGOT_PASSWORD}
+              className="p-2.5 text-sm text-gray-600 hover:text-secondary-300"
+            >
+              비밀번호 찾기
+            </Link>
+            <Link
+              href={PATH.SIGNUP}
+              className="p-2.5 text-sm text-gray-600 hover:text-secondary-300"
+            >
+              회원가입
+            </Link>
+          </div>
         </form>
       ) : (
         // 회원가입 폼
@@ -167,7 +177,7 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
           )}
         >
           {/* 이메일 입력 필드 */}
-          <div className="space-y-1">
+          <div>
             <Label htmlFor="email">이메일</Label>
             <Input
               id="email"
@@ -178,7 +188,7 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
             <ErrorMessage message={errorsSignup.email?.message} />
           </div>
 
-          <div className="space-y-1">
+          <div>
             {/* 비밀번호 입력 필드 */}
             <Label htmlFor="password">비밀번호</Label>
             <PasswordInput
@@ -189,7 +199,7 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
             <ErrorMessage message={errorsSignup.password?.message} />
           </div>
 
-          <div className="space-y-1">
+          <div>
             {/* 비밀번호 확인 입력 필드 */}
             <Label htmlFor="confirmPassword">비밀번호 확인</Label>
             <PasswordInput
@@ -200,7 +210,7 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
             <ErrorMessage message={errorsSignup.confirmPassword?.message} />
           </div>
 
-          <div className="space-y-1">
+          <div>
             {/* 닉네임 입력 필드 */}
             <Label htmlFor="nickname">닉네임</Label>
             <Input
@@ -212,7 +222,7 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
             <ErrorMessage message={errorsSignup.nickname?.message} />
           </div>
 
-          <div className="space-y-1">
+          <div>
             {/* 전화번호 입력 필드 */}
             <Label htmlFor="phone">전화번호</Label>
             <Input
@@ -225,7 +235,11 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
           </div>
 
           {/* 폼 제출 버튼 영역 */}
-          <Button type="submit" className="mt-2 w-full" disabled={isLoading}>
+          <Button
+            type="submit"
+            className="mt-4 flex h-11 w-full items-center justify-center gap-2.5 rounded-xl bg-primary-500 p-2.5 pt-3 hover:bg-primary-600"
+            disabled={isLoading}
+          >
             {isLoading ? AUTH_BUTTON_TEXT.LOADING : buttonText}
           </Button>
         </form>

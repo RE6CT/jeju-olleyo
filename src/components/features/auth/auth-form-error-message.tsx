@@ -5,8 +5,12 @@
  * @returns 에러 메시지 컴포넌트
  */
 
-const ErrorMessage = ({ message }: { message: string | undefined }) => (
-  <p className="mt-1 text-xs text-red">{message}</p>
-);
+const ErrorMessage = ({ message }: { message: string | undefined }) => {
+  return (
+    <div className="flex h-6 min-h-6 items-center">
+      {message && <p className="text-xs text-red">{message}</p>}
+    </div>
+  );
+};
 
 export default ErrorMessage;

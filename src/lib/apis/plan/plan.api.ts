@@ -2,6 +2,7 @@
 
 import { Plan, PlanFilterOptions } from '@/types/plan.type';
 import { getServerClient } from '@/lib/supabase/server';
+import { getBrowserClient } from '@/lib/supabase/client';
 import { camelize } from '@/lib/utils/camelize';
 import {
   isDateGreaterThanOrEqual,
@@ -284,4 +285,50 @@ export const fetchSavePlanPlaces = async (
       );
     }
   }
+};
+
+/**
+ * 이미지를 Supabase Storage에 업로드하는 API
+ * @param formData - FormData 객체 (file 필드 포함)
+ * @returns Promise<string> - 업로드된 이미지의 URL
+ */
+export const fetchUploadPlanImage = async (
+  formData: FormData,
+): Promise<string> => {
+  const supabase = await getServerClient();
+
+  const file = formData.get('file') as File;
+  if (!file) {
+    throw new Error('파일이 없습니다.');
+  }
+
+  // 현재 사용자 정보 가져오기
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+  if (userError || !user) {
+    throw new Error('인증된 사용자만 이미지를 업로드할 수 있습니다.');
+  }
+
+  // 사용자별 폴더 경로 생성
+  const filePath = `${user.id}/plan-images/${Date.now()}-${file.name}`;
+
+  const { data, error } = await supabase.storage
+    .from('plan-images')
+    .upload(filePath, file, {
+      cacheControl: '3600',
+      upsert: false,
+    });
+
+  if (error) {
+    throw new Error(`이미지 업로드에 실패했습니다: ${error.message}`);
+  }
+
+  // 업로드된 이미지의 공개 URL 가져오기
+  const {
+    data: { publicUrl },
+  } = supabase.storage.from('plan-images').getPublicUrl(filePath);
+
+  return publicUrl;
 };

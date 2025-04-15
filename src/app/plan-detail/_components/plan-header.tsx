@@ -11,6 +11,8 @@ import { formatTravelPeriod } from '@/lib/utils/date';
 import { Label } from '@/components/ui/label';
 import TextareaWithCount from '@/components/ui/textarea-with-count';
 
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+
 const PlanHeader = ({
   startDate,
   endDate,
@@ -42,7 +44,7 @@ const PlanHeader = ({
         {/* 썸네일 업로드 영역 */}
         <Label
           htmlFor="thumbnail"
-          className="flex w-[252px] cursor-pointer flex-col items-center gap-3 rounded-[12px] border border-solid border-gray-200 px-[58px] py-7"
+          className="relative flex h-[160px] w-[252px] cursor-pointer flex-col items-center gap-3 rounded-[12px] border border-solid border-gray-200 px-[58px] py-7"
         >
           <Input
             type="file"
@@ -52,29 +54,40 @@ const PlanHeader = ({
             onChange={(e) => {
               const file = e.target.files?.[0];
               if (file) {
-                // TODO: 이미지 업로드 처리
+                // 파일 크기 제한 (5MB)
+                if (file.size > MAX_FILE_SIZE) {
+                  alert('이미지 크기는 5MB를 초과할 수 없습니다.');
+                  return;
+                }
+
+                const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+                if (!validTypes.includes(file.type)) {
+                  alert('JPEG, PNG, GIF 형식의 이미지만 업로드 가능합니다.');
+                  return;
+                }
+
                 setPlanImage(URL.createObjectURL(file));
               }
             }}
           />
-          <div className="flex h-full flex-col items-center justify-center gap-3">
-            {planImage ? (
-              <img
-                src={planImage}
-                alt="썸네일"
-                className="h-full w-full object-cover"
-              />
-            ) : (
-              <>
-                <p className="text-24 text-gray-300">+</p>
-                <p className="text-center text-14 font-medium text-gray-300">
-                  내 일정을 대표할
-                  <br />
-                  이미지를 추가하세요
-                </p>
-              </>
-            )}
-          </div>
+          {planImage ? (
+            <Image
+              src={planImage}
+              alt="썸네일"
+              width={252}
+              height={160}
+              className="absolute inset-0 h-full w-full rounded-[12px] object-cover"
+            />
+          ) : (
+            <div className="flex h-full w-full flex-col items-center justify-center gap-3">
+              <p className="text-24 text-gray-300">+</p>
+              <p className="text-center text-14 font-medium text-gray-300">
+                내 일정을 대표할
+                <br />
+                이미지를 추가하세요
+              </p>
+            </div>
+          )}
         </Label>
 
         {/* 입력 영역 */}

@@ -51,7 +51,8 @@ const PlanSchedule = ({
   const [activeTab, setActiveTab] = useState<TabType>('전체보기');
   const dayCount = calculateTotalDays(startDate, endDate);
   const [dayPlaces, setDayPlaces] = useState<DayPlaces>({});
-  const [placeCount, setPlaceCount] = useState(0);
+  const [placeCount, setPlaceCount] = useState(0); // 장소 추가 시 고유 아이디 부여 시 사용
+  const [copiedDay, setCopiedDay] = useState<number | null>(null); // 복사 시 복사된 일자 저장
 
   /**
    * 장소 추가 핸들러
@@ -105,7 +106,7 @@ const PlanSchedule = ({
   const handleDeleteDayPlaces = (dayNumber: number) => {
     setDayPlaces((prev: DayPlaces) => {
       const newDayPlaces = { ...prev };
-      delete newDayPlaces[dayNumber]; // 특정 일자의 장소를 삭제
+      delete newDayPlaces[dayNumber]; // 객체 내부 특정 일자의 장소를 삭제
       return newDayPlaces;
     });
   };
@@ -229,6 +230,38 @@ const PlanSchedule = ({
     ));
   };
 
+  /**
+   * 특정 일자의 장소들을 복사하는 핸들러
+   * @param dayNumber 복사할 일자
+   */
+  const handleCopyDayPlaces = (dayNumber: number) => {
+    setCopiedDay(dayNumber);
+  };
+
+  /**
+   * 복사된 장소들을 붙여넣는 핸들러
+   * @param targetDay 붙여넣을 일자
+   */
+  const handlePasteDayPlaces = (targetDay: number) => {
+    if (copiedDay === null) return;
+
+    setDayPlaces((prev: DayPlaces) => {
+      const copiedPlaces = [...(prev[copiedDay] || [])];
+      const newPlaces = copiedPlaces.map((place) => ({
+        ...place,
+        uniqueId: `${place.id}-${placeCount + copiedPlaces.indexOf(place)}`,
+      }));
+
+      return {
+        ...prev,
+        [targetDay]: [...(prev[targetDay] || []), ...newPlaces],
+      };
+    });
+
+    setPlaceCount((prev) => prev + (dayPlaces[copiedDay]?.length || 0));
+    setCopiedDay(null);
+  };
+
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <div className="my-6">
@@ -294,12 +327,29 @@ const PlanSchedule = ({
                             </span>
                           </div>
                           <div className="flex items-center">
-                            <Button
-                              variant="ghost"
-                              className="text-12 font-medium text-gray-500 hover:bg-transparent hover:text-[#698EA1]"
-                            >
-                              복사
-                            </Button>
+                            {copiedDay !== null && copiedDay !== day ? (
+                              <Button
+                                variant="ghost"
+                                className="medium-12 text-gray-500 hover:text-gray-500"
+                                onClick={() => handlePasteDayPlaces(day)}
+                              >
+                                붙여넣기
+                              </Button>
+                            ) : (
+                              <Button
+                                variant="ghost"
+                                className={cn(
+                                  'medium-12',
+                                  copiedDay === day
+                                    ? 'cursor-not-allowed text-gray-400'
+                                    : 'text-gray-500 hover:text-gray-500',
+                                )}
+                                onClick={() => handleCopyDayPlaces(day)}
+                                disabled={copiedDay === day}
+                              >
+                                {copiedDay === day ? '복사됨' : '복사'}
+                              </Button>
+                            )}
                             <Button
                               variant="ghost"
                               className="text-12 font-medium text-red hover:bg-transparent hover:text-red"
@@ -330,12 +380,33 @@ const PlanSchedule = ({
                       </span>
                     </div>
                     <div className="flex items-center gap-4">
-                      <Button
-                        variant="ghost"
-                        className="text-12 font-medium text-gray-600 hover:bg-transparent hover:text-gray-900"
-                      >
-                        복사
-                      </Button>
+                      {copiedDay !== null && copiedDay !== activeTab ? (
+                        <Button
+                          variant="ghost"
+                          className="medium-12 text-gray-500 hover:text-gray-500"
+                          onClick={() =>
+                            handlePasteDayPlaces(activeTab as number)
+                          }
+                        >
+                          붙여넣기
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="ghost"
+                          className={cn(
+                            'medium-12',
+                            copiedDay === activeTab
+                              ? 'cursor-not-allowed text-gray-400'
+                              : 'text-gray-600 hover:text-gray-900',
+                          )}
+                          onClick={() =>
+                            handleCopyDayPlaces(activeTab as number)
+                          }
+                          disabled={copiedDay === activeTab}
+                        >
+                          {copiedDay === activeTab ? '복사됨' : '복사'}
+                        </Button>
+                      )}
                       <Button
                         variant="ghost"
                         className="text-12 font-medium text-red hover:bg-transparent hover:text-red/80"

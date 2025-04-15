@@ -46,7 +46,7 @@ const PopularSchedules = () => {
       ) : (
         <div className="grid w-full grid-cols-1 gap-x-3 gap-y-5 sm:grid-cols-2 md:grid-cols-3">
           {plans.map((plan: PlanType) => (
-            <PlanVerticalCard key={plan.planId} plan={plan} userId={userId} />
+            <PlanVerticalCard key={plan.planId} plan={plan} />
           ))}
         </div>
       )}

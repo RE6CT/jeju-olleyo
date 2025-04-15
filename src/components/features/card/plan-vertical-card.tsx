@@ -8,7 +8,7 @@ import Link from 'next/link';
  * vertical한 플랜 카드 컴포넌트
  * @param plan - 플랜 카드를 위한 PlanCardType의 객체
  */
-const PlanVerticalCard = ({ plan, userId }: PlanVerticalCardProps) => {
+const PlanVerticalCard = ({ plan }: PlanVerticalCardProps) => {
   return (
     <Link href={`/plan-detail/${plan.planId}`}>
       <div className="relative">
@@ -38,7 +38,7 @@ const PlanVerticalCard = ({ plan, userId }: PlanVerticalCardProps) => {
       <div className="flex flex-col gap-1 p-2">
         <div className="flex flex-col gap-2">
           <p className="medium-16 line-clamp-1">{plan.title}</p>
-          <p className="regular-14 text-description line-clamp-2">
+          <p className="regular-14 line-clamp-2 text-description">
             {plan.description}
           </p>
         </div>

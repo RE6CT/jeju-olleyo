@@ -1,14 +1,21 @@
 import JejuBanner from '@/components/features/banner/jeju-banner';
 import { PATH } from '@/constants/path.constants';
 import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
-import { fetchAllPlans } from '@/lib/apis/plan/plan.api';
-import PlanVerticalCard from '@/components/features/card/plan-vertical-card';
+import { fetchGetAllPlans } from '@/lib/apis/plan/plan.api';
+import CommunityPlanList from './_components/community-plan-list';
+import { CommunitySortType } from '@/types/community.type';
 
-const Community = async () => {
+const Community = async ({
+  searchParams,
+}: {
+  searchParams: { sort?: string };
+}) => {
   const user = await fetchGetCurrentUser();
   const userId = user.user?.id || null;
 
-  const plans = await fetchAllPlans(userId);
+  // 쿼리 파라미터에서 sort 값 가져오기
+  const sort = (searchParams.sort as CommunitySortType) || 'popular';
+  const plans = await fetchGetAllPlans(userId, sort);
 
   return (
     <>
@@ -18,14 +25,7 @@ const Community = async () => {
         buttonText="내 일정 만들러 가기"
         buttonUrl={PATH.PLAN_NEW}
       />
-      <div className="flex w-full max-w-[1024px] flex-col gap-3 p-9">
-        <h2 className="semibold-22">올레 인기 일정</h2>
-        <div className="grid w-full grid-cols-1 gap-x-3 gap-y-5 sm:grid-cols-2 md:grid-cols-3">
-          {plans.map((plan) => (
-            <PlanVerticalCard key={plan.planId} plan={plan} userId={userId} />
-          ))}
-        </div>
-      </div>
+      <CommunityPlanList plans={plans} />
     </>
   );
 };

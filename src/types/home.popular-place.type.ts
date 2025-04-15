@@ -4,7 +4,7 @@ export type Place = {
   id: number;
   title: string;
   address: string;
-  category: Category;
+  category: string;
   content_type_id: number;
   image: string | null;
   lat: number;

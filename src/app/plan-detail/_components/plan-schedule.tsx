@@ -2,6 +2,13 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { calculateTotalDays, formatDayDate } from '@/lib/utils/date';
 import PlaceSidemenu from './place-sidemenu';
@@ -17,6 +24,11 @@ const ACTIVE_TAB_STYLE =
   'border-primary-500 bg-primary-100 text-primary-500 hover:bg-primary-100 hover:text-primary-500';
 const INACTIVE_TAB_STYLE =
   'border-[0.6px] border-gray-600 bg-white text-gray-900 hover:bg-gray-100 hover:text-gray-900';
+const DROPDOWN_BUTTON_STYLE = 'flex items-center gap-2 text-14 font-medium';
+const DROPDOWN_CONTENT_STYLE =
+  'p-0 border border-[#E7EDF0] bg-[#F9FAFB] rounded-[12px] w-[140px] [&>*:hover]:bg-primary-100 [&>*:hover]:text-primary-500';
+const DROPDOWN_ITEM_STYLE =
+  'flex justify-center items-center px-5 py-2.5 text-14 font-medium cursor-pointer w-full transition-colors data-[highlighted]:bg-primary-100 data-[highlighted]:text-primary-500';
 
 const COLORS = {
   ODD: 'bg-primary-500',
@@ -283,37 +295,48 @@ const PlanSchedule = ({
           <div className="absolute -top-[370px] left-0 right-0 h-[370px] bg-white" />
           <div className="bg-white py-4">
             <div className="flex gap-2">
-              <Button
-                variant="outline"
-                className={cn(
-                  BASE_TAB_STYLE,
-                  activeTab === '전체보기'
-                    ? ACTIVE_TAB_STYLE
-                    : INACTIVE_TAB_STYLE,
-                )}
-                onClick={() => setActiveTab('전체보기')}
-              >
-                전체보기
-              </Button>
-              {Array.from({ length: dayCount }, (_, i) => i + 1).map((day) => (
-                <Button
-                  key={day}
-                  variant="outline"
-                  className={cn(
-                    BASE_TAB_STYLE,
-                    activeTab === day ? ACTIVE_TAB_STYLE : INACTIVE_TAB_STYLE,
-                  )}
-                  onClick={() => setActiveTab(day)}
+              <DropdownMenu modal={false}>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="flex w-[140px] items-center justify-center gap-2 rounded-[12px] border border-[#E7EDF0] bg-[#F9FAFB] px-5 py-2.5 text-14 font-medium"
+                  >
+                    {activeTab === '전체보기' ? '전체보기' : `DAY ${activeTab}`}
+                    <ChevronDown className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  align="start"
+                  className={DROPDOWN_CONTENT_STYLE}
+                  sideOffset={4}
                 >
-                  DAY {day}
-                </Button>
-              ))}
-              <Button
-                variant="outline"
-                className="rounded-full border-gray-200 px-4 py-2 text-14 font-medium"
-              >
-                +
-              </Button>
+                  <DropdownMenuItem
+                    onClick={() => setActiveTab('전체보기')}
+                    className={cn(
+                      DROPDOWN_ITEM_STYLE,
+                      activeTab === '전체보기' &&
+                        'bg-primary-100 text-primary-500',
+                    )}
+                  >
+                    전체보기
+                  </DropdownMenuItem>
+                  {Array.from({ length: dayCount }, (_, i) => i + 1).map(
+                    (day) => (
+                      <DropdownMenuItem
+                        key={day}
+                        onClick={() => setActiveTab(day)}
+                        className={cn(
+                          DROPDOWN_ITEM_STYLE,
+                          activeTab === day &&
+                            'bg-primary-100 text-primary-500',
+                        )}
+                      >
+                        DAY {day}
+                      </DropdownMenuItem>
+                    ),
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         </div>

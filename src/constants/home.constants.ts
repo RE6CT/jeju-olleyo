@@ -30,6 +30,14 @@ export const CATEGORIES: TravelCategory[] = [
   '항공권',
 ];
 
+export const BOTTOM_CATEGORIES: TravelCategory[] = [
+  '전체',
+  '명소',
+  '숙박',
+  '맛집',
+  '카페',
+];
+
 export const QUERY_KEYS = {
   MAIN_CAROUSEL_IMAGE: ['MAIN_CAROUSEL_IMAGE'],
   STRIP_BANNERS: ['STRIP_BANNERS'],

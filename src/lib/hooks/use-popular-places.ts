@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { getPopularPlaces } from '@/lib/apis/home/home.popular.api';
-import { useBookmarkStore } from '@/zustand/home.place.store';
+import { useBookmarkStore } from '@/zustand/bookmark.store';
 import { Place } from '@/types/home.popular-place.type';
 import { useState, useEffect } from 'react';
+import useAuth from './use-auth';
 
 /**
  * 인기 장소 데이터를 가져오고 북마크 상태를 적용하는 커스텀 훅
@@ -14,42 +15,39 @@ import { useState, useEffect } from 'react';
 export const usePopularPlaces = (category: string = '전체') => {
   const isBookmarked = useBookmarkStore((state) => state.isBookmarked);
   const [previousData, setPreviousData] = useState<Place[]>([]);
+  const { user } = useAuth();
 
   // React Query를 사용한 데이터 패칭
   const { data, isLoading, error } = useQuery({
-    queryKey: ['popularPlaces', category],
-    queryFn: () => getPopularPlaces(category),
+    queryKey: ['popularPlaces', category, user?.id],
+    queryFn: () => getPopularPlaces(category, user?.id),
     // 데이터가 stale 상태가 되더라도 즉시 리페칭하지 않도록 설정
     staleTime: 1000 * 60 * 5, // 5분
     // 캐시 시간 설정
     gcTime: 1000 * 60 * 10, // 10분
     // 화면 포커스 시 자동 리페칭 방지
     refetchOnWindowFocus: false,
-    // 이전 데이터 유지
-    placeholderData: previousData.length > 0 ? previousData : undefined,
   });
 
   // 데이터가 로드되면 이전 데이터 업데이트
   useEffect(() => {
     if (data && !isLoading) {
-      setPreviousData(
-        data.map((place) => ({
-          ...place,
-          isBookmarked: false,
-          name: place.title,
-          bookmarkCount: 0,
-        })),
-      );
+      setPreviousData(data);
     }
   }, [data, isLoading]);
 
-  // 북마크 상태 적용
+  // 로컬 북마크 상태 적용
   const placesWithBookmarks = data
     ? data.map((place) => ({
         ...place,
-        isBookmarked: isBookmarked(place.id),
+        isBookmarked: user ? place.isBookmarked : isBookmarked(place.id),
       }))
-    : [];
+    : previousData.length > 0
+      ? previousData.map((place) => ({
+          ...place,
+          isBookmarked: user ? place.isBookmarked : isBookmarked(place.id),
+        }))
+      : [];
 
   return {
     places: placesWithBookmarks,
@@ -59,5 +57,3 @@ export const usePopularPlaces = (category: string = '전체') => {
     isFirstLoading: isLoading && previousData.length === 0,
   };
 };
-
-export default usePopularPlaces;

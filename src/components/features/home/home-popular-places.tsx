@@ -4,9 +4,9 @@ import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { usePopularPlaces } from '@/lib/hooks/use-popular-places';
 import { Category } from '@/types/home.popular-place.type';
-import { CATEGORIES } from '@/constants/home.constants';
-import PlaceCard from '../card/place-card';
+import { BOTTOM_CATEGORIES } from '@/constants/home.constants';
 import useDragScroll from '@/lib/hooks/use-drag-scroll';
+import PlaceCard from '../card/place-card';
 
 /**
  * 인기 장소를 카테고리별로 표시하는 컴포넌트
@@ -45,7 +45,7 @@ const PopularPlaces = () => {
         </div>
         {/* 카테고리 탭 */}
         <div className="mb-6 flex space-x-2 overflow-x-auto">
-          {CATEGORIES.map((category) => (
+          {BOTTOM_CATEGORIES.map((category) => (
             <button
               key={category}
               onClick={() => handleCategoryChange(category)}

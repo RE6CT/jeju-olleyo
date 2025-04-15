@@ -9,6 +9,7 @@ import PlaceCard from './place-card';
 import { Place } from '@/types/search.type';
 import { DayPlaces, TabType } from '@/types/plan-detail.type';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import ScheduleDeleteModal from './schedule-delete-modal';
 
 const BASE_TAB_STYLE =
   'flex items-center justify-center gap-[10px] rounded-[28px] border px-5 py-2 text-14 font-medium transition-colors';
@@ -53,6 +54,8 @@ const PlanSchedule = ({
   const [dayPlaces, setDayPlaces] = useState<DayPlaces>({});
   const [placeCount, setPlaceCount] = useState(0); // 장소 추가 시 고유 아이디 부여 시 사용
   const [copiedDay, setCopiedDay] = useState<number | null>(null); // 복사 시 복사된 일자 저장
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [dayToDelete, setDayToDelete] = useState<number | null>(null);
 
   /**
    * 장소 추가 핸들러
@@ -104,11 +107,20 @@ const PlanSchedule = ({
    * @param dayNumber 삭제할 일자
    */
   const handleDeleteDayPlaces = (dayNumber: number) => {
-    setDayPlaces((prev: DayPlaces) => {
-      const newDayPlaces = { ...prev };
-      delete newDayPlaces[dayNumber]; // 객체 내부 특정 일자의 장소를 삭제
-      return newDayPlaces;
-    });
+    setDayToDelete(dayNumber);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (dayToDelete !== null) {
+      setDayPlaces((prev: DayPlaces) => {
+        const newDayPlaces = { ...prev };
+        delete newDayPlaces[dayToDelete];
+        return newDayPlaces;
+      });
+    }
+    setIsDeleteModalOpen(false);
+    setDayToDelete(null);
   };
 
   /**
@@ -352,8 +364,16 @@ const PlanSchedule = ({
                             )}
                             <Button
                               variant="ghost"
-                              className="text-12 font-medium text-red hover:bg-transparent hover:text-red"
+                              className={cn(
+                                'text-12 font-medium',
+                                !dayPlaces[day] || dayPlaces[day].length === 0
+                                  ? 'cursor-not-allowed text-gray-400'
+                                  : 'text-red hover:bg-transparent hover:text-red',
+                              )}
                               onClick={() => handleDeleteDayPlaces(day)}
+                              disabled={
+                                !dayPlaces[day] || dayPlaces[day].length === 0
+                              }
                             >
                               삭제
                             </Button>
@@ -409,9 +429,19 @@ const PlanSchedule = ({
                       )}
                       <Button
                         variant="ghost"
-                        className="text-12 font-medium text-red hover:bg-transparent hover:text-red/80"
+                        className={cn(
+                          'text-12 font-medium',
+                          !dayPlaces[activeTab as number] ||
+                            dayPlaces[activeTab as number].length === 0
+                            ? 'cursor-not-allowed text-gray-400'
+                            : 'text-red hover:bg-transparent hover:text-red/80',
+                        )}
                         onClick={() =>
                           handleDeleteDayPlaces(activeTab as number)
+                        }
+                        disabled={
+                          !dayPlaces[activeTab as number] ||
+                          dayPlaces[activeTab as number].length === 0
                         }
                       >
                         삭제
@@ -438,6 +468,13 @@ const PlanSchedule = ({
             onAddPlace={handleAddPlace}
           />
         </div>
+        <ScheduleDeleteModal
+          isOpen={isDeleteModalOpen}
+          onClose={() => {
+            setIsDeleteModalOpen(false);
+          }}
+          onDeleteClick={handleConfirmDelete}
+        />
       </div>
     </DragDropContext>
   );

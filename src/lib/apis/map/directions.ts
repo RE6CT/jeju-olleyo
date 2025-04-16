@@ -15,12 +15,16 @@ interface RouteSummary {
  * 카카오맵 API를 사용하여 자동차 경로를 검색하고 그리는 함수
  * @param routeInfo 경로 정보 (출발지, 도착지, 경유지)
  * @param map 카카오맵 인스턴스
- * @returns Promise<{ path: { lat: number; lng: number }[]; summary: RouteSummary }>
+ * @returns Promise<{ path: { lat: number; lng: number }[]; summary: RouteSummary; sections: { distance: number; duration: number }[] }>
  */
 export const getCarRoute = async (
   routeInfo: RouteInfo,
   map: any,
-): Promise<{ path: { lat: number; lng: number }[]; summary: RouteSummary }> => {
+): Promise<{
+  path: { lat: number; lng: number }[];
+  summary: RouteSummary;
+  sections: { distance: number; duration: number }[];
+}> => {
   if (!routeInfo.start || !routeInfo.end) {
     throw new Error('출발지와 도착지를 설정해 주세요.');
   }
@@ -65,10 +69,19 @@ export const getCarRoute = async (
     let totalDistance = 0;
     let totalDuration = 0;
     const linePath: { lat: number; lng: number }[] = [];
+    const sections: { distance: number; duration: number }[] = [];
 
     data.routes[0].sections.forEach((section: any) => {
-      totalDistance += section.distance;
-      totalDuration += section.duration;
+      const sectionDistance = section.distance;
+      const sectionDuration = section.duration;
+
+      totalDistance += sectionDistance;
+      totalDuration += sectionDuration;
+
+      sections.push({
+        distance: Math.round(sectionDistance),
+        duration: Math.round(sectionDuration / 60), // 초 -> 분 변환
+      });
 
       section.roads.forEach((road: any) => {
         road.vertexes.forEach((_: any, index: number) => {
@@ -85,9 +98,10 @@ export const getCarRoute = async (
     return {
       path: linePath,
       summary: {
-        distance: Math.round(totalDistance / 1000), // m -> km 변환
+        distance: Math.round(totalDistance),
         duration: Math.round(totalDuration / 60), // 초 -> 분 변환
       },
+      sections,
     };
   } catch (error) {
     console.error('경로 검색 중 오류 발생:', error);

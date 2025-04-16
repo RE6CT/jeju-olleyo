@@ -18,10 +18,8 @@ const WeatherHeader: React.FC<WeatherHeaderProps> = ({
 }: WeatherHeaderProps) => {
   const headerContainerClasses =
     'flex w-full flex-col items-start justify-center gap-1 sm:gap-1 md:gap-1.5 lg:gap-2';
-  const titleClasses =
-    'flex w-full justify-center text-center text-12 font-semibold not-italic sm:text-14 md:text-14 lg:text-16';
-  const subtitleClasses =
-    'self-stretch text-center text-14 font-semibold not-italic text-gray-900 sm:text-16 md:text-18 lg:text-20';
+  const titleClasses = 'flex w-full justify-center text-center semibold-16';
+  const subtitleClasses = 'self-stretch text-center semibold-20 text-gray-900';
 
   return (
     <div className={headerContainerClasses}>
@@ -30,7 +28,7 @@ const WeatherHeader: React.FC<WeatherHeaderProps> = ({
           {month}월 {day}일
         </h2>
         <span className="text-secondary-300">,</span>
-        <h2 className="text-gray-900">{title}</h2>
+        <h2 className="text-gray-500">{title}</h2>
       </div>
 
       <p className={subtitleClasses}>{subtitle}</p>

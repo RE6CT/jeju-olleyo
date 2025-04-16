@@ -4,9 +4,9 @@
  */
 const Footer = () => {
   return (
-    <footer className="flex w-[1024px] items-center gap-[100px] px-9 py-8">
+    <footer className="mx-auto flex w-full max-w-[1024px] flex-col items-center gap-[50px] px-4 py-6 md:flex-row md:gap-[100px] md:px-9 md:py-8">
       {/* 로고 및 카피라이트 */}
-      <div className="flex h-[189px] w-[244px] shrink-0 flex-col items-center justify-center">
+      <div className="flex w-full shrink-0 flex-col items-center justify-center md:h-[189px] md:w-[244px]">
         <div className="flex flex-col items-start gap-2 self-stretch">
           <div className="flex w-36 items-center justify-center gap-[1.548px]">
             <img src="/logo/color_logo.svg" alt="Logo" />
@@ -17,12 +17,12 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="flex w-[521px] shrink-0 flex-col items-start gap-[27px]">
+      <div className="flex w-full shrink-0 flex-col items-start gap-[20px] md:w-[550px] md:gap-[27px]">
         {/* 개발자 */}
         <div className="flex items-start self-stretch">
           <h3 className="semibold-16 w-[80px] text-gray-600">개발자</h3>
-          <div className="flex">
-            <div className="flex w-[85px] items-center gap-1">
+          <div className="flex flex-wrap">
+            <div className="mb-2 mr-2 flex min-w-[85px] items-center gap-1">
               <span className="medium-14 text-gray-600">민정현</span>
               <a
                 href="https://github.com/Eletsia"
@@ -36,7 +36,7 @@ const Footer = () => {
                 />
               </a>
             </div>
-            <div className="flex w-[85px] items-center gap-1">
+            <div className="mb-2 mr-2 flex min-w-[85px] items-center gap-1">
               <span className="medium-14 text-gray-600">조영현</span>
               <a
                 href="https://github.com/joyounghyun550"
@@ -50,7 +50,7 @@ const Footer = () => {
                 />
               </a>
             </div>
-            <div className="flex w-[85px] items-center gap-1">
+            <div className="mb-2 mr-2 flex min-w-[85px] items-center gap-1">
               <span className="medium-14 text-gray-600">고용준</span>
               <a
                 href="https://github.com/mbdyjk"
@@ -64,7 +64,7 @@ const Footer = () => {
                 />
               </a>
             </div>
-            <div className="flex w-[85px] items-center gap-1">
+            <div className="mb-2 mr-2 flex min-w-[85px] items-center gap-1">
               <span className="medium-14 text-gray-600">강푸른</span>
               <a
                 href="https://github.com/PureunKang"
@@ -78,7 +78,7 @@ const Footer = () => {
                 />
               </a>
             </div>
-            <div className="flex w-[85px] items-center gap-1">
+            <div className="mb-2 mr-2 flex min-w-[85px] items-center gap-1">
               <span className="medium-14 text-gray-600">이소흔</span>
               <a
                 href="https://github.com/sohxxny"
@@ -96,20 +96,28 @@ const Footer = () => {
         </div>
 
         {/* 디자이너 섹션 */}
-        <div className="flex items-start">
+        <div className="flex flex-wrap items-start">
           <h3 className="semibold-16 w-[80px] text-gray-600">디자이너</h3>
-          <div className="flex">
-            <span className="medium-14 w-[85px] text-gray-600">최시현</span>
-            <span className="medium-14 w-[85px] text-gray-600">유진희</span>
+          <div className="flex flex-wrap">
+            <span className="medium-14 mb-2 mr-2 min-w-[85px] text-gray-600">
+              최시현
+            </span>
+            <span className="medium-14 mb-2 mr-2 min-w-[85px] text-gray-600">
+              유진희
+            </span>
           </div>
         </div>
 
         {/* 튜터 섹션 */}
-        <div className="flex items-start">
+        <div className="flex flex-wrap items-start">
           <h3 className="semibold-16 w-[80px] text-gray-600">튜터</h3>
-          <div className="flex">
-            <span className="medium-14 w-[85px] text-gray-600">김병연</span>
-            <span className="medium-14 w-[85px] text-gray-600">박가현</span>
+          <div className="flex flex-wrap">
+            <span className="medium-14 mb-2 mr-2 min-w-[85px] text-gray-600">
+              김병연
+            </span>
+            <span className="medium-14 mb-2 mr-2 min-w-[85px] text-gray-600">
+              박가현
+            </span>
           </div>
         </div>
       </div>

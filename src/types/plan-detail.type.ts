@@ -1,4 +1,4 @@
-import { CategoryType } from './category-badge.type';
+import { CategoryType } from './category.type';
 import { Place } from './search.type';
 
 export type CommentType = {

@@ -6,7 +6,7 @@ import { TravelCategory } from '@/types/home.category.type';
 export const CATEGORY_ROUTES: Record<TravelCategory, string> = {
   전체: '/categories/all',
   명소: '/categories/toursite',
-  숙박: '/categories/accomodation',
+  숙박: '/categories/accommodation',
   맛집: '/categories/restaurant',
   카페: '/categories/cafe',
   항공권: '/categories/flight',
@@ -15,7 +15,7 @@ export const CATEGORY_ROUTES: Record<TravelCategory, string> = {
 export const CATEGORY_KR_MAP: Record<string, TravelCategory> = {
   all: '전체',
   toursite: '명소',
-  accomodation: '숙박',
+  accommodation: '숙박',
   restaurant: '맛집',
   cafe: '카페',
   flight: '항공권',

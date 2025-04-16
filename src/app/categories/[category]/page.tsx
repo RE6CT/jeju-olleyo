@@ -4,10 +4,16 @@ import {
   QueryClient,
 } from '@tanstack/react-query';
 
-import { usePrefetchPlacesByCategory } from '@/lib/queries/use-prefetch-places';
 import CategoryClient from './category-client';
+import { CategoryParamType } from '@/types/category.type';
+import { usePrefetchPlacesByCategory } from '@/lib/queries/use-get-places';
 
-const CategoryPage = async ({ params }: { params: { category: string } }) => {
+/** 서버에서 초기 데이터를 로드하는 서버 컴포넌트 페이지 */
+const CategoryPage = async ({
+  params,
+}: {
+  params: { category: CategoryParamType };
+}) => {
   const queryClient = new QueryClient();
 
   const urlCategory = params.category;

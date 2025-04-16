@@ -36,17 +36,17 @@ const ForgotPasswordPage = () => {
         description={
           isSubmitted
             ? '비밀번호 재설정 링크를 이메일로 발송했어요.'
-            : '계정에 등록된 이메일을 입력하여 비밀번호를 재설정하세요'
+            : '등록된 이메일을 입력하여 비밀번호를 재설정하세요'
         }
       />
 
-      <CardContent>
+      <CardContent className="mt-7">
         {error && <AuthErrorMessage messages={[error]} className="mb-4" />}
 
         {isSubmitted ? (
           <div className="space-y-4">
-            <div className="rounded-md border border-gray-400 p-3">
-              <p className="text-center text-gray-400">
+            <div className="rounded-12 border border-gray-200 p-3">
+              <p className="medium-16 text-start text-gray-400">
                 {submittedEmail || 'abc123@email.com'}
               </p>
             </div>
@@ -61,11 +61,8 @@ const ForgotPasswordPage = () => {
             </div>
           </div>
         ) : (
-          <form
-            onSubmit={handleSubmit(handleResetPassword)}
-            className="space-y-4"
-          >
-            <div className="space-y-2">
+          <form onSubmit={handleSubmit(handleResetPassword)}>
+            <div>
               <Label htmlFor="email">이메일</Label>
               <Input
                 id="email"
@@ -73,11 +70,17 @@ const ForgotPasswordPage = () => {
                 placeholder="name@example.com"
                 {...register('email')}
               />
-              {errors.email && (
-                <p className="text-14 text-red">{errors.email.message}</p>
-              )}
+              <div className="h-5">
+                {errors.email && (
+                  <p className="text-14 text-red">{errors.email.message}</p>
+                )}
+              </div>
             </div>
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button
+              type="submit"
+              className="mt-[5px] flex h-11 w-full items-center justify-center gap-2.5 rounded-xl bg-primary-500 p-2.5 pt-3 hover:bg-primary-600"
+              disabled={isLoading}
+            >
               {isLoading
                 ? AUTH_BUTTON_TEXT.LOADING
                 : AUTH_BUTTON_TEXT.FORGOT_PASSWORD.DEFAULT}
@@ -88,8 +91,11 @@ const ForgotPasswordPage = () => {
 
       <CardFooter className="flex justify-center">
         <div className="text-14 text-gray-600">
-          <Link href={PATH.SIGNIN} className="ml-1 text-black hover:text-blue">
-            로그인 페이지로 돌아가기
+          <Link
+            href={PATH.SIGNIN}
+            className="medium-12 p-2.5 text-secondary-300"
+          >
+            로그인으로 돌아가기
           </Link>
         </div>
       </CardFooter>

@@ -29,7 +29,7 @@ const Home = () => {
       </section>
 
       {/* 날씨 섹션 */}
-      <section className="mt-8">
+      <section className="mt-[58px]">
         <Suspense fallback={<Loading />}>
           <WeatherSection />
         </Suspense>
@@ -52,7 +52,7 @@ const Home = () => {
       {/* 내 일정 만들러 가기 배너 섹션*/}
       <section>
         <JejuBanner
-          imageUrl="/banner-images/plan-banner.svg"
+          imageUrl="/banner-images/plan-banner.jpg"
           title="나만의 제주 여행 계획하기"
           buttonText="내 일정 만들러 가기"
           buttonUrl={PATH.PLAN_NEW}

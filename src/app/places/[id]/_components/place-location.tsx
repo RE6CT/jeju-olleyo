@@ -30,7 +30,7 @@ const PlaceLocation = ({
     },
   ];
   return (
-    <div className="h-[102px] w-[479px]">
+    <div className="pt-auto h-[150px] w-[479px]">
       <KakaoMap
         center={{ lat, lng }}
         level={3}

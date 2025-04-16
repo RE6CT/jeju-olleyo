@@ -12,16 +12,15 @@ const BookmarkIcon = ({
   onToggle: () => void;
 }) => {
   return (
-    <Button
+    <button
       onClick={onToggle}
-      variant="ghost"
-      className="flex h-8 w-8 cursor-pointer items-center justify-center border-none bg-transparent p-0 hover:bg-transparent"
+      className="h-30 w-30 flex cursor-pointer items-center justify-center border-none bg-transparent p-0 hover:bg-transparent"
       aria-label={isBookmarked ? '북마크 해제' : '북마크'}
     >
       <svg
-        width="20"
-        height="20"
-        viewBox="0 0 20 20"
+        width="30"
+        height="30"
+        viewBox="0 0 25 25"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
@@ -33,7 +32,7 @@ const BookmarkIcon = ({
           className={isBookmarked ? 'text-primary-500' : 'text-gray-200'}
         />
       </svg>
-    </Button>
+    </button>
   );
 };
 

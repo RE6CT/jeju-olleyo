@@ -11,16 +11,35 @@ import { useEffect, useState } from 'react';
 import PlaceLocation from './_components/place-location';
 import { camelize } from '@/lib/utils/camelize';
 import PlanIncludingPlace from './_components/plan-including-place';
+import BookmarkIcon from '@/components/commons/bookmark-icon';
+import { useBookmarkQuery } from '@/lib/hooks/use-bookmark-query';
 
 const PlaceDetailPage = () => {
   const params = useParams();
 
   const [place, setPlace] = useState<Place | null>(null);
-  const [detailInfo, setDetailInfo] = useState<DetailIntroRaw | undefined>(
-    undefined,
-  );
+  const [detailInfo, setDetailInfo] = useState<DetailIntroRaw>();
   const [error, setError] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
 
+  // 유저 아이디 가져오기
+  useEffect(() => {
+    const fetchUserId = async () => {
+      const supabase = await getBrowserClient();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (session?.user?.id) {
+        setUserId(session.user.id);
+      }
+    };
+    fetchUserId();
+  }, []);
+
+  // 북마크 상태 가져오기
+  const { isBookmarked, toggleBookmark } = useBookmarkQuery(userId ?? '');
+
+  // 수파베이스 내 장소 정보 가져오기
   useEffect(() => {
     const fetchGetPlaceById = async () => {
       try {
@@ -40,13 +59,12 @@ const PlaceDetailPage = () => {
         const camelizedData = camelize(data) as Place;
         setPlace(camelizedData);
 
-        const contentId = camelizedData.placeId;
-        const contentTypeId = camelizedData.contentTypeId;
+        const { placeId: contentId, contentTypeId } = camelizedData;
 
+        // 관광공사 api 라우트 핸들러 내에서 영업시간 등 가져오기
         const detailRes = await fetch(
           `/api/korea-tour/detail?contentId=${contentId}&contentTypeId=${contentTypeId}`,
         );
-
         const detailJson = await detailRes.json();
 
         if (!detailRes.ok) {
@@ -65,6 +83,20 @@ const PlaceDetailPage = () => {
     }
   }, [params]);
 
+  // '숙박' 카테고리 판단 : 숙박은 운영시간아니고 체크인 체크아웃으로 표시해야 하니까
+  const isHotel = place?.contentTypeId === 32;
+  const rawSummary = isHotel
+    ? detailInfo
+      ? `${detailInfo.openTime || '체크인/아웃 시간 정보 없음'}`
+      : '정보 없음'
+    : detailInfo
+      ? `${detailInfo.openTime || '운영 시간 정보 없음'}${
+          detailInfo.closeDay ? ` (휴무: ${detailInfo.closeDay})` : ''
+        }`
+      : '정보 없음';
+
+  const openSummary = rawSummary.replace(/<br\s*\/?>/gi, '\n');
+
   return (
     <div className="mt-[73px]">
       {place ? (
@@ -80,9 +112,19 @@ const PlaceDetailPage = () => {
                 badgeType="modal"
               />
             </div>
+
             <div className="mb-[10px] mt-[10px] flex items-center gap-2">
               <div className="bold-28 text-xl">{place.title}</div>
-              <div>북마크 영역</div>
+              <div className="ml-auto">
+                <BookmarkIcon
+                  isBookmarked={isBookmarked(Number(params.id))}
+                  onToggle={() => {
+                    if (userId) {
+                      toggleBookmark(Number(params.id));
+                    }
+                  }}
+                />
+              </div>
             </div>
 
             {detailInfo ? (
@@ -102,8 +144,11 @@ const PlaceDetailPage = () => {
                       fill="#A7BDC8"
                     />
                   </svg>
-                  {detailInfo.openTime}
+                  {isHotel ? '체크인/체크아웃' : ''}
+                  {}
+                  {openSummary}
                 </div>
+
                 <div className="medium-18 flex space-x-2">
                   <svg
                     width="28"
@@ -117,7 +162,7 @@ const PlaceDetailPage = () => {
                       fill="#A7BDC8"
                     />
                   </svg>
-                  {detailInfo.phone}
+                  {detailInfo?.phone || '전화번호 미제공'}
                 </div>
               </div>
             ) : (
@@ -135,13 +180,10 @@ const PlaceDetailPage = () => {
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
-                  <g id="&#236;&#167;&#128;&#235;&#143;&#132; &#237;&#149;&#128;">
-                    <path
-                      id="Vector"
-                      d="M36.7273 9.14727C40.0319 12.3733 41.9219 16.7277 41.9976 21.2896C42.0734 25.8516 40.329 30.2635 37.1333 33.5924L36.7273 34.0025L28.2415 42.2856C27.1648 43.3362 25.7193 43.9479 24.1979 43.9968C22.6765 44.0458 21.193 43.5283 20.0477 42.5492L19.7598 42.2856L11.272 34.0005C7.89639 30.7048 6 26.2348 6 21.5739C6 16.913 7.89639 12.443 11.272 9.14727C14.6476 5.85153 19.2258 4 23.9996 4C28.7734 4 33.3517 5.85153 36.7273 9.14727ZM23.9996 15.716C23.2117 15.716 22.4315 15.8675 21.7036 16.1619C20.9757 16.4563 20.3142 16.8878 19.7571 17.4317C19.2 17.9757 18.758 18.6214 18.4565 19.3322C18.155 20.0429 17.9998 20.8046 17.9998 21.5739C17.9998 22.3432 18.155 23.1049 18.4565 23.8156C18.758 24.5263 19.2 25.1721 19.7571 25.7161C20.3142 26.26 20.9757 26.6915 21.7036 26.9859C22.4315 27.2803 23.2117 27.4318 23.9996 27.4318C25.5909 27.4318 27.117 26.8146 28.2422 25.7161C29.3674 24.6175 29.9995 23.1275 29.9995 21.5739C29.9995 20.0203 29.3674 18.5303 28.2422 17.4317C27.117 16.3331 25.5909 15.716 23.9996 15.716Z"
-                      fill="#A7BDC8"
-                    />
-                  </g>
+                  <path
+                    d="M36.7273 9.14727C40.0319 12.3733 41.9219 16.7277 41.9976 21.2896C42.0734 25.8516 40.329 30.2635 37.1333 33.5924L36.7273 34.0025L28.2415 42.2856C27.1648 43.3362 25.7193 43.9479 24.1979 43.9968C22.6765 44.0458 21.193 43.5283 20.0477 42.5492L19.7598 42.2856L11.272 34.0005C7.89639 30.7048 6 26.2348 6 21.5739C6 16.913 7.89639 12.443 11.272 9.14727C14.6476 5.85153 19.2258 4 23.9996 4C28.7734 4 33.3517 5.85153 36.7273 9.14727ZM23.9996 15.716C21.238 15.716 18.9998 17.9542 18.9998 20.7159C18.9998 23.4775 21.238 25.7158 23.9996 25.7158C26.7613 25.7158 28.9995 23.4775 28.9995 20.7159C28.9995 17.9542 26.7613 15.716 23.9996 15.716Z"
+                    fill="#A7BDC8"
+                  />
                 </svg>
                 {place.address}
               </div>

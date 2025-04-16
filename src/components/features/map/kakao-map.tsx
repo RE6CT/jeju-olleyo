@@ -43,7 +43,7 @@ const KakaoMap = ({ center, level, onMapLoad, onError }: KakaoMapProps) => {
             options,
           );
           setIsMapLoaded(true);
-          if (mapInstance.current) onMapLoad(mapInstance.current); // map 인스턴스를 외부 컴포넌트로 전달
+          if (mapInstance.current) onMapLoad(mapInstance.current);
         } catch (error) {
           onError?.(
             error instanceof Error ? error : new Error('지도 로드 실패'),
@@ -66,18 +66,6 @@ const KakaoMap = ({ center, level, onMapLoad, onError }: KakaoMapProps) => {
       document.head.removeChild(script);
     };
   }, []); // 마운트시 최초 한번만 실행
-
-  useEffect(() => {
-    if (!isMapLoaded || !mapInstance.current) return;
-
-    try {
-      const latlng = new window.kakao.maps.LatLng(center.lat, center.lng);
-      mapInstance.current.setCenter(latlng);
-      mapInstance.current.setLevel(level);
-    } catch (err) {
-      onError?.(err instanceof Error ? err : new Error('지도 위치 변경 실패'));
-    }
-  }, [center.lat, center.lng, level, isMapLoaded, onError]);
 
   return <div ref={mapRef} style={{ width: '100%', height: '100%' }} />;
 };

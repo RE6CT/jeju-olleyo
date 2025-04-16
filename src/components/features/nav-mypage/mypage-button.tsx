@@ -52,11 +52,11 @@ const MypageButton = ({ userId }: { userId: string }) => {
   };
 
   return (
-    <>
+    <div className="relative">
       <button
         onClick={handleMypageModalToggle}
         ref={buttonRef}
-        className="relative whitespace-nowrap text-xs font-medium sm:text-xs md:text-sm lg:text-base"
+        className="whitespace-nowrap text-xs font-medium sm:text-xs md:text-sm lg:text-base"
       >
         마이페이지
       </button>
@@ -68,7 +68,7 @@ const MypageButton = ({ userId }: { userId: string }) => {
           modalRef={modalRef}
         />
       )}
-    </>
+    </div>
   );
 };
 

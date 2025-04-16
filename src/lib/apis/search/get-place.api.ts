@@ -1,6 +1,7 @@
 'use server';
 
 import { getServerClient } from '@/lib/supabase/server';
+import { camelize } from '@/lib/utils/camelize';
 
 /**
  *
@@ -13,7 +14,7 @@ const fetchGetAllPlaces = async () => {
 
   if (error) throw new Error(error.message);
 
-  return data;
+  return data.map(camelize);
 };
 
 export default fetchGetAllPlaces;

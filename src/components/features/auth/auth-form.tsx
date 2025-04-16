@@ -117,6 +117,7 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
             <PasswordInput
               id="password"
               placeholder="비밀번호를 입력하세요"
+              autoComplete="current-password"
               register={registerLogin('password')}
             />
             <ErrorMessage message={errorsLogin.password?.message} />
@@ -193,6 +194,7 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
               id="password"
               placeholder="비밀번호를 입력하세요"
               register={registerSignup('password')}
+              autoComplete="new-password"
             />
             <ErrorMessage message={errorsSignup.password?.message} />
           </div>
@@ -204,6 +206,7 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
               id="confirmPassword"
               placeholder="비밀번호를 다시 입력하세요"
               register={registerSignup('confirmPassword')}
+              autoComplete="new-password"
             />
             <ErrorMessage message={errorsSignup.confirmPassword?.message} />
           </div>

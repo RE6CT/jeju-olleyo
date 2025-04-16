@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import PlaceSidemenuLayout from './place-sidemenu-layout';
 import { Input } from '@/components/ui/input';
 import PlaceCardCategory from './place-card-category';
-import { CategoryType } from '@/types/category-badge.type';
+import { CategoryType } from '@/types/category.type';
 import fetchGetAllPlaces from '@/lib/apis/search/get-place.api';
 import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { Place } from '@/types/search.type';
@@ -233,11 +233,9 @@ const SearchSidemenu = ({
                     title={place.title}
                     category={place.category as CategoryType}
                     imageUrl={place.image || ''}
-                    isBookmarked={isBookmarked(place.place_id)}
+                    isBookmarked={isBookmarked(place.placeId)}
                     isSearchSection
-                    onBookmarkToggle={() =>
-                      handleBookmarkToggle(place.place_id)
-                    }
+                    onBookmarkToggle={() => handleBookmarkToggle(place.placeId)}
                     onAddPlace={() => handleAddPlace(place)}
                   />
                 </motion.div>

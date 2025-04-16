@@ -5,7 +5,7 @@ import { Bookmark } from 'lucide-react';
 import PlaceImage from '@/components/commons/place-image';
 import { PlaceModalProps } from '@/types/place-modal.type';
 import CategoryBadge from '@/components/commons/category-badge';
-import { CategoryType } from '@/types/category-badge.type';
+import { CategoryType } from '@/types/category.type';
 
 const PlaceModal = ({ place, detailInfo }: PlaceModalProps) => {
   const isHotel = place.content_type_id === 32;

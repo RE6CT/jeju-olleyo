@@ -45,6 +45,7 @@ const ResetPasswordPage = () => {
               id="password"
               placeholder="8~12자 영문,숫자,특수문자"
               register={register('password')}
+              autoComplete="new-password"
             />
             <div className="h-6">
               {errors.password && (
@@ -59,6 +60,7 @@ const ResetPasswordPage = () => {
               id="confirmPassword"
               placeholder="8~12자 영문,숫자,특수문자"
               register={register('confirmPassword')}
+              autoComplete="new-password"
             />
             <div className="h-6">
               {errors.confirmPassword && (

@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import CategoryBadge from '@/components/commons/category-badge';
-import { CategoryType } from '@/types/category-badge.type';
+import { CategoryType } from '@/types/category.type';
 import { cn } from '@/lib/utils';
 import { DEFAULT_IMAGES } from '@/constants/plan.constants';
 import { useMemo } from 'react';

@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import PlaceSidemenuLayout from './place-sidemenu-layout';
 import PlaceCardCategory from './place-card-category';
-import { CategoryType } from '@/types/category-badge.type';
+import { CategoryType } from '@/types/category.type';
 import ErrorMessage from '@/components/ui/error-message';
 import { useBookmarkQuery } from '@/lib/hooks/use-bookmark-query';
 import DynamicPagination from '@/components/ui/dynamic-pagination';

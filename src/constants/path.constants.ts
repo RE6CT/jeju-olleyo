@@ -17,4 +17,5 @@ export const PATH = {
   CATEGORIES: '/categories',
   RESERVATIONS: '/reservations',
   TICKET: '/air-ticket',
+  PLACES: '/places',
 } as const;

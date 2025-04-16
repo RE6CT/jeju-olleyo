@@ -19,6 +19,7 @@ const PasswordInput = ({
   required = false,
   register,
   className,
+  autoComplete,
 }: PasswordInputProps) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -32,6 +33,7 @@ const PasswordInput = ({
         placeholder={placeholder}
         className={`pr-10 ${className}`}
         required={required}
+        autoComplete={autoComplete}
         {...register}
       />
       <Button

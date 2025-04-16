@@ -372,7 +372,10 @@ export type Database = {
     };
     Functions: {
       get_plans_by_place_id: {
-        Args: { input_place_id: number };
+        Args: {
+          input_place_id: number;
+          user_id_param: string;
+        };
         Returns: {
           plan_id: number;
           title: string;
@@ -381,6 +384,8 @@ export type Database = {
           travel_start_date: string;
           travel_end_date: string;
           like_count: number;
+          nickname: string;
+          is_liked: boolean;
         }[];
       };
       get_user_bookmarks: {

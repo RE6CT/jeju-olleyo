@@ -9,6 +9,8 @@ import { Place } from '@/types/search.type';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import PlaceLocation from './_components/place-location';
+import { camelize } from '@/lib/utils/camelize';
+import PlanIncludingPlace from './_components/plan-including-place';
 
 const PlaceDetailPage = () => {
   const params = useParams();
@@ -35,10 +37,11 @@ const PlaceDetailPage = () => {
           return;
         }
 
-        setPlace(data);
+        const camelizedData = camelize(data) as Place;
+        setPlace(camelizedData);
 
-        const contentId = data.place_id;
-        const contentTypeId = data.content_type_id;
+        const contentId = camelizedData.placeId;
+        const contentTypeId = camelizedData.contentTypeId;
 
         const detailRes = await fetch(
           `/api/korea-tour/detail?contentId=${contentId}&contentTypeId=${contentTypeId}`,
@@ -63,7 +66,7 @@ const PlaceDetailPage = () => {
   }, [params]);
 
   return (
-    <>
+    <div className="mt-[73px]">
       {place ? (
         <div className="flex gap-8">
           <div className="relative aspect-square h-[415px] w-[553px] bg-no-repeat object-cover">
@@ -93,8 +96,8 @@ const PlaceDetailPage = () => {
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
+                      fillRule="evenodd"
+                      clipRule="evenodd"
                       d="M6 24C6 14.0586 14.0586 6 24 6C33.9414 6 42 14.0586 42 24C42 33.9414 33.9414 42 24 42C14.0586 42 6 33.9414 6 24ZM25.8 15C25.8 14.5226 25.6104 14.0648 25.2728 13.7272C24.9352 13.3896 24.4774 13.2 24 13.2C23.5226 13.2 23.0648 13.3896 22.7272 13.7272C22.3896 14.0648 22.2 14.5226 22.2 15V21.7752C22.2 22.7779 22.4792 23.7608 23.0063 24.6137C23.5334 25.4667 24.2876 26.1561 25.1844 26.6046L30.3954 29.2092C30.6076 29.3236 30.8406 29.3943 31.0806 29.4169C31.3206 29.4396 31.5627 29.4138 31.7925 29.3411C32.0223 29.2684 32.2352 29.1503 32.4186 28.9938C32.6019 28.8372 32.7519 28.6455 32.8597 28.4299C32.9675 28.2142 33.0309 27.9792 33.0462 27.7386C33.0614 27.498 33.0281 27.2568 32.9484 27.0293C32.8686 26.8019 32.744 26.5927 32.5819 26.4143C32.4197 26.2359 32.2234 26.0919 32.0046 25.9908L26.7954 23.3844C26.4965 23.235 26.245 23.0054 26.0692 22.7211C25.8934 22.4369 25.8002 22.1094 25.8 21.7752V15Z"
                       fill="#A7BDC8"
                     />
@@ -154,7 +157,9 @@ const PlaceDetailPage = () => {
       ) : (
         <p className="text-gray-300">장소 정보를 불러오는 중...</p>
       )}
-    </>
+
+      <PlanIncludingPlace placeId={Number(params.id)} />
+    </div>
   );
 };
 

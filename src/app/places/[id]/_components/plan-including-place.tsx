@@ -1,18 +1,22 @@
 'use client';
 
+import PlanVerticalCard from '@/components/features/card/plan-vertical-card';
 import { getBrowserClient } from '@/lib/supabase/client';
+import { camelize } from '@/lib/utils/camelize';
 import { useEffect, useState } from 'react';
 
 const PlanIncludingPlace = ({ placeId }: { placeId: number }) => {
   const [plans, setPlans] = useState<
     {
-      plan_id: number;
+      planId: number;
       title: string;
       description: string;
-      plan_img: string;
-      travel_start_date: string;
-      travel_end_date: string;
-      like_count: number;
+      planImg: string;
+      travelStartDate: string;
+      travelEndDate: string;
+      likeCount: number;
+      nickname: string;
+      isLiked: boolean;
     }[]
   >();
 
@@ -21,8 +25,21 @@ const PlanIncludingPlace = ({ placeId }: { placeId: number }) => {
       try {
         const supabase = await getBrowserClient();
 
+        const {
+          data: { session },
+          error: sessionError,
+        } = await supabase.auth.getSession();
+
+        if (sessionError || !session?.user?.id) {
+          console.error('유저 세션 확인 실패');
+          return;
+        }
+
+        const currentUserId = session.user.id;
+
         const { data, error } = await supabase.rpc('get_plans_by_place_id', {
           input_place_id: placeId,
+          user_id_param: currentUserId,
         });
 
         if (error) {
@@ -32,16 +49,38 @@ const PlanIncludingPlace = ({ placeId }: { placeId: number }) => {
         if (!data) {
           return <div>해당 장소가 포함된 일정이 아직 없습니다.</div>;
         }
-        setPlans(data);
+
+        setPlans(data.map(camelize) as typeof plans);
+        console.log(data);
       } catch (err) {
         console.error('장소가 포함된 일정 불러오기 에러');
       }
     };
+    fetchGetPlansByPlaceId();
   }, []);
 
   return (
     <>
-      <div>해당 장소가 포함된 일정</div>
+      <div>
+        <div>
+          <div className="semibold-24 mb-7 mt-[73px]">
+            해당 장소가 포함된 일정
+          </div>
+
+          {plans?.length === 0 && (
+            <p className="text-sm text-gray-400">
+              아직 이 장소가 포함된 일정이 없습니다.
+            </p>
+          )}
+
+          <div className="grid w-full grid-cols-1 gap-x-[11px] gap-y-9 sm:grid-cols-2 md:grid-cols-3">
+            {plans &&
+              plans.map((plan) => (
+                <PlanVerticalCard key={plan.planId} plan={plan} />
+              ))}
+          </div>
+        </div>
+      </div>
     </>
   );
 };

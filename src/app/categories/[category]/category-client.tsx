@@ -9,7 +9,6 @@ const CategoryClient = ({ category }: { category: string }) => {
 
   if (isPending) return <Loading />;
   if (isError) return <ErrorMessage message="장소 불러오기 오류 발생" />;
-
   return (
     <>
       {(data as any[])?.map((place) => <div key={place.id}>{place.title}</div>)}

@@ -1,26 +1,41 @@
 import { Flight } from '../_type/type';
 
+export type SortKey = 'airline' | 'dep' | 'arr';
+export type SortOrder = 'asc' | 'desc';
+
 const sortFlights = (
   flights: Flight[],
   key: 'airline' | 'dep' | 'arr',
   order: 'asc' | 'desc',
 ) => {
-  return [...flights].sort((a, b) => {
-    const keyA =
-      key === 'airline'
-        ? a.airlineKorean
-        : key === 'dep'
-          ? a.depPlandTime
-          : a.arrPlandTime;
-    const keyB =
-      key === 'airline'
-        ? b.airlineKorean
-        : key === 'dep'
-          ? b.depPlandTime
-          : b.arrPlandTime;
-    const compare = keyA.localeCompare(keyB);
-    return order === 'asc' ? compare : -compare;
+  const sorted = [...flights].sort((a, b) => {
+    let aVal, bVal;
+
+    if (key === 'airline') {
+      aVal = a.airlineKorean;
+      bVal = b.airlineKorean;
+    } else if (key === 'dep') {
+      aVal = a.depPlandTime;
+      bVal = b.depPlandTime;
+    } else if (key === 'arr') {
+      aVal = a.arrPlandTime;
+      bVal = b.arrPlandTime;
+    }
+
+    if (typeof aVal === 'string' && typeof bVal === 'string') {
+      return order === 'asc'
+        ? aVal.localeCompare(bVal)
+        : bVal.localeCompare(aVal);
+    }
+
+    if (typeof aVal === 'number' && typeof bVal === 'number') {
+      return order === 'asc' ? aVal - bVal : bVal - aVal;
+    }
+
+    return 0;
   });
+
+  return sorted;
 };
 
 const formatTime = (timeStr: string) => {

@@ -1,31 +1,17 @@
-import { Flight } from '../_type/type';
-import { formatTime } from '../_utils/ticket-uitls';
+import { FlightListProps } from '../_type/type';
+import TicketCard from './TIcketCard';
 
-interface FlightListProps {
-  flights: Flight[];
-  sortKey: 'airline' | 'dep' | 'arr';
-  sortOrder: 'asc' | 'desc';
-  sortFlights: (
-    flights: Flight[],
-    key: 'airline' | 'dep' | 'arr',
-    order: 'asc' | 'desc',
-  ) => Flight[];
-  setSortKey: React.Dispatch<React.SetStateAction<'airline' | 'dep' | 'arr'>>;
-  setSortOrder: React.Dispatch<React.SetStateAction<'asc' | 'desc'>>;
-}
-
-export const FlightList: React.FC<FlightListProps> = ({
+const FlightList = ({
   flights,
   sortKey,
   sortOrder,
   sortFlights,
   setSortKey,
   setSortOrder,
-}) => {
-  console.log('flights', flights);
+}: FlightListProps) => {
   return (
     <div>
-      <div className="mb-2 flex items-center gap-3">
+      <div className="mb-2 mt-4 flex items-center gap-3">
         <label className="font-medium">정렬 기준:</label>
         <select
           className="rounded border px-2 py-1"
@@ -51,16 +37,10 @@ export const FlightList: React.FC<FlightListProps> = ({
 
       <ul className="space-y-3">
         {sortFlights(flights, sortKey, sortOrder).map((flight, idx) => (
-          <li key={idx} className="rounded border bg-gray-100 p-4 text-sm">
-            ✈️ 항공사: {flight.airlineKorean}
-            <br />
-            항공편: {flight.flightId}
-            <br />
-            출발: {formatTime(flight.depPlandTime)} / 도착:{' '}
-            {formatTime(flight.arrPlandTime)}
-          </li>
+          <TicketCard flight={flight} idx={idx} />
         ))}
       </ul>
     </div>
   );
 };
+export default FlightList;

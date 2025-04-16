@@ -1,26 +1,11 @@
-interface DateOptionsProps {
-  formData: {
-    schDate: string;
-    returnDate: string;
-    schArrvCityCode: string;
-  };
-  setFormData: React.Dispatch<
-    React.SetStateAction<{
-      schDate: string;
-      returnDate: string;
-      schArrvCityCode: string;
-    }>
-  >;
-  field: 'schDate' | 'returnDate';
-  baseDateStr: string;
-}
+import { DateOptionsProps } from '../_type/type';
 
-export const DateOptions: React.FC<DateOptionsProps> = ({
+const DateOptions = ({
   formData,
   setFormData,
   field,
   baseDateStr,
-}) => {
+}: DateOptionsProps) => {
   if (!baseDateStr) return null;
 
   const baseDate = new Date(baseDateStr);
@@ -54,3 +39,5 @@ export const DateOptions: React.FC<DateOptionsProps> = ({
     </div>
   );
 };
+
+export default DateOptions;

@@ -1,18 +1,18 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
-import { FlightSearchForm } from './_components/FlightSearchForm';
-import { DateOptions } from './_components/DateOptions';
-import { FlightList } from './_components/FlightList';
-import { getAirportLabel } from './_utils/ticket-uitls';
+import FlightSearchForm from './_components/FlightSearchForm';
+import DateOptions from './_components/DateOptions';
+import FlightList from './_components/FlightList';
+import {
+  getAirportLabel,
+  sortFlights,
+  SortKey,
+  SortOrder,
+} from './_utils/ticket-uitls';
 import Loading from '../loading';
-
-interface Flight {
-  airlineKorean: string;
-  flightId: string;
-  depPlandTime: string;
-  arrPlandTime: string;
-}
+import { Flight } from './_type/type';
+import { DEPARTURE_LIST } from '@/constants/ticket.constants';
 
 export default function FlightSearch() {
   const [formData, setFormData] = useState({
@@ -25,23 +25,10 @@ export default function FlightSearch() {
   const [returnFlights, setReturnFlights] = useState<Flight[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const departureList = [
-    { label: '서울', value: 'SEL' },
-    { label: '부산', value: 'PUS' },
-    { label: '김포', value: 'GMP' },
-    { label: '인천', value: 'ICN' },
-    { label: '광주', value: 'KWJ' },
-    { label: '무안', value: 'MWX' },
-    { label: '군산', value: 'KUV' },
-    { label: '대구', value: 'TAE' },
-    { label: '진주', value: 'HIN' },
-    { label: '여수', value: 'RSU' },
-    { label: '울산', value: 'USN' },
-    { label: '원주', value: 'WJU' },
-    { label: '청주', value: 'CJJ' },
-    { label: '포항', value: 'KPO' },
-    { label: '양양', value: 'YNY' },
-  ];
+  // 정렬 상태 관리
+  const [sortKey, setSortKey] = useState<SortKey>('airline');
+  const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
+
   const didMount = useRef(false);
 
   useEffect(() => {
@@ -80,7 +67,7 @@ export default function FlightSearch() {
         }),
       ]);
 
-      const mapFlights = (items: any[]) =>
+      const mapFlights = (items: any[]): Flight[] =>
         items.map((item) => ({
           airlineKorean: item.airlineKorean,
           flightId: item.domesticNum,
@@ -91,16 +78,17 @@ export default function FlightSearch() {
       setGoFlights(mapFlights(goRes.data.items || []));
       setReturnFlights(mapFlights(returnRes.data.items || []));
     } catch (error) {
-      alert('운항 정보를 불러오는 데 실패했습니다.');
+      alert('항공기 정보를 불러오는데 실패했습니다. 다시 시도해 주세요.');
       console.error(error);
     } finally {
       setLoading(false);
     }
   };
+
   return (
     <div className="mx-auto max-w-7xl p-6">
       <FlightSearchForm
-        departureList={departureList}
+        departureList={DEPARTURE_LIST}
         departure={departure}
         setDeparture={setDeparture}
         formData={formData}
@@ -109,11 +97,13 @@ export default function FlightSearch() {
         }
         handleSubmit={handleSubmit}
       />
+
       {loading ? (
         <Loading />
       ) : (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <section>
+            <h2 className="mb-2 text-lg font-semibold">가는편</h2>
             <p>{getAirportLabel(departure)} ➡ 제주</p>
             <DateOptions
               baseDateStr={formData.schDate}
@@ -121,17 +111,18 @@ export default function FlightSearch() {
               formData={formData}
               setFormData={setFormData}
             />
-            <h2 className="mb-2 text-lg font-semibold">가는편</h2>
             <FlightList
               flights={goFlights}
-              sortKey="airline"
-              sortOrder="asc"
-              sortFlights={(flights) => flights}
-              setSortKey={() => {}}
-              setSortOrder={() => {}}
+              sortKey={sortKey}
+              sortOrder={sortOrder}
+              sortFlights={sortFlights}
+              setSortKey={setSortKey}
+              setSortOrder={setSortOrder}
             />
           </section>
+
           <section>
+            <h2 className="mb-2 text-lg font-semibold">오는편</h2>
             <p>제주 ➡ {getAirportLabel(departure)}</p>
             <DateOptions
               baseDateStr={formData.returnDate}
@@ -139,14 +130,13 @@ export default function FlightSearch() {
               formData={formData}
               setFormData={setFormData}
             />
-            <h2 className="mb-2 text-lg font-semibold">오는편</h2>
             <FlightList
               flights={returnFlights}
-              sortKey="airline"
-              sortOrder="asc"
-              sortFlights={(flights) => flights}
-              setSortKey={() => {}}
-              setSortOrder={() => {}}
+              sortKey={sortKey}
+              sortOrder={sortOrder}
+              sortFlights={sortFlights}
+              setSortKey={setSortKey}
+              setSortOrder={setSortOrder}
             />
           </section>
         </div>

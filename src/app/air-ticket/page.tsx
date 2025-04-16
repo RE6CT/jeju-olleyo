@@ -101,45 +101,47 @@ export default function FlightSearch() {
       {loading ? (
         <Loading />
       ) : (
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <section>
-            <h2 className="mb-2 text-lg font-semibold">가는편</h2>
-            <p>{getAirportLabel(departure)} ➡ 제주</p>
-            <DateOptions
-              baseDateStr={formData.schDate}
-              field="schDate"
-              formData={formData}
-              setFormData={setFormData}
-            />
-            <FlightList
-              flights={goFlights}
-              sortKey={sortKey}
-              sortOrder={sortOrder}
-              sortFlights={sortFlights}
-              setSortKey={setSortKey}
-              setSortOrder={setSortOrder}
-            />
-          </section>
+        departure && (
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <section>
+              <h2 className="mb-2 text-lg font-semibold">가는편</h2>
+              <p>{getAirportLabel(departure)} ➡ 제주</p>
+              <DateOptions
+                baseDateStr={formData.schDate}
+                field="schDate"
+                formData={formData}
+                setFormData={setFormData}
+              />
+              <FlightList
+                flights={goFlights}
+                sortKey={sortKey}
+                sortOrder={sortOrder}
+                sortFlights={sortFlights}
+                setSortKey={setSortKey}
+                setSortOrder={setSortOrder}
+              />
+            </section>
 
-          <section>
-            <h2 className="mb-2 text-lg font-semibold">오는편</h2>
-            <p>제주 ➡ {getAirportLabel(departure)}</p>
-            <DateOptions
-              baseDateStr={formData.returnDate}
-              field="returnDate"
-              formData={formData}
-              setFormData={setFormData}
-            />
-            <FlightList
-              flights={returnFlights}
-              sortKey={sortKey}
-              sortOrder={sortOrder}
-              sortFlights={sortFlights}
-              setSortKey={setSortKey}
-              setSortOrder={setSortOrder}
-            />
-          </section>
-        </div>
+            <section>
+              <h2 className="mb-2 text-lg font-semibold">오는편</h2>
+              <p>제주 ➡ {getAirportLabel(departure)}</p>
+              <DateOptions
+                baseDateStr={formData.returnDate}
+                field="returnDate"
+                formData={formData}
+                setFormData={setFormData}
+              />
+              <FlightList
+                flights={returnFlights}
+                sortKey={sortKey}
+                sortOrder={sortOrder}
+                sortFlights={sortFlights}
+                setSortKey={setSortKey}
+                setSortOrder={setSortOrder}
+              />
+            </section>
+          </div>
+        )
       )}
     </div>
   );

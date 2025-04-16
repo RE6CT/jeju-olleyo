@@ -46,7 +46,7 @@ const AccountProfileImage = ({
       if (error instanceof Error) {
         errorMessage = error.message;
       }
-      alert(errorMessage);
+      successToast(errorMessage);
     } finally {
       setModalOpen(false);
     }

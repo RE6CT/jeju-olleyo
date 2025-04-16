@@ -12,6 +12,7 @@ import { getCurrentSession } from '@/lib/apis/auth/auth-browser.api';
 import { PATH } from '@/constants/path.constants';
 import useAuthStore from '@/zustand/auth.store';
 import { useGetDataCount } from '@/lib/queries/use-get-data-count';
+import useCustomToast from '@/lib/hooks/use-custom-toast';
 
 const ICON_STYLE = {
   title: 'medium-14 text-gray-500',
@@ -41,6 +42,7 @@ const MypageModal = ({
   const { handleLogout, isLoading: isAuthLoading } = useAuth();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [localUser, setLocalUser] = useState(user);
+  const { successToast } = useCustomToast();
 
   // 컴포넌트 마운트 시 세션에서 직접 사용자 정보 가져오기
   useEffect(() => {
@@ -72,7 +74,7 @@ const MypageModal = ({
       const success = await handleLogout();
 
       if (!success) {
-        alert('로그아웃에 실패했습니다. 다시 시도해주세요.');
+        successToast('로그아웃에 실패했습니다. 다시 시도해주세요.');
         return;
       }
 

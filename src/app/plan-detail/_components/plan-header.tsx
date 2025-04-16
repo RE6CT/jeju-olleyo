@@ -11,6 +11,7 @@ import { formatTravelPeriod } from '@/lib/utils/date';
 import { Label } from '@/components/ui/label';
 import TextareaWithCount from '@/components/ui/textarea-with-count';
 import { fetchUploadPlanImage } from '@/lib/apis/plan/plan.api';
+import useCustomToast from '@/lib/hooks/use-custom-toast';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
@@ -40,6 +41,7 @@ const PlanHeader = ({
   setPlanImage: (image: string | null) => void;
 }) => {
   const [isUploading, setIsUploading] = useState(false);
+  const { successToast } = useCustomToast();
 
   // 컴포넌트가 언마운트될 때 객체 URL 해제
   useEffect(() => {
@@ -56,13 +58,13 @@ const PlanHeader = ({
 
     // 파일 크기 제한 (5MB)
     if (file.size > MAX_FILE_SIZE) {
-      alert('이미지 크기는 5MB를 초과할 수 없습니다.');
+      successToast('이미지 크기는 5MB를 초과할 수 없습니다.');
       return;
     }
 
     const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
     if (!validTypes.includes(file.type)) {
-      alert('JPEG, PNG, GIF 형식의 이미지만 업로드 가능합니다.');
+      successToast('JPEG, PNG, GIF 형식의 이미지만 업로드 가능합니다.');
       return;
     }
 
@@ -81,7 +83,7 @@ const PlanHeader = ({
       setPlanImage(uploadedImageUrl);
     } catch (error) {
       console.error('이미지 업로드 실패:', error);
-      alert('이미지 업로드에 실패했습니다.');
+      successToast('이미지 업로드에 실패했습니다.');
       setPlanImage(null);
     } finally {
       setIsUploading(false);

@@ -85,7 +85,7 @@ const PersonalInfo = ({
       if (error instanceof Error) {
         errorMessage = error.message;
       }
-      alert(errorMessage);
+      successToast(errorMessage);
     } finally {
       setIsEditMode(false);
       reset();

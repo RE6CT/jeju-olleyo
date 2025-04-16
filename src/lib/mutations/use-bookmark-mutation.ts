@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { addBookmark, removeBookmark } from '@/lib/apis/home/home.popular.api';
 import useAuth from '../hooks/use-auth';
+import useCustomToast from '../hooks/use-custom-toast';
 
 /**
  * 북마크 추가/삭제 기능을 제공하는 훅
@@ -9,6 +10,7 @@ import useAuth from '../hooks/use-auth';
 export const useBookmarkMutation = () => {
   const { user } = useAuth();
   const queryClient = useQueryClient();
+  const { successToast } = useCustomToast();
 
   const bookmarkMutation = useMutation({
     mutationFn: async ({
@@ -20,7 +22,7 @@ export const useBookmarkMutation = () => {
     }) => {
       if (!user) {
         // 로그인하지 않은 경우 로그인 안내
-        alert('로그인이 필요한 기능입니다.');
+        successToast('로그인이 필요합니다.');
         return { success: false };
       }
 
@@ -43,7 +45,7 @@ export const useBookmarkMutation = () => {
     },
     onError: (error) => {
       console.error('북마크 작업 실패:', error);
-      alert('북마크 작업 중 오류가 발생했습니다.');
+      successToast('북마크 작업 중 오류가 발생했습니다.');
     },
   });
 

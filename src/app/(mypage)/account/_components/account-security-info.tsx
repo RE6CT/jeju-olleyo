@@ -73,7 +73,7 @@ const SecurityInfo = ({ userId }: { userId: string }) => {
       if (error instanceof Error) {
         errorMessage = error.message;
       }
-      alert(errorMessage);
+      successToast(errorMessage);
     } finally {
       setIsEditMode(false);
       reset();

@@ -58,7 +58,7 @@ const ProfileModal = ({
     const file = e.target.files[0];
     if (file) {
       if (file.size > MAX_FILE_SIZE) {
-        alert('파일의 크기는 5MB를 넘을 수 없습니다.');
+        successToast('파일의 크기는 5MB를 넘을 수 없습니다.');
         return;
       }
 
@@ -74,7 +74,7 @@ const ProfileModal = ({
   ) => {
     e.preventDefault();
     if (!selectImage) {
-      alert(ERROR_MESSAGES.IMAGE_DATA_MISSING);
+      successToast(ERROR_MESSAGES.IMAGE_DATA_MISSING);
       return;
     }
 
@@ -89,14 +89,14 @@ const ProfileModal = ({
       formData.append('userId', userId);
 
       const result = await fetchUpdateProfileImage(formData);
-      alert(result.message);
+
       successToast(result.message);
     } catch (error: unknown) {
       let errorMessage = ERROR_MESSAGES.PROFILE_UPDATE_FAILED;
       if (error instanceof Error) {
         errorMessage = error.message;
       }
-      alert(errorMessage);
+      successToast(errorMessage);
     } finally {
       setModalOpen(false);
     }

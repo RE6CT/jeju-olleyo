@@ -24,7 +24,7 @@ export const useDeletePlan = (userId: string) => {
       successToast('일정이 삭제되었습니다.');
     },
     onError: (error: Error) => {
-      alert(error.message || '일정 삭제에 실패했습니다.');
+      successToast(error.message || '일정 삭제에 실패했습니다.');
     },
   });
 };

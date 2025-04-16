@@ -5,6 +5,7 @@ import { getCurrentSession } from '../apis/auth/auth-browser.api';
 import fetchDeleteLike from '../apis/like/delete-like.api';
 import fetchUpdateLikeByUserId from '../apis/like/add-like.api';
 import { useInvalidateLikes } from '../mutations/use-like-mutation';
+import useCustomToast from './use-custom-toast';
 
 /**
  * 좋아요 토글 함수를 반환하는 커스텀 훅
@@ -13,6 +14,7 @@ import { useInvalidateLikes } from '../mutations/use-like-mutation';
  */
 const useToggleLike = (planId: number) => {
   const { invalidateLikes } = useInvalidateLikes();
+  const { successToast } = useCustomToast();
 
   const toggleLike = async () => {
     try {
@@ -20,7 +22,8 @@ const useToggleLike = (planId: number) => {
       const userId = sessionUser?.id;
 
       if (!userId) {
-        alert('로그인이 필요합니다.');
+        successToast('로그인이 필요합니다.');
+
         return;
       }
 
@@ -35,7 +38,7 @@ const useToggleLike = (planId: number) => {
       invalidateLikes();
     } catch (error) {
       console.error('Error toggling like:', error);
-      alert('좋아요 처리 중 오류가 발생했습니다.');
+      successToast('좋아요 처리 중 오류가 발생했습니다.');
     }
   };
 

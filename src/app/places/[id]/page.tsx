@@ -100,10 +100,10 @@ const PlaceDetailPage = () => {
   const openSummary = rawSummary.replace(/<br\s*\/?>/gi, '\n');
 
   return (
-    <div className="mt-[73px]">
+    <div className="mt-[73px] flex flex-col items-center justify-center px-9">
       {place ? (
         <div className="flex gap-8">
-          <div className="relative aspect-square h-[417px] w-[415px] bg-no-repeat object-cover">
+          <div className="relative aspect-square w-[479px] bg-no-repeat object-cover">
             <PlaceImage image={place.image} title={place.title} />
           </div>
 
@@ -203,8 +203,9 @@ const PlaceDetailPage = () => {
       ) : (
         <p className="text-gray-300">장소 정보를 불러오는 중...</p>
       )}
-
-      <PlanIncludingPlace placeId={Number(params.id)} />
+      <div className="w-full text-left">
+        <PlanIncludingPlace placeId={Number(params.id)} />
+      </div>
     </div>
   );
 };

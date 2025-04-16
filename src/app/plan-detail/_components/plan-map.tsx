@@ -5,20 +5,11 @@ import KakaoMap from '@/components/features/map/kakao-map';
 import Clusterer from '@/components/features/map/clusterer';
 import Loading from '@/app/loading';
 import ErrorMessage from '@/app/error';
-import {
-  KakaoMapInstance,
-  KakaoMapOptions,
-  MarkerProps,
-} from '@/types/kakao-map.type';
+import { KakaoMapInstance, MarkerProps } from '@/types/kakao-map.type';
 import { DayPlaces, TabType } from '@/types/plan-detail.type';
 import { Place } from '@/types/search.type';
-import { MARKER } from '@/constants/map.constants';
-
-// 초기 설정 map option
-const DEFAULT_MAP_OPTIONS: KakaoMapOptions = {
-  center: { lat: 33.3616666, lng: 126.5291666 },
-  level: 10,
-};
+import { DEFAULT_MAP_OPTIONS } from '@/constants/map.constants';
+import { getLatLng, createMarkerImage } from '@/lib/utils/map.util';
 
 const PlanMap = ({
   dayPlaces,
@@ -40,48 +31,6 @@ const PlanMap = ({
   const handleMapError = (error: Error) => {
     setError(error.message);
     setIsLoading(false);
-  };
-
-  // 위치 정보 변환 함수
-  const getLatLng = (place: Place) => {
-    // 위도, 경도 정보가 있는지 확인
-    if ('latitude' in place && 'longitude' in place) {
-      const lat =
-        typeof place.latitude === 'string'
-          ? parseFloat(place.latitude)
-          : Number(place.latitude);
-      const lng =
-        typeof place.longitude === 'string'
-          ? parseFloat(place.longitude)
-          : Number(place.longitude);
-      return { lat, lng };
-    }
-    if ('lat' in place && 'lng' in place) {
-      const lat =
-        typeof place.lat === 'string'
-          ? parseFloat(place.lat)
-          : Number(place.lat);
-      const lng =
-        typeof place.lng === 'string'
-          ? parseFloat(place.lng)
-          : Number(place.lng);
-      return { lat, lng };
-    }
-    // 기본값 반환 (제주도 중심)
-    return DEFAULT_MAP_OPTIONS.center;
-  };
-
-  // 마커 이미지 생성 함수
-  const createMarkerImage = (day: number) => {
-    const imageSize = new window.kakao.maps.Size(MARKER.SIZE, MARKER.SIZE);
-    const imageUrl =
-      day % 2 === 1
-        ? `/map/primary500-mapmarker-day${day}.png` // 홀수일: primary500 마커 이미지
-        : `/map/secondary300-mapmarker-day${day}.png`; // 짝수일: secondary300 마커 이미지
-
-    return new window.kakao.maps.MarkerImage(imageUrl, imageSize, {
-      offset: new window.kakao.maps.Point(MARKER.OFFSET.X, MARKER.OFFSET.Y),
-    });
   };
 
   // 현재 활성화된 탭에 따라 표시할 마커들을 필터링
@@ -108,17 +57,14 @@ const PlanMap = ({
       // 선택된 일자의 마커만 표시
       const selectedDay = typeof activeTab === 'number' ? activeTab : 1;
       const places = dayPlaces[selectedDay] || [];
-      return places.map((place: Place, index: number) => {
-        const position = getLatLng(place);
-        return {
-          position,
-          title: place.title,
-          image: createMarkerImage(selectedDay),
-          day: selectedDay,
-          order: index + 1,
-          showDay: false,
-        };
-      });
+      return places.map((place: Place, index: number) => ({
+        position: getLatLng(place),
+        title: place.title,
+        image: createMarkerImage(selectedDay),
+        day: selectedDay,
+        order: index + 1,
+        showDay: false,
+      }));
     }
   };
 

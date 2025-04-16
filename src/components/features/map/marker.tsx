@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { MarkerInstance, MarkerProps } from '@/types/kakao-map.type';
 import { MARKER } from '@/constants/map.constants';
+import { createMarkerImage } from '@/lib/utils/map.util';
 
 /**
  * 카카오맵 마커 컴포넌트
@@ -27,26 +28,11 @@ const Marker = ({
 }: MarkerProps) => {
   const markerInstance = useRef<MarkerInstance | null>(null);
 
-  // 마커 이미지 생성
-  const createMarkerImage = (day: number, order: number, showDay: boolean) => {
-    const imageSize = new window.kakao.maps.Size(MARKER.SIZE, MARKER.SIZE);
-
-    // 마커 이미지 URL 설정 (홀수일: primary500, 짝수일: secondary300)
-    const imageUrl =
-      (day || 1) % 2 === 1
-        ? '/map/primary500-mapmarker.png' // 홀수일: primary500 마커 이미지
-        : '/map/secondary300-mapmarker.png'; // 짝수일: secondary300 마커 이미지
-
-    return new window.kakao.maps.MarkerImage(imageUrl, imageSize, {
-      offset: new window.kakao.maps.Point(MARKER.OFFSET.X, MARKER.OFFSET.Y), // 마커 중심점을 하단 중앙으로 설정
-    });
-  };
-
   // 마커 초기화
   useEffect(() => {
     if (!map || !position) return;
 
-    const markerImage = createMarkerImage(day || 1, order || 1, showDay);
+    const markerImage = createMarkerImage(day || 1);
 
     const marker = new window.kakao.maps.Marker({
       map,

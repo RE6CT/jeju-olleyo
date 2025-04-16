@@ -18,7 +18,7 @@ const WeatherCard = memo(({ weather, isToday = false }: WeatherCardProps) => {
   return (
     <div className="flex flex-1 flex-col items-center">
       {/* 날짜 */}
-      <div className="md:text-11 flex justify-center self-stretch text-center text-10 font-medium not-italic text-gray-900 sm:text-10 lg:text-12">
+      <div className="regular-12 flex justify-center text-center text-gray-500">
         {isToday ? '오늘' : weather.dayOfWeek + '요일'}{' '}
         <div className="mx-1 h-4 w-px bg-gray-300 sm:mx-2 sm:h-4"></div>
         {weather.date.slice(weather.date.length - 2, weather.date.length) +
@@ -39,21 +39,18 @@ const WeatherCard = memo(({ weather, isToday = false }: WeatherCardProps) => {
       </div>
 
       {/* 날씨 상태 */}
-      <div className="px-1 text-center text-10 sm:text-12 md:text-14">
+      <div className="regular-10 px-1 text-center text-gray-900">
         {weather.weatherCondition}
       </div>
 
       {/* 최고/최저 기온 */}
       <div className="mt-1 flex items-center gap-2">
         <div className="flex flex-col items-center">
-          <div className="text-10 text-blue sm:text-12 md:text-14 lg:text-16">
-            {weather.minTemp}°
-          </div>
+          <div className="medium-14 text-blue">{weather.minTemp}°</div>
         </div>
+        <span className="medium-14 text-gray-200">/</span>
         <div className="flex flex-col items-center">
-          <div className="text-10 text-red sm:text-12 md:text-14 lg:text-16">
-            {weather.maxTemp}°
-          </div>
+          <div className="medium-14 text-red">{weather.maxTemp}°</div>
         </div>
       </div>
     </div>

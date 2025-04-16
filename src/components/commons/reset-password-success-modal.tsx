@@ -39,7 +39,7 @@ const ResetPasswordSuccessModal = ({
           />
 
           <p className="semibold-20 text-center text-secondary-300">
-            비밀번호 재설정이 성공적으로
+            비밀번호가 성공적으로
             <br />
             재설정되었습니다.
           </p>

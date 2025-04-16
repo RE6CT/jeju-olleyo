@@ -4,10 +4,8 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 import AuthLayout from '@/components/features/auth/auth-layout';
-import AuthHeader from '@/components/features/auth/auth-header';
 import AuthForm from '@/components/features/auth/auth-form';
 import SocialLogin from '@/components/features/auth/auth-social-login';
-import AuthFooter from '@/components/features/auth/auth-footer';
 import AuthErrorMessage from '@/components/features/auth/auth-error-message';
 import { CardContent } from '@/components/ui/card';
 
@@ -17,8 +15,6 @@ import useAuthCheck from '@/lib/hooks/use-auth-check';
 import useRememberEmail from '@/lib/hooks/use-remember-email';
 import useRedirectParams from '@/lib/hooks/use-redirect-params';
 import { getLoginErrorMessage } from '@/lib/utils/auth-error.util';
-import { PATH } from '@/constants/path.constants';
-import { AUTH_PAGE_META } from '@/constants/auth.constants';
 import Loading from '@/app/loading';
 import Image from 'next/image';
 

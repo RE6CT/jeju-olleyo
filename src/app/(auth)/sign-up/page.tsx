@@ -3,7 +3,6 @@
 import AuthLayout from '@/components/features/auth/auth-layout';
 import AuthHeader from '@/components/features/auth/auth-header';
 import AuthForm from '@/components/features/auth/auth-form';
-import AuthFooter from '@/components/features/auth/auth-footer';
 import AuthErrorMessage from '@/components/features/auth/auth-error-message';
 import { CardContent } from '@/components/ui/card';
 

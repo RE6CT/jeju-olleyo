@@ -69,6 +69,7 @@ const PlanSchedule = ({
   setDayPlaces,
   activeTab,
   setActiveTab,
+  routeSummary,
 }: {
   startDate: Date | null;
   endDate: Date | null;
@@ -80,6 +81,9 @@ const PlanSchedule = ({
   setDayPlaces: React.Dispatch<React.SetStateAction<DayPlaces>>;
   activeTab: TabType;
   setActiveTab: React.Dispatch<React.SetStateAction<TabType>>;
+  routeSummary: {
+    [key: number]: { distance: number; duration: number }[];
+  };
 }) => {
   const dayCount = calculateTotalDays(startDate, endDate);
   const [placeCount, setPlaceCount] = useState(0);
@@ -116,16 +120,14 @@ const PlanSchedule = ({
   const handleAddPlace = (newPlace: Place) => {
     if (activeTab === '전체보기') return;
 
-    setDayPlaces((prev: DayPlaces) => {
-      const dayNumber = activeTab as number;
-      const currentDayPlaces = prev[dayNumber] || [];
-      const uniqueId = `${newPlace.id}-${placeCount}`;
+    const dayNumber = activeTab as number;
+    const uniqueId = `${newPlace.id}-${placeCount}`;
+    const newPlaceWithId = { ...newPlace, uniqueId };
 
-      return {
-        ...prev,
-        [dayNumber]: [...currentDayPlaces, { ...newPlace, uniqueId }],
-      };
-    });
+    setDayPlaces((prev: DayPlaces) => ({
+      ...prev,
+      [dayNumber]: [...(prev[dayNumber] || []), newPlaceWithId],
+    }));
     setPlaceCount((prev) => prev + 1);
   };
 
@@ -235,58 +237,63 @@ const PlanSchedule = ({
     const places = dayPlaces[day] || [];
     if (places.length === 0) return null;
 
-    return places.map((place: Place & { uniqueId: string }, index: number) => (
-      <div
-        key={place.uniqueId}
-        draggable
-        onDragStart={(e) => {
-          e.dataTransfer.setData(
-            'text/plain',
-            JSON.stringify({
-              day,
-              index,
-              placeId: place.uniqueId,
-            }),
-          );
-        }}
-        onDragOver={(e) => {
-          e.preventDefault();
-          e.currentTarget.style.opacity = '0.5';
-        }}
-        onDragLeave={(e) => {
-          e.currentTarget.style.opacity = '1';
-        }}
-        onDrop={(e) => {
-          e.preventDefault();
-          e.currentTarget.style.opacity = '1';
-          const data = JSON.parse(e.dataTransfer.getData('text/plain'));
-          if (data.placeId !== place.uniqueId) {
-            handleDragEnd({
-              source: {
-                droppableId: data.day.toString(),
-                index: data.index,
-              },
-              destination: {
-                droppableId: day.toString(),
+    return places.map((place: Place & { uniqueId: string }, index: number) => {
+      const summary = routeSummary[day]?.[index];
+      return (
+        <div
+          key={place.uniqueId}
+          draggable
+          onDragStart={(e) => {
+            e.dataTransfer.setData(
+              'text/plain',
+              JSON.stringify({
+                day,
                 index,
-              },
-            });
-          }
-        }}
-        className="cursor-move transition-opacity duration-200"
-      >
-        <PlaceCard
-          index={index + 1}
-          dayNumber={day}
-          category={place.category}
-          title={place.title}
-          address={place.address}
-          imageUrl={place.image || undefined}
-          isLastItem={index === places.length - 1}
-          onDelete={() => handleDeletePlace(day, index)}
-        />
-      </div>
-    ));
+                placeId: place.uniqueId,
+              }),
+            );
+          }}
+          onDragOver={(e) => {
+            e.preventDefault();
+            e.currentTarget.style.opacity = '0.5';
+          }}
+          onDragLeave={(e) => {
+            e.currentTarget.style.opacity = '1';
+          }}
+          onDrop={(e) => {
+            e.preventDefault();
+            e.currentTarget.style.opacity = '1';
+            const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+            if (data.placeId !== place.uniqueId) {
+              handleDragEnd({
+                source: {
+                  droppableId: data.day.toString(),
+                  index: data.index,
+                },
+                destination: {
+                  droppableId: day.toString(),
+                  index,
+                },
+              });
+            }
+          }}
+          className="cursor-move transition-opacity duration-200"
+        >
+          <PlaceCard
+            index={index + 1}
+            dayNumber={day}
+            category={place.category}
+            title={place.title}
+            address={place.address}
+            imageUrl={place.image || undefined}
+            isLastItem={index === places.length - 1}
+            onDelete={() => handleDeletePlace(day, index)}
+            distance={summary?.distance}
+            duration={summary?.duration}
+          />
+        </div>
+      );
+    });
   };
 
   /**

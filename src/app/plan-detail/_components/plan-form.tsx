@@ -25,6 +25,9 @@ const PlanForm = ({ userId }: { userId: string }) => {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [dayPlaces, setDayPlaces] = useState<DayPlaces>({});
   const [activeTab, setActiveTab] = useState<TabType>('전체보기');
+  const [routeSummary, setRouteSummary] = useState<{
+    [key: number]: { distance: number; duration: number }[];
+  }>({});
 
   const handleDateChange = (dates: [Date | null, Date | null]) => {
     const [start, end] = dates;
@@ -57,7 +60,11 @@ const PlanForm = ({ userId }: { userId: string }) => {
         planImage={plan.planImg || ''}
         setPlanImage={(planImg) => setPlan((prev) => ({ ...prev, planImg }))}
       />
-      <PlanMap dayPlaces={dayPlaces} activeTab={activeTab} />
+      <PlanMap
+        dayPlaces={dayPlaces}
+        activeTab={activeTab}
+        setRouteSummary={setRouteSummary}
+      />
       <PlanSchedule
         startDate={startDate}
         endDate={endDate}
@@ -69,6 +76,7 @@ const PlanForm = ({ userId }: { userId: string }) => {
         setDayPlaces={setDayPlaces}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
+        routeSummary={routeSummary}
       />
     </div>
   );

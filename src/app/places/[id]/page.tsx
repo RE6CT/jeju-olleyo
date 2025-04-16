@@ -8,6 +8,7 @@ import { DetailIntroRaw } from '@/types/korea-tour.type';
 import { Place } from '@/types/search.type';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import PlaceLocation from './_components/place-location';
 
 const PlaceDetailPage = () => {
   const params = useParams();
@@ -142,6 +143,12 @@ const PlaceDetailPage = () => {
                 {place.address}
               </div>
             </div>
+
+            <PlaceLocation
+              lat={place.lat}
+              lng={place.lng}
+              title={place.title}
+            />
           </div>
         </div>
       ) : (

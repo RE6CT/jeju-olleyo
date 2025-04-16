@@ -371,6 +371,18 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      get_plans_by_place_id: {
+        Args: { input_place_id: number };
+        Returns: {
+          plan_id: number;
+          title: string;
+          description: string;
+          plan_img: string;
+          travel_start_date: string;
+          travel_end_date: string;
+          like_count: number;
+        }[];
+      };
       get_user_bookmarks: {
         Args: { user_id_param: string };
         Returns: {

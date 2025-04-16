@@ -4,11 +4,18 @@ import Image from 'next/image';
 import CategoryBadge from '@/components/commons/category-badge';
 import { CategoryType } from '@/types/category-badge.type';
 import { cn } from '@/lib/utils';
+import { DEFAULT_IMAGES } from '@/constants/plan.constants';
 
 const PLACE_IMAGE_SIZE = {
   width: 120,
   height: 120,
 };
+
+const getRandomDefaultImage = () => {
+  const randomIndex = Math.floor(Math.random() * DEFAULT_IMAGES.length);
+  return DEFAULT_IMAGES[randomIndex];
+};
+
 const BUTTON_SIZE = {
   width: 24,
   height: 24,
@@ -39,7 +46,7 @@ const PlaceCard = ({
   address,
   distance,
   duration,
-  imageUrl = '/images/default_place_image.svg',
+  imageUrl,
   isLastItem = false,
   onDelete,
 }: {
@@ -55,6 +62,7 @@ const PlaceCard = ({
   onDelete?: () => void;
 }) => {
   const dayColorSet = dayNumber % 2 === 1 ? COLORS.ODD : COLORS.EVEN;
+  const displayImageUrl = imageUrl || getRandomDefaultImage();
 
   return (
     <div className="flex w-full cursor-grab gap-3 active:cursor-grabbing">
@@ -72,7 +80,7 @@ const PlaceCard = ({
           className={`h-[${PLACE_IMAGE_SIZE.height}px] w-[${PLACE_IMAGE_SIZE.width}px] shrink-0 overflow-hidden rounded-lg bg-gray-100`}
         >
           <Image
-            src={imageUrl}
+            src={displayImageUrl}
             alt={title}
             width={PLACE_IMAGE_SIZE.width}
             height={PLACE_IMAGE_SIZE.height}

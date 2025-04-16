@@ -27,6 +27,10 @@ export type MarkerOptions = {
   clickable?: boolean;
   draggable?: boolean;
   onClick?: () => void;
+  day?: number; // 일자 (홀수/짝수에 따라 마커 색상 변경)
+  order?: number; // 순서 번호
+  showDay?: boolean; // 일자 표시 여부
+  image?: any; // 마커 이미지
 };
 
 export type MarkerInstance = {

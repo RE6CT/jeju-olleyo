@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { CategoryType } from '@/types/category.type';
 import { Button } from '@/components/ui/button';
 import BookmarkIcon from '@/components/commons/bookmark-icon';
+import { useMemo } from 'react';
 
 const PLACE_IMAGE_SIZE = {
   width: 40,
@@ -12,6 +13,18 @@ const PLACE_IMAGE_SIZE = {
 const ADD_PLACE_ICON_SIZE = {
   width: 20,
   height: 20,
+};
+
+const DEFAULT_IMAGES = [
+  `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/plan-images/default/plan_default_1.png`,
+  `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/plan-images/default/plan_default_2.png`,
+  `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/plan-images/default/plan_default_3.png`,
+  `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/plan-images/default/plan_default_4.png`,
+];
+
+const getRandomDefaultImage = () => {
+  const randomIndex = Math.floor(Math.random() * DEFAULT_IMAGES.length);
+  return DEFAULT_IMAGES[randomIndex];
 };
 
 const handleImageLoadError = (e: React.SyntheticEvent<HTMLImageElement>) => {
@@ -37,6 +50,9 @@ const PlaceCardCategory = ({
   onBookmarkToggle?: () => void;
   onAddPlace?: () => void;
 }) => {
+  const defaultImage = useMemo(() => getRandomDefaultImage(), []);
+  const displayImageUrl = imageUrl || defaultImage;
+
   return (
     <div className="flex w-full items-center justify-between py-3">
       <div className="flex gap-3">
@@ -44,16 +60,14 @@ const PlaceCardCategory = ({
         <div
           className={`h-[40px] w-[40px] overflow-hidden rounded-[4px] ${!imageUrl && 'bg-gray-200'}`}
         >
-          {imageUrl && (
-            <Image
-              src={imageUrl}
-              alt=""
-              width={PLACE_IMAGE_SIZE.width}
-              height={PLACE_IMAGE_SIZE.height}
-              className="h-full w-full object-cover"
-              onError={handleImageLoadError}
-            />
-          )}
+          <Image
+            src={displayImageUrl}
+            alt=""
+            width={PLACE_IMAGE_SIZE.width}
+            height={PLACE_IMAGE_SIZE.height}
+            className="h-full w-full object-cover"
+            onError={handleImageLoadError}
+          />
         </div>
 
         {/* 장소 정보 */}

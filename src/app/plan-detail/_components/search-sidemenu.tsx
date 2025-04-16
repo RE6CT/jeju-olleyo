@@ -148,6 +148,13 @@ const SearchSidemenu = ({
       setIsDaySelectModalOpen(true);
       return;
     }
+
+    // 장소의 위치 정보가 있는지 확인
+    if (!place.lat || !place.lng) {
+      console.error('장소의 위치 정보가 없습니다:', place);
+      return;
+    }
+
     onAddPlace(place);
   };
 

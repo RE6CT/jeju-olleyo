@@ -5,10 +5,12 @@ import Banner from './_components/banner';
 import useSearch from '@/lib/hooks/use-search';
 import Loading from '../loading';
 import EmptyResult from './_components/empty-result';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PlaceCard from '@/components/features/card/place-card';
 import CategoryFilterTabs from '@/components/commons/category-filter-tabs';
 import { CategoryType } from '@/types/category-badge.type';
+import { getBrowserClient } from '@/lib/supabase/client';
+import { useBookmarkQuery } from '@/lib/hooks/use-bookmark-query';
 
 const filterTabs: CategoryType[] = ['전체', '명소', '숙박', '맛집', '카페'];
 
@@ -18,6 +20,23 @@ const SearchResultsPage = () => {
   const { results, loading } = useSearch(query);
 
   const [activeFilterTab, setActiveFilterTab] = useState<CategoryType>('전체');
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchUserId = async () => {
+      const supabase = await getBrowserClient();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (session?.user?.id) {
+        setUserId(session.user.id);
+      }
+    };
+    fetchUserId();
+  }, []);
+
+  const { isBookmarked, toggleBookmark } = useBookmarkQuery(userId ?? '');
 
   const onFilterTabChange = (tab: CategoryType) => {
     setActiveFilterTab(tab);

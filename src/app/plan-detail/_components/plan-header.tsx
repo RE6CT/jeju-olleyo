@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -10,6 +10,10 @@ import { ko } from 'date-fns/locale';
 import { formatTravelPeriod } from '@/lib/utils/date';
 import { Label } from '@/components/ui/label';
 import TextareaWithCount from '@/components/ui/textarea-with-count';
+import { fetchUploadPlanImage } from '@/lib/apis/plan/plan.api';
+import useCustomToast from '@/lib/hooks/use-custom-toast';
+
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
 const PlanHeader = ({
   startDate,
@@ -17,15 +21,74 @@ const PlanHeader = ({
   isCalendarOpen,
   setIsCalendarOpen,
   handleDateChange,
+  planTitle,
+  setPlanTitle,
+  planDescription,
+  setPlanDescription,
+  planImage,
+  setPlanImage,
 }: {
   startDate: Date | null;
   endDate: Date | null;
   isCalendarOpen: boolean;
   setIsCalendarOpen: (isCalendarOpen: boolean) => void;
   handleDateChange: (dates: [Date | null, Date | null]) => void;
+  planTitle: string;
+  setPlanTitle: (title: string) => void;
+  planDescription: string;
+  setPlanDescription: (description: string) => void;
+  planImage: string | null;
+  setPlanImage: (image: string | null) => void;
 }) => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const [isUploading, setIsUploading] = useState(false);
+  const { successToast } = useCustomToast();
+
+  // 컴포넌트가 언마운트될 때 객체 URL 해제
+  useEffect(() => {
+    return () => {
+      if (planImage && planImage.startsWith('blob:')) {
+        URL.revokeObjectURL(planImage);
+      }
+    };
+  }, [planImage]);
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // 파일 크기 제한 (5MB)
+    if (file.size > MAX_FILE_SIZE) {
+      successToast('이미지 크기는 10MB를 초과할 수 없습니다.');
+      return;
+    }
+
+    const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    if (!validTypes.includes(file.type)) {
+      successToast('JPEG, PNG, GIF 형식의 이미지만 업로드 가능합니다.');
+      return;
+    }
+
+    try {
+      setIsUploading(true);
+      // 임시 미리보기를 위해 blob URL 생성
+      const tempUrl = URL.createObjectURL(file);
+      setPlanImage(tempUrl);
+
+      // FormData 생성 및 파일 추가
+      const formData = new FormData();
+      formData.append('file', file);
+
+      // Supabase Storage에 이미지 업로드
+      const uploadedImageUrl = await fetchUploadPlanImage(formData);
+      setPlanImage(uploadedImageUrl);
+    } catch (error) {
+      console.error('이미지 업로드 실패:', error);
+      successToast('이미지 업로드에 실패했습니다.');
+      setPlanImage(null);
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
   return (
     <>
@@ -33,29 +96,41 @@ const PlanHeader = ({
         {/* 썸네일 업로드 영역 */}
         <Label
           htmlFor="thumbnail"
-          className="flex w-[252px] cursor-pointer flex-col items-center gap-3 rounded-[12px] border border-solid border-gray-200 px-[58px] py-7"
+          className="relative flex h-[160px] w-[252px] cursor-pointer flex-col items-center gap-3 rounded-[12px] border border-solid border-gray-200"
         >
           <Input
             type="file"
             id="thumbnail"
             accept="image/*"
-            className="hidden"
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (file) {
-                // TODO: 이미지 업로드 처리
-              }
-            }}
+            className="hidden px-[58px] py-7"
+            onChange={handleFileChange}
+            disabled={isUploading}
           />
-          <div className="flex h-full flex-col items-center justify-center gap-3">
-            {/* svg 대체 필요 */}
-            <p className="text-24 text-gray-300">+</p>
-            <p className="text-center text-14 font-medium text-gray-300">
-              내 일정을 대표할
-              <br />
-              이미지를 추가하세요
-            </p>
-          </div>
+          {planImage ? (
+            // <div className="relative aspect-video w-full bg-gray-200">
+            <Image
+              src={planImage}
+              alt="썸네일"
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+              className="object-contain"
+            />
+          ) : (
+            // </div>
+            <div className="flex h-full w-full flex-col items-center justify-center gap-3">
+              <p className="text-24 text-gray-300">+</p>
+              <p className="text-center text-14 font-medium text-gray-300">
+                내 일정을 대표할
+                <br />
+                이미지를 추가하세요
+              </p>
+            </div>
+          )}
+          {isUploading && (
+            <div className="absolute inset-0 flex items-center justify-center rounded-[12px] bg-black bg-opacity-50">
+              <div className="h-8 w-8 animate-spin rounded-full border-4 border-white border-t-transparent" />
+            </div>
+          )}
         </Label>
 
         {/* 입력 영역 */}
@@ -72,8 +147,8 @@ const PlanHeader = ({
               <TextareaWithCount
                 maxLength={50}
                 placeholder="나만의 일정을 제목을 지어주세요"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                value={planTitle}
+                onChange={(e) => setPlanTitle(e.target.value)}
                 className="w-full resize-none border-0 bg-transparent py-5 pl-12 text-14 focus-visible:ring-0 focus-visible:ring-offset-0"
               />
             </div>
@@ -121,8 +196,8 @@ const PlanHeader = ({
           />
           <TextareaWithCount
             placeholder="특별히 적어 두고 싶은 메모를 입력하세요"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            value={planDescription}
+            onChange={(e) => setPlanDescription(e.target.value)}
             maxLength={500}
             className="h-[160px] w-full resize-none rounded-[12px] border-gray-200 py-5 pl-12 text-14 focus-visible:ring-0 focus-visible:ring-offset-0"
           />

@@ -1,4 +1,5 @@
 import { CommentPlanRow, CommentsRow } from './comment.type';
+import { CommunitySortType } from './community.type';
 import { PlansRow, UsersRow } from './plan.type';
 
 export type Json =
@@ -82,18 +83,21 @@ export type Database = {
           created_at: string | null;
           day_id: number;
           location_id: number;
+          place_id: number;
           visit_order: number | null;
         };
         Insert: {
           created_at?: string | null;
           day_id: number;
           location_id?: never;
+          place_id: number;
           visit_order?: number | null;
         };
         Update: {
           created_at?: string | null;
           day_id?: number;
           location_id?: never;
+          place_id?: number;
           visit_order?: number | null;
         };
         Relationships: [
@@ -103,6 +107,13 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: 'days';
             referencedColumns: ['day_id'];
+          },
+          {
+            foreignKeyName: 'locations_place_id_fkey';
+            columns: ['place_id'];
+            isOneToOne: false;
+            referencedRelation: 'places';
+            referencedColumns: ['place_id'];
           },
         ];
       };
@@ -370,6 +381,23 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      get_plans_by_place_id: {
+        Args: {
+          input_place_id: number;
+          user_id_param: string;
+        };
+        Returns: {
+          plan_id: number;
+          title: string;
+          description: string;
+          plan_img: string;
+          travel_start_date: string;
+          travel_end_date: string;
+          like_count: number;
+          nickname: string;
+          is_liked: boolean;
+        }[];
+      };
       get_user_bookmarks: {
         Args: { user_id_param: string };
         Returns: {
@@ -382,11 +410,11 @@ export type Database = {
       };
       get_user_likes: {
         Args: { user_id_param: string };
-        Returns: (PlansRow & UsersRow)[];
+        Returns: (PlansRow & UsersRow & { is_liked: boolean })[];
       };
       get_user_plans: {
         Args: { user_id_param: string };
-        Returns: (PlansRow & UsersRow)[];
+        Returns: (PlansRow & UsersRow & { is_liked: boolean })[];
       };
       get_user_comments: {
         Args: { user_id_param: string };
@@ -401,7 +429,10 @@ export type Database = {
         };
       };
       get_plans: {
-        Args: { user_id_param: string | null };
+        Args: {
+          user_id_param: string | null;
+          sort_option?: CommunitySortType;
+        };
         Returns: {
           plan_id: number;
           plan_img: string;
@@ -410,6 +441,17 @@ export type Database = {
           nickname: string;
           travel_start_date: string;
           travel_end_date: string;
+          is_liked: boolean;
+        }[];
+      };
+      get_places: {
+        Args: { user_id_param: string | null };
+        Returns: {
+          place_id: number;
+          title: string;
+          image: string;
+          address: string;
+          content_type: number;
           is_liked: boolean;
         }[];
       };

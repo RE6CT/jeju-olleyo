@@ -66,6 +66,7 @@ export type PasswordInputProps = {
   className?: string;
   /** react-hook-form의 register 반환값 */
   register: UseFormRegisterReturn;
+  autoComplete: string;
 };
 
 /**
@@ -129,4 +130,13 @@ export type AuthErrorMessageProps = {
   messages: string[];
   className?: string;
   variant?: 'default' | 'destructive';
+};
+
+/**
+ * 비밀번호 재설정 성공 모달 컴포넌트 Props
+ */
+export type ResetPasswordSuccessModalProps = {
+  open: boolean;
+  countdown: number;
+  redirectToHome: () => void;
 };

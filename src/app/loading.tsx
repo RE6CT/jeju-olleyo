@@ -1,9 +1,15 @@
 const Loading = () => {
   return (
-    <div className="flex min-h-[50vh] flex-col items-center justify-center py-16">
-      <div className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-black border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
-      <p className="medium-18 mt-4">로딩 중...</p>
-    </div>
+    <>
+      <div
+        className="fixed left-0 top-1/4 h-[123px] w-[127px] -translate-y-1/2 animate-rollAcross"
+        role="status"
+        aria-label="로딩 중"
+      >
+        <img src="/character/happy.png" alt="해피귤" />
+        <span className="sr-only">로딩 중...</span>
+      </div>
+    </>
   );
 };
 

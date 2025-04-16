@@ -18,10 +18,15 @@ const Nav = () => {
           <MypageButton userId={user?.id} />
         </div>
       ) : (
-        <div className="flex gap-6 whitespace-nowrap text-xs font-medium sm:text-xs md:text-sm lg:text-base">
+        <div className="flex items-center gap-6 whitespace-nowrap text-xs font-medium sm:text-xs md:text-sm lg:text-base">
           <Link href={PATH.MYPLAN}>내 여행</Link>
           <Link href={PATH.COMMUNITY}>커뮤니티</Link>
-          <Link href={PATH.SIGNIN}>로그인</Link>
+          <Link
+            href={PATH.SIGNIN}
+            className="rounded-full bg-secondary-300 px-[26px] py-[10px] text-white"
+          >
+            로그인
+          </Link>
         </div>
       )}
     </nav>

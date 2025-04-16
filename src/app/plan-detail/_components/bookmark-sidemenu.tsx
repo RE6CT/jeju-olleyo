@@ -3,11 +3,12 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import PlaceSidemenuLayout from './place-sidemenu-layout';
 import PlaceCardCategory from './place-card-category';
-import { CategoryType } from '@/types/category-badge.type';
-import ErrorMessage from '@/components/ui/error-message';
+import { CategoryType } from '@/types/category.type';
+import ErrorMessage from '@/components/features/alert/error-message';
 import { useBookmarkQuery } from '@/lib/hooks/use-bookmark-query';
 import DynamicPagination from '@/components/ui/dynamic-pagination';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Button } from '@/components/ui/button';
 
 const ITEMS_PER_PAGE = 7;
 const INITIAL_ITEMS = 3;
@@ -172,8 +173,8 @@ const BookmarkSidemenu = ({
         ) : filteredPlaces.length === 0 ? (
           <div className="flex items-center justify-center py-4 text-gray-500">
             {activeFilterTab === '전체'
-              ? '북마크한 장소가 없습니다.'
-              : `북마크한 ${activeFilterTab} 장소가 없습니다.`}
+              ? '북마크한 장소 정보가 없습니다.'
+              : `북마크한 ${activeFilterTab} 정보가 없습니다.`}
           </div>
         ) : (
           <div ref={listRef} className="overflow-y-auto">
@@ -197,12 +198,12 @@ const BookmarkSidemenu = ({
               ))}
             </AnimatePresence>
             {currentPageItems.length > INITIAL_ITEMS && (
-              <button
-                className="w-full text-gray-500 hover:text-gray-700"
+              <Button
+                className="flex h-[36px] w-full flex-shrink-0 items-center justify-center gap-1 rounded-xl border border-secondary-300 bg-gray-50 text-sm font-normal text-secondary-300 transition-colors hover:bg-gray-100"
                 onClick={toggleExpand}
               >
                 {isExpanded ? '접기' : '더보기'}
-              </button>
+              </Button>
             )}
             {isExpanded && totalPages > 1 && (
               <DynamicPagination

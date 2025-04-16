@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { ERROR_MESSAGES } from '@/constants/mypage.constants';
 import { fetchUpdatePassword } from '@/lib/apis/profile/update-profile.api';
+import useCustomToast from '@/lib/hooks/use-custom-toast';
 import useProviderFromCookie from '@/lib/hooks/use-get-provider';
 import { changePasswordSchema } from '@/lib/schemas/change-password-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -28,6 +29,7 @@ const SECURITY_INFO_STYLE = {
 const SecurityInfo = ({ userId }: { userId: string }) => {
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const provider = useProviderFromCookie(userId);
+  const { successToast } = useCustomToast();
 
   type passwordValues = z.infer<typeof changePasswordSchema>;
 
@@ -65,13 +67,13 @@ const SecurityInfo = ({ userId }: { userId: string }) => {
     // 비밀번호 번호 수정
     try {
       const result = await fetchUpdatePassword(data.password, data.newPassword);
-      alert(result.message);
+      successToast(result.message);
     } catch (error: unknown) {
       let errorMessage = ERROR_MESSAGES.PASSWORD_UPDATE_FAILED;
       if (error instanceof Error) {
         errorMessage = error.message;
       }
-      alert(errorMessage);
+      successToast(errorMessage);
     } finally {
       setIsEditMode(false);
       reset();
@@ -100,6 +102,7 @@ const SecurityInfo = ({ userId }: { userId: string }) => {
               id="currentPassword"
               placeholder="********"
               register={register('password')}
+              autoComplete="current-password"
             />
             {errors.password && (
               <p className="regular-14 m-2 text-red">
@@ -117,6 +120,7 @@ const SecurityInfo = ({ userId }: { userId: string }) => {
               id="newPassword"
               placeholder="숫자, 문자, 특수문자를 포함하여 8자 이상"
               register={register('newPassword')}
+              autoComplete="new-password"
             />
             {errors.newPassword && (
               <p className="regular-14 m-2 text-red">
@@ -137,6 +141,7 @@ const SecurityInfo = ({ userId }: { userId: string }) => {
               id="newPasswordCheck"
               placeholder="숫자, 문자, 특수문자를 포함하여 8자 이상"
               register={register('confirmNewPassword')}
+              autoComplete="new-password"
             />
             {errors.confirmNewPassword && (
               <p className="regular-14 m-2 text-red">

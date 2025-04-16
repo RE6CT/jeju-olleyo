@@ -4,16 +4,17 @@ import { Button } from '@/components/ui/button';
 import PlaceSidemenuLayout from './place-sidemenu-layout';
 import { Input } from '@/components/ui/input';
 import PlaceCardCategory from './place-card-category';
-import { CategoryType } from '@/types/category-badge.type';
+import { CategoryType } from '@/types/category.type';
 import fetchGetAllPlaces from '@/lib/apis/search/get-place.api';
 import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { Place } from '@/types/search.type';
 import DynamicPagination from '@/components/ui/dynamic-pagination';
 import { useBookmarkQuery } from '@/lib/hooks/use-bookmark-query';
 import { motion, AnimatePresence } from 'framer-motion';
+import DaySelectRequiredModal from './day-select-required-modal';
 
 const ITEMS_PER_PAGE = 7;
-const INITIAL_ITEMS = 3;
+const INITIAL_ITEMS = 5;
 const NAVIGATION_BUTTON_WIDTH = 42.4;
 const NAVIGATION_BUTTON_GAP = 4;
 const DEBOUNCE_TIME = 200;
@@ -23,11 +24,15 @@ const SearchSidemenu = ({
   activeFilterTab,
   onFilterTabChange,
   userId,
+  onAddPlace,
+  selectedDay,
 }: {
   filterTabs: CategoryType[];
   activeFilterTab: CategoryType;
   onFilterTabChange: (tab: CategoryType) => void;
   userId: string;
+  onAddPlace: (place: Place) => void;
+  selectedDay: number | null;
 }) => {
   const [places, setPlaces] = useState<Place[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -35,6 +40,7 @@ const SearchSidemenu = ({
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [maxVisiblePages, setMaxVisiblePages] = useState(3);
+  const [isDaySelectModalOpen, setIsDaySelectModalOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const resizeTimeoutRef = useRef<NodeJS.Timeout>();
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -137,8 +143,19 @@ const SearchSidemenu = ({
     }
   };
 
-  const handleAddPlace = (id: number) => {
-    //console.log('장소 추가:', id);
+  const handleAddPlace = (place: Place) => {
+    if (selectedDay === null) {
+      setIsDaySelectModalOpen(true);
+      return;
+    }
+
+    // 장소의 위치 정보가 있는지 확인
+    if (!place.lat || !place.lng) {
+      console.error('장소의 위치 정보가 없습니다:', place);
+      return;
+    }
+
+    onAddPlace(place);
   };
 
   const handlePageChange = (page: number) => {
@@ -216,20 +233,17 @@ const SearchSidemenu = ({
                     title={place.title}
                     category={place.category as CategoryType}
                     imageUrl={place.image || ''}
-                    isBookmarked={isBookmarked(place.place_id)}
+                    isBookmarked={isBookmarked(place.placeId)}
                     isSearchSection
-                    onBookmarkToggle={() =>
-                      handleBookmarkToggle(place.place_id)
-                    }
-                    onAddPlace={() => handleAddPlace(place.place_id)}
+                    onBookmarkToggle={() => handleBookmarkToggle(place.placeId)}
+                    onAddPlace={() => handleAddPlace(place)}
                   />
                 </motion.div>
               ))}
             </AnimatePresence>
             {currentPageItems.length > INITIAL_ITEMS && (
               <Button
-                variant="ghost"
-                className="w-full text-gray-500"
+                className="flex h-[36px] w-full flex-shrink-0 items-center justify-center gap-1 rounded-xl border border-secondary-300 bg-gray-50 text-sm font-normal text-secondary-300 transition-colors hover:bg-gray-100"
                 onClick={toggleExpand}
               >
                 {isExpanded ? '접기' : '더보기'}
@@ -250,6 +264,10 @@ const SearchSidemenu = ({
           </div>
         )}
       </div>
+      <DaySelectRequiredModal
+        isOpen={isDaySelectModalOpen}
+        onClose={() => setIsDaySelectModalOpen(false)}
+      />
     </PlaceSidemenuLayout>
   );
 };

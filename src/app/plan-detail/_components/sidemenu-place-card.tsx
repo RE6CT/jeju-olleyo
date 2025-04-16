@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { CategoryType } from '@/types/category-badge.type';
+import { CategoryType } from '@/types/category.type';
 import { Button } from '@/components/ui/button';
 import BookmarkIcon from '@/components/commons/bookmark-icon';
 
@@ -57,7 +57,7 @@ const SideMenuPlaceCard = ({
       </div>
 
       {/* 버튼 영역 */}
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-2">
         {onBookmarkToggle && (
           <BookmarkIcon
             isBookmarked={isBookmarked}

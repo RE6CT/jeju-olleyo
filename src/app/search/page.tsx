@@ -2,54 +2,79 @@
 
 import { useSearchParams } from 'next/navigation';
 import Banner from './_components/banner';
-import PlaceImage from '@/components/commons/place-image';
 import useSearch from '@/lib/hooks/use-search';
 import Loading from '../loading';
+import EmptyResult from './_components/empty-result';
+import { useState } from 'react';
+import PlaceCard from '@/components/features/card/place-card';
+import CategoryFilterTabs from '@/components/commons/category-filter-tabs';
+import { CategoryType } from '@/types/category.type';
 
-// TODO : 카드 컴포넌트 머지 후 div 요소 교체 필요 - 링크, 좋아요, 북마크 다 삽입될 예정
-// TODO : 디자이너님 배너 제작 후 배너 삽입 예정
-// TODO : 검색 중 상태일 때 사용될 수 있는 이미지 있는지 디자이너님께 문의 필요.
+const filterTabs: CategoryType[] = ['전체', '명소', '숙박', '맛집', '카페'];
 
 const SearchResultsPage = () => {
   const searchParams = useSearchParams();
   const query = searchParams.get('query') ?? '';
   const { results, loading } = useSearch(query);
 
+  const [activeFilterTab, setActiveFilterTab] = useState<CategoryType>('전체');
+
+  const onFilterTabChange = (tab: CategoryType) => {
+    setActiveFilterTab(tab);
+  };
+
   if (loading) {
     return <Loading />;
   }
 
-  return (
-    <div className="px-4 pt-20">
-      <div className="mb-6 text-2xl font-bold">'{query}'의 검색 결과</div>
+  const filteredResults =
+    activeFilterTab === '전체'
+      ? results
+      : results.filter((place) => place.category === activeFilterTab);
 
-      {results.length === 0 ? (
-        <div className="text-gray-500">검색 결과가 없습니다.</div>
+  return (
+    <div className="px-4">
+      <div className="mb-6 text-2xl font-bold">'{query}'의 검색 결과</div>
+      <div className="mb-[17px] mt-5 h-[40px] w-full max-w-[388px]">
+        <CategoryFilterTabs
+          tabs={filterTabs}
+          defaultTab={activeFilterTab}
+          onTabChange={onFilterTabChange}
+          tabsGapClass="gap-[10px]"
+          tabPaddingClass="px-1 py-1"
+        />
+      </div>
+
+      {filteredResults.length === 0 ? (
+        <EmptyResult />
       ) : (
         (() => {
           const grouped: JSX.Element[] = [];
 
-          for (let i = 0; i < results.length; i += 8) {
-            const slice = results.slice(i, i + 8);
+          for (let i = 0; i < filteredResults.length; i += 8) {
+            const slice = filteredResults.slice(i, i + 8);
 
             grouped.push(
-              <ul key={`group-${i}`} className="mb-6 grid grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 {slice.map((place) => (
-                  <li key={place.place_id}>
-                    <div className="relative aspect-square">
-                      <PlaceImage image={place.image} title={place.title} />
-                    </div>
-                    <div className="text-sm font-semibold">{place.title}</div>
-                  </li>
+                  <PlaceCard
+                    key={place.id}
+                    className="m-[11px] h-[230px] w-[230px]"
+                    placeId={place.placeId}
+                    image={place.image}
+                    title={place.title}
+                    isLiked={false}
+                    isDragging={false}
+                  />
                 ))}
-              </ul>,
+              </div>,
             );
 
             // 8개마다 배너 삽입
             if (i + 8 < results.length) {
               grouped.push(
-                <div key={`banner-${i}`}>
-                  <Banner />
+                <div className="mt-4">
+                  <Banner key={`banner-${i}`} />
                 </div>,
               );
             }

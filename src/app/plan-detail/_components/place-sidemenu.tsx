@@ -3,9 +3,18 @@
 import { useState } from 'react';
 import BookmarkSidemenu from './bookmark-sidemenu';
 import SearchSidemenu from './search-sidemenu';
-import { CategoryType } from '@/types/category-badge.type';
+import { CategoryType } from '@/types/category.type';
+import { Place } from '@/types/search.type';
 
-const PlaceSidemenu = ({ userId }: { userId: string }) => {
+const PlaceSidemenu = ({
+  userId,
+  selectedDay,
+  onAddPlace,
+}: {
+  userId: string;
+  selectedDay: number | null;
+  onAddPlace: (place: Place) => void;
+}) => {
   const [activeBookmarkTab, setActiveBookmarkTab] =
     useState<CategoryType>('전체');
   const [activeSearchTab, setActiveSearchTab] = useState<CategoryType>('전체');
@@ -33,6 +42,8 @@ const PlaceSidemenu = ({ userId }: { userId: string }) => {
           activeFilterTab={activeSearchTab}
           onFilterTabChange={setActiveSearchTab}
           userId={userId}
+          onAddPlace={onAddPlace}
+          selectedDay={selectedDay}
         />
       </div>
     </div>

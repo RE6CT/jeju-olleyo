@@ -43,6 +43,7 @@ export async function middleware(request: NextRequest) {
     PATH.LIKES,
     PATH.COMMENTS,
     PATH.TICKET,
+    PATH.PLACES,
   ];
 
   // 유효한 경로 패턴을 더 세밀하게 정의
@@ -57,6 +58,11 @@ export async function middleware(request: NextRequest) {
       CATEGORIES: PATH.CATEGORIES,
       pattern: /^\/categories\/[a-z]+$/,
     },
+    {
+      PLACES: PATH.PLACES,
+      pattern: /^\/places\/\d+$/,
+    },
+
     // 다른 경로들
   ];
 

@@ -61,6 +61,11 @@
   body {
     @apply bg-white font-sans leading-normal text-gray-900;
   }
+
+  html body[data-scroll-locked] {
+    overflow: visible !important;
+    margin-right: 0 !important;
+  }
 }
 
 @layer components {
@@ -124,4 +129,19 @@
   .regular-10 {
     @apply text-10 font-regular;
   }
+}
+
+/* 가로 스크롤만 숨기는 클래스 */
+.hide-horizontal-scrollbar {
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+}
+
+.hide-horizontal-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+
+/* 드래그 중일 때 스타일 */
+.active {
+  cursor: grabbing !important;
 }

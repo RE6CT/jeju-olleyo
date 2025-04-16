@@ -9,6 +9,15 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      keyframes: {
+        rollAcross: {
+          '0%': { transform: 'translateX(0) rotate(0deg)' },
+          '100%': { transform: 'translateX(100vw) rotate(720deg)' },
+        },
+      },
+      animation: {
+        rollAcross: 'rollAcross 2.5s linear infinite',
+      },
       colors: {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',

@@ -3,31 +3,33 @@ import { TravelCategory } from '@/types/home.category.type';
 /**
  * 카테고리와 해당 라우트 경로 매핑
  */
-export const CATEGORY_ROUTES: Record<TravelCategory, string> = {
+export const CATEGORY_ROUTES: Record<Exclude<TravelCategory, null>, string> = {
   전체: '/categories/all',
   명소: '/categories/toursite',
-  숙박: '/categories/accomodation',
+  숙박: '/categories/accommodation',
   맛집: '/categories/restaurant',
   카페: '/categories/cafe',
   항공권: '/categories/flight',
 };
 
-export const CATEGORY_KR_MAP: Record<string, TravelCategory> = {
+export const CATEGORY_KR_MAP: Record<string, Exclude<TravelCategory, null>> = {
   all: '전체',
   toursite: '명소',
-  accomodation: '숙박',
+  accommodation: '숙박',
   restaurant: '맛집',
   cafe: '카페',
   flight: '항공권',
 };
 
-export const CATEGORIES: TravelCategory[] = [
+/**
+ * 메인 카테고리 (항공권 제외)
+ */
+export const CATEGORIES: Exclude<TravelCategory, null>[] = [
   '전체',
   '명소',
   '숙박',
   '맛집',
   '카페',
-  '항공권',
 ];
 
 export const QUERY_KEYS = {

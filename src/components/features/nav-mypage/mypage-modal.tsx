@@ -12,6 +12,7 @@ import { getCurrentSession } from '@/lib/apis/auth/auth-browser.api';
 import { PATH } from '@/constants/path.constants';
 import useAuthStore from '@/zustand/auth.store';
 import { useGetDataCount } from '@/lib/queries/use-get-data-count';
+import useCustomToast from '@/lib/hooks/use-custom-toast';
 
 const ICON_STYLE = {
   title: 'medium-14 text-gray-500',
@@ -41,6 +42,7 @@ const MypageModal = ({
   const { handleLogout, isLoading: isAuthLoading } = useAuth();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [localUser, setLocalUser] = useState(user);
+  const { successToast } = useCustomToast();
 
   // 컴포넌트 마운트 시 세션에서 직접 사용자 정보 가져오기
   useEffect(() => {
@@ -72,7 +74,7 @@ const MypageModal = ({
       const success = await handleLogout();
 
       if (!success) {
-        alert('로그아웃에 실패했습니다. 다시 시도해주세요.');
+        successToast('로그아웃에 실패했습니다. 다시 시도해주세요.');
         return;
       }
 
@@ -116,10 +118,10 @@ const MypageModal = ({
   return (
     <div
       ref={modalRef}
-      className="sm:scale-80 absolute right-2 top-10 z-50 origin-top-right scale-75 rounded-12 bg-white p-4 text-black shadow-dropdown sm:right-4 sm:top-12 md:right-7 md:top-14 md:scale-90 lg:right-10 lg:top-16 lg:w-auto lg:scale-100 lg:gap-3 lg:p-4"
+      className="absolute right-0 top-10 z-50 w-[254px] rounded-12 bg-white p-4 shadow-dropdown"
     >
       {/* 섹션1 - 프로필 영역 */}
-      <div className="md:w-68 flex w-60 flex-col gap-3 sm:w-64 lg:w-auto">
+      <div className="flex flex-col gap-3">
         <section
           onClick={() => onLinkClick(PATH.ACCOUNT)}
           className="flex cursor-pointer items-center gap-3"

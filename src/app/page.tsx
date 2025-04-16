@@ -6,6 +6,7 @@ import Loading from '@/app/loading';
 import JejuBanner from '@/components/features/banner/jeju-banner';
 import { PATH } from '@/constants/path.constants';
 import PopularSchedules from '@/components/features/home/home-popular-schedules';
+import PopularPlaces from '@/components/features/home/home-popular-places';
 
 /**
  * 홈 페이지 컴포넌트
@@ -28,7 +29,7 @@ const Home = () => {
       </section>
 
       {/* 날씨 섹션 */}
-      <section className="mt-8">
+      <section className="mt-[58px]">
         <Suspense fallback={<Loading />}>
           <WeatherSection />
         </Suspense>
@@ -36,13 +37,22 @@ const Home = () => {
 
       {/* 인기 일정 섹션 */}
       <section>
-        <PopularSchedules />
+        <Suspense fallback={<Loading />}>
+          <PopularSchedules />
+        </Suspense>
+      </section>
+
+      {/* 인기 장소 섹션 */}
+      <section>
+        <Suspense fallback={<Loading />}>
+          <PopularPlaces />
+        </Suspense>
       </section>
 
       {/* 내 일정 만들러 가기 배너 섹션*/}
-      <section className="mt-8">
+      <section>
         <JejuBanner
-          imageUrl="/banner-images/plan-banner.svg"
+          imageUrl="/banner-images/plan-banner.jpg"
           title="나만의 제주 여행 계획하기"
           buttonText="내 일정 만들러 가기"
           buttonUrl={PATH.PLAN_NEW}

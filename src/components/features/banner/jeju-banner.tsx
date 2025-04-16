@@ -1,5 +1,7 @@
 'use client';
 
+import { PATH } from '@/constants/path.constants';
+import useAlert from '@/lib/hooks/use-alert';
 import { JejuBannerProps } from '@/types/common.type';
 import useAuthStore from '@/zustand/auth.store';
 import { useRouter } from 'next/navigation';
@@ -13,18 +15,27 @@ import { useRouter } from 'next/navigation';
  * @param buttonUrl - 버튼 클릭 시 이동할 URL
  */
 const JejuBanner = ({
-  imageUrl = '/banner-images/plan-banner.svg',
+  imageUrl = '/banner-images/plan-banner.jpg',
   title = '나만의 제주 여행 계획하기',
   buttonText = '내 일정 만들러 가기 >',
   buttonUrl = '/planner',
 }: JejuBannerProps) => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const router = useRouter();
+  const { showQuestion } = useAlert();
 
   /** 일정 만들기 버튼 클릭 시의 이벤트 핸들러 */
   const handleGotoNewPlan = () => {
     if (!isAuthenticated) {
-      alert('로그인이 필요합니다.');
+      showQuestion(
+        '로그인 필요',
+        '일정을 만들기 위해서는 로그인이 필요합니다.\n로그인 페이지로 이동하시겠습니까?',
+        {
+          onConfirm: () =>
+            router.push(`${PATH.SIGNIN}?redirectTo=${PATH.PLAN_NEW}`),
+          onCancel: () => {},
+        },
+      );
       return;
     }
     router.push(buttonUrl);
@@ -35,13 +46,15 @@ const JejuBanner = ({
       {/* 배경 이미지  */}
       <img src={imageUrl} alt="제주 여행 배너" className="aspect-auto w-full" />
       {/* 텍스트와 버튼 오버레이 - 왼쪽 상단에 배치 */}
-      <div className="absolute left-1/2 top-[10%] flex -translate-x-1/2 transform flex-row items-center gap-2 sm:left-[5%] sm:transform-none sm:flex-col sm:items-start">
-        <h2 className="sm:bold-28 bold-22 whitespace-nowrap">{title}</h2>
+      <div className="absolute left-1/2 top-[10%] flex -translate-x-1/2 transform flex-row items-center gap-4 sm:left-[5%] sm:transform-none sm:flex-col sm:items-start">
+        <h2 className="bold-28 whitespace-nowrap leading-[130%] tracking-[-0.56px] text-gray-900">
+          {title}
+        </h2>
         <button
           onClick={handleGotoNewPlan}
-          className="semibold-16 inline-flex items-center gap-1 rounded-full bg-primary-500 px-4 py-2 text-white"
+          className="flex h-10 items-center justify-center gap-1 rounded-[28px] bg-primary-500 px-4 py-2"
         >
-          <span className="whitespace-nowrap">{buttonText}</span>
+          <span className="semibold-16 text-white">{buttonText}</span>
           <svg
             width="12"
             height="12"

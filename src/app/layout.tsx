@@ -5,6 +5,8 @@ import Header from '@/components/layouts/header';
 import AuthProvider from '@/config/auth-provider';
 import localFont from 'next/font/local';
 import Footer from '@/components/layouts/footer';
+import AlertModal from '@/components/commons/alert-modal';
+import { Toaster } from '@/components/ui/toaster';
 export const metadata: Metadata = {
   title: '제주 올레요',
   description: '제주 여행을 떠나기 위한 일정 만들어요!',
@@ -32,6 +34,8 @@ export default function RootLayout({
               <main className="flex-1">{children}</main>
               <Footer />
             </div>
+            <AlertModal />
+            <Toaster />
           </Providers>
         </AuthProvider>
       </body>

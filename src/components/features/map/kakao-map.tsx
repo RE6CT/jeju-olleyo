@@ -53,7 +53,7 @@ const KakaoMap = ({ center, level, onMapLoad, onError }: KakaoMapProps) => {
     };
 
     const script = document.createElement('script');
-    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_API_KEY}&libraries=clusterer&autoload=false`;
+    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_API_KEY}&libraries=clusterer,services&autoload=false`;
     script.async = true;
     document.head.appendChild(script);
 

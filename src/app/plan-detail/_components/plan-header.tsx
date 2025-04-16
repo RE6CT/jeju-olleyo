@@ -12,7 +12,7 @@ import { Label } from '@/components/ui/label';
 import TextareaWithCount from '@/components/ui/textarea-with-count';
 import { fetchUploadPlanImage } from '@/lib/apis/plan/plan.api';
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 5MB
 
 const PlanHeader = ({
   startDate,
@@ -94,25 +94,27 @@ const PlanHeader = ({
         {/* 썸네일 업로드 영역 */}
         <Label
           htmlFor="thumbnail"
-          className="relative flex h-[160px] w-[252px] cursor-pointer flex-col items-center gap-3 rounded-[12px] border border-solid border-gray-200 px-[58px] py-7"
+          className="relative flex h-[160px] w-[252px] cursor-pointer flex-col items-center gap-3 rounded-[12px] border border-solid border-gray-200"
         >
           <Input
             type="file"
             id="thumbnail"
             accept="image/*"
-            className="hidden"
+            className="hidden px-[58px] py-7"
             onChange={handleFileChange}
             disabled={isUploading}
           />
           {planImage ? (
+            // <div className="relative aspect-video w-full bg-gray-200">
             <Image
               src={planImage}
               alt="썸네일"
-              width={252}
-              height={160}
-              className="absolute inset-0 h-full w-full rounded-[12px] object-cover"
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+              className="object-contain"
             />
           ) : (
+            // </div>
             <div className="flex h-full w-full flex-col items-center justify-center gap-3">
               <p className="text-24 text-gray-300">+</p>
               <p className="text-center text-14 font-medium text-gray-300">

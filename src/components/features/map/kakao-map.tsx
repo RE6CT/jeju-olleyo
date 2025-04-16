@@ -43,7 +43,7 @@ const KakaoMap = ({ center, level, onMapLoad, onError }: KakaoMapProps) => {
             options,
           );
           setIsMapLoaded(true);
-          if (mapInstance.current) onMapLoad(mapInstance.current);
+          if (mapInstance.current) onMapLoad(mapInstance.current); // map 인스턴스를 외부 컴포넌트로 전달
         } catch (error) {
           onError?.(
             error instanceof Error ? error : new Error('지도 로드 실패'),

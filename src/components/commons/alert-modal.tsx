@@ -51,7 +51,6 @@ const AlertModal = () => {
         return '/character/surprise_color.svg';
       case 'question':
         return '/character/question_color.svg';
-      case 'info':
       default:
         return '/character/sunglasses.svg';
     }
@@ -61,15 +60,13 @@ const AlertModal = () => {
   const getTitleClass = (type: AlertType): string => {
     switch (type) {
       case 'success':
-        return 'text-green-600';
+        return 'text-orange-500';
       case 'error':
-        return 'text-red';
+        return 'text-orange-500';
       case 'warning':
         return 'text-orange-500';
-      case 'question':
-      case 'info':
       default:
-        return 'text-secondary-300';
+        return 'text-orange-500';
     }
   };
 

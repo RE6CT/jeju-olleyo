@@ -33,6 +33,7 @@ const PasswordInput = ({
         placeholder={placeholder}
         className={`pr-10 ${className}`}
         required={required}
+        autoComplete={autoComplete}
         {...register}
       />
       <Button

@@ -7,10 +7,7 @@ import Loading from '../loading';
 import EmptyResult from './_components/empty-result';
 import { useEffect, useState } from 'react';
 import CategoryFilterTabs from '@/components/commons/category-filter-tabs';
-import { CategoryType } from '@/types/category-badge.type';
-import { getBrowserClient } from '@/lib/supabase/client';
-import SearchCard from './_components/search-card';
-import { useBookmarkQuery } from '@/lib/hooks/use-bookmark-query';
+import { CategoryType } from '@/types/category.type';
 
 const filterTabs: CategoryType[] = ['전체', '명소', '숙박', '맛집', '카페'];
 

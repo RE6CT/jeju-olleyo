@@ -29,7 +29,9 @@ const PlanVerticalCard = ({ plan }: PlanVerticalCardProps) => {
 
       <div className="flex flex-col gap-1 p-2">
         <div className="flex flex-col gap-2">
-          <p className="medium-16 line-clamp-1">{plan.title}</p>
+          <p className="medium-16 line-clamp-1 overflow-hidden text-ellipsis text-gray-900">
+            {plan.title}
+          </p>
           <p className="regular-14 line-clamp-2 text-description">
             {plan.description}
           </p>

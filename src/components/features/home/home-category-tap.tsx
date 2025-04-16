@@ -57,7 +57,8 @@ const CategoryTabs = memo(({ className }: CategoryTabsProps) => {
   // 카테고리 버튼 클릭 핸들러 생성 - 성능 최적화
   const createCategoryClickHandler = useCallback(
     (category: string) => {
-      return () => navigateToCategory(category as Exclude<TravelCategory, null>);
+      return () =>
+        navigateToCategory(category as Exclude<TravelCategory, null>);
     },
     [navigateToCategory],
   );
@@ -84,7 +85,7 @@ const CategoryTabs = memo(({ className }: CategoryTabsProps) => {
             style={{ width: '60px', height: '24px' }}
             aria-current={activeCategory === category ? 'page' : undefined}
           >
-            <div className="flex items-center">
+            <div className="flex items-center gap-2">
               <span className="mr-1">{getCategoryIcon(category)}</span>
               <span className="semibold-16">{category}</span>
             </div>
@@ -106,7 +107,7 @@ const CategoryTabs = memo(({ className }: CategoryTabsProps) => {
         )}
         style={{ width: '70px', height: '24px' }}
       >
-        <div className="flex items-center">
+        <div className="flex items-center gap-2">
           <span className="mr-1">{getCategoryIcon('항공권')}</span>
           <span className="semibold-16">항공권</span>
         </div>

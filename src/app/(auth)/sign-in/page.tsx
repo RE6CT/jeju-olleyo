@@ -61,7 +61,7 @@ const LoginPage = () => {
     <AuthLayout>
       <div className="flex h-[146px] w-full items-center justify-center">
         <Image
-          src={'/logo/color_logo.svg'}
+          src={'/logo/color_logo.png'}
           alt="logo"
           width={146}
           height={76}

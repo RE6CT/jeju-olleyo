@@ -65,7 +65,7 @@ export const useBookmarkQuery = (userId: string | null) => {
   const addBookmarkMutation = useMutation({
     mutationFn: (placeId: number) => {
       if (!userId) return Promise.resolve();
-      const placeExists = places.some((place) => place.place_id === placeId);
+      const placeExists = places.some((place) => place.placeId === placeId);
       if (!placeExists) {
         throw new Error('존재하지 않는 장소입니다.');
       }
@@ -77,9 +77,9 @@ export const useBookmarkQuery = (userId: string | null) => {
 
       const newBookmark = {
         placeId,
-        title: places.find((p) => p.place_id === placeId)?.title || '',
-        image: places.find((p) => p.place_id === placeId)?.image || '',
-        category: places.find((p) => p.place_id === placeId)?.category || '',
+        title: places.find((p) => p.placeId === placeId)?.title || '',
+        image: places.find((p) => p.placeId === placeId)?.image || '',
+        category: places.find((p) => p.placeId === placeId)?.category || '',
         createdAt: new Date().toISOString(),
       };
 

@@ -1,5 +1,7 @@
 'use client';
 
+import { PATH } from '@/constants/path.constants';
+import useAlert from '@/lib/hooks/use-alert';
 import { JejuBannerProps } from '@/types/common.type';
 import useAuthStore from '@/zustand/auth.store';
 import { useRouter } from 'next/navigation';
@@ -20,11 +22,20 @@ const JejuBanner = ({
 }: JejuBannerProps) => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const router = useRouter();
+  const { showQuestion } = useAlert();
 
   /** 일정 만들기 버튼 클릭 시의 이벤트 핸들러 */
   const handleGotoNewPlan = () => {
     if (!isAuthenticated) {
-      alert('로그인이 필요합니다.');
+      showQuestion(
+        '로그인 필요',
+        '일정을 만들기 위해서는 로그인이 필요합니다.\n로그인 페이지로 이동하시겠습니까?',
+        {
+          onConfirm: () =>
+            router.push(`${PATH.SIGNIN}?redirectTo=${PATH.PLAN_NEW}`),
+          onCancel: () => {},
+        },
+      );
       return;
     }
     router.push(buttonUrl);

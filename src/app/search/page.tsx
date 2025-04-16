@@ -76,7 +76,7 @@ const SearchResultsPage = () => {
                   <SearchCard
                     key={place.id}
                     className="m-[11px] h-[230px] w-[230px]"
-                    placeId={place.id}
+                    placeId={place.placeId}
                     image={place.image}
                     title={place.title}
                     isBookmarked={isBookmarked(place.place_id)}

@@ -7,10 +7,14 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import AuthErrorMessage from '@/components/features/auth/auth-error-message';
 import PasswordInput from '@/components/features/auth/auth-password-input';
+import ResetPasswordSuccessModal from '@/components/commons/reset-password-success-modal';
 
 import useResetPassword from '@/lib/hooks/use-reset-password';
 import { AUTH_BUTTON_TEXT } from '@/constants/auth.constants';
 
+/**
+ * 비밀번호 재설정 페이지 컴포넌트
+ */
 const ResetPasswordPage = () => {
   const {
     isSubmitted,
@@ -23,37 +27,6 @@ const ResetPasswordPage = () => {
     handlePasswordUpdate,
     redirectToHome,
   } = useResetPassword();
-
-  // 비밀번호 변경 성공 화면
-  if (isSubmitted) {
-    return (
-      <AuthLayout>
-        <div className="flex items-center justify-center p-6">
-          <div className="w-full">
-            <div className="mb-4 text-center">
-              <h2 className="bold-22">비밀번호 재설정</h2>
-            </div>
-            <div className="rounded-md bg-white">
-              <div className="text-center">
-                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-md bg-gray-100">
-                  {/* 성공 아이콘 */}
-                </div>
-                <h3 className="mb-2 font-bold">
-                  비밀번호가 성공적으로 재설정되었습니다.
-                </h3>
-                <p className="mb-6 text-sm text-gray-500">
-                  {countdown}초 후 메인페이지로 돌아갑니다.
-                </p>
-                <Button className="w-full" onClick={redirectToHome}>
-                  홈으로 돌아가기
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </AuthLayout>
-    );
-  }
 
   return (
     <AuthLayout>
@@ -107,6 +80,13 @@ const ResetPasswordPage = () => {
           </Button>
         </form>
       </CardContent>
+
+      {/* 성공 모달 컴포넌트 */}
+      <ResetPasswordSuccessModal
+        open={isSubmitted}
+        countdown={countdown}
+        redirectToHome={redirectToHome}
+      />
     </AuthLayout>
   );
 };

@@ -29,7 +29,7 @@ const Home = () => {
       </section>
 
       {/* 날씨 섹션 */}
-      <section className="mt-8">
+      <section className="mt-[58px]">
         <Suspense fallback={<Loading />}>
           <WeatherSection />
         </Suspense>

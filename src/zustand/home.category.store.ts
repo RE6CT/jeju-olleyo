@@ -11,7 +11,7 @@ import { CategoryState } from '@/types/home.category.type';
 const useCategoryStore = create<CategoryState>()(
   persist(
     (set) => ({
-      activeCategory: '전체', // 기본값은 '전체' 카테고리
+      activeCategory: null, // 기본값은 null로 설정하여 초기에 아무 카테고리도 선택되지 않게 함
 
       setActiveCategory: (category) => set({ activeCategory: category }),
     }),

@@ -34,22 +34,25 @@ const PopularPlaces = () => {
     <section className="w-full px-4 py-6">
       <div style={{ width: '952px' }} className="mx-auto">
         {/* 전체 가로 길이 952px로 고정 */}
-        <div className="mb-[22.5px] flex items-center justify-between">
-          <h2 className="text-xl font-bold">올레 인기 장소</h2>
-          <button
-            onClick={handleViewMore}
-            className="regular-16 text-gray-600 hover:text-black"
-          >
-            더보기
-          </button>
+        <div className="mb-5 flex items-center justify-between">
+          <h2 className="semibold-22">올레 인기 장소</h2>
+          <div className="p-2.5">
+            <button
+              onClick={handleViewMore}
+              className="regular-16 text-gray-600 hover:text-black"
+            >
+              더보기
+            </button>
+          </div>
         </div>
         {/* 카테고리 탭 */}
-        <div className="mb-6 flex space-x-3 overflow-x-auto">
+        <div className="mb-5 flex space-x-3 overflow-x-auto">
           {CATEGORIES.map((category) => (
             <button
               key={category}
               onClick={() => handleCategoryChange(category)}
-              className={`semibold-16 rounded-[28px] border-[0.6px] border-solid border-[color:var(--Gray-600,#537384)] px-5 py-1.5 transition-colors ${
+              className={`semibold-16 rounded-[28px] border-[0.6px] border-solid px-5 py-2 transition-colors ${
+
                 activeCategory === category
                   ? 'border-[#F60] bg-primary-100 text-primary-800'
                   : 'border-[color:var(--Gray-600,#537384)] text-gray-600'

@@ -80,8 +80,9 @@ const SearchResultsPage = () => {
         <>
           <div className="grid grid-cols-2 gap-[11px] sm:grid-cols-3 md:grid-cols-4">
             {filteredResults.map((place, idx) => (
-              <div key={place.placeId}>
+              <>
                 <SearchCard
+                  key={place.id}
                   placeId={place.placeId}
                   image={place.image}
                   title={place.title}
@@ -97,7 +98,7 @@ const SearchResultsPage = () => {
                     <Banner key={`banner-${idx}`} />
                   </div>
                 )}
-              </div>
+              </>
             ))}
           </div>
 

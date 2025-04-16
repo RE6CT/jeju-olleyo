@@ -1,5 +1,6 @@
 import { TicketListProps } from '../../../types/air-ticket-type';
 import TicketCard from './ticket-card';
+import Image from 'next/image';
 
 const TicketList = ({
   flights,
@@ -9,6 +10,8 @@ const TicketList = ({
   setSortKey,
   setSortOrder,
 }: TicketListProps) => {
+  const isEmpty = flights.length === 0;
+
   return (
     <div>
       <div className="mb-2 mt-4 flex items-center gap-3">
@@ -35,12 +38,23 @@ const TicketList = ({
         </button>
       </div>
 
-      <ul className="space-y-3">
-        {sortFlights(flights, sortKey, sortOrder).map((flight, idx) => (
-          <TicketCard flight={flight} idx={idx} />
-        ))}
-      </ul>
+      {isEmpty ? (
+        <div className="flex flex-col items-center justify-center py-10 text-center text-gray-600">
+          <img
+            src="../emptyresult/empty_result.svg"
+            alt="검색 결과가 없어요"
+            className="mb-4"
+          />
+        </div>
+      ) : (
+        <ul className="space-y-3">
+          {sortFlights(flights, sortKey, sortOrder).map((flight, idx) => (
+            <TicketCard key={idx} flight={flight} idx={idx} />
+          ))}
+        </ul>
+      )}
     </div>
   );
 };
+
 export default TicketList;

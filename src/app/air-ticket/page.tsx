@@ -13,6 +13,8 @@ import {
 import Loading from '../loading';
 import { Flight } from '../../types/air-ticket-type';
 import { DEPARTURE_LIST } from '@/constants/ticket.constants';
+import useAlertStore from '@/zustand/alert.store';
+import TicketList from './_components/ticket-list';
 
 export default function FlightSearch() {
   const [formData, setFormData] = useState({
@@ -32,7 +34,7 @@ export default function FlightSearch() {
   const [comeSortOrder, setComeSortOrder] = useState<SortOrder>('asc');
 
   const didMount = useRef(false);
-
+  const { open } = useAlertStore();
   useEffect(() => {
     if (!didMount.current) {
       didMount.current = true;
@@ -44,12 +46,36 @@ export default function FlightSearch() {
     }
   }, [formData.schDate, formData.returnDate]);
 
+  const dateAlert = () => {
+    open({
+      type: 'warning',
+      title: 'WARNING!',
+      message: '돌아오는 날짜는 가는 날짜보다 빠를 수 없습니다.',
+      confirmText: '확인',
+    });
+  };
+
+  const ErrorAlert = () => {
+    open({
+      type: 'error',
+      title: 'ERROR!',
+      message: '항공기 정보를 불러오는데 실패했습니다. 다시 시도해 주세요.',
+      confirmText: '확인',
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     const goDate = formData.schDate.replace(/-/g, '');
     const returnDate = formData.returnDate.replace(/-/g, '');
+
+    if (returnDate < goDate) {
+      setLoading(false);
+      dateAlert();
+      return;
+    }
 
     try {
       const [goRes, returnRes] = await Promise.all([
@@ -80,8 +106,7 @@ export default function FlightSearch() {
       setGoFlights(mapFlights(goRes.data.items || []));
       setReturnFlights(mapFlights(returnRes.data.items || []));
     } catch (error) {
-      alert('항공기 정보를 불러오는데 실패했습니다. 다시 시도해 주세요.');
-      console.error(error);
+      ErrorAlert();
     } finally {
       setLoading(false);
     }
@@ -114,7 +139,7 @@ export default function FlightSearch() {
                 formData={formData}
                 setFormData={setFormData}
               />
-              <FlightList
+              <TicketList
                 flights={goFlights}
                 sortKey={goSortKey}
                 sortOrder={goSortOrder}
@@ -133,7 +158,7 @@ export default function FlightSearch() {
                 formData={formData}
                 setFormData={setFormData}
               />
-              <FlightList
+              <TicketList
                 flights={returnFlights}
                 sortKey={comeSortKey}
                 sortOrder={comeSortOrder}

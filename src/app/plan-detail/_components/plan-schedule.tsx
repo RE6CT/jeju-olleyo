@@ -65,6 +65,10 @@ const PlanSchedule = ({
   planTitle,
   planDescription,
   planImage,
+  dayPlaces,
+  setDayPlaces,
+  activeTab,
+  setActiveTab,
 }: {
   startDate: Date | null;
   endDate: Date | null;
@@ -72,10 +76,12 @@ const PlanSchedule = ({
   planTitle: string;
   planDescription: string;
   planImage: string;
+  dayPlaces: DayPlaces;
+  setDayPlaces: React.Dispatch<React.SetStateAction<DayPlaces>>;
+  activeTab: TabType;
+  setActiveTab: React.Dispatch<React.SetStateAction<TabType>>;
 }) => {
-  const [activeTab, setActiveTab] = useState<TabType>('전체보기');
   const dayCount = calculateTotalDays(startDate, endDate);
-  const [dayPlaces, setDayPlaces] = useState<DayPlaces>({});
   const [placeCount, setPlaceCount] = useState(0);
   const [copiedDay, setCopiedDay] = useState<number | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);

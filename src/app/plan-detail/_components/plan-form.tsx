@@ -5,6 +5,7 @@ import PlanHeader from './plan-header';
 import PlanMap from './plan-map';
 import PlanSchedule from './plan-schedule';
 import { Plan } from '@/types/plan.type';
+import { DayPlaces, TabType } from '@/types/plan-detail.type';
 
 const PlanForm = ({ userId }: { userId: string }) => {
   const [startDate, setStartDate] = useState<Date | null>(null);
@@ -22,6 +23,8 @@ const PlanForm = ({ userId }: { userId: string }) => {
     public: false,
   });
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [dayPlaces, setDayPlaces] = useState<DayPlaces>({});
+  const [activeTab, setActiveTab] = useState<TabType>('전체보기');
 
   const handleDateChange = (dates: [Date | null, Date | null]) => {
     const [start, end] = dates;
@@ -54,7 +57,7 @@ const PlanForm = ({ userId }: { userId: string }) => {
         planImage={plan.planImg || ''}
         setPlanImage={(planImg) => setPlan((prev) => ({ ...prev, planImg }))}
       />
-      <PlanMap />
+      <PlanMap dayPlaces={dayPlaces} activeTab={activeTab} />
       <PlanSchedule
         startDate={startDate}
         endDate={endDate}
@@ -62,6 +65,10 @@ const PlanForm = ({ userId }: { userId: string }) => {
         planTitle={plan.title}
         planDescription={plan.description || ''}
         planImage={plan.planImg || ''}
+        dayPlaces={dayPlaces}
+        setDayPlaces={setDayPlaces}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
       />
     </div>
   );

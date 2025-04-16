@@ -86,6 +86,7 @@ const Clusterer = ({ map, markers, ...options }: ClustererOptions) => {
         title: marker.title,
         clickable: marker.clickable,
         draggable: marker.draggable,
+        image: marker.image,
       });
 
       if (marker.onClick) {

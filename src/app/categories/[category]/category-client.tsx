@@ -7,6 +7,7 @@ import PlaceCard from '@/components/features/card/place-card';
 import { useGetPlacesByCategoryInfiniteQuery } from '@/lib/queries/use-get-places';
 import { useInView } from 'react-intersection-observer';
 import { CategoryParamType } from '@/types/category.type';
+import Banner from '@/app/search/_components/banner';
 
 /** 서버에서 가져온 데이터를 표시하는 클라이언트 컴포넌트 (카테고리 리스트)) */
 const CategoryClient = ({ category }: { category: CategoryParamType }) => {
@@ -36,29 +37,34 @@ const CategoryClient = ({ category }: { category: CategoryParamType }) => {
   return (
     <>
       {/* 카드 그리드로 바로 표시 */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {allPlaces.map((place) => (
-          <PlaceCard
-            key={place.id}
-            className="m-[11px] h-[230px] w-[230px]"
-            placeId={place.id}
-            image={place.image}
-            title={place.title}
-            isLiked={false}
-            isDragging={false}
-          />
+      <div className="grid grid-cols-2 gap-[11px] sm:grid-cols-3 md:grid-cols-4">
+        {allPlaces.map((place, index) => (
+          <>
+            <PlaceCard
+              key={place.id}
+              placeId={place.id}
+              image={place.image}
+              title={place.title}
+              isLiked={false}
+              isDragging={false}
+            />
+            {/* 8번째 아이템 이후에 배너 삽입 (첫 페이지의 마지막) */}
+            {index === 7 && (
+              <div className="col-span-full my-4 flex w-full items-center justify-center">
+                <Banner key={`banner-0`} />
+                {/* 배너 컴포넌트 또는 광고를 여기에 삽입 */}
+              </div>
+            )}
+          </>
         ))}
       </div>
 
       {/* 로딩 인디케이터 및 다음 페이지 로드 트리거 */}
-      <div ref={ref} className="flex h-20 w-full items-center justify-center">
-        {isFetchingNextPage ? (
-          <p>더 불러오는 중...</p>
-        ) : hasNextPage ? (
-          <p>스크롤하여 더 불러오기</p>
-        ) : (
-          <p>모든 장소를 불러왔습니다</p>
-        )}
+      <div
+        ref={ref}
+        className="flex h-[50px] w-full items-center justify-center"
+      >
+        {isFetchingNextPage && <p>로딩중</p>}
       </div>
     </>
   );

@@ -14,12 +14,16 @@ const Footer = () => {
             <div className="mb-6 flex items-center">
               <div className="text-3xl font-bold">
                 <span className="text-orange-500">
-                  <img src="/logo/color_logo.svg" alt="Logo" />
+                  <img
+                    src="/logo/color_logo.png"
+                    alt="Logo"
+                    className="w-[144px]"
+                  />
                 </span>
               </div>
             </div>
             <p className="text-sm text-gray-500">
-              2025 리윅트. All right reserved.
+              2025 리왹트. All right reserved.
             </p>
           </div>
 

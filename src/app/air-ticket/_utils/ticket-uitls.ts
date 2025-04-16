@@ -1,4 +1,4 @@
-import { Flight } from '../_type/type';
+import { Flight } from '../../../types/air-ticket-type';
 
 export type SortKey = 'airline' | 'dep' | 'arr';
 export type SortOrder = 'asc' | 'desc';

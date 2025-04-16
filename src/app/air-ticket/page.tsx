@@ -1,9 +1,9 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
-import FlightSearchForm from './_components/FlightSearchForm';
-import DateOptions from './_components/DateOptions';
-import FlightList from './_components/FlightList';
+import FlightSearchForm from './_components/ticket-search-form';
+import DateOptions from './_components/date-options';
+import FlightList from './_components/ticket-list';
 import {
   getAirportLabel,
   sortFlights,
@@ -11,7 +11,7 @@ import {
   SortOrder,
 } from './_utils/ticket-uitls';
 import Loading from '../loading';
-import { Flight } from './_type/type';
+import { Flight } from '../../types/air-ticket-type';
 import { DEPARTURE_LIST } from '@/constants/ticket.constants';
 
 export default function FlightSearch() {

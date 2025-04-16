@@ -1,4 +1,4 @@
-import { TicketCardProps } from '../_type/type';
+import { TicketCardProps } from '../../../types/air-ticket-type';
 import { formatTime } from '../_utils/ticket-uitls';
 
 const TicketCard = ({ flight, idx }: TicketCardProps) => {

@@ -1,14 +1,14 @@
 import { Combobox } from '@/components/commons/combo-box';
-import { FlightSearchFormProps } from '../_type/type';
+import { TicketSearchFormProps } from '../../../types/air-ticket-type';
 
-const FlightSearchForm = ({
+const TicketSearchForm = ({
   departureList,
   departure,
   setDeparture,
   formData,
   handleChange,
   handleSubmit,
-}: FlightSearchFormProps) => {
+}: TicketSearchFormProps) => {
   return (
     <form onSubmit={handleSubmit} className="mb-6 flex flex-wrap gap-3">
       <div>
@@ -61,4 +61,4 @@ const FlightSearchForm = ({
   );
 };
 
-export default FlightSearchForm;
+export default TicketSearchForm;

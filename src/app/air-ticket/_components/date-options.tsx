@@ -1,4 +1,4 @@
-import { DateOptionsProps } from '../_type/type';
+import { DateOptionsProps } from '../../../types/air-ticket-type';
 
 const DateOptions = ({
   formData,

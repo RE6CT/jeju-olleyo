@@ -23,7 +23,7 @@ export async function GET(req) {
     console.error('API 요청 실패:', error.message);
 
     return new Response(
-      JSON.stringify({ error: '운항 정보를 불러오는 데 실패했습니다.' }),
+      JSON.stringify({ error: '항공기 정보를 불러오는데 실패했습니다' }),
       {
         status: 500,
         headers: { 'Content-Type': 'application/json' },

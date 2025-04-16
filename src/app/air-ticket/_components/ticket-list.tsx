@@ -1,14 +1,14 @@
-import { FlightListProps } from '../_type/type';
-import TicketCard from './TIcketCard';
+import { TicketListProps } from '../../../types/air-ticket-type';
+import TicketCard from './ticket-card';
 
-const FlightList = ({
+const TicketList = ({
   flights,
   sortKey,
   sortOrder,
   sortFlights,
   setSortKey,
   setSortOrder,
-}: FlightListProps) => {
+}: TicketListProps) => {
   return (
     <div>
       <div className="mb-2 mt-4 flex items-center gap-3">
@@ -43,4 +43,4 @@ const FlightList = ({
     </div>
   );
 };
-export default FlightList;
+export default TicketList;

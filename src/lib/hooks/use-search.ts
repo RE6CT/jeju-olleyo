@@ -1,49 +1,69 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Fuse from 'fuse.js';
-import fetchGetAllPlaces from '../apis/search/get-place.api';
 import { Place } from '@/types/search.type';
-import { useRouter } from 'next/navigation';
+import { getBrowserClient } from '../supabase/client';
+import { camelize } from '../utils/camelize';
+
+const PAGE_SIZE = 16;
 
 const useSearch = (query: string) => {
-  const [allPlaces, setAllPlaces] = useState<Place[]>([]);
   const [results, setResults] = useState<Place[]>([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(0);
+  const [more, setMore] = useState(true);
 
-  const router = useRouter();
+  const fetchNextPage = async (reset = false) => {
+    setLoading(true);
 
-  useEffect(() => {
-    const fetchPlaces = async () => {
-      try {
-        const data = await fetchGetAllPlaces();
-        setAllPlaces(data ?? []);
-      } catch (e) {
-        console.error('장소 불러오기 실패:', e);
-      } finally {
-        setLoading(false);
+    try {
+      const supabase = await getBrowserClient();
+
+      const from = reset ? 0 : page * PAGE_SIZE;
+      const to = from + PAGE_SIZE - 1;
+
+      const { data, error } = await supabase
+        .from('places')
+        .select('*')
+        .or(`title.ilike.%${query}%,address.ilike.%${query}%`)
+        .range(from, to);
+
+      if (error) {
+        console.error('검색 실패', error.message);
+        return;
       }
-    };
 
-    fetchPlaces();
-  }, []);
+      const camelized = data.map(camelize) as Place[];
 
-  // 검색어 없을 경우, '전체' 카테고리 페이지로 리다이렉트
-  useEffect(() => {
-    if (!query.trim()) {
-      router.replace('/categories/all');
+      if (reset) {
+        setResults(camelized); // reset이면 덮어쓰기
+        setPage(1);
+      } else {
+        setResults((prev) => [...prev, ...camelized]); // 누적
+        setPage((prev) => prev + 1);
+      }
+
+      if (camelized.length < PAGE_SIZE) {
+        setMore(false);
+      }
+    } catch (err) {
+      console.error('검색 요청 실패', err);
+    } finally {
+      setLoading(false);
     }
+  };
 
-    const fuse = new Fuse(allPlaces, {
-      keys: ['title', 'address'],
-      threshold: 0.5,
-    });
+  useEffect(() => {
+    setResults([]);
+    setPage(0);
+    setMore(true);
 
-    const filtered = fuse.search(query).map((r) => r.item);
-    setResults(filtered);
-  }, [query, allPlaces]);
+    if (query.trim()) {
+      fetchNextPage(true); // reset = true
+    }
+  }, [query]);
 
-  return { results, loading };
+  return { results, loading, more, fetchNextPage };
 };
 
 export default useSearch;

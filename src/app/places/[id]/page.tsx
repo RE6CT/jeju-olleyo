@@ -3,7 +3,6 @@
 import CategoryBadge from '@/components/commons/category-badge';
 import PlaceImage from '@/components/commons/place-image';
 import { getBrowserClient } from '@/lib/supabase/client';
-
 import { DetailIntroRaw } from '@/types/korea-tour.type';
 import { Place } from '@/types/search.type';
 import { useParams } from 'next/navigation';
@@ -11,9 +10,9 @@ import { useEffect, useState } from 'react';
 import { camelize } from '@/lib/utils/camelize';
 import BookmarkIcon from '@/components/commons/bookmark-icon';
 import { useBookmarkQuery } from '@/lib/hooks/use-bookmark-query';
+import { CategoryType } from '@/types/category.type';
 import PlaceLocation from './_components/place-location';
 import PlanIncludingPlace from './_components/plan-including-place';
-import { CategoryType } from '@/types/category.type';
 
 const PlaceDetailPage = () => {
   const params = useParams();
@@ -101,10 +100,10 @@ const PlaceDetailPage = () => {
   const openSummary = rawSummary.replace(/<br\s*\/?>/gi, '\n');
 
   return (
-    <div className="mt-[73px]">
+    <div className="mt-[73px] flex flex-col items-center justify-center px-9">
       {place ? (
         <div className="flex gap-8">
-          <div className="relative aspect-square h-[415px] w-[553px] bg-no-repeat object-cover">
+          <div className="relative aspect-square w-[479px] bg-no-repeat object-cover">
             <PlaceImage image={place.image} title={place.title} />
           </div>
 
@@ -192,18 +191,21 @@ const PlaceDetailPage = () => {
               </div>
             </div>
 
-            <PlaceLocation
-              lat={place.lat}
-              lng={place.lng}
-              title={place.title}
-            />
+            <div className="mb-auto">
+              <PlaceLocation
+                lat={place.lat}
+                lng={place.lng}
+                title={place.title}
+              />
+            </div>
           </div>
         </div>
       ) : (
         <p className="text-gray-300">장소 정보를 불러오는 중...</p>
       )}
-
-      <PlanIncludingPlace placeId={Number(params.id)} />
+      <div className="w-full text-left">
+        <PlanIncludingPlace placeId={Number(params.id)} />
+      </div>
     </div>
   );
 };

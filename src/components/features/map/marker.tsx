@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { MarkerInstance, MarkerProps } from '@/types/kakao-map.type';
+import { createMarkerImage } from '@/lib/utils/map.util';
 
 /**
  * 카카오맵 마커 컴포넌트
@@ -9,6 +10,9 @@ import { MarkerInstance, MarkerProps } from '@/types/kakao-map.type';
  * @param MarkerOptions.title - 마커의 타이틀
  * @param MarkerOptions.clickable - 마커 클릭 가능 여부
  * @param MarkerOptions.draggable - 마커 드래그 가능 여부
+ * @param MarkerOptions.day - 일자 (홀수/짝수에 따라 마커 색상 변경)
+ * @param MarkerOptions.order - 순서 번호
+ * @param MarkerOptions.showDay - 일자 표시 여부
  */
 const Marker = ({
   map,
@@ -16,18 +20,26 @@ const Marker = ({
   title,
   clickable = true,
   draggable = false,
+  day,
+  order,
+  showDay = false,
   onClick,
 }: MarkerProps) => {
   const markerInstance = useRef<MarkerInstance | null>(null);
 
   // 마커 초기화
   useEffect(() => {
+    if (!map || !position) return;
+
+    const markerImage = createMarkerImage(day || 1);
+
     const marker = new window.kakao.maps.Marker({
       map,
       position: new window.kakao.maps.LatLng(position.lat, position.lng),
       title,
       clickable,
       draggable,
+      image: markerImage,
     });
 
     markerInstance.current = marker;
@@ -48,8 +60,9 @@ const Marker = ({
         }
       }
     };
-  }, [map]);
+  }, [map, position, title, clickable, draggable, onClick, day]);
 
+  // 마커 속성 업데이트
   useEffect(() => {
     if (markerInstance.current) {
       const latlng = new window.kakao.maps.LatLng(position.lat, position.lng);

@@ -1,5 +1,4 @@
-import React from 'react';
-import { Button } from '../ui/button';
+import React, { MouseEvent } from 'react';
 
 /**
  * 좋아요 아이콘 컴포넌트
@@ -15,18 +14,25 @@ const LikeIcon = ({
   isLiked: boolean;
   onToggle: () => void;
 }) => {
+  /**
+   * onToggle 함수 전 이벤트 버블링 방지용 함수
+   */
+  const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onToggle();
+  };
+
   return (
-    <Button
-      onClick={onToggle}
-      variant="ghost"
-      className="flex h-6 w-6 cursor-pointer items-center justify-center border-none bg-transparent p-0 hover:bg-transparent"
+    <button
+      onClick={(e) => handleClick(e)}
+      className="flex cursor-pointer items-center justify-center border-none bg-transparent p-0 hover:bg-transparent"
       aria-label={isLiked ? '좋아요 취소' : '좋아요'}
     >
       <svg
-        width="24"
-        height="24"
+        width="40"
+        height="40"
         viewBox="0 0 48 48"
-        fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
@@ -37,7 +43,7 @@ const LikeIcon = ({
           className={isLiked ? 'text-primary-500' : 'text-gray-200'}
         />
       </svg>
-    </Button>
+    </button>
   );
 };
 

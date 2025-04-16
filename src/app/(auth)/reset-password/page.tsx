@@ -19,7 +19,6 @@ const ResetPasswordPage = () => {
     error,
     register,
     errors,
-    isValid,
     handleSubmit,
     handlePasswordUpdate,
     redirectToHome,
@@ -63,43 +62,44 @@ const ResetPasswordPage = () => {
         description="새로운 비밀번호를 입력해주세요"
       />
 
-      <CardContent>
+      <CardContent className="mt-7">
         {error && <AuthErrorMessage messages={[error]} className="mb-4" />}
 
-        <form
-          onSubmit={handleSubmit(handlePasswordUpdate)}
-          className="space-y-4"
-        >
-          <div className="space-y-2">
+        <form onSubmit={handleSubmit(handlePasswordUpdate)}>
+          <div>
             <Label htmlFor="password">새 비밀번호</Label>
             <PasswordInput
               id="password"
-              placeholder="새로운 비밀번호를 입력하세요"
+              placeholder="8~12자 영문,숫자,특수문자"
               register={register('password')}
             />
-            {errors.password && (
-              <p className="text-sm text-red">{errors.password.message}</p>
-            )}
+            <div className="h-6">
+              {errors.password && (
+                <p className="regular-14 text-red">{errors.password.message}</p>
+              )}
+            </div>
           </div>
 
-          <div className="space-y-2">
+          <div>
             <Label htmlFor="confirmPassword">비밀번호 확인</Label>
             <PasswordInput
               id="confirmPassword"
-              placeholder="비밀번호를 다시 입력하세요"
+              placeholder="8~12자 영문,숫자,특수문자"
               register={register('confirmPassword')}
             />
-            {errors.confirmPassword && (
-              <p className="text-sm text-red">
-                {errors.confirmPassword.message}
-              </p>
-            )}
+            <div className="h-6">
+              {errors.confirmPassword && (
+                <p className="regular-14 text-red">
+                  {errors.confirmPassword.message}
+                </p>
+              )}
+            </div>
           </div>
 
           <Button
             type="submit"
-            className="w-full"
-            disabled={!isValid || isLoading}
+            className="flex h-11 w-full items-center justify-center gap-2.5 rounded-xl bg-primary-500 p-2.5 pt-3 hover:bg-primary-600"
+            disabled={isLoading}
           >
             {isLoading
               ? AUTH_BUTTON_TEXT.LOADING

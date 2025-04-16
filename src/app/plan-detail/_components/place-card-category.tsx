@@ -28,8 +28,6 @@ const PlaceCardCategory = ({
   isSearchSection = false,
   onBookmarkToggle,
   onAddPlace,
-  placeId,
-  userId,
 }: {
   title: string;
   imageUrl: string;
@@ -38,8 +36,6 @@ const PlaceCardCategory = ({
   isSearchSection?: boolean;
   onBookmarkToggle?: () => void;
   onAddPlace?: () => void;
-  placeId?: number;
-  userId?: string;
 }) => {
   return (
     <div className="flex w-full items-center justify-between py-3">

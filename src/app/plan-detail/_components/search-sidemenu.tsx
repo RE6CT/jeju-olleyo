@@ -14,7 +14,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import DaySelectRequiredModal from './day-select-required-modal';
 
 const ITEMS_PER_PAGE = 7;
-const INITIAL_ITEMS = 3;
+const INITIAL_ITEMS = 5;
 const NAVIGATION_BUTTON_WIDTH = 42.4;
 const NAVIGATION_BUTTON_GAP = 4;
 const DEBOUNCE_TIME = 200;
@@ -238,8 +238,7 @@ const SearchSidemenu = ({
             </AnimatePresence>
             {currentPageItems.length > INITIAL_ITEMS && (
               <Button
-                variant="ghost"
-                className="w-full text-gray-500"
+                className="flex h-[36px] w-full flex-shrink-0 items-center justify-center gap-1 rounded-xl border border-secondary-300 bg-gray-50 text-sm font-normal text-secondary-300 transition-colors hover:bg-gray-100"
                 onClick={toggleExpand}
               >
                 {isExpanded ? '접기' : '더보기'}

@@ -8,7 +8,7 @@ import EmptyResult from './_components/empty-result';
 import { useState } from 'react';
 import PlaceCard from '@/components/features/card/place-card';
 import CategoryFilterTabs from '@/components/commons/category-filter-tabs';
-import { CategoryType } from '@/types/category-badge.type';
+import { CategoryType } from '@/types/category.type';
 
 const filterTabs: CategoryType[] = ['전체', '명소', '숙박', '맛집', '카페'];
 

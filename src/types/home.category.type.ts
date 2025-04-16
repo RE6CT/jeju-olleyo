@@ -7,7 +7,8 @@ export type TravelCategory =
   | '숙박'
   | '맛집'
   | '카페'
-  | '항공권';
+  | '항공권'
+  | null;
 
 /**
  *  활성화 카테고리 탭 타입

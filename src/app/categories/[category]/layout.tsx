@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 
 const CategoryLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <div>
+    <div className="w-full max-w-[1024px]">
       <CategoryTabs />
       <main>{children}</main>
     </div>

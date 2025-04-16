@@ -38,6 +38,7 @@ export const useBookmarkMutation = () => {
         queryClient.invalidateQueries({ queryKey: ['popularPlaces'] });
         queryClient.invalidateQueries({ queryKey: ['bookmarks'] });
         queryClient.invalidateQueries({ queryKey: ['dataCount'] });
+        queryClient.invalidateQueries({ queryKey: ['places'] });
       }
     },
     onError: (error) => {

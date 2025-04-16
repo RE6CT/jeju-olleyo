@@ -1,4 +1,4 @@
-import { CategoryBadgeProps } from '@/types/category-badge.type';
+import { CategoryBadgeProps } from '@/types/category.type';
 
 const getStyleByBadgeType = (
   badgeType: 'filter' | 'modal' | 'card',

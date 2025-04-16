@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Place } from '@/types/search.type';
 import { useRouter } from 'next/navigation';
 import { getBrowserClient } from '../supabase/client';
+import { camelize } from '../utils/camelize';
 
 const useSearch = (query: string) => {
   const [results, setResults] = useState<Place[]>([]);
@@ -31,7 +32,7 @@ const useSearch = (query: string) => {
           return;
         }
 
-        setResults(data as Place[]);
+        setResults(data.map(camelize) as Place[]);
       } catch (err) {
         console.error('검색 요청 실패', err);
       } finally {

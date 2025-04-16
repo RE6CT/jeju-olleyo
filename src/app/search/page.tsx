@@ -8,6 +8,9 @@ import EmptyResult from './_components/empty-result';
 import { useEffect, useState } from 'react';
 import CategoryFilterTabs from '@/components/commons/category-filter-tabs';
 import { CategoryType } from '@/types/category.type';
+import { useBookmarkQuery } from '@/lib/hooks/use-bookmark-query';
+import { getBrowserClient } from '@/lib/supabase/client';
+import SearchCard from './_components/search-card';
 
 const filterTabs: CategoryType[] = ['전체', '명소', '숙박', '맛집', '카페'];
 
@@ -79,9 +82,9 @@ const SearchResultsPage = () => {
                     placeId={place.placeId}
                     image={place.image}
                     title={place.title}
-                    isBookmarked={isBookmarked(place.place_id)}
+                    isBookmarked={isBookmarked(place.placeId)}
                     onBookmarkToggle={() => {
-                      if (userId) toggleBookmark(place.place_id);
+                      if (userId) toggleBookmark(place.placeId);
                     }}
                   />
                 ))}

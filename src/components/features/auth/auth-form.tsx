@@ -113,9 +113,7 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
 
           <div>
             {/* 비밀번호 입력 필드 */}
-            <div className="flex items-center justify-between">
-              <Label htmlFor="password">비밀번호</Label>
-            </div>
+            <Label htmlFor="password">비밀번호</Label>
             <PasswordInput
               id="password"
               placeholder="비밀번호를 입력하세요"
@@ -157,13 +155,13 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
             {/* 비밀번호 찾기 링크 */}
             <Link
               href={PATH.FORGOT_PASSWORD}
-              className="p-2.5 text-sm text-gray-600 hover:text-secondary-300"
+              className="regular-12 p-2.5 text-gray-600"
             >
               비밀번호 찾기
             </Link>
             <Link
               href={PATH.SIGNUP}
-              className="p-2.5 text-sm text-gray-600 hover:text-secondary-300"
+              className="medium-12 p-2.5 text-secondary-300"
             >
               회원가입
             </Link>
@@ -211,27 +209,27 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
           </div>
 
           <div>
+            {/* 전화번호 입력 필드 */}
+            <Label htmlFor="phone">휴대폰 번호</Label>
+            <Input
+              id="phone"
+              type="tel"
+              placeholder="010 1234 5678"
+              {...registerSignup('phone')}
+            />
+            <ErrorMessage message={errorsSignup.phone?.message} />
+          </div>
+
+          <div>
             {/* 닉네임 입력 필드 */}
             <Label htmlFor="nickname">닉네임</Label>
             <Input
               id="nickname"
               type="text"
-              placeholder="사용할 닉네임을 입력하세요"
+              placeholder="한글, 영문, 숫자"
               {...registerSignup('nickname')}
             />
             <ErrorMessage message={errorsSignup.nickname?.message} />
-          </div>
-
-          <div>
-            {/* 전화번호 입력 필드 */}
-            <Label htmlFor="phone">전화번호</Label>
-            <Input
-              id="phone"
-              type="tel"
-              placeholder="01012345678"
-              {...registerSignup('phone')}
-            />
-            <ErrorMessage message={errorsSignup.phone?.message} />
           </div>
 
           {/* 폼 제출 버튼 영역 */}

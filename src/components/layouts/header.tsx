@@ -7,21 +7,29 @@ import Image from 'next/image';
 const Header = () => {
   return (
     <header className="flex flex-col">
-      <div className="flex h-14 w-full items-center justify-between gap-2 bg-white px-2 text-black sm:h-16 sm:gap-3 sm:px-4 md:h-20 md:gap-4 md:px-6 lg:h-24 lg:gap-6 lg:px-10">
-        <div className="flex items-center gap-2 sm:gap-3 md:gap-6 lg:gap-12">
+      <div className="flex h-[86px] w-full items-center justify-between gap-2 bg-white px-9">
+        <div className="flex items-center gap-5 sm:gap-[42px]">
           <Link href={PATH.HOME} className="flex-shrink-0">
             <Image
-              src="/logo/color_logo.svg"
+              src="/logo/color_logo.png"
               alt="로고"
-              width={128}
-              height={32}
+              width={116}
+              height={61}
               priority
-              className="h-5 w-auto sm:h-6 md:h-7 lg:h-8"
+              className="hidden object-cover sm:block"
+            />
+            <Image
+              src="/logo/color_logo_single.png"
+              alt="로고"
+              width={28}
+              height={28}
+              priority
+              className="block object-cover sm:hidden"
             />
           </Link>
 
           {/* 검색바 */}
-          <div className="sm:w-68 lg:w-92 w-56 md:w-80">
+          <div className="w-full sm:w-[357px]">
             <SearchBar />
           </div>
         </div>

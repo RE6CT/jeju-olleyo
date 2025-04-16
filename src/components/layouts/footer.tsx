@@ -9,7 +9,7 @@ const Footer = () => {
       <div className="flex w-full shrink-0 flex-col items-center justify-center md:h-[189px] md:w-[244px]">
         <div className="flex flex-col items-start gap-2 self-stretch">
           <div className="flex w-36 items-center justify-center gap-[1.548px]">
-            <img src="/logo/color_logo.svg" alt="Logo" />
+            <img src="/logo/color_logo.png" alt="Logo" />
           </div>
           <p className="medium-14 self-stretch text-gray-600">
             2025 리윅트. All right reserved.

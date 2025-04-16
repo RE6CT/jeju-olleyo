@@ -6,10 +6,10 @@ import useSearch from '@/lib/hooks/use-search';
 import Loading from '../loading';
 import EmptyResult from './_components/empty-result';
 import { useEffect, useState } from 'react';
-import PlaceCard from '@/components/features/card/place-card';
 import CategoryFilterTabs from '@/components/commons/category-filter-tabs';
 import { CategoryType } from '@/types/category-badge.type';
 import { getBrowserClient } from '@/lib/supabase/client';
+import SearchCard from './_components/search-card';
 import { useBookmarkQuery } from '@/lib/hooks/use-bookmark-query';
 
 const filterTabs: CategoryType[] = ['전체', '명소', '숙박', '맛집', '카페'];
@@ -21,6 +21,8 @@ const SearchResultsPage = () => {
 
   const [activeFilterTab, setActiveFilterTab] = useState<CategoryType>('전체');
   const [userId, setUserId] = useState<string | null>(null);
+
+  const { isBookmarked, toggleBookmark } = useBookmarkQuery(userId ?? '');
 
   useEffect(() => {
     const fetchUserId = async () => {
@@ -35,8 +37,6 @@ const SearchResultsPage = () => {
     };
     fetchUserId();
   }, []);
-
-  const { isBookmarked, toggleBookmark } = useBookmarkQuery(userId ?? '');
 
   const onFilterTabChange = (tab: CategoryType) => {
     setActiveFilterTab(tab);
@@ -76,14 +76,16 @@ const SearchResultsPage = () => {
             grouped.push(
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 {slice.map((place) => (
-                  <PlaceCard
+                  <SearchCard
                     key={place.id}
                     className="m-[11px] h-[230px] w-[230px]"
                     placeId={place.id}
                     image={place.image}
                     title={place.title}
-                    isLiked={false}
-                    isDragging={false}
+                    isBookmarked={isBookmarked(place.place_id)}
+                    onBookmarkToggle={() => {
+                      if (userId) toggleBookmark(place.place_id);
+                    }}
                   />
                 ))}
               </div>,

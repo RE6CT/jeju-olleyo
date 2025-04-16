@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { MouseEvent } from 'react';
 import { Button } from '../ui/button';
 
 /**
@@ -11,9 +11,15 @@ const BookmarkIcon = ({
   isBookmarked: boolean;
   onToggle: () => void;
 }) => {
+  const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onToggle();
+  };
+
   return (
     <Button
-      onClick={onToggle}
+      onClick={handleClick}
       variant="ghost"
       className="flex h-8 w-8 cursor-pointer items-center justify-center border-none bg-transparent p-0 hover:bg-transparent"
       aria-label={isBookmarked ? '북마크 해제' : '북마크'}

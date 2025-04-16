@@ -19,6 +19,7 @@ const PasswordInput = ({
   required = false,
   register,
   className,
+  autoComplete,
 }: PasswordInputProps) => {
   const [showPassword, setShowPassword] = useState(false);
 

@@ -100,6 +100,7 @@ const SecurityInfo = ({ userId }: { userId: string }) => {
               id="currentPassword"
               placeholder="********"
               register={register('password')}
+              autoComplete="current-password"
             />
             {errors.password && (
               <p className="regular-14 m-2 text-red">
@@ -117,6 +118,7 @@ const SecurityInfo = ({ userId }: { userId: string }) => {
               id="newPassword"
               placeholder="숫자, 문자, 특수문자를 포함하여 8자 이상"
               register={register('newPassword')}
+              autoComplete="new-password"
             />
             {errors.newPassword && (
               <p className="regular-14 m-2 text-red">
@@ -137,6 +139,7 @@ const SecurityInfo = ({ userId }: { userId: string }) => {
               id="newPasswordCheck"
               placeholder="숫자, 문자, 특수문자를 포함하여 8자 이상"
               register={register('confirmNewPassword')}
+              autoComplete="new-password"
             />
             {errors.confirmNewPassword && (
               <p className="regular-14 m-2 text-red">

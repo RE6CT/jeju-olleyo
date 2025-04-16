@@ -25,7 +25,7 @@ import { UserBookmarks } from '@/types/mypage.type';
  * await toggleBookmark(placeId);
  * ```
  */
-export const useBookmarkQuery = (userId: string) => {
+export const useBookmarkQuery = (userId: string | null) => {
   const queryClient = useQueryClient();
 
   /**
@@ -36,7 +36,11 @@ export const useBookmarkQuery = (userId: string) => {
    */
   const { data: bookmarks = [] } = useQuery<UserBookmarks | null>({
     queryKey: ['bookmarks', userId],
-    queryFn: () => fetchGetAllBookmarksByUserId(userId),
+    queryFn: () => {
+      if (!userId) return Promise.resolve([]);
+      const result = fetchGetAllBookmarksByUserId(userId);
+      return result;
+    },
     staleTime: 0,
     gcTime: 0,
   });
@@ -60,6 +64,7 @@ export const useBookmarkQuery = (userId: string) => {
    */
   const addBookmarkMutation = useMutation({
     mutationFn: (placeId: number) => {
+      if (!userId) return Promise.resolve();
       const placeExists = places.some((place) => place.place_id === placeId);
       if (!placeExists) {
         throw new Error('존재하지 않는 장소입니다.');
@@ -110,6 +115,7 @@ export const useBookmarkQuery = (userId: string) => {
    */
   const deleteBookmarkMutation = useMutation({
     mutationFn: async (placeId: number) => {
+      if (!userId) return Promise.resolve();
       const bookmark = await fetchGetBookmarkByIdQuery(placeId, userId);
       if (!bookmark) {
         return;
@@ -155,7 +161,7 @@ export const useBookmarkQuery = (userId: string) => {
    * @returns 북마크 여부
    */
   const isBookmarked = (placeId: number) => {
-    if (!bookmarks) return false;
+    if (!bookmarks || !userId) return false;
     return bookmarks.some((bookmark) => bookmark.placeId === placeId);
   };
 
@@ -166,6 +172,7 @@ export const useBookmarkQuery = (userId: string) => {
   const toggleBookmark = async (
     placeId: number,
   ): Promise<{ success: boolean; error?: Error }> => {
+    if (!userId) return { success: false };
     const isCurrentlyBookmarked = isBookmarked(placeId);
     try {
       if (isCurrentlyBookmarked) {

@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { CategoryType } from '@/types/category-badge.type';
+import { CategoryType } from '@/types/category.type';
 import { Button } from '@/components/ui/button';
 import BookmarkIcon from '@/components/commons/bookmark-icon';
 

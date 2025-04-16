@@ -30,7 +30,7 @@ export const fetchAllPlans = async (userId: string | null, limit?: number) => {
 
 /**
  * URL 카테고리에 해당하는 장소 목록을 가져오는 함수
- * @param urlcategory - URL에서 받아온 카테고리 (toursite, restaurant, cafe, accomodation 등)
+ * @param urlcategory - URL에서 받아온 카테고리 (toursite, restaurant, cafe, accommodation 등)
  * @returns 해당 카테고리의 장소 목록
  */
 export const fetchGetPlacesByCategory = async (

@@ -234,7 +234,7 @@ export const fetchSavePlanPlaces = async (
         })
         .map((place, index) => ({
           day_id: dayData.day_id,
-          place_id: place.place_id,
+          place_id: place.placeId,
           visit_order: index + 1,
         }));
     });

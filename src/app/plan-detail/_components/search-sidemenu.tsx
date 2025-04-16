@@ -226,11 +226,9 @@ const SearchSidemenu = ({
                     title={place.title}
                     category={place.category as CategoryType}
                     imageUrl={place.image || ''}
-                    isBookmarked={isBookmarked(place.place_id)}
+                    isBookmarked={isBookmarked(place.placeId)}
                     isSearchSection
-                    onBookmarkToggle={() =>
-                      handleBookmarkToggle(place.place_id)
-                    }
+                    onBookmarkToggle={() => handleBookmarkToggle(place.placeId)}
                     onAddPlace={() => handleAddPlace(place)}
                   />
                 </motion.div>

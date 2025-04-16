@@ -5,14 +5,18 @@ import Loading from '@/app/loading';
 import PlaceCard from '@/components/features/card/place-card';
 import { useGetPlacesByCategoryQuery } from '@/lib/queries/use-get-places';
 import Banner from '@/app/search/_components/banner';
+import { Place } from '@/types/search.type';
 
 const CategoryClient = ({ category }: { category: string }) => {
-  const { data, isPending, isError } = useGetPlacesByCategoryQuery(category);
+  const {
+    data: places,
+    isPending,
+    isError,
+  } = useGetPlacesByCategoryQuery(category);
 
   if (isPending) return <Loading />;
   if (isError) return <ErrorMessage message="장소 불러오기 오류 발생" />;
 
-  const places = data as any[];
   const grouped: JSX.Element[] = [];
 
   for (let i = 0; i < places.length; i += 8) {
@@ -25,7 +29,7 @@ const CategoryClient = ({ category }: { category: string }) => {
           <PlaceCard
             key={place.id}
             className="m-[11px] h-[230px] w-[230px]"
-            placeId={place.id}
+            placeId={place.place_id}
             image={place.image}
             title={place.title}
             isLiked={false}

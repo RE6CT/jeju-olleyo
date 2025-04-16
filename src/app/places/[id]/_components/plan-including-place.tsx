@@ -57,7 +57,7 @@ const PlanIncludingPlace = ({ placeId }: { placeId: number }) => {
       }
     };
     fetchGetPlansByPlaceId();
-  }, [plans]);
+  }, []);
 
   return (
     <>

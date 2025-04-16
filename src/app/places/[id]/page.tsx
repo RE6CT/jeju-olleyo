@@ -8,11 +8,11 @@ import { DetailIntroRaw } from '@/types/korea-tour.type';
 import { Place } from '@/types/search.type';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import PlaceLocation from './_components/place-location';
 import { camelize } from '@/lib/utils/camelize';
-import PlanIncludingPlace from './_components/plan-including-place';
 import BookmarkIcon from '@/components/commons/bookmark-icon';
 import { useBookmarkQuery } from '@/lib/hooks/use-bookmark-query';
+import PlaceLocation from './_components/place-location';
+import PlanIncludingPlace from './_components/plan-including-place';
 
 const PlaceDetailPage = () => {
   const params = useParams();
@@ -50,6 +50,8 @@ const PlaceDetailPage = () => {
           .select('*')
           .eq('place_id', Number(params.id))
           .single();
+
+        console.log('장소 불러오기');
 
         if (error || !data) {
           setError('수파베이스 장소 불러오기 실패');

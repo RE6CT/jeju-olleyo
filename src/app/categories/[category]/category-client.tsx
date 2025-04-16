@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import ErrorMessage from '@/app/error';
 import Loading from '@/app/loading';
 import PlaceCard from '@/components/features/card/place-card';
@@ -8,9 +8,16 @@ import { useGetPlacesByCategoryInfiniteQuery } from '@/lib/queries/use-get-place
 import { useInView } from 'react-intersection-observer';
 import { CategoryParamType } from '@/types/category.type';
 import Banner from '@/app/search/_components/banner';
+import { useBookmarkQuery } from '@/lib/hooks/use-bookmark-query';
 
 /** 서버에서 가져온 데이터를 표시하는 클라이언트 컴포넌트 (카테고리 리스트)) */
-const CategoryClient = ({ category }: { category: CategoryParamType }) => {
+const CategoryClient = ({
+  category,
+  userId,
+}: {
+  category: CategoryParamType;
+  userId: string | null;
+}) => {
   const {
     data,
     fetchNextPage,
@@ -19,8 +26,8 @@ const CategoryClient = ({ category }: { category: CategoryParamType }) => {
     isPending,
     isError,
   } = useGetPlacesByCategoryInfiniteQuery(category);
-
   const { ref, inView } = useInView();
+  const { isBookmarked, bookmarks } = useBookmarkQuery(userId);
 
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
@@ -42,16 +49,16 @@ const CategoryClient = ({ category }: { category: CategoryParamType }) => {
           <>
             <PlaceCard
               key={place.id}
-              placeId={place.id}
+              placeId={place.placeId}
               image={place.image}
               title={place.title}
-              isLiked={false}
+              isLiked={isBookmarked(place.placeId)}
               isDragging={false}
             />
             {/* 8번째 아이템 이후에 배너 삽입 (첫 페이지의 마지막) */}
-            {index === 7 && (
+            {index % 8 === 7 && (
               <div className="col-span-full my-4 flex w-full items-center justify-center">
-                <Banner key={`banner-0`} />
+                <Banner key={`banner-${index}`} />
                 {/* 배너 컴포넌트 또는 광고를 여기에 삽입 */}
               </div>
             )}
@@ -63,9 +70,7 @@ const CategoryClient = ({ category }: { category: CategoryParamType }) => {
       <div
         ref={ref}
         className="flex h-[50px] w-full items-center justify-center"
-      >
-        {isFetchingNextPage && <p>로딩중</p>}
-      </div>
+      ></div>
     </>
   );
 };

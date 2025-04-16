@@ -7,8 +7,13 @@ export type KakaoMapOptions = {
 };
 
 export type KakaoMapInstance = {
-  setCenter(latlng: { getLat(): number; getLng(): number }): void;
-  setLevel(level: number): void;
+  setCenter: (latlng: LatLng) => void;
+  setLevel: (level: number) => void;
+  setBounds: (bounds: LatLngBounds) => void;
+  panTo: (
+    latlng: LatLng,
+    options?: { animate: boolean; duration: number },
+  ) => void; // 중심 좌표 기준 부드럽게 이동(필요하다면 zoom 이동까지)
   getCenter(): { getLat(): number; getLng(): number };
   getLevel(): number;
 };
@@ -66,7 +71,8 @@ export type ClustererOptions = {
 };
 
 export type ClustererInstance = {
-  setMap(map: KakaoMapInstance | null): void;
+  setMap: (map: KakaoMapInstance | null) => void;
+  clear: () => void;
 };
 
 export type PolylineOptions = {
@@ -89,3 +95,31 @@ export type PolylineInstance = {
 export type PolylineProps = PolylineOptions & {
   map?: KakaoMapInstance;
 };
+
+export interface LatLng {
+  lat: number;
+  lng: number;
+}
+
+export interface LatLngBounds {
+  extend: (latlng: LatLng) => void;
+  getCenter: () => { getLat(): number; getLng(): number };
+}
+
+export interface MarkerImage {
+  src: string;
+  size: Size;
+  options?: {
+    offset?: Point;
+  };
+}
+
+export interface Size {
+  width: number;
+  height: number;
+}
+
+export interface Point {
+  x: number;
+  y: number;
+}

@@ -2,10 +2,13 @@ import { KakaoMapOptions } from '@/types/kakao-map.type';
 
 // 마커 관련 상수 정의
 export const MARKER = {
-  SIZE: 36,
+  SIZE: {
+    X: 56,
+    Y: 33,
+  },
   OFFSET: {
-    X: 18,
-    Y: 36,
+    X: 28,
+    Y: 33,
   },
 } as const;
 

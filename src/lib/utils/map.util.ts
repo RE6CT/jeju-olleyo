@@ -34,11 +34,11 @@ export const getLatLng = (place: Place) => {
  * @returns 생성된 마커 이미지
  */
 export const createMarkerImage = (day: number) => {
-  const imageSize = new window.kakao.maps.Size(MARKER.SIZE, MARKER.SIZE);
+  const imageSize = new window.kakao.maps.Size(MARKER.SIZE.X, MARKER.SIZE.Y);
   const imageUrl =
     day % 2 === 1
-      ? `/map/primary500-mapmarker-day${day}.png` // 홀수일: primary500 마커 이미지
-      : `/map/secondary300-mapmarker-day${day}.png`; // 짝수일: secondary300 마커 이미지
+      ? `/map/mapmarker-day${day}.png` // 홀수일: primary500 마커 이미지
+      : `/map/mapmarker-day${day}.png`; // 짝수일: secondary300 마커 이미지
 
   return new window.kakao.maps.MarkerImage(imageUrl, imageSize, {
     offset: new window.kakao.maps.Point(MARKER.OFFSET.X, MARKER.OFFSET.Y),

@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from 'react';
 import { MarkerInstance, MarkerProps } from '@/types/kakao-map.type';
-import { MARKER } from '@/constants/map.constants';
 import { createMarkerImage } from '@/lib/utils/map.util';
 
 /**

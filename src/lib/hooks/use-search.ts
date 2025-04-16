@@ -1,46 +1,46 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import fetchGetAllPlaces from '../apis/search/get-place.api';
 import { Place } from '@/types/search.type';
 import { useRouter } from 'next/navigation';
+import { getBrowserClient } from '../supabase/client';
 
 const useSearch = (query: string) => {
-  const [allPlaces, setAllPlaces] = useState<Place[]>([]);
   const [results, setResults] = useState<Place[]>([]);
   const [loading, setLoading] = useState(true);
 
   const router = useRouter();
 
   useEffect(() => {
-    const fetchPlaces = async () => {
+    const fetchSearchResults = async () => {
+      if (!query.trim()) {
+        router.replace('/categories/all');
+        return;
+      }
+
       try {
-        const data = await fetchGetAllPlaces();
-        setAllPlaces(data ?? []);
-      } catch (e) {
-        console.error('장소 불러오기 실패:', e);
+        const supabase = await getBrowserClient();
+
+        const { data, error } = await supabase
+          .from('places')
+          .select('*')
+          .or(`title.ilike.%${query}%,address.ilike.%${query}%`);
+
+        if (error) {
+          console.error('검색 실패', error.message);
+          return;
+        }
+
+        setResults(data as Place[]);
+      } catch (err) {
+        console.error('검색 요청 실패', err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchPlaces();
-  }, []);
-
-  // 검색어 없을 경우, '전체' 카테고리 페이지로 리다이렉트
-  useEffect(() => {
-    if (!query.trim()) {
-      router.replace('/categories/all');
-    }
-
-    const fuse = new Fuse(allPlaces, {
-      keys: ['title', 'address'],
-      threshold: 0.5,
-    });
-
-    const filtered = fuse.search(query).map((r) => r.item);
-    setResults(filtered);
-  }, [query, allPlaces]);
+    fetchSearchResults();
+  }, [query]);
 
   return { results, loading };
 };

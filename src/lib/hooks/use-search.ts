@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Fuse from 'fuse.js';
 import fetchGetAllPlaces from '../apis/search/get-place.api';
 import { Place } from '@/types/search.type';
 import { useRouter } from 'next/navigation';

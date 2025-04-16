@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import KakaoMap from '@/components/features/map/kakao-map';
 import Clusterer from '@/components/features/map/clusterer';
+import Polyline from '@/components/features/map/polyline';
 import Loading from '@/app/loading';
 import ErrorMessage from '@/app/error';
 import { KakaoMapInstance, MarkerProps } from '@/types/kakao-map.type';
@@ -10,6 +11,7 @@ import { DayPlaces, TabType } from '@/types/plan-detail.type';
 import { Place } from '@/types/search.type';
 import { DEFAULT_MAP_OPTIONS } from '@/constants/map.constants';
 import { getLatLng, createMarkerImage } from '@/lib/utils/map.util';
+import { getCarRoute, createRouteInfo } from '@/lib/apis/map/directions';
 
 const PlanMap = ({
   dayPlaces,
@@ -22,6 +24,12 @@ const PlanMap = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [markers, setMarkers] = useState<MarkerProps[]>([]);
+  const [paths, setPaths] = useState<{
+    [key: number]: { lat: number; lng: number }[];
+  }>({});
+  const [routeSummary, setRouteSummary] = useState<{
+    [key: number]: { distance: number; duration: number };
+  }>({});
 
   /**
    * 지도 로드 시 호출되는 함수
@@ -159,6 +167,30 @@ const PlanMap = ({
     }
   };
 
+  // 경로 검색 및 그리기
+  const searchRoute = async (markers: MarkerProps[], day: number) => {
+    if (!map || markers.length < 2) return;
+
+    try {
+      const routeInfo = createRouteInfo(markers);
+      const { path, summary } = await getCarRoute(routeInfo, map);
+
+      setPaths((prev) => ({
+        ...prev,
+        [day]: path,
+      }));
+
+      setRouteSummary((prev) => ({
+        ...prev,
+        [day]: summary,
+      }));
+    } catch (error) {
+      console.error('경로 검색 중 오류 발생:', error);
+      setError('경로 검색에 실패했습니다.');
+    }
+  };
+
+  // 마커 목록 업데이트
   useEffect(() => {
     if (!map) return;
 
@@ -167,6 +199,25 @@ const PlanMap = ({
       if (!areMarkersEqual(markers, newMarkers)) {
         setMarkers(newMarkers);
         adjustMapView(newMarkers);
+
+        // 경로 초기화
+        setPaths({});
+        setRouteSummary({});
+
+        // 각 날짜별로 경로 검색
+        if (activeTab === '전체보기') {
+          Object.entries(dayPlaces).forEach(([day, places]) => {
+            const dayMarkers = newMarkers.filter(
+              (marker) => marker.day === parseInt(day),
+            );
+            searchRoute(dayMarkers, parseInt(day));
+          });
+        } else {
+          const dayMarkers = newMarkers.filter(
+            (marker) => marker.day === activeTab,
+          );
+          searchRoute(dayMarkers, activeTab);
+        }
       }
     } catch (error) {
       console.error('마커 업데이트 중 오류 발생:', error);
@@ -186,25 +237,47 @@ const PlanMap = ({
           onError={handleMapError}
         />
         {map && !isLoading && !error && (
-          <Clusterer
-            map={map}
-            markers={markers}
-            gridSize={60} // 클러스터링 격자 크기 감소 (마커가 더 가까이 있을 때만 클러스터링)
-            minLevel={5} // 클러스터링이 시작되는 최소 줌 레벨 감소 (더 넓은 영역에서 클러스터링)
-            minClusterSize={2} // 클러스터링을 위한 최소 마커 수 감소 (2개 이상 겹치면 클러스터링)
-            disableClickZoom={false} // 클러스터 클릭 시 줌인 가능
-            styles={[
-              {
-                width: '40px',
-                height: '40px',
-                background: '#FF6B6B',
-                borderRadius: '20px',
-                color: '#fff',
-                textAlign: 'center',
-                lineHeight: '41px',
-              },
-            ]}
-          />
+          <>
+            <Clusterer
+              map={map}
+              markers={markers}
+              gridSize={60}
+              minLevel={5}
+              minClusterSize={2}
+              disableClickZoom={false}
+              styles={[
+                {
+                  width: '40px',
+                  height: '40px',
+                  background: '#FF6B6B',
+                  borderRadius: '20px',
+                  color: '#fff',
+                  textAlign: 'center',
+                  lineHeight: '41px',
+                },
+              ]}
+            />
+            {Object.entries(paths).map(([day, path]) => (
+              <Polyline
+                key={day}
+                map={map}
+                path={path}
+                strokeWeight={3}
+                strokeColor={parseInt(day) % 2 === 0 ? '#4ECDC4' : '#FF6B6B'}
+                strokeOpacity={0.8}
+                strokeStyle="solid"
+              />
+            ))}
+            // ... existing code ...
+            {Object.entries(routeSummary).map(([day, summary]) => (
+              <div
+                key={day}
+                className="absolute left-2 top-28 rounded-lg bg-white p-2 text-sm text-gray-700 shadow-md"
+              >
+                Day {day} | 🚗 {summary.distance}km | ⏳ {summary.duration}분
+              </div>
+            ))}
+          </>
         )}
       </div>
     </>

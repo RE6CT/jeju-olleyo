@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import PlanFilterSection from './_components/plan-filter-section';
 import { fetchGetAllPlansByUserId } from '@/lib/apis/plan/plan.api';
 import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
-import ErrorMessage from '@/components/ui/error-message';
+import ErrorMessage from '@/components/features/alert/error-message';
 import Link from 'next/link';
 import { PATH } from '@/constants/path.constants';
 import Image from 'next/image';

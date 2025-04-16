@@ -12,6 +12,7 @@ import { z } from 'zod';
 import useProviderFromCookie from '@/lib/hooks/use-get-provider';
 import { ERROR_MESSAGES } from '@/constants/mypage.constants';
 import AccountProfileImage from './account-profile-image';
+import useCustomToast from '@/lib/hooks/use-custom-toast';
 
 const PROFILE_INFO_STYLE = {
   container:
@@ -19,7 +20,8 @@ const PROFILE_INFO_STYLE = {
   title: 'semibold-18 col-span-4 w-full',
   input:
     'rounded-[12px] border border-gray-200 px-4 py-[10px] !placeholder-gray-200',
-  rowLabel: 'medium-16 text-[16px] whitespace-nowrap w-[107px] p-[10px]',
+  rowLabel:
+    'medium-16 text-[16px] text-gray-900 whitespace-nowrap w-[107px] p-[10px]',
   rowValue: 'whitespace-nowrap medium-16 p-[10px]',
   button: 'medium-16 bg-transparent text-secondary-300 hover:bg-gray-100',
 };
@@ -41,6 +43,7 @@ const ProfileInfo = ({
 }) => {
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const provider = useProviderFromCookie(userId);
+  const { successToast } = useCustomToast();
 
   const formSchema = z.object({
     nickname: nicknameSchema,
@@ -87,7 +90,7 @@ const ProfileInfo = ({
 
     try {
       const result = await fetchUpdateNickname(userId, data.nickname);
-      alert(result.message);
+      successToast(result.message);
     } catch (error: unknown) {
       let errorMessage = ERROR_MESSAGES.NICKNAME_UPDATE_FAILED;
       if (error instanceof Error) {

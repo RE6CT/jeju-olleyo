@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/modal';
 import { ERROR_MESSAGES, MAX_FILE_SIZE } from '@/constants/mypage.constants';
 import { fetchUpdateProfileImage } from '@/lib/apis/profile/update-profile.api';
+import useCustomToast from '@/lib/hooks/use-custom-toast';
 import { ProfileModalProps } from '@/types/mypage.type';
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 
@@ -26,6 +27,7 @@ const ProfileModal = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectImage, setSelectImage] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
+  const { successToast } = useCustomToast();
 
   // 모달이 닫히면 프리뷰 이미지 및 파일 삭제
   useEffect(() => {
@@ -88,6 +90,7 @@ const ProfileModal = ({
 
       const result = await fetchUpdateProfileImage(formData);
       alert(result.message);
+      successToast(result.message);
     } catch (error: unknown) {
       let errorMessage = ERROR_MESSAGES.PROFILE_UPDATE_FAILED;
       if (error instanceof Error) {

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import ProfileModal from './account-profile-modal';
 import { fetchDeleteProfileImage } from '@/lib/apis/profile/update-profile.api';
 import { ERROR_MESSAGES } from '@/constants/mypage.constants';
+import useCustomToast from '@/lib/hooks/use-custom-toast';
 
 const IMAGE_SIZE = 88;
 
@@ -23,6 +24,7 @@ const AccountProfileImage = ({
   provider: string | undefined;
 }) => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
+  const { successToast } = useCustomToast();
 
   /** 드롭다운 [사진 변경] 메뉴 클릭 핸들러 */
   const handleProfileImageEdit = () => {
@@ -38,7 +40,7 @@ const AccountProfileImage = ({
 
     try {
       const result = await fetchDeleteProfileImage(userId, profileImage);
-      alert(result.message);
+      successToast(result.message);
     } catch (error: unknown) {
       let errorMessage = ERROR_MESSAGES.PROFILE_UPDATE_FAILED;
       if (error instanceof Error) {

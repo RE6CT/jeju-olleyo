@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ERROR_MESSAGES } from '@/constants/mypage.constants';
 import { fetchUpdatePhoneByUserId } from '@/lib/apis/profile/update-profile.api';
+import useCustomToast from '@/lib/hooks/use-custom-toast';
 import { phoneSchema } from '@/lib/schemas/auth-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
@@ -18,7 +19,8 @@ const PERSONAL_INFO_STYLE = {
   title: 'semibold-18 col-span-4 w-full',
   input:
     'rounded-[12px] border border-gray-200 px-4 py-[10px] !placeholder-gray-200',
-  rowLabel: 'medium-16 text-[16px] whitespace-nowrap w-[107px] p-[10px]',
+  rowLabel:
+    'medium-16 text-[16px] text-gray-900 whitespace-nowrap w-[107px] p-[10px]',
   rowValue: 'whitespace-nowrap medium-16 p-[10px]',
   button: 'medium-16 bg-transparent text-secondary-300 hover:bg-gray-100',
 };
@@ -34,6 +36,7 @@ const PersonalInfo = ({
   phone: string;
 }) => {
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
+  const { successToast } = useCustomToast();
 
   const formSchema = z.object({
     phone: phoneSchema,
@@ -76,7 +79,7 @@ const PersonalInfo = ({
 
     try {
       const result = await fetchUpdatePhoneByUserId(userId, data.phone);
-      alert(result.message);
+      successToast(result.message);
     } catch (error: unknown) {
       let errorMessage = ERROR_MESSAGES.PHONE_UPDATE_FAILED;
       if (error instanceof Error) {

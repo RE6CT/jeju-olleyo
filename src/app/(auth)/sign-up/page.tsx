@@ -3,7 +3,6 @@
 import AuthLayout from '@/components/features/auth/auth-layout';
 import AuthHeader from '@/components/features/auth/auth-header';
 import AuthForm from '@/components/features/auth/auth-form';
-import AuthFooter from '@/components/features/auth/auth-footer';
 import AuthErrorMessage from '@/components/features/auth/auth-error-message';
 import { CardContent } from '@/components/ui/card';
 
@@ -41,24 +40,25 @@ const SignUpPage = () => {
 
   return (
     <AuthLayout>
-      <AuthHeader
-        title="제주 올레요 회원가입"
-        description="회원가입을 위한 정보를 입력해주세요."
-      />
+      <div className="flex h-[602px] flex-col">
+        <AuthHeader
+          title="제주 올레요 회원가입"
+          description="회원가입을 위한 정보를 입력해주세요."
+        />
 
-      {errorMessages.length > 0 && (
-        <CardContent className="pb-0">
-          <AuthErrorMessage messages={errorMessages} className="mb-4" />
-        </CardContent>
-      )}
-
-      <AuthForm type="register" onSubmit={handleSubmit} isLoading={isLoading} />
-
-      <AuthFooter
-        question="이미 계정이 있으신가요?"
-        linkText="로그인"
-        linkHref={PATH.SIGNIN}
-      />
+        {errorMessages.length > 0 && (
+          <CardContent className="pb-0">
+            <AuthErrorMessage messages={errorMessages} className="mb-4" />
+          </CardContent>
+        )}
+        <section className="mt-[30px]">
+          <AuthForm
+            type="register"
+            onSubmit={handleSubmit}
+            isLoading={isLoading}
+          />
+        </section>
+      </div>
     </AuthLayout>
   );
 };

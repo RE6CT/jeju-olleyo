@@ -23,7 +23,9 @@ const AuthLayout = ({ children }: AuthProps) => {
   return (
     // 인증 페이지 레이아웃
     <div className="flex min-h-screen items-center justify-center">
-      <Card className="w-full max-w-md">{children}</Card>
+      <Card className="w-full max-w-md rounded-3xl border border-solid border-[color:var(--gray-100,#E7EDF0)] bg-white p-8">
+        {children}
+      </Card>
     </div>
   );
 };

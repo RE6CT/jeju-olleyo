@@ -57,7 +57,7 @@ const CategoryTabs = memo(({ className }: CategoryTabsProps) => {
   // 카테고리 버튼 클릭 핸들러 생성 - 성능 최적화
   const createCategoryClickHandler = useCallback(
     (category: string) => {
-      return () => navigateToCategory(category as TravelCategory);
+      return () => navigateToCategory(category as Exclude<TravelCategory, null>);
     },
     [navigateToCategory],
   );

@@ -25,9 +25,9 @@ const useCategoryNavigation = () => {
     // URL 경로를 기반으로 현재 활성화된 카테고리 찾기
     const currentPath = pathname || '/';
 
-    // 홈페이지인 경우 '전체' 카테고리 유지
+    // 홈페이지인 경우 null로 설정하여 아무 카테고리도 활성화하지 않음
     if (currentPath === '/') {
-      setActiveCategory('전체');
+      setActiveCategory(null);
       return;
     }
 
@@ -53,10 +53,12 @@ const useCategoryNavigation = () => {
   // 카테고리 변경 및 해당 페이지로 이동 (최적화)
   const navigateToCategory = useCallback(
     (category: TravelCategory) => {
+      if (category === null) return;
+
       setActiveCategory(category);
       // 부드러운 전환 처리를 위해 setTimeout 사용
       setTimeout(() => {
-        router.push(CATEGORY_ROUTES[category]);
+        router.push(CATEGORY_ROUTES[category as Exclude<TravelCategory, null>]);
       }, 0);
     },
     [router, setActiveCategory],

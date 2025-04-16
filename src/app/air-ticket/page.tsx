@@ -25,9 +25,11 @@ export default function FlightSearch() {
   const [returnFlights, setReturnFlights] = useState<Flight[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // 정렬 상태 관리
-  const [sortKey, setSortKey] = useState<SortKey>('airline');
-  const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
+  const [goSortKey, setGoSortKey] = useState<SortKey>('airline');
+  const [goSortOrder, setGoSortOrder] = useState<SortOrder>('asc');
+
+  const [comeSortKey, setComeSortKey] = useState<SortKey>('airline');
+  const [comeSortOrder, setComeSortOrder] = useState<SortOrder>('asc');
 
   const didMount = useRef(false);
 
@@ -114,11 +116,11 @@ export default function FlightSearch() {
               />
               <FlightList
                 flights={goFlights}
-                sortKey={sortKey}
-                sortOrder={sortOrder}
+                sortKey={goSortKey}
+                sortOrder={goSortOrder}
                 sortFlights={sortFlights}
-                setSortKey={setSortKey}
-                setSortOrder={setSortOrder}
+                setSortKey={setGoSortKey}
+                setSortOrder={setGoSortOrder}
               />
             </section>
 
@@ -133,11 +135,11 @@ export default function FlightSearch() {
               />
               <FlightList
                 flights={returnFlights}
-                sortKey={sortKey}
-                sortOrder={sortOrder}
+                sortKey={comeSortKey}
+                sortOrder={comeSortOrder}
                 sortFlights={sortFlights}
-                setSortKey={setSortKey}
-                setSortOrder={setSortOrder}
+                setSortKey={setComeSortKey}
+                setSortOrder={setComeSortOrder}
               />
             </section>
           </div>

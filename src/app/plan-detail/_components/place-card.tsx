@@ -112,7 +112,13 @@ const PlaceCard = ({
               <div className="flex">
                 <span className="text-gray-400">까지</span>
                 {'\u00A0'}
-                <span className={dayColorSet.text}>{distance}m</span>
+                <span className={dayColorSet.text}>
+                  {distance !== undefined
+                    ? distance < 1000
+                      ? `${distance}m`
+                      : `${(distance / 1000).toFixed(2)}km`
+                    : '0m'}
+                </span>
               </div>
               <Image
                 src="/icons/car.svg"

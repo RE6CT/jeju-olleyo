@@ -113,9 +113,9 @@ const Clusterer = ({ map, markers, ...options }: ClustererOptions) => {
     const clusterer = new window.kakao.maps.MarkerClusterer({
       map,
       markers: kakaoMarkers,
-      gridSize: 60,
-      minLevel: 5,
-      minClusterSize: 2,
+      gridSize: 120,
+      minLevel: 7,
+      minClusterSize: 3,
       disableClickZoom: true,
       styles,
       ...options,

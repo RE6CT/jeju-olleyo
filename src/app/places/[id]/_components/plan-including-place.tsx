@@ -4,7 +4,17 @@ import { getBrowserClient } from '@/lib/supabase/client';
 import { useEffect, useState } from 'react';
 
 const PlanIncludingPlace = ({ placeId }: { placeId: number }) => {
-  const [plans, setPlans] = useState();
+  const [plans, setPlans] = useState<
+    {
+      plan_id: number;
+      title: string;
+      description: string;
+      plan_img: string;
+      travel_start_date: string;
+      travel_end_date: string;
+      like_count: number;
+    }[]
+  >();
 
   useEffect(() => {
     const fetchGetPlansByPlaceId = async () => {

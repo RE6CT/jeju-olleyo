@@ -75,8 +75,6 @@ const MainCarousel = ({ imageList }: MainCarouselProps) => {
                   fill
                   priority={index === 0} // 첫번째 이미지는 우선 로딩
                   sizes="100vw"
-                  placeholder="blur"
-                  blurDataURL="/placeholder.jpg" // Next.js public 폴더 내 블러 대체 이미지
                   className="object-cover"
                 />
               </Link>

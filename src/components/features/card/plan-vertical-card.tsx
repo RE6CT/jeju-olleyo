@@ -20,7 +20,7 @@ const PlanVerticalCard = ({ plan }: PlanVerticalCardProps) => {
           />
         </div>
         {/* 추후 기능 추가된 좋아요 버튼이 생긴다면 이 부분을 대체하면 됩니다. */}
-        <button className="absolute right-4 top-4">
+        <button className="absolute right-4 top-4 rounded-12 bg-white/10 p-2.5">
           <svg
             width="40"
             height="40"

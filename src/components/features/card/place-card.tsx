@@ -55,9 +55,9 @@ const PlaceCard = ({
           />
         </div>
         <h4 className="medium-16 truncate px-2">{title}</h4>
-        {/* 좋아요 버튼 */}
+        {/* 북마크 버튼 */}
         <button
-          className="absolute right-3 top-3"
+          className="absolute right-3 top-3 rounded-12 bg-white/10"
           onClick={handleBookmarkClick}
           disabled={isLoading}
         >

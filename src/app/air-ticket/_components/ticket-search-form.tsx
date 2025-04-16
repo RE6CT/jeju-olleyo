@@ -1,11 +1,11 @@
 import { Combobox } from '@/components/commons/combo-box';
 import { TicketSearchFormProps } from '../../../types/air-ticket-type';
+import { Button } from '@/components/ui/button';
 
 const TicketSearchForm = ({
   departureList,
   departure,
   setDeparture,
-  formData,
   handleChange,
   handleSubmit,
 }: TicketSearchFormProps) => {
@@ -51,12 +51,14 @@ const TicketSearchForm = ({
           required
         />
       </div>
-      <button
-        type="submit"
-        className="rounded bg-black px-4 py-2 text-white hover:bg-gray-800"
-      >
-        조회 하기
-      </button>
+      <div className="pt-6">
+        <Button
+          type="submit"
+          className="rounded bg-black px-4 py-2 text-white hover:bg-gray-800"
+        >
+          조회 하기
+        </Button>
+      </div>
     </form>
   );
 };

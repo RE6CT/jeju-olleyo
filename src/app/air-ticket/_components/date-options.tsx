@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button';
 import { DateOptionsProps } from '../../../types/air-ticket-type';
 
 const DateOptions = ({
@@ -24,7 +25,7 @@ const DateOptions = ({
         const isSelected = formData[field] === dateStr;
 
         return (
-          <button
+          <Button
             key={dateStr}
             type="button"
             onClick={() => {
@@ -33,7 +34,7 @@ const DateOptions = ({
             className={`rounded border px-3 py-1 text-sm ${isSelected ? 'bg-black font-semibold text-white' : 'bg-white text-black hover:bg-gray-100'}`}
           >
             {display}
-          </button>
+          </Button>
         );
       })}
     </div>

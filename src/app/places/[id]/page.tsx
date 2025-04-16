@@ -3,7 +3,6 @@
 import CategoryBadge from '@/components/commons/category-badge';
 import PlaceImage from '@/components/commons/place-image';
 import { getBrowserClient } from '@/lib/supabase/client';
-
 import { DetailIntroRaw } from '@/types/korea-tour.type';
 import { Place } from '@/types/search.type';
 import { useParams } from 'next/navigation';
@@ -11,8 +10,9 @@ import { useEffect, useState } from 'react';
 import { camelize } from '@/lib/utils/camelize';
 import BookmarkIcon from '@/components/commons/bookmark-icon';
 import { useBookmarkQuery } from '@/lib/hooks/use-bookmark-query';
-
 import { CategoryType } from '@/types/category.type';
+import PlaceLocation from './_components/place-location';
+import PlanIncludingPlace from './_components/plan-including-place';
 
 const PlaceDetailPage = () => {
   const params = useParams();
@@ -103,7 +103,7 @@ const PlaceDetailPage = () => {
     <div className="mt-[73px]">
       {place ? (
         <div className="flex gap-8">
-          <div className="relative aspect-square h-[415px] w-[553px] bg-no-repeat object-cover">
+          <div className="relative aspect-square h-[417px] w-[415px] bg-no-repeat object-cover">
             <PlaceImage image={place.image} title={place.title} />
           </div>
 
@@ -191,11 +191,13 @@ const PlaceDetailPage = () => {
               </div>
             </div>
 
-            <PlaceLocation
-              lat={place.lat}
-              lng={place.lng}
-              title={place.title}
-            />
+            <div className="mb-auto">
+              <PlaceLocation
+                lat={place.lat}
+                lng={place.lng}
+                title={place.title}
+              />
+            </div>
           </div>
         </div>
       ) : (

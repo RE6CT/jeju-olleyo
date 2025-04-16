@@ -130,3 +130,12 @@ export type AuthErrorMessageProps = {
   className?: string;
   variant?: 'default' | 'destructive';
 };
+
+/**
+ * 비밀번호 재설정 성공 모달 컴포넌트 Props
+ */
+export type ResetPasswordSuccessModalProps = {
+  open: boolean;
+  countdown: number;
+  redirectToHome: () => void;
+};

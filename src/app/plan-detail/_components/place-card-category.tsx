@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { CategoryType } from '@/types/category-badge.type';
 import { Button } from '@/components/ui/button';
 import BookmarkIcon from '@/components/commons/bookmark-icon';
+import { useMemo } from 'react';
 
 const PLACE_IMAGE_SIZE = {
   width: 40,
@@ -49,7 +50,8 @@ const PlaceCardCategory = ({
   onBookmarkToggle?: () => void;
   onAddPlace?: () => void;
 }) => {
-  const displayImageUrl = imageUrl || getRandomDefaultImage();
+  const defaultImage = useMemo(() => getRandomDefaultImage(), []);
+  const displayImageUrl = imageUrl || defaultImage;
 
   return (
     <div className="flex w-full items-center justify-between py-3">

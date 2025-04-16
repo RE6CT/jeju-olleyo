@@ -5,6 +5,7 @@ import CategoryBadge from '@/components/commons/category-badge';
 import { CategoryType } from '@/types/category-badge.type';
 import { cn } from '@/lib/utils';
 import { DEFAULT_IMAGES } from '@/constants/plan.constants';
+import { useMemo } from 'react';
 
 const PLACE_IMAGE_SIZE = {
   width: 120,
@@ -62,7 +63,8 @@ const PlaceCard = ({
   onDelete?: () => void;
 }) => {
   const dayColorSet = dayNumber % 2 === 1 ? COLORS.ODD : COLORS.EVEN;
-  const displayImageUrl = imageUrl || getRandomDefaultImage();
+  const defaultImage = useMemo(() => getRandomDefaultImage(), []);
+  const displayImageUrl = imageUrl || defaultImage;
 
   return (
     <div className="flex w-full cursor-grab gap-3 active:cursor-grabbing">
@@ -135,7 +137,9 @@ const PlaceCard = ({
                 height={ICON_SIZE.height}
                 className="text-gray-400"
               />
-              <span className="text-gray-400">{duration}분</span>
+              <span className="text-gray-400">
+                {duration !== undefined ? `${duration}분` : '0분'}
+              </span>
             </div>
           )}
         </div>

@@ -60,7 +60,7 @@ const Marker = ({
         }
       }
     };
-  }, [map]);
+  }, [map, position, title, clickable, draggable, onClick, day]);
 
   // 마커 속성 업데이트
   useEffect(() => {

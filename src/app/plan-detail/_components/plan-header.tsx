@@ -12,7 +12,7 @@ import { Label } from '@/components/ui/label';
 import TextareaWithCount from '@/components/ui/textarea-with-count';
 import { fetchUploadPlanImage } from '@/lib/apis/plan/plan.api';
 
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 5MB
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
 const PlanHeader = ({
   startDate,
@@ -56,7 +56,7 @@ const PlanHeader = ({
 
     // 파일 크기 제한 (5MB)
     if (file.size > MAX_FILE_SIZE) {
-      alert('이미지 크기는 5MB를 초과할 수 없습니다.');
+      alert('이미지 크기는 10MB를 초과할 수 없습니다.');
       return;
     }
 

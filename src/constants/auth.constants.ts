@@ -116,7 +116,7 @@ export const AUTH_TIMEOUTS = {
 export const AUTH_ROUTES = {
   // 공개 페이지
   PUBLIC_ROUTES: [
-    '/',
+    PATH.HOME,
     PATH.SIGNIN,
     PATH.SIGNUP,
     PATH.FORGOT_PASSWORD,
@@ -124,6 +124,14 @@ export const AUTH_ROUTES = {
     PATH.CALLBACK,
     PATH.SEARCH,
     PATH.COMMUNITY,
+    PATH.TICKET,
+    PATH.PLACES,
+    PATH.PLAN_DETAIL,
+    '/categories/all',
+    '/categories/toursite',
+    '/categories/accommodation',
+    '/categories/restaurant',
+    '/categories/cafe',
   ],
 };
 

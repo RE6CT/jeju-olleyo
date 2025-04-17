@@ -1,9 +1,9 @@
 ---
 name: Feature Request
 about: 기능 요청 이슈 템플릿
-title: "[feature] "
-labels: "✨ feat"
-assignees: ""
+title: '[feature] '
+labels: '✨ Feature'
+assignees: ''
 ---
 
 ## 💡 기능 설명

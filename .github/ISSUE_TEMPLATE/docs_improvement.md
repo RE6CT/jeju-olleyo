@@ -1,9 +1,9 @@
 ---
 name: Documentation Improvement
-about: 문서 개선 제안
-title: "[docs] "
-labels: 📋 docs
-assignees: ""
+about: 문서 개선을 제안
+title: '[docs] '
+labels: 📋 documentation
+assignees: ''
 ---
 
 ## 📚 문서 설명

@@ -1,9 +1,9 @@
 ---
 name: Bug Report
-about: 버그 보고
-title: "[bug] "
-labels: 🐞 bugfix
-assignees: ""
+about: 버그를 보고하여 개선에 도움을 주세요.
+title: '[bug] '
+labels: 🐞 bug
+assignees: ''
 ---
 
 ## 🐞 문제 상황

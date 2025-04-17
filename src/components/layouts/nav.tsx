@@ -1,0 +1,36 @@
+'use client';
+
+import MypageButton from '../features/nav-mypage/mypage-button';
+import Link from 'next/link';
+import { PATH } from '@/constants/path.constants';
+import useAuthStore from '@/zustand/auth.store';
+
+/** 헤더의 nav 영역 컴포넌트 */
+const Nav = () => {
+  const user = useAuthStore((state) => state.user);
+
+  return (
+    <nav className="flex items-center">
+      {user ? (
+        <div className="flex gap-6 whitespace-nowrap text-xs font-medium sm:text-xs md:text-sm lg:text-base">
+          <Link href={PATH.MYPLAN}>내 여행</Link>
+          <Link href={PATH.COMMUNITY}>커뮤니티</Link>
+          <MypageButton userId={user?.id} />
+        </div>
+      ) : (
+        <div className="flex items-center gap-6 whitespace-nowrap text-xs font-medium sm:text-xs md:text-sm lg:text-base">
+          <Link href={PATH.MYPLAN}>내 여행</Link>
+          <Link href={PATH.COMMUNITY}>커뮤니티</Link>
+          <Link
+            href={PATH.SIGNIN}
+            className="rounded-full bg-secondary-300 px-[26px] py-[10px] text-white"
+          >
+            로그인
+          </Link>
+        </div>
+      )}
+    </nav>
+  );
+};
+
+export default Nav;

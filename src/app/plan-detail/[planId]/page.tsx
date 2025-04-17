@@ -32,16 +32,6 @@ const PlanDetailPage = async ({ params }: { params: { planId: string } }) => {
       }
     }
 
-    // 공개 일정이지만 로그인하지 않은 경우
-    if (!userId) {
-      return (
-        <ErrorMessage
-          title="로그인 필요"
-          description="일정을 보려면 로그인이 필요합니다."
-        />
-      );
-    }
-
     const dayPlaces = await fetchGetPlanDaysAndLocations(Number(params.planId));
 
     const initialPlan = {
@@ -73,7 +63,7 @@ const PlanDetailPage = async ({ params }: { params: { planId: string } }) => {
             />
           </div>
           <PlanForm
-            userId={userId}
+            userId={userId || ''}
             initialPlan={initialPlan}
             initialDayPlaces={dayPlaces}
             isReadOnly={!isOwner}

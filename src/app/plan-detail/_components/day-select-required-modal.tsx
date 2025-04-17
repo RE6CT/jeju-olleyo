@@ -20,10 +20,6 @@ const DaySelectRequiredModal = ({
         text: '확인',
         onClick: onClose,
       }}
-      secondaryButton={{
-        text: '확인',
-        onClick: onClose,
-      }}
     />
   );
 };

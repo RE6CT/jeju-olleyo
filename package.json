@@ -23,6 +23,7 @@
     "@tanstack/react-query": "^5.71.1",
     "@tanstack/react-query-devtools": "^5.74.3",
     "@types/react-datepicker": "^7.0.0",
+    "axios": "^1.8.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
@@ -31,6 +32,7 @@
     "embla-carousel": "^8.6.0",
     "embla-carousel-autoplay": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
+    "fast-xml-parser": "^5.2.0",
     "framer-motion": "^12.6.2",
     "lucide-react": "^0.486.0",
     "next": "14.2.26",
@@ -43,10 +45,12 @@
     "shadcn-ui": "^0.9.5",
     "tailwind-merge": "^3.1.0",
     "tailwindcss-animate": "^1.0.7",
+    "xml2js": "^0.6.2",
     "zod": "^3.24.2",
     "zustand": "^5.0.3"
   },
   "devDependencies": {
+    "@types/axios": "^0.14.4",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-beautiful-dnd": "^13.1.8",

@@ -18,6 +18,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+
 import { ComboBoxProp } from '@/types/card.type';
 
 /**
@@ -35,7 +36,12 @@ import { ComboBoxProp } from '@/types/card.type';
  * ></ComboBox>
  * ```
  */
-const Combobox = ({ list, value, setValue, defaultMessage }: ComboBoxProp) => {
+export const Combobox = ({
+  list,
+  value,
+  setValue,
+  defaultMessage,
+}: ComboBoxProp) => {
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -84,5 +90,3 @@ const Combobox = ({ list, value, setValue, defaultMessage }: ComboBoxProp) => {
     </Popover>
   );
 };
-
-export default Combobox;

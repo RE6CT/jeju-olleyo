@@ -15,7 +15,7 @@ import PlaceSidemenu from './place-sidemenu';
 import PlaceCard from './place-card';
 import { Place } from '@/types/search.type';
 import { DayPlaces, TabType } from '@/types/plan-detail.type';
-import { DragDropContext } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import ScheduleDeleteModal from './schedule-delete-modal';
 import ScheduleSaveModal from './schedule-save-modal';
 import { fetchSavePlan, fetchSavePlanPlaces } from '@/lib/apis/plan/plan.api';
@@ -176,7 +176,7 @@ const PlanSchedule = ({
    * })
    */
   const handleDragEnd = (result: any) => {
-    if (!result.destination) return; // 드래그 종료가 제대로 되지 않았다면 종료
+    if (!result.destination || isReadOnly) return; // 드래그 종료가 제대로 되지 않았거나 읽기 전용 모드라면 종료
 
     const { source, destination } = result; // {droppableId: string, index: number} 형태의 객체 두 개
 
@@ -225,29 +225,58 @@ const PlanSchedule = ({
     const places = dayPlaces[day] || [];
     if (places.length === 0) return null;
 
-    return places.map((place: Place & { uniqueId: string }, index: number) => {
-      const summary = routeSummary[day]?.[index];
-      return (
-        <PlaceCard
-          key={place.uniqueId}
-          index={index + 1}
-          dayNumber={day}
-          category={place.category}
-          title={place.title}
-          address={place.address}
-          distance={summary?.distance}
-          duration={summary?.duration}
-          imageUrl={place.image || ''}
-          isLastItem={index === places.length - 1}
-          onDelete={
-            !isReadOnly
-              ? () => handleRemovePlace(day, place.uniqueId)
-              : undefined
-          }
-          isReadOnly={isReadOnly}
-        />
-      );
-    });
+    return (
+      <Droppable droppableId={day.toString()}>
+        {(provided) => (
+          <div
+            {...provided.droppableProps}
+            ref={provided.innerRef}
+            className="flex flex-col gap-4"
+          >
+            {places.map(
+              (place: Place & { uniqueId: string }, index: number) => {
+                const summary = routeSummary[day]?.[index];
+                return (
+                  <Draggable
+                    key={place.uniqueId}
+                    draggableId={place.uniqueId}
+                    index={index}
+                    isDragDisabled={isReadOnly}
+                  >
+                    {(provided) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                      >
+                        <PlaceCard
+                          index={index + 1}
+                          dayNumber={day}
+                          category={place.category}
+                          title={place.title}
+                          address={place.address}
+                          distance={summary?.distance}
+                          duration={summary?.duration}
+                          imageUrl={place.image || ''}
+                          isLastItem={index === places.length - 1}
+                          onDelete={
+                            !isReadOnly
+                              ? () => handleRemovePlace(day, place.uniqueId)
+                              : undefined
+                          }
+                          isReadOnly={isReadOnly}
+                        />
+                      </div>
+                    )}
+                  </Draggable>
+                );
+              },
+            )}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+    );
   };
 
   /**

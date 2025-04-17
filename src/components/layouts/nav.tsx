@@ -27,6 +27,8 @@ const Nav = () => {
           onCancel: () => {},
         },
       );
+    } else {
+      router.push(PATH.MYPLAN);
     }
   };
 

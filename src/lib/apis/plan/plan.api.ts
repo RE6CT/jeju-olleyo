@@ -1,6 +1,6 @@
 'use server';
 
-import { Plan, PlanFilterOptions } from '@/types/plan.type';
+import { Plan, PlanFilterOptions, PlanWithDays } from '@/types/plan.type';
 import { getServerClient } from '@/lib/supabase/server';
 import { camelize } from '@/lib/utils/camelize';
 import {
@@ -8,7 +8,7 @@ import {
   isDateLessThanOrEqual,
 } from '@/lib/utils/date';
 import dayjs from 'dayjs';
-import { DayPlaces } from '@/types/plan-detail.type';
+import { DayPlaces, PlaceWithUniqueId } from '@/types/plan-detail.type';
 import { CommunitySortType } from '@/types/community.type';
 
 /**
@@ -347,40 +347,209 @@ export const fetchUploadPlanImage = async (
   return publicUrl;
 };
 
-export const fetchGetPlanById = async (planId: number): Promise<Plan> => {
+type PlaceResponse = {
+  place_id: number;
+  name: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+  category: string;
+  image_url: string | null;
+};
+
+type LocationResponse = {
+  visit_order: number;
+  places: PlaceResponse;
+};
+
+type DayResponse = {
+  day_id: number;
+  day: number;
+  locations: LocationResponse[];
+};
+
+type PlanResponse = {
+  plan_id: number;
+  user_id: string;
+  title: string;
+  description: string | null;
+  travel_start_date: string;
+  travel_end_date: string;
+  plan_img: string | null;
+  public: boolean;
+  created_at: string;
+  public_at: string | null;
+  users: {
+    nickname: string;
+  };
+};
+
+export const fetchGetPlanById = async (
+  planId: number,
+): Promise<PlanWithDays> => {
   const supabase = await getServerClient();
 
-  const { data, error } = await supabase
+  // 1. 기본 plan 정보와 user 정보 가져오기
+  const { data: planData, error: planError } = await supabase
     .from('plans')
-    .select(
-      `
-      plan_id,
-      user_id,
-      title,
-      description,
-      travel_start_date,
-      travel_end_date,
-      plan_img,
-      public,
-      created_at,
-      public_at,
-      users:user_id (
-        nickname
-      )
-    `,
-    )
+    .select(`*, users:user_id (nickname)`)
     .eq('plan_id', planId)
     .single();
 
-  if (error) {
-    throw new Error('일정을 불러오는데 실패했습니다.');
+  if (planError || !planData) {
+    throw new Error('일정 정보를 불러오는데 실패했습니다.');
   }
 
-  const camelizedData = camelize(data);
+  // 2. days 테이블에서 plan_id에 해당하는 모든 day 정보 가져오기
+  const { data: daysData, error: daysError } = await supabase
+    .from('days')
+    .select('day_id, day')
+    .eq('plan_id', planId)
+    .order('day', { ascending: true });
+
+  if (daysError || !daysData) {
+    throw new Error('일정의 날짜 정보를 불러오는데 실패했습니다.');
+  }
+
+  // 3. 각 day에 대한 locations 정보 가져오기
+  const transformedDays = [];
+
+  for (const day of daysData) {
+    const { data: locationsData, error: locationsError } = await supabase
+      .from('locations')
+      .select(
+        `
+        visit_order,
+        places!locations_place_id_fkey (
+          id,
+          address,
+          place_id,
+          content_type_id,
+          image,
+          lng,
+          lat,
+          title,
+          category
+        )
+      `,
+      )
+      .eq('day_id', day.day_id)
+      .order('visit_order', { ascending: true });
+
+    if (locationsError) {
+      console.error('Location error details:', locationsError);
+      throw new Error(
+        `장소 정보를 불러오는데 실패했습니다: ${locationsError.message}`,
+      );
+    }
+
+    if (!locationsData) continue;
+
+    transformedDays.push({
+      dayId: day.day_id,
+      day: day.day || 0,
+      locations: locationsData.map((location: any) => ({
+        visitOrder: location.visit_order || 0,
+        places: {
+          placeId: location.places.place_id,
+          name: location.places.title,
+          address: location.places.address,
+          latitude: location.places.lat,
+          longitude: location.places.lng,
+          category: location.places.category,
+          imageUrl: location.places.image,
+        },
+      })),
+    });
+  }
 
   return {
-    ...camelizedData,
-    nickname: camelizedData.users.nickname,
-    isLiked: false, // TODO: 좋아요 여부 확인 로직 추가
+    planId: planData.plan_id,
+    userId: planData.user_id,
+    title: planData.title,
+    description: planData.description,
+    travelStartDate: planData.travel_start_date,
+    travelEndDate: planData.travel_end_date,
+    planImg: planData.plan_img,
+    public: planData.public,
+    createdAt: planData.created_at,
+    publicAt: planData.public_at,
+    nickname: planData.users.nickname,
+    isLiked: false,
+    days: transformedDays,
   };
+};
+
+export const fetchGetPlanDaysAndLocations = async (
+  planId: number,
+): Promise<DayPlaces> => {
+  const supabase = await getServerClient();
+
+  // 1. days 테이블에서 plan_id에 해당하는 모든 day 정보 가져오기
+  const { data: daysData, error: daysError } = await supabase
+    .from('days')
+    .select('day_id, day')
+    .eq('plan_id', planId)
+    .order('day', { ascending: true });
+
+  if (daysError) {
+    throw new Error('일정의 날짜 정보를 가져오는데 실패했습니다.');
+  }
+
+  // 2. 각 day에 대한 locations 정보 가져오기
+  const dayPlaces: DayPlaces = {};
+
+  for (const day of daysData) {
+    if (day.day === null) continue; // day가 null인 경우 건너뛰기
+
+    const { data: locationsData, error: locationsError } = await supabase
+      .from('locations')
+      .select(
+        `
+        visit_order,
+        places!locations_place_id_fkey (
+          id,
+          address,
+          place_id,
+          content_type_id,
+          image,
+          lng,
+          lat,
+          title,
+          category
+        )
+      `,
+      )
+      .eq('day_id', day.day_id)
+      .order('visit_order', { ascending: true });
+
+    if (locationsError) {
+      console.error('Location error details:', locationsError);
+      throw new Error(
+        `장소 정보를 불러오는데 실패했습니다: ${locationsError.message}`,
+      );
+    }
+
+    if (!locationsData) continue;
+
+    // DayPlaces 타입에 맞게 변환
+    dayPlaces[day.day] = locationsData.map((location, index) => {
+      const place = location.places as any; // 타입 단언 사용
+      const uniqueId = `${place.place_id}-${index + 1}`; // plan-schedule.tsx와 동일한 방식으로 uniqueId 생성
+      return {
+        id: place.place_id,
+        placeId: place.place_id,
+        title: place.title,
+        address: place.address,
+        category: place.category,
+        contentTypeId: 0, // 기본값 설정
+        image: place.image,
+        lat: place.lat,
+        lng: place.lng,
+        uniqueId,
+      };
+    });
+  }
+
+  return dayPlaces;
 };

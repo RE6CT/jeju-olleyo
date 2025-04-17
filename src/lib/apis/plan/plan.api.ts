@@ -346,3 +346,41 @@ export const fetchUploadPlanImage = async (
 
   return publicUrl;
 };
+
+export const fetchGetPlanById = async (planId: number): Promise<Plan> => {
+  const supabase = await getServerClient();
+
+  const { data, error } = await supabase
+    .from('plans')
+    .select(
+      `
+      plan_id,
+      user_id,
+      title,
+      description,
+      travel_start_date,
+      travel_end_date,
+      plan_img,
+      public,
+      created_at,
+      public_at,
+      users:user_id (
+        nickname
+      )
+    `,
+    )
+    .eq('plan_id', planId)
+    .single();
+
+  if (error) {
+    throw new Error('일정을 불러오는데 실패했습니다.');
+  }
+
+  const camelizedData = camelize(data);
+
+  return {
+    ...camelizedData,
+    nickname: camelizedData.users.nickname,
+    isLiked: false, // TODO: 좋아요 여부 확인 로직 추가
+  };
+};

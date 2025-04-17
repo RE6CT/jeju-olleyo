@@ -10,7 +10,7 @@ const BookmarkIcon = ({
 }: {
   isBookmarked: boolean;
   onToggle: () => void;
-  size: number;
+  size?: number;
 }) => {
   const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -25,8 +25,8 @@ const BookmarkIcon = ({
       aria-label={isBookmarked ? '북마크 해제' : '북마크'}
     >
       <svg
-        width={size | 40}
-        height={size | 42}
+        width={size || 40}
+        height={size || 42}
         viewBox="0 0 25 25"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

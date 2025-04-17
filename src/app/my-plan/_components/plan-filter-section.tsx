@@ -24,6 +24,7 @@ import { PATH } from '@/constants/path.constants';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import PlanHorizontalCard from '@/components/features/card/plan-horizontal_card';
+import { useQueryClient } from '@tanstack/react-query';
 
 /**
  * 여행 계획 필터 섹션 컴포넌트
@@ -68,6 +69,7 @@ const PlanFilterSection = ({
   const { data: plans = initialPlans, isLoading: isPlansLoading } =
     useFilteredPlans(userId, filter);
   const { mutate: deletePlan } = useDeletePlan(userId);
+  const queryClient = useQueryClient();
 
   // 필터 초기화
   const resetFilter = () => {
@@ -118,7 +120,18 @@ const PlanFilterSection = ({
   // 계획 삭제 핸들러
   const handleDelete = (planId: number) => {
     if (confirm('정말로 이 일정을 삭제하시겠습니까?')) {
-      deletePlan(planId);
+      deletePlan(planId, {
+        onSuccess: () => {
+          // 삭제 성공 후 현재 페이지를 유지하면서 데이터를 갱신
+          queryClient.invalidateQueries({
+            queryKey: ['filteredPlans', userId],
+          });
+        },
+        onError: (error) => {
+          console.error('일정 삭제 실패:', error);
+          alert('일정 삭제에 실패했습니다. 다시 시도해주세요.');
+        },
+      });
     }
   };
 
@@ -215,7 +228,7 @@ const PlanFilterSection = ({
                 plan={plan}
                 nickname={userNickname}
                 onEdit={handleEdit}
-                onDelete={handleDelete}
+                onDelete={() => handleDelete(plan.planId)}
               />
             ))}
           </div>

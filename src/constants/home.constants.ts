@@ -9,7 +9,7 @@ export const CATEGORY_ROUTES: Record<Exclude<TravelCategory, null>, string> = {
   숙박: '/categories/accommodation',
   맛집: '/categories/restaurant',
   카페: '/categories/cafe',
-  항공권: '/categories/flight',
+  항공권: '/air-ticket',
 };
 
 export const CATEGORY_KR_MAP: Record<string, Exclude<TravelCategory, null>> = {

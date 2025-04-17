@@ -125,6 +125,7 @@ const PlaceDetailPage = () => {
                       toggleBookmark(Number(params.id));
                     }
                   }}
+                  size={40}
                 />
               </div>
             </div>

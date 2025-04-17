@@ -85,6 +85,7 @@ const PlaceCardCategory = ({
           <BookmarkIcon
             isBookmarked={isBookmarked}
             onToggle={onBookmarkToggle}
+            size={30}
           />
         )}
         {(isSearchSection || !onBookmarkToggle) && onAddPlace && (

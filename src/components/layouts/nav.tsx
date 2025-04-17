@@ -4,7 +4,6 @@ import MypageButton from '../features/nav-mypage/mypage-button';
 import Link from 'next/link';
 import { PATH } from '@/constants/path.constants';
 import useAuthStore from '@/zustand/auth.store';
-import { useCheckAuth } from '@/lib/utils/check-auth';
 import { useRouter } from 'next/navigation';
 import useAlert from '@/lib/hooks/use-alert';
 

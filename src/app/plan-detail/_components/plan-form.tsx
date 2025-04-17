@@ -7,29 +7,46 @@ import PlanSchedule from './plan-schedule';
 import { Plan } from '@/types/plan.type';
 import { DayPlaces, TabType } from '@/types/plan-detail.type';
 
-const PlanForm = ({ userId }: { userId: string }) => {
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
+const PlanForm = ({
+  userId,
+  initialPlan,
+  initialDayPlaces,
+  isReadOnly = false,
+}: {
+  userId: string;
+  initialPlan?: Omit<Plan, 'nickname' | 'createdAt' | 'publicAt' | 'isLiked'>;
+  initialDayPlaces?: DayPlaces;
+  isReadOnly?: boolean;
+}) => {
+  const [startDate, setStartDate] = useState<Date | null>(
+    initialPlan?.travelStartDate ? new Date(initialPlan.travelStartDate) : null,
+  );
+  const [endDate, setEndDate] = useState<Date | null>(
+    initialPlan?.travelEndDate ? new Date(initialPlan.travelEndDate) : null,
+  );
   const [plan, setPlan] = useState<
     Omit<Plan, 'nickname' | 'createdAt' | 'publicAt' | 'isLiked'>
-  >({
-    planId: 0,
-    planImg: '',
-    title: '',
-    description: '',
-    travelStartDate: '',
-    travelEndDate: '',
-    userId: userId,
-    public: false,
-  });
+  >(
+    initialPlan || {
+      planId: 0,
+      planImg: '',
+      title: '',
+      description: '',
+      travelStartDate: '',
+      travelEndDate: '',
+      userId: userId,
+      public: false,
+    },
+  );
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const [dayPlaces, setDayPlaces] = useState<DayPlaces>({});
+  const [dayPlaces, setDayPlaces] = useState<DayPlaces>(initialDayPlaces || {});
   const [activeTab, setActiveTab] = useState<TabType>('전체보기');
   const [routeSummary, setRouteSummary] = useState<{
     [key: number]: { distance: number; duration: number }[];
   }>({});
 
   const handleDateChange = (dates: [Date | null, Date | null]) => {
+    if (isReadOnly) return;
     const [start, end] = dates;
     setStartDate(start);
     setEndDate(end);
@@ -52,13 +69,18 @@ const PlanForm = ({ userId }: { userId: string }) => {
         setIsCalendarOpen={setIsCalendarOpen}
         handleDateChange={handleDateChange}
         planTitle={plan.title}
-        setPlanTitle={(title) => setPlan((prev) => ({ ...prev, title }))}
+        setPlanTitle={(title) =>
+          !isReadOnly && setPlan((prev) => ({ ...prev, title }))
+        }
         planDescription={plan.description || ''}
         setPlanDescription={(description) =>
-          setPlan((prev) => ({ ...prev, description }))
+          !isReadOnly && setPlan((prev) => ({ ...prev, description }))
         }
         planImage={plan.planImg || ''}
-        setPlanImage={(planImg) => setPlan((prev) => ({ ...prev, planImg }))}
+        setPlanImage={(planImg) =>
+          !isReadOnly && setPlan((prev) => ({ ...prev, planImg }))
+        }
+        isReadOnly={isReadOnly}
       />
       <PlanMap
         dayPlaces={dayPlaces}
@@ -77,6 +99,7 @@ const PlanForm = ({ userId }: { userId: string }) => {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         routeSummary={routeSummary}
+        isReadOnly={isReadOnly}
       />
     </div>
   );

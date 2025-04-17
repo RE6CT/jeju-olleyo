@@ -21,8 +21,7 @@ import ScheduleSaveModal from './schedule-save-modal';
 import { fetchSavePlan, fetchSavePlanPlaces } from '@/lib/apis/plan/plan.api';
 import PlanCardModal from '@/components/features/plan/plan-card-modal';
 import ScheduleCreatedModal from './schedule-created-modal';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { AlertCircle } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 import Image from 'next/image';
 
 const BASE_TAB_STYLE =
@@ -88,6 +87,7 @@ const PlanSchedule = ({
   };
   isReadOnly?: boolean;
 }) => {
+  const { toast } = useToast();
   const dayCount = calculateTotalDays(startDate, endDate);
   const [placeCount, setPlaceCount] = useState(0);
   const [copiedDay, setCopiedDay] = useState<number | null>(null);
@@ -95,21 +95,6 @@ const PlanSchedule = ({
   const [dayToDelete, setDayToDelete] = useState<number | null>(null);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const [isPublicModalOpen, setIsPublicModalOpen] = useState(false);
-  const [alert, setAlert] = useState<{
-    title: string;
-    description: string;
-  } | null>(null);
-
-  // Alert를 자동으로 제거하는 useEffect 추가
-  useEffect(() => {
-    if (alert) {
-      const timer = setTimeout(() => {
-        setAlert(null);
-      }, 3000); // 3초 후에 Alert 제거
-
-      return () => clearTimeout(timer);
-    }
-  }, [alert]);
 
   /**
    * 장소 추가 핸들러
@@ -299,34 +284,38 @@ const PlanSchedule = ({
 
   const handleSaveButtonClick = () => {
     if (!planTitle) {
-      setAlert({
+      toast({
         title: '일정 제목 누락',
         description: '일정 제목을 입력해주세요.',
+        variant: 'destructive',
       });
       return;
     }
 
     if (!startDate || !endDate) {
-      setAlert({
+      toast({
         title: '여행 기간 누락',
         description: '여행 기간을 선택해주세요.',
+        variant: 'destructive',
       });
       return;
     }
 
     if (startDate > endDate) {
-      setAlert({
+      toast({
         title: '여행 기간 오류',
         description: '여행 종료일은 시작일보다 이후여야 합니다.',
+        variant: 'destructive',
       });
       return;
     }
 
     // 일정 일자 데이터가 없는 경우
     if (Object.keys(dayPlaces).length === 0) {
-      setAlert({
+      toast({
         title: '일정 데이터 누락',
         description: '일정에 최소 하나 이상의 장소를 추가해주세요.',
+        variant: 'destructive',
       });
       return;
     }
@@ -356,11 +345,16 @@ const PlanSchedule = ({
       await fetchSavePlanPlaces(planId, dayPlaces);
 
       setIsPublicModalOpen(false);
+      toast({
+        title: '일정 저장 완료',
+        description: '일정이 성공적으로 저장되었습니다.',
+      });
     } catch (error) {
       console.error('일정 공개 설정 실패:', error);
-      setAlert({
+      toast({
         title: '일정 저장 실패',
         description: '일정 공개 설정에 실패했습니다.',
+        variant: 'destructive',
       });
     }
   };
@@ -386,11 +380,16 @@ const PlanSchedule = ({
       await fetchSavePlanPlaces(planId, dayPlaces);
 
       setIsPublicModalOpen(false);
+      toast({
+        title: '일정 저장 완료',
+        description: '일정이 성공적으로 저장되었습니다.',
+      });
     } catch (error) {
       console.error('일정 비공개 설정 실패:', error);
-      setAlert({
+      toast({
         title: '일정 저장 실패',
         description: '일정 비공개 설정에 실패했습니다.',
+        variant: 'destructive',
       });
     }
   };
@@ -417,18 +416,6 @@ const PlanSchedule = ({
 
   return (
     <div className="relative min-h-screen pb-32">
-      {alert && (
-        <Alert
-          variant={alert.title.includes('실패') ? 'destructive' : 'default'}
-          className="text-red-500 border-red-500 fixed bottom-4 left-4 z-50 w-auto animate-in fade-in slide-in-from-bottom-4"
-        >
-          <AlertCircle className="text-red-500 h-4 w-4" />
-          <AlertTitle className="text-red-500">{alert.title}</AlertTitle>
-          <AlertDescription className="text-red-500">
-            {alert.description}
-          </AlertDescription>
-        </Alert>
-      )}
       <DragDropContext
         onDragEnd={(result) => !isReadOnly && handleDragEnd(result)}
       >

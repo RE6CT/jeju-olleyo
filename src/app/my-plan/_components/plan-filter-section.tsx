@@ -25,6 +25,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import PlanHorizontalCard from '@/components/features/card/plan-horizontal_card';
 import { useQueryClient } from '@tanstack/react-query';
+import { useToast } from '@/hooks/use-toast';
 
 /**
  * 여행 계획 필터 섹션 컴포넌트
@@ -52,6 +53,7 @@ const PlanFilterSection = ({
   userNickname: string;
 }) => {
   const router = useRouter();
+  const { toast } = useToast();
   const [isOpen, setIsOpen] = useState(false);
   const [filter, setFilter] = useState<FilterState>({
     type: FILTER_TYPES.PUBLIC,
@@ -126,10 +128,18 @@ const PlanFilterSection = ({
           queryClient.invalidateQueries({
             queryKey: ['filteredPlans', userId],
           });
+          toast({
+            title: '일정 삭제 완료',
+            description: '일정이 성공적으로 삭제되었습니다.',
+          });
         },
         onError: (error) => {
           console.error('일정 삭제 실패:', error);
-          alert('일정 삭제에 실패했습니다. 다시 시도해주세요.');
+          toast({
+            title: '일정 삭제 실패',
+            description: '일정 삭제에 실패했습니다. 다시 시도해주세요.',
+            variant: 'destructive',
+          });
         },
       });
     }

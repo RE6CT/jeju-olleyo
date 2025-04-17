@@ -27,6 +27,7 @@ const PlanHeader = ({
   setPlanDescription,
   planImage,
   setPlanImage,
+  isReadOnly,
 }: {
   startDate: Date | null;
   endDate: Date | null;
@@ -39,6 +40,7 @@ const PlanHeader = ({
   setPlanDescription: (description: string) => void;
   planImage: string | null;
   setPlanImage: (image: string | null) => void;
+  isReadOnly?: boolean;
 }) => {
   const [isUploading, setIsUploading] = useState(false);
   const { successToast } = useCustomToast();
@@ -104,10 +106,9 @@ const PlanHeader = ({
             accept="image/*"
             className="hidden px-[58px] py-7"
             onChange={handleFileChange}
-            disabled={isUploading}
+            disabled={isUploading || isReadOnly}
           />
           {planImage ? (
-            // <div className="relative aspect-video w-full bg-gray-200">
             <Image
               src={planImage}
               alt="썸네일"
@@ -116,13 +117,12 @@ const PlanHeader = ({
               className="object-contain"
             />
           ) : (
-            // </div>
             <div className="flex h-full w-full flex-col items-center justify-center gap-3">
               <p className="text-24 text-gray-300">+</p>
               <p className="text-center text-14 font-medium text-gray-300">
-                내 일정을 대표할
-                <br />
-                이미지를 추가하세요
+                {isReadOnly
+                  ? '등록된 이미지가 없습니다'
+                  : '내 일정을 대표할\n이미지를 추가하세요'}
               </p>
             </div>
           )}
@@ -150,6 +150,7 @@ const PlanHeader = ({
                 value={planTitle}
                 onChange={(e) => setPlanTitle(e.target.value)}
                 className="w-full resize-none border-0 bg-transparent py-5 pl-12 text-14 focus-visible:ring-0 focus-visible:ring-offset-0"
+                readOnly={isReadOnly}
               />
             </div>
           </div>
@@ -161,7 +162,10 @@ const PlanHeader = ({
                 type="button"
                 variant="outline"
                 className="h-7 w-fit justify-start border-transparent bg-gray-50 px-5 py-1 text-left text-14 font-normal hover:bg-gray-100"
-                onClick={() => setIsCalendarOpen(!isCalendarOpen)}
+                onClick={() =>
+                  !isReadOnly && setIsCalendarOpen(!isCalendarOpen)
+                }
+                disabled={isReadOnly}
               >
                 {formatTravelPeriod(startDate, endDate)}
               </Button>
@@ -200,6 +204,7 @@ const PlanHeader = ({
             onChange={(e) => setPlanDescription(e.target.value)}
             maxLength={500}
             className="h-[160px] w-full resize-none rounded-[12px] border-gray-200 py-5 pl-12 text-14 focus-visible:ring-0 focus-visible:ring-offset-0"
+            readOnly={isReadOnly}
           />
         </div>
       </div>

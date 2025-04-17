@@ -50,6 +50,7 @@ const PlaceCard = ({
   imageUrl,
   isLastItem = false,
   onDelete,
+  isReadOnly = false,
 }: {
   index: number;
   dayNumber: number;
@@ -61,13 +62,19 @@ const PlaceCard = ({
   imageUrl?: string;
   isLastItem?: boolean;
   onDelete?: () => void;
+  isReadOnly?: boolean;
 }) => {
   const dayColorSet = dayNumber % 2 === 1 ? COLORS.ODD : COLORS.EVEN;
   const defaultImage = useMemo(() => getRandomDefaultImage(), []);
   const displayImageUrl = imageUrl || defaultImage;
 
   return (
-    <div className="flex w-full cursor-grab gap-3 active:cursor-grabbing">
+    <div
+      className={cn(
+        'flex w-full gap-3',
+        !isReadOnly && 'cursor-grab active:cursor-grabbing',
+      )}
+    >
       {/* 원형으로 인덱스 표시 */}
       <div
         className={`regular-12 flex h-6 w-6 flex-col items-center justify-center gap-[10px] rounded-[12px] ${dayColorSet.bg} px-2 text-white`}
@@ -145,14 +152,16 @@ const PlaceCard = ({
         </div>
 
         {/* 삭제 버튼 */}
-        <button className="shrink-0 self-start p-1" onClick={onDelete}>
-          <Image
-            src="/icons/close.svg"
-            alt="삭제"
-            width={BUTTON_SIZE.width}
-            height={BUTTON_SIZE.height}
-          />
-        </button>
+        {!isReadOnly && onDelete && (
+          <button className="shrink-0 self-start p-1" onClick={onDelete}>
+            <Image
+              src="/icons/close.svg"
+              alt="삭제"
+              width={BUTTON_SIZE.width}
+              height={BUTTON_SIZE.height}
+            />
+          </button>
+        )}
       </div>
     </div>
   );

@@ -11,6 +11,25 @@ export type UsersRow = Pick<
 // PlansRow를 CamelCase로 변환한 타입
 export type Plan = CamelCaseObject<PlansRow & UsersRow & { is_liked: boolean }>;
 
+export type PlanWithDays = Plan & {
+  days: {
+    dayId: number;
+    day: number;
+    locations: {
+      visitOrder: number;
+      places: {
+        placeId: number;
+        name: string;
+        address: string;
+        latitude: number;
+        longitude: number;
+        category: string;
+        imageUrl: string | null;
+      };
+    }[];
+  }[];
+};
+
 // 플랜 카드에서 쓰는 타입 (좋아요 포함)
 export type PlanCardType = {
   planId: number;

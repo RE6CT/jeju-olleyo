@@ -7,6 +7,7 @@ import {
   isDateLessThanOrEqual,
 } from '@/lib/utils/date';
 import { CommunitySortType } from '@/types/community.type';
+import { LocationData } from '@/types/kakao-map.type';
 import { DayPlaces } from '@/types/plan-detail.type';
 import { Plan, PlanFilterOptions, PlanWithDays } from '@/types/plan.type';
 

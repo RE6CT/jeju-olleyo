@@ -17,7 +17,13 @@ export const FilterInput = ({
   setIsDatePickerFocused,
   filter,
   applyFilter,
-}: FilterInputProps) => (
+}: {
+  selectedFilter: FilterType;
+  inputValue: string;
+  setInputValue: (value: string) => void;
+  selectedPublicOption: PublicOption;
+  setSelectedPublicOption: (option: PublicOption) => void;
+}) => (
   <div className="flex w-[250px] flex-col gap-2 border-l border-gray-200 p-2">
     {selectedFilter === FILTER_TYPES.PUBLIC ? (
       <div className="flex flex-col gap-2">

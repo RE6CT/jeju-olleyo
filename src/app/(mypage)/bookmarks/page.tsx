@@ -1,6 +1,6 @@
 import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
+
 import BookmarksList from './_components/bookmarks-list';
-import { useGetDataCount } from '@/lib/queries/use-get-data-count';
 
 const BookmarksPage = async () => {
   const { user } = await fetchGetCurrentUser();

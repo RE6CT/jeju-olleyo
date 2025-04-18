@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { ChevronDown } from 'lucide-react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -8,29 +9,19 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { calculateTotalDays, formatDayDate } from '@/lib/utils/date';
-import PlaceSidemenu from './place-sidemenu';
-import PlaceCard from './place-card';
-import { Place } from '@/types/search.type';
 import { DayPlaces, TabType } from '@/types/plan-detail.type';
+import { Place } from '@/types/search.type';
+import PlaceCard from './place-card';
+import PlaceSidemenu from './place-sidemenu';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import ScheduleDeleteModal from './schedule-delete-modal';
 import ScheduleSaveModal from './schedule-save-modal';
 import { fetchSavePlan, fetchSavePlanPlaces } from '@/lib/apis/plan/plan.api';
-import PlanCardModal from '@/components/features/plan/plan-card-modal';
 import ScheduleCreatedModal from './schedule-created-modal';
 import { useToast } from '@/hooks/use-toast';
-import Image from 'next/image';
 
-const BASE_TAB_STYLE =
-  'flex items-center justify-center gap-[10px] rounded-[28px] border px-5 py-2 text-14 font-medium transition-colors';
-const ACTIVE_TAB_STYLE =
-  'border-primary-500 bg-primary-100 text-primary-500 hover:bg-primary-100 hover:text-primary-500';
-const INACTIVE_TAB_STYLE =
-  'border-[0.6px] border-gray-600 bg-white text-gray-900 hover:bg-gray-100 hover:text-gray-900';
-const DROPDOWN_BUTTON_STYLE = 'flex items-center gap-2 text-14 font-medium';
 const DROPDOWN_CONTENT_STYLE =
   'p-0 border border-[#E7EDF0] bg-[#F9FAFB] rounded-[12px] w-[140px] [&>*:hover]:bg-primary-100 [&>*:hover]:text-primary-500';
 const DROPDOWN_ITEM_STYLE =
@@ -127,17 +118,6 @@ const PlanSchedule = ({
    * handleDeletePlace(1, 0)
    * 1일차 장소 중 첫 번째 장소를 삭제
    */
-  const handleDeletePlace = (dayNumber: number, placeIndex: number) => {
-    setDayPlaces((prev: DayPlaces) => {
-      const currentDayPlaces = [...(prev[dayNumber] || [])];
-      currentDayPlaces.splice(placeIndex, 1);
-
-      return {
-        ...prev,
-        [dayNumber]: currentDayPlaces,
-      };
-    });
-  };
 
   /**
    * 특정 일자의 모든 장소를 삭제하는 핸들러
@@ -421,14 +401,6 @@ const PlanSchedule = ({
         variant: 'destructive',
       });
     }
-  };
-
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>, day: number) => {
-    if (isReadOnly) return;
-
-    e.preventDefault();
-    const placeData = JSON.parse(e.dataTransfer.getData('place'));
-    handleAddPlace(placeData);
   };
 
   const handleRemovePlace = (day: number, uniqueId: string) => {

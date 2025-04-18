@@ -21,7 +21,7 @@ const DynamicPagination = ({
     const offset =
       maxVisiblePages % 2 === 0 ? 1 : Math.floor(maxVisiblePages / 2);
     let startPage = Math.max(1, currentPage - offset);
-    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+    const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
 
     // 시작 페이지 조정 (끝 페이지가 totalPages에 도달했을 때)
     if (endPage - startPage + 1 < maxVisiblePages) {

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+
 import { PolylineInstance, PolylineProps } from '@/types/kakao-map.type';
 
 /**

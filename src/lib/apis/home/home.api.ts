@@ -26,7 +26,7 @@ const fetchGetImagesByMainCarousel = async (): Promise<CarouselImages[]> => {
   }
 
   if (!data || data.length === 0) {
-    console.info('활성화된 메인 캐러셀 이미지가 없습니다.');
+    console.warn('활성화된 메인 캐러셀 이미지가 없습니다.');
     return [];
   }
 

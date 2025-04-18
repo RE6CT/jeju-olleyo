@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { KakaoMapInstance, KakaoMapProps } from '@/types/kakao-map.type';
-import React from 'react';
 
 /**
  * 카카오맵 컴포넌트
@@ -28,7 +27,7 @@ import React from 'react';
 const KakaoMap = ({ center, level, onMapLoad, onError }: KakaoMapProps) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<KakaoMapInstance | null>(null);
-  const [isMapLoaded, setIsMapLoaded] = useState(false); // 지도 로드 상태
+  const [, setIsMapLoaded] = useState(false); // 지도 로드 상태
 
   useEffect(() => {
     const handleMapLoad = () => {

@@ -1,9 +1,10 @@
 'use client';
 
+import { motion, AnimatePresence } from 'framer-motion';
 import { AlertCircle } from 'lucide-react';
+
 import { Alert } from '@/components/ui/alert';
 import { cn } from '@/lib/utils';
-import { motion, AnimatePresence } from 'framer-motion';
 import { AuthErrorMessageProps } from '@/types/auth.type';
 
 /**
@@ -22,7 +23,7 @@ const AuthErrorMessage = ({
   if (!messages || messages.length === 0) return null;
 
   // 첫 번째 메시지만 사용하고 "다시 시도해주세요" 문구 제거
-  let errorMessage = messages[0].replace(/다시 시도해주세요\.?/g, '').trim();
+  const errorMessage = messages[0].replace(/다시 시도해주세요\.?/g, '').trim();
 
   // 메시지가 비어있다면 표시하지 않음
   if (errorMessage.length === 0) return null;

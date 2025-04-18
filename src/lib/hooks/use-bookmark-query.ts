@@ -1,12 +1,15 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+
+import { UserBookmarks } from '@/types/mypage.type';
+
+import fetchAddBookmarkByIdQuery from '../apis/bookmark/add-bookmark.api';
+import fetchDeleteBookmark from '../apis/bookmark/delete-bookmark.api';
 import {
   fetchGetAllBookmarksByUserId,
   fetchGetBookmarkByIdQuery,
 } from '../apis/bookmark/get-bookmark.api';
-import fetchDeleteBookmark from '../apis/bookmark/delete-bookmark.api';
-import fetchAddBookmarkByIdQuery from '../apis/bookmark/add-bookmark.api';
 import fetchGetAllPlaces from '../apis/search/get-place.api';
-import { UserBookmarks } from '@/types/mypage.type';
+
 
 /**
  * 북마크 관련 기능을 제공하는 커스텀 훅

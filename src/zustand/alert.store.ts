@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+
 import { AlertState, AlertStore } from '@/types/alert.type';
 
 // 기본 상태

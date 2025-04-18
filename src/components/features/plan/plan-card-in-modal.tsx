@@ -1,7 +1,8 @@
+import { DialogDescription, DialogTitle } from '@radix-ui/react-dialog';
 import React from 'react';
+
 import { Button } from '@/components/ui/button';
 import { DialogHeader } from '@/components/ui/dialog';
-import { DialogDescription, DialogTitle } from '@radix-ui/react-dialog';
 import { PlanCardProps } from '@/types/plan-card-modal.type';
 
 const PlanCardInModal = ({ title, description, buttons }: PlanCardProps) => {

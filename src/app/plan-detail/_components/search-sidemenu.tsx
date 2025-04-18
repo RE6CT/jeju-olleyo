@@ -1,17 +1,20 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import PlaceSidemenuLayout from './place-sidemenu-layout';
-import { Input } from '@/components/ui/input';
-import PlaceCardCategory from './place-card-category';
-import { CategoryType } from '@/types/category.type';
-import fetchGetAllPlaces from '@/lib/apis/search/get-place.api';
-import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
-import { Place } from '@/types/search.type';
-import DynamicPagination from '@/components/ui/dynamic-pagination';
-import { useBookmarkQuery } from '@/lib/hooks/use-bookmark-query';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
+
+import { Button } from '@/components/ui/button';
+import DynamicPagination from '@/components/ui/dynamic-pagination';
+import { Input } from '@/components/ui/input';
+import fetchGetAllPlaces from '@/lib/apis/search/get-place.api';
+import { useBookmarkQuery } from '@/lib/hooks/use-bookmark-query';
+import { CategoryType } from '@/types/category.type';
+import { Place } from '@/types/search.type';
+
+
 import DaySelectRequiredModal from './day-select-required-modal';
+import PlaceCardCategory from './place-card-category';
+import PlaceSidemenuLayout from './place-sidemenu-layout';
 
 const ITEMS_PER_PAGE = 7;
 const INITIAL_ITEMS = 5;

@@ -1,9 +1,9 @@
 'use client';
 
-import { Command, CommandInput } from '@/components/ui/command';
-import { PATH } from '@/constants/path.constants';
 import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
+import { PATH } from '@/constants/path.constants';
+
 import { Input } from '../ui/input';
 
 /**

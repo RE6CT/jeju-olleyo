@@ -14,7 +14,6 @@ export const FilterInput = ({
   setStartDate,
   endDate,
   setEndDate,
-  isDatePickerFocused,
   setIsDatePickerFocused,
   filter,
   applyFilter,

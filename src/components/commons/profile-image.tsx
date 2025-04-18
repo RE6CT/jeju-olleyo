@@ -1,6 +1,7 @@
+import Image from 'next/image';
+
 import { getProfileImageWithFallback } from '@/lib/utils/get-image-with-fallback';
 import { ProfileImageProps } from '@/types/common.type';
-import Image from 'next/image';
 
 /**
  * 프로필 이미지 컴포넌트

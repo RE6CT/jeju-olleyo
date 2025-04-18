@@ -1,15 +1,14 @@
 'use server';
 
-import { Plan, PlanFilterOptions, PlanWithDays } from '@/types/plan.type';
 import { getServerClient } from '@/lib/supabase/server';
 import { camelize } from '@/lib/utils/camelize';
 import {
   isDateGreaterThanOrEqual,
   isDateLessThanOrEqual,
 } from '@/lib/utils/date';
-import dayjs from 'dayjs';
-import { DayPlaces, PlaceWithUniqueId } from '@/types/plan-detail.type';
 import { CommunitySortType } from '@/types/community.type';
+import { DayPlaces } from '@/types/plan-detail.type';
+import { Plan, PlanFilterOptions, PlanWithDays } from '@/types/plan.type';
 
 /**
  * 사용자의 일정 목록을 가져오는 API
@@ -275,7 +274,7 @@ export const fetchSavePlanPlaces = async (
     }
 
     // locations 테이블에 데이터 삽입
-    const { data: locationsData, error: locationsError } = await supabase
+    const { error: locationsError } = await supabase
       .from('locations')
       .insert(locationsToInsert)
       .select();
@@ -328,7 +327,7 @@ export const fetchUploadPlanImage = async (
   // 사용자별 폴더 경로 생성
   const filePath = `${user.id}/plan-images/${Date.now()}-${file.name}`;
 
-  const { data, error } = await supabase.storage
+  const { error } = await supabase.storage
     .from('plan-images')
     .upload(filePath, file, {
       cacheControl: '3600',
@@ -345,43 +344,6 @@ export const fetchUploadPlanImage = async (
   } = supabase.storage.from('plan-images').getPublicUrl(filePath);
 
   return publicUrl;
-};
-
-type PlaceResponse = {
-  place_id: number;
-  name: string;
-  address: string;
-  latitude: number;
-  longitude: number;
-  category: string;
-  image_url: string | null;
-};
-
-type LocationResponse = {
-  visit_order: number;
-  places: PlaceResponse;
-};
-
-type DayResponse = {
-  day_id: number;
-  day: number;
-  locations: LocationResponse[];
-};
-
-type PlanResponse = {
-  plan_id: number;
-  user_id: string;
-  title: string;
-  description: string | null;
-  travel_start_date: string;
-  travel_end_date: string;
-  plan_img: string | null;
-  public: boolean;
-  created_at: string;
-  public_at: string | null;
-  users: {
-    nickname: string;
-  };
 };
 
 export const fetchGetPlanById = async (

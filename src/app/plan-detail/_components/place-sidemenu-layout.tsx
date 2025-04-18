@@ -1,7 +1,7 @@
 'use client';
 
 import { ReactNode } from 'react';
-import { cn } from '@/lib/utils';
+
 import CategoryFilterTabs from '@/components/commons/category-filter-tabs';
 import { CategoryType } from '@/types/category.type';
 
@@ -12,7 +12,6 @@ const PlaceSidemenuLayout = ({
   onFilterTabChange,
   children,
   topContent,
-  isExpanded = true,
 }: {
   isBookmarkSection: boolean;
   filterTabs: CategoryType[];
@@ -20,7 +19,6 @@ const PlaceSidemenuLayout = ({
   onFilterTabChange: (tab: CategoryType) => void;
   children: ReactNode;
   topContent?: ReactNode;
-  isExpanded?: boolean;
 }) => {
   return (
     <div className="w-full space-y-4">

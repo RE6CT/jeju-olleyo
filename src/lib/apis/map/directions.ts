@@ -19,7 +19,6 @@ interface RouteSummary {
  */
 export const getCarRoute = async (
   routeInfo: RouteInfo,
-  map: any,
 ): Promise<{
   path: { lat: number; lng: number }[];
   summary: RouteSummary;

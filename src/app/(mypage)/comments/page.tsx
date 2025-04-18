@@ -1,6 +1,7 @@
 import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
-import MyComment from './_components/my-comment';
 import { fetchAllCommentsByUserId } from '@/lib/apis/comments/get-comments.api';
+
+import MyComment from './_components/my-comment';
 
 const CommentsPage = async () => {
   const { user } = await fetchGetCurrentUser();

@@ -1,13 +1,14 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { getBrowserClient } from '@/lib/supabase/client';
-import useAuthStore from '@/zustand/auth.store';
-import { formatUser } from '@/lib/apis/auth/auth-browser.api';
-import { AuthProps } from '@/types/auth.type';
-import { PATH } from '@/constants/path.constants';
+import { useEffect, useState } from 'react';
+
 import { AUTH_ROUTES } from '@/constants/auth.constants';
+import { PATH } from '@/constants/path.constants';
+import { formatUser } from '@/lib/apis/auth/auth-browser.api';
+import { getBrowserClient } from '@/lib/supabase/client';
+import { AuthProps } from '@/types/auth.type';
+import useAuthStore from '@/zustand/auth.store';
 
 /**
  * 인증 상태를 감시하고 관리하는 프로바이더 컴포넌트

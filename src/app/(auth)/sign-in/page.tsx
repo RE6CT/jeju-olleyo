@@ -1,22 +1,22 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
+import { useState, useEffect } from 'react';
 
-import AuthLayout from '@/components/features/auth/auth-layout';
-import AuthForm from '@/components/features/auth/auth-form';
-import SocialLogin from '@/components/features/auth/auth-social-login';
+import Loading from '@/app/loading';
 import AuthErrorMessage from '@/components/features/auth/auth-error-message';
+import AuthForm from '@/components/features/auth/auth-form';
+import AuthLayout from '@/components/features/auth/auth-layout';
+import SocialLogin from '@/components/features/auth/auth-social-login';
 import { CardContent } from '@/components/ui/card';
-
-import { LoginFormValues } from '@/types/auth.type';
 import useAuth from '@/lib/hooks/use-auth';
 import useAuthCheck from '@/lib/hooks/use-auth-check';
-import useRememberEmail from '@/lib/hooks/use-remember-email';
 import useRedirectParams from '@/lib/hooks/use-redirect-params';
+import useRememberEmail from '@/lib/hooks/use-remember-email';
 import { getLoginErrorMessage } from '@/lib/utils/auth-error.util';
-import Loading from '@/app/loading';
-import Image from 'next/image';
+import { LoginFormValues } from '@/types/auth.type';
+
 
 /**
  * 로그인 페이지 컴포넌트

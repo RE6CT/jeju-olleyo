@@ -1,17 +1,18 @@
+import { useRouter } from 'next/navigation';
 import { useState, useCallback } from 'react';
-import { LoginFormValues, RegisterFormValues } from '@/types/auth.type';
+
+import { PATH } from '@/constants/path.constants';
+import {
+  saveEmailToStorage,
+  clearClientAuthData,
+} from '@/lib/apis/auth/auth-browser.api';
 import {
   fetchLogin,
   fetchRegister,
   fetchLogout,
 } from '@/lib/apis/auth/auth-server.api';
-import {
-  saveEmailToStorage,
-  clearClientAuthData,
-} from '@/lib/apis/auth/auth-browser.api';
+import { LoginFormValues, RegisterFormValues } from '@/types/auth.type';
 import useAuthStore from '@/zustand/auth.store';
-import { PATH } from '@/constants/path.constants';
-import { useRouter } from 'next/navigation';
 
 /**
  * 인증 관련 기능을 처리하는 커스텀 훅
@@ -92,7 +93,7 @@ const useAuth = () => {
         setIsLoading(false);
       }
     },
-    [resetError, setError],
+    [resetError, setError, user],
   );
 
   /**
@@ -127,7 +128,7 @@ const useAuth = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [resetError, setError, clearUser]);
+  }, [resetError, setError, clearUser, router]);
 
   return {
     user,

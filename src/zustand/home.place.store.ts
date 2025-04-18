@@ -1,6 +1,7 @@
-import { BookmarkStore } from '@/types/home.popular-place.type';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+
+import { BookmarkStore } from '@/types/home.popular-place.type';
 
 export const useBookmarkStore = create<BookmarkStore>()(
   persist(

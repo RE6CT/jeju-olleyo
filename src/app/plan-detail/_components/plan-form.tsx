@@ -1,11 +1,13 @@
 'use client';
 
 import { useState } from 'react';
+
+import { DayPlaces, TabType } from '@/types/plan-detail.type';
+import { Plan } from '@/types/plan.type';
+
 import PlanHeader from './plan-header';
 import PlanMap from './plan-map';
 import PlanSchedule from './plan-schedule';
-import { Plan } from '@/types/plan.type';
-import { DayPlaces, TabType } from '@/types/plan-detail.type';
 
 const PlanForm = ({
   userId,

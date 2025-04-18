@@ -1,12 +1,7 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from '@/components/ui/dialog';
-import PlanCard from './plan-card-in-modal';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { PlanCardModalProps } from '@/types/plan-card-modal.type';
+
+import PlanCard from './plan-card-in-modal';
 
 const PlanCardModal = ({
   open,

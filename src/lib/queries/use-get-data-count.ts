@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+
 import { fetchGetProfileDataCountByUserId } from '../apis/profile/get-profile-data-count';
 
 /**

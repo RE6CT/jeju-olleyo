@@ -1,9 +1,10 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
 import PlanVerticalCard from '@/components/features/card/plan-vertical-card';
 import { getBrowserClient } from '@/lib/supabase/client';
 import { camelize } from '@/lib/utils/camelize';
-import { useEffect, useState } from 'react';
 
 const PlanIncludingPlace = ({ placeId }: { placeId: number }) => {
   const [plans, setPlans] = useState<
@@ -51,13 +52,12 @@ const PlanIncludingPlace = ({ placeId }: { placeId: number }) => {
         }
 
         setPlans(data.map(camelize) as typeof plans);
-        console.log(data);
-      } catch (err) {
+      } catch {
         console.error('장소가 포함된 일정 불러오기 에러');
       }
     };
     fetchGetPlansByPlaceId();
-  }, []);
+  }, [placeId]);
 
   return (
     <>

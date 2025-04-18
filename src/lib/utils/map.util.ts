@@ -1,5 +1,5 @@
-import { Place } from '@/types/search.type';
 import { MARKER } from '@/constants/map.constants';
+import { Place } from '@/types/search.type';
 
 /**
  * Place 객체에서 위도, 경도 정보를 추출하는 함수

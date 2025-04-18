@@ -1,5 +1,10 @@
 'use client';
 
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+
 import PasswordInput from '@/components/features/auth/auth-password-input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -8,10 +13,6 @@ import { fetchUpdatePassword } from '@/lib/apis/profile/update-profile.api';
 import useCustomToast from '@/lib/hooks/use-custom-toast';
 import useProviderFromCookie from '@/lib/hooks/use-get-provider';
 import { changePasswordSchema } from '@/lib/schemas/change-password-schema';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 
 const SECURITY_INFO_STYLE = {
   container:

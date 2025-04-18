@@ -1,9 +1,10 @@
 'use client';
 
 import Image from 'next/image';
-import { CategoryType } from '@/types/category.type';
-import { Button } from '@/components/ui/button';
+
 import BookmarkIcon from '@/components/commons/bookmark-icon';
+import { Button } from '@/components/ui/button';
+import { CategoryType } from '@/types/category.type';
 
 const handleImageLoadError = (e: React.SyntheticEvent<HTMLImageElement>) => {
   const target = e.target as HTMLImageElement;

@@ -1,14 +1,15 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useInView } from 'react-intersection-observer';
+
 import ErrorMessage from '@/app/error';
 import Loading from '@/app/loading';
-import PlaceCard from '@/components/features/card/place-card';
-import { useGetPlacesByCategoryInfiniteQuery } from '@/lib/queries/use-get-places';
-import { useInView } from 'react-intersection-observer';
-import { CategoryParamType } from '@/types/category.type';
 import Banner from '@/app/search/_components/banner';
+import PlaceCard from '@/components/features/card/place-card';
 import { useBookmarkQuery } from '@/lib/hooks/use-bookmark-query';
+import { useGetPlacesByCategoryInfiniteQuery } from '@/lib/queries/use-get-places';
+import { CategoryParamType } from '@/types/category.type';
 
 /** 서버에서 가져온 데이터를 표시하는 클라이언트 컴포넌트 (카테고리 리스트)) */
 const CategoryClient = ({
@@ -27,7 +28,7 @@ const CategoryClient = ({
     isError,
   } = useGetPlacesByCategoryInfiniteQuery(category);
   const { ref, inView } = useInView();
-  const { isBookmarked, bookmarks } = useBookmarkQuery(userId);
+  const { isBookmarked } = useBookmarkQuery(userId);
 
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {

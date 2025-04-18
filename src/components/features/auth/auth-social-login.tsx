@@ -1,8 +1,9 @@
 'use client';
 
-import { Separator } from '@/components/ui/separator';
-import { CardContent } from '@/components/ui/card';
 import Image from 'next/image';
+
+import { CardContent } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
 import useSocialLogin from '@/lib/hooks/use-social-login';
 
 /**

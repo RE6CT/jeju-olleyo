@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+
 import { ClustererInstance, ClustererOptions } from '@/types/kakao-map.type';
 
 /**
@@ -131,7 +132,7 @@ const Clusterer = ({ map, markers, ...options }: ClustererOptions) => {
         kakaoMarkers.forEach((marker) => marker.setMap(null));
       }
     };
-  }, [map, markers, options]);
+  }, [map, markers, options, styles]);
 
   return null;
 };

@@ -1,10 +1,13 @@
-import ProfileImage from '@/components/commons/profile-image';
-import ProfileImageButton from './account-profile-image-button';
 import { useState } from 'react';
-import ProfileModal from './account-profile-modal';
-import { fetchDeleteProfileImage } from '@/lib/apis/profile/update-profile.api';
+
+import ProfileImage from '@/components/commons/profile-image';
 import { ERROR_MESSAGES } from '@/constants/mypage.constants';
+import { fetchDeleteProfileImage } from '@/lib/apis/profile/update-profile.api';
 import useCustomToast from '@/lib/hooks/use-custom-toast';
+
+import ProfileImageButton from './account-profile-image-button';
+import ProfileModal from './account-profile-modal';
+
 
 const IMAGE_SIZE = 88;
 

@@ -4,10 +4,11 @@ import {
   QueryClient,
 } from '@tanstack/react-query';
 
-import CategoryClient from './category-client';
-import { CategoryParamType } from '@/types/category.type';
-import { usePrefetchPlacesByCategory } from '@/lib/queries/use-get-places';
 import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
+import { usePrefetchPlacesByCategory } from '@/lib/queries/use-get-places';
+import { CategoryParamType } from '@/types/category.type';
+
+import CategoryClient from './category-client';
 
 /** 서버에서 초기 데이터를 로드하는 서버 컴포넌트 페이지 */
 const CategoryPage = async ({
@@ -20,7 +21,7 @@ const CategoryPage = async ({
 
   const urlCategory = params.category;
 
-  await usePrefetchPlacesByCategory(queryClient, urlCategory);
+  // await usePrefetchPlacesByCategory(queryClient, urlCategory);
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

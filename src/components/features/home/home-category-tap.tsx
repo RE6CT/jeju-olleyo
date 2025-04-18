@@ -1,11 +1,12 @@
 'use client';
 
-import { memo, useCallback, useMemo } from 'react';
 import Link from 'next/link';
-import { cn } from '@/lib/utils';
-import useCategoryNavigation from '@/lib/hooks/use-category-navigation';
-import { CategoryTabsProps, TravelCategory } from '@/types/home.category.type';
+import { memo, useCallback, useMemo } from 'react';
+
 import { CATEGORIES, CATEGORY_ROUTES } from '@/constants/home.constants';
+import useCategoryNavigation from '@/lib/hooks/use-category-navigation';
+import { cn } from '@/lib/utils';
+import { CategoryTabsProps, TravelCategory } from '@/types/home.category.type';
 
 /**
  * 여행 관련 카테고리를 선택할 수 있는 탭 컴포넌트

@@ -1,6 +1,6 @@
 import { TicketListProps } from '../../../types/air-ticket-type';
+
 import TicketCard from './ticket-card';
-import Image from 'next/image';
 
 const TicketList = ({
   flights,
@@ -15,8 +15,11 @@ const TicketList = ({
   return (
     <div>
       <div className="mb-2 mt-4 flex items-center gap-3">
-        <label className="font-medium">정렬 기준:</label>
+        <label htmlFor="ticket-list-filter" className="font-medium">
+          정렬 기준:
+        </label>
         <select
+          id="ticket-list-filter"
           className="rounded border px-2 py-1"
           value={sortKey}
           onChange={(e) =>

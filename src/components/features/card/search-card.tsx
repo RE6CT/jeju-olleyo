@@ -1,9 +1,10 @@
 'use client';
 
-import PlaceImage from '@/components/commons/place-image';
-import { useRouter } from 'next/navigation';
 import { memo } from 'react';
 import BookmarkIcon from '@/components/commons/bookmark-icon';
+import PlaceImage from '@/components/commons/place-image';
+import Link from 'next/link';
+import { PATH } from '@/constants/path.constants';
 
 /**
  * 장소 카드 컴포넌트
@@ -28,16 +29,9 @@ const SearchCard = ({
   isBookmarked: boolean;
   onBookmarkToggle: () => void;
 }) => {
-  const router = useRouter();
-
-  const handleCardClick = () => {
-    router.push(`/places/${placeId}`);
-  };
-
   return (
-    <div
-      onClick={handleCardClick}
-      draggable="false"
+    <Link
+      href={`${PATH.PLACES}/${placeId}`}
       className={`${className} transition-all`}
     >
       <div className="relative flex flex-col gap-2">
@@ -59,7 +53,7 @@ const SearchCard = ({
         </div>
         <h4 className="medium-16 truncate px-2">{title}</h4>
       </div>
-    </div>
+    </Link>
   );
 };
 

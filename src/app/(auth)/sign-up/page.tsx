@@ -1,17 +1,16 @@
 'use client';
 
-import AuthLayout from '@/components/features/auth/auth-layout';
-import AuthHeader from '@/components/features/auth/auth-header';
-import AuthForm from '@/components/features/auth/auth-form';
+import Loading from '@/app/loading';
 import AuthErrorMessage from '@/components/features/auth/auth-error-message';
+import AuthForm from '@/components/features/auth/auth-form';
+import AuthHeader from '@/components/features/auth/auth-header';
+import AuthLayout from '@/components/features/auth/auth-layout';
 import { CardContent } from '@/components/ui/card';
-
-import { RegisterFormValues } from '@/types/auth.type';
+import { PATH } from '@/constants/path.constants';
 import useAuth from '@/lib/hooks/use-auth';
 import useAuthCheck from '@/lib/hooks/use-auth-check';
 import { getSignupErrorMessage } from '@/lib/utils/auth-error.util';
-import { PATH } from '@/constants/path.constants';
-import Loading from '@/app/loading';
+import { RegisterFormValues } from '@/types/auth.type';
 
 /**
  * 회원가입 페이지 컴포넌트

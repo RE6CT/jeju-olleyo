@@ -1,12 +1,13 @@
 import { Suspense } from 'react';
-import MainCarouselContainer from '@/components/features/home/home-main-carousel-container';
-import CategoryTabs from '@/components/features/home/home-category-tap';
-import WeatherSection from '@/components/features/home/home-weather-section';
+
 import Loading from '@/app/loading';
 import JejuBanner from '@/components/features/banner/jeju-banner';
-import { PATH } from '@/constants/path.constants';
-import PopularSchedules from '@/components/features/home/home-popular-schedules';
+import CategoryTabs from '@/components/features/home/home-category-tap';
+import MainCarouselContainer from '@/components/features/home/home-main-carousel-container';
 import PopularPlaces from '@/components/features/home/home-popular-places';
+import PopularSchedules from '@/components/features/home/home-popular-schedules';
+import WeatherSection from '@/components/features/home/home-weather-section';
+import { PATH } from '@/constants/path.constants';
 
 /**
  * 홈 페이지 컴포넌트

@@ -1,5 +1,6 @@
-import { NavigationButtonProps } from '@/types/home.carousel.type';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+
+import { NavigationButtonProps } from '@/types/home.carousel.type';
 
 const NavigationButton = ({ direction, onClick }: NavigationButtonProps) => {
   const isLeft = direction === 'left';

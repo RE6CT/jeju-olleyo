@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+
 import { getBrowserClient } from '@/lib/supabase/client';
 import useAuthStore from '@/zustand/auth.store';
 

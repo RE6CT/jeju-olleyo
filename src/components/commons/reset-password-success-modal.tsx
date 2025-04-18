@@ -1,8 +1,9 @@
 'use client';
 
 import Image from 'next/image';
-import { Dialog, DialogContent } from '@/components/ui/no-close-button-dialog';
 import { useEffect } from 'react';
+
+import { Dialog, DialogContent } from '@/components/ui/no-close-button-dialog';
 import { ResetPasswordSuccessModalProps } from '@/types/auth.type';
 
 const ResetPasswordSuccessModal = ({

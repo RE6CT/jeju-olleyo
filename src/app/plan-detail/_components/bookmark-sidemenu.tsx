@@ -1,14 +1,16 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import PlaceSidemenuLayout from './place-sidemenu-layout';
-import PlaceCardCategory from './place-card-category';
-import { CategoryType } from '@/types/category.type';
-import ErrorMessage from '@/components/features/alert/error-message';
-import { useBookmarkQuery } from '@/lib/hooks/use-bookmark-query';
-import DynamicPagination from '@/components/ui/dynamic-pagination';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+
+import ErrorMessage from '@/components/features/alert/error-message';
 import { Button } from '@/components/ui/button';
+import DynamicPagination from '@/components/ui/dynamic-pagination';
+import { useBookmarkQuery } from '@/lib/hooks/use-bookmark-query';
+import { CategoryType } from '@/types/category.type';
+
+import PlaceCardCategory from './place-card-category';
+import PlaceSidemenuLayout from './place-sidemenu-layout';
 
 const ITEMS_PER_PAGE = 7;
 const INITIAL_ITEMS = 3;
@@ -62,7 +64,7 @@ const BookmarkSidemenu = ({
           listRef.current.scrollTop = scrollPosition;
         }
       }, 0);
-    } catch (error) {
+    } catch {
       setError('북마크를 업데이트하는 데 실패했습니다.');
     }
   };

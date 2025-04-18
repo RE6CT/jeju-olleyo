@@ -1,6 +1,7 @@
 import { Combobox } from '@/components/commons/combo-box';
-import { TicketSearchFormProps } from '../../../types/air-ticket-type';
 import { Button } from '@/components/ui/button';
+
+import { TicketSearchFormProps } from '../../../types/air-ticket-type';
 
 const TicketSearchForm = ({
   departureList,
@@ -12,7 +13,7 @@ const TicketSearchForm = ({
   return (
     <form onSubmit={handleSubmit} className="mb-6 flex flex-wrap gap-3">
       <div>
-        <label className="mb-1 block text-sm font-medium">출발지</label>
+        <span className="mb-1 block text-sm font-medium">출발지</span>
         <Combobox
           list={departureList}
           value={departure}
@@ -21,8 +22,9 @@ const TicketSearchForm = ({
         />
       </div>
       <div>
-        <label className="mb-1 block text-sm font-medium">도착지</label>
+        <span className="mb-1 block text-sm font-medium">도착지</span>
         <input
+          id="return"
           type="text"
           name="schArrvCityCode"
           placeholder="제주"
@@ -32,7 +34,7 @@ const TicketSearchForm = ({
       </div>
       <input type="hidden" name="schArrvCityCode" value="CJU" />
       <div>
-        <label className="mb-1 block text-sm font-medium">출발 일자</label>
+        <span className="mb-1 block text-sm font-medium">출발 일자</span>
         <input
           type="date"
           name="schDate"
@@ -42,7 +44,7 @@ const TicketSearchForm = ({
         />
       </div>
       <div>
-        <label className="mb-1 block text-sm font-medium">도착 일자</label>
+        <span className="mb-1 block text-sm font-medium">도착 일자</span>
         <input
           type="date"
           name="returnDate"

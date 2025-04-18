@@ -1,8 +1,9 @@
 'use client';
 
+import { TextareaHTMLAttributes, forwardRef } from 'react';
+
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
-import { TextareaHTMLAttributes, forwardRef } from 'react';
 
 /**
  * 글자 수 카운트 기능이 있는 Textarea 컴포넌트입니다.

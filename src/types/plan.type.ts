@@ -1,6 +1,7 @@
-import { Database } from './supabase.type';
-import { CamelCaseObject } from './common.type';
 import { FILTER_TYPES, PUBLIC_OPTIONS } from '@/constants/plan.constants';
+
+import { CamelCaseObject } from './common.type';
+import { Database } from './supabase.type';
 
 export type PlansRow = Database['public']['Tables']['plans']['Row'];
 export type UsersRow = Pick<

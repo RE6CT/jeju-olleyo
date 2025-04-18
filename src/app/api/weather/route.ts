@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+
 import { weatherApi } from '@/lib/apis/home/home.weather.api';
 
 // 환경 변수에서 API 키 가져오기

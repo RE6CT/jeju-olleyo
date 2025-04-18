@@ -1,16 +1,18 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import Banner from './_components/banner';
-import useSearch from '@/lib/hooks/use-search';
-import EmptyResult from './_components/empty-result';
 import { useEffect, useState } from 'react';
+
 import CategoryFilterTabs from '@/components/commons/category-filter-tabs';
-import { CategoryType } from '@/types/category.type';
 import { useBookmarkQuery } from '@/lib/hooks/use-bookmark-query';
-import { getBrowserClient } from '@/lib/supabase/client';
-import SearchCard from './_components/search-card';
 import useInfiniteScroll from '@/lib/hooks/use-infinite-scroll';
+import useSearch from '@/lib/hooks/use-search';
+import { getBrowserClient } from '@/lib/supabase/client';
+import { CategoryType } from '@/types/category.type';
+
+import Banner from './_components/banner';
+import EmptyResult from './_components/empty-result';
+import SearchCard from './_components/search-card';
 
 const filterTabs: CategoryType[] = ['전체', '명소', '숙박', '맛집', '카페'];
 
@@ -62,7 +64,7 @@ const SearchResultsPage = () => {
 
   return (
     <div className="px-4">
-      <div className="mb-6 text-2xl font-bold">'{query}'의 검색 결과</div>
+      <div className="mb-6 text-2xl font-bold">{`'${query}'의 검색 결과`}</div>
 
       <div className="mb-[17px] mt-5 h-[40px] w-full max-w-[388px]">
         <CategoryFilterTabs

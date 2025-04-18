@@ -2,17 +2,16 @@
 
 import Link from 'next/link';
 
-import AuthLayout from '@/components/features/auth/auth-layout';
+import AuthErrorMessage from '@/components/features/auth/auth-error-message';
 import AuthHeader from '@/components/features/auth/auth-header';
+import AuthLayout from '@/components/features/auth/auth-layout';
+import { Button } from '@/components/ui/button';
 import { CardContent, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import AuthErrorMessage from '@/components/features/auth/auth-error-message';
-
-import useForgotPassword from '@/lib/hooks/use-forgot-password';
-import { PATH } from '@/constants/path.constants';
 import { AUTH_BUTTON_TEXT } from '@/constants/auth.constants';
+import { PATH } from '@/constants/path.constants';
+import useForgotPassword from '@/lib/hooks/use-forgot-password';
 
 /**
  * 비밀번호 찾기 페이지 컴포넌트

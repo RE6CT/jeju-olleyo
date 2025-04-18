@@ -1,16 +1,18 @@
 'use client';
 
-import CategoryBadge from '@/components/commons/category-badge';
-import PlaceImage from '@/components/commons/place-image';
-import { getBrowserClient } from '@/lib/supabase/client';
-import { DetailIntroRaw } from '@/types/korea-tour.type';
-import { Place } from '@/types/search.type';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { camelize } from '@/lib/utils/camelize';
+
 import BookmarkIcon from '@/components/commons/bookmark-icon';
+import CategoryBadge from '@/components/commons/category-badge';
+import PlaceImage from '@/components/commons/place-image';
 import { useBookmarkQuery } from '@/lib/hooks/use-bookmark-query';
+import { getBrowserClient } from '@/lib/supabase/client';
+import { camelize } from '@/lib/utils/camelize';
 import { CategoryType } from '@/types/category.type';
+import { DetailIntroRaw } from '@/types/korea-tour.type';
+import { Place } from '@/types/search.type';
+
 import PlaceLocation from './_components/place-location';
 import PlanIncludingPlace from './_components/plan-including-place';
 
@@ -19,7 +21,7 @@ const PlaceDetailPage = () => {
 
   const [place, setPlace] = useState<Place | null>(null);
   const [detailInfo, setDetailInfo] = useState<DetailIntroRaw>();
-  const [error, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
 
   // 유저 아이디 가져오기
@@ -50,8 +52,6 @@ const PlaceDetailPage = () => {
           .select('*')
           .eq('place_id', Number(params.id))
           .single();
-
-        console.log('장소 불러오기');
 
         if (error || !data) {
           setError('수파베이스 장소 불러오기 실패');

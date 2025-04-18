@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
 import type { EmblaCarouselType } from 'embla-carousel';
+import { useEffect, useRef, useState, useCallback } from 'react';
 
 export const useCarouselProgress = (
   api: EmblaCarouselType | null,

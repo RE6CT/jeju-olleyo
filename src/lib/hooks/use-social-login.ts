@@ -1,8 +1,9 @@
-import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { fetchSocialLoginUrl } from '@/lib/apis/auth/auth-server.api';
+import { useState } from 'react';
+
 import { SOCIAL_AUTH } from '@/constants/auth.constants';
 import { PATH } from '@/constants/path.constants';
+import { fetchSocialLoginUrl } from '@/lib/apis/auth/auth-server.api';
 import useAuthStore from '@/zustand/auth.store';
 
 /**

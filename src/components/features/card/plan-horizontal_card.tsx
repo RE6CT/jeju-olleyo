@@ -37,9 +37,9 @@ const PlanHorizontalCard = ({
   onDelete,
 }: PlanHorizontalCardProps) => {
   return (
-    <Link href={`/plan-detail/${plan.planId}`} className="flex gap-4">
+    <div className="flex gap-4">
       {/* 이미지 영역 */}
-      <div className="relative">
+      <Link href={`/plan-detail/${plan.planId}`} className="relative">
         <div className={`relative ${CARD.imageSize}`}>
           <PlanImage
             image={plan.planImg}
@@ -52,7 +52,7 @@ const PlanHorizontalCard = ({
           isLiked={plan.isLiked}
           className="absolute right-4 top-4"
         />
-      </div>
+      </Link>
 
       {/* 컨텐츠 영역 */}
       <div className="flex flex-1 flex-col gap-2">
@@ -79,7 +79,10 @@ const PlanHorizontalCard = ({
         </div>
 
         {/* 닉네임 및 날짜 영역 */}
-        <div className="medium-12 flex items-center gap-2 text-gray-500">
+        <Link
+          href={`/plan-detail/${plan.planId}`}
+          className="medium-12 flex items-center gap-2 text-gray-500"
+        >
           <span className="whitespace-nowrap">{plan.nickname}</span>
           <Separator orientation="vertical" className="h-[11px] bg-gray-300" />
           <Duration
@@ -87,14 +90,22 @@ const PlanHorizontalCard = ({
             end={plan.travelEndDate}
             separator="-"
           />
-        </div>
+        </Link>
         {/* 제목 및 description 영역 */}
-        <p className="medium-16 line-clamp-1">{plan.title}</p>
-        <p className="regular-14 line-clamp-2 text-description">
+        <Link
+          href={`/plan-detail/${plan.planId}`}
+          className="medium-16 line-clamp-1"
+        >
+          {plan.title}
+        </Link>
+        <Link
+          href={`/plan-detail/${plan.planId}`}
+          className="regular-14 line-clamp-2 text-description"
+        >
           {plan.description || TEXT.noDescription}
-        </p>
+        </Link>
       </div>
-    </Link>
+    </div>
   );
 };
 

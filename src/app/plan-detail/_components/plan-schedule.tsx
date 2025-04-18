@@ -1,9 +1,7 @@
 'use client';
 
-import { AlertCircle, ChevronDown } from 'lucide-react';
-import { useState, useEffect } from 'react';
-import { DragDropContext } from 'react-beautiful-dnd';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { ChevronDown } from 'lucide-react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -11,16 +9,18 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { fetchSavePlan, fetchSavePlanPlaces } from '@/lib/apis/plan/plan.api';
 import { cn } from '@/lib/utils';
 import { calculateTotalDays, formatDayDate } from '@/lib/utils/date';
 import { DayPlaces, TabType } from '@/types/plan-detail.type';
 import { Place } from '@/types/search.type';
 import PlaceCard from './place-card';
 import PlaceSidemenu from './place-sidemenu';
-import ScheduleCreatedModal from './schedule-created-modal';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import ScheduleDeleteModal from './schedule-delete-modal';
 import ScheduleSaveModal from './schedule-save-modal';
+import { fetchSavePlan, fetchSavePlanPlaces } from '@/lib/apis/plan/plan.api';
+import ScheduleCreatedModal from './schedule-created-modal';
+import { useToast } from '@/hooks/use-toast';
 
 const DROPDOWN_CONTENT_STYLE =
   'p-0 border border-[#E7EDF0] bg-[#F9FAFB] rounded-[12px] w-[140px] [&>*:hover]:bg-primary-100 [&>*:hover]:text-primary-500';
@@ -78,6 +78,7 @@ const PlanSchedule = ({
   };
   isReadOnly?: boolean;
 }) => {
+  const { toast } = useToast();
   const dayCount = calculateTotalDays(startDate, endDate);
   const [placeCount, setPlaceCount] = useState(0);
   const [copiedDay, setCopiedDay] = useState<number | null>(null);
@@ -85,21 +86,6 @@ const PlanSchedule = ({
   const [dayToDelete, setDayToDelete] = useState<number | null>(null);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const [isPublicModalOpen, setIsPublicModalOpen] = useState(false);
-  const [alert, setAlert] = useState<{
-    title: string;
-    description: string;
-  } | null>(null);
-
-  // Alert를 자동으로 제거하는 useEffect 추가
-  useEffect(() => {
-    if (alert) {
-      const timer = setTimeout(() => {
-        setAlert(null);
-      }, 3000); // 3초 후에 Alert 제거
-
-      return () => clearTimeout(timer);
-    }
-  }, [alert]);
 
   /**
    * 장소 추가 핸들러
@@ -170,7 +156,7 @@ const PlanSchedule = ({
    * })
    */
   const handleDragEnd = (result: any) => {
-    if (!result.destination) return; // 드래그 종료가 제대로 되지 않았다면 종료
+    if (!result.destination || isReadOnly) return; // 드래그 종료가 제대로 되지 않았거나 읽기 전용 모드라면 종료
 
     const { source, destination } = result; // {droppableId: string, index: number} 형태의 객체 두 개
 
@@ -219,29 +205,58 @@ const PlanSchedule = ({
     const places = dayPlaces[day] || [];
     if (places.length === 0) return null;
 
-    return places.map((place: Place & { uniqueId: string }, index: number) => {
-      const summary = routeSummary[day]?.[index];
-      return (
-        <PlaceCard
-          key={place.uniqueId}
-          index={index + 1}
-          dayNumber={day}
-          category={place.category}
-          title={place.title}
-          address={place.address}
-          distance={summary?.distance}
-          duration={summary?.duration}
-          imageUrl={place.image || ''}
-          isLastItem={index === places.length - 1}
-          onDelete={
-            !isReadOnly
-              ? () => handleRemovePlace(day, place.uniqueId)
-              : undefined
-          }
-          isReadOnly={isReadOnly}
-        />
-      );
-    });
+    return (
+      <Droppable droppableId={day.toString()}>
+        {(provided) => (
+          <div
+            {...provided.droppableProps}
+            ref={provided.innerRef}
+            className="flex flex-col gap-4"
+          >
+            {places.map(
+              (place: Place & { uniqueId: string }, index: number) => {
+                const summary = routeSummary[day]?.[index];
+                return (
+                  <Draggable
+                    key={place.uniqueId}
+                    draggableId={place.uniqueId}
+                    index={index}
+                    isDragDisabled={isReadOnly}
+                  >
+                    {(provided) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                      >
+                        <PlaceCard
+                          index={index + 1}
+                          dayNumber={day}
+                          category={place.category}
+                          title={place.title}
+                          address={place.address}
+                          distance={summary?.distance}
+                          duration={summary?.duration}
+                          imageUrl={place.image || ''}
+                          isLastItem={index === places.length - 1}
+                          onDelete={
+                            !isReadOnly
+                              ? () => handleRemovePlace(day, place.uniqueId)
+                              : undefined
+                          }
+                          isReadOnly={isReadOnly}
+                        />
+                      </div>
+                    )}
+                  </Draggable>
+                );
+              },
+            )}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+    );
   };
 
   /**
@@ -278,34 +293,38 @@ const PlanSchedule = ({
 
   const handleSaveButtonClick = () => {
     if (!planTitle) {
-      setAlert({
+      toast({
         title: '일정 제목 누락',
         description: '일정 제목을 입력해주세요.',
+        variant: 'destructive',
       });
       return;
     }
 
     if (!startDate || !endDate) {
-      setAlert({
+      toast({
         title: '여행 기간 누락',
         description: '여행 기간을 선택해주세요.',
+        variant: 'destructive',
       });
       return;
     }
 
     if (startDate > endDate) {
-      setAlert({
+      toast({
         title: '여행 기간 오류',
         description: '여행 종료일은 시작일보다 이후여야 합니다.',
+        variant: 'destructive',
       });
       return;
     }
 
     // 일정 일자 데이터가 없는 경우
     if (Object.keys(dayPlaces).length === 0) {
-      setAlert({
+      toast({
         title: '일정 데이터 누락',
         description: '일정에 최소 하나 이상의 장소를 추가해주세요.',
+        variant: 'destructive',
       });
       return;
     }
@@ -335,11 +354,16 @@ const PlanSchedule = ({
       await fetchSavePlanPlaces(planId, dayPlaces);
 
       setIsPublicModalOpen(false);
+      toast({
+        title: '일정 저장 완료',
+        description: '일정이 성공적으로 저장되었습니다.',
+      });
     } catch (error) {
       console.error('일정 공개 설정 실패:', error);
-      setAlert({
+      toast({
         title: '일정 저장 실패',
         description: '일정 공개 설정에 실패했습니다.',
+        variant: 'destructive',
       });
     }
   };
@@ -365,11 +389,16 @@ const PlanSchedule = ({
       await fetchSavePlanPlaces(planId, dayPlaces);
 
       setIsPublicModalOpen(false);
+      toast({
+        title: '일정 저장 완료',
+        description: '일정이 성공적으로 저장되었습니다.',
+      });
     } catch (error) {
       console.error('일정 비공개 설정 실패:', error);
-      setAlert({
+      toast({
         title: '일정 저장 실패',
         description: '일정 비공개 설정에 실패했습니다.',
+        variant: 'destructive',
       });
     }
   };
@@ -388,18 +417,6 @@ const PlanSchedule = ({
 
   return (
     <div className="relative min-h-screen pb-32">
-      {alert && (
-        <Alert
-          variant={alert.title.includes('실패') ? 'destructive' : 'default'}
-          className="text-red-500 border-red-500 fixed bottom-4 left-4 z-50 w-auto animate-in fade-in slide-in-from-bottom-4"
-        >
-          <AlertCircle className="text-red-500 h-4 w-4" />
-          <AlertTitle className="text-red-500">{alert.title}</AlertTitle>
-          <AlertDescription className="text-red-500">
-            {alert.description}
-          </AlertDescription>
-        </Alert>
-      )}
       <DragDropContext
         onDragEnd={(result) => !isReadOnly && handleDragEnd(result)}
       >

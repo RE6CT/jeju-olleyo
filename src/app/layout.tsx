@@ -1,12 +1,13 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import Providers from '@/config/tq-provider';
-import Header from '@/components/layouts/header';
-import AuthProvider from '@/config/auth-provider';
+
 import localFont from 'next/font/local';
-import Footer from '@/components/layouts/footer';
 import AlertModal from '@/components/commons/alert-modal';
+import Footer from '@/components/layouts/footer';
+import Header from '@/components/layouts/header';
 import { Toaster } from '@/components/ui/toaster';
+import AuthProvider from '@/config/auth-provider';
+import Providers from '@/config/tq-provider';
 export const metadata: Metadata = {
   title: '제주 올레요',
   description: '제주 여행을 떠나기 위한 일정 만들어요!',

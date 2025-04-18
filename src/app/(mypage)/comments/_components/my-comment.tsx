@@ -1,7 +1,8 @@
+import Link from 'next/link';
+
 import { PATH } from '@/constants/path.constants';
 import { formatDate } from '@/lib/utils/date';
 import { MyCommentType } from '@/types/comment.type';
-import Link from 'next/link';
 
 /**
  * 개별 댓글 하나를 나타내는 컴포넌트

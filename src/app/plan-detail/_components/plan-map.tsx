@@ -1,17 +1,17 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import KakaoMap from '@/components/features/map/kakao-map';
-import Clusterer from '@/components/features/map/clusterer';
-import Polyline from '@/components/features/map/polyline';
-import Loading from '@/app/loading';
+
 import ErrorMessage from '@/app/error';
+import Loading from '@/app/loading';
+import Clusterer from '@/components/features/map/clusterer';
+import KakaoMap from '@/components/features/map/kakao-map';
+import Polyline from '@/components/features/map/polyline';
+import { DEFAULT_MAP_OPTIONS } from '@/constants/map.constants';
+import { getCarRoute, createRouteInfo } from '@/lib/apis/map/directions';
+import { getLatLng, createMarkerImage } from '@/lib/utils/map.util';
 import { KakaoMapInstance, MarkerProps } from '@/types/kakao-map.type';
 import { DayPlaces, TabType } from '@/types/plan-detail.type';
-import { Place } from '@/types/search.type';
-import { DEFAULT_MAP_OPTIONS } from '@/constants/map.constants';
-import { getLatLng, createMarkerImage } from '@/lib/utils/map.util';
-import { getCarRoute, createRouteInfo } from '@/lib/apis/map/directions';
 
 const PlanMap = ({
   dayPlaces,
@@ -157,11 +157,6 @@ const PlanMap = ({
       const ne = bounds.getNorthEast();
       if (!sw || !ne) return;
 
-      const center = new window.kakao.maps.LatLng(
-        (sw.getLat() + ne.getLat()) / 2,
-        (sw.getLng() + ne.getLng()) / 2,
-      );
-
       // 3. 지도 시점 조정
       map.setBounds(bounds);
     } catch (error) {
@@ -176,7 +171,7 @@ const PlanMap = ({
 
     try {
       const routeInfo = createRouteInfo(markers);
-      const { path, summary, sections } = await getCarRoute(routeInfo, map);
+      const { path, sections } = await getCarRoute(routeInfo);
 
       // 경로 정보 업데이트
       const newPaths = { ...paths, [day]: path };
@@ -219,7 +214,7 @@ const PlanMap = ({
           // 각 날짜별로 경로 검색
           if (activeTab === '전체보기') {
             // 전체보기 탭에서는 모든 날짜의 경로를 표시
-            Object.entries(dayPlaces).forEach(([day, places]) => {
+            Object.entries(dayPlaces).forEach(([day]) => {
               const dayMarkers = newMarkers.filter(
                 (marker) => marker.day === parseInt(day),
               );
@@ -256,7 +251,16 @@ const PlanMap = ({
     return () => {
       isMounted = false;
     };
-  }, [dayPlaces, activeTab, map, markers]);
+  }, [
+    dayPlaces,
+    activeTab,
+    map,
+    markers,
+    adjustMapView,
+    getMarkersToShow,
+    searchRoute,
+    setRouteSummary,
+  ]);
 
   return (
     <>

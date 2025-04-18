@@ -1,3 +1,5 @@
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
+
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -10,7 +12,6 @@ import { ERROR_MESSAGES, MAX_FILE_SIZE } from '@/constants/mypage.constants';
 import { fetchUpdateProfileImage } from '@/lib/apis/profile/update-profile.api';
 import useCustomToast from '@/lib/hooks/use-custom-toast';
 import { ProfileModalProps } from '@/types/mypage.type';
-import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 
 /**
  * 프로필 이미지 수정 버튼을 눌렀을 때 뜨는 모달 컴포넌트

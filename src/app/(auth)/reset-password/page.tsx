@@ -1,16 +1,15 @@
 'use client';
 
-import AuthLayout from '@/components/features/auth/auth-layout';
+import ResetPasswordSuccessModal from '@/components/commons/reset-password-success-modal';
+import AuthErrorMessage from '@/components/features/auth/auth-error-message';
 import AuthHeader from '@/components/features/auth/auth-header';
+import AuthLayout from '@/components/features/auth/auth-layout';
+import PasswordInput from '@/components/features/auth/auth-password-input';
+import { Button } from '@/components/ui/button';
 import { CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import AuthErrorMessage from '@/components/features/auth/auth-error-message';
-import PasswordInput from '@/components/features/auth/auth-password-input';
-import ResetPasswordSuccessModal from '@/components/commons/reset-password-success-modal';
-
-import useResetPassword from '@/lib/hooks/use-reset-password';
 import { AUTH_BUTTON_TEXT } from '@/constants/auth.constants';
+import useResetPassword from '@/lib/hooks/use-reset-password';
 
 /**
  * 비밀번호 재설정 페이지 컴포넌트

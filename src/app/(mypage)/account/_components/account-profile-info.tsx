@@ -1,18 +1,23 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { fetchUpdateNickname } from '@/lib/apis/profile/update-profile.api';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { nicknameSchema } from '@/lib/schemas/auth-schema';
-import { z } from 'zod';
-import useProviderFromCookie from '@/lib/hooks/use-get-provider';
 import { ERROR_MESSAGES } from '@/constants/mypage.constants';
-import AccountProfileImage from './account-profile-image';
+import { fetchUpdateNickname } from '@/lib/apis/profile/update-profile.api';
 import useCustomToast from '@/lib/hooks/use-custom-toast';
+import useProviderFromCookie from '@/lib/hooks/use-get-provider';
+import { nicknameSchema } from '@/lib/schemas/auth-schema';
+
+
+
+import AccountProfileImage from './account-profile-image';
+
 
 const PROFILE_INFO_STYLE = {
   container:

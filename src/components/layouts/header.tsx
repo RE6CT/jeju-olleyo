@@ -1,8 +1,10 @@
-import Link from 'next/link';
-import SearchBar from './search-bar';
-import { PATH } from '@/constants/path.constants';
-import Nav from './nav';
 import Image from 'next/image';
+import Link from 'next/link';
+
+import { PATH } from '@/constants/path.constants';
+
+import Nav from './nav';
+import SearchBar from './search-bar';
 
 const Header = () => {
   return (

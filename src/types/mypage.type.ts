@@ -1,6 +1,7 @@
 import { Dispatch, RefObject, SetStateAction } from 'react';
-import { Database } from './supabase.type';
+
 import { CamelCaseObject } from './common.type';
+import { Database } from './supabase.type';
 
 /** 모달의 링크 path를 제한하는 타입 */
 export type ModalPath =

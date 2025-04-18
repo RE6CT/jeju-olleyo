@@ -1,4 +1,5 @@
-import { ReactElement, ReactNode } from 'react';
+import { ReactNode } from 'react';
+
 import { Plan } from './plan.type';
 
 /** 문자열을 카멜 케이스로 변환하는 타입 */

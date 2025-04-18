@@ -1,18 +1,20 @@
 'use client';
 
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { MouseEvent, useState, useEffect } from 'react';
+
+import ProfileImage from '@/components/commons/profile-image';
+import { PATH } from '@/constants/path.constants';
+import { getCurrentSession } from '@/lib/apis/auth/auth-browser.api';
+import useAuth from '@/lib/hooks/use-auth';
+import useCustomToast from '@/lib/hooks/use-custom-toast';
+import { useGetDataCount } from '@/lib/queries/use-get-data-count';
+import { MypageModalProps } from '@/types/mypage.type';
+import useAuthStore from '@/zustand/auth.store';
+
 import { Button } from '../../ui/button';
 import { Separator } from '../../ui/separator';
-import { MouseEvent, useState, useEffect } from 'react';
-import { MypageModalProps } from '@/types/mypage.type';
-import ProfileImage from '@/components/commons/profile-image';
-import { useRouter } from 'next/navigation';
-import useAuth from '@/lib/hooks/use-auth';
-import { getCurrentSession } from '@/lib/apis/auth/auth-browser.api';
-import { PATH } from '@/constants/path.constants';
-import useAuthStore from '@/zustand/auth.store';
-import { useGetDataCount } from '@/lib/queries/use-get-data-count';
-import useCustomToast from '@/lib/hooks/use-custom-toast';
 
 const ICON_STYLE = {
   title: 'medium-14 text-gray-500',
@@ -106,7 +108,7 @@ const MypageModal = ({
   };
 
   // 실제 사용자 정보 또는 기본값 사용
-  let userInfo = localUser
+  const userInfo = localUser
     ? {
         profileImg: localUser.avatar_url,
         nickname: localUser.nickname || '사용자',

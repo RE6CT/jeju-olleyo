@@ -1,8 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-import { getPopularPlaces } from '@/lib/apis/home/home.popular.api';
-import { useBookmarkStore } from '@/zustand/bookmark.store';
-import { Place } from '@/types/home.popular-place.type';
 import { useState, useEffect } from 'react';
+
+import { getPopularPlaces } from '@/lib/apis/home/home.popular.api';
+import { Place } from '@/types/home.popular-place.type';
+import { useBookmarkStore } from '@/zustand/bookmark.store';
+
 import useAuth from './use-auth';
 
 /**

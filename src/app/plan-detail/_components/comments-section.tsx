@@ -1,4 +1,5 @@
 import { CommentType } from '@/types/plan-detail.type';
+
 import Comment from './comment';
 import CommentInput from './comment-input';
 

@@ -1,10 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import BookmarkSidemenu from './bookmark-sidemenu';
-import SearchSidemenu from './search-sidemenu';
+
 import { CategoryType } from '@/types/category.type';
 import { Place } from '@/types/search.type';
+
+import BookmarkSidemenu from './bookmark-sidemenu';
+import SearchSidemenu from './search-sidemenu';
 
 const PlaceSidemenu = ({
   userId,

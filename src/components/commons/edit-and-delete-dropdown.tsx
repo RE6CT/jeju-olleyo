@@ -1,3 +1,5 @@
+import { Pencil, Trash2 } from 'lucide-react';
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -6,7 +8,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { TEXT } from '@/constants/plan.constants';
 import { EditAndDeleteDropdownProps } from '@/types/common.type';
-import { Pencil, Trash2 } from 'lucide-react';
 
 const PlanDropdown = ({
   plan,

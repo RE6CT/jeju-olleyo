@@ -1,7 +1,8 @@
 'use client';
 
-import { useCallback, useEffect, useMemo } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
+import { useCallback, useEffect, useMemo } from 'react';
+
 import { CATEGORY_ROUTES } from '@/constants/home.constants';
 import { TravelCategory } from '@/types/home.category.type';
 import useCategoryStore from '@/zustand/home.category.store';

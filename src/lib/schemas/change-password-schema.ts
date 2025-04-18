@@ -1,6 +1,8 @@
 import { z } from 'zod';
-import { passwordSchema } from './auth-schema';
+
 import { ERROR_MESSAGES } from '@/constants/auth.constants';
+
+import { passwordSchema } from './auth-schema';
 
 // 비밀번호 스키마 정의
 export const changePasswordSchema = z

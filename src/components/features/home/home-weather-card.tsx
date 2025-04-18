@@ -1,9 +1,10 @@
 'use client';
 
-import { memo } from 'react';
 import Image from 'next/image';
-import { WeatherCardProps } from '@/types/home.weather.type';
+import { memo } from 'react';
+
 import { weatherUtil } from '@/lib/utils/home.weather.util';
+import { WeatherCardProps } from '@/types/home.weather.type';
 
 /**
  * 날씨 카드 컴포넌트

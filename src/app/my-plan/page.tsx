@@ -1,11 +1,13 @@
-import { Button } from '@/components/ui/button';
-import PlanFilterSection from './_components/plan-filter-section';
-import { fetchGetAllPlansByUserId } from '@/lib/apis/plan/plan.api';
-import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
-import ErrorMessage from '@/components/features/alert/error-message';
-import Link from 'next/link';
-import { PATH } from '@/constants/path.constants';
 import Image from 'next/image';
+import Link from 'next/link';
+
+import ErrorMessage from '@/components/features/alert/error-message';
+import { Button } from '@/components/ui/button';
+import { PATH } from '@/constants/path.constants';
+import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
+import { fetchGetAllPlansByUserId } from '@/lib/apis/plan/plan.api';
+
+import PlanFilterSection from './_components/plan-filter-section';
 
 const MyPlanPage = async () => {
   const SUNGLASSES_IMAGE = {
@@ -75,7 +77,7 @@ const MyPlanPage = async () => {
         </div>
       </div>
     );
-  } catch (error) {
+  } catch {
     return (
       <ErrorMessage
         title="일정 목록 조회 실패"

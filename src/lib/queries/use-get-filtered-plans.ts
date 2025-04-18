@@ -1,12 +1,13 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
+
+import { FILTER_TYPES, PUBLIC_OPTIONS } from '@/constants/plan.constants';
 import {
   fetchGetAllPlansByUserId,
   fetchGetFilteredPlansByUserId,
 } from '@/lib/apis/plan/plan.api';
 import { FilterState } from '@/types/plan.type';
-import { FILTER_TYPES, PUBLIC_OPTIONS } from '@/constants/plan.constants';
 
 /**
  * 필터링된 여행 계획 목록을 가져오는 React Query 훅

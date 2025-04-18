@@ -1,9 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { ProcessedDayWeather } from '@/types/home.weather.type';
+
 import { weatherApi } from '@/lib/apis/home/home.weather.api';
 import { weatherUtil } from '@/lib/utils/home.weather.util';
+import { ProcessedDayWeather } from '@/types/home.weather.type';
 import useWeatherStore from '@/zustand/home.weather.store';
 
 /**

@@ -1,9 +1,12 @@
 import Image from 'next/image';
-import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
-import { fetchGetPlanById } from '@/lib/apis/plan/plan.api';
-import ErrorMessage from '@/components/features/alert/error-message';
+
 import PlanForm from '@/app/plan-detail/_components/plan-form';
-import { fetchGetPlanDaysAndLocations } from '@/lib/apis/plan/plan.api';
+import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
+import {
+  fetchGetPlanById,
+  fetchGetPlanDaysAndLocations,
+} from '@/lib/apis/plan/plan.api';
+
 import NotFound from '../not-found';
 
 const PlanDetailPage = async ({ params }: { params: { planId: string } }) => {
@@ -71,7 +74,7 @@ const PlanDetailPage = async ({ params }: { params: { planId: string } }) => {
         </div>
       </div>
     );
-  } catch (error) {
+  } catch {
     // 일정을 찾을 수 없는 경우
     return <NotFound />;
   }

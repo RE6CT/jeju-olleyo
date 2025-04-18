@@ -1,8 +1,9 @@
 'use client';
 
 import { memo } from 'react';
-import { WeatherCardsContainerProps } from '@/types/home.weather.type';
+
 import WeatherCard from '@/components/features/home/home-weather-card';
+import { WeatherCardsContainerProps } from '@/types/home.weather.type';
 
 /**
  * 날씨 카드들을 담는 컨테이너 컴포넌트

@@ -1,20 +1,22 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
-import FlightSearchForm from './_components/ticket-search-form';
+import { useEffect, useRef, useState } from 'react';
+
+import { DEPARTURE_LIST } from '@/constants/ticket.constants';
+import useAlertStore from '@/zustand/alert.store';
+
+import { Flight } from '../../types/air-ticket-type';
+import Loading from '../loading';
+
 import DateOptions from './_components/date-options';
-import FlightList from './_components/ticket-list';
+import TicketList from './_components/ticket-list';
+import FlightSearchForm from './_components/ticket-search-form';
 import {
   getAirportLabel,
   sortFlights,
   SortKey,
   SortOrder,
 } from './_utils/ticket-uitls';
-import Loading from '../loading';
-import { Flight } from '../../types/air-ticket-type';
-import { DEPARTURE_LIST } from '@/constants/ticket.constants';
-import useAlertStore from '@/zustand/alert.store';
-import TicketList from './_components/ticket-list';
 
 export default function FlightSearch() {
   const [formData, setFormData] = useState({
@@ -44,7 +46,7 @@ export default function FlightSearch() {
     if (formData.schDate && formData.returnDate && departure) {
       handleSubmit(new Event('submit') as any);
     }
-  }, [formData.schDate, formData.returnDate]);
+  }, [formData.schDate, formData.returnDate, departure]);
 
   const dateAlert = () => {
     open({
@@ -105,7 +107,7 @@ export default function FlightSearch() {
 
       setGoFlights(mapFlights(goRes.data.items || []));
       setReturnFlights(mapFlights(returnRes.data.items || []));
-    } catch (error) {
+    } catch {
       ErrorAlert();
     } finally {
       setLoading(false);

@@ -1,6 +1,5 @@
 import { getPlaceImageWithFallback } from '@/lib/utils/get-image-with-fallback';
 import { PlaceImageProps } from '@/types/common.type';
-import Image from 'next/image';
 
 /**
  * 장소 이미지 컴포넌트

@@ -1,8 +1,7 @@
+import { CATEGORY_KR_MAP } from '@/constants/home.constants';
 import { getBrowserClient } from '@/lib/supabase/client';
 import { camelize } from '@/lib/utils/camelize';
-import { CATEGORY_KR_MAP } from '@/constants/home.constants';
 import { Place, PlaceResponse } from '@/types/home.popular-place.type';
-import { TravelCategory } from '@/types/home.category.type';
 
 /**
  * 전체 일정을 가져오는 함수

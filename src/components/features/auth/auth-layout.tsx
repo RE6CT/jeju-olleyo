@@ -1,10 +1,11 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
+
 import { Card } from '@/components/ui/card';
 import { AuthProps } from '@/types/auth.type';
 import useAuthStore from '@/zustand/auth.store';
-import { usePathname } from 'next/navigation';
 
 /**
  * 인증 관련 페이지의 레이아웃 컴포넌트

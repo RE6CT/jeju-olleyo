@@ -1,10 +1,11 @@
 import { Suspense } from 'react';
-import { getStaticWeatherData } from '@/lib/apis/home/home.weather.api';
-import WeatherHeader from '@/components/features/home/home-weather-header';
+
 import WeatherCardsContainer from '@/components/features/home/home-weather-container';
 import WeatherError from '@/components/features/home/home-weather-error';
-import { weatherUtil } from '@/lib/utils/home.weather.util';
+import WeatherHeader from '@/components/features/home/home-weather-header';
 import { WeatherRefresher } from '@/components/features/home/home-weather-refresher';
+import { getStaticWeatherData } from '@/lib/apis/home/home.weather.api';
+import { weatherUtil } from '@/lib/utils/home.weather.util';
 
 /**
  * 날씨 섹션 컴포넌트

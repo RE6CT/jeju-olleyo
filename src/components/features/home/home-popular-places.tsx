@@ -1,11 +1,13 @@
 'use client';
 
-import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { usePopularPlaces } from '@/lib/hooks/use-popular-places';
-import { Category } from '@/types/home.popular-place.type';
+import { useState, useRef } from 'react';
+
 import { CATEGORIES } from '@/constants/home.constants';
 import useDragScroll from '@/lib/hooks/use-drag-scroll';
+import { usePopularPlaces } from '@/lib/hooks/use-popular-places';
+import { Category } from '@/types/home.popular-place.type';
+
 import PlaceCard from '../card/place-card';
 
 /**

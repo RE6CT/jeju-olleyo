@@ -1,7 +1,8 @@
 import { createServerClient } from '@supabase/ssr';
 import { type NextRequest, NextResponse } from 'next/server';
-import { PATH } from './constants/path.constants';
+
 import { AUTH_ROUTES } from './constants/auth.constants';
+import { PATH } from './constants/path.constants';
 
 /**
  * 인증 상태를 확인하고 접근 제어를 수행하는 미들웨어
@@ -19,7 +20,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  let response = NextResponse.next({
+  const response = NextResponse.next({
     request: {
       headers: request.headers,
     },
@@ -98,7 +99,7 @@ export async function middleware(request: NextRequest) {
         set(name, value, options) {
           response.cookies.set(name, value, options);
         },
-        remove(name, options) {
+        remove(name) {
           response.cookies.delete(name);
         },
       },

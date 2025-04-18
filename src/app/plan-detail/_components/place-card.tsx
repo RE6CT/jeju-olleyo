@@ -1,11 +1,12 @@
 'use client';
 
 import Image from 'next/image';
-import CategoryBadge from '@/components/commons/category-badge';
-import { CategoryType } from '@/types/category.type';
-import { cn } from '@/lib/utils';
-import { DEFAULT_IMAGES } from '@/constants/plan.constants';
 import { useMemo } from 'react';
+
+import CategoryBadge from '@/components/commons/category-badge';
+import { DEFAULT_IMAGES } from '@/constants/plan.constants';
+import { cn } from '@/lib/utils';
+import { CategoryType } from '@/types/category.type';
 
 const PLACE_IMAGE_SIZE = {
   width: 120,

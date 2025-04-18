@@ -1,21 +1,26 @@
 'use client';
 
+import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
+import { useCallback, useEffect, useMemo } from 'react';
+import { useForm, Controller } from 'react-hook-form';
+
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { CardContent } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
-import { AuthFormProps } from '@/types/auth.type';
-import PasswordInput from './auth-password-input';
-import { useForm, Controller } from 'react-hook-form';
-import { LoginFormValues, RegisterFormValues } from '@/types/auth.type';
-import { useCallback, useEffect, useMemo } from 'react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { loginSchema, registerSchema } from '@/lib/schemas/auth-schema';
-import { PATH } from '@/constants/path.constants';
-import ErrorMessage from './auth-form-error-message';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { AUTH_BUTTON_TEXT } from '@/constants/auth.constants';
+import { PATH } from '@/constants/path.constants';
+import { loginSchema, registerSchema } from '@/lib/schemas/auth-schema';
+import {
+  AuthFormProps,
+  LoginFormValues,
+  RegisterFormValues,
+} from '@/types/auth.type';
+
+import ErrorMessage from './auth-form-error-message';
+import PasswordInput from './auth-password-input';
 
 /**
  * 인증 관련 페이지의 폼 컴포넌트

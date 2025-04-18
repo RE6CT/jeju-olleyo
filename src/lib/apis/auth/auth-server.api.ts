@@ -1,14 +1,15 @@
 'use server';
 
+import { cookies } from 'next/headers';
+
+import { PATH } from '@/constants/path.constants';
+import { getServerClient } from '@/lib/supabase/server';
+import { handleError } from '@/lib/utils/handleError';
 import {
   LoginFormValues,
   RegisterFormValues,
   AuthResult,
 } from '@/types/auth.type';
-import { getServerClient } from '@/lib/supabase/server';
-import { PATH } from '@/constants/path.constants';
-import { cookies } from 'next/headers';
-import { handleError } from '@/lib/utils/handleError';
 
 /**
  * 로그인 서버 액션

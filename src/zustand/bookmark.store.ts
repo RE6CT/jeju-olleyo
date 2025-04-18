@@ -1,6 +1,7 @@
-import { BookmarkStore } from '@/types/home.popular-place.type';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+
+import { BookmarkStore } from '@/types/home.popular-place.type';
 
 /**
  * 북마크 상태를 관리하는 Zustand 스토어

@@ -1,7 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+
 import { Place } from '@/types/search.type';
+
 import { getBrowserClient } from '../supabase/client';
 import { camelize } from '../utils/camelize';
 

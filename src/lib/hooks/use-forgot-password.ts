@@ -1,10 +1,12 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+
 import { forgotPasswordSchema } from '@/lib/schemas/auth-schema';
-import { EmailFormValues } from '@/types/auth.type';
 import { getForgotPasswordErrorMessage } from '@/lib/utils/auth-error.util';
+import { EmailFormValues } from '@/types/auth.type';
 import useAuthStore from '@/zustand/auth.store';
+
 import { fetchSendPasswordResetEmail } from '../apis/auth/auth-browser.api';
 
 /**

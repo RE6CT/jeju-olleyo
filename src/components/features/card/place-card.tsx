@@ -1,11 +1,11 @@
 'use client';
 
-import { PlaceCardProps } from '@/types/card.type';
-import PlaceImage from '@/components/commons/place-image';
 import { useRouter } from 'next/navigation';
 import { memo } from 'react';
+
+import PlaceImage from '@/components/commons/place-image';
 import { useBookmarkMutation } from '@/lib/mutations/use-bookmark-mutation';
-import { useBookmarkQuery } from '@/lib/hooks/use-bookmark-query';
+import { PlaceCardProps } from '@/types/card.type';
 
 /**
  * 장소 카드 컴포넌트

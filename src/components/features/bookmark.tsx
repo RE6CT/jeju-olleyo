@@ -1,7 +1,8 @@
 'use client';
 
-import useBookmark from '@/lib/hooks/use-bookmark';
 import { Bookmark as BookmarkButton } from 'lucide-react';
+
+import useBookmark from '@/lib/hooks/use-bookmark';
 
 const Bookmark = ({
   userId,

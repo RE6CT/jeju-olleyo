@@ -1,8 +1,9 @@
 'use client';
 
-import KakaoMap from '@/components/features/map/kakao-map';
-import Clusterer from '@/components/features/map/clusterer';
 import { useState } from 'react';
+
+import Clusterer from '@/components/features/map/clusterer';
+import KakaoMap from '@/components/features/map/kakao-map';
 
 const PlaceLocation = ({
   lat,

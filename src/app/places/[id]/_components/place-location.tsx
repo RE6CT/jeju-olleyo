@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import Clusterer from '@/components/features/map/clusterer';
 import KakaoMap from '@/components/features/map/kakao-map';
+import { KakaoMapInstance } from '@/types/kakao-map.type';
 
 const PlaceLocation = ({
   lat,
@@ -14,13 +15,13 @@ const PlaceLocation = ({
   lng: number;
   title: string;
 }) => {
-  const [map, setMap] = useState(null);
+  const [map, setMap] = useState<KakaoMapInstance | null>(null);
 
-  const handleMapLoad = (mapInstance: any) => {
+  const handleMapLoad = (mapInstance: KakaoMapInstance) => {
     setMap(mapInstance);
   };
 
-  const handleError = (error: any) => {
+  const handleError = (error: unknown) => {
     console.error('지도 로드 중 오류:', error);
   };
 

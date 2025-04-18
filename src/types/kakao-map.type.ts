@@ -14,6 +14,8 @@ export type LatLng = {
 export type LatLngBounds = {
   extend: (latlng: LatLng) => void; // 위치 데이터를 추가하여 영역을 재결정하는 메서드
   getCenter: () => { getLat(): number; getLng(): number }; // 영역의 중심점을 반환하는 메서드
+  getSouthWest: () => { getLat(): number; getLng(): number }; // 영역의 남서쪽 좌표를 반환하는 메서드
+  getNorthEast: () => { getLat(): number; getLng(): number }; // 영역의 북동쪽 좌표를 반환하는 메서드
 };
 
 /**
@@ -44,12 +46,14 @@ export type MarkerOptions = {
 
 // 마커 인스턴스 타입
 export type MarkerInstance = {
-  setMap(map: KakaoMapInstance | null): void; // 마커를 지도에 표시하거나 제거
-  setPosition(position: { getLat(): number; getLng(): number }): void; // 마커의 위치 변경
-  setTitle(title: string): void; // 마커의 제목 변경
-  setClickable(clickable: boolean): void; // 마커의 클릭 가능 여부 변경
-  setDraggable(draggable: boolean): void; // 마커의 드래그 가능 여부 변경
-  addListener(event: string, callback: () => void): void; // 이벤트 리스너 추가
+  setMap: (map: KakaoMapInstance | null) => void; // 마커를 지도에 표시하거나 제거
+  setPosition: (position: LatLng) => void; // 마커의 위치 변경
+  setTitle: (title: string) => void; // 마커의 제목 변경
+  setClickable: (clickable: boolean) => void; // 마커의 클릭 가능 여부 변경
+  setDraggable: (draggable: boolean) => void; // 마커의 드래그 가능 여부 변경
+  setImage: (image: MarkerImage) => void; // 마커의 이미지 변경
+  addListener: (event: string, callback: () => void) => void; // 이벤트 리스너 추가
+  removeListener: (event: string, callback: () => void) => void; // 이벤트 리스너 제거
 };
 
 // 마커 속성 타입
@@ -116,13 +120,38 @@ export type ClustererInstance = {
   clear: () => void; // 클러스터 초기화
 };
 
+// 클러스터러 옵션 타입
+export type MarkerClustererOptions = {
+  map: KakaoMapInstance; // 클러스터러가 표시될 지도
+  markers: MarkerInstance[]; // 클러스터러에 포함될 마커들
+  gridSize?: number; // 클러스터러의 격자 크기
+  minLevel?: number; // 클러스터러가 표시될 최소 지도 레벨
+  minClusterSize?: number; // 클러스터러가 생성될 최소 마커 수
+  disableClickZoom?: boolean; // 클러스터러 클릭 시 줌 동작 비활성화 여부
+  styles?: {
+    width: string;
+    height: string;
+    background: string;
+    borderRadius: string;
+    color: string;
+    textAlign: string;
+    lineHeight: string;
+  }[]; // 클러스터러 스타일
+};
+
+// 클러스터러 인스턴스 타입
+export type MarkerClustererInstance = {
+  setMap: (map: KakaoMapInstance | null) => void; // 클러스터러를 지도에 표시하거나 제거
+  clear: () => void; // 클러스터러 초기화
+};
+
 /**
  * 경로 관련 타입들
  */
 
 // 경로 옵션 타입
 export type PolylineOptions = {
-  path: LatLng[]; // 경로를 구성하는 좌표들
+  path: Array<{ lat: number; lng: number }>; // 경로를 구성하는 좌표들
   strokeWeight?: number; // 선의 두께
   strokeColor?: string; // 선의 색상
   strokeOpacity?: number; // 선의 투명도
@@ -131,9 +160,9 @@ export type PolylineOptions = {
 
 // 경로 인스턴스 타입
 export type PolylineInstance = {
-  setMap(map: KakaoMapInstance | null): void; // 경로를 지도에 표시하거나 제거
-  setOptions(options: PolylineOptions): void; // 경로 옵션 변경
-  setPath(path: { getLat(): number; getLng(): number }[]): void; // 경로 좌표 변경
+  setMap: (map: KakaoMapInstance | null) => void; // 경로를 지도에 표시하거나 제거
+  setOptions: (options: PolylineOptions) => void; // 경로 옵션 변경
+  setPath: (path: LatLng[]) => void; // 경로 좌표 변경
 };
 
 // 경로 속성 타입
@@ -249,39 +278,44 @@ export type KakaoMapAPI = {
         ) => void;
       };
     };
-    LatLng: new (
-      lat: number,
-      lng: number,
-    ) => {
-      getLat: () => number;
-      getLng: () => number;
-    };
+    LatLng: new (lat: number, lng: number) => LatLng;
     Map: new (
       container: HTMLElement,
       options: {
-        center: {
-          getLat(): number;
-          getLng(): number;
-        };
+        center: LatLng;
         level: number;
       },
     ) => KakaoMapInstance;
     Marker: new (options: {
-      position: { getLat(): number; getLng(): number };
+      position: LatLng;
       map?: KakaoMapInstance;
-    }) => {
-      setMap: (map: KakaoMapInstance | null) => void;
-      setPosition: (position: { getLat(): number; getLng(): number }) => void;
-    };
+      title?: string;
+      clickable?: boolean;
+      draggable?: boolean;
+      image?: MarkerImage;
+    }) => MarkerInstance;
     MarkerImage: new (
       src: string,
       size: Size,
       options?: {
         offset?: Point;
       },
-    ) => void;
+    ) => MarkerImage;
     Size: new (width: number, height: number) => Size;
     Point: new (x: number, y: number) => Point;
+    LatLngBounds: new () => LatLngBounds;
+    Polyline: new (options: PolylineOptions) => PolylineInstance;
+    MarkerClusterer: new (
+      options: MarkerClustererOptions,
+    ) => MarkerClustererInstance;
+    event: {
+      addListener: (target: any, event: string, callback: () => void) => void;
+      removeListener: (
+        target: any,
+        event: string,
+        callback: () => void,
+      ) => void;
+    };
     load: (callback: () => void) => void;
   };
 };

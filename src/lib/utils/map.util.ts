@@ -1,4 +1,5 @@
 import { MARKER } from '@/constants/map.constants';
+import { MarkerImage } from '@/types/kakao-map.type';
 import { Place } from '@/types/search.type';
 
 /**
@@ -33,7 +34,7 @@ export const getLatLng = (place: Place) => {
  * @param day - 일자 (홀수/짝수에 따라 마커 색상 변경)
  * @returns 생성된 마커 이미지
  */
-export const createMarkerImage = (day: number) => {
+export const createMarkerImage = (day: number): MarkerImage => {
   const imageSize = new window.kakao.maps.Size(
     MARKER.SIZE.width,
     MARKER.SIZE.height,

@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { FILTER_TYPES, PUBLIC_OPTIONS } from '@/constants/plan.constants';
-import { FilterInputProps } from '@/types/plan.type';
+import { FilterState, FilterType, PublicOption } from '@/types/plan.type';
 
 export const FilterInput = ({
   selectedFilter,
@@ -23,6 +23,13 @@ export const FilterInput = ({
   setInputValue: (value: string) => void;
   selectedPublicOption: PublicOption;
   setSelectedPublicOption: (option: PublicOption) => void;
+  startDate: string;
+  setStartDate: (date: string) => void;
+  endDate: string;
+  setEndDate: (date: string) => void;
+  setIsDatePickerFocused: (focused: boolean) => void;
+  filter: FilterState;
+  applyFilter: () => void;
 }) => (
   <div className="flex w-[250px] flex-col gap-2 border-l border-gray-200 p-2">
     {selectedFilter === FILTER_TYPES.PUBLIC ? (

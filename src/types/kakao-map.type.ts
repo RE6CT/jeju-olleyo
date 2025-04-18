@@ -275,13 +275,13 @@ export type KakaoMapAPI = {
     };
     MarkerImage: new (
       src: string,
-      size: { width: number; height: number },
+      size: Size,
       options?: {
-        offset?: { x: number; y: number };
+        offset?: Point;
       },
     ) => void;
-    Size: new (width: number, height: number) => void;
-    Point: new (x: number, y: number) => void;
+    Size: new (width: number, height: number) => Size;
+    Point: new (x: number, y: number) => Point;
     load: (callback: () => void) => void;
   };
 };

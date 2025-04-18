@@ -34,10 +34,13 @@ export const getLatLng = (place: Place) => {
  * @returns 생성된 마커 이미지
  */
 export const createMarkerImage = (day: number) => {
-  const imageSize = new window.kakao.maps.Size(MARKER.SIZE.X, MARKER.SIZE.Y);
+  const imageSize = new window.kakao.maps.Size(
+    MARKER.SIZE.width,
+    MARKER.SIZE.height,
+  );
   const imageUrl = `/map/mapmarker-day${day}.png`;
 
   return new window.kakao.maps.MarkerImage(imageUrl, imageSize, {
-    offset: new window.kakao.maps.Point(MARKER.OFFSET.X, MARKER.OFFSET.Y),
+    offset: new window.kakao.maps.Point(MARKER.OFFSET.x, MARKER.OFFSET.y),
   });
 };

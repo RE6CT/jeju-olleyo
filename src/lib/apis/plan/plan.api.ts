@@ -410,7 +410,7 @@ export const fetchGetPlanById = async (
     transformedDays.push({
       dayId: day.day_id,
       day: day.day || 0,
-      locations: locationsData.map((location: any) => ({
+      locations: locationsData.map((location: LocationData) => ({
         visitOrder: location.visit_order || 0,
         places: {
           placeId: location.places.place_id,

@@ -1,60 +1,100 @@
-export type KakaoMapOptions = {
-  center: {
-    lat: number;
-    lng: number;
+/**
+ * 카카오맵 API의 기본 타입들
+ */
+
+import { Point, Size } from './global/window.type';
+
+// 지도 위의 좌표를 나타내는 타입
+export type LatLng = {
+  lat: number; // 위도
+  lng: number; // 경도
+};
+
+// 지도의 영역을 나타내는 타입
+export type LatLngBounds = {
+  extend: (latlng: LatLng) => void; // 위치 데이터를 추가하여 영역을 재결정하는 메서드
+  getCenter: () => { getLat(): number; getLng(): number }; // 영역의 중심점을 반환하는 메서드
+};
+
+/**
+ * 마커 관련 타입들
+ */
+
+// 마커 이미지 옵션 타입
+export type MarkerImage = {
+  src: string; // 이미지 URL
+  size: Size; // 이미지 크기
+  options?: {
+    offset?: Point; // 이미지의 기준점
   };
-  level: number;
 };
 
-export type KakaoMapInstance = {
-  setCenter: (latlng: LatLng) => void;
-  setLevel: (level: number) => void;
-  setBounds: (bounds: LatLngBounds) => void;
-  panTo: (
-    latlng: LatLng,
-    options?: { animate: boolean; duration: number },
-  ) => void; // 중심 좌표 기준 부드럽게 이동(필요하다면 zoom 이동까지)
-  getCenter(): { getLat(): number; getLng(): number };
-  getLevel(): number;
-};
-
-export type KakaoMapProps = KakaoMapOptions & {
-  onMapLoad: (map: KakaoMapInstance) => void;
-  onError: (error: Error) => void;
-};
-
+// 마커 생성 옵션 타입
 export type MarkerOptions = {
-  position: {
-    lat: number;
-    lng: number;
-  };
-  title: string;
-  clickable?: boolean;
-  draggable?: boolean;
-  onClick?: () => void;
+  position: LatLng; // 마커의 위치
+  title: string; // 마커의 제목
+  clickable?: boolean; // 클릭 가능 여부
+  draggable?: boolean; // 드래그 가능 여부
+  onClick?: () => void; // 클릭 이벤트 핸들러
   day?: number; // 일자 (홀수/짝수에 따라 마커 색상 변경)
   order?: number; // 순서 번호
   showDay?: boolean; // 일자 표시 여부
   image?: MarkerImage; // 마커 이미지
 };
 
+// 마커 인스턴스 타입
 export type MarkerInstance = {
-  setMap(map: KakaoMapInstance | null): void;
-  setPosition(position: { getLat(): number; getLng(): number }): void;
-  setTitle(title: string): void;
-  setClickable(clickable: boolean): void;
-  setDraggable(draggable: boolean): void;
-  addListener(event: string, callback: () => void): void;
+  setMap(map: KakaoMapInstance | null): void; // 마커를 지도에 표시하거나 제거
+  setPosition(position: { getLat(): number; getLng(): number }): void; // 마커의 위치 변경
+  setTitle(title: string): void; // 마커의 제목 변경
+  setClickable(clickable: boolean): void; // 마커의 클릭 가능 여부 변경
+  setDraggable(draggable: boolean): void; // 마커의 드래그 가능 여부 변경
+  addListener(event: string, callback: () => void): void; // 이벤트 리스너 추가
 };
 
+// 마커 속성 타입
 export type MarkerProps = MarkerOptions & {
-  map?: KakaoMapInstance;
-  onClick?: () => void;
+  map?: KakaoMapInstance; // 마커가 표시될 지도
+  onClick?: () => void; // 클릭 이벤트 핸들러
 };
 
+/**
+ * 지도 관련 타입들
+ */
+
+// 지도 생성 옵션 타입
+export type KakaoMapOptions = {
+  center: LatLng; // 지도의 중심 좌표
+  level: number; // 지도의 확대 레벨
+};
+
+// 지도 인스턴스 타입
+export type KakaoMapInstance = {
+  setCenter: (latlng: LatLng) => void; // 지도의 중심 좌표 변경
+  setLevel: (level: number) => void; // 지도의 확대 레벨 변경
+  setBounds: (bounds: LatLngBounds) => void; // 지도의 영역 변경
+  panTo: (
+    latlng: LatLng,
+    options?: { animate: boolean; duration: number },
+  ) => void; // 중심 좌표 기준 부드럽게 이동
+  getCenter(): { getLat(): number; getLng(): number }; // 지도의 중심 좌표 반환
+  getLevel(): number; // 지도의 확대 레벨 반환
+};
+
+// 지도 컴포넌트 속성 타입
+export type KakaoMapProps = KakaoMapOptions & {
+  onMapLoad: (map: KakaoMapInstance) => void; // 지도 로드 완료 시 호출되는 콜백
+  onError: (error: Error) => void; // 에러 발생 시 호출되는 콜백
+};
+
+/**
+ * 클러스터 관련 타입들
+ */
+
+// 클러스터 생성 옵션 타입
 export type ClustererOptions = {
-  map: KakaoMapInstance;
-  markers: MarkerProps[];
+  map: KakaoMapInstance; // 클러스터가 표시될 지도
+  markers: MarkerProps[]; // 클러스터에 포함될 마커들
   gridSize?: number; // 클러스터의 격자 크기
   minLevel?: number; // 클러스터가 표시될 최소 지도 레벨
   minClusterSize?: number; // 클러스터가 생성될 최소 마커 수
@@ -67,110 +107,101 @@ export type ClustererOptions = {
     color: string;
     textAlign: string;
     lineHeight: string;
-  }[];
+  }[]; // 클러스터 스타일
 };
 
+// 클러스터 인스턴스 타입
 export type ClustererInstance = {
-  setMap: (map: KakaoMapInstance | null) => void;
-  clear: () => void;
+  setMap: (map: KakaoMapInstance | null) => void; // 클러스터를 지도에 표시하거나 제거
+  clear: () => void; // 클러스터 초기화
 };
 
+/**
+ * 경로 관련 타입들
+ */
+
+// 경로 옵션 타입
 export type PolylineOptions = {
-  path: {
-    lat: number;
-    lng: number;
-  }[];
-  strokeWeight?: number;
-  strokeColor?: string;
-  strokeOpacity?: number;
-  strokeStyle?: 'solid' | 'dot' | 'dash' | 'dashdot';
+  path: LatLng[]; // 경로를 구성하는 좌표들
+  strokeWeight?: number; // 선의 두께
+  strokeColor?: string; // 선의 색상
+  strokeOpacity?: number; // 선의 투명도
+  strokeStyle?: 'solid' | 'dot' | 'dash' | 'dashdot'; // 선의 스타일
 };
 
+// 경로 인스턴스 타입
 export type PolylineInstance = {
-  setMap(map: KakaoMapInstance | null): void;
-  setOptions(options: PolylineOptions): void;
-  setPath(path: { getLat(): number; getLng(): number }[]): void;
+  setMap(map: KakaoMapInstance | null): void; // 경로를 지도에 표시하거나 제거
+  setOptions(options: PolylineOptions): void; // 경로 옵션 변경
+  setPath(path: { getLat(): number; getLng(): number }[]): void; // 경로 좌표 변경
 };
 
+// 경로 속성 타입
 export type PolylineProps = PolylineOptions & {
-  map?: KakaoMapInstance;
+  map?: KakaoMapInstance; // 경로가 표시될 지도
 };
 
-export type LatLng = {
-  lat: number;
-  lng: number;
-};
+/**
+ * 카카오맵 API 응답 타입들
+ */
 
-export type LatLngBounds = {
-  extend: (latlng: LatLng) => void;
-  getCenter: () => { getLat(): number; getLng(): number };
-};
-
-export type MarkerImage = {
-  src: string;
-  size: Size;
-  options?: {
-    offset?: Point;
-  };
-};
-
-export type Size = {
-  width: number;
-  height: number;
-};
-
-export type Point = {
-  x: number;
-  y: number;
-};
-
+// 경로 정보 타입
 export type RouteInfo = {
-  start: { lat: number; lng: number };
-  end: { lat: number; lng: number };
-  via: { lat: number; lng: number }[];
+  start: LatLng; // 출발지 좌표
+  end: LatLng; // 도착지 좌표
+  via: LatLng[]; // 경유지 좌표들
 };
 
+// 경로 요약 정보 타입
 export type RouteSummary = {
-  distance: number;
-  duration: number;
+  distance: number; // 총 거리 (미터)
+  duration: number; // 총 시간 (분)
 };
 
+// 경로 구간 정보 타입
 export type KakaoMapSection = {
-  distance: number;
-  duration: number;
-  roads: KakaoMapRoad[];
+  distance: number; // 구간 거리
+  duration: number; // 구간 시간
+  roads: KakaoMapRoad[]; // 구간의 도로들
 };
 
+// 도로 정보 타입
 export type KakaoMapRoad = {
-  vertexes: number[];
-  name: string;
-  distance: number;
-  duration: number;
-  traffic_speed: number;
-  traffic_state: number;
-  vertex_type: string;
+  vertexes: number[]; // 도로의 정점들
+  name: string; // 도로명
+  distance: number; // 도로 거리
+  duration: number; // 도로 통행 시간
+  traffic_speed: number; // 교통 속도
+  traffic_state: number; // 교통 상태
+  vertex_type: string; // 정점 타입
 };
 
+// 카카오맵 API 응답 타입
 export type KakaoMapResponse = {
   routes: {
-    sections: KakaoMapSection[];
+    sections: KakaoMapSection[]; // 경로 구간들
   }[];
 };
 
+// 위치 데이터 타입
 export type LocationData = {
-  visit_order: number | null;
+  visit_order: number | null; // 방문 순서
   places: {
-    id: number;
-    address: string;
-    place_id: number;
-    content_type_id: number;
-    image: string | null;
-    lng: number;
-    lat: number;
-    title: string;
-    category: string;
+    id: number; // 장소 ID
+    address: string; // 주소
+    place_id: number; // 장소 ID
+    content_type_id: number; // 콘텐츠 타입 ID
+    image: string | null; // 이미지 URL
+    lng: number; // 경도
+    lat: number; // 위도
+    title: string; // 제목
+    category: string; // 카테고리
   };
 };
+
+/**
+ * 카카오맵 API 타입
+ */
 
 export type KakaoMapAPI = {
   maps: {

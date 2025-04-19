@@ -203,7 +203,6 @@ const PlanFilterSection = ({
                 setStartDate={setStartDate}
                 endDate={endDate}
                 setEndDate={setEndDate}
-                isDatePickerFocused={isDatePickerFocused}
                 setIsDatePickerFocused={setIsDatePickerFocused}
                 filter={filter}
                 applyFilter={handleApplyFilter}

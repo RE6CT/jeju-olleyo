@@ -1,15 +1,11 @@
-import { MarkerProps } from '@/types/kakao-map.type';
-
-interface RouteInfo {
-  start: { lat: number; lng: number };
-  end: { lat: number; lng: number };
-  via: { lat: number; lng: number }[];
-}
-
-interface RouteSummary {
-  distance: number;
-  duration: number;
-}
+import {
+  KakaoMapResponse,
+  KakaoMapRoad,
+  KakaoMapSection,
+  MarkerProps,
+  RouteInfo,
+  RouteSummary,
+} from '@/types/kakao-map.type';
 
 /**
  * 카카오맵 API를 사용하여 자동차 경로를 검색하고 그리는 함수
@@ -63,14 +59,14 @@ export const getCarRoute = async (
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
-    const data = await response.json();
+    const data: KakaoMapResponse = await response.json();
 
     let totalDistance = 0;
     let totalDuration = 0;
     const linePath: { lat: number; lng: number }[] = [];
     const sections: { distance: number; duration: number }[] = [];
 
-    data.routes[0].sections.forEach((section: any) => {
+    data.routes[0].sections.forEach((section: KakaoMapSection) => {
       const sectionDistance = section.distance;
       const sectionDuration = section.duration;
 
@@ -82,8 +78,8 @@ export const getCarRoute = async (
         duration: Math.round(sectionDuration / 60), // 초 -> 분 변환
       });
 
-      section.roads.forEach((road: any) => {
-        road.vertexes.forEach((_: any, index: number) => {
+      section.roads.forEach((road: KakaoMapRoad) => {
+        road.vertexes.forEach((_, index: number) => {
           if (index % 2 === 0) {
             linePath.push({
               lat: road.vertexes[index + 1],

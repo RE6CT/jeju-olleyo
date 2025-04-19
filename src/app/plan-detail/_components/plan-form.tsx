@@ -5,9 +5,9 @@ import { useState } from 'react';
 import { DayPlaces, TabType } from '@/types/plan-detail.type';
 import { Plan } from '@/types/plan.type';
 
-import PlanHeader from './plan-header';
-import PlanMap from './plan-map';
-import PlanSchedule from './plan-schedule';
+import PlanHeader from './core/plan-header';
+import PlanMap from './core/plan-map';
+import PlanSchedule from './core/plan-schedule';
 
 const PlanForm = ({
   userId,

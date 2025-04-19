@@ -13,18 +13,18 @@ import { cn } from '@/lib/utils';
 import { calculateTotalDays, formatDayDate } from '@/lib/utils/date';
 import { DayPlaces, TabType } from '@/types/plan-detail.type';
 import { Place } from '@/types/search.type';
-import PlaceCard from './place-card';
-import PlaceSidemenu from './place-sidemenu';
+import PlaceCard from '../features/card/place-card';
+import PlaceSidemenu from '../features/sidemenu/place-sidemenu';
 import {
   DragDropContext,
   Droppable,
   Draggable,
   DropResult,
 } from 'react-beautiful-dnd';
-import ScheduleDeleteModal from './schedule-delete-modal';
-import ScheduleSaveModal from './schedule-save-modal';
+import ScheduleDeleteModal from '../features/modal/schedule-delete-modal';
+import ScheduleSaveModal from '../features/modal/schedule-save-modal';
+import ScheduleCreatedModal from '../features/modal/schedule-created-modal';
 import { fetchSavePlan, fetchSavePlanPlaces } from '@/lib/apis/plan/plan.api';
-import ScheduleCreatedModal from './schedule-created-modal';
 import { useToast } from '@/hooks/use-toast';
 
 const DROPDOWN_CONTENT_STYLE =

@@ -78,10 +78,7 @@ const PlanForm = ({
         setPlanDescription={(description) =>
           !isReadOnly && setPlan((prev) => ({ ...prev, description }))
         }
-        planImage={plan.planImg || ''}
-        setPlanImage={(planImg) =>
-          !isReadOnly && setPlan((prev) => ({ ...prev, planImg }))
-        }
+        previewImage={plan.planImg || ''}
         isReadOnly={isReadOnly}
       />
       <PlanMap

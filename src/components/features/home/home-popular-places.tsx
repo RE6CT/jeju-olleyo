@@ -9,6 +9,7 @@ import { usePopularPlaces } from '@/lib/hooks/use-popular-places';
 import { Category } from '@/types/home.popular-place.type';
 
 import PlaceCard from '../card/place-card';
+import { LoadingSpinner } from '@/components/commons/loading-spinner';
 
 /**
  * 인기 장소를 카테고리별로 표시하는 컴포넌트
@@ -114,11 +115,7 @@ const PopularPlaces = () => {
           </div>
 
           {/* 로딩 인디케이터 오버레이 (첫 로딩이 아닌 경우에만) */}
-          {isLoading && !isFirstLoading && (
-            <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-30 backdrop-blur-[1px] transition-opacity">
-              <div className="h-8 w-8 animate-spin rounded-full border-4 border-orange-500 border-t-transparent"></div>
-            </div>
-          )}
+          {isLoading && !isFirstLoading && <LoadingSpinner />}
         </div>
       </div>
     </section>

@@ -13,6 +13,7 @@ import { fetchUpdateProfileImage } from '@/lib/apis/profile/update-profile.api';
 import useCustomToast from '@/lib/hooks/use-custom-toast';
 import { ProfileModalProps } from '@/types/mypage.type';
 import { MAX_FILE_SIZE } from '@/constants/global.constant';
+import { useChangeImageFile } from '@/lib/hooks/use-change-image-file';
 
 /**
  * 프로필 이미지 수정 버튼을 눌렀을 때 뜨는 모달 컴포넌트
@@ -30,6 +31,7 @@ const ProfileModal = ({
   const [selectImage, setSelectImage] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const { successToast } = useCustomToast();
+  const { handleFileChange } = useChangeImageFile(preview);
 
   // 모달이 닫히면 프리뷰 이미지 및 파일 삭제
   useEffect(() => {
@@ -51,23 +53,6 @@ const ProfileModal = ({
   /** 이미지 파일 피커 트리거 */
   const handleSelectFile = () => {
     fileInputRef.current?.click();
-  };
-
-  /** 파일 선택 핸들러 */
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
-
-    const file = e.target.files[0];
-    if (file) {
-      if (file.size > MAX_FILE_SIZE) {
-        successToast('파일의 크기는 5MB를 넘을 수 없습니다.');
-        return;
-      }
-
-      setSelectImage(file);
-      const imageUrl = URL.createObjectURL(file);
-      setPreview(imageUrl);
-    }
   };
 
   /** 이미지 변경 완료 버튼 클릭 */

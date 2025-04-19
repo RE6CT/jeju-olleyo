@@ -51,7 +51,7 @@ const PlaceDetailPage = () => {
           .eq('place_id', Number(params.id))
           .single();
 
-        console.log('장소 불러오기');
+        // console.log('장소 불러오기');
 
         if (error || !data) {
           setError('수파베이스 장소 불러오기 실패');

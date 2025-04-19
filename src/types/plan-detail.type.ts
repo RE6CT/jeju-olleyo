@@ -32,7 +32,7 @@ export type BookmarkedPlace = {
   /** 장소의 카테고리 */
   category: CategoryType;
   /** 장소의 대표 이미지 URL */
-  image: string;
+  image: string | null;
   /** 북마크 생성 시간 */
   created_at: string;
 };

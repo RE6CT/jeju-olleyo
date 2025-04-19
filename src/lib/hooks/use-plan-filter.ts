@@ -80,6 +80,29 @@ export const usePlanFilter = (userId: string) => {
     }
   };
 
+  /**
+   * 필터 버튼 클릭 핸들러 함수
+   * @param filterType - 선택된 필터 타입 (제목(title), 날짜(date), 공개상태(public))
+   * @param setSelectedFilter - 선택된 필터를 설정하는 함수
+   * @param setInputValue - 입력값을 설정하는 함수
+   * @param filter - 현재 적용된 필터 상태
+   */
+  const handleFilterClick = (
+    filterType: FilterType,
+    setSelectedFilter: (filter: FilterType) => void,
+    setInputValue: (value: string) => void,
+    filter: FilterState,
+  ) => {
+    setSelectedFilter(filterType);
+    setInputValue(
+      filterType === FILTER_TYPES.PUBLIC
+        ? ''
+        : filter.type === filterType
+          ? filter.value
+          : '',
+    );
+  };
+
   return {
     filter,
     selectedFilter,
@@ -98,5 +121,6 @@ export const usePlanFilter = (userId: string) => {
     handleEdit,
     handleApplyFilter,
     handleDelete,
+    handleFilterClick,
   };
 };

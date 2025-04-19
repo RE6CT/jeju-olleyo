@@ -67,6 +67,7 @@ const PlanFilterSection = ({
     handleEdit,
     handleApplyFilter,
     handleDelete,
+    handleFilterClick,
   } = usePlanFilter(userId);
 
   const { data: plans = plansList, isLoading: isPlansLoading } =
@@ -122,6 +123,7 @@ const PlanFilterSection = ({
               setSelectedFilter={setSelectedFilter}
               filter={filter}
               setInputValue={setInputValue}
+              handleFilterClick={handleFilterClick}
             />
             {selectedFilter && (
               <FilterInput

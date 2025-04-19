@@ -74,7 +74,7 @@ const MyPlanPage = async () => {
             </Link>
           </div>
           <PlanFilterSection
-            initialPlans={plans ?? []}
+            plansList={plans ?? []}
             userId={user.id}
             userNickname={user.nickname}
           />

@@ -21,7 +21,7 @@ export const useGetPlacesByCategoryInfiniteQuery = (
  * @param category - 조회할 카테고리 타입
  * @returns 프리페치 작업 결과
  */
-export const usePrefetchPlacesByCategory = async (
+export const prefetchPlacesByCategory = async (
   queryClient: QueryClient,
   category: CategoryParamType,
 ) => {

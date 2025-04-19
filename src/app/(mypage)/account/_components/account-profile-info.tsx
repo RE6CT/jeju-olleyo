@@ -14,10 +14,7 @@ import useCustomToast from '@/lib/hooks/use-custom-toast';
 import useProviderFromCookie from '@/lib/hooks/use-get-provider';
 import { nicknameSchema } from '@/lib/schemas/auth-schema';
 
-
-
 import AccountProfileImage from './account-profile-image';
-
 
 const PROFILE_INFO_STYLE = {
   container:

@@ -1,13 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { fetchDeletePlan } from '../apis/plan/plan.api';
-import useCustomToast from '../hooks/use-custom-toast';
-
-interface DeletePlanOptions {
-  onSuccess?: () => void;
-  onError?: (error: Error) => void;
-}
-
+import { useToast } from '@/hooks/use-toast';
 /**
  * 일정을 삭제하는 React Query 훅
  * @param userId - 사용자 ID
@@ -26,21 +20,26 @@ interface DeletePlanOptions {
  * });
  * ```
  */
-export const useDeletePlan = (userId: string) => {
+export const useDeletePlanMutation = (userId: string) => {
   const queryClient = useQueryClient();
-  const { successToast } = useCustomToast();
+  const { toast } = useToast();
 
   return useMutation({
     mutationFn: fetchDeletePlan,
-    onSuccess: (_, __, options: DeletePlanOptions) => {
+    onSuccess: () => {
       // 일정 목록 캐시 갱신
       queryClient.invalidateQueries({ queryKey: ['filteredPlans', userId] });
-      successToast('일정이 삭제되었습니다.');
-      options?.onSuccess?.();
+      toast({
+        title: '일정 삭제 완료',
+        description: '일정이 성공적으로 삭제되었습니다.',
+      });
     },
-    onError: (error: Error, __, context: DeletePlanOptions | undefined) => {
-      successToast(error.message || '일정 삭제에 실패했습니다.');
-      context?.onError?.(error);
+    onError: (error: Error, __) => {
+      toast({
+        title: '일정 삭제 실패',
+        description: error.message || '일정 삭제에 실패했습니다.',
+        variant: 'destructive',
+      });
     },
   });
 };

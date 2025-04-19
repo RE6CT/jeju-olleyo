@@ -15,7 +15,12 @@ import { DayPlaces, TabType } from '@/types/plan-detail.type';
 import { Place } from '@/types/search.type';
 import PlaceCard from './place-card';
 import PlaceSidemenu from './place-sidemenu';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from 'react-beautiful-dnd';
 import ScheduleDeleteModal from './schedule-delete-modal';
 import ScheduleSaveModal from './schedule-save-modal';
 import { fetchSavePlan, fetchSavePlanPlaces } from '@/lib/apis/plan/plan.api';
@@ -155,7 +160,7 @@ const PlanSchedule = ({
    *   },
    * })
    */
-  const handleDragEnd = (result: any) => {
+  const handleDragEnd = (result: DropResult) => {
     if (!result.destination || isReadOnly) return; // 드래그 종료가 제대로 되지 않았거나 읽기 전용 모드라면 종료
 
     const { source, destination } = result; // {droppableId: string, index: number} 형태의 객체 두 개

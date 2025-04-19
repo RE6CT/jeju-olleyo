@@ -17,13 +17,13 @@ import { FilterState } from '@/types/plan.type';
  *
  * @example
  * ```typescript
- * const { data: plans, isLoading } = useFilteredPlans(userId, {
+ * const { data: plans, isLoading } = useGetFilteredPlans(userId, {
  *   type: 'title',
  *   value: '제주도'
  * });
  * ```
  */
-export const useFilteredPlans = (userId: string, filter: FilterState) => {
+export const useGetFilteredPlans = (userId: string, filter: FilterState) => {
   return useQuery({
     queryKey: ['filteredPlans', userId, filter.type, filter.value],
     queryFn: async () => {

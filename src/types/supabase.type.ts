@@ -1,6 +1,6 @@
 import { CommentPlanRow, CommentsRow } from './comment.type';
 import { CommunitySortType } from './community.type';
-import { PlansRow, UsersRow } from './plan.type';
+import { PlansRow, UsersNicknameRow } from './plan.type';
 
 export type Json =
   | string
@@ -410,11 +410,11 @@ export type Database = {
       };
       get_user_likes: {
         Args: { user_id_param: string };
-        Returns: (PlansRow & UsersRow & { is_liked: boolean })[];
+        Returns: (PlansRow & UsersNicknameRow & { is_liked: boolean })[];
       };
       get_user_plans: {
         Args: { user_id_param: string };
-        Returns: (PlansRow & UsersRow & { is_liked: boolean })[];
+        Returns: (PlansRow & UsersNicknameRow & { is_liked: boolean })[];
       };
       get_user_comments: {
         Args: { user_id_param: string };

@@ -20,6 +20,7 @@ export const TEXT = {
 } as const;
 
 export const ITEMS_PER_PAGE = 10; // 페이지당 표시할 일정 수
+export const INITIAL_PAGE = 1;
 
 export const DEFAULT_IMAGES = [
   `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/plan-images/default/plan_default_1.png`,

@@ -47,7 +47,7 @@ const Polyline = ({ map, path, ...options }: PolylineProps) => {
       strokeWeight: 3,
       strokeColor: '#4CAF50',
       strokeOpacity: 0.8,
-      strokeStyle: 'solid',
+      strokeStyle: 'solid' as const,
     };
 
     const polyline = new window.kakao.maps.Polyline({

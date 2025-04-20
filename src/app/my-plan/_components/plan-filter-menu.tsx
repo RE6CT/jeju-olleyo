@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { FILTER_TYPES } from '@/constants/plan.constants';
-import { FilterMenuProps, FilterState, FilterType } from '@/types/plan.type';
+import { FilterState, FilterType } from '@/types/plan.type';
 
 /**
  * 필터 버튼 클릭 핸들러
@@ -30,7 +30,12 @@ export const FilterMenu = ({
   setSelectedFilter,
   filter,
   setInputValue,
-}: FilterMenuProps) => (
+}: {
+  selectedFilter: FilterType;
+  setSelectedFilter: (filter: FilterType) => void;
+  filter: FilterState;
+  setInputValue: (value: string) => void;
+}) => (
   <div className="flex w-[120px] flex-col gap-2">
     <Button
       variant={selectedFilter === FILTER_TYPES.TITLE ? 'default' : 'ghost'}

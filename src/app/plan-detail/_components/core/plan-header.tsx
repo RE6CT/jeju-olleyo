@@ -48,16 +48,12 @@ const PlanHeader = ({
   previewImage: string | null;
   isReadOnly?: boolean;
 }) => {
-  const { isUploading, handleFileChange } = useChangeImageFile(previewImage);
-
-  // 컴포넌트가 언마운트될 때 미리보기 URL 해제
-  useEffect(() => {
-    return () => {
-      if (previewImage && previewImage.startsWith('blob:')) {
-        URL.revokeObjectURL(previewImage);
-      }
-    };
-  }, [previewImage]);
+  const {
+    previewImage: newPreviewImage,
+    setPreviewImage,
+    isUploading,
+    handleFileChange,
+  } = useChangeImageFile(previewImage);
 
   return (
     <>

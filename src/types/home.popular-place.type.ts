@@ -1,14 +1,5 @@
 import { CATEGORIES } from '@/constants/home.constants';
 
-export type PlaceWithLiked = {
-  place_id: number;
-  title: string;
-  image: string;
-  address: string;
-  category: Category;
-  is_liked: boolean;
-};
-
 export type Place = {
   id: number;
   title: string;
@@ -16,13 +7,6 @@ export type Place = {
   address: string;
   category: Category;
   isBookmarked: boolean;
-};
-
-export type BookmarkStore = {
-  bookmarks: number[];
-  addBookmark: (id: number) => void;
-  removeBookmark: (id: number) => void;
-  isBookmarked: (id: number) => boolean;
 };
 
 export type Category = (typeof CATEGORIES)[number];

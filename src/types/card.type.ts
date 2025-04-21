@@ -31,7 +31,7 @@ export type PlaceCardProps = {
   placeId: number;
   image: string | null;
   title: string;
-  isLiked: boolean;
+  isBookmarked: boolean;
   className?: string;
   isDragging: boolean;
 };

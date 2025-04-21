@@ -11,12 +11,7 @@ import { useGetPlacesByCategoryInfiniteQuery } from '@/lib/queries/use-get-place
 import { CategoryParamType } from '@/types/category.type';
 
 /** 서버에서 가져온 데이터를 표시하는 클라이언트 컴포넌트 (카테고리 리스트)) */
-const CategoryClient = ({
-  category,
-}: {
-  category: CategoryParamType;
-  userId: string | null;
-}) => {
+const CategoryClient = ({ category }: { category: CategoryParamType }) => {
   const {
     data,
     fetchNextPage,
@@ -50,7 +45,7 @@ const CategoryClient = ({
               placeId={place.placeId}
               image={place.image}
               title={place.title}
-              isLiked={place.isLiked}
+              isBookmarked={place.isBookmarked}
               isDragging={false}
             />
             {/* 8번째 아이템 이후에 배너 삽입 (첫 페이지의 마지막) */}

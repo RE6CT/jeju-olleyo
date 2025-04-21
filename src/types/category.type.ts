@@ -24,7 +24,7 @@ export type PlaceType = {
   image: string | null;
   placeId: number;
   title: string;
-  isLiked: boolean;
+  isBookmarked: boolean;
 };
 
 /** 쿼리 함수 응답 타입 */

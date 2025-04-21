@@ -10,7 +10,7 @@ import { UserBookmarks } from '@/types/mypage.type';
  * @param userId 사용자 ID
  */
 export const fetchGetBookmarkByIdQuery = async (
-  place: number,
+  placeId: number,
   userId: string,
 ) => {
   const supabase = await getServerClient();
@@ -18,7 +18,7 @@ export const fetchGetBookmarkByIdQuery = async (
   const { data, error } = await supabase
     .from('bookmarks')
     .select('bookmark_id')
-    .eq('place_id', place)
+    .eq('place_id', placeId)
     .eq('user_id', userId)
     .maybeSingle();
 

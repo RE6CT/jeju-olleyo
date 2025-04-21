@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation';
 import { memo } from 'react';
 
 import PlaceImage from '@/components/commons/place-image';
-import { useBookmarkMutation } from '@/lib/mutations/use-bookmark-mutation';
 import { PlaceCardProps } from '@/types/card.type';
 import BookmarkButton from '../like/bookmark-button';
 
@@ -13,7 +12,7 @@ import BookmarkButton from '../like/bookmark-button';
  * @param placeId - 장소의 id
  * @param image - 이미지 값
  * @param title - 장소 이름
- * @param isLiked - 좋아요 여부
+ * @param isBookmarked - 좋아요 여부
  * @param isDragging - 드래그 중인지 여부
  * @param className - 추가 스타일 클래스
  */
@@ -21,24 +20,17 @@ const PlaceCard = ({
   placeId,
   image,
   title,
-  isLiked,
+  isBookmarked,
   className,
   isDragging = false,
 }: PlaceCardProps) => {
   const router = useRouter();
-  const { toggleBookmark, isLoading } = useBookmarkMutation();
 
+  /** 링크 이동 핸들러 */
   const handleCardClick = () => {
     // 드래그 중이 아닐 때만 페이지 이동
     if (!isDragging) {
       router.push(`/places/${placeId}`);
-    }
-  };
-
-  const handleBookmarkClick = (e: React.MouseEvent) => {
-    e.stopPropagation(); // 부모 요소의 onClick 이벤트 방지
-    if (!isLoading) {
-      toggleBookmark(placeId, isLiked);
     }
   };
 
@@ -59,7 +51,7 @@ const PlaceCard = ({
         <h4 className="medium-16 truncate px-2">{title}</h4>
         {/* 북마크 버튼 */}
         <BookmarkButton
-          isBookmarked={isLiked}
+          isBookmarked={isBookmarked}
           placeId={placeId}
           className="absolute right-2 top-2"
         />

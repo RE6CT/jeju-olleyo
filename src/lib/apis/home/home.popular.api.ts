@@ -1,4 +1,3 @@
-import { CATEGORY_KR_MAP } from '@/constants/home.constants';
 import { getBrowserClient } from '@/lib/supabase/client';
 import { camelize } from '@/lib/utils/camelize';
 import { Place, PlaceResponse } from '@/types/home.popular-place.type';
@@ -67,56 +66,4 @@ export const getPopularPlaces = async (
     console.error('데이터 처리 중 오류:', err);
     throw err;
   }
-};
-
-/**
- * 북마크 추가 함수
- * @param placeId - 북마크할 장소 ID
- * @param userId - 사용자 ID
- * @returns 성공 여부와 에러 객체
- */
-export const addBookmark = async (
-  placeId: number,
-  userId: string,
-): Promise<{
-  success: boolean;
-  data: null | { place_id: number; user_id: string }[];
-  error: null | { message: string; code: string };
-}> => {
-  const supabase = getBrowserClient();
-  const { data, error } = await supabase
-    .from('bookmarks')
-    .insert([{ place_id: placeId, user_id: userId }]);
-
-  if (error) {
-    console.error('북마크 추가 중 오류:', error);
-  }
-
-  return { success: !error, data, error };
-};
-
-/**
- * 북마크 삭제 함수
- * @param placeId - 북마크 삭제할 장소 ID
- * @param userId - 사용자 ID
- * @returns 성공 여부와 에러 객체
- */
-export const removeBookmark = async (
-  placeId: number,
-  userId: string,
-): Promise<{
-  success: boolean;
-  data: null | { place_id: number; user_id: string }[];
-  error: null | { message: string; code: string };
-}> => {
-  const supabase = getBrowserClient();
-  const { data, error } = await supabase
-    .from('bookmarks')
-    .delete()
-    .eq('place_id', placeId)
-    .eq('user_id', userId);
-  if (error) {
-    console.error('북마크 삭제 중 오류:', error);
-  }
-  return { success: !error, data, error };
 };

@@ -21,7 +21,7 @@ const PlaceLocation = ({
     setMap(mapInstance);
   };
 
-  const handleError = (error: unknown) => {
+  const handleError = (error: Error) => {
     console.error('지도 로드 중 오류:', error);
   };
 

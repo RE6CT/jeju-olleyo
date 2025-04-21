@@ -60,6 +60,10 @@ export async function middleware(request: NextRequest) {
       pattern: /^\/categories\/[a-z]+$/,
     },
     {
+      SEARCH: PATH.SEARCH,
+      pattern: /^\/search\/[a-z]+$/,
+    },
+    {
       PLACES: PATH.PLACES,
       pattern: /^\/places\/\d+$/,
     },

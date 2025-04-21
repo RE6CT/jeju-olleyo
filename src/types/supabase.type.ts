@@ -464,6 +464,7 @@ export type Database = {
           image: string;
           title: string;
           category: string;
+          address: string;
           is_bookmarked: boolean;
         }[];
       };

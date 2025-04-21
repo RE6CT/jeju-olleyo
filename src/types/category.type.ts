@@ -24,6 +24,7 @@ export type PlaceType = {
   image: string | null;
   placeId: number;
   title: string;
+  address: string;
   isBookmarked: boolean;
 };
 

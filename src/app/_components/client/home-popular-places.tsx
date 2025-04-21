@@ -8,7 +8,7 @@ import useDragScroll from '@/lib/hooks/use-drag-scroll';
 import { usePopularPlaces } from '@/lib/hooks/use-popular-places';
 import { Category } from '@/types/home.popular-place.type';
 
-import PlaceCard from '../card/place-card';
+import PlaceCard from '../../../components/features/card/place-card';
 import { LoadingSpinner } from '@/components/commons/loading-spinner';
 
 /**
@@ -36,7 +36,7 @@ const PopularPlaces = () => {
   return (
     <section className="w-full px-4 py-6">
       <div style={{ width: '952px' }} className="mx-auto">
-        {/* 전체 가로 길이 952px로 고정 */}
+        
         <div className="mb-5 flex items-center justify-between">
           <h2 className="semibold-22">올레 인기 장소</h2>
           <div className="p-2.5">

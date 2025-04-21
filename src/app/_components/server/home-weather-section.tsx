@@ -1,9 +1,9 @@
 import { Suspense } from 'react';
 
-import WeatherCardsContainer from '@/components/features/home/home-weather-container';
-import WeatherError from '@/components/features/home/home-weather-error';
-import WeatherHeader from '@/components/features/home/home-weather-header';
-import { WeatherRefresher } from '@/components/features/home/home-weather-refresher';
+import WeatherCardsContainer from '@/app/_components/server/home-weather-container';
+import WeatherError from '@/app/_components/server/home-weather-error';
+import WeatherHeader from '@/app/_components/server/home-weather-header';
+import { WeatherRefresher } from '@/app/_components/client/home-weather-refresher';
 import { getStaticWeatherData } from '@/lib/apis/home/home.weather.api';
 import { weatherUtil } from '@/lib/utils/home.weather.util';
 

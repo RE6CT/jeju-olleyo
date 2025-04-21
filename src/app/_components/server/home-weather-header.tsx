@@ -1,5 +1,3 @@
-'use client';
-
 import { WeatherHeaderProps } from '@/types/home.weather.type';
 
 /**

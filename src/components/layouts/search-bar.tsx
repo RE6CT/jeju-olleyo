@@ -1,16 +1,22 @@
 'use client';
 
 import { useParams, usePathname, useRouter } from 'next/navigation';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { PATH } from '@/constants/path.constants';
 
 import { Input } from '../ui/input';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 
 /**
  * 반응형 검색바 컴포넌트
  * 화면 크기에 맞게 너비가 조정됨
  */
 const SearchBar = () => {
+  const [keywords, setKeywords] = useState<string[]>([]);
+
+  const [inputValue, setInputValue] = useState('');
+  const [open, setOpen] = useState(false);
+
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const params = useParams();
@@ -19,25 +25,50 @@ const SearchBar = () => {
   const category = params.category ?? 'all';
 
   const handleSearch = () => {
-    const query = inputRef.current?.value;
+    const query = inputValue.trim();
     if (query) {
-      router.push(`${PATH.SEARCH}/${category}?query=${query.trim()}`);
+      handleAddKeyword(query);
+      router.push(`${PATH.SEARCH}/${category}?query=${query}`);
+      setOpen(false);
     }
   };
 
   useEffect(() => {
-    if ((path === PATH.HOME || path !== PATH.SEARCH) && inputRef.current) {
-      inputRef.current.value = '';
+    if (path === PATH.HOME || path !== PATH.SEARCH) {
+      setInputValue('');
     }
   }, [path]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const result = localStorage.getItem('keywords') || '[]';
+      setKeywords(JSON.parse(result));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('keywords', JSON.stringify(keywords));
+  }, [keywords]);
+
+  const handleAddKeyword = (text: string) => {
+    const deleteDuplicate = keywords.filter((keyword) => keyword !== text);
+    const updated = [text, ...deleteDuplicate].slice(0, 5);
+    setKeywords(updated);
+  };
+
+  const handleClearKeywords = () => {
+    setKeywords([]);
+  };
 
   return (
     <div className="relative">
       <SearchIcon className="absolute left-2 top-1/2 -translate-y-1/2 transform" />
       <Input
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
         placeholder="제주 여행, 어디부터 시작할까요?"
-        ref={inputRef}
         className="placeholder:medium-14 medium-14 h-10 rounded-full border-none bg-gray-50 pl-[42px] placeholder:text-gray-400"
+        onFocus={() => setOpen(true)}
         onKeyDown={(e) => {
           if (e.key === 'Enter') {
             e.preventDefault();
@@ -45,6 +76,55 @@ const SearchBar = () => {
           }
         }}
       />
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <button
+            className="pointer-events-none absolute inset-0"
+            aria-label="트리거"
+          />
+          {/* 투명 클릭 트리거 */}
+        </PopoverTrigger>
+        {keywords.length ? (
+          <PopoverContent className="w-[300px] p-4">
+            <div className="mb-2 flex items-center justify-between text-sm font-semibold text-gray-700">
+              <span>최근 검색어</span>
+              <button
+                onClick={handleClearKeywords}
+                className="text-xs text-gray-400 hover:text-gray-600"
+              >
+                전체 삭제
+              </button>
+            </div>
+            <ul className="space-y-2 text-sm text-gray-600">
+              {keywords.map((keyword) => (
+                <li
+                  key={keyword}
+                  className="flex cursor-pointer items-center justify-between hover:text-gray-900"
+                  onClick={() => {
+                    setInputValue(keyword);
+                    handleSearch();
+                  }}
+                >
+                  <span className="truncate">{keyword}</span>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation(); // 검색 실행 막기
+                      setKeywords((prev) => prev.filter((k) => k !== keyword));
+                    }}
+                    className="text-xs text-gray-400 hover:text-gray-600"
+                  >
+                    ✕
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </PopoverContent>
+        ) : (
+          <PopoverContent className="truncate">
+            최근 검색어가 없습니다.
+          </PopoverContent>
+        )}
+      </Popover>
     </div>
   );
 };

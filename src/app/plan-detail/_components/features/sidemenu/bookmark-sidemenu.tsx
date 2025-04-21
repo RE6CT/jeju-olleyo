@@ -6,10 +6,10 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import ErrorMessage from '@/components/features/alert/error-message';
 import { Button } from '@/components/ui/button';
 import DynamicPagination from '@/components/ui/dynamic-pagination';
-import { useBookmarkQuery } from '@/lib/hooks/use-bookmark-query';
+import { useBookmarkQuery } from '@/lib/queries/use-bookmark-query';
 import { CategoryType } from '@/types/category.type';
 
-import PlaceCardCategory from './place-card-category';
+import PlaceCardSidemenu from '../card/place-card-sidemenu';
 import PlaceSidemenuLayout from './place-sidemenu-layout';
 
 const ITEMS_PER_PAGE = 7;
@@ -189,7 +189,7 @@ const BookmarkSidemenu = ({
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <PlaceCardCategory
+                  <PlaceCardSidemenu
                     title={place.title}
                     category={place.category as CategoryType}
                     imageUrl={place.image}

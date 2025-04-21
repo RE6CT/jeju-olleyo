@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import CategoryFilterTabs from '@/components/commons/category-filter-tabs';
-import { useBookmarkQuery } from '@/lib/hooks/use-bookmark-query';
+import { useBookmarkQuery } from '@/lib/queries/use-bookmark-query';
 import useInfiniteScroll from '@/lib/hooks/use-infinite-scroll';
 import useSearch from '@/lib/hooks/use-search';
 import { getBrowserClient } from '@/lib/supabase/client';

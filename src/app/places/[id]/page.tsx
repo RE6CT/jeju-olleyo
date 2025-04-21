@@ -9,7 +9,7 @@ import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { camelize } from '@/lib/utils/camelize';
 import BookmarkIcon from '@/components/commons/bookmark-icon';
-import { useBookmarkQuery } from '@/lib/hooks/use-bookmark-query';
+import { useBookmarkQuery } from '@/lib/queries/use-bookmark-query';
 import { CategoryType } from '@/types/category.type';
 import PlaceLocation from './_components/place-location';
 import PlanIncludingPlace from './_components/plan-including-place';

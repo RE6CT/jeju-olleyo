@@ -1,13 +1,13 @@
 import { ApiError } from 'next/dist/server/api-utils';
 import { NextResponse, NextRequest } from 'next/server';
 
+import { DetailIntroRaw } from '@/types/korea-tour.type';
 import {
   AREA_CODE_JEJU,
   KOREA_TOUR_API_KEY,
   KOREA_TOUR_APP_NAME,
   KOREA_TOUR_BASE_URL,
-} from '@/constants/korea-tour-api';
-import { DetailIntroRaw } from '@/types/korea-tour.type';
+} from '@/constants/tour.constants';
 
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
@@ -70,7 +70,10 @@ export async function GET(req: NextRequest) {
     }
 
     return NextResponse.json({ phone, openTime, closeDay, rawData });
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+  } catch (err: unknown) {
+    return NextResponse.json(
+      { error: (err as Error).message },
+      { status: 500 },
+    );
   }
 }

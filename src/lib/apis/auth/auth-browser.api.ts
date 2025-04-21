@@ -7,7 +7,6 @@ import { AuthResult, UserInfo } from '@/types/auth.type';
 
 import { getBrowserClient } from '../../supabase/client';
 
-
 /**
  * 사용자 객체를 UserInfo 타입으로 변환하는 함수
  * @param user - Supabase User 객체
@@ -80,7 +79,7 @@ export const fetchSendPasswordResetEmail = async (
     }
 
     return { success: true, error: null };
-  } catch (error: any) {
+  } catch (error: unknown) {
     // handleError를 호출한 결과의 error 속성을 AuthResult에 맞게 래핑하여 반환합니다.
     const handled = handleError('비밀번호 재설정 메일 전송', error);
     return { success: false, error: handled.error };
@@ -111,7 +110,7 @@ export const fetchUpdatePassword = async (
     }
 
     return { success: true, error: null };
-  } catch (error: any) {
+  } catch (error: unknown) {
     const handled = handleError('비밀번호 업데이트', error);
     return { success: false, error: handled.error };
   }

@@ -19,9 +19,9 @@ import { CATEGORY_KR_MAP } from '@/constants/home.constants';
 export const TAB_LIST: Record<CategoryType, CategoryParamType> = {
   전체: 'all',
   명소: 'toursite',
+  숙박: 'accommodation',
   맛집: 'restaurant',
   카페: 'cafe',
-  숙박: 'accommodation',
 };
 
 const SearchResultsPage = ({

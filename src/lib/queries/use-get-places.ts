@@ -2,7 +2,7 @@ import { QueryClient, useInfiniteQuery } from '@tanstack/react-query';
 
 import { CategoryParamType, PlaceResponse } from '@/types/category.type';
 
-import { fetchGetPlacesByCategory } from '../apis/category/get-place';
+import { fetchGetPlacesByCategory } from '../apis/category/get-place.api';
 
 /**
  * 클라이언트 컴포넌트에서 카테고리별 장소 데이터를 무한 스크롤로 조회하는 훅

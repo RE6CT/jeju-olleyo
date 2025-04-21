@@ -21,7 +21,7 @@ const SearchBar = () => {
   const handleSearch = () => {
     const query = inputRef.current?.value;
     if (query) {
-      router.push(`${PATH.SEARCH}/${category}?query=${query}`);
+      router.push(`${PATH.SEARCH}/${category}?query=${query.trim()}`);
     }
   };
 

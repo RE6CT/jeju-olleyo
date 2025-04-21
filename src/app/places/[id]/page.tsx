@@ -19,7 +19,7 @@ const PlaceDetailPage = () => {
 
   const [place, setPlace] = useState<Place | null>(null);
   const [detailInfo, setDetailInfo] = useState<DetailIntroRaw>();
-  const [_, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
 
   // 유저 아이디 가져오기

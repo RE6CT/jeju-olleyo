@@ -42,8 +42,8 @@ export const fetchGetPlacesByCategory = async (
     countQuery = countQuery.eq('category', krCategory);
   }
 
-  const { error: countError, count } = await countQuery;
-  const { error: dataError, data } = await dataQuery;
+  const [{ error: countError, count }, { error: dataError, data }] =
+    await Promise.all([countQuery, dataQuery]);
 
   if (countError) throw new Error(countError.message);
   if (dataError) throw new Error(dataError.message);

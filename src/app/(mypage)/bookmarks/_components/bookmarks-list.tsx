@@ -30,7 +30,7 @@ const BookmarksList = ({ userId }: { userId: string }) => {
               placeId={place.placeId}
               image={place.image}
               title={place.title}
-              isLiked={true}
+              isBookmarked={true}
               isDragging={false}
             />
           ))}

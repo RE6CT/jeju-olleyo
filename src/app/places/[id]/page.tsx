@@ -6,7 +6,7 @@ import { CategoryType } from '@/types/category.type';
 import PlaceLocation from './_components/place-location';
 import PlanIncludingPlace from './_components/plan-including-place';
 import { getServerClient } from '@/lib/supabase/server';
-import { SERVER_COMPONENT_BASE_URL } from '@/constants/korea-tour-api';
+import { SERVER_COMPONENT_BASE_URL } from '@/constants/tour.constants';
 
 const PlaceDetailPage = async ({ params }: { params: { id: string } }) => {
   const supabase = await getServerClient();

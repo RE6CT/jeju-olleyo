@@ -9,7 +9,7 @@ import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { camelize } from '@/lib/utils/camelize';
 import BookmarkIcon from '@/components/commons/bookmark-icon';
-import { useBookmarkQuery } from '@/lib/hooks/use-bookmark-query';
+// import { useBookmarkQuery } from '@/lib/hooks/use-bookmark-query';
 import { CategoryType } from '@/types/category.type';
 import PlaceLocation from './_components/place-location';
 import PlanIncludingPlace from './_components/plan-including-place';
@@ -37,7 +37,7 @@ const PlaceDetailPage = () => {
   }, []);
 
   // 북마크 상태 가져오기
-  const { isBookmarked, toggleBookmark } = useBookmarkQuery(userId ?? '');
+  // const { isBookmarked, toggleBookmark } = useBookmarkQuery(userId ?? '');
 
   // 수파베이스 내 장소 정보 가져오기
   useEffect(() => {
@@ -118,7 +118,7 @@ const PlaceDetailPage = () => {
             <div className="mb-[10px] mt-[10px] flex items-center gap-2">
               <div className="bold-28 text-xl">{place.title}</div>
               <div className="ml-auto">
-                <BookmarkIcon
+                {/* <BookmarkIcon
                   isBookmarked={isBookmarked(Number(params.id))}
                   onToggle={() => {
                     if (userId) {
@@ -126,7 +126,7 @@ const PlaceDetailPage = () => {
                     }
                   }}
                   size={40}
-                />
+                /> */}
               </div>
             </div>
 

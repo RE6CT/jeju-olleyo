@@ -12,7 +12,6 @@ import { useToast } from '@/hooks/use-toast';
  * ```
  */
 export const usePlanFilter = (userId: string) => {
-  const { toast } = useToast();
   const { mutate: deletePlan } = useDeletePlanMutation(userId);
 
   const [filter, setFilter] = useState<FilterState>({

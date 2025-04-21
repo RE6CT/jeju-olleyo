@@ -10,7 +10,6 @@ import {
 } from '../apis/bookmark/get-bookmark.api';
 import fetchGetAllPlaces from '../apis/search/get-place.api';
 
-
 /**
  * 북마크 관련 기능을 제공하는 커스텀 훅
  *
@@ -61,9 +60,9 @@ export const useBookmarkQuery = (userId: string | null) => {
   /**
    * 북마크 추가를 위한 mutation
    * @remarks
-   * - 장소가 존재하는지 먼저 확인합니다.
-   * - 낙관적 업데이트를 사용하여 UI를 즉시 업데이트합니다.
-   * - 에러 발생 시 이전 상태로 롤백합니다.
+   * - 장소가 존재하는지 먼저 확인
+   * - 낙관적 업데이트를 사용하여 UI를 즉시 업데이트
+   * - 에러 발생 시 이전 상태로 롤백
    */
   const addBookmarkMutation = useMutation({
     mutationFn: (placeId: number) => {
@@ -96,6 +95,13 @@ export const useBookmarkQuery = (userId: string | null) => {
 
       return { previousBookmarks };
     },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['bookmarks', userId],
+        refetchType: 'active',
+        exact: true,
+      });
+    },
     onError: (_err, _newBookmark, context) => {
       if (context?.previousBookmarks) {
         queryClient.setQueryData(
@@ -103,13 +109,6 @@ export const useBookmarkQuery = (userId: string | null) => {
           context.previousBookmarks,
         );
       }
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['bookmarks', userId],
-        refetchType: 'active',
-        exact: true,
-      });
     },
   });
 

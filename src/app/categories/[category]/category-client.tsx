@@ -7,7 +7,7 @@ import ErrorMessage from '@/app/error';
 import Loading from '@/app/loading';
 import Banner from '@/app/search/_components/banner';
 import PlaceCard from '@/components/features/card/place-card';
-import { useBookmarkQuery } from '@/lib/hooks/use-bookmark-query';
+import { useBookmarkQuery } from '@/lib/queries/use-bookmark-query';
 import { useGetPlacesByCategoryInfiniteQuery } from '@/lib/queries/use-get-places';
 import { CategoryParamType } from '@/types/category.type';
 

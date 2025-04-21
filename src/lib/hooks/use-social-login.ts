@@ -35,8 +35,12 @@ const useSocialLogin = () => {
       if (url) {
         window.location.href = url;
       }
-    } catch (error: any) {
-      setError(error.message || '구글 로그인 중 오류가 발생했습니다.');
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError('구글 로그인 중 오류가 발생했습니다.');
+      }
     } finally {
       setIsGoogleLoading(false);
     }
@@ -61,8 +65,12 @@ const useSocialLogin = () => {
       if (url) {
         window.location.href = url;
       }
-    } catch (error: any) {
-      setError(error.message || '카카오 로그인 중 오류가 발생했습니다.');
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError('카카오 로그인 중 오류가 발생했습니다.');
+      }
     } finally {
       setIsKakaoLoading(false);
     }

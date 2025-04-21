@@ -7,7 +7,7 @@ import {
   fetchGetPlanDaysAndLocations,
 } from '@/lib/apis/plan/plan.api';
 
-import NotFound from '../not-found';
+import NotFound from '../_components/features/notfound/not-found';
 
 const PlanDetailPage = async ({ params }: { params: { planId: string } }) => {
   const HAPPY_IMAGE = {

@@ -20,5 +20,3 @@ export const SUCCESS_MESSAGES = {
   PHONE_UPDATED: '휴대폰 번호가 변경되었습니다.',
   PASSWORD_UPDATED: '비밀번호가 변경되었습니다.',
 };
-
-export const MAX_FILE_SIZE = 5 * 1024 * 1024;

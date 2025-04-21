@@ -7,13 +7,12 @@ import { Button } from '@/components/ui/button';
 import DynamicPagination from '@/components/ui/dynamic-pagination';
 import { Input } from '@/components/ui/input';
 import fetchGetAllPlaces from '@/lib/apis/search/get-place.api';
-import { useBookmarkQuery } from '@/lib/hooks/use-bookmark-query';
+import { useBookmarkQuery } from '@/lib/queries/use-bookmark-query';
 import { CategoryType } from '@/types/category.type';
 import { Place } from '@/types/search.type';
 
-
-import DaySelectRequiredModal from './day-select-required-modal';
-import PlaceCardCategory from './place-card-category';
+import DaySelectRequiredModal from '../modal/day-select-required-modal';
+import PlaceCardSidemenu from '../card/place-card-sidemenu';
 import PlaceSidemenuLayout from './place-sidemenu-layout';
 
 const ITEMS_PER_PAGE = 7;
@@ -232,7 +231,7 @@ const SearchSidemenu = ({
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <PlaceCardCategory
+                  <PlaceCardSidemenu
                     title={place.title}
                     category={place.category as CategoryType}
                     imageUrl={place.image || ''}

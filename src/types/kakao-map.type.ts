@@ -228,6 +228,13 @@ export type LocationData = {
   };
 };
 
+// 이벤트 타겟 타입
+export type KakaoMapEventTarget =
+  | KakaoMapInstance
+  | MarkerInstance
+  | PolylineInstance
+  | MarkerClustererInstance;
+
 /**
  * 카카오맵 API 타입
  */
@@ -309,9 +316,13 @@ export type KakaoMapAPI = {
       options: MarkerClustererOptions,
     ) => MarkerClustererInstance;
     event: {
-      addListener: (target: any, event: string, callback: () => void) => void;
+      addListener: (
+        target: KakaoMapEventTarget,
+        event: string,
+        callback: () => void,
+      ) => void;
       removeListener: (
-        target: any,
+        target: KakaoMapEventTarget,
         event: string,
         callback: () => void,
       ) => void;

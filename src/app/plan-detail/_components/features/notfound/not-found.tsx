@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
 
-export default function NotFound() {
+const NotFound = () => {
   return (
     <div className="flex min-h-[calc(100vh-80px)] flex-col items-center justify-center gap-6">
       <Image
@@ -27,4 +27,6 @@ export default function NotFound() {
       </Link>
     </div>
   );
-}
+};
+
+export default NotFound;

@@ -51,9 +51,14 @@ const useAuth = () => {
         }
 
         return true;
-      } catch (error: any) {
-        setError(error.message || '로그인 중 오류가 발생했습니다.');
-        return false;
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          setError(error.message);
+          return false;
+        } else {
+          setError('로그인 중 오류가 발생했습니다.');
+          return false;
+        }
       } finally {
         setIsLoading(false);
       }
@@ -86,9 +91,14 @@ const useAuth = () => {
         }
 
         return true;
-      } catch (error: any) {
-        setError(error.message || '회원가입 중 오류가 발생했습니다.');
-        return false;
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          setError(error.message);
+          return false;
+        } else {
+          setError('회원가입 중 오류가 발생했습니다.');
+          return false;
+        }
       } finally {
         setIsLoading(false);
       }
@@ -122,9 +132,14 @@ const useAuth = () => {
       router.push(PATH.SIGNIN);
 
       return true;
-    } catch (error: any) {
-      setError(error.message || '로그아웃 중 오류가 발생했습니다.');
-      return false;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error.message);
+        return false;
+      } else {
+        setError('로그아웃 중 오류가 발생했습니다.');
+        return false;
+      }
     } finally {
       setIsLoading(false);
     }

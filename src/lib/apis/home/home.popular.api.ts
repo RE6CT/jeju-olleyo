@@ -28,34 +28,6 @@ export const fetchAllPlans = async (userId: string | null, limit?: number) => {
 };
 
 /**
- * URL 카테고리에 해당하는 장소 목록을 가져오는 함수
- * @param urlcategory - URL에서 받아온 카테고리 (toursite, restaurant, cafe, accommodation 등)
- * @returns 해당 카테고리의 장소 목록
- */
-export const fetchGetPlacesByCategory = async (
-  urlcategory: string,
-): Promise<any[]> => {
-  try {
-    const supabase = getBrowserClient();
-
-    const krCategory = CATEGORY_KR_MAP[urlcategory];
-    if (!krCategory) throw new Error('유효하지 않은 카테고리입니다.');
-
-    const { data, error } = await supabase
-      .from('places')
-      .select('*')
-      .eq('category', krCategory);
-
-    if (error) throw new Error(error.message);
-
-    return data;
-  } catch (error) {
-    console.error('Error fetching places by category:', error);
-    throw error;
-  }
-};
-
-/**
  * 인기 장소 목록을 가져오는 함수
  * @param category - 장소 카테고리 (기본값: '전체')
  * @param userId - 현재 로그인한 사용자의 ID (선택적)

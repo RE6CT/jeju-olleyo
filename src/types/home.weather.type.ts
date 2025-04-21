@@ -1,9 +1,7 @@
-// src/types/home.weather.type.ts
-
 /**
  * Visual Crossing 날씨 API의 응답 타입
  */
-export interface VisualCrossingResponse {
+export type VisualCrossingResponse = {
   queryCost: number;
   latitude: number;
   longitude: number;
@@ -12,15 +10,15 @@ export interface VisualCrossingResponse {
   timezone: string;
   tzoffset: number;
   days: VisualCrossingDay[];
-  alerts: any[];
-  stations: Record<string, any>;
-  currentConditions: Record<string, any>;
-}
+  alerts: unknown[];
+  stations: Record<string, unknown>;
+  currentConditions: Record<string, unknown>;
+};
 
 /**
  * Visual Crossing API 일간 날씨 데이터 타입
  */
-export interface VisualCrossingDay {
+export type VisualCrossingDay = {
   datetime: string;
   datetimeEpoch: number;
   tempmax: number;
@@ -57,7 +55,7 @@ export interface VisualCrossingDay {
   icon: string;
   stations: string[];
   source: string;
-}
+};
 
 /**
  * 날씨 아이콘 타입
@@ -82,62 +80,62 @@ export type WeatherIcon =
 /**
  * 가공된 일간 날씨 데이터 타입
  */
-export interface ProcessedDayWeather {
+export type ProcessedDayWeather = {
   date: string;
   dayOfWeek: string;
   minTemp: number;
   maxTemp: number;
   weatherIcon: WeatherIcon;
   weatherCondition: string;
-}
+};
 
 /**
  * 날씨 카드 props 타입
  */
-export interface WeatherCardProps {
+export type WeatherCardProps = {
   /** 날씨 데이터 */
   weather: ProcessedDayWeather;
   isToday?: boolean;
-}
+};
 
 /**
  * 날씨 카드 컨테이너 props 타입
  */
-export interface WeatherCardsContainerProps {
+export type WeatherCardsContainerProps = {
   /** 날씨 데이터 배열 */
   weatherData: ProcessedDayWeather[];
-}
+};
 
 /**
  * 날씨 오류 컴포넌트 props 타입
  */
-export interface WeatherErrorProps {
+export type WeatherErrorProps = {
   title: string;
   errorMessage: string;
-}
+};
 
 /**
  * 날씨 헤더 컴포넌트 props 타입
  */
-export interface WeatherHeaderProps {
+export type WeatherHeaderProps = {
   month: number;
   day: number;
   title: string;
   subtitle: string;
-}
+};
 
 /**
  * 날씨 메시지 타입
  */
-export interface WeatherMessage {
+export type WeatherMessage = {
   title: string;
   subtitle: string;
-}
+};
 
 /**
  * useJejuWeatherQuery 훅 반환 타입
  */
-export interface UseJejuWeatherReturn {
+export type UseJejuWeatherReturn = {
   /** 날씨 데이터 배열 */
   weatherData: ProcessedDayWeather[];
   isLoading: boolean;
@@ -147,16 +145,16 @@ export interface UseJejuWeatherReturn {
     month: number;
     day: number;
   };
-}
+};
 
 /**
  * 정적 날씨 데이터 결과 타입
  */
-export interface StaticWeatherResult {
+export type StaticWeatherResult = {
   /** 날씨 데이터 배열 */
   weatherData: ProcessedDayWeather[];
   error: string | null;
-}
+};
 
 /**
  * 날씨 스토어 상태 인터페이스

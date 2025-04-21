@@ -2,7 +2,6 @@
 
 import { ko } from 'date-fns/locale';
 import Image from 'next/image';
-import { useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';

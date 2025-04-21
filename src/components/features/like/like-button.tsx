@@ -2,7 +2,7 @@
 
 import useToggleLike from '@/lib/hooks/use-like';
 
-import LikeIcon from '../commons/like-icon';
+import LikeIcon from '../../commons/like-icon';
 
 /**
  * 좋아요 버튼 컴포넌트

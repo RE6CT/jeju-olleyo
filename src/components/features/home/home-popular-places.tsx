@@ -75,7 +75,7 @@ const PopularPlaces = () => {
               WebkitOverflowScrolling: 'touch',
               userSelect: 'none',
               gap: '11px', // 카드 간 간격 11px로 설정
-              minHeight: '350px', // 최소 높이 유지로 레이아웃 안정화
+              minHeight: '270px', // 최소 높이 유지로 레이아웃 안정화
             }}
           >
             {isFirstLoading ? (
@@ -84,7 +84,7 @@ const PopularPlaces = () => {
                 <div
                   key={idx}
                   className="flex-shrink-0 animate-pulse rounded-lg bg-gray-200"
-                  style={{ width: '230px', height: '300px' }} // 카드 가로 길이 230px로 고정
+                  style={{ width: '230px', height: '270px' }} // 카드 가로 길이 230px로 고정
                 />
               ))
             ) : places.length > 0 ? (
@@ -100,7 +100,7 @@ const PopularPlaces = () => {
                     placeId={place.id}
                     image={place.image || '/images/default_place_image.svg'}
                     title={place.title}
-                    isLiked={place.isBookmarked}
+                    isBookmarked={place.isBookmarked}
                     isDragging={isDragging}
                     className="cursor-pointer select-none"
                   />

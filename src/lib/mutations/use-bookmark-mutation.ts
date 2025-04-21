@@ -4,6 +4,7 @@ import { fetchGetBookmarkByIdQuery } from '../apis/bookmark/get-bookmark.api';
 import fetchDeleteBookmark from '../apis/bookmark/delete-bookmark.api';
 import { Place } from '@/types/home.popular-place.type';
 import { InfinitePlaceData } from '@/types/category.type';
+import { UserBookmark } from '@/types/mypage.type';
 
 /**
  * 북마크를 토글하는 뮤테이션 훅
@@ -31,11 +32,13 @@ export const useBookmarkMutation = () => {
       // 관련 쿼리 취소
       await queryClient.cancelQueries({ queryKey: ['popularPlaces'] });
       await queryClient.cancelQueries({ queryKey: ['places'] });
+      await queryClient.cancelQueries({ queryKey: ['bookmarks'] });
 
       // 이전 데이터 저장
       const previousData = {
         popularPlaces: queryClient.getQueryData(['popularPlaces']),
         places: queryClient.getQueryData(['places']),
+        bookmarks: queryClient.getQueryData(['bookmarks']),
       };
 
       // 홈 페이지 쿼리 업데이트
@@ -73,6 +76,17 @@ export const useBookmarkMutation = () => {
               };
             }),
           };
+        },
+      );
+
+      // 북마크 페이지 쿼리 업데이트
+      queryClient.setQueriesData(
+        { queryKey: ['bookmarks'], exact: false },
+        (oldData: UserBookmark[]) => {
+          const bookmarks = oldData.filter(
+            (place) => place.placeId !== placeId,
+          );
+          return bookmarks;
         },
       );
 

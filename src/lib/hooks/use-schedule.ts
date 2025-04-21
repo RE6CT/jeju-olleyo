@@ -17,7 +17,9 @@ export const useSchedule = (
   isReadOnly: boolean,
 ) => {
   const { toast } = useToast();
-  const [placeCount, setPlaceCount] = useState(0);
+  const [placeCount, setPlaceCount] = useState(() =>
+    Object.values(dayPlaces).reduce((acc, places) => acc + places.length, 0),
+  ); // 초기 장소 개수 계산
   const [copiedDay, setCopiedDay] = useState<number | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [dayToDelete, setDayToDelete] = useState<number | null>(null);
@@ -38,14 +40,17 @@ export const useSchedule = (
     if (activeTab === '전체보기') return;
 
     const dayNumber = activeTab as number;
-    const uniqueId = `${newPlace.id}-${placeCount}`;
+    let uniqueId = '';
+    setPlaceCount((prev) => {
+      uniqueId = `${newPlace.id}-${prev}`;
+      return prev + 1;
+    }); // 함수형 업데이트로 최신 장소 개수 보장(여러 장소가 동시에 추가되는 경우에도 고유 ID를 갖게 하여 충돌 방지)
     const newPlaceWithId = { ...newPlace, uniqueId };
 
     setDayPlaces((prev: DayPlaces) => ({
       ...prev,
       [dayNumber]: [...(prev[dayNumber] || []), newPlaceWithId],
     }));
-    setPlaceCount((prev) => prev + 1);
   };
 
   /**

@@ -30,14 +30,20 @@ export const useChangeImageFile = (
       setIsUploading(true);
 
       if (file.size > MAX_FILE_SIZE) {
-        successToast(`이미지 크기는 ${MAX_FILE_SIZE}MB를 초과할 수 없습니다.`);
+        const maxMb = (MAX_FILE_SIZE / 1024 / 1024).toFixed(1);
+        successToast(`이미지 크기는 ${maxMb}MB를 초과할 수 없습니다.`);
         setIsUploading(false);
         return;
       }
 
-      const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
-      if (!validTypes.includes(file.type)) {
-        successToast(`${VALID_FILE_TYPES} 형식의 이미지만 업로드 가능합니다.`);
+      if (
+        !VALID_FILE_TYPES.includes(
+          file.type as 'image/jpeg' | 'image/png' | 'image/gif',
+        )
+      ) {
+        successToast(
+          `${VALID_FILE_TYPES.join(', ')} 형식의 이미지만 업로드 가능합니다.`,
+        );
         setIsUploading(false);
         return;
       }

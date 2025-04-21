@@ -14,13 +14,14 @@ import CategoryFilterTabs from '@/components/commons/category-filter-tabs';
 import ErrorMessage from '@/app/error';
 import Loading from '@/app/loading';
 import { PATH } from '@/constants/path.constants';
-// const tabList = category.map((c) => CATEGORY_KR_MAP[c])
-const tabList: { [key in CategoryParamType]: CategoryType } = {
-  all: '전체',
-  toursite: '명소',
-  restaurant: '맛집',
-  cafe: '카페',
-  accommodation: '숙박',
+import { CATEGORY_KR_MAP } from '@/constants/home.constants';
+
+export const TAB_LIST: Record<CategoryType, CategoryParamType> = {
+  전체: 'all',
+  명소: 'toursite',
+  맛집: 'restaurant',
+  카페: 'cafe',
+  숙박: 'accommodation',
 };
 
 const SearchResultsPage = ({
@@ -55,8 +56,12 @@ const SearchResultsPage = ({
     }
   }, [query, router]);
 
-  const onFilterTabChange = () => {
-    router.push(`${PATH.SEARCH}/${urlCategory}?query=${query}`);
+  /**
+   * 탭을 눌렀을 때 실행되는 이벤트 핸들러
+   * @param tab - 탭 이름
+   */
+  const onFilterTabChange = (tab: CategoryType) => {
+    router.push(`${PATH.SEARCH}/${TAB_LIST[tab]}?query=${query}`);
   };
 
   if (isPending) return <Loading />;
@@ -71,7 +76,8 @@ const SearchResultsPage = ({
 
       <div className="mb-[17px] mt-5 h-[40px] w-full max-w-[388px]">
         <CategoryFilterTabs
-          tabs={Object.values(tabList)}
+          tabs={Object.keys(TAB_LIST) as CategoryType[]}
+          defaultTab={CATEGORY_KR_MAP[urlCategory] as CategoryType}
           onTabChange={onFilterTabChange}
           tabsGapClass="gap-[10px]"
           tabPaddingClass="px-1 py-1"

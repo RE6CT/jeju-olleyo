@@ -7,8 +7,8 @@ import { CategoryType } from '@/types/category.type';
 
 const CategoryFilterTabs = ({
   tabs,
-  defaultTab = '전체',
   tabsGapClass = 'gap-[10px]',
+  defaultTab = '전체',
   onTabChange,
   tabPaddingClass = 'px-2',
 }: {

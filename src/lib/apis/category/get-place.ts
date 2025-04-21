@@ -20,8 +20,6 @@ export const fetchGetPlacesByCategory = async (
   const start = pageParam * pageSize;
   const end = start + pageSize - 1;
 
-  console.log('searchQuery ➡️', searchQuery);
-
   // 유저 정보 가져오기
   const { user: sessionUser } = await getCurrentSession();
   const userId = sessionUser?.id;

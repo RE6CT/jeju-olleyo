@@ -1,49 +1,99 @@
+'use client';
+
 import CategoryBadge from '@/components/commons/category-badge';
 import PlaceImage from '@/components/commons/place-image';
+import { getBrowserClient } from '@/lib/supabase/client';
+import { DetailIntroRaw } from '@/types/korea-tour.type';
 import { Place } from '@/types/search.type';
+import { useParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { camelize } from '@/lib/utils/camelize';
+import BookmarkIcon from '@/components/commons/bookmark-icon';
+import { useBookmarkQuery } from '@/lib/hooks/use-bookmark-query';
 import { CategoryType } from '@/types/category.type';
 import PlaceLocation from './_components/place-location';
 import PlanIncludingPlace from './_components/plan-including-place';
-import { getServerClient } from '@/lib/supabase/server';
-import { SERVER_COMPONENT_BASE_URL } from '@/constants/korea-tour-api';
 
-const PlaceDetailPage = async ({ params }: { params: { id: string } }) => {
-  const supabase = await getServerClient();
+const PlaceDetailPage = () => {
+  const params = useParams();
 
-  // 추후 북마크 표시 위한 수파베이스 로직
-  // const {
-  //       data: { session },
-  //     } = await supabase.auth.getSession();
-  // const userId = session?.user?.id ?? null;
+  const [place, setPlace] = useState<Place | null>(null);
+  const [detailInfo, setDetailInfo] = useState<DetailIntroRaw>();
+  const [_, setError] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
 
-  const { data, error } = await supabase
-    .from('places')
-    .select('*')
-    .eq('place_id', Number(params.id))
-    .single();
+  // 유저 아이디 가져오기
+  useEffect(() => {
+    const fetchUserId = async () => {
+      const supabase = await getBrowserClient();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (session?.user?.id) {
+        setUserId(session.user.id);
+      }
+    };
+    fetchUserId();
+  }, []);
 
-  if (error || !data) {
-    return <div>장소 기본 정보 불러오기 실패</div>;
-  }
+  // 북마크 상태 가져오기
+  const { isBookmarked, toggleBookmark } = useBookmarkQuery(userId ?? '');
 
-  const camelizedData = camelize(data) as Place;
-  const { placeId: contentId, contentTypeId } = camelizedData;
+  // 수파베이스 내 장소 정보 가져오기
+  useEffect(() => {
+    const fetchGetPlaceById = async () => {
+      try {
+        const supabase = await getBrowserClient();
 
-  const detailRes = await fetch(
-    `${SERVER_COMPONENT_BASE_URL}/api/korea-tour/detail?contentId=${contentId}&contentTypeId=${contentTypeId}`,
-  );
-  const detailJson = await detailRes.json();
+        const { data, error } = await supabase
+          .from('places')
+          .select('*')
+          .eq('place_id', Number(params.id))
+          .single();
+
+        // console.log('장소 불러오기');
+
+        if (error || !data) {
+          setError('수파베이스 장소 불러오기 실패');
+          return;
+        }
+
+        const camelizedData = camelize(data) as Place;
+        setPlace(camelizedData);
+
+        const { placeId: contentId, contentTypeId } = camelizedData;
+
+        // 관광공사 api 라우트 핸들러 내에서 영업시간 등 가져오기
+        const detailRes = await fetch(
+          `/api/korea-tour/detail?contentId=${contentId}&contentTypeId=${contentTypeId}`,
+        );
+        const detailJson = await detailRes.json();
+
+        if (!detailRes.ok) {
+          setError('상세정보 불러오기 실패');
+          return;
+        }
+
+        setDetailInfo(detailJson);
+      } catch (err) {
+        console.error('장소 불러오기 에러:', err);
+      }
+    };
+
+    if (params?.id) {
+      fetchGetPlaceById();
+    }
+  }, [params]);
 
   // '숙박' 카테고리 판단 : 숙박은 운영시간아니고 체크인 체크아웃으로 표시해야 하니까
-  const isHotel = camelizedData?.contentTypeId === 32;
+  const isHotel = place?.contentTypeId === 32;
   const rawSummary = isHotel
-    ? detailJson
-      ? `${detailJson.openTime || '체크인/아웃 시간 정보 없음'}`
+    ? detailInfo
+      ? `${detailInfo.openTime || '체크인/아웃 시간 정보 없음'}`
       : '정보 없음'
-    : detailJson
-      ? `${detailJson.openTime || '운영 시간 정보 없음'}${
-          detailJson.closeDay ? ` (휴무: ${detailJson.closeDay})` : ''
+    : detailInfo
+      ? `${detailInfo.openTime || '운영 시간 정보 없음'}${
+          detailInfo.closeDay ? ` (휴무: ${detailInfo.closeDay})` : ''
         }`
       : '정보 없음';
 
@@ -51,31 +101,36 @@ const PlaceDetailPage = async ({ params }: { params: { id: string } }) => {
 
   return (
     <div className="mt-[73px] flex flex-col items-center justify-center px-9">
-      {camelizedData ? (
+      {place ? (
         <div className="flex gap-8">
           <div className="relative aspect-square w-[479px] bg-no-repeat object-cover">
-            <PlaceImage
-              image={camelizedData.image}
-              title={camelizedData.title}
-            />
+            <PlaceImage image={place.image} title={place.title} />
           </div>
 
           <div className="flex flex-col justify-start space-y-3 pt-2">
             <div className="flex items-center gap-2">
               <CategoryBadge
-                category={camelizedData.category as CategoryType}
+                category={place.category as CategoryType}
                 badgeType="modal"
               />
             </div>
 
             <div className="mb-[10px] mt-[10px] flex items-center gap-2">
-              <div className="bold-28 text-xl">{camelizedData.title}</div>
+              <div className="bold-28 text-xl">{place.title}</div>
               <div className="ml-auto">
-                <div>북마크 필요</div>
+                <BookmarkIcon
+                  isBookmarked={isBookmarked(Number(params.id))}
+                  onToggle={() => {
+                    if (userId) {
+                      toggleBookmark(Number(params.id));
+                    }
+                  }}
+                  size={40}
+                />
               </div>
             </div>
 
-            {detailJson ? (
+            {detailInfo ? (
               <div className="mt-2 space-y-[9.5px] text-gray-300">
                 <div className="medium-18 flex space-x-2">
                   <svg
@@ -110,7 +165,7 @@ const PlaceDetailPage = async ({ params }: { params: { id: string } }) => {
                       fill="#A7BDC8"
                     />
                   </svg>
-                  {detailJson?.phone || '전화번호 미제공'}
+                  {detailInfo?.phone || '전화번호 미제공'}
                 </div>
               </div>
             ) : (
@@ -133,15 +188,15 @@ const PlaceDetailPage = async ({ params }: { params: { id: string } }) => {
                     fill="#A7BDC8"
                   />
                 </svg>
-                {camelizedData.address}
+                {place.address}
               </div>
             </div>
 
             <div className="mb-auto">
               <PlaceLocation
-                lat={camelizedData.lat}
-                lng={camelizedData.lng}
-                title={camelizedData.title}
+                lat={place.lat}
+                lng={place.lng}
+                title={place.title}
               />
             </div>
           </div>

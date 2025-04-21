@@ -6,7 +6,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import ErrorMessage from '@/components/features/alert/error-message';
 import { Button } from '@/components/ui/button';
 import DynamicPagination from '@/components/ui/dynamic-pagination';
-import { useBookmarkQuery } from '@/lib/hooks/use-bookmark-query';
+import { useBookmarkQuery } from '@/lib/queries/use-bookmark-query';
 import { CategoryType } from '@/types/category.type';
 
 import PlaceCardSidemenu from '../card/place-card-sidemenu';

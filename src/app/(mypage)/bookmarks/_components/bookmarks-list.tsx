@@ -1,7 +1,7 @@
 'use client';
 
 import PlaceCard from '@/components/features/card/place-card';
-import { useBookmarkQuery } from '@/lib/hooks/use-bookmark-query';
+import { useBookmarkQuery } from '@/lib/queries/use-bookmark-query';
 import { useGetDataCount } from '@/lib/queries/use-get-data-count';
 
 /**

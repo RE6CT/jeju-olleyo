@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import DynamicPagination from '@/components/ui/dynamic-pagination';
 import { Input } from '@/components/ui/input';
 import fetchGetAllPlaces from '@/lib/apis/search/get-place.api';
-import { useBookmarkQuery } from '@/lib/hooks/use-bookmark-query';
+import { useBookmarkQuery } from '@/lib/queries/use-bookmark-query';
 import { CategoryType } from '@/types/category.type';
 import { Place } from '@/types/search.type';
 

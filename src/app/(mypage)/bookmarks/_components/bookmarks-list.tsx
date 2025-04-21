@@ -1,22 +1,31 @@
 'use client';
 
+import Loading from '@/app/loading';
 import PlaceCard from '@/components/features/card/place-card';
-import { useBookmarkQuery } from '@/lib/queries/use-bookmark-query';
+import useAuth from '@/lib/hooks/use-auth';
+import { useGetBookMarks } from '@/lib/queries/use-get-bookmarks';
 import { useGetDataCount } from '@/lib/queries/use-get-data-count';
 
 /**
  * 북마크 페이지 내용 전체를 담고 있는 클라이언트 컴포넌트
  * @param userId - 사용자의 uuid
  */
-const BookmarksList = ({ userId }: { userId: string }) => {
-  const { data } = useGetDataCount(userId);
-  const { bookmarks } = useBookmarkQuery(userId);
+const BookmarksList = () => {
+  const { user, isLoading } = useAuth();
+  const { data: countData, isLoading: isCountLoading } = useGetDataCount(
+    user?.id,
+  );
+  const { data: bookmarks, isLoading: isBookmarksLoading } = useGetBookMarks(
+    user?.id,
+  );
+
+  if (isLoading || isCountLoading || isBookmarksLoading) return <Loading />;
 
   return (
     <>
       <div className="flex flex-col gap-4">
         <p className="medium-16 text-secondary-300">
-          {data?.bookmarkCount}개의 장소를 북마크했어요
+          {countData?.bookmarkCount}개의 장소를 북마크했어요
         </p>
         <h2 className="semibold-28 w-full">내가 북마크한 장소</h2>
       </div>

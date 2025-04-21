@@ -58,8 +58,11 @@ const CategoryClient = ({
             />
             {/* 8번째 아이템 이후에 배너 삽입 (첫 페이지의 마지막) */}
             {index % 8 === 7 && (
-              <div className="col-span-full my-4 flex w-full items-center justify-center">
-                <Banner key={`banner-${index}`} />
+              <div
+                key={`banner-${index}`}
+                className="col-span-full my-4 flex w-full items-center justify-center"
+              >
+                <Banner />
                 {/* 배너 컴포넌트 또는 광고를 여기에 삽입 */}
               </div>
             )}

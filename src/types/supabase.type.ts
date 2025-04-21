@@ -455,6 +455,18 @@ export type Database = {
           is_liked: boolean;
         }[];
       };
+      get_all_places: {
+        Args: {
+          user_id_param: string | null;
+        };
+        Returns: {
+          place_id: number;
+          image: string;
+          title: string;
+          category: string;
+          is_liked: boolean;
+        };
+      };
     };
     Enums: {
       [_ in never]: never;

@@ -2,6 +2,7 @@ import { CATEGORY_KR_MAP } from '@/constants/home.constants';
 import { getBrowserClient } from '@/lib/supabase/client';
 import { camelize } from '@/lib/utils/camelize';
 import { CategoryParamType } from '@/types/category.type';
+import { getCurrentSession } from '../auth/auth-browser.api';
 
 /**
  * 카테고리별로 장소 데이터를 가져오는 함수
@@ -17,21 +18,35 @@ export const fetchGetPlacesByCategory = async (
   const start = pageParam * pageSize;
   const end = start + pageSize - 1;
 
+  // 유저 정보 가져오기
+  const { user: sessionUser } = await getCurrentSession();
+  const userId = sessionUser?.id;
+
   const krCategory = CATEGORY_KR_MAP[urlCategory];
   if (!krCategory) throw new Error('유효하지 않은 카테고리입니다.');
 
-  // 카테고리 all 아닐 경우 특정 카테고리만 가져오기
-  let query = supabase
-    .from('places')
-    .select('*', { count: 'exact' })
+  // 데이터 개수 가져오기
+  let countQuery = supabase.from('places').select('*', { count: 'exact' });
+
+  // 데이터 가져오기
+  let dataQuery = supabase
+    .rpc(
+      'get_all_places',
+      { user_id_param: userId ?? null },
+      { count: 'exact' },
+    )
     .range(start, end);
+
   if (urlCategory !== 'all') {
-    query = query.eq('category', krCategory);
+    dataQuery = dataQuery.eq('category', krCategory);
+    countQuery = countQuery.eq('category', krCategory);
   }
 
-  const { data, error, count } = await query;
+  const { error: countError, count } = await countQuery;
+  const { error: dataError, data } = await dataQuery;
 
-  if (error) throw new Error(error.message);
+  if (countError) throw new Error(countError.message);
+  if (dataError) throw new Error(dataError.message);
 
   return { data: camelize(data), count };
 };

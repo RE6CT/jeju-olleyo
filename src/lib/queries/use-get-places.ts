@@ -67,7 +67,7 @@ const getPlacesByCategoryQueryOptions = (category: CategoryParamType) => ({
  * @param category - 조회할 카테고리 타입
  * @returns 인피니트 쿼리 결과
  */
-export const getPlacesBySearchQuery = (
+export const useGetPlacesBySearchQuery = (
   category: CategoryParamType,
   searchQuery: string,
 ) => {

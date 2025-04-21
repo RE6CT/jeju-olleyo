@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 
 import { CategoryParamType, CategoryType } from '@/types/category.type';
 
-import { getPlacesBySearchQuery } from '@/lib/queries/use-get-places';
+import { useGetPlacesBySearchQuery } from '@/lib/queries/use-get-places';
 import { useInView } from 'react-intersection-observer';
 import Banner from '../_components/banner';
 import PlaceCard from '@/components/features/card/place-card';
@@ -16,7 +16,7 @@ import Loading from '@/app/loading';
 import { PATH } from '@/constants/path.constants';
 import { CATEGORY_KR_MAP } from '@/constants/home.constants';
 
-export const TAB_LIST: Record<CategoryType, CategoryParamType> = {
+const TAB_LIST: Record<CategoryType, CategoryParamType> = {
   전체: 'all',
   명소: 'toursite',
   숙박: 'accommodation',
@@ -40,7 +40,7 @@ const SearchResultsPage = ({
     isFetchingNextPage,
     isPending,
     isError,
-  } = getPlacesBySearchQuery(urlCategory, query);
+  } = useGetPlacesBySearchQuery(urlCategory, query);
 
   const { ref: observerRef, inView } = useInView();
 

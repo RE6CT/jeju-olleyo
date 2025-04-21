@@ -48,3 +48,9 @@ export const POLYLINE_OPTIONS = {
     ODD: '#FF6B6B',
   },
 } as const;
+
+// 일자별 색상 옵션
+export const DAY_COLORS = {
+  ODD: 'bg-primary-500',
+  EVEN: 'bg-secondary-300',
+} as const;

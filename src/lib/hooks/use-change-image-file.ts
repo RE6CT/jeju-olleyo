@@ -60,7 +60,6 @@ export const useChangeImageFile = (
 
   return {
     previewImage,
-    setPreviewImage,
     isUploading,
     handleFileChange,
   };

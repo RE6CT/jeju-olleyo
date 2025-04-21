@@ -33,7 +33,7 @@ const PlanHeader = ({
   setPlanTitle,
   planDescription,
   setPlanDescription,
-  previewImage,
+  targetImage,
   isReadOnly,
 }: {
   startDate: Date | null;
@@ -45,15 +45,11 @@ const PlanHeader = ({
   setPlanTitle: (title: string) => void;
   planDescription: string;
   setPlanDescription: (description: string) => void;
-  previewImage: string | null;
+  targetImage: string | null;
   isReadOnly?: boolean;
 }) => {
-  const {
-    previewImage: newPreviewImage,
-    setPreviewImage,
-    isUploading,
-    handleFileChange,
-  } = useChangeImageFile(previewImage);
+  const { previewImage, isUploading, handleFileChange } =
+    useChangeImageFile(targetImage);
 
   return (
     <>

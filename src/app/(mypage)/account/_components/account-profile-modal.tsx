@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -12,7 +12,6 @@ import { ERROR_MESSAGES } from '@/constants/mypage.constants';
 import { fetchUpdateProfileImage } from '@/lib/apis/profile/update-profile.api';
 import useCustomToast from '@/lib/hooks/use-custom-toast';
 import { ProfileModalProps } from '@/types/mypage.type';
-import { MAX_FILE_SIZE } from '@/constants/global.constant';
 import { useChangeImageFile } from '@/lib/hooks/use-change-image-file';
 
 /**

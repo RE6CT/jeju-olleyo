@@ -26,19 +26,19 @@ import ScheduleSaveModal from '../features/modal/schedule-save-modal';
 import ScheduleCreatedModal from '../features/modal/schedule-created-modal';
 import { fetchSavePlan, fetchSavePlanPlaces } from '@/lib/apis/plan/plan.api';
 import { useToast } from '@/hooks/use-toast';
+import { DAY_COLORS } from '@/constants/map.constants';
 
 const DROPDOWN_CONTENT_STYLE =
   'p-0 border border-[#E7EDF0] bg-[#F9FAFB] rounded-[12px] w-[140px] [&>*:hover]:bg-primary-100 [&>*:hover]:text-primary-500';
 const DROPDOWN_ITEM_STYLE =
   'flex justify-center items-center px-5 py-2.5 text-14 font-medium cursor-pointer w-full transition-colors data-[highlighted]:bg-primary-100 data-[highlighted]:text-primary-500';
 
-const COLORS = {
-  ODD: 'bg-primary-500',
-  EVEN: 'bg-secondary-300',
+const STYLE_CONSTANTS = {
+  SIDE_OFFSET: 4,
 } as const;
 
 const AddPlacePrompt = ({ dayNumber }: { dayNumber: number }) => {
-  const dayColor = dayNumber % 2 === 1 ? COLORS.ODD : COLORS.EVEN;
+  const dayColor = dayNumber % 2 === 1 ? DAY_COLORS.ODD : DAY_COLORS.EVEN;
 
   return (
     <div className="mt-4 flex items-center gap-3">
@@ -426,10 +426,10 @@ const PlanSchedule = ({
         onDragEnd={(result) => !isReadOnly && handleDragEnd(result)}
       >
         <div className="my-6">
-          {/* 탭 네비게이션 */}
           <div className="sticky top-[370px] z-10">
-            {/* 탭 네비게이션 마스킹 영역 */}
-            <div className="absolute -top-[370px] left-0 right-0 h-[370px] bg-white" />
+            <div
+              className={`absolute -top-[370px] left-0 right-0 h-[370px] bg-white`}
+            />
             <div className="bg-white py-4">
               <div className="flex gap-2">
                 <DropdownMenu modal={false}>
@@ -447,7 +447,7 @@ const PlanSchedule = ({
                   <DropdownMenuContent
                     align="start"
                     className={DROPDOWN_CONTENT_STYLE}
-                    sideOffset={4}
+                    sideOffset={STYLE_CONSTANTS.SIDE_OFFSET}
                   >
                     <DropdownMenuItem
                       onClick={() => setActiveTab('전체보기')}

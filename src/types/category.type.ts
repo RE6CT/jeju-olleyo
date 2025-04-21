@@ -20,19 +20,15 @@ export type CategoryBadgeProps = {
 
 /** 장소 타입 */
 export type PlaceType = {
-  address: string;
   category: string;
-  contentTypeId: number;
-  id: number;
   image: string | null;
-  lat: number;
-  lng: number;
   placeId: number;
   title: string;
+  isLiked: boolean;
 };
 
 /** 쿼리 함수 응답 타입 */
 export type PlaceResponse = {
-  data: PlaceType[];
+  data: PlaceType[] | null;
   count: number | null;
 };

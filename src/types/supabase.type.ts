@@ -465,7 +465,7 @@ export type Database = {
           title: string;
           category: string;
           is_liked: boolean;
-        };
+        }[];
       };
     };
     Enums: {

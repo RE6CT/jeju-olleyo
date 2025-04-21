@@ -7,10 +7,12 @@ const BookmarkIcon = ({
   isBookmarked,
   onToggle,
   size,
+  className,
 }: {
   isBookmarked: boolean;
   onToggle: () => void;
   size?: number;
+  className?: string;
 }) => {
   const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -21,7 +23,7 @@ const BookmarkIcon = ({
   return (
     <button
       onClick={handleClick}
-      className="h-30 w-30 right-3 top-3 flex cursor-pointer items-center justify-center rounded-12 border-none bg-white/10 p-0"
+      className={`py- flex cursor-pointer items-center justify-center rounded-12 border-none bg-white/10 px-3 ${className}`}
       aria-label={isBookmarked ? '북마크 해제' : '북마크'}
     >
       <svg

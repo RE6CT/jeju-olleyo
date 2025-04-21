@@ -7,14 +7,12 @@ import ErrorMessage from '@/app/error';
 import Loading from '@/app/loading';
 import Banner from '@/app/search/_components/banner';
 import PlaceCard from '@/components/features/card/place-card';
-import { useBookmarkQuery } from '@/lib/hooks/use-bookmark-query';
 import { useGetPlacesByCategoryInfiniteQuery } from '@/lib/queries/use-get-places';
 import { CategoryParamType } from '@/types/category.type';
 
 /** 서버에서 가져온 데이터를 표시하는 클라이언트 컴포넌트 (카테고리 리스트)) */
 const CategoryClient = ({
   category,
-  userId,
 }: {
   category: CategoryParamType;
   userId: string | null;
@@ -28,7 +26,6 @@ const CategoryClient = ({
     isError,
   } = useGetPlacesByCategoryInfiniteQuery(category);
   const { ref, inView } = useInView();
-  const { isBookmarked } = useBookmarkQuery(userId);
 
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
@@ -49,11 +46,11 @@ const CategoryClient = ({
         {allPlaces.map((place, index) => (
           <>
             <PlaceCard
-              key={place.id}
+              key={place.placeId}
               placeId={place.placeId}
               image={place.image}
               title={place.title}
-              isLiked={isBookmarked(place.placeId)}
+              isLiked={place.isLiked}
               isDragging={false}
             />
             {/* 8번째 아이템 이후에 배너 삽입 (첫 페이지의 마지막) */}

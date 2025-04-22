@@ -56,24 +56,27 @@ const BookmarksList = () => {
       {bookmarks?.length === 0 ? (
         <div>아직 북마크한 장소가 없습니다.</div>
       ) : (
-        <div className="grid grid-cols-1 gap-x-3 gap-y-5 sm:grid-cols-2 md:grid-cols-3">
-          {bookmarks?.map((place) => (
-            <PlaceCard
-              key={place.placeId}
-              placeId={place.placeId}
-              image={place.image}
-              title={place.title}
-              isBookmarked={true}
-              isDragging={false}
-            />
-          ))}
+        <div className="flex flex-col gap-10">
+          <div className="grid grid-cols-1 gap-x-3 gap-y-5 sm:grid-cols-2 md:grid-cols-3">
+            {bookmarks?.map((place) => (
+              <PlaceCard
+                key={place.placeId}
+                placeId={place.placeId}
+                image={place.image}
+                title={place.title}
+                isBookmarked={true}
+                isDragging={false}
+              />
+            ))}
+          </div>
+          <Pagination
+            currentPage={page}
+            totalPages={Math.ceil((countData?.bookmarkCount ?? 1) / PAGE_SIZE)}
+            onPageChange={handlePageChange}
+            backgroundColor="primary-500"
+          />
         </div>
       )}
-      <Pagination
-        currentPage={page}
-        totalPages={Math.ceil((countData?.bookmarkCount ?? 1) / PAGE_SIZE)}
-        onPageChange={handlePageChange}
-      />
     </>
   );
 };

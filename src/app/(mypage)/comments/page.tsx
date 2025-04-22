@@ -2,8 +2,9 @@ import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 import { fetchAllCommentsByUserId } from '@/lib/apis/comments/get-comments.api';
 
 import MyComment from './_components/my-comment';
-import CommentsPagination from './_components/comments-pagination';
-import CommentsCounts from './_components/comments-counts';
+import MypageDataCounts from '../_components/mypage-data-counts';
+import MypagePagination from '../_components/mypage-pagination';
+import CommentsList from './_components/comments-list';
 
 const PAGE_SIZE = 10;
 
@@ -34,15 +35,11 @@ const CommentsPage = async ({
   return (
     <div className="flex w-full flex-col gap-5">
       <div className="flex flex-col gap-4">
-        <CommentsCounts />
+        <MypageDataCounts pageType="comments" />
         <h2 className="semibold-28 w-full">내가 쓴 댓글</h2>
-        <div className="flex flex-col gap-5">
-          {comments.map((comment) => (
-            <MyComment key={comment.planId} comment={comment} />
-          ))}
-        </div>
+        <CommentsList comments={comments} />
       </div>
-      <CommentsPagination pageSize={PAGE_SIZE} />
+      <MypagePagination pageType="comments" pageSize={PAGE_SIZE} />
     </div>
   );
 };

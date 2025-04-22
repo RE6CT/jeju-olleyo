@@ -12,7 +12,7 @@ import { cn } from '@/lib/utils';
 import { calculateTotalDays, formatDayDate } from '@/lib/utils/date';
 import { DayPlaces, TabType } from '@/types/plan-detail.type';
 import PlaceSidemenu from '../features/sidemenu/place-sidemenu';
-import { DragDropContext } from 'react-beautiful-dnd';
+import { DragDropContext } from '@hello-pangea/dnd';
 import ScheduleDeleteModal from '../features/modal/schedule-delete-modal';
 import ScheduleSaveModal from '../features/modal/schedule-save-modal';
 import ScheduleCreatedModal from '../features/modal/schedule-created-modal';
@@ -111,7 +111,7 @@ const PlanSchedule = memo(
 
     return (
       <div className="relative min-h-screen pb-32">
-        <DragDropContext onDragEnd={(result) => handleDragEnd(result)}>
+        <DragDropContext onDragEnd={handleDragEnd}>
           <div className="my-6">
             <div className="sticky top-[370px] z-10">
               <div

@@ -145,6 +145,10 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL(PATH.HOME, request.url));
   }
 
+  if (pathname === PATH.BOOKMARKS) {
+    return NextResponse.redirect(new URL(`${PATH.BOOKMARKS}/all`, request.url));
+  }
+
   return response;
 }
 

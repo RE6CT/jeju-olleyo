@@ -9,7 +9,10 @@ import Loading from '@/app/loading';
 
 const PAGE_SIZE = 4;
 
-/** 좋아요 목록 전체를 담고 있는 클라이언트 컴포넌트 */
+/**
+ * 좋아요 목록 전체를 담고 있는 클라이언트 컴포넌트
+ * @param likes - 좋아요 목록
+ */
 const LikesList = ({ likes }: { likes: Plan[] }) => {
   const { user, isLoading } = useAuth();
   const { data: countData, isLoading: isCountLoading } = useGetDataCount(

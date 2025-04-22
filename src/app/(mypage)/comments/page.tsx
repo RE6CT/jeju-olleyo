@@ -1,9 +1,7 @@
 import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 import { fetchAllCommentsByUserId } from '@/lib/apis/comments/get-comments.api';
 
-import MyComment from './_components/my-comment';
 import MypageDataCounts from '../_components/mypage-data-counts';
-import MypagePagination from '../_components/mypage-pagination';
 import CommentsList from './_components/comments-list';
 
 const PAGE_SIZE = 10;
@@ -37,9 +35,8 @@ const CommentsPage = async ({
       <div className="flex flex-col gap-4">
         <MypageDataCounts pageType="comments" />
         <h2 className="semibold-28 w-full">내가 쓴 댓글</h2>
-        <CommentsList comments={comments} />
+        <CommentsList comments={comments} pageSize={PAGE_SIZE} />
       </div>
-      <MypagePagination pageType="comments" pageSize={PAGE_SIZE} />
     </div>
   );
 };

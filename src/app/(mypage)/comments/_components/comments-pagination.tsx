@@ -7,6 +7,10 @@ import { useGetDataCount } from '@/lib/queries/use-get-data-count';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
+/**
+ * 마이페이지에서 사용하는 페이지네이션 컴포넌트
+ * @param pageSize - 한 페이지에 들어갈 데이터 수
+ */
 const CommentsPagination = ({ pageSize }: { pageSize: number }) => {
   const router = useRouter();
   const searchParams = useSearchParams();

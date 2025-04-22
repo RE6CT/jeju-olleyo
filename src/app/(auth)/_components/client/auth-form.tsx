@@ -18,9 +18,9 @@ import {
   LoginFormValues,
   RegisterFormValues,
 } from '@/types/auth.type';
+import ErrorMessage from '@/components/features/error-message/input-error-message';
+import PasswordInput from '@/components/features/input/password-input';
 
-import ErrorMessage from './auth-form-error-message';
-import PasswordInput from './auth-password-input';
 
 /**
  * 인증 관련 페이지의 폼 컴포넌트

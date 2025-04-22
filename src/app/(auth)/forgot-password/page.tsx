@@ -1,17 +1,17 @@
 'use client';
 
-import Link from 'next/link';
-
-import AuthErrorMessage from '@/components/features/auth/auth-error-message';
-import AuthHeader from '@/components/features/auth/auth-header';
-import AuthLayout from '@/components/features/auth/auth-layout';
+import AuthHeader from '@/app/(auth)/_components/server/auth-header';
+import AuthLayout from '@/app/(auth)/_components/client/auth-layout';
 import { Button } from '@/components/ui/button';
-import { CardContent, CardFooter } from '@/components/ui/card';
+import { CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { AUTH_BUTTON_TEXT } from '@/constants/auth.constants';
 import { PATH } from '@/constants/path.constants';
 import useForgotPassword from '@/lib/hooks/use-forgot-password';
+import AuthFooter from '../_components/server/auth-footer';
+import AuthErrorMessage from '@/components/features/error-message/error-message';
+import ErrorMessage from '@/components/features/error-message/input-error-message';
 
 /**
  * 비밀번호 찾기 페이지 컴포넌트
@@ -70,9 +70,7 @@ const ForgotPasswordPage = () => {
                 {...register('email')}
               />
               <div className="h-5">
-                {errors.email && (
-                  <p className="text-14 text-red">{errors.email.message}</p>
-                )}
+                <ErrorMessage message={errors.email?.message} />
               </div>
             </div>
             <Button
@@ -87,17 +85,7 @@ const ForgotPasswordPage = () => {
           </form>
         )}
       </CardContent>
-
-      <CardFooter className="flex justify-center">
-        <div className="text-14 text-gray-600">
-          <Link
-            href={PATH.SIGNIN}
-            className="medium-12 p-2.5 text-secondary-300"
-          >
-            로그인으로 돌아가기
-          </Link>
-        </div>
-      </CardFooter>
+      <AuthFooter linkHref={PATH.SIGNIN} linkText="로그인으로 돌아가기" />
     </AuthLayout>
   );
 };

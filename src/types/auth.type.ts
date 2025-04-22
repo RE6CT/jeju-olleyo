@@ -51,7 +51,6 @@ export type AuthHeaderProps = {
  * 인증 페이지 푸터 컴포넌트의 Props 타입
  */
 export type AuthFooterProps = {
-  question: string;
   linkText: string;
   linkHref: string;
 };

@@ -24,24 +24,37 @@ const SocialLogin = () => {
           </div>
         </div>
 
-        <div className="flex flex-row items-center justify-center space-x-4">
+        <nav
+          className="flex flex-row items-center justify-center space-x-4"
+          aria-label="소셜 로그인"
+        >
           {/* 구글 로그인 버튼 */}
-          <Image
-            src="/images/google-logo.svg"
-            alt="구글 로고"
-            width={48}
-            height={48}
+          <button
             onClick={handleGoogle}
-          />
+            aria-label="구글 계정으로 로그인"
+            className="rounded-full focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+          >
+            <Image
+              src="/images/google-logo.svg"
+              alt="구글 로고"
+              width={48}
+              height={48}
+            />
+          </button>
           {/* 카카오 로그인 버튼 */}
-          <Image
-            src="/images/kakao-logo.svg"
-            alt="카카오 로고"
-            width={48}
-            height={48}
+          <button
             onClick={handleKakao}
-          />
-        </div>
+            aria-label="카카오 계정으로 로그인"
+            className="rounded-full focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+          >
+            <Image
+              src="/images/kakao-logo.svg"
+              alt="카카오 로고"
+              width={48}
+              height={48}
+            />
+          </button>
+        </nav>
       </div>
     </CardContent>
   );

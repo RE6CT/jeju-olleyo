@@ -85,17 +85,17 @@ const SearchBar = () => {
           {/* 투명 클릭 트리거 */}
         </PopoverTrigger>
         {keywords.length ? (
-          <PopoverContent className="w-[300px] p-4">
-            <div className="mb-2 flex items-center justify-between text-sm font-semibold text-gray-700">
+          <PopoverContent className="w-[357px] rounded-xl border-none bg-gray-50">
+            <div className="medium-12 flex items-center justify-between px-4 py-3 text-gray-600">
               <span>최근 검색어</span>
               <button
                 onClick={handleClearKeywords}
-                className="text-xs text-gray-400 hover:text-gray-600"
+                className="medium-12 text-gray-400 hover:text-gray-500"
               >
                 전체 삭제
               </button>
             </div>
-            <ul className="space-y-2 text-sm text-gray-600">
+            <ul className="regular-14 space-y-[11px] px-4 py-3 text-gray-800">
               {keywords.map((keyword) => (
                 <li
                   key={keyword}
@@ -108,19 +108,32 @@ const SearchBar = () => {
                   <span className="truncate">{keyword}</span>
                   <button
                     onClick={(e) => {
-                      e.stopPropagation(); // 검색 실행 막기
+                      e.stopPropagation();
                       setKeywords((prev) => prev.filter((k) => k !== keyword));
                     }}
                     className="text-xs text-gray-400 hover:text-gray-600"
                   >
-                    ✕
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 48 48"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        clipRule="evenodd"
+                        d="M12.3329 12.3329C12.9187 11.7471 13.8684 11.7471 14.4542 12.3329L24.0002 21.8788L33.5461 12.3329C34.1319 11.7471 35.0816 11.7471 35.6674 12.3329C36.2532 12.9187 36.2532 13.8684 35.6674 14.4542L26.1215 24.0002L35.6674 33.5461C36.2532 34.1319 36.2532 35.0816 35.6674 35.6674C35.0816 36.2532 34.1319 36.2532 33.5461 35.6674L24.0002 26.1215L14.4542 35.6674C13.8684 36.2532 12.9187 36.2532 12.3329 35.6674C11.7471 35.0816 11.7471 34.1319 12.3329 33.5461L21.8788 24.0002L12.3329 14.4542C11.7471 13.8684 11.7471 12.9187 12.3329 12.3329Z"
+                        fill="black"
+                      />
+                    </svg>
                   </button>
                 </li>
               ))}
             </ul>
           </PopoverContent>
         ) : (
-          <PopoverContent className="truncate">
+          <PopoverContent className="medium-12 w-[357px] truncate rounded-xl border-none bg-gray-50 text-gray-400">
             최근 검색어가 없습니다.
           </PopoverContent>
         )}

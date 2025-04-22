@@ -6,8 +6,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 
-import NavigationButton from '@/components/features/home/home-navigation-button';
-import { ProgressIndicator } from '@/components/features/home/home-progress';
+import NavigationButton from '@/app/_components/server/home-navigation-button';
+import { ProgressIndicator } from '@/app/_components/server/home-progress';
 import { MAIN_CAROUSEL_OPTIONS } from '@/constants/home.constants';
 import { useCarouselProgress } from '@/lib/hooks/use-carousel-progress';
 import { MainCarouselProps } from '@/types/home.carousel.type';

@@ -1,8 +1,5 @@
-'use client';
-
 import { memo } from 'react';
-
-import WeatherCard from '@/components/features/home/home-weather-card';
+import WeatherCard from '@/app/_components/server/home-weather-card';
 import { WeatherCardsContainerProps } from '@/types/home.weather.type';
 
 /**
@@ -28,8 +25,5 @@ const WeatherCardsContainer = memo(
     );
   },
 );
-
-// 개발 환경에서 컴포넌트 이름 표시 (디버깅 도움)
-WeatherCardsContainer.displayName = 'WeatherCardsContainer';
 
 export default WeatherCardsContainer;

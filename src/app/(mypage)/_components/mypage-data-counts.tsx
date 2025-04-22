@@ -26,15 +26,15 @@ const MypageDataCounts = ({
 
   switch (pageType) {
     case 'bookmarks':
-      countValue = countData?.bookmarkCount.all;
+      countValue = countData?.bookmarkCount.all ?? 0;
       message = `${countValue}개의 장소를 북마크했어요`;
       break;
     case 'likes':
-      countValue = countData?.likeCount;
+      countValue = countData?.likeCount ?? 0;
       message = `${countValue}개의 장소에 좋아요를 눌렀어요`;
       break;
     case 'comments':
-      countValue = countData?.commentCount;
+      countValue = countData?.commentCount ?? 0;
       message = `${countValue}개의 댓글을 남겼어요`;
       break;
     default:

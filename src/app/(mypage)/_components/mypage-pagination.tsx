@@ -38,9 +38,11 @@ const MypagePagination = ({
 
   switch (pageType) {
     case 'bookmarks':
-      const category = (pathname.split('/').filter(Boolean)[1] ??
-        'all') as CategoryParamType;
-      count = countData?.bookmarkCount[category];
+      {
+        const category = (pathname.split('/').filter(Boolean)[1] ??
+          'all') as CategoryParamType;
+        count = countData?.bookmarkCount[category];
+      }
       break;
     case 'likes':
       count = countData?.likeCount;

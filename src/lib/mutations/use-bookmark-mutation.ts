@@ -1,59 +1,39 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-
-import { addBookmark, removeBookmark } from '@/lib/apis/home/home.popular.api';
-
-import useAuth from '../hooks/use-auth';
-import useCustomToast from '../hooks/use-custom-toast';
+import fetchAddBookmarkByIdQuery from '../apis/bookmark/add-bookmark.api';
+import { fetchGetBookmarkByIdQuery } from '../apis/bookmark/get-bookmark.api';
+import fetchDeleteBookmark from '../apis/bookmark/delete-bookmark.api';
 
 /**
- * 북마크 추가/삭제 기능을 제공하는 훅
- * @returns 북마크 관련 함수와 상태
+ * 북마크를 토글하는 뮤테이션 훅
  */
 export const useBookmarkMutation = () => {
-  const { user } = useAuth();
   const queryClient = useQueryClient();
-  const { successToast } = useCustomToast();
 
-  const bookmarkMutation = useMutation({
+  return useMutation({
     mutationFn: async ({
+      userId,
       placeId,
-      isBookmarked,
     }: {
+      userId: string;
       placeId: number;
-      isBookmarked: boolean;
     }) => {
-      if (!user) {
-        // 로그인하지 않은 경우 로그인 안내
-        successToast('로그인이 필요합니다.');
-        return { success: false };
-      }
+      const currentBookmark = await fetchGetBookmarkByIdQuery(placeId, userId);
 
-      // 로그인한 경우에만 북마크 기능 사용
-      if (isBookmarked) {
-        await removeBookmark(placeId, user.id);
-        return { success: true };
+      if (currentBookmark) {
+        await fetchDeleteBookmark(currentBookmark.bookmark_id);
       } else {
-        await addBookmark(placeId, user.id);
-        return { success: true };
+        await fetchAddBookmarkByIdQuery(placeId, userId);
       }
     },
-    onSuccess: (result) => {
-      if (result.success) {
-        queryClient.invalidateQueries({ queryKey: ['popularPlaces'] });
-        queryClient.invalidateQueries({ queryKey: ['bookmarks'] });
-        queryClient.invalidateQueries({ queryKey: ['dataCount'] });
-        queryClient.invalidateQueries({ queryKey: ['places'] });
-      }
+    onMutate: () => {},
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['popularPlaces'] }); // 홈 페이지
+      queryClient.invalidateQueries({ queryKey: ['places'] }); // 검색, 카테고리 페이지
+      queryClient.invalidateQueries({ queryKey: ['bookmarks'] }); // 북마크 페이지
+      queryClient.invalidateQueries({ queryKey: ['dataCount'] }); // 마이페이지 모달
     },
     onError: (error) => {
       console.error('북마크 작업 실패:', error);
-      successToast('북마크 작업 중 오류가 발생했습니다.');
     },
   });
-
-  return {
-    toggleBookmark: (placeId: number, isBookmarked: boolean) =>
-      bookmarkMutation.mutate({ placeId, isBookmarked }),
-    isLoading: bookmarkMutation.isPending,
-  };
 };

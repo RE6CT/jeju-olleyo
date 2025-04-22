@@ -1,6 +1,6 @@
 'use client';
 
-import { usePathname, useRouter } from 'next/navigation';
+import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import { PATH } from '@/constants/path.constants';
 
@@ -13,12 +13,15 @@ import { Input } from '../ui/input';
 const SearchBar = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+  const params = useParams();
   const path = usePathname();
+
+  const category = params.category ?? 'all';
 
   const handleSearch = () => {
     const query = inputRef.current?.value;
     if (query) {
-      router.push(`${PATH.SEARCH}?query=${query}`);
+      router.push(`${PATH.SEARCH}/${category}?query=${query.trim()}`);
     }
   };
 

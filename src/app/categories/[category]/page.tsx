@@ -4,7 +4,6 @@ import {
   QueryClient,
 } from '@tanstack/react-query';
 
-import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 import { prefetchPlacesByCategory } from '@/lib/queries/use-get-places';
 import { CategoryParamType } from '@/types/category.type';
 
@@ -17,16 +16,14 @@ const CategoryPage = async ({
   params: { category: CategoryParamType };
 }) => {
   const queryClient = new QueryClient();
-  const { user } = await fetchGetCurrentUser();
 
   const urlCategory = params.category;
-
   await prefetchPlacesByCategory(queryClient, urlCategory);
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <section className="flex flex-col items-center justify-center p-9">
-        <CategoryClient category={urlCategory} userId={user?.id || null} />
+        <CategoryClient category={urlCategory} />
       </section>
     </HydrationBoundary>
   );

@@ -33,7 +33,6 @@ const BookmarksList = ({ category }: { category: CategoryParamType }) => {
 
   // URL에서 페이지 번호 가져오기
   const currentPage = parseInt(searchParams.get('page') || '1');
-  const [page, setPage] = useState<number>(currentPage);
 
   const { user, isLoading } = useAuth();
   const { data: countData, isLoading: isCountLoading } = useGetDataCount(
@@ -52,7 +51,6 @@ const BookmarksList = ({ category }: { category: CategoryParamType }) => {
    */
   const handlePageChange = (page: number) => {
     router.push(`?page=${page}`);
-    setPage(page);
   };
 
   /**
@@ -67,11 +65,11 @@ const BookmarksList = ({ category }: { category: CategoryParamType }) => {
 
   return (
     <>
-      <div className="flex flex-col gap-4">
+      <div>
         <p className="medium-16 text-secondary-300">
           {countData?.bookmarkCount.all}개의 장소를 북마크했어요
         </p>
-        <h2 className="semibold-28 w-full">내가 북마크한 장소</h2>
+        <h2 className="semibold-28 w-full pb-5 pt-4">내가 북마크한 장소</h2>
 
         <div className="w-fit">
           <CategoryFilterTabs
@@ -79,7 +77,7 @@ const BookmarksList = ({ category }: { category: CategoryParamType }) => {
             defaultTab={CATEGORY_KR_MAP[category] as CategoryType}
             onTabChange={handleFilterTabChange}
             tabsGapClass="gap-3"
-            tabPaddingClass="px-5 py-2 !semibold-16"
+            tabPaddingClass="px-5 py-2 semibold-16"
           />
         </div>
       </div>
@@ -100,9 +98,10 @@ const BookmarksList = ({ category }: { category: CategoryParamType }) => {
             ))}
           </div>
           <Pagination
-            currentPage={page}
-            totalPages={Math.ceil(
-              (countData?.bookmarkCount[category] ?? 1) / PAGE_SIZE,
+            currentPage={currentPage}
+            totalPages={Math.max(
+              1,
+              Math.ceil(countData?.bookmarkCount[category] ?? 0) / PAGE_SIZE,
             )}
             onPageChange={handlePageChange}
             backgroundColor="primary-500"

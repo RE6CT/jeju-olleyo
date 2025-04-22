@@ -401,11 +401,16 @@ export type Database = {
       get_user_bookmarks: {
         Args: { user_id_param: string };
         Returns: {
+          id: number;
           place_id: number;
           title: string;
           image: string;
           created_at: string;
           category: string;
+          content_type_id: number;
+          address: string;
+          lng: number;
+          lat: number;
         }[];
       };
       get_user_likes: {

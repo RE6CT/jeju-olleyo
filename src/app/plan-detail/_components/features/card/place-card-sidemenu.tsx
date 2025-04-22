@@ -36,6 +36,7 @@ const handleImageLoadError = (e: React.SyntheticEvent<HTMLImageElement>) => {
 
 const PlaceCardSidemenu = ({
   title,
+  placeId,
   imageUrl,
   category,
   isBookmarked = false,
@@ -44,6 +45,7 @@ const PlaceCardSidemenu = ({
   onAddPlace,
 }: {
   title: string;
+  placeId: number;
   imageUrl: string;
   category: CategoryType;
   isBookmarked: boolean;

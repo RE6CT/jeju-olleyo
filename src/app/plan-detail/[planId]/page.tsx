@@ -7,7 +7,7 @@ import {
   fetchGetPlanDaysAndLocations,
 } from '@/lib/apis/plan/plan.api';
 
-import NotFound from '../_components/features/notfound/not-found';
+import NotFound from '@/app/plan-detail/_components/features/notfound/not-found';
 
 const PlanDetailPage = async ({ params }: { params: { planId: string } }) => {
   const HAPPY_IMAGE = {
@@ -25,12 +25,8 @@ const PlanDetailPage = async ({ params }: { params: { planId: string } }) => {
 
     // 비공개 일정인 경우 로그인 필수
     if (!plan.public) {
-      // 로그인하지 않은 경우
-      if (!userId) {
-        return <NotFound />;
-      }
-      // 작성자가 아닌 경우
-      if (plan.userId !== userId) {
+      // 로그인하지 않은 경우, 작성자가 아닌 경우
+      if (!userId || plan.userId !== userId) {
         return <NotFound />;
       }
     }

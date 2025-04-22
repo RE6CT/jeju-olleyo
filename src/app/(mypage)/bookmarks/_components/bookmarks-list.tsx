@@ -70,6 +70,7 @@ const BookmarksList = () => {
             totalPages={Math.ceil((countData?.bookmarkCount ?? 1) / PAGE_SIZE)}
             onPageChange={handlePageChange}
             backgroundColor="primary-500"
+            hideOnSinglePage={false}
           />
         </div>
       )}

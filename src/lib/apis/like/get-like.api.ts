@@ -32,12 +32,19 @@ export const fetchgetSingleLike = async (planId: number, userId: string) => {
  */
 export const fetchGetAllLikesByUserId = async (
   userId: string,
+  page: number = 1,
+  pageSize: number = 4,
 ): Promise<Plan[] | null> => {
   const supabase = await getServerClient();
 
-  const { data, error } = await supabase.rpc('get_user_likes', {
-    user_id_param: userId,
-  });
+  const startIndex = (page - 1) * pageSize;
+  const endIndex = startIndex + pageSize - 1;
+
+  const { data, error } = await supabase
+    .rpc('get_user_likes', {
+      user_id_param: userId,
+    })
+    .range(startIndex, endIndex);
 
   if (error) throw new Error(error.message);
 

@@ -14,13 +14,15 @@ const Pagination = ({
   totalPages,
   onPageChange,
   backgroundColor = 'secondary-300',
+  hideOnSinglePage = true,
 }: {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
   backgroundColor?: string;
+  hideOnSinglePage?: boolean;
 }) => {
-  if (totalPages <= 1) return null; // 페이지가 1개 이하면 렌더링 하지 않음
+  if (hideOnSinglePage && totalPages <= 1) return null; // 페이지가 1개 이하면 렌더링 하지 않음
 
   return (
     <div className="mt-6 flex justify-center gap-3">

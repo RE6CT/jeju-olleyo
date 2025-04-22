@@ -21,18 +21,28 @@ const NAVIGATION_BUTTON_WIDTH = 42.4;
 const NAVIGATION_BUTTON_GAP = 4;
 const DEBOUNCE_TIME = 200;
 
+/**
+ * 검색 결과를 표시하는 사이드메뉴 컴포넌트
+ *
+ * @param userId - 사용자 ID
+ * @param filterTabs - 필터 탭 목록
+ * @param activeFilterTab - 현재 선택된 필터 탭
+ * @param onFilterTabChange - 필터 탭 변경 핸들러
+ * @param onAddPlace - 장소 추가 핸들러
+ * @param selectedDay - 선택된 날짜
+ */
 const SearchSidemenu = ({
+  userId,
   filterTabs,
   activeFilterTab,
   onFilterTabChange,
-  userId,
   onAddPlace,
   selectedDay,
 }: {
+  userId: string;
   filterTabs: CategoryType[];
   activeFilterTab: CategoryType;
   onFilterTabChange: (tab: CategoryType) => void;
-  userId: string;
   onAddPlace: (place: Place) => void;
   selectedDay: number | null;
 }) => {
@@ -237,7 +247,6 @@ const SearchSidemenu = ({
                     category={place.category as CategoryType}
                     imageUrl={place.image || ''}
                     isBookmarked={isBookmarked(place.placeId)}
-                    isSearchSection
                     onBookmarkToggle={() => handleBookmarkToggle(place.placeId)}
                     onAddPlace={() => handleAddPlace(place)}
                   />

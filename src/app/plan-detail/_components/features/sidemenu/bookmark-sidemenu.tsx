@@ -8,9 +8,11 @@ import { Button } from '@/components/ui/button';
 import DynamicPagination from '@/components/ui/dynamic-pagination';
 import { useBookmarkQuery } from '@/lib/queries/use-bookmark-query';
 import { CategoryType } from '@/types/category.type';
+import { Place } from '@/types/search.type';
 
 import PlaceCardSidemenu from '../card/place-card-sidemenu';
 import PlaceSidemenuLayout from './place-sidemenu-layout';
+import DaySelectRequiredModal from '../modal/day-select-required-modal';
 
 const ITEMS_PER_PAGE = 7;
 const INITIAL_ITEMS = 3;
@@ -25,29 +27,40 @@ const DEBOUNCE_TIME = 200;
  * @param filterTabs - 카테고리 필터 탭 목록
  * @param activeFilterTab - 현재 선택된 필터 탭
  * @param onFilterTabChange - 필터 탭 변경 핸들러
+ * @param onAddPlace - 장소 추가 핸들러
+ * @param selectedDay - 선택된 날짜
  */
 const BookmarkSidemenu = ({
   userId,
   filterTabs,
   activeFilterTab,
   onFilterTabChange,
+  onAddPlace,
+  selectedDay,
 }: {
   userId: string;
   filterTabs: CategoryType[];
   activeFilterTab: CategoryType;
   onFilterTabChange: (tab: CategoryType) => void;
+  onAddPlace: (place: Place) => void;
+  selectedDay: number | null;
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [maxVisiblePages, setMaxVisiblePages] = useState(3);
+  const [isDaySelectModalOpen, setIsDaySelectModalOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const resizeTimeoutRef = useRef<NodeJS.Timeout>();
   const [scrollPosition, setScrollPosition] = useState(0);
   const listRef = useRef<HTMLDivElement>(null);
 
   const { isBookmarked, toggleBookmark, bookmarks } = useBookmarkQuery(userId);
+
+  useEffect(() => {
+    setIsLoading(false);
+  }, [bookmarks]);
 
   const handleBookmarkToggle = async (place_id: number) => {
     try {
@@ -68,10 +81,6 @@ const BookmarkSidemenu = ({
       setError('북마크를 업데이트하는 데 실패했습니다.');
     }
   };
-
-  useEffect(() => {
-    setIsLoading(false);
-  }, [bookmarks]);
 
   /* 카테고리별 필터링 */
   const filteredPlaces = bookmarks
@@ -130,6 +139,15 @@ const BookmarkSidemenu = ({
       }
     };
   }, [calculateMaxVisiblePages, updateMaxVisiblePages]);
+
+  const handleAddPlace = (place: Place) => {
+    if (selectedDay === null) {
+      setIsDaySelectModalOpen(true);
+      return;
+    }
+
+    onAddPlace(place);
+  };
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -196,6 +214,7 @@ const BookmarkSidemenu = ({
                     imageUrl={place.image}
                     isBookmarked={isBookmarked(place.placeId)}
                     onBookmarkToggle={() => handleBookmarkToggle(place.placeId)}
+                    // onAddPlace={() => handleAddPlace(place)} // 이후 수정
                   />
                 </motion.div>
               ))}
@@ -219,6 +238,10 @@ const BookmarkSidemenu = ({
           </div>
         )}
       </div>
+      <DaySelectRequiredModal
+        isOpen={isDaySelectModalOpen}
+        onClose={() => setIsDaySelectModalOpen(false)}
+      />
     </PlaceSidemenuLayout>
   );
 };

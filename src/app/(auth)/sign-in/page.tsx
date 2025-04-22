@@ -5,10 +5,9 @@ import { useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
 import Loading from '@/app/loading';
-import AuthErrorMessage from '@/components/features/auth/auth-error-message';
-import AuthForm from '@/components/features/auth/auth-form';
-import AuthLayout from '@/components/features/auth/auth-layout';
-import SocialLogin from '@/components/features/auth/auth-social-login';
+import AuthForm from '@/app/(auth)/_components/client/auth-form';
+import AuthLayout from '@/app/(auth)/_components/client/auth-layout';
+import SocialLogin from '@/app/(auth)/sign-in/_components/client/auth-social-login';
 import { CardContent } from '@/components/ui/card';
 import useAuth from '@/lib/hooks/use-auth';
 import useAuthCheck from '@/lib/hooks/use-auth-check';
@@ -16,7 +15,7 @@ import useRedirectParams from '@/lib/hooks/use-redirect-params';
 import useRememberEmail from '@/lib/hooks/use-remember-email';
 import { getLoginErrorMessage } from '@/lib/utils/auth-error.util';
 import { LoginFormValues } from '@/types/auth.type';
-
+import AuthErrorMessage from '@/components/features/error-message/error-message';
 
 /**
  * 로그인 페이지 컴포넌트

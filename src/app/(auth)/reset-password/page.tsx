@@ -1,15 +1,16 @@
 'use client';
 
 import ResetPasswordSuccessModal from '@/components/commons/reset-password-success-modal';
-import AuthErrorMessage from '@/components/features/auth/auth-error-message';
-import AuthHeader from '@/components/features/auth/auth-header';
-import AuthLayout from '@/components/features/auth/auth-layout';
-import PasswordInput from '@/components/features/auth/auth-password-input';
+import AuthHeader from '@/app/(auth)/_components/server/auth-header';
+import AuthLayout from '@/app/(auth)/_components/client/auth-layout';
 import { Button } from '@/components/ui/button';
 import { CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { AUTH_BUTTON_TEXT } from '@/constants/auth.constants';
 import useResetPassword from '@/lib/hooks/use-reset-password';
+import AuthErrorMessage from '@/components/features/error-message/error-message';
+import PasswordInput from '@/components/features/input/password-input';
+import ErrorMessage from '@/components/features/error-message/input-error-message';
 
 /**
  * 비밀번호 재설정 페이지 컴포넌트
@@ -47,9 +48,7 @@ const ResetPasswordPage = () => {
               autoComplete="new-password"
             />
             <div className="h-6">
-              {errors.password && (
-                <p className="regular-14 text-red">{errors.password.message}</p>
-              )}
+              <ErrorMessage message={errors.password?.message} />
             </div>
           </div>
 
@@ -62,11 +61,7 @@ const ResetPasswordPage = () => {
               autoComplete="new-password"
             />
             <div className="h-6">
-              {errors.confirmPassword && (
-                <p className="regular-14 text-red">
-                  {errors.confirmPassword.message}
-                </p>
-              )}
+              <ErrorMessage message={errors.confirmPassword?.message} />
             </div>
           </div>
 

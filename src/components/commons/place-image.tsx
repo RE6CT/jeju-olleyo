@@ -79,6 +79,7 @@ const PlaceImage = ({
           onError={handleImageError}
           quality={process.env.NODE_ENV === 'development' ? 60 : 75}
           fetchPriority={isPriority ? 'high' : 'auto'}
+          unoptimized
         />
       )}
     </div>

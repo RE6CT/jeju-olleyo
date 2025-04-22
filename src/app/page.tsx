@@ -8,6 +8,7 @@ import PopularPlaces from '@/app/_components/client/home-popular-places';
 import PopularSchedules from '@/app/_components/client/home-popular-schedules';
 import WeatherSection from '@/app/_components/server/home-weather-section';
 import { PATH } from '@/constants/path.constants';
+import { SCHEDULE_BANNER } from '@/constants/home.constants';
 
 /**
  * 홈 페이지 컴포넌트
@@ -53,9 +54,9 @@ const Home = () => {
       {/* 내 일정 만들러 가기 배너 섹션*/}
       <section>
         <JejuBanner
-          imageUrl="/banner-images/plan-banner.jpg"
-          title="나만의 제주 여행 계획하기"
-          buttonText="내 일정 만들러 가기"
+          imageUrl={SCHEDULE_BANNER.SCHEDULE_BANNER_IMAGE_URL}
+          title={SCHEDULE_BANNER.SCHEDULE_BANNER_TITLE}
+          buttonText={SCHEDULE_BANNER.SCHEDULE_BANNER_BUTTON_TEXT}
           buttonUrl={PATH.PLAN_NEW}
         />
       </section>

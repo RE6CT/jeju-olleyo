@@ -52,3 +52,12 @@ export const MAIN_CAROUSEL_OPTIONS = {
   /** 네비게이션 아이콘 두께 */
   NAVIGATION_ICON_STROKE_WIDTH: 2,
 };
+
+/**
+ * 일정 만들러가기 배너
+ */
+export const SCHEDULE_BANNER = {
+  SCHEDULE_BANNER_IMAGE_URL: '/banner-images/plan-banner.jpg',
+  SCHEDULE_BANNER_TITLE: '나만의 제주 여행 계획하기',
+  SCHEDULE_BANNER_BUTTON_TEXT: '내 일정 만들러 가기',
+};

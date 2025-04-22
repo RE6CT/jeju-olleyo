@@ -1,15 +1,14 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState, useRef } from 'react';
+import { useState, useRef, useMemo } from 'react';
 
 import { CATEGORIES } from '@/constants/home.constants';
 import useDragScroll from '@/lib/hooks/use-drag-scroll';
 import { usePopularPlaces } from '@/lib/hooks/use-popular-places';
 import { Category } from '@/types/home.popular-place.type';
 
-import PlaceCard from '../../../components/features/card/place-card';
-import { LoadingSpinner } from '@/components/commons/loading-spinner';
+import PlaceCard from '@/components/features/card/place-card';
 
 /**
  * 인기 장소를 카테고리별로 표시하는 컴포넌트
@@ -33,10 +32,77 @@ const PopularPlaces = () => {
     setActiveCategory(category);
   };
 
+  // 카테고리 버튼 메모이제이션
+  const categoryButtons = useMemo(() => {
+    return CATEGORIES.map((category) => (
+      <button
+        key={category}
+        onClick={() => handleCategoryChange(category)}
+        className={`semibold-16 rounded-[28px] border-[0.6px] border-solid px-5 py-2 transition-colors ${
+          activeCategory === category
+            ? 'border-[#F60] bg-primary-100 text-primary-800'
+            : 'border-[color:var(--Gray-600,#537384)] text-gray-600'
+        }`}
+      >
+        {category}
+      </button>
+    ));
+  }, [activeCategory]);
+
+  // 장소 카드 메모이제이션
+  const placeCards = useMemo(() => {
+    if (isFirstLoading) {
+      // 첫 로딩 시에만 스켈레톤 UI 표시
+      return Array.from({ length: 4 }).map((_, idx) => (
+        <div
+          key={idx}
+          className="flex-shrink-0 animate-pulse rounded-lg bg-gray-200"
+          style={{ width: '230px', height: '270px' }}
+        />
+      ));
+    }
+
+    // places가 배열인지 확인
+    if (!Array.isArray(places)) {
+      console.error('places is not an array:', places);
+      return <div>데이터 형식 오류가 발생했습니다.</div>;
+    }
+
+    if (places.length > 0) {
+      // 장소 카드 렌더링
+      return places.map((place, index) => (
+        <div
+          key={place.id}
+          className="flex-shrink-0 transition-opacity duration-200"
+          style={{ width: '230px' }}
+        >
+          <PlaceCard
+            key={place.id}
+            placeId={place.id}
+            image={place.image || '/images/default_place_image.svg'}
+            title={place.title}
+            isBookmarked={place.isBookmarked}
+            isDragging={isDragging}
+            className="cursor-pointer select-none"
+          />
+        </div>
+      ));
+    }
+
+    // 데이터가 없을 때
+    return (
+      <div className="w-full py-12 text-center text-gray-500">
+        {typeof activeCategory === 'string'
+          ? activeCategory
+          : '선택된 카테고리'}
+        에 인기 장소가 없습니다.
+      </div>
+    );
+  }, [places, isFirstLoading, isDragging, activeCategory]);
+
   return (
     <section className="w-full px-4 py-6">
       <div style={{ width: '952px' }} className="mx-auto">
-        
         <div className="mb-5 flex items-center justify-between">
           <h2 className="semibold-22">올레 인기 장소</h2>
           <div className="p-2.5">
@@ -48,22 +114,12 @@ const PopularPlaces = () => {
             </button>
           </div>
         </div>
+
         {/* 카테고리 탭 */}
         <div className="mb-5 flex space-x-3 overflow-x-auto">
-          {CATEGORIES.map((category) => (
-            <button
-              key={category}
-              onClick={() => handleCategoryChange(category)}
-              className={`semibold-16 rounded-[28px] border-[0.6px] border-solid px-5 py-2 transition-colors ${
-                activeCategory === category
-                  ? 'border-[#F60] bg-primary-100 text-primary-800'
-                  : 'border-[color:var(--Gray-600,#537384)] text-gray-600'
-              }`}
-            >
-              {category}
-            </button>
-          ))}
+          {categoryButtons}
         </div>
+
         {/* 장소 카드 슬라이더 */}
         <div className="relative overflow-hidden">
           <div
@@ -78,44 +134,11 @@ const PopularPlaces = () => {
               minHeight: '270px', // 최소 높이 유지로 레이아웃 안정화
             }}
           >
-            {isFirstLoading ? (
-              // 첫 로딩 시에만 스켈레톤 UI 표시
-              Array.from({ length: 4 }).map((_, idx) => (
-                <div
-                  key={idx}
-                  className="flex-shrink-0 animate-pulse rounded-lg bg-gray-200"
-                  style={{ width: '230px', height: '270px' }} // 카드 가로 길이 230px로 고정
-                />
-              ))
-            ) : places.length > 0 ? (
-              // 장소 카드 렌더링
-              places.map((place) => (
-                <div
-                  key={place.id}
-                  className="flex-shrink-0 transition-opacity duration-200"
-                  style={{ width: '230px' }} // 카드 가로 길이 230px로 고정
-                >
-                  <PlaceCard
-                    key={place.id}
-                    placeId={place.id}
-                    image={place.image || '/images/default_place_image.svg'}
-                    title={place.title}
-                    isBookmarked={place.isBookmarked}
-                    isDragging={isDragging}
-                    className="cursor-pointer select-none"
-                  />
-                </div>
-              ))
-            ) : (
-              // 데이터가 없을 때
-              <div className="w-full py-12 text-center text-gray-500">
-                {activeCategory} 카테고리에 인기 장소가 없습니다.
-              </div>
-            )}
+            {placeCards}
           </div>
 
           {/* 로딩 인디케이터 오버레이 (첫 로딩이 아닌 경우에만) */}
-          {isLoading && !isFirstLoading && <LoadingSpinner />}
+          {isLoading && !isFirstLoading}
         </div>
       </div>
     </section>

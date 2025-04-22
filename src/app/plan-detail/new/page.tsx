@@ -2,7 +2,8 @@ import Image from 'next/image';
 
 import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 
-import PlanForm from '../_components/plan-form';
+import NotFound from '@/app/plan-detail/_components/features/notfound/not-found';
+import PlanForm from '@/app/plan-detail/_components/plan-form';
 
 const PlanDetailNewPage = async () => {
   const HAPPY_IMAGE = {
@@ -13,7 +14,7 @@ const PlanDetailNewPage = async () => {
   const { user } = await fetchGetCurrentUser();
   const userId = user?.id;
 
-  if (!userId) return null;
+  if (!userId) return <NotFound />;
 
   return (
     <div className="flex flex-col">

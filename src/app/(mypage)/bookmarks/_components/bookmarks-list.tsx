@@ -1,18 +1,29 @@
 'use client';
 
 import Loading from '@/app/loading';
+import CategoryFilterTabs from '@/components/commons/category-filter-tabs';
 import PlaceCard from '@/components/features/card/place-card';
 import Pagination from '@/components/ui/pagination';
+import { CATEGORY_KR_MAP } from '@/constants/home.constants';
+import { PATH } from '@/constants/path.constants';
 import useAuth from '@/lib/hooks/use-auth';
 import { useGetBookMarks } from '@/lib/queries/use-get-bookmarks';
 import { useGetDataCount } from '@/lib/queries/use-get-data-count';
+import { CategoryParamType, CategoryType } from '@/types/category.type';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
 const PAGE_SIZE = 9;
+const TAB_LIST: Record<CategoryType, CategoryParamType> = {
+  전체: 'all',
+  명소: 'toursite',
+  숙박: 'accommodation',
+  맛집: 'restaurant',
+  카페: 'cafe',
+};
 
-/** 북마크 페이지 내용 전체를 담고 있는 클라이언트 컴포넌트 */
-const BookmarksList = () => {
+/** 카테고리별 북마크 페이지 내용 전체를 담고 있는 클라이언트 컴포넌트 */
+const BookmarksList = ({ category }: { category: CategoryParamType }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -28,15 +39,24 @@ const BookmarksList = () => {
     user?.id,
     currentPage,
     PAGE_SIZE,
+    CATEGORY_KR_MAP[category] as CategoryType,
   );
 
   /**
-   * 페이지 이동 클릭 핸들러
+   * 페이지 이동 핸들러
    * @param page - 이동할 페이지 숫자
    */
   const handlePageChange = (page: number) => {
     router.push(`?page=${page}`);
     setPage(page);
+  };
+
+  /**
+   * 탭 이동 핸들러
+   * @param tab - 현재 탭
+   */
+  const handleFilterTabChange = (tab: CategoryType) => {
+    router.push(`${PATH.BOOKMARKS}/${TAB_LIST[tab]}?page=1`);
   };
 
   if (isLoading || isCountLoading || isBookmarksLoading) return <Loading />;
@@ -45,9 +65,19 @@ const BookmarksList = () => {
     <>
       <div className="flex flex-col gap-4">
         <p className="medium-16 text-secondary-300">
-          {countData?.bookmarkCount}개의 장소를 북마크했어요
+          {countData?.bookmarkCount.all}개의 장소를 북마크했어요
         </p>
         <h2 className="semibold-28 w-full">내가 북마크한 장소</h2>
+
+        <div className="w-fit">
+          <CategoryFilterTabs
+            tabs={Object.keys(TAB_LIST) as CategoryType[]}
+            defaultTab={CATEGORY_KR_MAP[category] as CategoryType}
+            onTabChange={handleFilterTabChange}
+            tabsGapClass="gap-3"
+            tabPaddingClass="px-5 py-2 !semibold-16"
+          />
+        </div>
       </div>
       {bookmarks?.length === 0 ? (
         <div>아직 북마크한 장소가 없습니다.</div>
@@ -67,7 +97,9 @@ const BookmarksList = () => {
           </div>
           <Pagination
             currentPage={page}
-            totalPages={Math.ceil((countData?.bookmarkCount ?? 1) / PAGE_SIZE)}
+            totalPages={Math.ceil(
+              (countData?.bookmarkCount[category] ?? 1) / PAGE_SIZE,
+            )}
             onPageChange={handlePageChange}
             backgroundColor="primary-500"
             hideOnSinglePage={false}

@@ -64,6 +64,10 @@ export async function middleware(request: NextRequest) {
       pattern: /^\/search\/[a-z]+$/,
     },
     {
+      BOOKMARKS: PATH.BOOKMARKS,
+      pattern: /^\/bookmarks\/[a-z]+$/,
+    },
+    {
       PLACES: PATH.PLACES,
       pattern: /^\/places\/\d+$/,
     },

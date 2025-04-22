@@ -423,7 +423,13 @@ export type Database = {
       get_user_data_counts: {
         Args: { user_id_param: string };
         Returns: {
-          bookmark_count: number;
+          bookmark_count: {
+            all: number;
+            toursite: number;
+            cafe: number;
+            accommodation: number;
+            restaurant: number;
+          };
           like_count: number;
           comment_count: number;
         };

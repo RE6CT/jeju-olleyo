@@ -2,22 +2,46 @@
 
 import Loading from '@/app/loading';
 import PlaceCard from '@/components/features/card/place-card';
+import Pagination from '@/components/ui/pagination';
 import useAuth from '@/lib/hooks/use-auth';
 import { useGetBookMarks } from '@/lib/queries/use-get-bookmarks';
 import { useGetDataCount } from '@/lib/queries/use-get-data-count';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
+import { number } from 'zod';
+
+const PAGE_SIZE = 9;
 
 /**
  * 북마크 페이지 내용 전체를 담고 있는 클라이언트 컴포넌트
  * @param userId - 사용자의 uuid
  */
 const BookmarksList = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // URL에서 페이지 번호 가져오기
+  const currentPage = parseInt(searchParams.get('page') || '1');
+  const [page, setPage] = useState<number>(currentPage);
+
   const { user, isLoading } = useAuth();
   const { data: countData, isLoading: isCountLoading } = useGetDataCount(
     user?.id,
   );
   const { data: bookmarks, isLoading: isBookmarksLoading } = useGetBookMarks(
     user?.id,
+    currentPage,
+    PAGE_SIZE,
   );
+
+  /**
+   * 페이지 이동 클릭 핸들러
+   * @param page - 이동할 페이지 숫자
+   */
+  const handlePageChange = (page: number) => {
+    router.push(`?page=${page}`);
+    setPage(page);
+  };
 
   if (isLoading || isCountLoading || isBookmarksLoading) return <Loading />;
 
@@ -45,6 +69,11 @@ const BookmarksList = () => {
           ))}
         </div>
       )}
+      <Pagination
+        currentPage={page}
+        totalPages={Math.ceil((countData?.bookmarkCount ?? 1) / PAGE_SIZE)}
+        onPageChange={handlePageChange}
+      />
     </>
   );
 };

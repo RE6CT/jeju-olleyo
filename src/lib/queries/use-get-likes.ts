@@ -4,6 +4,8 @@ import { fetchGetAllLikesByUserId } from '../apis/like/get-like.api';
 /**
  * 유저의 좋아요 정보를 가져오는 쿼리 훅
  * @param userId - 유저의 uuid
+ * @param page - 시작 페이지
+ * @param pageSize - 페이지 크기
  */
 export const useGetLikes = (
   userId: string | undefined,

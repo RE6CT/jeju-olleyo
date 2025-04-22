@@ -8,7 +8,7 @@ import { Plan } from '@/types/plan.type';
  * 좋아요 리스트를 1개 또는 0개 가져오는 함수
  * @param planId - 플랜의 id 값
  * @param userId - 유저의 uuid
- * @returns
+ * @returns 좋아요 데이터
  */
 export const fetchgetSingleLike = async (planId: number, userId: string) => {
   const supabase = await getServerClient();
@@ -28,6 +28,8 @@ export const fetchgetSingleLike = async (planId: number, userId: string) => {
 /**
  * 사용자의 좋아요 목록을 가져오는 함수
  * @param userId - 사용자 ID
+ * @param page - 시작 페이지
+ * @param pageSize - 페이지 크기
  * @returns 사용자의 좋아요 목록 또는 null
  */
 export const fetchGetAllLikesByUserId = async (

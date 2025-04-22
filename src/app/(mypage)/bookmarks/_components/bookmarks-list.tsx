@@ -22,7 +22,11 @@ const TAB_LIST: Record<CategoryType, CategoryParamType> = {
   카페: 'cafe',
 };
 
-/** 카테고리별 북마크 페이지 내용 전체를 담고 있는 클라이언트 컴포넌트 */
+/**
+ * 카테고리별 북마크 페이지 내용 전체를 담고 있는 클라이언트 컴포넌트
+ * @param category - 현재 북마크 페이지의 카테고리
+ * @returns
+ */
 const BookmarksList = ({ category }: { category: CategoryParamType }) => {
   const router = useRouter();
   const searchParams = useSearchParams();

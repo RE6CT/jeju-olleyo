@@ -6,7 +6,6 @@ import { useEffect } from 'react';
 import { CategoryParamType, CategoryType } from '@/types/category.type';
 
 import { useGetPlacesBySearchQuery } from '@/lib/queries/use-get-places';
-import { useInView } from 'react-intersection-observer';
 import Banner from '../_components/banner';
 import PlaceCard from '@/components/features/card/place-card';
 import EmptyResult from '../_components/empty-result';
@@ -15,6 +14,7 @@ import ErrorMessage from '@/app/error';
 import Loading from '@/app/loading';
 import { PATH } from '@/constants/path.constants';
 import { CATEGORY_KR_MAP } from '@/constants/home.constants';
+import useInfiniteScroll from '@/lib/hooks/use-infinite-scroll';
 
 const TAB_LIST: Record<CategoryType, CategoryParamType> = {
   전체: 'all',
@@ -42,13 +42,12 @@ const SearchResultsPage = ({
     isError,
   } = useGetPlacesBySearchQuery(urlCategory, query);
 
-  const { ref: observerRef, inView } = useInView();
-
-  useEffect(() => {
-    if (inView && hasNextPage && !isFetchingNextPage) {
+  // useInView 대신 커스텀 훅 사용
+  const observerRef = useInfiniteScroll(() => {
+    if (hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
-  }, [inView, fetchNextPage, hasNextPage, isFetchingNextPage]);
+  });
 
   useEffect(() => {
     if (!query.trim()) {

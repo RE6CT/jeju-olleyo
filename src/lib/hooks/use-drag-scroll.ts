@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 
-// 마우스 드래그 스크롤 기능 구현
 const useDragScroll = (
   ref: React.RefObject<HTMLElement>,
   options = { threshold: 5 },
 ) => {
   const [isDragging, setIsDragging] = useState<boolean>(false);
+
   useEffect(() => {
     const element = ref.current;
     if (!element) return;
@@ -50,6 +50,7 @@ const useDragScroll = (
       setIsDragging(true);
       element.scrollLeft = scrollLeft - walk;
     };
+
     const handleTouchStart = (e: TouchEvent) => {
       isDown = true;
       moveDistance = 0;
@@ -78,13 +79,16 @@ const useDragScroll = (
       element.scrollLeft = scrollLeft - walk;
     };
 
+    // passive: false 옵션 추가
     element.addEventListener('mousedown', handleMouseDown);
     element.addEventListener('mouseleave', handleMouseLeave);
     element.addEventListener('mouseup', handleMouseUp);
     element.addEventListener('mousemove', handleMouseMove);
-    element.addEventListener('touchstart', handleTouchStart);
+    element.addEventListener('touchstart', handleTouchStart, {
+      passive: false,
+    });
     element.addEventListener('touchend', handleTouchEnd);
-    element.addEventListener('touchmove', handleTouchMove);
+    element.addEventListener('touchmove', handleTouchMove, { passive: false });
 
     return () => {
       element.removeEventListener('mousedown', handleMouseDown);
@@ -96,6 +100,7 @@ const useDragScroll = (
       element.removeEventListener('touchmove', handleTouchMove);
     };
   }, [ref, options.threshold]);
+
   return { isDragging };
 };
 

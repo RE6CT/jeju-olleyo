@@ -1,18 +1,17 @@
 'use client';
 
-import Loading from '@/app/loading';
 import PlanHorizontalCard from '@/components/features/card/plan-horizontal_card';
 import Pagination from '@/components/ui/pagination';
 import useAuth from '@/lib/hooks/use-auth';
 import { useGetDataCount } from '@/lib/queries/use-get-data-count';
-import { useGetLikes } from '@/lib/queries/use-get-likes';
+import { Plan } from '@/types/plan.type';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
 const PAGE_SIZE = 4;
 
 /** 좋아요 목록 전체를 담고 있는 클라이언트 컴포넌트 */
-const LikesList = () => {
+const LikesList = ({ likes }: { likes: Plan[] }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -25,22 +24,14 @@ const LikesList = () => {
     user?.id,
   );
 
-  const { data: likes, isLoading: isLikesLoading } = useGetLikes(
-    user?.id,
-    currentPage,
-    PAGE_SIZE,
-  );
-
   /**
-   * 페이지 이동 클릭 핸들러
+   * 페이지 이동 핸들러
    * @param page - 이동할 페이지 숫자
    */
   const handlePageChange = (page: number) => {
     router.push(`?page=${page}`);
     setPage(page);
   };
-
-  if (isLoading || isCountLoading || isLikesLoading) return <Loading />;
 
   return (
     <>

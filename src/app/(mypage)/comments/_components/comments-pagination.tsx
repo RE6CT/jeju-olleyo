@@ -1,5 +1,6 @@
 'use client';
 
+import Loading from '@/app/loading';
 import Pagination from '@/components/ui/pagination';
 import useAuth from '@/lib/hooks/use-auth';
 import { useGetDataCount } from '@/lib/queries/use-get-data-count';
@@ -27,6 +28,8 @@ const CommentsPagination = ({ pageSize }: { pageSize: number }) => {
     router.push(`?page=${page}`);
     setPage(page);
   };
+
+  if (isLoading || isCountLoading) return <Loading />;
 
   return (
     <Pagination

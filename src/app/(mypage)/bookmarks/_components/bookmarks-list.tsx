@@ -99,9 +99,8 @@ const BookmarksList = ({ category }: { category: CategoryParamType }) => {
           </div>
           <Pagination
             currentPage={currentPage}
-            totalPages={Math.max(
-              1,
-              Math.ceil(countData?.bookmarkCount[category] ?? 0) / PAGE_SIZE,
+            totalPages={Math.ceil(
+              (countData?.bookmarkCount[category] ?? 1) / PAGE_SIZE,
             )}
             onPageChange={handlePageChange}
             backgroundColor="primary-500"

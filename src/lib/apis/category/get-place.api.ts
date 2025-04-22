@@ -9,6 +9,7 @@ import { getCurrentSession } from '../auth/auth-browser.api';
  * @param urlcategory - params로 받아온 all, toursite, restaurant, cafe, accommodation
  * @param pageParam - 시작 페이지
  * krCategory - 위 urlcategory를 수파베이스 컬럼 분류에 맞게 교체
+ * @param searchQuery - 검색어
  */
 export const fetchGetPlacesByCategory = async (
   urlCategory: CategoryParamType,

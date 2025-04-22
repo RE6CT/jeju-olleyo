@@ -30,11 +30,13 @@ const AuthErrorMessage = ({
 
   return (
     <AnimatePresence>
-      <motion.div
+      <motion.aside
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.2 }}
         className={cn('flex items-center justify-center', className)}
+        aria-live="assertive"
+        role="alert"
       >
         <Alert
           variant={variant}
@@ -47,7 +49,7 @@ const AuthErrorMessage = ({
             </span>
           </div>
         </Alert>
-      </motion.div>
+      </motion.aside>
     </AnimatePresence>
   );
 };

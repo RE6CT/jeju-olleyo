@@ -21,7 +21,6 @@ import {
 import ErrorMessage from '@/components/features/error-message/input-error-message';
 import PasswordInput from '@/components/features/input/password-input';
 
-
 /**
  * 인증 관련 페이지의 폼 컴포넌트
  *
@@ -103,20 +102,23 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
           onSubmit={handleSubmitLogin(
             handleFormSubmit as (data: LoginFormValues) => void,
           )}
+          aria-label="로그인 양식"
         >
           {/* 이메일 입력 필드 */}
-          <div>
+          <fieldset>
             <Label htmlFor="email">이메일</Label>
             <Input
               id="email"
               type="email"
               placeholder="name@example.com"
               {...registerLogin('email')}
+              aria-required="true"
+              aria-invalid={errorsLogin.email ? 'true' : 'false'}
             />
             <ErrorMessage message={errorsLogin.email?.message} />
-          </div>
+          </fieldset>
 
-          <div>
+          <fieldset>
             {/* 비밀번호 입력 필드 */}
             <Label htmlFor="password">비밀번호</Label>
             <PasswordInput
@@ -124,9 +126,11 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
               placeholder="비밀번호를 입력하세요"
               autoComplete="current-password"
               register={registerLogin('password')}
+              aria-required="true"
+              aria-invalid={errorsLogin.password ? 'true' : 'false'}
             />
             <ErrorMessage message={errorsLogin.password?.message} />
-          </div>
+          </fieldset>
 
           <div className="flex items-center justify-between pb-3">
             <div className="flex items-center gap-2">
@@ -157,7 +161,7 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
           >
             {isLoading ? AUTH_BUTTON_TEXT.LOADING : buttonText}
           </Button>
-          <div className="flex flex-row justify-center">
+          <nav className="flex flex-row justify-center">
             {/* 비밀번호 찾기 링크 */}
             <Link
               href={PATH.FORGOT_PASSWORD}
@@ -171,7 +175,7 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
             >
               회원가입
             </Link>
-          </div>
+          </nav>
         </form>
       ) : (
         // 회원가입 폼
@@ -179,20 +183,23 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
           onSubmit={handleSubmitSignup(
             handleFormSubmit as (data: RegisterFormValues) => void,
           )}
+          aria-label="회원가입 양식"
         >
           {/* 이메일 입력 필드 */}
-          <div>
+          <fieldset>
             <Label htmlFor="email">이메일</Label>
             <Input
               id="email"
               type="email"
               placeholder="name@example.com"
               {...registerSignup('email')}
+              aria-required="true"
+              aria-invalid={errorsSignup.email ? 'true' : 'false'}
             />
             <ErrorMessage message={errorsSignup.email?.message} />
-          </div>
+          </fieldset>
 
-          <div>
+          <fieldset>
             {/* 비밀번호 입력 필드 */}
             <Label htmlFor="password">비밀번호</Label>
             <PasswordInput
@@ -200,11 +207,13 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
               placeholder="비밀번호를 입력하세요"
               register={registerSignup('password')}
               autoComplete="new-password"
+              aria-required="true"
+              aria-invalid={errorsSignup.password ? 'true' : 'false'}
             />
             <ErrorMessage message={errorsSignup.password?.message} />
-          </div>
+          </fieldset>
 
-          <div>
+          <fieldset>
             {/* 비밀번호 확인 입력 필드 */}
             <Label htmlFor="confirmPassword">비밀번호 확인</Label>
             <PasswordInput
@@ -212,11 +221,13 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
               placeholder="비밀번호를 다시 입력하세요"
               register={registerSignup('confirmPassword')}
               autoComplete="new-password"
+              aria-required="true"
+              aria-invalid={errorsSignup.confirmPassword ? 'true' : 'false'}
             />
             <ErrorMessage message={errorsSignup.confirmPassword?.message} />
-          </div>
+          </fieldset>
 
-          <div>
+          <fieldset>
             {/* 전화번호 입력 필드 */}
             <Label htmlFor="phone">휴대폰 번호</Label>
             <Input
@@ -224,11 +235,13 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
               type="tel"
               placeholder="010 1234 5678"
               {...registerSignup('phone')}
+              aria-required="true"
+              aria-invalid={errorsSignup.phone ? 'true' : 'false'}
             />
             <ErrorMessage message={errorsSignup.phone?.message} />
-          </div>
+          </fieldset>
 
-          <div>
+          <fieldset>
             {/* 닉네임 입력 필드 */}
             <Label htmlFor="nickname">닉네임</Label>
             <Input
@@ -236,9 +249,11 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
               type="text"
               placeholder="한글, 영문, 숫자"
               {...registerSignup('nickname')}
+              aria-required="true"
+              aria-invalid={errorsSignup.nickname ? 'true' : 'false'}
             />
             <ErrorMessage message={errorsSignup.nickname?.message} />
-          </div>
+          </fieldset>
 
           {/* 폼 제출 버튼 영역 */}
           <Button

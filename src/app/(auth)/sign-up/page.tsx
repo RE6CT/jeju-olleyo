@@ -50,7 +50,7 @@ const SignUpPage = () => {
             <AuthErrorMessage messages={errorMessages} className="mb-4" />
           </CardContent>
         )}
-        <section className="mt-[30px]">
+        <section className="mt-[30px]" aria-label="회원가입 양식">
           <AuthForm
             type="register"
             onSubmit={handleSubmit}

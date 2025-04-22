@@ -293,7 +293,6 @@ export const useSchedule = (
   };
 
   return {
-    placeCount,
     copiedDay,
     isDeleteModalOpen,
     isSaveModalOpen,

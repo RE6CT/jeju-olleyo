@@ -58,14 +58,14 @@ const LoginPage = () => {
 
   return (
     <AuthLayout>
-      <div className="flex h-[146px] w-full items-center justify-center">
+      <header className="flex h-[146px] w-full items-center justify-center">
         <Image
           src={'/logo/color_logo.png'}
           alt="logo"
           width={146}
           height={76}
         />
-      </div>
+      </header>
 
       {errorMessages.length > 0 && (
         <CardContent className="pb-0">
@@ -73,14 +73,18 @@ const LoginPage = () => {
         </CardContent>
       )}
 
-      <AuthForm
-        type="login"
-        onSubmit={handleSubmit}
-        isLoading={isLoading}
-        savedEmail={savedEmail}
-      />
+      <section aria-label="로그인 양식">
+        <AuthForm
+          type="login"
+          onSubmit={handleSubmit}
+          isLoading={isLoading}
+          savedEmail={savedEmail}
+        />
+      </section>
 
-      <SocialLogin />
+      <section aria-label="소셜 로그인">
+        <SocialLogin />
+      </section>
     </AuthLayout>
   );
 };

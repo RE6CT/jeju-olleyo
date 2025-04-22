@@ -2,14 +2,31 @@ import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 import { fetchAllCommentsByUserId } from '@/lib/apis/comments/get-comments.api';
 
 import MyComment from './_components/my-comment';
+import CommentsPagination from './_components/comments-pagination';
+import CommentsCounts from './_components/comments-counts';
 
-const CommentsPage = async () => {
+const PAGE_SIZE = 10;
+
+const CommentsPage = async ({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) => {
   const { user } = await fetchGetCurrentUser();
   const userId = user?.id;
-
   if (!userId) return null;
 
-  const comments = await fetchAllCommentsByUserId(userId);
+  const currentPage = parseInt(
+    (Array.isArray(searchParams.page)
+      ? searchParams.page[0]
+      : searchParams.page) || '1',
+  );
+
+  const comments = await fetchAllCommentsByUserId(
+    userId,
+    currentPage,
+    PAGE_SIZE,
+  );
 
   if (!comments)
     throw new Error('내가 쓴 댓글 목록을 가져오는 도중 에러가 발생했습니다.');
@@ -17,16 +34,15 @@ const CommentsPage = async () => {
   return (
     <div className="flex w-full flex-col gap-5">
       <div className="flex flex-col gap-4">
-        <p className="medium-16 text-secondary-300">
-          {comments.length}개의 댓글을 남겼어요
-        </p>
+        <CommentsCounts />
         <h2 className="semibold-28 w-full">내가 쓴 댓글</h2>
-        <ul className="flex flex-col gap-5">
+        <div className="flex flex-col gap-5">
           {comments.map((comment) => (
             <MyComment key={comment.planId} comment={comment} />
           ))}
-        </ul>
+        </div>
       </div>
+      <CommentsPagination pageSize={PAGE_SIZE} />
     </div>
   );
 };

@@ -52,6 +52,7 @@ const PlaceCard = ({
   isLastItem = false,
   onDelete,
   isReadOnly = false,
+  isDragging = false,
 }: {
   index: number;
   dayNumber: number;
@@ -64,6 +65,7 @@ const PlaceCard = ({
   isLastItem?: boolean;
   onDelete?: () => void;
   isReadOnly?: boolean;
+  isDragging?: boolean;
 }) => {
   const dayColorSet = dayNumber % 2 === 1 ? COLORS.ODD : COLORS.EVEN;
   const defaultImage = useMemo(() => getRandomDefaultImage(), []);
@@ -74,6 +76,7 @@ const PlaceCard = ({
       className={cn(
         'flex w-full gap-3',
         !isReadOnly && 'cursor-grab active:cursor-grabbing',
+        isDragging && 'opacity-50',
       )}
     >
       {/* 원형으로 인덱스 표시 */}

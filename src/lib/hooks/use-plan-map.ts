@@ -7,15 +7,14 @@ import { DayPlaces, TabType } from '@/types/plan-detail.type';
 export const usePlanMap = ({
   dayPlaces,
   activeTab,
-  setRouteSummary,
+  updateRouteSummary,
 }: {
   dayPlaces: DayPlaces;
   activeTab: TabType;
-  setRouteSummary: React.Dispatch<
-    React.SetStateAction<{
-      [key: number]: { distance: number; duration: number }[];
-    }>
-  >;
+  updateRouteSummary: (
+    day: number,
+    summaries: { distance: number; duration: number }[],
+  ) => void;
 }) => {
   const [map, setMap] = useState<KakaoMapInstance | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -126,10 +125,7 @@ export const usePlanMap = ({
         return sections[index];
       });
 
-      setRouteSummary((prev) => ({
-        ...prev,
-        [day]: placeSummaries,
-      }));
+      updateRouteSummary(day, placeSummaries);
     } catch (error) {
       console.error('경로 검색 중 오류 발생:', error);
       setError('경로 검색에 실패했습니다.');
@@ -149,7 +145,8 @@ export const usePlanMap = ({
           adjustMapView(newMarkers);
 
           setPaths({});
-          setRouteSummary({});
+          updateRouteSummary(0, []);
+          setError(null);
 
           if (activeTab === '전체보기') {
             Object.entries(dayPlaces).forEach(([day]) => {
@@ -196,7 +193,7 @@ export const usePlanMap = ({
     adjustMapView,
     getMarkersToShow,
     searchRoute,
-    setRouteSummary,
+    updateRouteSummary,
   ]);
 
   return {

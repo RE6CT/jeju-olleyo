@@ -1,5 +1,3 @@
-'use client';
-
 import { WeatherErrorProps } from '@/types/home.weather.type';
 
 /**

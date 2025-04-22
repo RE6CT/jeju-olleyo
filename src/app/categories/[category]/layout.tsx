@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import CategoryTabs from '@/components/features/home/home-category-tap';
+import CategoryTabs from '@/app/_components/client/home-category-tap';
 
 const CategoryLayout = ({ children }: { children: ReactNode }) => {
   return (

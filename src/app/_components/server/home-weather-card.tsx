@@ -1,5 +1,3 @@
-'use client';
-
 import Image from 'next/image';
 import { memo } from 'react';
 
@@ -57,8 +55,5 @@ const WeatherCard = memo(({ weather, isToday = false }: WeatherCardProps) => {
     </div>
   );
 });
-
-// 개발 환경에서 컴포넌트 이름 표시 (디버깅 도움)
-WeatherCard.displayName = 'WeatherCard';
 
 export default WeatherCard;

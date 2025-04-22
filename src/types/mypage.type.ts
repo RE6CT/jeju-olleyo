@@ -21,11 +21,16 @@ export type MypageModalProps = {
 
 /** 유저의 북마크 목록에서 사용하는 북마크 타입 */
 type UserBookmarkRow = {
+  id: number;
   place_id: number;
   title: string;
   image: string;
   created_at: string;
   category: string;
+  content_type_id: number;
+  address: string;
+  lng: number;
+  lat: number;
 };
 export type UserBookmark = CamelCaseObject<UserBookmarkRow>;
 

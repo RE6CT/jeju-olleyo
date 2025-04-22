@@ -401,11 +401,16 @@ export type Database = {
       get_user_bookmarks: {
         Args: { user_id_param: string };
         Returns: {
+          id: number;
           place_id: number;
           title: string;
           image: string;
           created_at: string;
           category: string;
+          content_type_id: number;
+          address: string;
+          lng: number;
+          lat: number;
         }[];
       };
       get_user_likes: {
@@ -423,7 +428,13 @@ export type Database = {
       get_user_data_counts: {
         Args: { user_id_param: string };
         Returns: {
-          bookmark_count: number;
+          bookmark_count: {
+            all: number;
+            toursite: number;
+            cafe: number;
+            accommodation: number;
+            restaurant: number;
+          };
           like_count: number;
           comment_count: number;
         };

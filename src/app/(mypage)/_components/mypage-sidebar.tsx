@@ -15,7 +15,7 @@ const SIDEBAR_STYLE = {
 const MypageSidebar = ({ className }: { className: string }) => {
   return (
     <aside
-      className={`rounded-24 flex min-w-[200px] flex-col gap-5 border border-gray-100 bg-white p-6 ${className}`}
+      className={`flex min-w-[200px] flex-col gap-5 rounded-24 border border-gray-100 bg-white p-6 ${className}`}
     >
       <section className={SIDEBAR_STYLE.section}>
         <h3 className={SIDEBAR_STYLE.category}>내 정보</h3>
@@ -41,7 +41,9 @@ const MypageSidebar = ({ className }: { className: string }) => {
 
 const NavLink = ({ href, children }: { href: string; children: string }) => {
   const pathname = usePathname();
-  const isActive = pathname === href;
+  const firstPathSegment = pathname.split('/').filter(Boolean)[0];
+  const baseRoute = `/${firstPathSegment}`;
+  const isActive = baseRoute === href;
 
   return (
     <Link

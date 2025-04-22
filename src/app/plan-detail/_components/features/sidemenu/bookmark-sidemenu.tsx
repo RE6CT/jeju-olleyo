@@ -191,6 +191,7 @@ const BookmarkSidemenu = ({
                 >
                   <PlaceCardSidemenu
                     title={place.title}
+                    placeId={place.placeId}
                     category={place.category as CategoryType}
                     imageUrl={place.image}
                     isBookmarked={isBookmarked(place.placeId)}

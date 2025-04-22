@@ -45,6 +45,7 @@ export const useBookmarkMutation = () => {
       queryClient.setQueriesData(
         { queryKey: ['popularPlaces'], exact: false },
         (oldData: Place[]) => {
+          if (!oldData) return oldData;
           const popularPlaces = oldData.map((place) => {
             if (place.id === placeId)
               return { ...place, isBookmarked: !place.isBookmarked };
@@ -58,8 +59,7 @@ export const useBookmarkMutation = () => {
       queryClient.setQueriesData(
         { queryKey: ['places'], exact: false },
         (oldData: InfinitePlaceData) => {
-          if (!oldData.pages)
-            throw new Error('장소 데이터가 존재하지 않습니다.');
+          if (!oldData.pages) return oldData;
           return {
             ...oldData,
             pages: oldData.pages.map((page) => {
@@ -94,15 +94,13 @@ export const useBookmarkMutation = () => {
     },
     onError: (error, _, context) => {
       console.error('북마크 작업 실패:', error);
+      // 각 데이터 롤백
       if (context?.previousData) {
-        // 홈 데이터 롤백
-        queryClient.setQueryData(
-          ['popularPlaces'],
-          context.previousData.popularPlaces,
-        );
-
-        // 카테고리, 검색 데이터 롤백
-        queryClient.setQueryData(['places'], context.previousData.places);
+        const { popularPlaces, places, bookmarks } = context.previousData;
+        if (popularPlaces)
+          queryClient.setQueryData(['popularPlaces'], popularPlaces);
+        if (places) queryClient.setQueryData(['places'], places);
+        if (bookmarks) queryClient.setQueryData(['bookmarks'], bookmarks);
       }
     },
     onSuccess: () => {

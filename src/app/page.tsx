@@ -2,11 +2,11 @@ import { Suspense } from 'react';
 
 import Loading from '@/app/loading';
 import JejuBanner from '@/components/features/banner/jeju-banner';
-import CategoryTabs from '@/components/features/home/home-category-tap';
-import MainCarouselContainer from '@/components/features/home/home-main-carousel-container';
-import PopularPlaces from '@/components/features/home/home-popular-places';
-import PopularSchedules from '@/components/features/home/home-popular-schedules';
-import WeatherSection from '@/components/features/home/home-weather-section';
+import CategoryTabs from '@/app/_components/client/home-category-tap';
+import MainCarouselContainer from '@/app/_components/server/home-main-carousel-container';
+import PopularPlaces from '@/app/_components/client/home-popular-places';
+import PopularSchedules from '@/app/_components/client/home-popular-schedules';
+import WeatherSection from '@/app/_components/server/home-weather-section';
 import { PATH } from '@/constants/path.constants';
 
 /**

@@ -20,9 +20,14 @@ export type MypageModalProps = {
 };
 
 /** 유저의 북마크 목록에서 사용하는 북마크 타입 */
-type UserBookmarkRows =
-  Database['public']['Functions']['get_user_bookmarks']['Returns'];
-export type UserBookmarks = CamelCaseObject<UserBookmarkRows>;
+type UserBookmarkRow = {
+  place_id: number;
+  title: string;
+  image: string;
+  created_at: string;
+  category: string;
+};
+export type UserBookmark = CamelCaseObject<UserBookmarkRow>;
 
 export type ProfileImageButtonProps = {
   onEdit: () => void;

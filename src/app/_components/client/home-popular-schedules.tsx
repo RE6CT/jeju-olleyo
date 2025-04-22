@@ -7,7 +7,7 @@ import { usePopularPlans } from '@/lib/queries/use-get-popular-plans';
 import { PlanType } from '@/types/plan.type';
 import useAuthStore from '@/zustand/auth.store';
 
-import PlanVerticalCard from '../card/plan-vertical-card';
+import PlanVerticalCard from '../../../components/features/card/plan-vertical-card';
 
 /**
  * 인기 일정을 표시하는 클라이언트 컴포넌트

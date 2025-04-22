@@ -33,3 +33,9 @@ export type PlaceResponse = {
   data: PlaceType[] | null;
   count: number | null;
 };
+
+/** 옵티미스틱 업데이트에 사용되는 페이지 포함 타입 */
+export type InfinitePlaceData = {
+  pages: PlaceResponse[];
+  pageParams: unknown[];
+};

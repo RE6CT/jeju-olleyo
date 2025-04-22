@@ -1,7 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { UserBookmarks } from '@/types/mypage.type';
-
 import fetchAddBookmarkByIdQuery from '../apis/bookmark/add-bookmark.api';
 import fetchDeleteBookmark from '../apis/bookmark/delete-bookmark.api';
 import {
@@ -9,6 +7,7 @@ import {
   fetchGetBookmarkByIdQuery,
 } from '../apis/bookmark/get-bookmark.api';
 import fetchGetAllPlaces from '../apis/search/get-place.api';
+import { UserBookmark } from '@/types/mypage.type';
 
 /**
  * 북마크 관련 기능을 제공하는 커스텀 훅
@@ -36,7 +35,7 @@ export const useBookmarkQuery = (userId: string | null) => {
    * - staleTime과 gcTime을 0으로 설정하여 항상 최신 데이터를 가져옵니다.
    * - 북마크 목록이 없을 경우 빈 배열을 기본값으로 사용합니다.
    */
-  const { data: bookmarks = [] } = useQuery<UserBookmarks | null>({
+  const { data: bookmarks = [] } = useQuery<UserBookmark[] | null>({
     queryKey: ['bookmarks', userId],
     queryFn: () => {
       if (!userId) return Promise.resolve([]);
@@ -87,7 +86,7 @@ export const useBookmarkQuery = (userId: string | null) => {
 
       queryClient.setQueryData(
         ['bookmarks', userId],
-        (old: UserBookmarks | null) => {
+        (old: UserBookmark[] | null) => {
           if (!old) return [newBookmark];
           return [...old, newBookmark];
         },
@@ -130,7 +129,7 @@ export const useBookmarkQuery = (userId: string | null) => {
 
       queryClient.setQueryData(
         ['bookmarks', userId],
-        (old: UserBookmarks | null) => {
+        (old: UserBookmark[] | null) => {
           if (!old) return [];
           return old.filter((bookmark) => bookmark.placeId !== placeId);
         },

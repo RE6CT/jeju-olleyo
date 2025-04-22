@@ -1,16 +1,16 @@
 'use client';
 
 import Loading from '@/app/loading';
-import AuthErrorMessage from '@/components/features/auth/auth-error-message';
-import AuthForm from '@/components/features/auth/auth-form';
-import AuthHeader from '@/components/features/auth/auth-header';
-import AuthLayout from '@/components/features/auth/auth-layout';
+import AuthForm from '@/app/(auth)/_components/client/auth-form';
+import AuthHeader from '@/app/(auth)/_components/server/auth-header';
+import AuthLayout from '@/app/(auth)/_components/client/auth-layout';
 import { CardContent } from '@/components/ui/card';
 import { PATH } from '@/constants/path.constants';
 import useAuth from '@/lib/hooks/use-auth';
 import useAuthCheck from '@/lib/hooks/use-auth-check';
 import { getSignupErrorMessage } from '@/lib/utils/auth-error.util';
 import { RegisterFormValues } from '@/types/auth.type';
+import AuthErrorMessage from '@/components/features/error-message/error-message';
 
 /**
  * 회원가입 페이지 컴포넌트

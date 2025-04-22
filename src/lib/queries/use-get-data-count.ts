@@ -7,10 +7,14 @@ import { fetchGetProfileDataCountByUserId } from '../apis/profile/get-profile-da
  * @param userId - 유저의 uuid
  * @returns
  */
-export const useGetDataCount = (userId: string) => {
+export const useGetDataCount = (userId: string | undefined) => {
   return useQuery({
     queryKey: ['dataCount', userId],
-    queryFn: async () => await fetchGetProfileDataCountByUserId(userId),
+    queryFn: () => {
+      if (!userId) return null;
+      return fetchGetProfileDataCountByUserId(userId);
+    },
     staleTime: 30000,
+    enabled: !!userId,
   });
 };

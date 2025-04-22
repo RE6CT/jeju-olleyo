@@ -461,6 +461,7 @@ export const fetchGetPlanDaysAndLocations = async (
 
   // 2. 각 day에 대한 locations 정보 가져오기
   const dayPlaces: DayPlaces = {};
+  let totalIndex = 0;
 
   for (const day of daysData) {
     if (day.day === null) continue; // day가 null인 경우 건너뛰기
@@ -496,9 +497,17 @@ export const fetchGetPlanDaysAndLocations = async (
     if (!locationsData) continue;
 
     // DayPlaces 타입에 맞게 변환
-    dayPlaces[day.day] = locationsData.map((location, index) => {
-      const place = location.places as any; // 타입 단언 사용
-      const uniqueId = `${place.place_id}-${index + 1}`; // plan-schedule.tsx와 동일한 방식으로 uniqueId 생성
+    dayPlaces[day.day] = locationsData.map((location) => {
+      const place = location.places as {
+        place_id: number;
+        title: string;
+        address: string;
+        category: string;
+        image: string | null;
+        lat: number;
+        lng: number;
+      }; // 명시적 타입 정의
+      const uniqueId = `${place.place_id}-${totalIndex++}`; // 전체 dayPlaces 기준으로 index 생성
       return {
         id: place.place_id,
         placeId: place.place_id,

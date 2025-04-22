@@ -117,7 +117,4 @@ const CategoryTabs = memo(({ className }: CategoryTabsProps) => {
   );
 });
 
-// 개발 환경에서 컴포넌트 이름 표시 (디버깅 도움)
-CategoryTabs.displayName = 'CategoryTabs';
-
 export default CategoryTabs;

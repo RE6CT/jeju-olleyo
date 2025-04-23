@@ -6,15 +6,16 @@ import { MouseEvent, useState, useEffect } from 'react';
 
 import ProfileImage from '@/components/commons/profile-image';
 import { PATH } from '@/constants/path.constants';
-import { getCurrentSession } from '@/lib/apis/auth/auth-browser.api';
 import useAuth from '@/lib/hooks/use-auth';
 import useCustomToast from '@/lib/hooks/use-custom-toast';
 import { useGetDataCount } from '@/lib/queries/use-get-data-count';
 import { MypageModalProps } from '@/types/mypage.type';
-import useAuthStore from '@/zustand/auth.store';
+import { UserInfo } from '@/types/auth.type';
 
 import { Button } from '../../ui/button';
 import { Separator } from '../../ui/separator';
+import { useCurrentUser } from '@/lib/queries/auth-queries';
+import { getCurrentSession } from '@/lib/apis/auth/auth-browser.api';
 
 const ICON_STYLE = {
   title: 'medium-14 text-gray-500',
@@ -25,12 +26,6 @@ const ICON_STYLE = {
 
 /**
  * nav의 마이페이지 버튼 클릭 시 나타나는 모달 컴포넌트
- * - 모바일에서는 작은 크기로 표시 (두 번째 코드 기준)
- * - 데스크탑에서는 원래 크기로 표시 (첫 번째 코드 기준)
- *
- * @param onLinkClick - 링크 클릭시 실행되는 이벤트 핸들러
- * @param setClose - 모달 오픈 여부 set 함수
- * @param modalRef - 모달에 전달할 모달 ref
  */
 const MypageModal = ({
   onLinkClick,
@@ -39,11 +34,14 @@ const MypageModal = ({
   userId,
 }: MypageModalProps) => {
   const router = useRouter();
-  const user = useAuthStore((state) => state.user);
+  const { data: user, isLoading: isUserLoading } = useCurrentUser({
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+  });
   const { data } = useGetDataCount(userId);
   const { handleLogout, isLoading: isAuthLoading } = useAuth();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
-  const [localUser, setLocalUser] = useState(user);
+  const [localUser, setLocalUser] = useState<UserInfo | null>(null);
   const { successToast } = useCustomToast();
 
   // 컴포넌트 마운트 시 세션에서 직접 사용자 정보 가져오기
@@ -94,11 +92,14 @@ const MypageModal = ({
     }
   };
 
-  // 쿠키에 저장된 provider 값을 읽어서 덮어쓰기 (있다면)
-  const cookieProvider = document.cookie
-    .split('; ')
-    .find((row) => row.startsWith('provider='))
-    ?.split('=')[1];
+  // 쿠키에 저장된 provider 값 가져오기
+  const cookieProvider =
+    typeof document !== 'undefined'
+      ? document.cookie
+          .split('; ')
+          .find((row) => row.startsWith('provider='))
+          ?.split('=')[1]
+      : undefined;
 
   // 사용자 정보가 없는 경우 기본값 설정
   const defaultUser = {
@@ -112,7 +113,7 @@ const MypageModal = ({
     ? {
         profileImg: localUser.avatar_url,
         nickname: localUser.nickname || '사용자',
-        email: localUser.email,
+        email: localUser.email || '', // null 처리
         provider: cookieProvider,
       }
     : defaultUser;

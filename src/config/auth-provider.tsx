@@ -1,23 +1,28 @@
 'use client';
 
 import { useRouter, usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { ReactNode, useEffect } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { AUTH_ROUTES } from '@/constants/auth.constants';
 import { PATH } from '@/constants/path.constants';
-import { formatUser } from '@/lib/apis/auth/auth-browser.api';
-import { getBrowserClient } from '@/lib/supabase/client';
-import { AuthProps } from '@/types/auth.type';
-import useAuthStore from '@/zustand/auth.store';
+import { useCurrentUser, USER_QUERY_KEY } from '@/lib/queries/auth-queries';
+
+interface AuthProviderProps {
+  children: ReactNode;
+}
 
 /**
  * 인증 상태를 감시하고 관리하는 프로바이더 컴포넌트
+ * TanStack Query 기반으로 리팩토링됨
  */
-const AuthProvider = ({ children }: AuthProps) => {
+const AuthProvider = ({ children }: AuthProviderProps) => {
   const router = useRouter();
   const pathname = usePathname();
-  const { setUser, clearUser, setLoading } = useAuthStore();
-  const [isInitialized, setIsInitialized] = useState(false);
+  const queryClient = useQueryClient();
+
+  // 사용자 정보 쿼리 사용
+  const { data: user, isLoading, isError } = useCurrentUser();
 
   // 공개 페이지 여부 확인
   const isPublicPage = (path: string): boolean => {
@@ -27,114 +32,56 @@ const AuthProvider = ({ children }: AuthProps) => {
     );
   };
 
-  // 초기 인증 상태 설정
+  // 인증 상태에 따른 라우팅 로직
   useEffect(() => {
-    const initializeAuth = async () => {
-      setLoading(true);
-      const supabase = await getBrowserClient();
+    // 로딩 중에는 아무 작업도 하지 않음
+    if (isLoading) return;
 
-      try {
-        // 초기 사용자 상태 확인
-        const { data, error } = await supabase.auth.getSession();
-
-        if (error) {
-          if (!error.message.includes('Auth session missing')) {
-            console.error('사용자 정보 로드 오류:', error.message);
-          }
-
-          clearUser();
-
-          // 보호된 페이지에 있는 경우 로그인 페이지로 리다이렉트
-          if (!isPublicPage(pathname)) {
-            router.push(
-              `${PATH.SIGNIN}?redirectTo=${encodeURIComponent(pathname)}`,
-            );
-          }
-        } else if (data.session) {
-          // 사용자 정보를 가져오기 위한 추가 호출
-          const { data: userData } = await supabase.auth.getUser();
-
-          // 사용자 정보 저장
-          if (userData.user) {
-            const formattedUser = formatUser(userData.user);
-            setUser(formattedUser);
-
-            // 로그인/회원가입 페이지에 있는 경우 홈으로 리다이렉트
-            if (pathname === PATH.SIGNIN || pathname === PATH.SIGNUP) {
-              router.push(PATH.HOME);
-            }
-          }
-        } else if (!isPublicPage(pathname)) {
-          // 사용자가 없고 보호된 페이지에 있는 경우 로그인 페이지로 리다이렉트
-          router.push(
-            `${PATH.SIGNIN}?redirectTo=${encodeURIComponent(pathname)}`,
-          );
-        }
-      } catch (err) {
-        console.error('인증 초기화 오류:', err);
-        clearUser();
-
-        if (!isPublicPage(pathname)) {
-          router.push(PATH.SIGNIN);
-        }
-      } finally {
-        setLoading(false);
-        setIsInitialized(true);
+    // 에러가 있거나 사용자가 없는 경우 (로그인되지 않은 경우)
+    if (isError || !user) {
+      // 보호된 페이지에 있는 경우 로그인 페이지로 리다이렉트
+      if (!isPublicPage(pathname)) {
+        router.push(
+          `${PATH.SIGNIN}?redirectTo=${encodeURIComponent(pathname)}`,
+        );
       }
-    };
+    } else {
+      // 로그인되어 있고 로그인/회원가입 페이지에 있는 경우 홈으로 리다이렉트
+      if (pathname === PATH.SIGNIN || pathname === PATH.SIGNUP) {
+        router.push(PATH.HOME);
+      }
+    }
+  }, [isLoading, isError, user, pathname, router]);
 
-    initializeAuth();
-  }, [pathname, router, clearUser, setLoading, setUser]);
-
-  // 인증 상태 변경 감지
+  // 브라우저 클라이언트측 Auth 상태 변경 감지 리스너 설정
   useEffect(() => {
-    if (!isInitialized) return;
-
+    // 여기에 Supabase auth 상태 변경 리스너 설정
     const setupAuthListener = async () => {
+      const { getBrowserClient } = await import('@/lib/supabase/client');
       const supabase = await getBrowserClient();
 
       // 인증 상태 변경 리스너 설정
       const { data: authListener } = supabase.auth.onAuthStateChange(
         async (event, session) => {
-          setLoading(true);
+          if (
+            (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') &&
+            session?.user
+          ) {
+            // 사용자 정보 다시 가져오도록 쿼리 무효화
+            queryClient.invalidateQueries({ queryKey: USER_QUERY_KEY });
+          } else if (event === 'SIGNED_OUT') {
+            // 사용자 정보 캐시 제거
+            queryClient.setQueryData(USER_QUERY_KEY, null);
 
-          try {
-            // INITIAL_SESSION 이벤트도 처리
-            if (
-              (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') &&
-              session?.user
-            ) {
-              const formattedUser = formatUser(session.user);
-              setUser(formattedUser);
-
-              // URL 파라미터에서 리다이렉트 경로 확인
-              if (typeof window !== 'undefined') {
-                const params = new URLSearchParams(window.location.search);
-                const redirectTo = params.get('redirectTo') || PATH.HOME;
-
-                // 로그인 페이지나 회원가입 페이지, 콜백 페이지에서 로그인한 경우에만 리다이렉트
-                const isAuthPage =
-                  pathname.includes(PATH.SIGNIN) ||
-                  pathname.includes(PATH.SIGNUP) ||
-                  pathname.includes(PATH.CALLBACK);
-
-                if (isAuthPage) {
-                  window.location.href = redirectTo;
-                }
-              }
-            } else if (event === 'SIGNED_OUT') {
-              clearUser();
+            // 비공개 페이지에 있는 경우 로그인 페이지로 리다이렉트
+            if (!isPublicPage(pathname)) {
               router.push(PATH.SIGNIN);
-            } else if (event === 'USER_UPDATED' && session?.user) {
-              const formattedUser = formatUser(session.user);
-              setUser(formattedUser);
-            } else if (event === 'PASSWORD_RECOVERY') {
-              router.push(PATH.RESET_PASSWORD);
             }
-          } catch (err) {
-            console.error('인증 상태 변경 처리 오류:', err);
-          } finally {
-            setLoading(false);
+          } else if (event === 'USER_UPDATED' && session?.user) {
+            // 사용자 정보 다시 가져오도록 쿼리 무효화
+            queryClient.invalidateQueries({ queryKey: USER_QUERY_KEY });
+          } else if (event === 'PASSWORD_RECOVERY') {
+            router.push(PATH.RESET_PASSWORD);
           }
         },
       );
@@ -146,7 +93,7 @@ const AuthProvider = ({ children }: AuthProps) => {
     };
 
     setupAuthListener();
-  }, [isInitialized, pathname, router, setUser, clearUser, setLoading]);
+  }, [pathname, router, queryClient]);
 
   return <>{children}</>;
 };

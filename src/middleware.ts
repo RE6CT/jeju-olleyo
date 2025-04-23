@@ -65,6 +65,10 @@ export async function middleware(request: NextRequest) {
       pattern: /^\/search\/[a-z]+$/,
     },
     {
+      BOOKMARKS: PATH.BOOKMARKS,
+      pattern: /^\/bookmarks\/[a-z]+$/,
+    },
+    {
       PLACES: PATH.PLACES,
       pattern: /^\/places\/\d+$/,
     },
@@ -140,6 +144,10 @@ export async function middleware(request: NextRequest) {
   // 이미 인증된 사용자가 로그인/회원가입 페이지에 접근할 경우 홈으로 리다이렉트
   if (session && isAuthPage) {
     return NextResponse.redirect(new URL(PATH.HOME, request.url));
+  }
+
+  if (pathname === PATH.BOOKMARKS) {
+    return NextResponse.redirect(new URL(`${PATH.BOOKMARKS}/all`, request.url));
   }
 
   return response;

@@ -15,6 +15,7 @@ import PlaceCardSidemenu from '../card/place-card-sidemenu';
 import PlaceSidemenuLayout from './place-sidemenu-layout';
 import DaySelectRequiredModal from '../modal/day-select-required-modal';
 import { useGetDataCount } from '@/lib/queries/use-get-data-count';
+import useAuthStore from '@/zustand/auth.store';
 
 const ITEMS_PER_PAGE = 7;
 const INITIAL_ITEMS = 3;
@@ -34,14 +35,12 @@ const DEBOUNCE_TIME = 200;
  * @param selectedDay - 선택된 날짜
  */
 const BookmarkSidemenu = ({
-  userId,
   filterTabs,
   activeFilterTab,
   onFilterTabChange,
   onAddPlace,
   selectedDay,
 }: {
-  userId: string;
   filterTabs: CategoryType[];
   activeFilterTab: CategoryType;
   onFilterTabChange: (tab: CategoryType) => void;
@@ -56,6 +55,9 @@ const BookmarkSidemenu = ({
   const resizeTimeoutRef = useRef<NodeJS.Timeout>();
   const listRef = useRef<HTMLDivElement>(null);
 
+  const { user } = useAuthStore();
+  const userId = user?.id || null;
+  if (!userId) return null;
   const { data: countData, isLoading: isCountLoading } =
     useGetDataCount(userId);
 

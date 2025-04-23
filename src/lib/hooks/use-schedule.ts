@@ -4,17 +4,22 @@ import { useToast } from '@/hooks/use-toast';
 import { DayPlaces } from '@/types/plan-detail.type';
 import { Place } from '@/types/search.type';
 import { fetchSavePlan, fetchSavePlanPlaces } from '@/lib/apis/plan/plan.api';
-import { usePlanStore } from '@/lib/store/plan-store';
+import { usePlanStore } from '@/zustand/plan.store';
+import useAuthStore from '@/zustand/auth.store';
 
-export const useSchedule = (
-  userId: string,
-  startDate: Date | null,
-  endDate: Date | null,
-  dayPlaces: DayPlaces,
-  setDayPlaces: React.Dispatch<React.SetStateAction<DayPlaces>>,
-  isReadOnly: boolean,
-) => {
+export const useSchedule = () => {
   const { toast } = useToast();
+  const {
+    startDate,
+    endDate,
+    dayPlaces,
+    setDayPlaces,
+    isReadOnly,
+    title,
+    description,
+    planImg,
+  } = usePlanStore();
+
   const [placeCount, setPlaceCount] = useState(() =>
     Object.values(dayPlaces).reduce((acc, places) => acc + places.length, 0),
   ); // 초기 장소 개수 계산
@@ -23,6 +28,9 @@ export const useSchedule = (
   const [dayToDelete, setDayToDelete] = useState<number | null>(null);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const [isPublicModalOpen, setIsPublicModalOpen] = useState(false);
+
+  const { user } = useAuthStore();
+  const userId = user?.id || null;
 
   /**
    * 장소 추가 핸들러
@@ -42,13 +50,14 @@ export const useSchedule = (
     setPlaceCount((prev) => {
       uniqueId = `${newPlace.id}-${prev}`;
       return prev + 1;
-    }); // 함수형 업데이트로 최신 장소 개수 보장(여러 장소가 동시에 추가되는 경우에도 고유 ID를 갖게 하여 충돌 방지)
+    });
     const newPlaceWithId = { ...newPlace, uniqueId };
 
-    setDayPlaces((prev: DayPlaces) => ({
-      ...prev,
-      [dayNumber]: [...(prev[dayNumber] || []), newPlaceWithId],
-    }));
+    const updatedDayPlaces = {
+      ...dayPlaces,
+      [dayNumber]: [...(dayPlaces[dayNumber] || []), newPlaceWithId],
+    };
+    setDayPlaces(updatedDayPlaces);
   };
 
   /**
@@ -62,13 +71,11 @@ export const useSchedule = (
   const handleRemovePlace = (day: number, uniqueId: string) => {
     if (isReadOnly) return;
 
-    setDayPlaces((prev) => {
-      const newDayPlaces = { ...prev };
-      newDayPlaces[day] = newDayPlaces[day].filter(
-        (place) => place.uniqueId !== uniqueId,
-      );
-      return newDayPlaces;
-    });
+    const updatedDayPlaces = {
+      ...dayPlaces,
+      [day]: dayPlaces[day].filter((place) => place.uniqueId !== uniqueId),
+    };
+    setDayPlaces(updatedDayPlaces);
   };
 
   /**
@@ -92,32 +99,30 @@ export const useSchedule = (
     const { source, destination } = result;
 
     if (source.droppableId === destination.droppableId) {
-      setDayPlaces((prev: DayPlaces) => {
-        const dayNumber = parseInt(source.droppableId);
-        const places = [...(prev[dayNumber] || [])];
-        const [removed] = places.splice(source.index, 1);
-        places.splice(destination.index, 0, removed);
+      const dayNumber = parseInt(source.droppableId);
+      const places = [...(dayPlaces[dayNumber] || [])];
+      const [removed] = places.splice(source.index, 1);
+      places.splice(destination.index, 0, removed);
 
-        return {
-          ...prev,
-          [dayNumber]: places,
-        };
-      });
+      const updatedDayPlaces = {
+        ...dayPlaces,
+        [dayNumber]: places,
+      };
+      setDayPlaces(updatedDayPlaces);
     } else {
-      setDayPlaces((prev: DayPlaces) => {
-        const sourceDay = parseInt(source.droppableId);
-        const destDay = parseInt(destination.droppableId);
-        const sourcePlaces = [...(prev[sourceDay] || [])];
-        const destPlaces = [...(prev[destDay] || [])];
-        const [removed] = sourcePlaces.splice(source.index, 1);
-        destPlaces.splice(destination.index, 0, removed);
+      const sourceDay = parseInt(source.droppableId);
+      const destDay = parseInt(destination.droppableId);
+      const sourcePlaces = [...(dayPlaces[sourceDay] || [])];
+      const destPlaces = [...(dayPlaces[destDay] || [])];
+      const [removed] = sourcePlaces.splice(source.index, 1);
+      destPlaces.splice(destination.index, 0, removed);
 
-        return {
-          ...prev,
-          [sourceDay]: sourcePlaces,
-          [destDay]: destPlaces,
-        };
-      });
+      const updatedDayPlaces = {
+        ...dayPlaces,
+        [sourceDay]: sourcePlaces,
+        [destDay]: destPlaces,
+      };
+      setDayPlaces(updatedDayPlaces);
     }
   };
 
@@ -136,18 +141,17 @@ export const useSchedule = (
   const handlePasteDayPlaces = (targetDay: number) => {
     if (copiedDay === null) return;
 
-    setDayPlaces((prev: DayPlaces) => {
-      const copiedPlaces = [...(prev[copiedDay] || [])];
-      const newPlaces = copiedPlaces.map((place) => ({
-        ...place,
-        uniqueId: `${place.id}-${placeCount + copiedPlaces.indexOf(place)}`,
-      }));
+    const copiedPlaces = [...(dayPlaces[copiedDay] || [])];
+    const newPlaces = copiedPlaces.map((place) => ({
+      ...place,
+      uniqueId: `${place.id}-${placeCount + copiedPlaces.indexOf(place)}`,
+    }));
 
-      return {
-        ...prev,
-        [targetDay]: [...(prev[targetDay] || []), ...newPlaces],
-      };
-    });
+    const updatedDayPlaces = {
+      ...dayPlaces,
+      [targetDay]: [...(dayPlaces[targetDay] || []), ...newPlaces],
+    };
+    setDayPlaces(updatedDayPlaces);
 
     setPlaceCount((prev) => prev + (dayPlaces[copiedDay]?.length || 0));
     setCopiedDay(null);
@@ -164,11 +168,9 @@ export const useSchedule = (
 
   const handleConfirmDelete = () => {
     if (dayToDelete !== null) {
-      setDayPlaces((prev: DayPlaces) => {
-        const newDayPlaces = { ...prev };
-        delete newDayPlaces[dayToDelete];
-        return newDayPlaces;
-      });
+      const updatedDayPlaces = { ...dayPlaces };
+      delete updatedDayPlaces[dayToDelete];
+      setDayPlaces(updatedDayPlaces);
     }
     setIsDeleteModalOpen(false);
     setDayToDelete(null);
@@ -178,8 +180,6 @@ export const useSchedule = (
    * 일정 저장 버튼 클릭 핸들러
    */
   const handleSaveButtonClick = () => {
-    const { title } = usePlanStore.getState();
-
     if (!title) {
       toast({
         title: '일정 제목 누락',
@@ -225,9 +225,7 @@ export const useSchedule = (
    */
   const handlePublicClick = async () => {
     try {
-      const { title, description, planImg } = usePlanStore.getState();
-
-      if (!startDate || !endDate || !title) {
+      if (!startDate || !endDate || !title || !userId) {
         throw new Error('필수 정보가 누락되었습니다.');
       }
 
@@ -263,9 +261,7 @@ export const useSchedule = (
    */
   const handlePrivateClick = async () => {
     try {
-      const { title, description, planImg } = usePlanStore.getState();
-
-      if (!startDate || !endDate || !title) {
+      if (!startDate || !endDate || !title || !userId) {
         throw new Error('필수 정보가 누락되었습니다.');
       }
 

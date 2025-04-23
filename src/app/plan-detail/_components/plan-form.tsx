@@ -2,7 +2,7 @@
 
 import { DayPlaces, TabType } from '@/types/plan-detail.type';
 import { Plan } from '@/types/plan.type';
-import { usePlanStore } from '@/lib/store/plan-store';
+import { usePlanStore } from '@/zustand/plan.store';
 import { usePlanDetailForm } from '@/lib/hooks/use-plan-detail-form';
 import { useEffect } from 'react';
 
@@ -24,19 +24,7 @@ const PlanForm = ({
   const { title, description, planImg, setTitle, setDescription, setPlanImg } =
     usePlanStore();
 
-  const {
-    startDate,
-    endDate,
-    isCalendarOpen,
-    dayPlaces,
-    activeTab,
-    routeSummary,
-    setIsCalendarOpen,
-    setDayPlaces,
-    setActiveTab,
-    updateRouteSummary,
-    handleDateChange,
-  } = usePlanDetailForm({
+  const { dayPlaces, activeTab, updateRouteSummary } = usePlanDetailForm({
     userId,
     initialPlan,
     initialDayPlaces,
@@ -55,30 +43,13 @@ const PlanForm = ({
   console.log('planform 렌더링');
   return (
     <div>
-      <PlanHeader
-        startDate={startDate}
-        endDate={endDate}
-        isCalendarOpen={isCalendarOpen}
-        setIsCalendarOpen={setIsCalendarOpen}
-        handleDateChange={handleDateChange}
-        isReadOnly={isReadOnly}
-      />
+      <PlanHeader />
       <PlanMap
         dayPlaces={dayPlaces}
         activeTab={activeTab}
         updateRouteSummary={updateRouteSummary}
       />
-      <PlanSchedule
-        startDate={startDate}
-        endDate={endDate}
-        userId={userId}
-        dayPlaces={dayPlaces}
-        setDayPlaces={setDayPlaces}
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        routeSummary={routeSummary}
-        isReadOnly={isReadOnly}
-      />
+      <PlanSchedule />
     </div>
   );
 };

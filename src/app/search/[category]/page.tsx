@@ -99,8 +99,8 @@ const SearchResultsPage = ({
                   isBookmarked={place.isBookmarked}
                 />
 
-                {/* 8번째마다 배너 삽입 */}
-                {idx % 8 === 7 && (
+                {/* 처음 8개 이후 배너 삽입 */}
+                {idx === 7 && (
                   <div className="col-span-full my-4 flex w-full items-center justify-center">
                     <Banner key={`banner-${idx}`} />
                   </div>

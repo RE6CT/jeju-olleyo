@@ -1,12 +1,10 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useInView } from 'react-intersection-observer';
-
 import ErrorMessage from '@/app/error';
 import Loading from '@/app/loading';
 import Banner from '@/app/search/_components/banner';
 import PlaceCard from '@/components/features/card/place-card';
+import useInfiniteScroll from '@/lib/hooks/use-infinite-scroll';
 import { useGetPlacesByCategoryInfiniteQuery } from '@/lib/queries/use-get-places';
 import { CategoryParamType } from '@/types/category.type';
 
@@ -20,13 +18,13 @@ const CategoryClient = ({ category }: { category: CategoryParamType }) => {
     isPending,
     isError,
   } = useGetPlacesByCategoryInfiniteQuery(category);
-  const { ref, inView } = useInView();
 
-  useEffect(() => {
-    if (inView && hasNextPage && !isFetchingNextPage) {
+  // useInView 대신 커스텀 훅 사용
+  const observerRef = useInfiniteScroll(() => {
+    if (hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
-  }, [inView, fetchNextPage, hasNextPage, isFetchingNextPage]);
+  });
 
   if (isPending) return <Loading />;
   if (isError) return <ErrorMessage message="장소 불러오기 오류 발생" />;
@@ -64,7 +62,7 @@ const CategoryClient = ({ category }: { category: CategoryParamType }) => {
 
       {/* 로딩 인디케이터 및 다음 페이지 로드 트리거 */}
       <div
-        ref={ref}
+        ref={observerRef}
         className="flex h-[50px] w-full items-center justify-center"
       ></div>
     </>

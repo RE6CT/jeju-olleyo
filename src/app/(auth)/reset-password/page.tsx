@@ -38,43 +38,49 @@ const ResetPasswordPage = () => {
       <CardContent className="mt-7">
         {error && <AuthErrorMessage messages={[error]} className="mb-4" />}
 
-        <form onSubmit={handleSubmit(handlePasswordUpdate)}>
-          <div>
-            <Label htmlFor="password">새 비밀번호</Label>
-            <PasswordInput
-              id="password"
-              placeholder="8~12자 영문,숫자,특수문자"
-              register={register('password')}
-              autoComplete="new-password"
-            />
-            <div className="h-6">
-              <ErrorMessage message={errors.password?.message} />
+        <section aria-label="비밀번호 재설정 양식">
+          <form onSubmit={handleSubmit(handlePasswordUpdate)}>
+            <div>
+              <Label htmlFor="password">새 비밀번호</Label>
+              <PasswordInput
+                id="password"
+                placeholder="8~12자 영문,숫자,특수문자"
+                register={register('password')}
+                autoComplete="new-password"
+                aria-required="true"
+                aria-invalid={errors.password ? 'true' : 'false'}
+              />
+              <div className="h-6">
+                <ErrorMessage message={errors.password?.message} />
+              </div>
             </div>
-          </div>
 
-          <div>
-            <Label htmlFor="confirmPassword">비밀번호 확인</Label>
-            <PasswordInput
-              id="confirmPassword"
-              placeholder="8~12자 영문,숫자,특수문자"
-              register={register('confirmPassword')}
-              autoComplete="new-password"
-            />
-            <div className="h-6">
-              <ErrorMessage message={errors.confirmPassword?.message} />
+            <div>
+              <Label htmlFor="confirmPassword">비밀번호 확인</Label>
+              <PasswordInput
+                id="confirmPassword"
+                placeholder="8~12자 영문,숫자,특수문자"
+                register={register('confirmPassword')}
+                autoComplete="new-password"
+                aria-required="true"
+                aria-invalid={errors.confirmPassword ? 'true' : 'false'}
+              />
+              <div className="h-6">
+                <ErrorMessage message={errors.confirmPassword?.message} />
+              </div>
             </div>
-          </div>
 
-          <Button
-            type="submit"
-            className="flex h-11 w-full items-center justify-center gap-2.5 rounded-xl bg-primary-500 p-2.5 pt-3 hover:bg-primary-600"
-            disabled={isLoading}
-          >
-            {isLoading
-              ? AUTH_BUTTON_TEXT.LOADING
-              : AUTH_BUTTON_TEXT.RESET_PASSWORD.DEFAULT}
-          </Button>
-        </form>
+            <Button
+              type="submit"
+              className="flex h-11 w-full items-center justify-center gap-2.5 rounded-xl bg-primary-500 p-2.5 pt-3 hover:bg-primary-600"
+              disabled={isLoading}
+            >
+              {isLoading
+                ? AUTH_BUTTON_TEXT.LOADING
+                : AUTH_BUTTON_TEXT.RESET_PASSWORD.DEFAULT}
+            </Button>
+          </form>
+        </section>
       </CardContent>
 
       {/* 성공 모달 컴포넌트 */}

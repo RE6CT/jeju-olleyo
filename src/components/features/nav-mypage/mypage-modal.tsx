@@ -161,7 +161,7 @@ const MypageModal = ({
                     className={ICON_STYLE.icon}
                   />
                   <span className={ICON_STYLE.description}>
-                    {data?.bookmarkCount || 0}개
+                    {data?.bookmarkCount.all || 0}개
                   </span>
                 </button>
                 <button

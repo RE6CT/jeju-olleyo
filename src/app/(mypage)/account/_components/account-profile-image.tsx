@@ -8,7 +8,6 @@ import useCustomToast from '@/lib/hooks/use-custom-toast';
 import ProfileImageButton from './account-profile-image-button';
 import ProfileModal from './account-profile-modal';
 
-
 const IMAGE_SIZE = 88;
 
 /**
@@ -62,7 +61,7 @@ const AccountProfileImage = ({
           image={profileImage}
           width={IMAGE_SIZE}
           height={IMAGE_SIZE}
-          className="rounded-full"
+          className="aspect-square rounded-full"
         />
         {provider === 'email' && (
           <ProfileImageButton

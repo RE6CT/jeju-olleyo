@@ -21,7 +21,7 @@ const PERSONAL_INFO_STYLE = {
   input:
     'rounded-[12px] border border-gray-200 px-4 py-[10px] !placeholder-gray-200',
   rowLabel:
-    'medium-16 text-[16px] text-gray-900 whitespace-nowrap w-[107px] p-[10px]',
+    'text-[16px] text-gray-900 whitespace-nowrap w-[107px] p-[10px] font-medium',
   rowValue: 'whitespace-nowrap medium-16 p-[10px]',
   button: 'medium-16 bg-transparent text-secondary-300 hover:bg-gray-100',
 };
@@ -111,7 +111,7 @@ const PersonalInfo = ({
           <div className="flex flex-col">
             <Input
               id="phone"
-              placeholder={`${phone}`}
+              placeholder="휴대폰 번호를 입력하세요"
               {...register('phone')}
               className={PERSONAL_INFO_STYLE.input}
             />

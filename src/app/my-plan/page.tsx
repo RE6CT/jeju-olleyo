@@ -8,6 +8,7 @@ import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 import { fetchGetAllPlansByUserId } from '@/lib/apis/plan/plan.api';
 
 import PlanFilterSection from './_components/plan-filter-section';
+import { fetchfetchAllCommentsByPlanId } from '@/lib/apis/comments/get-comments.api';
 
 const IMAGE_CONSTANTS = {
   SUNGLASSES: {

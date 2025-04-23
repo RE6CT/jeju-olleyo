@@ -197,7 +197,6 @@ const BookmarkSidemenu = ({
                         category={place.category as CategoryType}
                         imageUrl={place.image}
                         isBookmarked={true}
-                        onBookmarkToggle={() => {}}
                         onAddPlace={() => handleAddPlace(place)}
                       />
                     </motion.div>

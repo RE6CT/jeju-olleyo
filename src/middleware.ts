@@ -149,6 +149,12 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL(`${PATH.BOOKMARKS}/all`, request.url));
   }
 
+  if (pathname === PATH.CATEGORIES) {
+    return NextResponse.redirect(
+      new URL(`${PATH.CATEGORIES}/all`, request.url),
+    );
+  }
+
   return response;
 }
 

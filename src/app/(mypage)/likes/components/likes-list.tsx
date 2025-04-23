@@ -6,6 +6,8 @@ import { useGetDataCount } from '@/lib/queries/use-get-data-count';
 import { Plan } from '@/types/plan.type';
 import MypagePagination from '../../_components/mypage-pagination';
 import Loading from '@/app/loading';
+import EmptyResult from '@/components/commons/empty-result-link';
+import { PATH } from '@/constants/path.constants';
 
 const PAGE_SIZE = 4;
 
@@ -24,7 +26,11 @@ const LikesList = ({ likes }: { likes: Plan[] }) => {
   return (
     <>
       {countData?.likeCount === 0 ? (
-        <div>아직 좋아요한 일정이 없습니다.</div>
+        <EmptyResult
+          buttonText="제주도 인기 일정 보러가기"
+          href={PATH.CATEGORIES}
+          imagePath="/empty-result/empty_likes.png"
+        />
       ) : (
         <div className="flex flex-col gap-20">
           <div className="grid grid-cols-1 gap-6">

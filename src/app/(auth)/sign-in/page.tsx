@@ -37,7 +37,7 @@ const LoginPage = () => {
   }, [searchParams]);
 
   // 인증 상태 체크 (로그아웃 직후가 아닌 경우만)
-  const { isLoading: isCheckingAuth, isAuthenticated } = useAuthCheck({
+  const { isChecking: isCheckingAuth, isAuthenticated } = useAuthCheck({
     redirectIfFound: true,
     redirectTo,
     skipCheck: !shouldCheckAuth,

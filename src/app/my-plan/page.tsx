@@ -8,6 +8,7 @@ import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 import { fetchGetAllPlansByUserId } from '@/lib/apis/plan/plan.api';
 
 import PlanFilterSection from '@/app/my-plan/_components/client/plan-filter-section';
+import AddIcon from '@/components/icons/add-icon';
 
 const IMAGE_CONSTANTS = {
   SUNGLASSES: {
@@ -45,7 +46,7 @@ const MyPlanPage = async () => {
     const plans = await fetchGetAllPlansByUserId(user.id);
 
     return (
-      <div className="container mx-auto py-8">
+      <div className="container mx-auto px-9 py-8">
         <div className="mb-8 flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -59,14 +60,7 @@ const MyPlanPage = async () => {
             </div>
             <Link href={PATH.PLAN_NEW}>
               <Button className="flex items-center gap-2 rounded-[20px] border border-primary-500 bg-white px-3 py-2 hover:bg-primary-100">
-                <span className="mr-1 flex h-[20px] w-[20px] items-center justify-center">
-                  <Image
-                    src="/icons/add.svg"
-                    alt="plus icon"
-                    width={IMAGE_CONSTANTS.ADD_ICON.width}
-                    height={IMAGE_CONSTANTS.ADD_ICON.height}
-                  />
-                </span>
+                <AddIcon size={20} fill="primary-500" />
                 <span className="text-center text-16 font-medium leading-[150%] text-primary-500">
                   새 일정 만들기
                 </span>

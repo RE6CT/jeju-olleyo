@@ -39,7 +39,7 @@ const ResetPasswordPage = () => {
         {error && <AuthErrorMessage messages={[error]} className="mb-4" />}
 
         <section aria-label="비밀번호 재설정 양식">
-          <form onSubmit={handleSubmit(handlePasswordUpdate)}>
+          <form onSubmit={handleSubmit(handlePasswordUpdate)} noValidate>
             <div>
               <Label htmlFor="password">새 비밀번호</Label>
               <PasswordInput

@@ -43,9 +43,9 @@ const PlanIncludingPlace = async ({ placeId }: { placeId: number }) => {
 
       <div className="grid w-full grid-cols-1 gap-x-[11px] gap-y-9 sm:grid-cols-2 md:grid-cols-3">
         {plans &&
-          plans.map((plan) => (
-            <PlanVerticalCard key={plan.planId} plan={plan} />
-          ))}
+          plans
+            .slice(0, 6)
+            .map((plan) => <PlanVerticalCard key={plan.planId} plan={plan} />)}
       </div>
     </div>
   );

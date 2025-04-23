@@ -24,7 +24,7 @@ const PROFILE_INFO_STYLE = {
   input:
     'rounded-[12px] border border-gray-200 px-4 py-[10px] !placeholder-gray-200',
   rowLabel:
-    'medium-16 text-[16px] text-gray-900 whitespace-nowrap w-[107px] p-[10px]',
+    'text-[16px] text-gray-900 whitespace-nowrap w-[107px] p-[10px] font-medium',
   rowValue: 'whitespace-nowrap medium-16 p-[10px]',
   button: 'medium-16 bg-transparent text-secondary-300 hover:bg-gray-100',
 };
@@ -134,7 +134,7 @@ const ProfileInfo = ({
           <div className="relative">
             <Input
               id="nickname"
-              placeholder={`${nickname}`}
+              placeholder="새 닉네임을 입력하세요"
               {...register('nickname')}
               className={PROFILE_INFO_STYLE.input}
             />

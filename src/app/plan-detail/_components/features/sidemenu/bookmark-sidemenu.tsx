@@ -109,25 +109,13 @@ const BookmarkSidemenu = ({
     setCurrentPage(1);
   }, [activeFilterTab]);
 
-  const handleAddPlace = (place: any) => {
+  const handleAddPlace = (place: Place) => {
     if (selectedDay === null) {
       setIsDaySelectModalOpen(true);
       return;
     }
 
-    const placeToAdd: Place = {
-      id: 0,
-      placeId: 0,
-      title: place.title,
-      category: place.category,
-      image: place.image,
-      address: '',
-      contentTypeId: 0,
-      lat: 0,
-      lng: 0,
-    };
-
-    onAddPlace(placeToAdd);
+    onAddPlace(place);
   };
 
   const handlePageChange = (page: number) => {

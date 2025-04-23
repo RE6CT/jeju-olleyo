@@ -23,9 +23,6 @@ import {
   usePlanSetDescription,
   usePlanSetStartDate,
   usePlanSetEndDate,
-  usePlanSetDayPlaces,
-  usePlanSetActiveTab,
-  usePlanDayPlaces,
 } from '@/zustand/plan.store';
 
 const EDIT_ICON_CONSTANTS = {

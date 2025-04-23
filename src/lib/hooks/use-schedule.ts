@@ -4,22 +4,7 @@ import { useToast } from '@/hooks/use-toast';
 import { DayPlaces } from '@/types/plan-detail.type';
 import { Place } from '@/types/search.type';
 import { fetchSavePlan, fetchSavePlanPlaces } from '@/lib/apis/plan/plan.api';
-
-// 모달 상태를 관리하는 훅
-export const useScheduleModal = () => {
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
-  const [isPublicModalOpen, setIsPublicModalOpen] = useState(false);
-
-  return {
-    isDeleteModalOpen,
-    isSaveModalOpen,
-    isPublicModalOpen,
-    setIsDeleteModalOpen,
-    setIsSaveModalOpen,
-    setIsPublicModalOpen,
-  };
-};
+import { useScheduleModalStore } from '@/zustand/plan.store';
 
 // 복사/붙여넣기 기능을 관리하는 훅
 export const useScheduleCopyPaste = (
@@ -75,8 +60,10 @@ export const useSchedulePlaces = (
   setDayPlaces: (dayPlaces: DayPlaces) => void,
   isReadOnly: boolean,
   setIsDeleteModalOpen: (isOpen: boolean) => void,
+  dayToDelete: number | null,
+  setDayToDelete: (day: number | null) => void,
 ) => {
-  const [dayToDelete, setDayToDelete] = useState<number | null>(null);
+  const { toast } = useToast();
 
   /**
    * 장소 추가 핸들러

@@ -189,3 +189,17 @@ export type PlanState = {
   activeTab: TabType; // 현재 활성화된 탭
   setActiveTab: (activeTab: TabType) => void;
 };
+
+/**
+ * 일정 모달 상태 타입
+ */
+export type ScheduleModalStore = {
+  isDeleteModalOpen: boolean;
+  isSaveModalOpen: boolean;
+  isPublicModalOpen: boolean;
+  dayToDelete: number | null;
+  setIsDeleteModalOpen: (isOpen: boolean) => void;
+  setIsSaveModalOpen: (isOpen: boolean) => void;
+  setIsPublicModalOpen: (isOpen: boolean) => void;
+  setDayToDelete: (day: number | null) => void;
+};

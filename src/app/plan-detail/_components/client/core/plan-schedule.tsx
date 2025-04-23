@@ -29,12 +29,14 @@ import {
   usePlanTitle,
   usePlanDescription,
   usePlanImg,
+  useScheduleModalStore,
 } from '@/zustand/plan.store';
-import { useScheduleModal } from '@/lib/hooks/use-schedule';
-import { useScheduleCopyPaste } from '@/lib/hooks/use-schedule';
-import { useSchedulePlaces } from '@/lib/hooks/use-schedule';
-import { useScheduleSaveButton } from '@/lib/hooks/use-schedule';
-import { useScheduleSavePlan } from '@/lib/hooks/use-schedule';
+import {
+  useScheduleCopyPaste,
+  useSchedulePlaces,
+  useScheduleSaveButton,
+  useScheduleSavePlan,
+} from '@/lib/hooks/use-schedule';
 import { useCurrentUser } from '@/lib/queries/auth-queries';
 
 const DROPDOWN_CONTENT_STYLE =
@@ -67,7 +69,7 @@ const SaveButton = memo(() => {
   const startDate = usePlanStartDate();
   const endDate = usePlanEndDate();
   const dayPlaces = usePlanDayPlaces();
-  const { setIsSaveModalOpen, setIsPublicModalOpen } = useScheduleModal();
+  const { setIsSaveModalOpen, setIsPublicModalOpen } = useScheduleModalStore();
   const { handleSaveButtonClick } = useScheduleSaveButton(
     usePlanTitle(),
     startDate,
@@ -91,7 +93,7 @@ const SaveButton = memo(() => {
 
 SaveButton.displayName = 'SaveButton';
 
-const ScheduleModals = memo(() => {
+const ScheduleModals = () => {
   const startDate = usePlanStartDate();
   const endDate = usePlanEndDate();
   const dayPlaces = usePlanDayPlaces();
@@ -102,7 +104,9 @@ const ScheduleModals = memo(() => {
     setIsDeleteModalOpen,
     setIsSaveModalOpen,
     setIsPublicModalOpen,
-  } = useScheduleModal();
+    dayToDelete,
+    setDayToDelete,
+  } = useScheduleModalStore();
   const { data: user } = useCurrentUser();
   const userId = user?.id || null;
   const { handleConfirmDelete } = useSchedulePlaces(
@@ -110,6 +114,8 @@ const ScheduleModals = memo(() => {
     usePlanSetDayPlaces(),
     usePlanIsReadOnly(),
     setIsDeleteModalOpen,
+    dayToDelete,
+    setDayToDelete,
   );
   const { handlePublicClick, handlePrivateClick } = useScheduleSavePlan(
     dayPlaces,
@@ -148,9 +154,7 @@ const ScheduleModals = memo(() => {
       />
     </>
   );
-});
-
-ScheduleModals.displayName = 'SaveModals';
+};
 
 const PlanSchedule = memo(() => {
   console.log('PlanSchedule 렌더링');
@@ -162,7 +166,8 @@ const PlanSchedule = memo(() => {
   const setActiveTab = usePlanSetActiveTab();
   const isReadOnly = usePlanIsReadOnly();
 
-  const { setIsDeleteModalOpen } = useScheduleModal();
+  const { setIsDeleteModalOpen, dayToDelete, setDayToDelete } =
+    useScheduleModalStore();
 
   const { copiedDay, handleCopyDayPlaces, handlePasteDayPlaces } =
     useScheduleCopyPaste(dayPlaces, setDayPlaces);
@@ -177,6 +182,8 @@ const PlanSchedule = memo(() => {
     setDayPlaces,
     isReadOnly,
     setIsDeleteModalOpen,
+    dayToDelete,
+    setDayToDelete,
   );
 
   const dayCount = calculateTotalDays(startDate, endDate);

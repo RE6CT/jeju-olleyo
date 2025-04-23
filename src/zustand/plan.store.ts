@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { DayPlaces, TabType } from '@/types/plan-detail.type';
-import { PlanState } from '@/types/plan.type';
+import { PlanState, ScheduleModalStore } from '@/types/plan.type';
 
 export const usePlanStore = create<PlanState>((set) => ({
   // 여행 기간
@@ -53,3 +53,14 @@ export const usePlanSetDayPlaces = () =>
   usePlanStore((state) => state.setDayPlaces);
 export const usePlanSetActiveTab = () =>
   usePlanStore((state) => state.setActiveTab);
+
+export const useScheduleModalStore = create<ScheduleModalStore>((set) => ({
+  isDeleteModalOpen: false,
+  isSaveModalOpen: false,
+  isPublicModalOpen: false,
+  dayToDelete: null,
+  setIsDeleteModalOpen: (isOpen) => set({ isDeleteModalOpen: isOpen }),
+  setIsSaveModalOpen: (isOpen) => set({ isSaveModalOpen: isOpen }),
+  setIsPublicModalOpen: (isOpen) => set({ isPublicModalOpen: isOpen }),
+  setDayToDelete: (day) => set({ dayToDelete: day }),
+}));

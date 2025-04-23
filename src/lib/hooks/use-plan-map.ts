@@ -73,6 +73,30 @@ export const usePlanMap = ({
   };
 
   /**
+   * 마커 클릭 시 해당 마커로 지도 포커스
+   * @param marker - 클릭된 마커 객체
+   */
+  const handleMarkerClick = useCallback(
+    (marker: MarkerProps) => {
+      if (!map) return;
+
+      try {
+        // 클릭된 마커의 위치로 지도 중심 이동
+        const position = new window.kakao.maps.LatLng(
+          marker.position.lat,
+          marker.position.lng,
+        );
+
+        map.setCenter(position);
+        map.setLevel(4);
+      } catch (error) {
+        console.error('마커 포커스 중 오류 발생:', error);
+      }
+    },
+    [map],
+  );
+
+  /**
    * 현재 활성화된 탭에 따라 표시할 마커 목록을 반환
    * @returns MarkerProps[] - 표시할 마커 목록
    */
@@ -122,6 +146,14 @@ export const usePlanMap = ({
             day: place.day,
             order: place.order,
             showDay: place.showDay,
+            onClick: () =>
+              handleMarkerClick({
+                position,
+                title: place.title,
+                day: place.day,
+                order: place.order,
+                showDay: place.showDay,
+              }),
           };
         })
         .filter(
@@ -132,7 +164,7 @@ export const usePlanMap = ({
       setError('마커 생성에 실패했습니다.');
       return [];
     }
-  }, [dayPlaces, activeTab]);
+  }, [dayPlaces, activeTab, handleMarkerClick]);
 
   /**
    * 지도 뷰를 마커들의 위치에 맞게 조정

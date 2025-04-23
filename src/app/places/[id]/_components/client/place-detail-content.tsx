@@ -6,6 +6,7 @@ import PlaceImage from '@/components/commons/place-image';
 import PlaceLocation from './place-location';
 import { CategoryType } from '@/types/category.type';
 import { Place } from '@/types/search.type';
+import { DetailIntroRaw } from '@/types/korea-tour.type';
 
 const PlaceDetailContent = ({
   place,
@@ -13,7 +14,7 @@ const PlaceDetailContent = ({
   isBookmarked,
 }: {
   place: Place;
-  detailJson: any; // TODO : 타입 명시 필요
+  detailJson: DetailIntroRaw;
   isBookmarked: boolean;
 }) => {
   const placeId = place.placeId;

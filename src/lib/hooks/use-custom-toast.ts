@@ -11,8 +11,7 @@ const useCustomToast = () => {
     toast({
       description: message,
       duration: 2000,
-      className:
-        'border-none text-secondary-100 bg-secondary-800 flex justify-center text-center px-4 py-4 min-w-[378px] w-full !rounded-12',
+      variant: 'success',
     });
   };
 

@@ -28,8 +28,8 @@ export default function RootLayout({
       <body
         className={`${pretendard.variable} font-pretendard flex min-h-screen w-full flex-col items-center justify-center antialiased`}
       >
-        <AuthProvider>
-          <Providers>
+        <Providers>
+          <AuthProvider>
             <div className="flex w-full max-w-[1024px] flex-1 flex-col">
               <Header />
               <main className="flex-1">{children}</main>
@@ -37,8 +37,8 @@ export default function RootLayout({
             </div>
             <AlertModal />
             <Toaster />
-          </Providers>
-        </AuthProvider>
+          </AuthProvider>
+        </Providers>
       </body>
     </html>
   );

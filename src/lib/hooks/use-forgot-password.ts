@@ -49,11 +49,6 @@ const useForgotPasswordForm = () => {
       setSubmittedEmail(email);
       setIsSubmitted(true);
 
-      console.log('비밀번호 재설정 요청 성공, 상태 업데이트 완료', {
-        isSubmitted: true,
-        email,
-      });
-
       return true;
     } catch (err) {
       // 오류 메시지 처리

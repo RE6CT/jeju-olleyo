@@ -29,19 +29,10 @@ const ForgotPasswordPage = () => {
     handleResetPassword,
   } = useForgotPasswordForm();
 
-  // 상태 변화 확인용 useEffect
-  useEffect(() => {
-    console.log('ForgotPassword - 상태 변화 감지 - isSubmitted:', isSubmitted);
-  }, [isSubmitted]);
-
   // 폼 제출 처리 함수
   const onSubmit = async (data: { email: string }) => {
-    console.log('폼 제출 시작', data);
     const result = await handleResetPassword(data);
-    console.log('폼 제출 결과:', result);
   };
-
-  console.log('ForgotPassword - 렌더링 - isSubmitted:', isSubmitted);
 
   return (
     <AuthLayout>

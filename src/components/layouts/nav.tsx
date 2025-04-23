@@ -11,7 +11,10 @@ import { useCurrentUser } from '@/lib/queries/auth-queries';
 
 /** 헤더의 nav 영역 컴포넌트 */
 const Nav = () => {
-  const { data: user } = useCurrentUser();
+  const { data: user } = useCurrentUser({
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+  });
   const router = useRouter();
   const { showQuestion } = useAlert();
 

@@ -35,8 +35,8 @@ const MypageModal = ({
 }: MypageModalProps) => {
   const router = useRouter();
   const { data: user, isLoading: isUserLoading } = useCurrentUser({
-    refetchOnMount: true,
-    refetchOnWindowFocus: true,
+    refetchOnMount: true, // 컴포넌트 마운트시 항상 다시 가져오기
+    refetchOnWindowFocus: true, // 창 포커스시 다시 가져오기
   });
   const { data } = useGetDataCount(userId);
   const { handleLogout, isLoading: isAuthLoading } = useAuth();

@@ -32,43 +32,42 @@ const PlaceImage = ({
       ref={containerRef}
       className={`relative aspect-square overflow-hidden ${className}`}
     >
-      <>
-        {isLoading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
-            <div className="h-6 w-6 animate-pulse rounded-full bg-gray-200"></div>
-          </div>
-        )}
+      {isLoading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+          <div className="h-6 w-6 animate-pulse rounded-full bg-gray-200"></div>
+        </div>
+      )}
 
-        {error ? (
-          <div className="flex h-full w-full items-center justify-center bg-gray-100">
-            <Image
-              src={defaultImage}
-              alt={`${title} 이미지 로드 실패`}
-              fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              className="object-cover"
-            />
-          </div>
-        ) : (
+      {error ? (
+        <div className="flex h-full w-full items-center justify-center bg-gray-100">
           <Image
-            src={imageSource}
-            alt={title}
+            src={defaultImage}
+            alt={`${title} 이미지 로드 실패`}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className={`object-cover transition-opacity duration-300 ${
-              isLoading ? 'opacity-0' : 'opacity-100'
-            }`}
-            priority={isPriority}
-            loading={isPriority ? undefined : 'lazy'}
-            placeholder="blur"
-            blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI0YzRjRGNiIvPjwvc3ZnPg=="
-            onLoad={handleImageLoad}
-            onError={handleImageError}
-            quality={process.env.NODE_ENV === 'development' ? 60 : 75}
-            fetchPriority={isPriority ? 'high' : 'auto'}
+            className="object-cover"
           />
-        )}
-      </>
+        </div>
+      ) : (
+        <Image
+          src={imageSource}
+          alt={title}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          className={`object-cover transition-opacity duration-300 ${
+            isLoading ? 'opacity-0' : 'opacity-100'
+          }`}
+          priority={isPriority}
+          loading={isPriority ? undefined : 'lazy'}
+          placeholder="blur"
+          blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI0YzRjRGNiIvPjwvc3ZnPg=="
+          onLoad={handleImageLoad}
+          onError={handleImageError}
+          quality={process.env.NODE_ENV === 'development' ? 60 : 75}
+          fetchPriority={isPriority ? 'high' : 'auto'}
+          unoptimized
+        />
+      )}
     </div>
   );
 };

@@ -58,7 +58,9 @@ const PlanHeader = memo(
           {/* 썸네일 업로드 영역 */}
           <Label
             htmlFor="thumbnail"
-            className="relative flex h-[160px] w-[252px] cursor-pointer flex-col items-center gap-3 rounded-[12px] border border-solid border-gray-200"
+            className={`relative flex h-[160px] w-[252px] flex-col items-center gap-3 rounded-[12px] border border-solid border-gray-200 ${
+              !isReadOnly ? 'cursor-pointer' : ''
+            }`}
           >
             <Input
               type="file"
@@ -92,30 +94,37 @@ const PlanHeader = memo(
           {/* 입력 영역 */}
           <div className="flex h-[160px] flex-1 flex-col items-start gap-7 rounded-[12px] border border-solid border-gray-200">
             <div className="relative w-full">
-              <Image
-                src="/icons/edit.svg"
-                alt="edit icon"
-                width={EDIT_ICON_CONSTANTS.WIDTH}
-                height={EDIT_ICON_CONSTANTS.HEIGHT}
-                className="absolute left-4 top-5 z-10"
-              />
+              {!isReadOnly && (
+                <Image
+                  src="/icons/edit.svg"
+                  alt="edit icon"
+                  width={EDIT_ICON_CONSTANTS.WIDTH}
+                  height={EDIT_ICON_CONSTANTS.HEIGHT}
+                  className="absolute left-4 top-5 z-10"
+                />
+              )}
               <TextareaWithCount
                 maxLength={MAX_TEXT_LENGTH.TITLE}
                 placeholder="나만의 일정을 제목을 지어주세요"
                 value={planTitle}
                 onChange={(e) => setPlanTitle(e.target.value)}
-                className="w-full resize-none border-0 bg-transparent py-5 pl-12 text-14 focus-visible:ring-0 focus-visible:ring-offset-0"
+                className={`w-full resize-none border-0 bg-transparent py-5 ${
+                  isReadOnly ? 'pl-5' : 'pl-12'
+                } text-14 focus-visible:ring-0 focus-visible:ring-offset-0 ${
+                  isReadOnly ? 'cursor-default' : ''
+                }`}
                 readOnly={isReadOnly}
+                showCount={!isReadOnly}
               />
             </div>
 
             <div className="relative w-full">
               <div className="flex items-center gap-7 px-5 pb-5 text-14">
-                <span className="text-gray-500">여행 기간</span>
+                <span className="text-black-900">여행 기간</span>
                 <Button
                   type="button"
                   variant="outline"
-                  className="h-7 w-fit justify-start border-transparent bg-gray-50 px-5 py-1 text-left text-14 font-normal hover:bg-gray-100"
+                  className="text-black-900 disabled:text-black-900 h-7 w-fit justify-start border-transparent bg-gray-50 px-5 py-1 text-left text-14 font-normal disabled:opacity-100"
                   onClick={() =>
                     !isReadOnly && setIsCalendarOpen(!isCalendarOpen)
                   }
@@ -144,20 +153,27 @@ const PlanHeader = memo(
 
         {/* 일정 설명 입력 */}
         <div className="relative mt-4">
-          <Image
-            src="/icons/edit.svg"
-            alt="edit icon"
-            width={EDIT_ICON_CONSTANTS.WIDTH}
-            height={EDIT_ICON_CONSTANTS.HEIGHT}
-            className="absolute left-4 top-5 z-10"
-          />
+          {!isReadOnly && (
+            <Image
+              src="/icons/edit.svg"
+              alt="edit icon"
+              width={EDIT_ICON_CONSTANTS.WIDTH}
+              height={EDIT_ICON_CONSTANTS.HEIGHT}
+              className="absolute left-4 top-5 z-10"
+            />
+          )}
           <TextareaWithCount
             placeholder="특별히 적어 두고 싶은 메모를 입력하세요"
             value={planDescription}
             onChange={(e) => setPlanDescription(e.target.value)}
             maxLength={MAX_TEXT_LENGTH.DESCRIPTION}
-            className="h-[160px] w-full resize-none rounded-[12px] border-gray-200 py-5 pl-12 text-14 focus-visible:ring-0 focus-visible:ring-offset-0"
+            className={`h-[160px] w-full resize-none rounded-[12px] border-gray-200 py-5 ${
+              isReadOnly ? 'pl-5' : 'pl-12'
+            } text-14 focus-visible:ring-0 focus-visible:ring-offset-0 ${
+              isReadOnly ? 'cursor-default' : ''
+            }`}
             readOnly={isReadOnly}
+            showCount={!isReadOnly}
           />
         </div>
       </>

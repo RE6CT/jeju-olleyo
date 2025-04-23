@@ -1,25 +1,39 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { AUTH_TIMEOUTS, DEFAULT_FORM_VALUES } from '@/constants/auth.constants';
 import { resetPasswordSchema } from '@/lib/schemas/auth-schema';
 import { getResetPasswordErrorMessage } from '@/lib/utils/auth-error.util';
 import { ResetPasswordFormValues } from '@/types/auth.type';
-import useAuthStore from '@/zustand/auth.store';
-
-import { fetchUpdatePassword } from '../apis/auth/auth-server.api';
+import { useResetPassword } from '@/lib/queries/auth-queries';
 
 /**
  * 비밀번호 재설정 기능을 위한 커스텀 훅
  */
-const useResetPassword = () => {
+const useResetPasswordForm = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [countdown, setCountdown] = useState(
     AUTH_TIMEOUTS.PASSWORD_CHANGE_REDIRECT_DELAY_MS / 1000,
   );
-  const { setError, resetError, error } = useAuthStore();
+  const [error, setError] = useState<string | null>(null);
+  const timerRef = useRef<NodeJS.Timeout | null>(null); // 타이머 참조 저장
+
+  // TanStack Query 기반 훅 사용 - 콜백 추가
+  const resetPasswordMutation = useResetPassword({
+    onSuccess: () => {
+      setIsSubmitted(true); // 성공 상태 설정
+      startCountdown(); // 카운트다운 시작
+    },
+    onError: (err: unknown) => {
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : '비밀번호 재설정 중 오류가 발생했습니다.';
+      const errorMessages = getResetPasswordErrorMessage(errorMessage);
+      setError(errorMessages[0]);
+    },
+  });
 
   // 폼 설정
   const {
@@ -54,85 +68,77 @@ const useResetPassword = () => {
 
     parseHashFragment();
 
-    // 컴포넌트 언마운트 시 에러 상태 초기화
-    return () => resetError();
-  }, [setError, resetError]);
+    // 컴포넌트 언마운트 시 에러 상태 초기화 및 타이머 클리어
+    return () => {
+      setError(null);
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, []);
 
-  // 카운트다운 타이머 효과
-  useEffect(() => {
-    let timer: NodeJS.Timeout;
-
-    if (isSubmitted && countdown > 0) {
-      // 카운트다운 타이머 시작
-      timer = setInterval(() => {
-        setCountdown((prev) => {
-          if (prev <= 1) {
-            clearInterval(timer);
-            // 카운트다운이 끝나면 window.location.href로 전체 페이지 리로드
-            window.location.href = '/';
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
+  // 카운트다운 시작 함수
+  const startCountdown = useCallback(() => {
+    // 기존 타이머 있으면 제거
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
     }
 
-    return () => clearInterval(timer); // 컴포넌트 언마운트 시 타이머 클리어
-  }, [isSubmitted, countdown]);
+    // 카운트다운 타이머 설정
+    timerRef.current = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          if (timerRef.current) {
+            clearInterval(timerRef.current);
+          }
+          // 카운트다운이 끝나면 홈으로 리다이렉트
+          window.location.href = '/';
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  }, []);
 
   // 비밀번호 업데이트 제출 핸들러
   const handlePasswordUpdate = useCallback(
     async (data: ResetPasswordFormValues) => {
-      setIsLoading(true);
-      resetError();
+      setError(null);
 
       try {
-        // 클라이언트 호출
-        const result = await fetchUpdatePassword(data.password);
-
-        if (result.error) {
-          // 서버에서 반환된 실제 에러 메시지를 사용
-          const errorMessages = getResetPasswordErrorMessage(
-            result.error?.message || '비밀번호 변경 중 오류가 발생했습니다.',
-          );
-          setError(errorMessages[0]);
-          setIsLoading(false);
-          return false;
-        }
-
-        setIsSubmitted(true);
+        // 뮤테이션 실행만 하고 성공/실패 처리는 콜백에서
+        await resetPasswordMutation.mutateAsync(data);
         return true;
       } catch (err) {
-        // 예외 처리 (네트워크 오류 등)
-        const errorMessages = getResetPasswordErrorMessage(
-          err instanceof Error
-            ? err.message
-            : '비밀번호 재설정 중 오류가 발생했습니다.',
-        );
-        setError(errorMessages[0]);
+        // 에러 처리는 onError 콜백에서
         return false;
       }
     },
-    [resetError, setError],
+    [resetPasswordMutation],
   );
 
   // 즉시 홈으로 리다이렉트하는 함수
   const redirectToHome = useCallback(() => {
-    // window.location.href를 사용하여 전체 페이지 리로드
+    // 타이머 정리
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+    // 홈으로 리다이렉트
     window.location.href = '/';
   }, []);
 
   return {
     isSubmitted,
     countdown,
-    isLoading,
+    isLoading: resetPasswordMutation.isPending,
     error,
     register,
     errors,
     handleSubmit,
     handlePasswordUpdate,
     redirectToHome,
+    resetError: () => setError(null),
   };
 };
 
-export default useResetPassword;
+export default useResetPasswordForm;

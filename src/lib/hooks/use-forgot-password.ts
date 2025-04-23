@@ -5,20 +5,29 @@ import { useForm } from 'react-hook-form';
 import { forgotPasswordSchema } from '@/lib/schemas/auth-schema';
 import { getForgotPasswordErrorMessage } from '@/lib/utils/auth-error.util';
 import { EmailFormValues } from '@/types/auth.type';
-import useAuthStore from '@/zustand/auth.store';
-
-import { fetchSendPasswordResetEmail } from '../apis/auth/auth-server.api';
+import { useForgotPassword } from '@/lib/queries/auth-queries';
 
 /**
  * 비밀번호 찾기 기능을 위한 커스텀 훅
- *
- * @returns {Object} 비밀번호 찾기 관련 상태와 함수들
  */
-const useForgotPassword = () => {
-  const [isLoading, setIsLoading] = useState(false);
+const useForgotPasswordForm = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submittedEmail, setSubmittedEmail] = useState('');
-  const { setError, resetError, error } = useAuthStore();
+  const [error, setError] = useState<string | null>(null);
+
+  // TanStack Query 기반 훅 사용 - onSuccess, onError 콜백 추가
+  const forgotPasswordMutation = useForgotPassword({
+    onSuccess: (email: string) => {
+      setSubmittedEmail(email);
+      setIsSubmitted(true);
+    },
+    onError: (err: unknown) => {
+      const errorMessage =
+        err instanceof Error ? err.message : '알 수 없는 오류';
+      const errorMessages = getForgotPasswordErrorMessage(errorMessage);
+      setError(errorMessages[0]);
+    },
+  });
 
   // react-hook-form 설정
   const {
@@ -33,48 +42,31 @@ const useForgotPassword = () => {
     },
   });
 
-  // 비밀번호 재설정 요청 핸들러
+  // 비밀번호 재설정 요청 핸들러 - 단순화
   const handleResetPassword = async (data: EmailFormValues) => {
-    setIsLoading(true);
-    resetError(); // 기존 에러 메시지 초기화
+    setError(null);
 
     try {
-      const result = await fetchSendPasswordResetEmail(data.email);
-
-      if (result.error) {
-        const errorMessages = getForgotPasswordErrorMessage(
-          result.error.message,
-        );
-        setError(errorMessages[0]);
-        setIsLoading(false);
-        return false;
-      }
-
-      setSubmittedEmail(data.email);
-      setIsSubmitted(true);
+      // 단순히 뮤테이션만 실행하고 상태 변경은 콜백에 맡김
+      await forgotPasswordMutation.mutateAsync(data);
       return true;
-    } catch (error) {
-      console.error('예외 발생:', error);
-      const errorMessages = getForgotPasswordErrorMessage(
-        error instanceof Error ? error.message : '알 수 없는 오류',
-      );
-      setError(errorMessages[0]);
+    } catch (err) {
+      // 에러 처리는 onError 콜백에서 처리
       return false;
-    } finally {
-      setIsLoading(false);
     }
   };
 
   return {
-    isLoading,
-    isSubmitted,
+    isLoading: forgotPasswordMutation.isPending,
+    isSubmitted, // 이 상태가 유지되어야 함
     submittedEmail,
     error,
     register,
     errors,
     handleSubmit,
     handleResetPassword,
+    resetError: () => setError(null),
   };
 };
 
-export default useForgotPassword;
+export default useForgotPasswordForm;

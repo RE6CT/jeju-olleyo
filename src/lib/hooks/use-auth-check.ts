@@ -1,70 +1,66 @@
 import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { useCurrentUser } from '@/lib/queries/auth-queries';
 
-import { getBrowserClient } from '@/lib/supabase/client';
-import useAuthStore from '@/zustand/auth.store';
+interface UseAuthCheckProps {
+  redirectTo?: string;
+  redirectIfFound?: boolean;
+  skipCheck?: boolean;
+}
 
 /**
  * 인증 상태를 체크하고 적절한 리다이렉션을 처리하는 커스텀 훅
+ * TanStack Query 기반으로 리팩토링됨
  */
 const useAuthCheck = ({
   redirectTo = '/',
   redirectIfFound = false,
-  skipCheck = false, // 추가: 인증 체크 건너뛰기 옵션
-}: {
-  redirectTo?: string;
-  redirectIfFound?: boolean;
-  skipCheck?: boolean;
-} = {}) => {
-  const [isLoading, setIsLoading] = useState(!skipCheck); // skipCheck가 true면 로딩 상태 false로 시작
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  skipCheck = false,
+}: UseAuthCheckProps = {}) => {
   const router = useRouter();
-  const { clearUser } = useAuthStore();
+  const [isChecked, setIsChecked] = useState(skipCheck);
+
+  // 현재 사용자 정보 가져오기
+  const { data: user, isLoading, isError } = useCurrentUser();
+
+  const isAuthenticated = !!user;
 
   useEffect(() => {
     // skipCheck가 true면 체크하지 않음
     if (skipCheck) {
-      setIsLoading(false);
+      setIsChecked(true);
       return;
     }
 
-    const checkAuthStatus = async () => {
-      try {
-        const supabase = await getBrowserClient();
-        const { data, error } = await supabase.auth.getSession();
+    // 로딩 중이면 아직 체크하지 않음
+    if (isLoading) {
+      return;
+    }
 
-        if (error) {
-          throw error;
-        }
+    // 인증된 상태에서 redirectIfFound가 true인 경우 리다이렉트
+    if (isAuthenticated && redirectIfFound) {
+      router.push(redirectTo);
+    }
+    // 인증되지 않은 상태에서 redirectIfFound가 false인 경우 리다이렉트
+    else if (!isAuthenticated && !redirectIfFound) {
+      router.push(redirectTo);
+    }
 
-        const hasSession = !!data.session;
-        setIsAuthenticated(hasSession);
+    setIsChecked(true);
+  }, [
+    isAuthenticated,
+    isLoading,
+    redirectIfFound,
+    redirectTo,
+    router,
+    skipCheck,
+  ]);
 
-        // 인증된 상태에서 redirectIfFound가 true인 경우 리다이렉트
-        if (hasSession && redirectIfFound) {
-          router.push(redirectTo);
-        }
-        // 인증되지 않은 상태에서 redirectIfFound가 false인 경우 리다이렉트
-        else if (!hasSession && !redirectIfFound) {
-          router.push(redirectTo);
-        }
-      } catch (err) {
-        console.error('세션 확인 오류:', err);
-        clearUser();
-
-        // 에러 발생 시 인증되지 않은 것으로 간주
-        if (!redirectIfFound) {
-          router.push(redirectTo);
-        }
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    checkAuthStatus();
-  }, [redirectTo, redirectIfFound, router, clearUser, skipCheck]);
-
-  return { isLoading, isAuthenticated };
+  return {
+    isLoading: isLoading || !isChecked,
+    isAuthenticated,
+    user,
+  };
 };
 
 export default useAuthCheck;

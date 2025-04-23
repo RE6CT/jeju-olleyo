@@ -106,23 +106,6 @@ export type AuthResult = {
 };
 
 /**
- * 인증 상태 관리를 위한 Zustand 스토어 타입
- */
-export type AuthState = {
-  user: UserInfo | null;
-  isLoading: boolean;
-  error: string | null;
-  isAuthenticated: boolean;
-
-  // 액션들
-  setUser: (user: UserInfo | null) => void;
-  clearUser: () => void;
-  setLoading: (isLoading: boolean) => void;
-  setError: (error: string | null) => void;
-  resetError: () => void;
-};
-
-/**
  * 에러 메시지 컴포넌트의 Props 타입
  */
 export type AuthErrorMessageProps = {

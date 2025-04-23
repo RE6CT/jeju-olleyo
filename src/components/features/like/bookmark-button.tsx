@@ -2,6 +2,7 @@ import BookmarkIcon from '@/components/commons/bookmark-icon';
 import useAuth from '@/lib/hooks/use-auth';
 import useCustomToast from '@/lib/hooks/use-custom-toast';
 import { useBookmarkMutation } from '@/lib/mutations/use-bookmark-mutation';
+import { useCurrentUser } from '@/lib/queries/auth-queries';
 
 /**
  * 북마크 버튼 컴포넌트
@@ -18,7 +19,7 @@ const BookmarkButton = ({
   className?: string;
 }) => {
   const { mutate: toggleBookmark, isPending } = useBookmarkMutation();
-  const { user } = useAuth();
+  const { data: user } = useCurrentUser();
   const { successToast } = useCustomToast();
 
   /** 북마크 버튼 클릭 핸들러 */

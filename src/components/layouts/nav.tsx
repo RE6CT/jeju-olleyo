@@ -5,13 +5,13 @@ import { useRouter } from 'next/navigation';
 
 import { PATH } from '@/constants/path.constants';
 import useAlert from '@/lib/hooks/use-alert';
-import useAuthStore from '@/zustand/auth.store';
 
 import MypageButton from '../features/nav-mypage/mypage-button';
+import { useCurrentUser } from '@/lib/queries/auth-queries';
 
 /** 헤더의 nav 영역 컴포넌트 */
 const Nav = () => {
-  const user = useAuthStore((state) => state.user);
+  const { data: user } = useCurrentUser();
   const router = useRouter();
   const { showQuestion } = useAlert();
 

@@ -1,24 +1,26 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
 import ErrorMessage from '@/components/features/alert/error-message';
 import { Button } from '@/components/ui/button';
 import DynamicPagination from '@/components/ui/dynamic-pagination';
-import { useBookmarkQuery } from '@/lib/queries/use-bookmark-query';
+import { useGetBookMarks } from '@/lib/queries/use-get-bookmarks';
 import { CategoryType } from '@/types/category.type';
 import { Place } from '@/types/search.type';
+import { CATEGORY_EN_MAP } from '@/constants/home.constants';
 
 import PlaceCardSidemenu from '../card/place-card-sidemenu';
 import PlaceSidemenuLayout from './place-sidemenu-layout';
 import DaySelectRequiredModal from '../modal/day-select-required-modal';
-import { BookmarkedPlace } from '@/types/plan-detail.type';
+import { useGetDataCount } from '@/lib/queries/use-get-data-count';
 
 const ITEMS_PER_PAGE = 7;
 const INITIAL_ITEMS = 3;
 const NAVIGATION_BUTTON_WIDTH = 42.4;
-const NAVIGATION_BUTTON_GAP = 4;
+const NAVIGATION_BUTTON_GAP = 12;
+const BUTTON_WIDTH = 24;
 const DEBOUNCE_TIME = 200;
 
 /**
@@ -46,76 +48,39 @@ const BookmarkSidemenu = ({
   onAddPlace: (place: Place) => void;
   selectedDay: number | null;
 }) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [maxVisiblePages, setMaxVisiblePages] = useState(3);
   const [isDaySelectModalOpen, setIsDaySelectModalOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const resizeTimeoutRef = useRef<NodeJS.Timeout>();
-  const [scrollPosition, setScrollPosition] = useState(0);
   const listRef = useRef<HTMLDivElement>(null);
 
-  const { isBookmarked, toggleBookmark, bookmarks } = useBookmarkQuery(userId);
+  const { data: countData, isLoading: isCountLoading } =
+    useGetDataCount(userId);
 
-  useEffect(() => {
-    setIsLoading(false);
-  }, [bookmarks]);
-
-  const handleBookmarkToggle = async (place_id: number) => {
-    try {
-      // 현재 스크롤 위치 저장
-      if (listRef.current) {
-        setScrollPosition(listRef.current.scrollTop);
-      }
-
-      await toggleBookmark(place_id);
-
-      // 북마크 상태 변경 후 스크롤 위치 복원
-      setTimeout(() => {
-        if (listRef.current) {
-          listRef.current.scrollTop = scrollPosition;
-        }
-      }, 0);
-    } catch {
-      setError('북마크를 업데이트하는 데 실패했습니다.');
-    }
-  };
-
-  /* 카테고리별 필터링 */
-  const filteredPlaces = bookmarks
-    ? activeFilterTab === '전체'
-      ? bookmarks
-      : bookmarks.filter((place) => place.category === activeFilterTab)
-    : [];
-
-  const totalPages = Math.ceil(filteredPlaces.length / ITEMS_PER_PAGE);
-
-  // 버튼의 width: 한자리 숫자일 때 27px, 두자리 숫자일 때 33px, 세자리 숫자일 때 39px(예상) + gap 4px
-  // 이전, 다음 버튼: 42px
-  // 버튼 너비 계산: 숫자 자릿수별 너비 + 패딩(8px) + 갭(4px)
-  const getButtonWidth = useMemo(
-    () => (numLength: number) => {
-      const digitWidth = 6; // 숫자 1자당 약 6px
-      return numLength * digitWidth + 21;
-    },
-    [],
+  const {
+    data: bookmarks,
+    isLoading,
+    error,
+  } = useGetBookMarks(
+    userId,
+    currentPage,
+    isExpanded ? ITEMS_PER_PAGE : INITIAL_ITEMS,
+    activeFilterTab === '전체' ? undefined : activeFilterTab,
   );
 
   const calculateMaxVisiblePages = useCallback(() => {
-    if (!containerRef.current) return 3;
+    if (!containerRef.current || !countData) return 3;
 
     const containerWidth = containerRef.current.offsetWidth;
 
-    // 총 페이지 수에 따른 최대 버튼 수 계산
     const maxButtons = Math.floor(
-      (containerWidth - NAVIGATION_BUTTON_WIDTH * 2) / // 이전/다음 버튼 공간 제외
-        (NAVIGATION_BUTTON_GAP +
-          getButtonWidth(Math.min(3, totalPages.toString().length))), // gap 포함 + 최대 3자리수까지 고려
+      (containerWidth - NAVIGATION_BUTTON_WIDTH * 2) /
+        (NAVIGATION_BUTTON_GAP + BUTTON_WIDTH),
     );
     return Math.max(1, maxButtons);
-  }, [getButtonWidth, totalPages]);
+  }, [countData, activeFilterTab]);
 
   const updateMaxVisiblePages = useCallback(() => {
     if (resizeTimeoutRef.current) {
@@ -128,9 +93,7 @@ const BookmarkSidemenu = ({
   }, [calculateMaxVisiblePages]);
 
   useEffect(() => {
-    // 초기 계산
     setMaxVisiblePages(calculateMaxVisiblePages());
-
     window.addEventListener('resize', updateMaxVisiblePages);
 
     return () => {
@@ -141,13 +104,17 @@ const BookmarkSidemenu = ({
     };
   }, [calculateMaxVisiblePages, updateMaxVisiblePages]);
 
+  // 필터 탭이 변경될 때 페이지를 1로 리셋
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeFilterTab]);
+
   const handleAddPlace = (place: any) => {
     if (selectedDay === null) {
       setIsDaySelectModalOpen(true);
       return;
     }
 
-    // 북마크 데이터를 Place 타입으로 변환
     const placeToAdd: Place = {
       id: 0,
       placeId: 0,
@@ -169,24 +136,29 @@ const BookmarkSidemenu = ({
 
   const toggleExpand = () => {
     setIsExpanded(!isExpanded);
+    if (!isExpanded) {
+      setCurrentPage(1);
+    }
   };
 
-  // 현재 페이지의 아이템들을 가져옴
-  const currentPageItems = filteredPlaces.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE,
-  );
+  const bookmarkCount =
+    countData?.bookmarkCount[
+      CATEGORY_EN_MAP[activeFilterTab] as keyof typeof countData.bookmarkCount
+    ];
 
-  // 접힌 상태일 때는 현재 페이지 아이템 중 처음 3개만, 펼친 상태일 때는 모든 아이템이 보이도록 현재 페이지 아이템을 가져옴
-  const displayedPlaces = isExpanded
-    ? currentPageItems
-    : currentPageItems.slice(0, INITIAL_ITEMS);
+  const totalPages = bookmarkCount
+    ? Math.ceil(bookmarkCount / ITEMS_PER_PAGE)
+    : 0;
 
   if (error) {
     return (
       <ErrorMessage
         title={'북마크 데이터를 불러오는데 실패했습니다.'}
-        description={error}
+        description={
+          error instanceof Error
+            ? error.message
+            : '알 수 없는 오류가 발생했습니다.'
+        }
       />
     );
   }
@@ -200,7 +172,6 @@ const BookmarkSidemenu = ({
       isExpanded={isExpanded}
       onToggleExpand={toggleExpand}
     >
-      {/* 북마크 리스트 */}
       <AnimatePresence>
         {isExpanded && (
           <motion.div
@@ -211,11 +182,11 @@ const BookmarkSidemenu = ({
             className="space-y-2 overflow-hidden"
             ref={containerRef}
           >
-            {isLoading ? (
+            {isLoading || isCountLoading ? (
               <div className="flex items-center justify-center py-4 text-gray-500">
                 불러오는 중...
               </div>
-            ) : filteredPlaces.length === 0 ? (
+            ) : !bookmarks || bookmarks.length === 0 ? (
               <div className="flex items-center justify-center py-4 text-gray-500">
                 {activeFilterTab === '전체'
                   ? '북마크한 장소 정보가 없습니다.'
@@ -224,7 +195,7 @@ const BookmarkSidemenu = ({
             ) : (
               <div ref={listRef} className="overflow-y-auto">
                 <AnimatePresence initial={false}>
-                  {displayedPlaces.map((place) => (
+                  {bookmarks.map((place) => (
                     <motion.div
                       key={place.placeId}
                       initial={{ opacity: 0, height: 0 }}
@@ -237,16 +208,14 @@ const BookmarkSidemenu = ({
                         placeId={place.placeId}
                         category={place.category as CategoryType}
                         imageUrl={place.image}
-                        isBookmarked={isBookmarked(place.placeId)}
-                        onBookmarkToggle={() =>
-                          handleBookmarkToggle(place.placeId)
-                        }
+                        isBookmarked={true}
+                        onBookmarkToggle={() => {}}
                         onAddPlace={() => handleAddPlace(place)}
                       />
                     </motion.div>
                   ))}
                 </AnimatePresence>
-                {currentPageItems.length > INITIAL_ITEMS && !isExpanded && (
+                {!isExpanded && (
                   <Button
                     className="flex h-[36px] w-full flex-shrink-0 items-center justify-center gap-1 rounded-xl border border-secondary-300 bg-gray-50 text-sm font-normal text-secondary-300 transition-colors hover:bg-gray-100"
                     onClick={toggleExpand}
@@ -254,7 +223,7 @@ const BookmarkSidemenu = ({
                     더보기
                   </Button>
                 )}
-                {isExpanded && totalPages > 1 && (
+                {isExpanded && (
                   <DynamicPagination
                     currentPage={currentPage}
                     totalPages={totalPages}

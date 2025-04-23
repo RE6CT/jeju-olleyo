@@ -11,7 +11,6 @@ import { useGetBookMarks } from '@/lib/queries/use-get-bookmarks';
 import { useGetDataCount } from '@/lib/queries/use-get-data-count';
 import { CategoryParamType, CategoryType } from '@/types/category.type';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
 
 const PAGE_SIZE = 9;
 const TAB_LIST: Record<CategoryType, CategoryParamType> = {
@@ -99,9 +98,8 @@ const BookmarksList = ({ category }: { category: CategoryParamType }) => {
           </div>
           <Pagination
             currentPage={currentPage}
-            totalPages={Math.max(
-              1,
-              Math.ceil(countData?.bookmarkCount[category] ?? 0) / PAGE_SIZE,
+            totalPages={Math.ceil(
+              (countData?.bookmarkCount[category] ?? 1) / PAGE_SIZE,
             )}
             onPageChange={handlePageChange}
             backgroundColor="primary-500"

@@ -7,16 +7,18 @@ import { CategoryType } from '@/types/category.type';
 
 const CategoryFilterTabs = ({
   tabs,
-  tabsGapClass = 'gap-[10px]',
   defaultTab = '전체',
   onTabChange,
+  tabsGapClass = 'gap-[10px]',
   tabPaddingClass = 'px-2',
+  tabFontClass = 'medium-12',
 }: {
   tabs: CategoryType[];
   onTabChange: (tab: CategoryType) => void;
   defaultTab?: CategoryType;
   tabsGapClass?: string;
   tabPaddingClass?: string;
+  tabFontClass?: string;
 }) => {
   const [activeTab, setActiveTab] = useState(defaultTab);
 
@@ -33,6 +35,7 @@ const CategoryFilterTabs = ({
           onClick={() => handleTabClick(tab)}
           className={cn(
             'flex flex-1 items-center justify-center gap-[10px] rounded-[28px] py-1 transition-all',
+            tabFontClass,
             tabPaddingClass,
             activeTab === tab
               ? 'border border-primary-500 bg-primary-100 text-primary-800'

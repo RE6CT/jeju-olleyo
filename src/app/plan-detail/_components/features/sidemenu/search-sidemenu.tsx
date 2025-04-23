@@ -16,23 +16,34 @@ import PlaceCardSidemenu from '../card/place-card-sidemenu';
 import PlaceSidemenuLayout from './place-sidemenu-layout';
 
 const ITEMS_PER_PAGE = 7;
-const INITIAL_ITEMS = 5;
+const INITIAL_ITEMS = 3;
 const NAVIGATION_BUTTON_WIDTH = 42.4;
-const NAVIGATION_BUTTON_GAP = 4;
+const NAVIGATION_BUTTON_GAP = 12;
+const BUTTON_WIDTH = 24;
 const DEBOUNCE_TIME = 200;
 
+/**
+ * 검색 결과를 표시하는 사이드메뉴 컴포넌트
+ *
+ * @param userId - 사용자 ID
+ * @param filterTabs - 필터 탭 목록
+ * @param activeFilterTab - 현재 선택된 필터 탭
+ * @param onFilterTabChange - 필터 탭 변경 핸들러
+ * @param onAddPlace - 장소 추가 핸들러
+ * @param selectedDay - 선택된 날짜
+ */
 const SearchSidemenu = ({
+  userId,
   filterTabs,
   activeFilterTab,
   onFilterTabChange,
-  userId,
   onAddPlace,
   selectedDay,
 }: {
+  userId: string;
   filterTabs: CategoryType[];
   activeFilterTab: CategoryType;
   onFilterTabChange: (tab: CategoryType) => void;
-  userId: string;
   onAddPlace: (place: Place) => void;
   selectedDay: number | null;
 }) => {
@@ -61,17 +72,6 @@ const SearchSidemenu = ({
 
   const totalPages = Math.ceil(filteredPlaces.length / ITEMS_PER_PAGE);
 
-  // 버튼의 width: 한자리 숫자일 때 27px, 두자리 숫자일 때 33px, 세자리 숫자일 때 39px(예상) + gap 4px
-  // 이전, 다음 버튼: 42px
-  // 버튼 너비 계산: 숫자 자릿수별 너비 + 패딩(8px) + 갭(4px)
-  const getButtonWidth = useMemo(
-    () => (numLength: number) => {
-      const digitWidth = 6; // 숫자 1자당 약 6px
-      return numLength * digitWidth + 21;
-    },
-    [],
-  );
-
   const calculateMaxVisiblePages = useCallback(() => {
     if (!containerRef.current) return 3;
 
@@ -80,11 +80,11 @@ const SearchSidemenu = ({
     // 총 페이지 수에 따른 최대 버튼 수 계산
     const maxButtons = Math.floor(
       (containerWidth - NAVIGATION_BUTTON_WIDTH * 2) / // 이전/다음 버튼 공간 제외
-        (NAVIGATION_BUTTON_GAP +
-          getButtonWidth(Math.min(3, totalPages.toString().length))), // gap 포함 + 최대 3자리수까지 고려
+        (NAVIGATION_BUTTON_GAP + BUTTON_WIDTH), // gap 포함 + 최대 3자리수까지 고려
     );
+
     return Math.max(1, maxButtons);
-  }, [getButtonWidth, totalPages]);
+  }, [totalPages]);
 
   const updateMaxVisiblePages = useCallback(() => {
     if (resizeTimeoutRef.current) {
@@ -97,9 +97,7 @@ const SearchSidemenu = ({
   }, [calculateMaxVisiblePages]);
 
   useEffect(() => {
-    // 초기 계산
     setMaxVisiblePages(calculateMaxVisiblePages());
-
     window.addEventListener('resize', updateMaxVisiblePages);
 
     return () => {
@@ -237,7 +235,6 @@ const SearchSidemenu = ({
                     category={place.category as CategoryType}
                     imageUrl={place.image || ''}
                     isBookmarked={isBookmarked(place.placeId)}
-                    isSearchSection
                     onBookmarkToggle={() => handleBookmarkToggle(place.placeId)}
                     onAddPlace={() => handleAddPlace(place)}
                   />

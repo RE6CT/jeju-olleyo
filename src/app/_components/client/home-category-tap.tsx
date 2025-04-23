@@ -65,12 +65,7 @@ const CategoryTabs = memo(({ className }: CategoryTabsProps) => {
   );
 
   return (
-    <div
-      className={cn(
-        'flex items-center border-b border-gray-200 bg-white p-2.5 px-9',
-        className,
-      )}
-    >
+    <div className={cn('flex items-center bg-white p-2.5 px-9', className)}>
       <div className="flex items-center gap-x-4">
         {/* 메인 카테고리 탭 - 첫 번째 이미지에서 보이는 순서대로 배치 */}
         {CATEGORIES.map((category) => (

@@ -17,7 +17,7 @@ import { useEffect } from 'react';
 import PlanHeader from './core/plan-header';
 import PlanMap from './core/plan-map';
 import PlanSchedule from './core/plan-schedule';
-import useAuthStore from '@/zustand/auth.store';
+import { useCurrentUser } from '@/lib/queries/auth-queries';
 
 const PlanForm = ({
   initialPlan,
@@ -28,7 +28,7 @@ const PlanForm = ({
   initialDayPlaces?: DayPlaces;
   isReadOnly?: boolean;
 }) => {
-  const { user } = useAuthStore();
+  const { data: user } = useCurrentUser();
   const userId = user?.id || null;
 
   const setTitle = usePlanSetTitle();

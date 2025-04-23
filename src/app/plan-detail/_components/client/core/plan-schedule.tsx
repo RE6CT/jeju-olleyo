@@ -10,7 +10,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 import { calculateTotalDays, formatDayDate } from '@/lib/utils/date';
-import { DayPlaces, TabType } from '@/types/plan-detail.type';
 import PlaceSidemenu from '../features/sidemenu/place-sidemenu';
 import { DragDropContext } from '@hello-pangea/dnd';
 import ScheduleDeleteModal from '../features/modal/schedule-delete-modal';
@@ -36,7 +35,7 @@ import { useScheduleCopyPaste } from '@/lib/hooks/use-schedule';
 import { useSchedulePlaces } from '@/lib/hooks/use-schedule';
 import { useScheduleSaveButton } from '@/lib/hooks/use-schedule';
 import { useScheduleSavePlan } from '@/lib/hooks/use-schedule';
-import useAuthStore from '@/zustand/auth.store';
+import { useCurrentUser } from '@/lib/queries/auth-queries';
 
 const DROPDOWN_CONTENT_STYLE =
   'p-0 border border-[#E7EDF0] bg-[#F9FAFB] rounded-[12px] w-[140px] [&>*:hover]:bg-primary-100 [&>*:hover]:text-primary-500';
@@ -104,7 +103,7 @@ const ScheduleModals = memo(() => {
     setIsSaveModalOpen,
     setIsPublicModalOpen,
   } = useScheduleModal();
-  const { user } = useAuthStore();
+  const { data: user } = useCurrentUser();
   const userId = user?.id || null;
   const { handleConfirmDelete } = useSchedulePlaces(
     dayPlaces,

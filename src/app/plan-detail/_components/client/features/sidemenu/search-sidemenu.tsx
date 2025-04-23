@@ -5,7 +5,6 @@ import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 
 import { Button } from '@/components/ui/button';
 import DynamicPagination from '@/components/ui/dynamic-pagination';
-import { Input } from '@/components/ui/input';
 import fetchGetAllPlaces from '@/lib/apis/search/get-place.api';
 import { useBookmarkQuery } from '@/lib/queries/use-bookmark-query';
 import { CategoryType } from '@/types/category.type';
@@ -14,7 +13,7 @@ import { Place } from '@/types/search.type';
 import DaySelectRequiredModal from '../modal/day-select-required-modal';
 import PlaceCardSidemenu from '../card/place-card-sidemenu';
 import PlaceSidemenuLayout from './place-sidemenu-layout';
-import useAuthStore from '@/zustand/auth.store';
+import { useCurrentUser } from '@/lib/queries/auth-queries';
 
 const ITEMS_PER_PAGE = 7;
 const INITIAL_ITEMS = 3;
@@ -57,7 +56,7 @@ const SearchSidemenu = ({
   const resizeTimeoutRef = useRef<NodeJS.Timeout>();
   const listRef = useRef<HTMLDivElement>(null);
 
-  const { user } = useAuthStore();
+  const { data: user } = useCurrentUser();
   const userId = user?.id || null;
 
   const { isBookmarked } = useBookmarkQuery(userId);

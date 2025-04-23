@@ -31,7 +31,7 @@ const PlanDetailNewPage = async () => {
             height={HAPPY_IMAGE.height}
           />
         </div>
-        <PlanForm userId={userId} />
+        <PlanForm isReadOnly={false} />
       </div>
     </div>
   );

@@ -71,7 +71,6 @@ const PlanDetailPage = async ({
             </div>
           )}
           <PlanForm
-            userId={userId || ''}
             initialPlan={initialPlan}
             initialDayPlaces={dayPlaces}
             isReadOnly={isReadOnly}

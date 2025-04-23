@@ -26,7 +26,6 @@ const PlaceSidemenu = ({
       {/* 북마크 섹션 */}
       <div className="rounded-[12px] border border-gray-200 p-5">
         <BookmarkSidemenu
-          userId={userId}
           filterTabs={
             ['전체', '명소', '맛집', '카페', '숙박'] as CategoryType[]
           }
@@ -45,7 +44,6 @@ const PlaceSidemenu = ({
           }
           activeFilterTab={activeSearchTab}
           onFilterTabChange={setActiveSearchTab}
-          userId={userId}
           onAddPlace={onAddPlace}
           selectedDay={selectedDay}
         />

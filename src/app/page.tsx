@@ -1,12 +1,14 @@
 import { Suspense } from 'react';
-import MainCarouselContainer from '@/components/features/home/home-main-carousel-container';
-import CategoryTabs from '@/components/features/home/home-category-tap';
-import WeatherSection from '@/components/features/home/home-weather-section';
+
 import Loading from '@/app/loading';
 import JejuBanner from '@/components/features/banner/jeju-banner';
+import CategoryTabs from '@/app/_components/client/home-category-tap';
+import MainCarouselContainer from '@/app/_components/server/home-main-carousel-container';
+import PopularPlaces from '@/app/_components/client/home-popular-places';
+import PopularSchedules from '@/app/_components/client/home-popular-schedules';
+import WeatherSection from '@/app/_components/server/home-weather-section';
 import { PATH } from '@/constants/path.constants';
-import PopularSchedules from '@/components/features/home/home-popular-schedules';
-import PopularPlaces from '@/components/features/home/home-popular-places';
+import { SCHEDULE_BANNER } from '@/constants/home.constants';
 
 /**
  * 홈 페이지 컴포넌트
@@ -52,9 +54,9 @@ const Home = () => {
       {/* 내 일정 만들러 가기 배너 섹션*/}
       <section>
         <JejuBanner
-          imageUrl="/banner-images/plan-banner.jpg"
-          title="나만의 제주 여행 계획하기"
-          buttonText="내 일정 만들러 가기"
+          imageUrl={SCHEDULE_BANNER.SCHEDULE_BANNER_IMAGE_URL}
+          title={SCHEDULE_BANNER.SCHEDULE_BANNER_TITLE}
+          buttonText={SCHEDULE_BANNER.SCHEDULE_BANNER_BUTTON_TEXT}
           buttonUrl={PATH.PLAN_NEW}
         />
       </section>

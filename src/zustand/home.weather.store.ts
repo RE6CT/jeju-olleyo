@@ -1,7 +1,8 @@
 'use client';
 
-import { WeatherState } from '@/types/home.weather.type';
 import { create } from 'zustand';
+
+import { WeatherState } from '@/types/home.weather.type';
 
 /**
  * 날씨 데이터 관리를 위한 Zustand 스토어

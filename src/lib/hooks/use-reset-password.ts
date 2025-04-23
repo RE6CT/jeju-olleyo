@@ -1,11 +1,13 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useState, useEffect, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { resetPasswordSchema } from '@/lib/schemas/auth-schema';
-import { ResetPasswordFormValues } from '@/types/auth.type';
-import { getResetPasswordErrorMessage } from '@/lib/utils/auth-error.util';
+
 import { AUTH_TIMEOUTS, DEFAULT_FORM_VALUES } from '@/constants/auth.constants';
+import { resetPasswordSchema } from '@/lib/schemas/auth-schema';
+import { getResetPasswordErrorMessage } from '@/lib/utils/auth-error.util';
+import { ResetPasswordFormValues } from '@/types/auth.type';
 import useAuthStore from '@/zustand/auth.store';
+
 import { fetchUpdatePassword } from '../apis/auth/auth-browser.api';
 
 /**

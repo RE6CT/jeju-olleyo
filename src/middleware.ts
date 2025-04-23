@@ -1,7 +1,8 @@
 import { createServerClient } from '@supabase/ssr';
 import { type NextRequest, NextResponse } from 'next/server';
-import { PATH } from './constants/path.constants';
+
 import { AUTH_ROUTES } from './constants/auth.constants';
+import { PATH } from './constants/path.constants';
 
 /**
  * 인증 상태를 확인하고 접근 제어를 수행하는 미들웨어
@@ -19,7 +20,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  let response = NextResponse.next({
+  const response = NextResponse.next({
     request: {
       headers: request.headers,
     },
@@ -57,6 +58,14 @@ export async function middleware(request: NextRequest) {
     {
       CATEGORIES: PATH.CATEGORIES,
       pattern: /^\/categories\/[a-z]+$/,
+    },
+    {
+      SEARCH: PATH.SEARCH,
+      pattern: /^\/search\/[a-z]+$/,
+    },
+    {
+      BOOKMARKS: PATH.BOOKMARKS,
+      pattern: /^\/bookmarks\/[a-z]+$/,
     },
     {
       PLACES: PATH.PLACES,
@@ -98,7 +107,7 @@ export async function middleware(request: NextRequest) {
         set(name, value, options) {
           response.cookies.set(name, value, options);
         },
-        remove(name, options) {
+        remove(name) {
           response.cookies.delete(name);
         },
       },
@@ -134,6 +143,10 @@ export async function middleware(request: NextRequest) {
   // 이미 인증된 사용자가 로그인/회원가입 페이지에 접근할 경우 홈으로 리다이렉트
   if (session && isAuthPage) {
     return NextResponse.redirect(new URL(PATH.HOME, request.url));
+  }
+
+  if (pathname === PATH.BOOKMARKS) {
+    return NextResponse.redirect(new URL(`${PATH.BOOKMARKS}/all`, request.url));
   }
 
   return response;

@@ -1,14 +1,16 @@
 'use server';
 
+import { cookies } from 'next/headers';
+
+import { PATH } from '@/constants/path.constants';
+import { Provider } from '@supabase/supabase-js';
+import { getServerClient } from '@/lib/supabase/server';
+import { handleError } from '@/lib/utils/handleError';
 import {
   LoginFormValues,
   RegisterFormValues,
   AuthResult,
 } from '@/types/auth.type';
-import { getServerClient } from '@/lib/supabase/server';
-import { PATH } from '@/constants/path.constants';
-import { cookies } from 'next/headers';
-import { handleError } from '@/lib/utils/handleError';
 
 /**
  * 로그인 서버 액션
@@ -45,7 +47,7 @@ export const fetchLogin = async (values: LoginFormValues) => {
       : null;
 
     return { user: userInfo, error: null };
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleError('로그인 처리', error);
   }
 };
@@ -85,7 +87,7 @@ export const fetchRegister = async (values: RegisterFormValues) => {
     });
 
     return { error: null };
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleError('회원가입 처리', error);
   }
 };
@@ -104,7 +106,7 @@ export const fetchSocialLoginUrl = async (
 
   try {
     const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: provider as any,
+      provider: provider as Provider,
       options: {
         redirectTo: redirectUrl,
       },
@@ -116,7 +118,7 @@ export const fetchSocialLoginUrl = async (
     }
 
     return { url: data?.url || null, error: null };
-  } catch (error: any) {
+  } catch (error: unknown) {
     const handled = handleError('소셜 로그인 URL 생성', error);
     return { url: null, error: handled.error };
   }
@@ -145,7 +147,7 @@ export const fetchLogout = async (): Promise<AuthResult> => {
     });
 
     return { success: true, error: null };
-  } catch (error: any) {
+  } catch (error: unknown) {
     const handled = handleError('로그아웃 처리', error);
     return { success: false, error: handled.error };
   }
@@ -186,7 +188,7 @@ export const fetchGetCurrentUser = async () => {
     };
 
     return { user: userInfo, error: null };
-  } catch (error: any) {
+  } catch (error: unknown) {
     const handled = handleError('사용자 정보 조회', error);
     return { user: null, error: handled.error };
   }

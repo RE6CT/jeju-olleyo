@@ -1,3 +1,5 @@
+import { FormEvent, useEffect, useRef } from 'react';
+
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -6,11 +8,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/modal';
-import { ERROR_MESSAGES, MAX_FILE_SIZE } from '@/constants/mypage.constants';
+import { ERROR_MESSAGES } from '@/constants/mypage.constants';
 import { fetchUpdateProfileImage } from '@/lib/apis/profile/update-profile.api';
 import useCustomToast from '@/lib/hooks/use-custom-toast';
 import { ProfileModalProps } from '@/types/mypage.type';
-import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
+import { useChangeImageFile } from '@/lib/hooks/use-change-image-file';
 
 /**
  * 프로필 이미지 수정 버튼을 눌렀을 때 뜨는 모달 컴포넌트
@@ -25,47 +27,20 @@ const ProfileModal = ({
   setModalOpen,
 }: ProfileModalProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [selectImage, setSelectImage] = useState<File | null>(null);
-  const [preview, setPreview] = useState<string | null>(null);
   const { successToast } = useCustomToast();
+  const { previewImage, selectedFile, handleFileChange, resetFile } =
+    useChangeImageFile();
 
-  // 모달이 닫히면 프리뷰 이미지 및 파일 삭제
+  // 모달이 닫히면 파일 상태 초기화
   useEffect(() => {
     if (!isModalOpen) {
-      setPreview(null);
-      setSelectImage(null);
+      resetFile();
     }
-  }, [isModalOpen]);
-
-  // URL 객체 해제
-  useEffect(() => {
-    if (preview) {
-      return () => {
-        URL.revokeObjectURL(preview);
-      };
-    }
-  }, [preview]);
+  }, [isModalOpen, resetFile]);
 
   /** 이미지 파일 피커 트리거 */
   const handleSelectFile = () => {
     fileInputRef.current?.click();
-  };
-
-  /** 파일 선택 핸들러 */
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
-
-    const file = e.target.files[0];
-    if (file) {
-      if (file.size > MAX_FILE_SIZE) {
-        successToast('파일의 크기는 5MB를 넘을 수 없습니다.');
-        return;
-      }
-
-      setSelectImage(file);
-      const imageUrl = URL.createObjectURL(file);
-      setPreview(imageUrl);
-    }
   };
 
   /** 이미지 변경 완료 버튼 클릭 */
@@ -73,7 +48,7 @@ const ProfileModal = ({
     e: FormEvent<HTMLFormElement>,
   ) => {
     e.preventDefault();
-    if (!selectImage) {
+    if (!selectedFile) {
       successToast(ERROR_MESSAGES.IMAGE_DATA_MISSING);
       return;
     }
@@ -85,7 +60,7 @@ const ProfileModal = ({
     try {
       // formData 생성 및 파일 추가
       const formData = new FormData();
-      formData.append('profileImage', selectImage);
+      formData.append('profileImage', selectedFile);
       formData.append('userId', userId);
 
       const result = await fetchUpdateProfileImage(formData);
@@ -119,16 +94,16 @@ const ProfileModal = ({
           onClick={handleSelectFile}
           className="border-gray-10 mb-4 mt-3 flex aspect-square w-[296px] items-center justify-center rounded-12 border bg-gray-50"
           style={
-            preview
+            previewImage
               ? {
-                  backgroundImage: `url(${preview})`,
+                  backgroundImage: `url(${previewImage})`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                 }
               : {}
           }
         >
-          {!preview && (
+          {!previewImage && (
             <div className="h-[80px] w-[80px] bg-gray-300 [mask-image:url(/icons/add.svg)] [mask-repeat:no-repeat] [mask-size:contain]" />
           )}
         </button>

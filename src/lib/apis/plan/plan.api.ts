@@ -1,15 +1,15 @@
 'use server';
 
-import { Plan, PlanFilterOptions, PlanWithDays } from '@/types/plan.type';
 import { getServerClient } from '@/lib/supabase/server';
 import { camelize } from '@/lib/utils/camelize';
 import {
   isDateGreaterThanOrEqual,
   isDateLessThanOrEqual,
 } from '@/lib/utils/date';
-import dayjs from 'dayjs';
-import { DayPlaces, PlaceWithUniqueId } from '@/types/plan-detail.type';
 import { CommunitySortType } from '@/types/community.type';
+import { LocationData } from '@/types/kakao-map.type';
+import { DayPlaces } from '@/types/plan-detail.type';
+import { Plan, PlanFilterOptions, PlanWithDays } from '@/types/plan.type';
 
 /**
  * 사용자의 일정 목록을 가져오는 API
@@ -275,7 +275,7 @@ export const fetchSavePlanPlaces = async (
     }
 
     // locations 테이블에 데이터 삽입
-    const { data: locationsData, error: locationsError } = await supabase
+    const { error: locationsError } = await supabase
       .from('locations')
       .insert(locationsToInsert)
       .select();
@@ -328,7 +328,7 @@ export const fetchUploadPlanImage = async (
   // 사용자별 폴더 경로 생성
   const filePath = `${user.id}/plan-images/${Date.now()}-${file.name}`;
 
-  const { data, error } = await supabase.storage
+  const { error } = await supabase.storage
     .from('plan-images')
     .upload(filePath, file, {
       cacheControl: '3600',
@@ -345,43 +345,6 @@ export const fetchUploadPlanImage = async (
   } = supabase.storage.from('plan-images').getPublicUrl(filePath);
 
   return publicUrl;
-};
-
-type PlaceResponse = {
-  place_id: number;
-  name: string;
-  address: string;
-  latitude: number;
-  longitude: number;
-  category: string;
-  image_url: string | null;
-};
-
-type LocationResponse = {
-  visit_order: number;
-  places: PlaceResponse;
-};
-
-type DayResponse = {
-  day_id: number;
-  day: number;
-  locations: LocationResponse[];
-};
-
-type PlanResponse = {
-  plan_id: number;
-  user_id: string;
-  title: string;
-  description: string | null;
-  travel_start_date: string;
-  travel_end_date: string;
-  plan_img: string | null;
-  public: boolean;
-  created_at: string;
-  public_at: string | null;
-  users: {
-    nickname: string;
-  };
 };
 
 export const fetchGetPlanById = async (
@@ -448,7 +411,7 @@ export const fetchGetPlanById = async (
     transformedDays.push({
       dayId: day.day_id,
       day: day.day || 0,
-      locations: locationsData.map((location: any) => ({
+      locations: locationsData.map((location: LocationData) => ({
         visitOrder: location.visit_order || 0,
         places: {
           placeId: location.places.place_id,
@@ -498,6 +461,7 @@ export const fetchGetPlanDaysAndLocations = async (
 
   // 2. 각 day에 대한 locations 정보 가져오기
   const dayPlaces: DayPlaces = {};
+  let totalIndex = 0;
 
   for (const day of daysData) {
     if (day.day === null) continue; // day가 null인 경우 건너뛰기
@@ -533,9 +497,17 @@ export const fetchGetPlanDaysAndLocations = async (
     if (!locationsData) continue;
 
     // DayPlaces 타입에 맞게 변환
-    dayPlaces[day.day] = locationsData.map((location, index) => {
-      const place = location.places as any; // 타입 단언 사용
-      const uniqueId = `${place.place_id}-${index + 1}`; // plan-schedule.tsx와 동일한 방식으로 uniqueId 생성
+    dayPlaces[day.day] = locationsData.map((location) => {
+      const place = location.places as {
+        place_id: number;
+        title: string;
+        address: string;
+        category: string;
+        image: string | null;
+        lat: number;
+        lng: number;
+      }; // 명시적 타입 정의
+      const uniqueId = `${place.place_id}-${totalIndex++}`; // 전체 dayPlaces 기준으로 index 생성
       return {
         id: place.place_id,
         placeId: place.place_id,

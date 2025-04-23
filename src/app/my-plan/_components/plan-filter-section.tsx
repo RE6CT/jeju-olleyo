@@ -1,36 +1,33 @@
 'use client';
 
-import { useState } from 'react';
-import { Plan } from '@/types/plan.type';
+import Image from 'next/image';
+import Loading from '@/app/loading';
+import PlanHorizontalCard from '@/components/features/card/plan-horizontal_card';
 import { Button } from '@/components/ui/button';
+import Pagination from '@/components/ui/pagination';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
 import {
-  FILTER_TYPES,
   ITEMS_PER_PAGE,
   PUBLIC_OPTIONS,
+  INITIAL_PAGE,
 } from '@/constants/plan.constants';
-import { FilterType, PublicOption, FilterState } from '@/types/plan.type';
-import { FilterMenu } from './plan-filter-menu';
+import { useGetFilteredPlans } from '@/lib/queries/use-get-filtered-plans';
+import { Plan } from '@/types/plan.type';
 import { FilterInput } from './plan-filter-input';
-import Loading from '@/app/loading';
-import { useFilteredPlans } from '@/lib/queries/use-get-filtered-plans';
-import Pagination from '@/components/ui/pagination';
-import { useDeletePlan } from '@/lib/queries/use-delete-plan';
-import { PATH } from '@/constants/path.constants';
-import { useRouter } from 'next/navigation';
-import Image from 'next/image';
-import PlanHorizontalCard from '@/components/features/card/plan-horizontal_card';
-import { useQueryClient } from '@tanstack/react-query';
-import { useToast } from '@/hooks/use-toast';
+import { FilterMenu } from './plan-filter-menu';
+import { usePlanFilter } from '@/lib/hooks/use-plan-filter';
+import { usePagination } from '@/lib/hooks/use-pagination';
+import { usePopover } from '@/lib/hooks/use-popover';
 
 /**
  * 여행 계획 필터 섹션 컴포넌트
- * @param initialPlans - 초기 여행 계획 목록
- * @param user - 현재 로그인한 사용자의 정보
+ * @param plansList - 여행 계획 목록
+ * @param userId - 사용자 ID
+ * @param userNickname - 사용자 닉네임
  *
  * @example
  * ```tsx
@@ -44,116 +41,50 @@ import { useToast } from '@/hooks/use-toast';
  * ```
  */
 const PlanFilterSection = ({
-  initialPlans,
+  plansList,
   userId,
   userNickname,
 }: {
-  initialPlans: Plan[];
+  plansList: Plan[];
   userId: string;
   userNickname: string;
 }) => {
-  const router = useRouter();
-  const { toast } = useToast();
-  const [isOpen, setIsOpen] = useState(false);
-  const [filter, setFilter] = useState<FilterState>({
-    type: FILTER_TYPES.PUBLIC,
-    value: PUBLIC_OPTIONS.ALL,
-  }); // 현재 적용된 필터 상태
-  const [selectedFilter, setSelectedFilter] = useState<FilterType>(null); // popover 내부 메뉴에서 선택된 필터 상태
-  const [inputValue, setInputValue] = useState('');
-  const [selectedPublicOption, setSelectedPublicOption] =
-    useState<PublicOption>(PUBLIC_OPTIONS.ALL);
-  const [isDatePickerFocused, setIsDatePickerFocused] = useState(false); // datepicker 포커스 상태(popover 닫히는 문제 해결을 위해)
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
+  const {
+    filter,
+    selectedFilter,
+    setSelectedFilter,
+    inputValue,
+    setInputValue,
+    selectedPublicOption,
+    setSelectedPublicOption,
+    startDate,
+    setStartDate,
+    endDate,
+    setEndDate,
+    isDatePickerFocused,
+    setIsDatePickerFocused,
+    resetFilter,
+    handleEdit,
+    handleApplyFilter,
+    handleDelete,
+    handleFilterClick,
+  } = usePlanFilter(userId);
 
-  const { data: plans = initialPlans, isLoading: isPlansLoading } =
-    useFilteredPlans(userId, filter);
-  const { mutate: deletePlan } = useDeletePlan(userId);
-  const queryClient = useQueryClient();
+  const { data: plans = plansList, isLoading: isPlansLoading } =
+    useGetFilteredPlans(userId, filter);
 
-  // 필터 초기화
-  const resetFilter = () => {
-    setFilter({
-      type: FILTER_TYPES.PUBLIC,
-      value: PUBLIC_OPTIONS.ALL,
-    });
-    setSelectedFilter(null);
-    setInputValue('');
-    setStartDate('');
-    setEndDate('');
-    setSelectedPublicOption(PUBLIC_OPTIONS.ALL);
-    setCurrentPage(1);
-  };
+  const { currentPage, setCurrentPage, handlePageChange } = usePagination();
+  const { isOpen, setIsOpen, handleMouseLeave } = usePopover();
 
-  // 필터 적용
-  const handleApplyFilter = async () => {
-    try {
-      setFilter({
-        type: selectedFilter,
-        value:
-          selectedFilter === FILTER_TYPES.PUBLIC
-            ? selectedPublicOption
-            : selectedFilter === FILTER_TYPES.DATE
-              ? `${startDate} ~ ${endDate}`
-              : inputValue,
-      });
-      setIsOpen(false);
-      setCurrentPage(1);
-    } catch (error) {
-      console.error('필터링 중 오류 발생:', error);
-    }
-  };
-
-  // popover mouseleave 이벤트 핸들러
-  const handleMouseLeave = () => {
-    if (!isDatePickerFocused) {
-      setIsOpen(false);
-      setSelectedFilter(null);
-    }
-  };
-
-  // 계획 수정 핸들러
-  const handleEdit = (planId: number) => {
-    router.push(`${PATH.PLAN_DETAIL}/${planId}`);
-  };
-
-  // 계획 삭제 핸들러
-  const handleDelete = (planId: number) => {
-    if (confirm('정말로 이 일정을 삭제하시겠습니까?')) {
-      deletePlan(planId, {
-        onSuccess: () => {
-          // 삭제 성공 후 현재 페이지를 유지하면서 데이터를 갱신
-          queryClient.invalidateQueries({
-            queryKey: ['filteredPlans', userId],
-          });
-          toast({
-            title: '일정 삭제 완료',
-            description: '일정이 성공적으로 삭제되었습니다.',
-          });
-        },
-        onError: (error) => {
-          console.error('일정 삭제 실패:', error);
-          toast({
-            title: '일정 삭제 실패',
-            description: '일정 삭제에 실패했습니다. 다시 시도해주세요.',
-            variant: 'destructive',
-          });
-        },
-      });
-    }
-  };
-
-  // 페이지네이션 계산
   const totalPages = Math.ceil((plans ?? []).length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
-  const currentPlans = (plans ?? []).slice(startIndex, endIndex);
+  const currentPagePlans = (plans ?? []).slice(startIndex, endIndex);
 
-  // 페이지 변경 핸들러
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
+  const handleApplyFilterAndClose = async () => {
+    await handleApplyFilter();
+    setIsOpen(false);
+    setCurrentPage(INITIAL_PAGE);
   };
 
   if (isPlansLoading) {
@@ -167,7 +98,7 @@ const PlanFilterSection = ({
           <PopoverTrigger
             asChild
             onMouseEnter={() => setIsOpen(true)}
-            onMouseLeave={handleMouseLeave}
+            onMouseLeave={() => handleMouseLeave(isDatePickerFocused)}
           >
             <Button variant="outline" size="sm" disabled={isPlansLoading}>
               <Image
@@ -185,13 +116,14 @@ const PlanFilterSection = ({
             align="start"
             sideOffset={5}
             onMouseEnter={() => setIsOpen(true)}
-            onMouseLeave={handleMouseLeave}
+            onMouseLeave={() => handleMouseLeave(isDatePickerFocused)}
           >
             <FilterMenu
               selectedFilter={selectedFilter}
               setSelectedFilter={setSelectedFilter}
               filter={filter}
               setInputValue={setInputValue}
+              handleFilterClick={handleFilterClick}
             />
             {selectedFilter && (
               <FilterInput
@@ -204,10 +136,9 @@ const PlanFilterSection = ({
                 setStartDate={setStartDate}
                 endDate={endDate}
                 setEndDate={setEndDate}
-                isDatePickerFocused={isDatePickerFocused}
                 setIsDatePickerFocused={setIsDatePickerFocused}
                 filter={filter}
-                applyFilter={handleApplyFilter}
+                applyFilter={handleApplyFilterAndClose}
               />
             )}
           </PopoverContent>
@@ -216,7 +147,10 @@ const PlanFilterSection = ({
           <Button
             variant="ghost"
             size="sm"
-            onClick={resetFilter}
+            onClick={() => {
+              resetFilter();
+              setCurrentPage(INITIAL_PAGE);
+            }}
             className="medium-14 text-gray-500 hover:text-gray-900"
             disabled={isPlansLoading}
           >
@@ -232,7 +166,7 @@ const PlanFilterSection = ({
       ) : (
         <>
           <div className="grid grid-cols-1 gap-6">
-            {currentPlans.map((plan) => (
+            {currentPagePlans.map((plan) => (
               <PlanHorizontalCard
                 key={plan.planId}
                 plan={plan}

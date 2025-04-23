@@ -1,18 +1,18 @@
 'use client';
 
-import React, { useEffect } from 'react';
 import Image from 'next/image';
+import React, { useEffect } from 'react';
+
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogTitle,
   DialogDescription,
 } from '@/components/ui/no-close-button-dialog';
-import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-
-import useAlertStore from '@/zustand/alert.store';
 import { AlertType } from '@/types/alert.type';
+import useAlertStore from '@/zustand/alert.store';
 
 const AlertModal = () => {
   const {

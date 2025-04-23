@@ -1,5 +1,6 @@
-import { STORAGE_KEY } from '@/constants/auth.constants';
 import { useState, useEffect } from 'react';
+
+import { STORAGE_KEY } from '@/constants/auth.constants';
 
 /**
  * 이메일 저장 기능을 위한 커스텀 훅

@@ -1,5 +1,5 @@
+import { AlertOptions } from '@/types/alert.type';
 import useAlertStore from '@/zustand/alert.store';
-import { AlertType, AlertOptions } from '@/types/alert.type';
 
 const useAlert = () => {
   const { open, close } = useAlertStore();

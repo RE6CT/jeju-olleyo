@@ -1,10 +1,13 @@
 import Image from 'next/image';
-import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
-import { fetchGetPlanById } from '@/lib/apis/plan/plan.api';
-import ErrorMessage from '@/components/features/alert/error-message';
+
 import PlanForm from '@/app/plan-detail/_components/plan-form';
-import { fetchGetPlanDaysAndLocations } from '@/lib/apis/plan/plan.api';
-import NotFound from '../not-found';
+import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
+import {
+  fetchGetPlanById,
+  fetchGetPlanDaysAndLocations,
+} from '@/lib/apis/plan/plan.api';
+
+import NotFound from '@/app/plan-detail/_components/features/notfound/not-found';
 
 const PlanDetailPage = async ({ params }: { params: { planId: string } }) => {
   const HAPPY_IMAGE = {
@@ -22,12 +25,8 @@ const PlanDetailPage = async ({ params }: { params: { planId: string } }) => {
 
     // 비공개 일정인 경우 로그인 필수
     if (!plan.public) {
-      // 로그인하지 않은 경우
-      if (!userId) {
-        return <NotFound />;
-      }
-      // 작성자가 아닌 경우
-      if (plan.userId !== userId) {
+      // 로그인하지 않은 경우, 작성자가 아닌 경우
+      if (!userId || plan.userId !== userId) {
         return <NotFound />;
       }
     }
@@ -71,7 +70,7 @@ const PlanDetailPage = async ({ params }: { params: { planId: string } }) => {
         </div>
       </div>
     );
-  } catch (error) {
+  } catch {
     // 일정을 찾을 수 없는 경우
     return <NotFound />;
   }

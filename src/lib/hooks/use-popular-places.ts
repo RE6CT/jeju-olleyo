@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import { getPopularPlaces } from '@/lib/apis/home/home.popular.api';
-import { useBookmarkStore } from '@/zustand/bookmark.store';
-import { Place } from '@/types/home.popular-place.type';
 import { useState, useEffect } from 'react';
+
+import { getPopularPlaces } from '@/lib/apis/home/home.popular.api';
+import { Place } from '@/types/home.popular-place.type';
+
 import useAuth from './use-auth';
 
 /**
@@ -13,7 +14,6 @@ import useAuth from './use-auth';
  * @returns 북마크 상태가 적용된 인기 장소 데이터와 로딩 상태
  */
 export const usePopularPlaces = (category: string = '전체') => {
-  const isBookmarked = useBookmarkStore((state) => state.isBookmarked);
   const [previousData, setPreviousData] = useState<Place[]>([]);
   const { user } = useAuth();
 
@@ -40,12 +40,12 @@ export const usePopularPlaces = (category: string = '전체') => {
   const placesWithBookmarks = data
     ? data.map((place) => ({
         ...place,
-        isBookmarked: user ? place.isBookmarked : isBookmarked(place.id),
+        isBookmarked: user ? place.isBookmarked : false,
       }))
     : previousData.length > 0
       ? previousData.map((place) => ({
           ...place,
-          isBookmarked: user ? place.isBookmarked : isBookmarked(place.id),
+          isBookmarked: user ? place.isBookmarked : false,
         }))
       : [];
 

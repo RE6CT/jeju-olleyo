@@ -1,5 +1,6 @@
-import { PATH } from '@/constants/path.constants';
 import Link from 'next/link';
+
+import { PATH } from '@/constants/path.constants';
 
 // TODO : 메인 레이아웃 적용되면 감싸고 있는 디브 태그 없애야 될 것임.
 

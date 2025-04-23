@@ -1,9 +1,11 @@
+import Link from 'next/link';
+
 import Duration from '@/components/commons/duration';
 import PlanImage from '@/components/commons/plan-image';
 import { Separator } from '@/components/ui/separator';
 import { PlanVerticalCardProps } from '@/types/plan.type';
-import Link from 'next/link';
-import LikeButton from '../like-button';
+
+import LikeButton from '../like/like-button';
 
 /**
  * vertical한 플랜 카드 컴포넌트

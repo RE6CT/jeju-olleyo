@@ -1,8 +1,9 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { MarkerInstance, MarkerProps } from '@/types/kakao-map.type';
+
 import { createMarkerImage } from '@/lib/utils/map.util';
+import { MarkerInstance, MarkerProps } from '@/types/kakao-map.type';
 
 /**
  * 카카오맵 마커 컴포넌트
@@ -21,8 +22,6 @@ const Marker = ({
   clickable = true,
   draggable = false,
   day,
-  order,
-  showDay = false,
   onClick,
 }: MarkerProps) => {
   const markerInstance = useRef<MarkerInstance | null>(null);

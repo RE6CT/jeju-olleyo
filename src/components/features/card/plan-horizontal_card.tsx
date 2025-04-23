@@ -1,3 +1,6 @@
+import Image from 'next/image';
+import Link from 'next/link';
+
 import Duration from '@/components/commons/duration';
 import PlanDropdown from '@/components/commons/edit-and-delete-dropdown';
 import PlanImage from '@/components/commons/plan-image';
@@ -5,9 +8,8 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { TEXT } from '@/constants/plan.constants';
 import { PlanHorizontalCardProps } from '@/types/plan.type';
-import Image from 'next/image';
-import Link from 'next/link';
-import LikeButton from '../like-button';
+
+import LikeButton from '../like/like-button';
 
 export const CARD = {
   imageSize: 'w-[310px] h-[216px]',

@@ -1,11 +1,13 @@
 'use server';
 
+import dayjs from 'dayjs';
+import { revalidatePath } from 'next/cache';
+
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/constants/mypage.constants';
 import { PATH } from '@/constants/path.constants';
 import { ERROR_CODES } from '@/constants/supabase.constant';
 import { getServerClient } from '@/lib/supabase/server';
-import dayjs from 'dayjs';
-import { revalidatePath } from 'next/cache';
+
 import { fetchGetCurrentUser } from '../auth/auth-server.api';
 
 /**
@@ -77,7 +79,6 @@ export const fetchUpdateProfileImage = async (formData: FormData) => {
       .upload(fileName, file);
 
     if (imageUploadError) {
-      console.log(imageUploadError.message);
       throw new Error(ERROR_MESSAGES.PROFILE_UPDATE_FAILED);
     }
 

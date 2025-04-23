@@ -21,6 +21,15 @@ export const CATEGORY_KR_MAP: Record<string, Exclude<TravelCategory, null>> = {
   flight: '항공권',
 };
 
+export const CATEGORY_EN_MAP: Record<Exclude<TravelCategory, null>, string> = {
+  전체: 'all',
+  명소: 'toursite',
+  숙박: 'accommodation',
+  맛집: 'restaurant',
+  카페: 'cafe',
+  항공권: 'flight',
+};
+
 /**
  * 메인 카테고리 (항공권 제외)
  */
@@ -51,4 +60,13 @@ export const MAIN_CAROUSEL_OPTIONS = {
   NAVIGATION_ICON_SIZE: 48,
   /** 네비게이션 아이콘 두께 */
   NAVIGATION_ICON_STROKE_WIDTH: 2,
+};
+
+/**
+ * 일정 만들러가기 배너
+ */
+export const SCHEDULE_BANNER = {
+  SCHEDULE_BANNER_IMAGE_URL: '/banner-images/plan-banner.jpg',
+  SCHEDULE_BANNER_TITLE: '나만의 제주 여행 계획하기',
+  SCHEDULE_BANNER_BUTTON_TEXT: '내 일정 만들러 가기',
 };

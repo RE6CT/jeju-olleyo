@@ -1,5 +1,7 @@
 'use client';
 
+import { useRouter, useSearchParams } from 'next/navigation';
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,7 +10,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Separator } from '@/components/ui/separator';
 import { CommunitySortType } from '@/types/community.type';
-import { useRouter, useSearchParams } from 'next/navigation';
 
 const sortTypeLabels = {
   popular: '인기순',

@@ -1,8 +1,9 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
+
 import { PATH } from '@/constants/path.constants';
 import { getServerClient } from '@/lib/supabase/server';
-import { revalidatePath } from 'next/cache';
 
 /**
  * 좋아요 데이터를 추가해주는 함수

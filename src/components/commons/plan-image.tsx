@@ -1,6 +1,7 @@
+import Image from 'next/image';
+
 import { getPlanImageWithFallback } from '@/lib/utils/get-image-with-fallback';
 import { PlaceImageProps } from '@/types/common.type';
-import Image from 'next/image';
 
 /**
  * 일정 이미지 컴포넌트

@@ -1,9 +1,11 @@
-import ProfileInfo from './_components/account-profile-info';
-import PersonalInfo from './_components/account-personal-info';
-import SecurityInfo from './_components/account-security-info';
 import { Suspense } from 'react';
+
 import Loading from '@/app/loading';
 import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
+
+import PersonalInfo from './_components/account-personal-info';
+import ProfileInfo from './_components/account-profile-info';
+import SecurityInfo from './_components/account-security-info';
 
 const AccountPage = async () => {
   const { user } = await fetchGetCurrentUser();

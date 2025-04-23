@@ -1,13 +1,20 @@
-import React from 'react';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
-import { Button } from '../../ui/button';
 import { Bookmark } from 'lucide-react';
-import PlaceImage from '@/components/commons/place-image';
-import { PlaceModalProps } from '@/types/place-modal.type';
+import React from 'react';
 import CategoryBadge from '@/components/commons/category-badge';
+import PlaceImage from '@/components/commons/place-image';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { CategoryType } from '@/types/category.type';
+import { Button } from '../../ui/button';
+import { Place } from '@/types/place.type';
+import { DetailIntroRaw } from '@/types/korea-tour.type';
 
-const PlaceModal = ({ place, detailInfo }: PlaceModalProps) => {
+const PlaceModal = ({
+  place,
+  detailInfo,
+}: {
+  place: Place;
+  detailInfo: DetailIntroRaw;
+}) => {
   const isHotel = place.content_type_id === 32;
 
   const rawSummary = isHotel

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import { getServerClient } from '@/lib/supabase/server';
-import { AUTH_ROUTES } from '@/constants/auth.constants';
+
 import { PATH } from '@/constants/path.constants';
+import { getServerClient } from '@/lib/supabase/server';
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);

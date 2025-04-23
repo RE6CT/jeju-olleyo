@@ -1,5 +1,6 @@
-import { Place } from '@/types/search.type';
 import { MARKER } from '@/constants/map.constants';
+import { MarkerImage } from '@/types/kakao-map.type';
+import { Place } from '@/types/search.type';
 
 /**
  * Place 객체에서 위도, 경도 정보를 추출하는 함수
@@ -33,11 +34,14 @@ export const getLatLng = (place: Place) => {
  * @param day - 일자 (홀수/짝수에 따라 마커 색상 변경)
  * @returns 생성된 마커 이미지
  */
-export const createMarkerImage = (day: number) => {
-  const imageSize = new window.kakao.maps.Size(MARKER.SIZE.X, MARKER.SIZE.Y);
+export const createMarkerImage = (day: number): MarkerImage => {
+  const imageSize = new window.kakao.maps.Size(
+    MARKER.SIZE.width,
+    MARKER.SIZE.height,
+  );
   const imageUrl = `/map/mapmarker-day${day}.png`;
 
   return new window.kakao.maps.MarkerImage(imageUrl, imageSize, {
-    offset: new window.kakao.maps.Point(MARKER.OFFSET.X, MARKER.OFFSET.Y),
+    offset: new window.kakao.maps.Point(MARKER.OFFSET.x, MARKER.OFFSET.y),
   });
 };

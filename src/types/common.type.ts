@@ -1,4 +1,5 @@
-import { ReactElement, ReactNode } from 'react';
+import { ReactNode } from 'react';
+
 import { Plan } from './plan.type';
 
 /** 문자열을 카멜 케이스로 변환하는 타입 */
@@ -31,6 +32,7 @@ export type PlaceImageProps = {
   image: string | null;
   title: string;
   className?: string;
+  isPriority?: boolean;
 };
 
 // 수정/삭제를 하는 드롭다운 컴포넌트의 props

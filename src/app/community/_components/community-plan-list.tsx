@@ -1,10 +1,13 @@
 'use client';
 
-import { PlanCardType } from '@/types/plan.type';
-import SortDropdown from './community-sort-dropdown';
-import PlanVerticalCard from '@/components/features/card/plan-vertical-card';
 import { useSearchParams } from 'next/navigation';
+
+import PlanVerticalCard from '@/components/features/card/plan-vertical-card';
 import { CommunitySortType } from '@/types/community.type';
+import { PlanCardType } from '@/types/plan.type';
+
+import SortDropdown from './community-sort-dropdown';
+
 
 const CommunityPlanList = ({ plans }: { plans: PlanCardType[] }) => {
   const searchParams = useSearchParams();

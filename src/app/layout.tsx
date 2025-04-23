@@ -1,12 +1,13 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import Providers from '@/config/tq-provider';
-import Header from '@/components/layouts/header';
-import AuthProvider from '@/config/auth-provider';
+
 import localFont from 'next/font/local';
-import Footer from '@/components/layouts/footer';
 import AlertModal from '@/components/commons/alert-modal';
+import Footer from '@/components/layouts/footer';
+import Header from '@/components/layouts/header';
 import { Toaster } from '@/components/ui/toaster';
+import AuthProvider from '@/config/auth-provider';
+import Providers from '@/config/tq-provider';
 export const metadata: Metadata = {
   title: '제주 올레요',
   description: '제주 여행을 떠나기 위한 일정 만들어요!',
@@ -27,8 +28,8 @@ export default function RootLayout({
       <body
         className={`${pretendard.variable} font-pretendard flex min-h-screen w-full flex-col items-center justify-center antialiased`}
       >
-        <AuthProvider>
-          <Providers>
+        <Providers>
+          <AuthProvider>
             <div className="flex w-full max-w-[1024px] flex-1 flex-col">
               <Header />
               <main className="flex-1">{children}</main>
@@ -36,8 +37,8 @@ export default function RootLayout({
             </div>
             <AlertModal />
             <Toaster />
-          </Providers>
-        </AuthProvider>
+          </AuthProvider>
+        </Providers>
       </body>
     </html>
   );

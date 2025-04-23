@@ -1,17 +1,16 @@
 'use client';
 
-import AuthLayout from '@/components/features/auth/auth-layout';
-import AuthHeader from '@/components/features/auth/auth-header';
-import AuthForm from '@/components/features/auth/auth-form';
-import AuthErrorMessage from '@/components/features/auth/auth-error-message';
+import Loading from '@/app/loading';
+import AuthForm from '@/app/(auth)/_components/client/auth-form';
+import AuthHeader from '@/app/(auth)/_components/server/auth-header';
+import AuthLayout from '@/app/(auth)/_components/client/auth-layout';
 import { CardContent } from '@/components/ui/card';
-
-import { RegisterFormValues } from '@/types/auth.type';
+import { PATH } from '@/constants/path.constants';
 import useAuth from '@/lib/hooks/use-auth';
 import useAuthCheck from '@/lib/hooks/use-auth-check';
 import { getSignupErrorMessage } from '@/lib/utils/auth-error.util';
-import { PATH } from '@/constants/path.constants';
-import Loading from '@/app/loading';
+import { RegisterFormValues } from '@/types/auth.type';
+import AuthErrorMessage from '@/components/features/error-message/error-message';
 
 /**
  * 회원가입 페이지 컴포넌트
@@ -51,7 +50,7 @@ const SignUpPage = () => {
             <AuthErrorMessage messages={errorMessages} className="mb-4" />
           </CardContent>
         )}
-        <section className="mt-[30px]">
+        <section className="mt-[30px]" aria-label="회원가입 양식">
           <AuthForm
             type="register"
             onSubmit={handleSubmit}

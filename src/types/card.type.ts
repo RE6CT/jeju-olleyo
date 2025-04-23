@@ -1,15 +1,6 @@
 import { CamelCaseObject, List } from './common.type';
 import { Tables } from './supabase.type';
 
-type bookmarks = Tables<'bookmarks'>;
-export type SearchCardProp = {
-  bookmarks: CamelCaseObject<Pick<bookmarks, 'user_id' | 'place_id'>>;
-  className?: string | 'none';
-  initialBookmarks: boolean;
-  image: string;
-  title: string;
-};
-
 export type ComboBoxProp = {
   list: List;
   value: string;
@@ -31,7 +22,7 @@ export type PlaceCardProps = {
   placeId: number;
   image: string | null;
   title: string;
-  isLiked: boolean;
+  isBookmarked: boolean;
   className?: string;
   isDragging: boolean;
 };

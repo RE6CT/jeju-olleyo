@@ -1,23 +1,15 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import ErrorMessage from '@/app/error';
 import Loading from '@/app/loading';
-import PlaceCard from '@/components/features/card/place-card';
-import { useGetPlacesByCategoryInfiniteQuery } from '@/lib/queries/use-get-places';
-import { useInView } from 'react-intersection-observer';
-import { CategoryParamType } from '@/types/category.type';
 import Banner from '@/app/search/_components/banner';
-import { useBookmarkQuery } from '@/lib/hooks/use-bookmark-query';
+import PlaceCard from '@/components/features/card/place-card';
+import useInfiniteScroll from '@/lib/hooks/use-infinite-scroll';
+import { useGetPlacesByCategoryInfiniteQuery } from '@/lib/queries/use-get-places';
+import { CategoryParamType } from '@/types/category.type';
 
 /** 서버에서 가져온 데이터를 표시하는 클라이언트 컴포넌트 (카테고리 리스트)) */
-const CategoryClient = ({
-  category,
-  userId,
-}: {
-  category: CategoryParamType;
-  userId: string | null;
-}) => {
+const CategoryClient = ({ category }: { category: CategoryParamType }) => {
   const {
     data,
     fetchNextPage,
@@ -26,14 +18,13 @@ const CategoryClient = ({
     isPending,
     isError,
   } = useGetPlacesByCategoryInfiniteQuery(category);
-  const { ref, inView } = useInView();
-  const { isBookmarked, bookmarks } = useBookmarkQuery(userId);
 
-  useEffect(() => {
-    if (inView && hasNextPage && !isFetchingNextPage) {
+  // useInView 대신 커스텀 훅 사용
+  const observerRef = useInfiniteScroll(() => {
+    if (hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
-  }, [inView, fetchNextPage, hasNextPage, isFetchingNextPage]);
+  });
 
   if (isPending) return <Loading />;
   if (isError) return <ErrorMessage message="장소 불러오기 오류 발생" />;
@@ -48,17 +39,20 @@ const CategoryClient = ({
         {allPlaces.map((place, index) => (
           <>
             <PlaceCard
-              key={place.id}
+              key={place.placeId}
               placeId={place.placeId}
               image={place.image}
               title={place.title}
-              isLiked={isBookmarked(place.placeId)}
+              isBookmarked={place.isBookmarked}
               isDragging={false}
             />
             {/* 8번째 아이템 이후에 배너 삽입 (첫 페이지의 마지막) */}
             {index % 8 === 7 && (
-              <div className="col-span-full my-4 flex w-full items-center justify-center">
-                <Banner key={`banner-${index}`} />
+              <div
+                key={`banner-${index}`}
+                className="col-span-full my-4 flex w-full items-center justify-center"
+              >
+                <Banner />
                 {/* 배너 컴포넌트 또는 광고를 여기에 삽입 */}
               </div>
             )}
@@ -68,7 +62,7 @@ const CategoryClient = ({
 
       {/* 로딩 인디케이터 및 다음 페이지 로드 트리거 */}
       <div
-        ref={ref}
+        ref={observerRef}
         className="flex h-[50px] w-full items-center justify-center"
       ></div>
     </>

@@ -1,8 +1,9 @@
-import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { fetchSocialLoginUrl } from '@/lib/apis/auth/auth-server.api';
+import { useState } from 'react';
+
 import { SOCIAL_AUTH } from '@/constants/auth.constants';
 import { PATH } from '@/constants/path.constants';
+import { fetchSocialLoginUrl } from '@/lib/apis/auth/auth-server.api';
 import useAuthStore from '@/zustand/auth.store';
 
 /**
@@ -34,8 +35,12 @@ const useSocialLogin = () => {
       if (url) {
         window.location.href = url;
       }
-    } catch (error: any) {
-      setError(error.message || '구글 로그인 중 오류가 발생했습니다.');
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError('구글 로그인 중 오류가 발생했습니다.');
+      }
     } finally {
       setIsGoogleLoading(false);
     }
@@ -60,8 +65,12 @@ const useSocialLogin = () => {
       if (url) {
         window.location.href = url;
       }
-    } catch (error: any) {
-      setError(error.message || '카카오 로그인 중 오류가 발생했습니다.');
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError('카카오 로그인 중 오류가 발생했습니다.');
+      }
     } finally {
       setIsKakaoLoading(false);
     }

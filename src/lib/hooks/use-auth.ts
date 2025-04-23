@@ -1,17 +1,18 @@
+import { useRouter } from 'next/navigation';
 import { useState, useCallback } from 'react';
-import { LoginFormValues, RegisterFormValues } from '@/types/auth.type';
+
+import { PATH } from '@/constants/path.constants';
+import {
+  saveEmailToStorage,
+  clearClientAuthData,
+} from '@/lib/apis/auth/auth-browser.api';
 import {
   fetchLogin,
   fetchRegister,
   fetchLogout,
 } from '@/lib/apis/auth/auth-server.api';
-import {
-  saveEmailToStorage,
-  clearClientAuthData,
-} from '@/lib/apis/auth/auth-browser.api';
+import { LoginFormValues, RegisterFormValues } from '@/types/auth.type';
 import useAuthStore from '@/zustand/auth.store';
-import { PATH } from '@/constants/path.constants';
-import { useRouter } from 'next/navigation';
 
 /**
  * 인증 관련 기능을 처리하는 커스텀 훅
@@ -50,9 +51,14 @@ const useAuth = () => {
         }
 
         return true;
-      } catch (error: any) {
-        setError(error.message || '로그인 중 오류가 발생했습니다.');
-        return false;
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          setError(error.message);
+          return false;
+        } else {
+          setError('로그인 중 오류가 발생했습니다.');
+          return false;
+        }
       } finally {
         setIsLoading(false);
       }
@@ -85,14 +91,19 @@ const useAuth = () => {
         }
 
         return true;
-      } catch (error: any) {
-        setError(error.message || '회원가입 중 오류가 발생했습니다.');
-        return false;
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          setError(error.message);
+          return false;
+        } else {
+          setError('회원가입 중 오류가 발생했습니다.');
+          return false;
+        }
       } finally {
         setIsLoading(false);
       }
     },
-    [resetError, setError],
+    [resetError, setError, user],
   );
 
   /**
@@ -121,13 +132,18 @@ const useAuth = () => {
       router.push(PATH.SIGNIN);
 
       return true;
-    } catch (error: any) {
-      setError(error.message || '로그아웃 중 오류가 발생했습니다.');
-      return false;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error.message);
+        return false;
+      } else {
+        setError('로그아웃 중 오류가 발생했습니다.');
+        return false;
+      }
     } finally {
       setIsLoading(false);
     }
-  }, [resetError, setError, clearUser]);
+  }, [resetError, setError, clearUser, router]);
 
   return {
     user,

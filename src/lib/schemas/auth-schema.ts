@@ -1,10 +1,12 @@
 import { z } from 'zod';
+
+import { ERROR_MESSAGES, VALIDATION_RULES } from '@/constants/auth.constants';
+
 import {
   checkEmailExists,
   checkNickNameExists,
   checkPhoneExists,
 } from '../apis/auth/auth-server.api';
-import { ERROR_MESSAGES, VALIDATION_RULES } from '@/constants/auth.constants';
 
 /**
  * 이메일 유효성 검사를 위한 스키마

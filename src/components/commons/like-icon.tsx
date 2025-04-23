@@ -26,7 +26,7 @@ const LikeIcon = ({
   return (
     <button
       onClick={(e) => handleClick(e)}
-      className="flex h-14 w-14 cursor-pointer items-center justify-center rounded-12 border-none bg-white/10 p-0 hover:bg-transparent"
+      className="flex h-14 w-14 cursor-pointer items-center justify-center rounded-12 border-none bg-white/10 p-0"
       aria-label={isLiked ? '좋아요 취소' : '좋아요'}
     >
       <svg

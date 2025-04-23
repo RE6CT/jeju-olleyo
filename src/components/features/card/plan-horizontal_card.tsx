@@ -37,9 +37,14 @@ const PlanHorizontalCard = ({
   onDelete,
 }: PlanHorizontalCardProps) => {
   return (
-    <div className="flex gap-4">
+    <div className="group relative flex gap-4 rounded-lg p-4 transition-colors hover:bg-gray-50">
+      <Link
+        href={`/plan-detail/${plan.planId}?isReadOnly=true`}
+        className="absolute inset-0"
+      />
+
       {/* 이미지 영역 */}
-      <Link href={`/plan-detail/${plan.planId}`} className="relative">
+      <div className="relative">
         <div className={`relative ${CARD.imageSize}`}>
           <PlanImage
             image={plan.planImg}
@@ -52,14 +57,17 @@ const PlanHorizontalCard = ({
           isLiked={plan.isLiked}
           className="absolute right-4 top-4"
         />
-      </Link>
+      </div>
 
       {/* 컨텐츠 영역 */}
       <div className="flex flex-1 flex-col gap-2">
         <div className="relative">
           {/* 드롭다운 메뉴 */}
           {onEdit && onDelete && (
-            <div className="absolute right-4 top-2">
+            <div
+              className="absolute right-4 top-2"
+              onClick={(e) => e.stopPropagation()}
+            >
               <PlanDropdown plan={plan} onEdit={onEdit} onDelete={onDelete}>
                 <Button
                   variant="ghost"
@@ -79,10 +87,7 @@ const PlanHorizontalCard = ({
         </div>
 
         {/* 닉네임 및 날짜 영역 */}
-        <Link
-          href={`/plan-detail/${plan.planId}`}
-          className="medium-12 flex items-center gap-2 text-gray-500"
-        >
+        <div className="medium-12 flex items-center gap-2 text-gray-500">
           <span className="whitespace-nowrap">{plan.nickname}</span>
           <Separator orientation="vertical" className="h-[11px] bg-gray-300" />
           <Duration
@@ -90,20 +95,12 @@ const PlanHorizontalCard = ({
             end={plan.travelEndDate}
             separator="-"
           />
-        </Link>
+        </div>
         {/* 제목 및 description 영역 */}
-        <Link
-          href={`/plan-detail/${plan.planId}`}
-          className="medium-16 line-clamp-1"
-        >
-          {plan.title}
-        </Link>
-        <Link
-          href={`/plan-detail/${plan.planId}`}
-          className="regular-14 line-clamp-2 text-description"
-        >
+        <div className="medium-16 line-clamp-1">{plan.title}</div>
+        <div className="regular-14 line-clamp-2 text-description">
           {plan.description || TEXT.noDescription}
-        </Link>
+        </div>
       </div>
     </div>
   );

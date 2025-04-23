@@ -178,15 +178,15 @@ const SearchSidemenu = ({
     : currentPageItems.slice(0, INITIAL_ITEMS);
 
   const searchBar = (
-    <div className="rounded-[12px] bg-gray-100 px-3 py-2">
-      <div className="flex items-center gap-[12px]">
+    <div className="w-[240px] rounded-[12px] bg-gray-100 px-3 py-2">
+      <div className="flex items-center gap-3">
         <img src="/icons/search.svg" alt="검색" className="h-5 w-5" />
-        <Input
+        <input
           type="text"
           placeholder="장소를 검색해 추가하세요"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full border-none bg-transparent text-14 font-medium leading-[150%] text-[#698EA1] placeholder:text-gray-400 focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+          className="medium-14 border-none bg-transparent text-gray-500 placeholder:text-gray-400 focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
         />
       </div>
     </div>

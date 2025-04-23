@@ -1,8 +1,8 @@
 'use client';
 
 import ErrorMessage from '@/app/error';
-import Loading from '@/app/loading';
 import Banner from '@/app/search/_components/banner';
+import PlaceListSkeleton from '@/components/commons/place-list-skeleton';
 import PlaceCard from '@/components/features/card/place-card';
 import useInfiniteScroll from '@/lib/hooks/use-infinite-scroll';
 import { useGetPlacesByCategoryInfiniteQuery } from '@/lib/queries/use-get-places';
@@ -26,7 +26,6 @@ const CategoryClient = ({ category }: { category: CategoryParamType }) => {
     }
   });
 
-  if (isPending) return <Loading />;
   if (isError) return <ErrorMessage message="장소 불러오기 오류 발생" />;
 
   // 데이터 평탄화
@@ -36,28 +35,32 @@ const CategoryClient = ({ category }: { category: CategoryParamType }) => {
     <>
       {/* 카드 그리드로 바로 표시 */}
       <div className="grid grid-cols-2 gap-[11px] sm:grid-cols-3 md:grid-cols-4">
-        {allPlaces.map((place, index) => (
-          <>
-            <PlaceCard
-              key={place.placeId}
-              placeId={place.placeId}
-              image={place.image}
-              title={place.title}
-              isBookmarked={place.isBookmarked}
-              isDragging={false}
-            />
-            {/* 8번째 아이템 이후에 배너 삽입 (첫 페이지의 마지막에만 적용) */}
-            {index === 7 && (
-              <div
-                key={`banner-${index}`}
-                className="col-span-full my-4 flex w-full items-center justify-center"
-              >
-                <Banner />
-                {/* 배너 컴포넌트 또는 광고를 여기에 삽입 */}
-              </div>
-            )}
-          </>
-        ))}
+        {isPending ? (
+          <PlaceListSkeleton count={16} />
+        ) : (
+          allPlaces.map((place, index) => (
+            <>
+              <PlaceCard
+                key={place.placeId}
+                placeId={place.placeId}
+                image={place.image}
+                title={place.title}
+                isBookmarked={place.isBookmarked}
+                isDragging={false}
+              />
+              {/* 8번째 아이템 이후에 배너 삽입 (첫 페이지의 마지막에만 적용) */}
+              {index === 7 && (
+                <div
+                  key={`banner-${index}`}
+                  className="col-span-full my-4 flex w-full items-center justify-center"
+                >
+                  <Banner />
+                  {/* 배너 컴포넌트 또는 광고를 여기에 삽입 */}
+                </div>
+              )}
+            </>
+          ))
+        )}
       </div>
 
       {/* 로딩 인디케이터 및 다음 페이지 로드 트리거 */}

@@ -15,6 +15,7 @@ import useProviderFromCookie from '@/lib/hooks/use-get-provider';
 import { nicknameSchema } from '@/lib/schemas/auth-schema';
 
 import AccountProfileImage from './account-profile-image';
+import useUpdateNicknameMutation from '@/lib/mutations/use-update-nickname-mutation';
 
 const PROFILE_INFO_STYLE = {
   container:
@@ -23,7 +24,7 @@ const PROFILE_INFO_STYLE = {
   input:
     'rounded-[12px] border border-gray-200 px-4 py-[10px] !placeholder-gray-200',
   rowLabel:
-    'medium-16 text-[16px] text-gray-900 whitespace-nowrap w-[107px] p-[10px]',
+    'text-[16px] text-gray-900 whitespace-nowrap w-[107px] p-[10px] font-medium',
   rowValue: 'whitespace-nowrap medium-16 p-[10px]',
   button: 'medium-16 bg-transparent text-secondary-300 hover:bg-gray-100',
 };
@@ -81,18 +82,26 @@ const ProfileInfo = ({
     reset();
   };
 
+  // 닉네임 업데이트 뮤테이션 사용
+  const updateNicknameMutation = useUpdateNicknameMutation();
+
   /**
    * 닉네임 수정 폼 제출 핸들러
    * @param data - 유효성 검사를 통과한 닉네임 데이터
    * data.nickname: 사용자가 입력한 새 닉네임 값
    */
+  // 닉네임 수정 폼 제출 핸들러
   const handleEditComplete = async (data: NicknameValues) => {
     const isConfirmed = confirm('닉네임을 수정하시겠습니까?');
     if (!isConfirmed) return;
 
     try {
-      const result = await fetchUpdateNickname(userId, data.nickname);
-      successToast(result.message);
+      // 뮤테이션 사용
+      await updateNicknameMutation.mutateAsync({
+        userId,
+        nickname: data.nickname,
+      });
+      successToast('닉네임이 성공적으로 변경되었습니다.');
     } catch (error: unknown) {
       let errorMessage = ERROR_MESSAGES.NICKNAME_UPDATE_FAILED;
       if (error instanceof Error) {
@@ -125,7 +134,7 @@ const ProfileInfo = ({
           <div className="relative">
             <Input
               id="nickname"
-              placeholder={`${nickname}`}
+              placeholder="새 닉네임을 입력하세요"
               {...register('nickname')}
               className={PROFILE_INFO_STYLE.input}
             />

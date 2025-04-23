@@ -32,7 +32,7 @@ const SocialLogin = () => {
           <button
             onClick={handleGoogle}
             aria-label="구글 계정으로 로그인"
-            className="rounded-full focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+            className="rounded-full"
           >
             <Image
               src="/images/google-logo.svg"
@@ -45,7 +45,7 @@ const SocialLogin = () => {
           <button
             onClick={handleKakao}
             aria-label="카카오 계정으로 로그인"
-            className="rounded-full focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+            className="rounded-full"
           >
             <Image
               src="/images/kakao-logo.svg"

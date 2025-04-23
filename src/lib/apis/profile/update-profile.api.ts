@@ -9,6 +9,8 @@ import { ERROR_CODES } from '@/constants/supabase.constant';
 import { getServerClient } from '@/lib/supabase/server';
 
 import { fetchGetCurrentUser } from '../auth/auth-server.api';
+import { QueryClient } from '@tanstack/react-query';
+import { USER_QUERY_KEY } from '@/lib/queries/auth-queries';
 
 /**
  * 유저의 닉네임을 업데이트하는 서버 액션 함수
@@ -36,6 +38,15 @@ export const fetchUpdateNickname = async (userId: string, nickname: string) => {
     }
 
     revalidatePath(PATH.ACCOUNT);
+
+    // 클라이언트측 TanStack Query 캐시 무효화 추가 코드
+    if (typeof window !== 'undefined') {
+      // window 객체에 저장해둔 queryClient 사용
+      // 또는 useUpdateNickname 훅을 만들어 queryClient.invalidateQueries 사용
+      const queryClient = new QueryClient();
+      queryClient.invalidateQueries({ queryKey: USER_QUERY_KEY });
+    }
+
     return { success: true, message: SUCCESS_MESSAGES.NICKNAME_UPDATED };
   } catch (error: unknown) {
     // 에러 메시지 없을 경우의 디폴트 메시지

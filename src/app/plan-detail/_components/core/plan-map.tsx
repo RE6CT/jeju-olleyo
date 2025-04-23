@@ -12,6 +12,7 @@ import {
 } from '@/constants/map.constants';
 import { usePlanMap } from '@/lib/hooks/use-plan-map';
 import { DayPlaces, TabType } from '@/types/plan-detail.type';
+import { MarkerProps } from '@/types/kakao-map.type';
 import { memo } from 'react';
 
 const PlanMap = memo(
@@ -41,7 +42,7 @@ const PlanMap = memo(
 
     return (
       <>
-        <div className="sticky top-0 h-8 bg-slate-50"></div>
+        <div className="sticky top-0 z-40 h-10 bg-slate-50"></div>
         <div className="sticky top-8 z-40 mt-4 h-[326px] w-full overflow-hidden rounded-[12px]">
           {isLoading && <Loading />}
           {error && <ErrorMessage message={error} />}
@@ -60,6 +61,11 @@ const PlanMap = memo(
                 minClusterSize={CLUSTERER_OPTIONS.MIN_CLUSTER_SIZE}
                 disableClickZoom={CLUSTERER_OPTIONS.DISABLE_CLICK_ZOOM}
                 styles={[...CLUSTERER_OPTIONS.STYLES]}
+                onMarkerClick={(marker: MarkerProps) => {
+                  if (marker.onClick) {
+                    marker.onClick();
+                  }
+                }}
               />
               {Object.entries(paths).map(([day, path]) => {
                 if (activeTab === '전체보기' || parseInt(day) === activeTab) {

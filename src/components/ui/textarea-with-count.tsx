@@ -18,6 +18,7 @@ import { cn } from '@/lib/utils';
  *   onChange={(e) => setText(e.target.value)}
  *   maxLength={100}
  *   placeholder="내용을 입력하세요"
+ *   showCount={true}
  * />
  * ```
  */
@@ -31,42 +32,50 @@ const TextareaWithCount = forwardRef<
     value: string;
     maxLength: number;
     onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+    showCount?: boolean;
   }
->(({ value, maxLength, className, onChange, ...props }, ref) => {
-  const currentLength = value.length;
-  const isExceeded = currentLength >= maxLength;
+>(
+  (
+    { value, maxLength, className, onChange, showCount = true, ...props },
+    ref,
+  ) => {
+    const currentLength = value.length;
+    const isExceeded = currentLength >= maxLength;
 
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (e.target.value.length <= maxLength) {
-      onChange?.(e);
-    }
-  };
+    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      if (e.target.value.length <= maxLength) {
+        onChange?.(e);
+      }
+    };
 
-  return (
-    <div className="relative">
-      <Textarea
-        ref={ref}
-        value={value}
-        className={cn('pr-16', className)} // 글자 수 표시 공간 확보, 외부에서 padding right 방향 속성 주면 이상해짐
-        onChange={handleChange}
-        {...props}
-      />
+    return (
+      <div className="relative">
+        <Textarea
+          ref={ref}
+          value={value}
+          className={cn(showCount ? 'pr-16' : '', className)} // 글자 수 표시 공간 확보, 외부에서 padding right 방향 속성 주면 이상해짐
+          onChange={handleChange}
+          {...props}
+        />
 
-      <div
-        className={cn(
-          'absolute bottom-2 right-4 text-xs',
-          currentLength === 0
-            ? 'text-gray-300'
-            : isExceeded
-              ? 'text-red'
-              : 'text-gray-900',
+        {showCount && (
+          <div
+            className={cn(
+              'absolute bottom-2 right-4 text-xs',
+              currentLength === 0
+                ? 'text-gray-300'
+                : isExceeded
+                  ? 'text-red'
+                  : 'text-gray-900',
+            )}
+          >
+            {currentLength}/{maxLength}
+          </div>
         )}
-      >
-        {currentLength}/{maxLength}
       </div>
-    </div>
-  );
-});
+    );
+  },
+);
 
 TextareaWithCount.displayName = 'TextareaWithCount'; // forwardRef 사용시 기본적으로 이름이 추론되지 않아 명시
 

@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 
 import { Card } from '@/components/ui/card';
 import { AuthProps } from '@/types/auth.type';
-import useAuthStore from '@/zustand/auth.store';
+import useAuth from '@/lib/hooks/use-auth';
 
 /**
  * 인증 관련 페이지의 레이아웃 컴포넌트
@@ -14,7 +14,7 @@ import useAuthStore from '@/zustand/auth.store';
  */
 const AuthLayout = ({ children }: AuthProps) => {
   const pathname = usePathname();
-  const { resetError } = useAuthStore();
+  const { resetError } = useAuth();
 
   // 페이지가 변경될 때 에러 상태 초기화
   useEffect(() => {

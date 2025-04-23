@@ -162,7 +162,7 @@ const PlanSchedule = memo(
                     </DropdownMenuContent>
                   </DropdownMenu>
 
-                  <div className="mt-8 flex gap-6">
+                  <div className="mt-8 flex w-full gap-6">
                     {startDate && endDate ? (
                       activeTab === '전체보기' ? (
                         <div className="flex flex-col gap-6">
@@ -338,6 +338,19 @@ const PlanSchedule = memo(
                     }
                     onAddPlace={(place) => handleAddPlace(place, activeTab)}
                   />
+                )}
+                {isReadOnly && (
+                  <div className="h-full w-[400px] border-l border-gray-200 p-6">
+                    <div className="mb-4 text-18 font-bold">댓글 0</div>
+                    <div className="space-y-4">
+                      <div className="rounded-lg bg-gray-50 p-4">
+                        <div className="whitespace-pre-line py-8 text-center text-gray-400">
+                          댓글 영역입니다. {'\n'} 이후 버전에서 구현될
+                          예정입니다
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 )}
               </div>
             </div>

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { PATH } from '@/constants/path.constants';
 import useAlert from '@/lib/hooks/use-alert';
 import { JejuBannerProps } from '@/types/common.type';
-import useAuthStore from '@/zustand/auth.store';
+import useAuthCheck from '@/lib/hooks/use-auth-check';
 
 /**
  * 제주 여행 계획 배너 컴포넌트
@@ -21,7 +21,7 @@ const JejuBanner = ({
   buttonText = '내 일정 만들러 가기 >',
   buttonUrl = '/planner',
 }: JejuBannerProps) => {
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const { isAuthenticated } = useAuthCheck();
   const router = useRouter();
   const { showQuestion } = useAlert();
 

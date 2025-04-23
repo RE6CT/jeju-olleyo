@@ -58,6 +58,16 @@ const PlanForm = ({
       );
       setIsReadOnly(isReadOnly);
       setDayPlaces(initialDayPlaces || {});
+    } else {
+      // 새로운 일정을 만들 때는 모든 데이터를 초기화
+      setTitle('');
+      setDescription('');
+      setPlanImg('');
+      setActiveTab('전체보기');
+      setStartDate(null);
+      setEndDate(null);
+      setIsReadOnly(isReadOnly);
+      setDayPlaces({});
     }
   }, [initialPlan, setTitle, setDescription, setPlanImg, setDayPlaces]);
 
@@ -65,20 +75,16 @@ const PlanForm = ({
     setIsMounted(true);
   }, []);
 
-  if (!isMounted) {
-    return null;
-  }
-
-  if (!userId) {
+  if (!isMounted || !userId) {
     return null;
   }
 
   return (
-    <div>
+    <>
       <PlanHeader />
       <PlanMap />
       <PlanSchedule />
-    </div>
+    </>
   );
 };
 

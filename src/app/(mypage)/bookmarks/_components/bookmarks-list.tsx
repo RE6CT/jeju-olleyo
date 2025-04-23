@@ -76,7 +76,7 @@ const BookmarksList = ({ category }: { category: CategoryParamType }) => {
         />
       ) : (
         <div className="flex flex-col gap-20">
-          <div className="grid grid-cols-1 gap-x-3 gap-y-5 sm:grid-cols-2 md:grid-cols-3">
+          <div className="grid grid-cols-2 gap-x-3 gap-y-5 md:grid-cols-3">
             {bookmarks?.map((place) => (
               <PlaceCard
                 key={place.placeId}

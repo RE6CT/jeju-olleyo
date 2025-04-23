@@ -46,8 +46,8 @@ const CategoryClient = ({ category }: { category: CategoryParamType }) => {
               isBookmarked={place.isBookmarked}
               isDragging={false}
             />
-            {/* 8번째 아이템 이후에 배너 삽입 (첫 페이지의 마지막) */}
-            {index % 8 === 7 && (
+            {/* 8번째 아이템 이후에 배너 삽입 (첫 페이지의 마지막에만 적용) */}
+            {index === 7 && (
               <div
                 key={`banner-${index}`}
                 className="col-span-full my-4 flex w-full items-center justify-center"

@@ -1,28 +1,74 @@
-import { getPlaceImageWithFallback } from '@/lib/utils/get-image-with-fallback';
-import { PlaceImageProps } from '@/types/common.type';
+'use client';
 
-/**
- * 장소 이미지 컴포넌트
- * @param image - 장소 이미지
- * @param title - 장소의 타이틀 (alt 속성용)
- * @param className - 커스텀 클래스 속성 넣고 싶은 경우 추가 (필수 X)
- * - 반응형 고려하여 높이와 너비를 받지 않고 fill로 설정하였습니다.
- *
- * @example
- * <PlaceImage image={place.image} title={place.title} />
- */
-const PlaceImage = ({ image, className, title, ...props }: PlaceImageProps) => {
-  // null 여부 판단해서 디폴트 이미지 추가
-  const placeImage = getPlaceImageWithFallback(image);
+import { PlaceImageProps } from '@/types/common.type';
+import Image from 'next/image';
+import { useState, useRef } from 'react';
+
+const PlaceImage = ({
+  image,
+  title,
+  className = '',
+  isPriority = false,
+}: PlaceImageProps & { isPriority?: boolean }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const defaultImage = '/images/default_place_image.svg';
+  const imageSource = image || defaultImage;
+
+  // 이미지 로드 완료 핸들러
+  const handleImageLoad = () => {
+    setIsLoading(false);
+  };
+
+  // 이미지 로드 실패 핸들러
+  const handleImageError = () => {
+    setIsLoading(false);
+    setError(true);
+  };
 
   return (
-    <img
-      src={placeImage}
-      alt={title}
-      draggable="false"
-      className={`object-cover ${className} aspect-square w-full`}
-      {...props}
-    />
+    <div
+      ref={containerRef}
+      className={`relative aspect-square overflow-hidden ${className}`}
+    >
+      {isLoading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+          <div className="h-6 w-6 animate-pulse rounded-full bg-gray-200"></div>
+        </div>
+      )}
+
+      {error ? (
+        <div className="flex h-full w-full items-center justify-center bg-gray-100">
+          <Image
+            src={defaultImage}
+            alt={`${title} 이미지 로드 실패`}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover"
+          />
+        </div>
+      ) : (
+        <Image
+          src={imageSource}
+          alt={title}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          className={`object-cover transition-opacity duration-300 ${
+            isLoading ? 'opacity-0' : 'opacity-100'
+          }`}
+          priority={isPriority}
+          loading={isPriority ? undefined : 'lazy'}
+          placeholder="blur"
+          blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI0YzRjRGNiIvPjwvc3ZnPg=="
+          onLoad={handleImageLoad}
+          onError={handleImageError}
+          quality={process.env.NODE_ENV === 'development' ? 60 : 75}
+          fetchPriority={isPriority ? 'high' : 'auto'}
+          unoptimized
+        />
+      )}
+    </div>
   );
 };
 

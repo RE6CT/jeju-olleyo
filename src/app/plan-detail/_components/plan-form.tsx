@@ -41,6 +41,7 @@ const PlanForm = ({
     isReadOnly,
   });
 
+  console.log('planform 렌더링');
   return (
     <div>
       <PlanHeader

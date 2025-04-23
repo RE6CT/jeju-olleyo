@@ -56,10 +56,9 @@ const SearchSidemenu = ({
   const [isDaySelectModalOpen, setIsDaySelectModalOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const resizeTimeoutRef = useRef<NodeJS.Timeout>();
-  const [scrollPosition, setScrollPosition] = useState(0);
   const listRef = useRef<HTMLDivElement>(null);
 
-  const { isBookmarked, toggleBookmark } = useBookmarkQuery(userId);
+  const { isBookmarked } = useBookmarkQuery(userId);
 
   const filteredPlaces = places.filter((place) => {
     const matchesCategory =
@@ -122,26 +121,6 @@ const SearchSidemenu = ({
 
     fetchData();
   }, [userId]);
-
-  const handleBookmarkToggle = async (placeId: number) => {
-    try {
-      // 현재 스크롤 위치 저장
-      if (listRef.current) {
-        setScrollPosition(listRef.current.scrollTop);
-      }
-
-      await toggleBookmark(placeId);
-
-      // 북마크 상태 변경 후 스크롤 위치 복원
-      setTimeout(() => {
-        if (listRef.current) {
-          listRef.current.scrollTop = scrollPosition;
-        }
-      }, 0);
-    } catch (error) {
-      console.error('북마크 토글에 실패했습니다:', error);
-    }
-  };
 
   const handleAddPlace = (place: Place) => {
     if (selectedDay === null) {

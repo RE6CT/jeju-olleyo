@@ -28,7 +28,7 @@ const PlanMap = memo(
       summaries: { distance: number; duration: number }[],
     ) => void;
   }) => {
-    //console.log('PlanMap 렌더링');
+    console.log('PlanMap 렌더링');
 
     const {
       map,

@@ -77,6 +77,8 @@ const PlanSchedule = memo(
     };
     isReadOnly: boolean;
   }) => {
+    console.log('PlanSchedule 렌더링');
+
     const dayCount = calculateTotalDays(startDate, endDate);
 
     const {

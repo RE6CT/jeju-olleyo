@@ -49,6 +49,8 @@ const PlanHeader = memo(
     targetImage: string | null;
     isReadOnly?: boolean;
   }) => {
+    console.log('PlanHeader 렌더링');
+
     const { previewImage, isUploading, handleFileChange } =
       useChangeImageFile(targetImage);
 

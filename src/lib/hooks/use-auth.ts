@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
   useCurrentUser,
   useLogin,
@@ -20,21 +20,24 @@ const useAuth = () => {
   const logoutMutation = useLogout();
 
   // 이메일 로그인 처리 함수
-  const handleLogin = async (values: LoginFormValues) => {
-    setError(null);
+  const handleLogin = useCallback(
+    async (values: LoginFormValues) => {
+      setError(null);
 
-    try {
-      await loginMutation.mutateAsync(values);
-      return true;
-    } catch (error) {
-      setError(
-        error instanceof Error
-          ? error.message
-          : '로그인 중 오류가 발생했습니다.',
-      );
-      return false;
-    }
-  };
+      try {
+        await loginMutation.mutateAsync(values);
+        return true;
+      } catch (error) {
+        setError(
+          error instanceof Error
+            ? error.message
+            : '로그인 중 오류가 발생했습니다.',
+        );
+        return false;
+      }
+    },
+    [loginMutation],
+  );
 
   // 회원가입 처리 함수
   const handleRegister = async (values: RegisterFormValues) => {

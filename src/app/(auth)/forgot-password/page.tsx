@@ -29,11 +29,6 @@ const ForgotPasswordPage = () => {
     handleResetPassword,
   } = useForgotPasswordForm();
 
-  // 폼 제출 처리 함수
-  const onSubmit = async (data: { email: string }) => {
-    const result = await handleResetPassword(data);
-  };
-
   return (
     <AuthLayout>
       <AuthHeader
@@ -67,7 +62,7 @@ const ForgotPasswordPage = () => {
           </article>
         ) : (
           <section aria-label="비밀번호 재설정 요청 양식">
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(handleResetPassword)}>
               <div>
                 <Label htmlFor="email">이메일</Label>
                 <Input

@@ -1,5 +1,4 @@
 import BookmarkIcon from '@/components/commons/bookmark-icon';
-import useAuth from '@/lib/hooks/use-auth';
 import useCustomToast from '@/lib/hooks/use-custom-toast';
 import { useBookmarkMutation } from '@/lib/mutations/use-bookmark-mutation';
 import { useCurrentUser } from '@/lib/queries/auth-queries';

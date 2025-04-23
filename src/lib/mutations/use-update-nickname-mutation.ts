@@ -4,6 +4,7 @@ import { USER_QUERY_KEY } from '@/lib/queries/auth-queries';
 
 /**
  * 닉네임 업데이트 뮤테이션 훅
+ * @returns {UseMutationResult} 닉네임 업데이트를 위한 뮤테이션 객체
  */
 const useUpdateNicknameMutation = () => {
   const queryClient = useQueryClient();

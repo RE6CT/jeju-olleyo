@@ -1,5 +1,11 @@
 'use client';
 
+declare global {
+  interface Window {
+    queryClient?: QueryClient;
+  }
+}
+
 import {
   isServer,
   QueryClient,
@@ -29,7 +35,7 @@ export function getQueryClient() {
 
     // 전역에서 접근 가능하도록 window 객체에 추가
     if (typeof window !== 'undefined') {
-      (window as any).queryClient = browserQueryClient;
+      window.queryClient = browserQueryClient;
     }
 
     return browserQueryClient;

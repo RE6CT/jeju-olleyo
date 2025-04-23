@@ -1,9 +1,13 @@
 import { ResetPasswordState } from '@/types/auth.type';
 import { create } from 'zustand';
+import { AUTH_TIMEOUTS } from '@/constants/auth.constants';
+
+const COUNTDOWN_SECONDS =
+  AUTH_TIMEOUTS.PASSWORD_CHANGE_REDIRECT_DELAY_MS / 1000;
 
 const useResetPasswordStore = create<ResetPasswordState>((set) => ({
   isSubmitted: false,
-  countdown: 5, // AUTH_TIMEOUTS.PASSWORD_CHANGE_REDIRECT_DELAY_MS / 1000와 동일한 값 사용
+  countdown: COUNTDOWN_SECONDS,
   error: null,
 
   setIsSubmitted: (value) => set({ isSubmitted: value }),

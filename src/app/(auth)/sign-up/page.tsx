@@ -19,7 +19,7 @@ const SignUpPage = () => {
   const { handleRegister, isLoading, error } = useAuth();
 
   // 이미 로그인되어 있는 경우 홈으로 리다이렉트
-  const { isLoading: isCheckingAuth } = useAuthCheck({
+  const { isChecking: isCheckingAuth } = useAuthCheck({
     redirectIfFound: true,
     redirectTo: PATH.HOME,
   });

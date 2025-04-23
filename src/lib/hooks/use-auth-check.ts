@@ -21,7 +21,9 @@ const useAuthCheck = ({
   const [isChecked, setIsChecked] = useState(skipCheck);
 
   // 현재 사용자 정보 가져오기
-  const { data: user, isLoading } = useCurrentUser();
+  const { data: user, isLoading } = useCurrentUser({
+    enabled: !skipCheck,
+  });
 
   const isAuthenticated = !!user;
 
@@ -57,7 +59,7 @@ const useAuthCheck = ({
   ]);
 
   return {
-    isLoading: isLoading || !isChecked,
+    isChecking: isLoading || !isChecked,
     isAuthenticated,
     user,
   };

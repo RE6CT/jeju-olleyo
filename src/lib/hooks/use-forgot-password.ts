@@ -8,7 +8,9 @@ import useForgotPasswordStore from '@/zustand/forgot-password-store';
 
 /**
  * 비밀번호 찾기 기능을 위한 커스텀 훅
- * @returns 비밀번호 찾기 관련 상태 및 핸들러
+ * React Query와 Zustand를 사용하여 폼 상태와 API 호출을 관리합니다.
+ * @returns {Object} 폼 상태(isLoading, isSubmitted, error), 폼 핸들러(register, handleSubmit),
+ * 비밀번호 재설정 함수(handleResetPassword), 에러 초기화 함수(resetError)
  */
 const useForgotPasswordForm = () => {
   const {
@@ -54,10 +56,9 @@ const useForgotPasswordForm = () => {
       // 오류 메시지 처리
       const errorMessage =
         err instanceof Error ? err.message : '알 수 없는 오류';
-      const errorMessages = getForgotPasswordErrorMessage(errorMessage);
-
+      const [firstMessage] = getForgotPasswordErrorMessage(errorMessage);
       // 에러 상태 업데이트
-      setError(errorMessages[0]);
+      setError(firstMessage ?? '알 수 없는 오류가 발생했습니다.');
 
       return false;
     }

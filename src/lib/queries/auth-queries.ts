@@ -51,6 +51,7 @@ export const useCurrentUser = (options = {}) => {
  */
 export const useLogin = () => {
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   return useMutation({
     mutationFn: async (values: LoginFormValues) => {
@@ -66,7 +67,6 @@ export const useLogin = () => {
       return result.user;
     },
     onSuccess: (user) => {
-      // 타입 명시적 지정 또는 타입 단언 사용
       // 사용자 정보 캐시 업데이트
       queryClient.setQueryData<typeof user>(USER_QUERY_KEY, user);
 
@@ -74,7 +74,7 @@ export const useLogin = () => {
       if (typeof window !== 'undefined') {
         const params = new URLSearchParams(window.location.search);
         const redirectTo = params.get('redirectTo') || PATH.HOME;
-        window.location.href = redirectTo;
+        router.push(redirectTo);
       }
     },
   });

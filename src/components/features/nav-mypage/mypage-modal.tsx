@@ -48,17 +48,20 @@ const MypageModal = ({
 
   // 컴포넌트 마운트 시 세션에서 직접 사용자 정보 가져오기
   useEffect(() => {
+    let isMounted = true;
     const fetchUserInfo = async () => {
       if (!user) {
         const { user: sessionUser } = await getCurrentSession();
-        if (sessionUser) {
-          setLocalUser(sessionUser);
-        }
-      } else {
+        if (isMounted && sessionUser) setLocalUser(sessionUser);
+      } else if (isMounted) {
         setLocalUser(user);
       }
     };
     fetchUserInfo();
+
+    return () => {
+      isMounted = false;
+    };
   }, [user]);
 
   /**

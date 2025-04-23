@@ -19,4 +19,5 @@ export const SUCCESS_MESSAGES = {
   PROFILE_UPDATED: '프로필 이미지가 변경되었습니다.',
   PHONE_UPDATED: '휴대폰 번호가 변경되었습니다.',
   PASSWORD_UPDATED: '비밀번호가 변경되었습니다.',
+  PROFILE_IMAGE_RESET: '프로필 이미지가 성공적으로 초기화되었습니다.',
 };

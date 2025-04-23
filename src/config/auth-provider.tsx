@@ -58,7 +58,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     // 여기에 Supabase auth 상태 변경 리스너 설정
     const setupAuthListener = async () => {
       const { getBrowserClient } = await import('@/lib/supabase/client');
-      const supabase = await getBrowserClient();
+      const supabase = getBrowserClient();
 
       // 인증 상태 변경 리스너 설정
       const { data: authListener } = supabase.auth.onAuthStateChange(
@@ -74,7 +74,8 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
             queryClient.setQueryData(USER_QUERY_KEY, null);
 
             // 비공개 페이지에 있는 경우 로그인 페이지로 리다이렉트
-            if (!isPublicPage(pathname)) {
+            const currentPath = window.location.pathname;
+            if (!isPublicPage(currentPath)) {
               router.push(PATH.SIGNIN);
             }
           } else if (event === 'USER_UPDATED' && session?.user) {

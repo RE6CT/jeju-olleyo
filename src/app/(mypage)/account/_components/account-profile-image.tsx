@@ -1,8 +1,7 @@
 import { useState } from 'react';
 
 import ProfileImage from '@/components/commons/profile-image';
-import { ERROR_MESSAGES } from '@/constants/mypage.constants';
-import { fetchDeleteProfileImage } from '@/lib/apis/profile/update-profile.api';
+import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/constants/mypage.constants';
 import useCustomToast from '@/lib/hooks/use-custom-toast';
 
 import ProfileImageButton from './account-profile-image-button';
@@ -46,7 +45,7 @@ const AccountProfileImage = ({
     try {
       // 뮤테이션 사용
       await deleteProfileImageMutation.mutateAsync({ userId, profileImage });
-      successToast('프로필 이미지가 성공적으로 초기화되었습니다.');
+      successToast(SUCCESS_MESSAGES.PROFILE_IMAGE_RESET);
     } catch (error: unknown) {
       let errorMessage = ERROR_MESSAGES.PROFILE_UPDATE_FAILED;
       if (error instanceof Error) {

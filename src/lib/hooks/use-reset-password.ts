@@ -22,10 +22,9 @@ const useResetPasswordForm = () => {
     setCountdown,
     decrementCountdown,
     setError,
-    reset,
   } = useResetPasswordStore();
 
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // 폼 설정
   const {

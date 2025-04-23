@@ -12,6 +12,7 @@ import { formatTravelPeriod } from '@/lib/utils/date';
 import 'react-datepicker/dist/react-datepicker.css'; // react-datepicker 캘린더 스타일 적용
 import { useChangeImageFile } from '@/lib/hooks/use-change-image-file';
 import { LoadingSpinner } from '@/components/commons/loading-spinner';
+import { usePlanStore } from '@/lib/store/plan-store';
 
 const EDIT_ICON_CONSTANTS = {
   WIDTH: 24,
@@ -30,11 +31,6 @@ const PlanHeader = memo(
     isCalendarOpen,
     setIsCalendarOpen,
     handleDateChange,
-    planTitle,
-    setPlanTitle,
-    planDescription,
-    setPlanDescription,
-    targetImage,
     isReadOnly,
   }: {
     startDate: Date | null;
@@ -42,17 +38,19 @@ const PlanHeader = memo(
     isCalendarOpen: boolean;
     setIsCalendarOpen: (isOpen: boolean) => void;
     handleDateChange: (dates: [Date | null, Date | null]) => void;
-    planTitle: string;
-    setPlanTitle: (title: string) => void;
-    planDescription: string;
-    setPlanDescription: (description: string) => void;
-    targetImage: string | null;
     isReadOnly?: boolean;
   }) => {
     console.log('PlanHeader 렌더링');
-
+    const {
+      title,
+      description,
+      planImg,
+      setTitle,
+      setDescription,
+      setPlanImg,
+    } = usePlanStore();
     const { previewImage, isUploading, handleFileChange } =
-      useChangeImageFile(targetImage);
+      useChangeImageFile(planImg);
 
     return (
       <>
@@ -108,8 +106,8 @@ const PlanHeader = memo(
               <TextareaWithCount
                 maxLength={MAX_TEXT_LENGTH.TITLE}
                 placeholder="나만의 일정을 제목을 지어주세요"
-                value={planTitle}
-                onChange={(e) => setPlanTitle(e.target.value)}
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
                 className={`w-full resize-none border-0 bg-transparent py-5 ${
                   isReadOnly ? 'pl-5' : 'pl-12'
                 } text-14 focus-visible:ring-0 focus-visible:ring-offset-0 ${
@@ -166,8 +164,8 @@ const PlanHeader = memo(
           )}
           <TextareaWithCount
             placeholder="특별히 적어 두고 싶은 메모를 입력하세요"
-            value={planDescription}
-            onChange={(e) => setPlanDescription(e.target.value)}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             maxLength={MAX_TEXT_LENGTH.DESCRIPTION}
             className={`h-[160px] w-full resize-none rounded-[12px] border-gray-200 py-5 ${
               isReadOnly ? 'pl-5' : 'pl-12'

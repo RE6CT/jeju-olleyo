@@ -4,12 +4,10 @@ import { useToast } from '@/hooks/use-toast';
 import { DayPlaces } from '@/types/plan-detail.type';
 import { Place } from '@/types/search.type';
 import { fetchSavePlan, fetchSavePlanPlaces } from '@/lib/apis/plan/plan.api';
+import { usePlanStore } from '@/lib/store/plan-store';
 
 export const useSchedule = (
   userId: string,
-  planTitle: string,
-  planDescription: string,
-  planImage: string,
   startDate: Date | null,
   endDate: Date | null,
   dayPlaces: DayPlaces,
@@ -180,7 +178,9 @@ export const useSchedule = (
    * 일정 저장 버튼 클릭 핸들러
    */
   const handleSaveButtonClick = () => {
-    if (!planTitle) {
+    const { title } = usePlanStore.getState();
+
+    if (!title) {
       toast({
         title: '일정 제목 누락',
         description: '일정 제목을 입력해주세요.',
@@ -225,17 +225,19 @@ export const useSchedule = (
    */
   const handlePublicClick = async () => {
     try {
-      if (!startDate || !endDate || !planTitle) {
+      const { title, description, planImg } = usePlanStore.getState();
+
+      if (!startDate || !endDate || !title) {
         throw new Error('필수 정보가 누락되었습니다.');
       }
 
       const planId = await fetchSavePlan({
         userId: userId,
-        title: planTitle,
-        description: planDescription,
+        title: title,
+        description: description,
         travelStartDate: startDate?.toISOString() || '',
         travelEndDate: endDate?.toISOString() || '',
-        planImg: planImage || null,
+        planImg: planImg || null,
         public: true,
       });
 
@@ -261,17 +263,19 @@ export const useSchedule = (
    */
   const handlePrivateClick = async () => {
     try {
-      if (!startDate || !endDate || !planTitle) {
+      const { title, description, planImg } = usePlanStore.getState();
+
+      if (!startDate || !endDate || !title) {
         throw new Error('필수 정보가 누락되었습니다.');
       }
 
       const planId = await fetchSavePlan({
         userId: userId,
-        title: planTitle,
-        description: planDescription,
+        title: title,
+        description: description,
         travelStartDate: startDate?.toISOString() || '',
         travelEndDate: endDate?.toISOString() || '',
-        planImg: planImage || null,
+        planImg: planImg || null,
         public: false,
       });
 

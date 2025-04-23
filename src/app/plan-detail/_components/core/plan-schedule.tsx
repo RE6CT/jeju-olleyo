@@ -52,9 +52,6 @@ const PlanSchedule = memo(
     startDate,
     endDate,
     userId,
-    planTitle,
-    planDescription,
-    planImage,
     dayPlaces,
     setDayPlaces,
     activeTab,
@@ -65,9 +62,6 @@ const PlanSchedule = memo(
     startDate: Date | null;
     endDate: Date | null;
     userId: string;
-    planTitle: string;
-    planDescription: string;
-    planImage: string;
     dayPlaces: DayPlaces;
     setDayPlaces: React.Dispatch<React.SetStateAction<DayPlaces>>;
     activeTab: TabType;
@@ -101,9 +95,6 @@ const PlanSchedule = memo(
       handlePrivateClick,
     } = useSchedule(
       userId,
-      planTitle,
-      planDescription,
-      planImage,
       startDate,
       endDate,
       dayPlaces,

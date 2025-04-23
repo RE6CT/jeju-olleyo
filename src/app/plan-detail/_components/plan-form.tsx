@@ -2,11 +2,13 @@
 
 import { DayPlaces, TabType } from '@/types/plan-detail.type';
 import { Plan } from '@/types/plan.type';
+import { usePlanStore } from '@/lib/store/plan-store';
+import { usePlanDetailForm } from '@/lib/hooks/use-plan-detail-form';
+import { useEffect } from 'react';
 
 import PlanHeader from './core/plan-header';
 import PlanMap from './core/plan-map';
 import PlanSchedule from './core/plan-schedule';
-import { usePlanDetailForm } from '@/lib/hooks/use-plan-detail-form';
 
 const PlanForm = ({
   userId,
@@ -19,10 +21,12 @@ const PlanForm = ({
   initialDayPlaces?: DayPlaces;
   isReadOnly?: boolean;
 }) => {
+  const { title, description, planImg, setTitle, setDescription, setPlanImg } =
+    usePlanStore();
+
   const {
     startDate,
     endDate,
-    plan,
     isCalendarOpen,
     dayPlaces,
     activeTab,
@@ -32,14 +36,21 @@ const PlanForm = ({
     setActiveTab,
     updateRouteSummary,
     handleDateChange,
-    handlePlanTitleChange,
-    handlePlanDescriptionChange,
   } = usePlanDetailForm({
     userId,
     initialPlan,
     initialDayPlaces,
     isReadOnly,
   });
+
+  // 초기값 설정
+  useEffect(() => {
+    if (initialPlan) {
+      setTitle(initialPlan.title);
+      setDescription(initialPlan.description || '');
+      setPlanImg(initialPlan.planImg || '');
+    }
+  }, [initialPlan, setTitle, setDescription, setPlanImg]);
 
   console.log('planform 렌더링');
   return (
@@ -50,11 +61,6 @@ const PlanForm = ({
         isCalendarOpen={isCalendarOpen}
         setIsCalendarOpen={setIsCalendarOpen}
         handleDateChange={handleDateChange}
-        planTitle={plan.title}
-        setPlanTitle={handlePlanTitleChange}
-        planDescription={plan.description || ''}
-        setPlanDescription={handlePlanDescriptionChange}
-        targetImage={plan.planImg || ''}
         isReadOnly={isReadOnly}
       />
       <PlanMap
@@ -66,9 +72,6 @@ const PlanForm = ({
         startDate={startDate}
         endDate={endDate}
         userId={userId}
-        planTitle={plan.title}
-        planDescription={plan.description || ''}
-        planImage={plan.planImg || ''}
         dayPlaces={dayPlaces}
         setDayPlaces={setDayPlaces}
         activeTab={activeTab}

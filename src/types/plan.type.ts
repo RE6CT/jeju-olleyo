@@ -164,3 +164,15 @@ export type PlanType = {
   /** 좋아요 여부 */
   isLiked: boolean;
 };
+
+/**
+ * zustand 일정 상태 타입
+ */
+export type PlanState = {
+  title: string;
+  description: string;
+  planImg: string;
+  setTitle: (title: string) => void;
+  setDescription: (description: string) => void;
+  setPlanImg: (planImg: string) => void;
+};

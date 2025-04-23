@@ -13,6 +13,7 @@ import { Place } from '@/types/search.type';
 import PlaceCardSidemenu from '../card/place-card-sidemenu';
 import PlaceSidemenuLayout from './place-sidemenu-layout';
 import DaySelectRequiredModal from '../modal/day-select-required-modal';
+import { BookmarkedPlace } from '@/types/plan-detail.type';
 
 const ITEMS_PER_PAGE = 7;
 const INITIAL_ITEMS = 3;
@@ -140,13 +141,26 @@ const BookmarkSidemenu = ({
     };
   }, [calculateMaxVisiblePages, updateMaxVisiblePages]);
 
-  const handleAddPlace = (place: Place) => {
+  const handleAddPlace = (place: any) => {
     if (selectedDay === null) {
       setIsDaySelectModalOpen(true);
       return;
     }
 
-    onAddPlace(place);
+    // 북마크 데이터를 Place 타입으로 변환
+    const placeToAdd: Place = {
+      id: 0,
+      placeId: 0,
+      title: place.title,
+      category: place.category,
+      image: place.image,
+      address: '',
+      contentTypeId: 0,
+      lat: 0,
+      lng: 0,
+    };
+
+    onAddPlace(placeToAdd);
   };
 
   const handlePageChange = (page: number) => {
@@ -183,61 +197,76 @@ const BookmarkSidemenu = ({
       filterTabs={filterTabs}
       activeFilterTab={activeFilterTab}
       onFilterTabChange={onFilterTabChange}
+      isExpanded={isExpanded}
+      onToggleExpand={toggleExpand}
     >
       {/* 북마크 리스트 */}
-      <div className="space-y-2" ref={containerRef}>
-        {isLoading ? (
-          <div className="flex items-center justify-center py-4 text-gray-500">
-            불러오는 중...
-          </div>
-        ) : filteredPlaces.length === 0 ? (
-          <div className="flex items-center justify-center py-4 text-gray-500">
-            {activeFilterTab === '전체'
-              ? '북마크한 장소 정보가 없습니다.'
-              : `북마크한 ${activeFilterTab} 정보가 없습니다.`}
-          </div>
-        ) : (
-          <div ref={listRef} className="overflow-y-auto">
-            <AnimatePresence initial={false}>
-              {displayedPlaces.map((place) => (
-                <motion.div
-                  key={place.placeId}
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <PlaceCardSidemenu
-                    title={place.title}
-                    placeId={place.placeId}
-                    category={place.category as CategoryType}
-                    imageUrl={place.image}
-                    isBookmarked={isBookmarked(place.placeId)}
-                    onBookmarkToggle={() => handleBookmarkToggle(place.placeId)}
-                    // onAddPlace={() => handleAddPlace(place)} // 이후 수정
+      <AnimatePresence>
+        {isExpanded && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="space-y-2 overflow-hidden"
+            ref={containerRef}
+          >
+            {isLoading ? (
+              <div className="flex items-center justify-center py-4 text-gray-500">
+                불러오는 중...
+              </div>
+            ) : filteredPlaces.length === 0 ? (
+              <div className="flex items-center justify-center py-4 text-gray-500">
+                {activeFilterTab === '전체'
+                  ? '북마크한 장소 정보가 없습니다.'
+                  : `북마크한 ${activeFilterTab} 정보가 없습니다.`}
+              </div>
+            ) : (
+              <div ref={listRef} className="overflow-y-auto">
+                <AnimatePresence initial={false}>
+                  {displayedPlaces.map((place) => (
+                    <motion.div
+                      key={place.placeId}
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <PlaceCardSidemenu
+                        title={place.title}
+                        placeId={place.placeId}
+                        category={place.category as CategoryType}
+                        imageUrl={place.image}
+                        isBookmarked={isBookmarked(place.placeId)}
+                        onBookmarkToggle={() =>
+                          handleBookmarkToggle(place.placeId)
+                        }
+                        onAddPlace={() => handleAddPlace(place)}
+                      />
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+                {currentPageItems.length > INITIAL_ITEMS && !isExpanded && (
+                  <Button
+                    className="flex h-[36px] w-full flex-shrink-0 items-center justify-center gap-1 rounded-xl border border-secondary-300 bg-gray-50 text-sm font-normal text-secondary-300 transition-colors hover:bg-gray-100"
+                    onClick={toggleExpand}
+                  >
+                    더보기
+                  </Button>
+                )}
+                {isExpanded && totalPages > 1 && (
+                  <DynamicPagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                    maxVisiblePages={maxVisiblePages}
                   />
-                </motion.div>
-              ))}
-            </AnimatePresence>
-            {currentPageItems.length > INITIAL_ITEMS && (
-              <Button
-                className="flex h-[36px] w-full flex-shrink-0 items-center justify-center gap-1 rounded-xl border border-secondary-300 bg-gray-50 text-sm font-normal text-secondary-300 transition-colors hover:bg-gray-100"
-                onClick={toggleExpand}
-              >
-                {isExpanded ? '접기' : '더보기'}
-              </Button>
+                )}
+              </div>
             )}
-            {isExpanded && totalPages > 1 && (
-              <DynamicPagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={handlePageChange}
-                maxVisiblePages={maxVisiblePages}
-              />
-            )}
-          </div>
+          </motion.div>
         )}
-      </div>
+      </AnimatePresence>
       <DaySelectRequiredModal
         isOpen={isDaySelectModalOpen}
         onClose={() => setIsDaySelectModalOpen(false)}

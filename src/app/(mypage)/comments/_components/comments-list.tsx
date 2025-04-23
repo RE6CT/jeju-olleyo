@@ -6,6 +6,8 @@ import useAuth from '@/lib/hooks/use-auth';
 import { useGetDataCount } from '@/lib/queries/use-get-data-count';
 import Loading from '@/app/loading';
 import MypagePagination from '../../_components/mypage-pagination';
+import EmptyResult from '@/components/commons/empty-result-link';
+import { PATH } from '@/constants/path.constants';
 
 /**
  * 댓글 리스트 컴포넌트
@@ -28,7 +30,11 @@ const CommentsList = ({
   return (
     <>
       {countData?.commentCount === 0 ? (
-        <div>아직 작성한 댓글이 없습니다.</div>
+        <EmptyResult
+          buttonText="인기 일정 보러가기"
+          href={PATH.COMMUNITY}
+          imagePath="/empty-result/empty_comments.png"
+        />
       ) : (
         <div className="flex flex-col gap-20">
           <div className="flex flex-col gap-5">

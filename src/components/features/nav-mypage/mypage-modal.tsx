@@ -134,7 +134,12 @@ const MypageModal = ({
           onClick={() => onLinkClick(PATH.ACCOUNT)}
           className="flex cursor-pointer items-center gap-3"
         >
-          <ProfileImage image={userInfo.profileImg} width={58} height={58} />
+          <ProfileImage
+            image={userInfo.profileImg}
+            width={58}
+            height={58}
+            className="aspect-square"
+          />
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-2">
               <h3 className="semibold-20 whitespace-nowrap">

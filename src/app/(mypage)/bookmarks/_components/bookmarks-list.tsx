@@ -11,6 +11,7 @@ import { CategoryParamType, CategoryType } from '@/types/category.type';
 import { useRouter, useSearchParams } from 'next/navigation';
 import MypageDataCounts from '../../_components/mypage-data-counts';
 import MypagePagination from '../../_components/mypage-pagination';
+import EmptyResult from '@/components/commons/empty-result-link';
 
 const PAGE_SIZE = 9;
 const TAB_LIST: Record<CategoryType, CategoryParamType> = {
@@ -33,7 +34,7 @@ const BookmarksList = ({ category }: { category: CategoryParamType }) => {
   const currentPage = parseInt(searchParams.get('page') || '1');
 
   const { user, isLoading } = useAuth();
-  const { data: bookmarks, isLoading: isBookmarksLoading } = useGetBookMarks(
+  const { data: bookmarks } = useGetBookMarks(
     user?.id,
     currentPage,
     PAGE_SIZE,
@@ -48,7 +49,7 @@ const BookmarksList = ({ category }: { category: CategoryParamType }) => {
     router.push(`${PATH.BOOKMARKS}/${TAB_LIST[tab]}?page=1`);
   };
 
-  if (isLoading || isBookmarksLoading) return <Loading />;
+  if (isLoading) return <Loading />;
 
   return (
     <>
@@ -68,7 +69,11 @@ const BookmarksList = ({ category }: { category: CategoryParamType }) => {
         </div>
       </div>
       {bookmarks?.length === 0 ? (
-        <div>아직 북마크한 장소가 없습니다.</div>
+        <EmptyResult
+          buttonText="인기 일정 보러가기"
+          href={PATH.COMMUNITY}
+          imagePath="/empty-result/empty_bookmarks.png"
+        />
       ) : (
         <div className="flex flex-col gap-20">
           <div className="grid grid-cols-1 gap-x-3 gap-y-5 sm:grid-cols-2 md:grid-cols-3">

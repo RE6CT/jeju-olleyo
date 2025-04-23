@@ -22,6 +22,8 @@ import { FilterMenu } from './plan-filter-menu';
 import { usePlanFilter } from '@/lib/hooks/use-plan-filter';
 import { usePagination } from '@/lib/hooks/use-pagination';
 import { usePopover } from '@/lib/hooks/use-popover';
+import { useRouter } from 'next/navigation';
+import { PATH } from '@/constants/path.constants';
 
 /**
  * 여행 계획 필터 섹션 컴포넌트
@@ -49,6 +51,8 @@ const PlanFilterSection = ({
   userId: string;
   userNickname: string;
 }) => {
+  const router = useRouter();
+
   const {
     filter,
     selectedFilter,
@@ -64,7 +68,6 @@ const PlanFilterSection = ({
     isDatePickerFocused,
     setIsDatePickerFocused,
     resetFilter,
-    handleEdit,
     handleApplyFilter,
     handleDelete,
     handleFilterClick,
@@ -85,6 +88,10 @@ const PlanFilterSection = ({
     await handleApplyFilter();
     setIsOpen(false);
     setCurrentPage(INITIAL_PAGE);
+  };
+
+  const handleEdit = (planId: number) => {
+    router.push(`${PATH.PLAN_DETAIL}/${planId}`);
   };
 
   if (isPlansLoading) {

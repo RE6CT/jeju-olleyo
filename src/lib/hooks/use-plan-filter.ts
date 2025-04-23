@@ -4,7 +4,6 @@ import { FilterState, FilterType, PublicOption } from '@/types/plan.type';
 import router from 'next/router';
 import { useState } from 'react';
 import { useDeletePlanMutation } from '@/lib/mutations/use-delete-plan-mutation';
-import { useToast } from '@/hooks/use-toast';
 
 /**
  * 여행 계획 필터링을 위한 커스텀 훅
@@ -62,14 +61,6 @@ export const usePlanFilter = (userId: string) => {
   };
 
   /**
-   * 일정 수정 핸들러 함수
-   * @param planId - 수정할 일정의 ID
-   */
-  const handleEdit = (planId: number) => {
-    router.push(`${PATH.PLAN_DETAIL}/${planId}`);
-  };
-
-  /**
    * 일정을 삭제 핸들러 함수
    * @param planId - 삭제할 일정의 ID
    */
@@ -117,7 +108,6 @@ export const usePlanFilter = (userId: string) => {
     isDatePickerFocused,
     setIsDatePickerFocused,
     resetFilter,
-    handleEdit,
     handleApplyFilter,
     handleDelete,
     handleFilterClick,

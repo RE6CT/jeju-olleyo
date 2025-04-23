@@ -76,7 +76,7 @@ const PlanHeader = memo(
                 alt="썸네일"
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                className="object-contain"
+                className="object-cover"
               />
             ) : (
               <div className="flex h-full w-full flex-col items-center justify-center gap-3">

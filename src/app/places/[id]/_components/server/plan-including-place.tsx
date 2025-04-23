@@ -21,14 +21,6 @@ const PlanIncludingPlace = async ({ placeId }: { placeId: number }) => {
     return <p className="text-sm text-gray-400">일정을 불러오지 못했습니다.</p>;
   }
 
-  if (!data || data.length === 0) {
-    return (
-      <p className="text-sm text-gray-400">
-        아직 이 장소가 포함된 일정이 없습니다.
-      </p>
-    );
-  }
-
   const plans = data.map(camelize);
 
   return (

@@ -1,33 +1,24 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-
 import { forgotPasswordSchema } from '@/lib/schemas/auth-schema';
 import { getForgotPasswordErrorMessage } from '@/lib/utils/auth-error.util';
 import { EmailFormValues } from '@/types/auth.type';
-import { useForgotPassword } from '@/lib/queries/auth-queries';
+import { useForgotPassword as usePasswordResetMutation } from '@/lib/queries/auth-queries';
+import useForgotPasswordStore from '@/zustand/forgot-password-store';
 
 /**
  * 비밀번호 찾기 기능을 위한 커스텀 훅
+ * @returns 비밀번호 찾기 관련 상태 및 핸들러
  */
 const useForgotPasswordForm = () => {
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [submittedEmail, setSubmittedEmail] = useState('');
-  const [error, setError] = useState<string | null>(null);
-
-  // TanStack Query 기반 훅 사용 - onSuccess, onError 콜백 추가
-  const forgotPasswordMutation = useForgotPassword({
-    onSuccess: (email: string) => {
-      setSubmittedEmail(email);
-      setIsSubmitted(true);
-    },
-    onError: (err: unknown) => {
-      const errorMessage =
-        err instanceof Error ? err.message : '알 수 없는 오류';
-      const errorMessages = getForgotPasswordErrorMessage(errorMessage);
-      setError(errorMessages[0]);
-    },
-  });
+  const {
+    isSubmitted,
+    submittedEmail,
+    error,
+    setIsSubmitted,
+    setSubmittedEmail,
+    setError,
+  } = useForgotPasswordStore();
 
   // react-hook-form 설정
   const {
@@ -42,29 +33,51 @@ const useForgotPasswordForm = () => {
     },
   });
 
-  // 비밀번호 재설정 요청 핸들러 - 단순화
-  const handleResetPassword = async (data: EmailFormValues) => {
+  // 비밀번호 재설정 요청을 위한 mutation 훅 사용
+  const forgotPasswordMutation = usePasswordResetMutation();
+
+  // 폼 제출 처리 함수
+  const submitPasswordReset = async (data: EmailFormValues) => {
+    // 에러 상태 초기화
     setError(null);
 
     try {
-      // 단순히 뮤테이션만 실행하고 상태 변경은 콜백에 맡김
-      await forgotPasswordMutation.mutateAsync(data);
+      // mutation 실행
+      const email = await forgotPasswordMutation.mutateAsync(data);
+
+      // 성공 시 상태 업데이트
+      setSubmittedEmail(email);
+      setIsSubmitted(true);
+
+      console.log('비밀번호 재설정 요청 성공, 상태 업데이트 완료', {
+        isSubmitted: true,
+        email,
+      });
+
       return true;
     } catch (err) {
-      // 에러 처리는 onError 콜백에서 처리
+      // 오류 메시지 처리
+      const errorMessage =
+        err instanceof Error ? err.message : '알 수 없는 오류';
+      const errorMessages = getForgotPasswordErrorMessage(errorMessage);
+
+      // 에러 상태 업데이트
+      setError(errorMessages[0]);
+
       return false;
     }
   };
 
+  // 외부에서 사용할 값들 반환
   return {
     isLoading: forgotPasswordMutation.isPending,
-    isSubmitted, // 이 상태가 유지되어야 함
+    isSubmitted,
     submittedEmail,
     error,
     register,
     errors,
     handleSubmit,
-    handleResetPassword,
+    handleResetPassword: submitPasswordReset,
     resetError: () => setError(null),
   };
 };

@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import AuthHeader from '@/app/(auth)/_components/server/auth-header';
 import AuthLayout from '@/app/(auth)/_components/client/auth-layout';
 import { Button } from '@/components/ui/button';
@@ -8,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { AUTH_BUTTON_TEXT } from '@/constants/auth.constants';
 import { PATH } from '@/constants/path.constants';
-import useForgotPassword from '@/lib/hooks/use-forgot-password';
+import useForgotPasswordForm from '@/lib/hooks/use-forgot-password';
 import AuthFooter from '../_components/server/auth-footer';
 import AuthErrorMessage from '@/components/features/error-message/error-message';
 import ErrorMessage from '@/components/features/error-message/input-error-message';
@@ -26,7 +27,21 @@ const ForgotPasswordPage = () => {
     errors,
     handleSubmit,
     handleResetPassword,
-  } = useForgotPassword();
+  } = useForgotPasswordForm();
+
+  // 상태 변화 확인용 useEffect
+  useEffect(() => {
+    console.log('ForgotPassword - 상태 변화 감지 - isSubmitted:', isSubmitted);
+  }, [isSubmitted]);
+
+  // 폼 제출 처리 함수
+  const onSubmit = async (data: { email: string }) => {
+    console.log('폼 제출 시작', data);
+    const result = await handleResetPassword(data);
+    console.log('폼 제출 결과:', result);
+  };
+
+  console.log('ForgotPassword - 렌더링 - isSubmitted:', isSubmitted);
 
   return (
     <AuthLayout>
@@ -61,7 +76,7 @@ const ForgotPasswordPage = () => {
           </article>
         ) : (
           <section aria-label="비밀번호 재설정 요청 양식">
-            <form onSubmit={handleSubmit(handleResetPassword)}>
+            <form onSubmit={handleSubmit(onSubmit)}>
               <div>
                 <Label htmlFor="email">이메일</Label>
                 <Input

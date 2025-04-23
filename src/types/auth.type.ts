@@ -122,3 +122,24 @@ export type ResetPasswordSuccessModalProps = {
   countdown: number;
   redirectToHome: () => void;
 };
+
+export type ForgotPasswordState = {
+  isSubmitted: boolean;
+  submittedEmail: string;
+  error: string | null;
+  setIsSubmitted: (value: boolean) => void;
+  setSubmittedEmail: (email: string) => void;
+  setError: (error: string | null) => void;
+  reset: () => void;
+};
+
+export type ResetPasswordState = {
+  isSubmitted: boolean;
+  countdown: number;
+  error: string | null;
+  setIsSubmitted: (value: boolean) => void;
+  setCountdown: (value: number) => void;
+  decrementCountdown: () => void;
+  setError: (error: string | null) => void;
+  reset: () => void;
+};

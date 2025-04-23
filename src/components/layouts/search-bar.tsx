@@ -34,7 +34,7 @@ const SearchBar = () => {
   };
 
   useEffect(() => {
-    if (path === PATH.HOME || path !== PATH.SEARCH) {
+    if (path !== `${PATH.SEARCH}/${category}`) {
       setInputValue('');
     }
   }, [path]);

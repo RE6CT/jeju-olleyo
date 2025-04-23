@@ -62,7 +62,8 @@ const BookmarksList = ({ category }: { category: CategoryParamType }) => {
             defaultTab={CATEGORY_KR_MAP[category] as CategoryType}
             onTabChange={handleFilterTabChange}
             tabsGapClass="gap-3"
-            tabPaddingClass="px-5 py-2 semibold-16"
+            tabPaddingClass="px-5 py-2"
+            tabFontClass="semibold-16"
           />
         </div>
       </div>

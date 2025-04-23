@@ -40,7 +40,6 @@ const PlaceCardSidemenu = ({
   imageUrl,
   category,
   isBookmarked = false,
-  isSearchSection = false,
   onBookmarkToggle,
   onAddPlace,
 }: {
@@ -49,7 +48,6 @@ const PlaceCardSidemenu = ({
   imageUrl: string;
   category: CategoryType;
   isBookmarked: boolean;
-  isSearchSection?: boolean;
   onBookmarkToggle?: () => void;
   onAddPlace?: () => void;
 }) => {
@@ -91,7 +89,7 @@ const PlaceCardSidemenu = ({
             size={30}
           />
         )}
-        {(isSearchSection || !onBookmarkToggle) && onAddPlace && (
+        {onAddPlace && (
           <Button
             variant="ghost"
             size="icon"

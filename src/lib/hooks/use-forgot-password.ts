@@ -7,7 +7,7 @@ import { getForgotPasswordErrorMessage } from '@/lib/utils/auth-error.util';
 import { EmailFormValues } from '@/types/auth.type';
 import useAuthStore from '@/zustand/auth.store';
 
-import { fetchSendPasswordResetEmail } from '../apis/auth/auth-browser.api';
+import { fetchSendPasswordResetEmail } from '../apis/auth/auth-server.api';
 
 /**
  * 비밀번호 찾기 기능을 위한 커스텀 훅

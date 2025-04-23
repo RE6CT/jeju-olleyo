@@ -8,7 +8,7 @@ import { getResetPasswordErrorMessage } from '@/lib/utils/auth-error.util';
 import { ResetPasswordFormValues } from '@/types/auth.type';
 import useAuthStore from '@/zustand/auth.store';
 
-import { fetchUpdatePassword } from '../apis/auth/auth-browser.api';
+import { fetchUpdatePassword } from '../apis/auth/auth-server.api';
 
 /**
  * 비밀번호 재설정 기능을 위한 커스텀 훅

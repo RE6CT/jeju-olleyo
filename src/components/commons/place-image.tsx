@@ -16,23 +16,6 @@ const PlaceImage = ({
   const defaultImage = '/images/default_place_image.svg';
   const imageSource = image || defaultImage;
 
-  // 이미지 크기 계산 (실제 사용 환경에 맞게 조정)
-  const [, setDimensions] = useState({ width: 0, height: 0 });
-
-  useEffect(() => {
-    // 컨테이너 크기에 맞춰 이미지 크기 계산
-    const updateDimensions = () => {
-      if (containerRef.current) {
-        const width = containerRef.current.clientWidth;
-        setDimensions({ width, height: width }); // 정사각형 유지
-      }
-    };
-
-    updateDimensions();
-    window.addEventListener('resize', updateDimensions);
-    return () => window.removeEventListener('resize', updateDimensions);
-  }, []);
-
   // 이미지 로드 완료 핸들러
   const handleImageLoad = () => {
     setIsLoading(false);
@@ -49,7 +32,7 @@ const PlaceImage = ({
       ref={containerRef}
       className={`relative aspect-square overflow-hidden ${className}`}
     >
-      <div className={`relative aspect-square overflow-hidden ${className}`}>
+      <>
         {isLoading && (
           <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
             <div className="h-6 w-6 animate-pulse rounded-full bg-gray-200"></div>
@@ -71,22 +54,21 @@ const PlaceImage = ({
             src={imageSource}
             alt={title}
             fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 30vw, 300px"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             className={`object-cover transition-opacity duration-300 ${
               isLoading ? 'opacity-0' : 'opacity-100'
             }`}
             priority={isPriority}
-            loading={isPriority ? 'eager' : 'lazy'}
+            loading={isPriority ? undefined : 'lazy'}
             placeholder="blur"
             blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI0YzRjRGNiIvPjwvc3ZnPg=="
             onLoad={handleImageLoad}
             onError={handleImageError}
             quality={process.env.NODE_ENV === 'development' ? 60 : 75}
             fetchPriority={isPriority ? 'high' : 'auto'}
-            unoptimized
           />
         )}
-      </div>
+      </>
     </div>
   );
 };

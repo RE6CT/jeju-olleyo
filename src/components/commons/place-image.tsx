@@ -2,7 +2,7 @@
 
 import { PlaceImageProps } from '@/types/common.type';
 import Image from 'next/image';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 
 const PlaceImage = ({
   image,

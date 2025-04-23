@@ -5,7 +5,8 @@ import { useState } from 'react';
 import { CategoryType } from '@/types/category.type';
 import { Place } from '@/types/search.type';
 
-import SearchSidemenu from './search-sidemenu';
+import SearchSidemenu from './features/sidemenu/search-sidemenu';
+import BookmarkSidemenu from './features/sidemenu/bookmark-sidemenu';
 
 const PlaceSidemenu = ({
   userId,

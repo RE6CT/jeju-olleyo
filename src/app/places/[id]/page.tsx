@@ -5,7 +5,6 @@ import { SERVER_COMPONENT_BASE_URL } from '@/constants/tour.constants';
 import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 import PlaceDetailContent from './_components/client/place-detail-content';
 import PlanIncludingPlace from './_components/server/plan-including-place';
-import PlanIncludingPlaceServer from './_components/server/plan-including-place';
 
 const PlaceDetailPage = async ({ params }: { params: { id: string } }) => {
   const supabase = await getServerClient();

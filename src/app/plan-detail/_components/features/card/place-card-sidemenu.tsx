@@ -55,7 +55,7 @@ const PlaceCardSidemenu = ({
   const displayImageUrl = imageUrl || defaultImage;
 
   return (
-    <div className="flex w-full items-center justify-between py-3">
+    <div className="flex w-[240px] items-center justify-between py-3">
       <div className="flex gap-3">
         {/* 장소 이미지 */}
         <div

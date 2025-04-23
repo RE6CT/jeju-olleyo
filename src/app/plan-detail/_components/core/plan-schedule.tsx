@@ -162,7 +162,7 @@ const PlanSchedule = memo(
                     </DropdownMenuContent>
                   </DropdownMenu>
 
-                  <div className="mt-8 flex gap-6">
+                  <div className="mt-8 flex w-full gap-6">
                     {startDate && endDate ? (
                       activeTab === '전체보기' ? (
                         <div className="flex flex-col gap-6">

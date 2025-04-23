@@ -34,9 +34,11 @@ const MypageModal = ({
   userId,
 }: MypageModalProps) => {
   const router = useRouter();
+  // useCurrentUser 훅을 사용할 때 refetch 옵션 활성화
   const { data: user, isLoading: isUserLoading } = useCurrentUser({
     refetchOnMount: true, // 컴포넌트 마운트시 항상 다시 가져오기
     refetchOnWindowFocus: true, // 창 포커스시 다시 가져오기
+    staleTime: 0, // 항상 최신 데이터가 필요할 때
   });
   const { data } = useGetDataCount(userId);
   const { handleLogout, isLoading: isAuthLoading } = useAuth();

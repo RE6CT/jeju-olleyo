@@ -7,7 +7,7 @@ import useCustomToast from '@/lib/hooks/use-custom-toast';
 
 import ProfileImageButton from './account-profile-image-button';
 import ProfileModal from './account-profile-modal';
-
+import useDeleteProfileImageMutation from '@/lib/mutations/use-delete-profile-image-mutation';
 
 const IMAGE_SIZE = 88;
 
@@ -34,6 +34,8 @@ const AccountProfileImage = ({
     setModalOpen(true);
   };
 
+  const deleteProfileImageMutation = useDeleteProfileImageMutation();
+
   /** 프로필 사진 초기화 핸들러 */
   const handleProfileImageDelete = async () => {
     const isConfirmed = confirm(
@@ -42,8 +44,9 @@ const AccountProfileImage = ({
     if (!isConfirmed) return;
 
     try {
-      const result = await fetchDeleteProfileImage(userId, profileImage);
-      successToast(result.message);
+      // 뮤테이션 사용
+      await deleteProfileImageMutation.mutateAsync({ userId, profileImage });
+      successToast('프로필 이미지가 성공적으로 초기화되었습니다.');
     } catch (error: unknown) {
       let errorMessage = ERROR_MESSAGES.PROFILE_UPDATE_FAILED;
       if (error instanceof Error) {

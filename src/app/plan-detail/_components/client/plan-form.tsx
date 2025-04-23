@@ -12,7 +12,7 @@ import {
   usePlanSetEndDate,
   usePlanSetIsReadOnly,
 } from '@/zustand/plan.store';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import PlanHeader from './core/plan-header';
 import PlanMap from './core/plan-map';
@@ -28,6 +28,7 @@ const PlanForm = ({
   initialDayPlaces?: DayPlaces;
   isReadOnly?: boolean;
 }) => {
+  const [isMounted, setIsMounted] = useState(false);
   const { data: user } = useCurrentUser();
   const userId = user?.id || null;
 
@@ -60,7 +61,13 @@ const PlanForm = ({
     }
   }, [initialPlan, setTitle, setDescription, setPlanImg, setDayPlaces]);
 
-  console.log('planform 렌더링');
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return null;
+  }
 
   if (!userId) {
     return null;

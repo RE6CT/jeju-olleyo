@@ -40,7 +40,11 @@ export const useCurrentUser = (options = {}) => {
       }
       return user;
     },
-    staleTime: 5 * 60 * 1000, // 5분 동안 최신 데이터로 간주
+    // 중요: 인증 상태가 자주 변경되지 않도록 설정
+    staleTime: Infinity, // 명시적으로 무효화하기 전까지 다시 가져오지 않음
+    gcTime: 1000 * 60 * 60, // 캐시 유지 시간 (1시간)
+    refetchOnMount: false, // 컴포넌트 마운트 시 다시 가져오지 않음
+    refetchOnWindowFocus: false, // 창 포커스 시 다시 가져오지 않음
     retry: false,
     ...options,
   });

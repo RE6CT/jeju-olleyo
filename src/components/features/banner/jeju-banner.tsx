@@ -43,7 +43,7 @@ const JejuBanner = ({
   };
 
   return (
-    <div className="relative w-full overflow-hidden">
+    <div className="relative mt-11 w-full overflow-hidden">
       {/* 배경 이미지  */}
       <img src={imageUrl} alt="제주 여행 배너" className="aspect-auto w-full" />
       {/* 텍스트와 버튼 오버레이 - 왼쪽 상단에 배치 */}

@@ -25,7 +25,7 @@ const WeatherHeader: React.FC<WeatherHeaderProps> = ({
         <h2 className="text-primary-500/60">
           {month}월 {day}일
         </h2>
-        <span className="text-secondary-300">,</span>
+        <span className="text-secondary-300">, </span>
         <h2 className="text-gray-500">{title}</h2>
       </div>
 

@@ -14,6 +14,7 @@ import ErrorMessage from '@/app/error';
 import { PATH } from '@/constants/path.constants';
 import { CATEGORY_KR_MAP } from '@/constants/home.constants';
 import useInfiniteScroll from '@/lib/hooks/use-infinite-scroll';
+import PlaceListSkeleton from '@/components/commons/place-list-skeleton';
 
 const TAB_LIST: Record<CategoryType, CategoryParamType> = {
   전체: 'all',
@@ -62,30 +63,10 @@ const SearchResultsPage = ({
     router.push(`${PATH.SEARCH}/${TAB_LIST[tab]}?query=${query}`);
   };
 
-  // if (isPending) return <Loading />;
   if (isError) return <ErrorMessage message="장소 불러오기 오류 발생" />;
 
   // 데이터 평탄화
   const places = data?.pages?.flatMap((page) => page?.data ?? []) ?? [];
-
-  // 스켈레톤 UI 렌더링
-  const renderSkeleton = () => (
-    <div className="grid grid-cols-2 gap-[11px] sm:grid-cols-3 md:grid-cols-4">
-      {Array(16)
-        .fill(null)
-        .map((_, index) => (
-          <div key={`skeleton-${index}`} className="contents">
-            <div className="flex aspect-square animate-pulse flex-col space-y-2 rounded-lg bg-gray-200" />
-            {/* 8번째 카드 다음에 배너 스켈레톤 */}
-            {index === 7 && (
-              <div className="col-span-full my-4 flex w-full items-center justify-center">
-                <div className="mt-[42px] aspect-auto w-full animate-pulse rounded-lg bg-gray-200" />
-              </div>
-            )}
-          </div>
-        ))}
-    </div>
-  );
 
   return (
     <div className="px-4">
@@ -106,7 +87,7 @@ const SearchResultsPage = ({
       ) : (
         <>
           {isPending ? (
-            renderSkeleton()
+            <PlaceListSkeleton count={16} />
           ) : (
             <div className="grid grid-cols-2 gap-[11px] sm:grid-cols-3 md:grid-cols-4">
               {places.map((place, idx) => (

@@ -9,6 +9,8 @@ import {
   fetchUpdatePlan,
 } from '@/lib/apis/plan/plan.api';
 import { useScheduleModalStore } from '@/zustand/plan.store';
+import { useRouter } from 'next/navigation';
+import { PATH } from '@/constants/path.constants';
 
 // 복사/붙여넣기 기능을 관리하는 훅
 export const useScheduleCopyPaste = (
@@ -255,6 +257,7 @@ export const useScheduleSavePlan = (
   planId?: number, // 기존 일정 ID (수정 시 사용)
 ) => {
   const { toast } = useToast();
+  const router = useRouter();
 
   const handlePublicClick = async () => {
     try {
@@ -293,6 +296,7 @@ export const useScheduleSavePlan = (
         title: '일정 저장 완료',
         description: '일정이 성공적으로 저장되었습니다.',
       });
+      router.push(`${PATH.MYPLAN}`); // 내 일정 페이지로 이동
     } catch (error) {
       console.error('일정 공개 설정 실패:', error);
       toast({
@@ -340,6 +344,7 @@ export const useScheduleSavePlan = (
         title: '일정 저장 완료',
         description: '일정이 성공적으로 저장되었습니다.',
       });
+      router.push(`${PATH.MYPLAN}`); // 내 일정 페이지로 이동
     } catch (error) {
       console.error('일정 비공개 설정 실패:', error);
       toast({

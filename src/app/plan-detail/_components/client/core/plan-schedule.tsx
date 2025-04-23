@@ -81,10 +81,10 @@ const SaveButton = memo(() => {
   );
 
   return (
-    <div className="absolute bottom-10 right-10">
+    <div className="mt-[70px]">
       <Button
         onClick={handleSaveButtonClick}
-        className="flex items-center justify-center rounded-[12px] border border-primary-400 bg-primary-500 px-7 py-4 text-24 font-bold text-[#F8F8F8] shadow-[2px_4px_4px_0px_rgba(153,61,0,0.20)] backdrop-blur-[10px] hover:bg-primary-600"
+        className="flex items-center justify-center rounded-[12px] border border-primary-400 bg-primary-500 px-7 py-4 text-24 font-bold leading-[130%] text-[#F8F8F8] shadow-[2px_4px_4px_0px_rgba(153,61,0,0.20)] backdrop-blur-[10px] hover:bg-primary-600"
       >
         저장하기
       </Button>
@@ -160,7 +160,7 @@ const ScheduleModals = () => {
 };
 
 const PlanSchedule = memo(() => {
-  console.log('PlanSchedule 렌더링');
+  //console.log('PlanSchedule 렌더링');
   const startDate = usePlanStartDate();
   const endDate = usePlanEndDate();
   const dayPlaces = usePlanDayPlaces();
@@ -406,15 +406,20 @@ const PlanSchedule = memo(() => {
               </div>
 
               {!isReadOnly && (
-                <PlaceSidemenu
-                  selectedDay={
-                    activeTab === '전체보기' ? null : (activeTab as number)
-                  }
-                  onAddPlace={(place) => handleAddPlace(place, activeTab)}
-                />
+                <div className="flex flex-col">
+                  <PlaceSidemenu
+                    selectedDay={
+                      activeTab === '전체보기' ? null : (activeTab as number)
+                    }
+                    onAddPlace={(place) => handleAddPlace(place, activeTab)}
+                  />
+                  <div className="mr-[40px] flex justify-end">
+                    <SaveButton />
+                  </div>
+                </div>
               )}
               {isReadOnly && (
-                <div className="h-full w-[400px] border-l border-gray-200 p-6">
+                <div className="relative h-full w-[400px] border-l border-gray-200 p-6">
                   <div className="mb-4 text-18 font-bold">댓글 0</div>
                   <div className="space-y-4">
                     <div className="rounded-lg bg-gray-50 p-4">
@@ -423,13 +428,15 @@ const PlanSchedule = memo(() => {
                       </div>
                     </div>
                   </div>
+                  <div className="absolute bottom-[-70px] right-[40px]">
+                    <SaveButton />
+                  </div>
                 </div>
               )}
             </div>
           </div>
         </div>
       </DragDropContext>
-      {!isReadOnly && <SaveButton />}
       <ScheduleModals />
     </div>
   );

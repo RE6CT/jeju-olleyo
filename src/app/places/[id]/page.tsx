@@ -4,6 +4,8 @@ import { getServerClient } from '@/lib/supabase/server';
 import { SERVER_COMPONENT_BASE_URL } from '@/constants/tour.constants';
 import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 import PlaceDetailContent from './_components/place-detail-content';
+import PlanIncludingPlace from './_components/plan-including-place';
+import PlanIncludingPlaceServer from './_components/plan-including-place-server';
 
 const PlaceDetailPage = async ({ params }: { params: { id: string } }) => {
   const supabase = await getServerClient();
@@ -41,11 +43,18 @@ const PlaceDetailPage = async ({ params }: { params: { id: string } }) => {
   const detailJson = await detailRes.json();
 
   return (
-    <PlaceDetailContent
-      place={camelizedData}
-      detailJson={detailJson}
-      isBookmarked={isBookmarked}
-    />
+    <>
+      <PlaceDetailContent
+        place={camelizedData}
+        detailJson={detailJson}
+        isBookmarked={isBookmarked}
+      />
+
+      {/* 해당 장소가 포함된 일정 영역 */}
+      <div className="w-full text-left">
+        <PlanIncludingPlaceServer placeId={placeId} />
+      </div>
+    </>
   );
 };
 

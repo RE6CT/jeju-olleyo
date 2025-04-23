@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { DayPlaces, TabType } from '@/types/plan-detail.type';
 import { PlanState, ScheduleModalStore } from '@/types/plan.type';
 
 export const usePlanStore = create<PlanState>((set) => ({
@@ -14,10 +13,12 @@ export const usePlanStore = create<PlanState>((set) => ({
   description: '',
   planImg: '',
   isReadOnly: false,
+  planId: 0,
   setTitle: (title) => set({ title }),
   setDescription: (description) => set({ description }),
   setPlanImg: (planImg) => set({ planImg }),
   setIsReadOnly: (isReadOnly) => set({ isReadOnly }),
+  setPlanId: (planId) => set({ planId }),
 
   // 일정 관련 정보 초기값
   dayPlaces: {},
@@ -33,6 +34,7 @@ export const usePlanDescription = () =>
 export const usePlanImg = () => usePlanStore((state) => state.planImg);
 export const usePlanIsReadOnly = () =>
   usePlanStore((state) => state.isReadOnly);
+export const usePlanId = () => usePlanStore((state) => state.planId);
 export const usePlanStartDate = () => usePlanStore((state) => state.startDate);
 export const usePlanEndDate = () => usePlanStore((state) => state.endDate);
 export const usePlanDayPlaces = () => usePlanStore((state) => state.dayPlaces);
@@ -45,6 +47,7 @@ export const usePlanSetDescription = () =>
 export const usePlanSetImg = () => usePlanStore((state) => state.setPlanImg);
 export const usePlanSetIsReadOnly = () =>
   usePlanStore((state) => state.setIsReadOnly);
+export const usePlanSetPlanId = () => usePlanStore((state) => state.setPlanId);
 export const usePlanSetStartDate = () =>
   usePlanStore((state) => state.setStartDate);
 export const usePlanSetEndDate = () =>

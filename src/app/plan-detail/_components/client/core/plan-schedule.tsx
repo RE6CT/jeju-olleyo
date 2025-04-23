@@ -30,6 +30,7 @@ import {
   usePlanDescription,
   usePlanImg,
   useScheduleModalStore,
+  usePlanId,
 } from '@/zustand/plan.store';
 import {
   useScheduleCopyPaste,
@@ -97,6 +98,7 @@ const ScheduleModals = () => {
   const startDate = usePlanStartDate();
   const endDate = usePlanEndDate();
   const dayPlaces = usePlanDayPlaces();
+  const planId = usePlanId();
   const {
     isDeleteModalOpen,
     isSaveModalOpen,
@@ -126,6 +128,7 @@ const ScheduleModals = () => {
     usePlanImg(),
     userId,
     setIsPublicModalOpen,
+    planId,
   );
 
   return (

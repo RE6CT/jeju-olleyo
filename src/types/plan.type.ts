@@ -178,10 +178,12 @@ export type PlanState = {
   description: string;
   planImg: string;
   isReadOnly: boolean;
+  planId: number;
   setTitle: (title: string) => void;
   setDescription: (description: string) => void;
   setPlanImg: (planImg: string) => void;
   setIsReadOnly: (isReadOnly: boolean) => void;
+  setPlanId: (planId: number) => void;
 
   // 일정 관련 정보
   dayPlaces: DayPlaces; // 일정별 장소 정보

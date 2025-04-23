@@ -3,7 +3,11 @@ import { DropResult } from 'react-beautiful-dnd';
 import { useToast } from '@/hooks/use-toast';
 import { DayPlaces } from '@/types/plan-detail.type';
 import { Place } from '@/types/search.type';
-import { fetchSavePlan, fetchSavePlanPlaces } from '@/lib/apis/plan/plan.api';
+import {
+  fetchSavePlan,
+  fetchSavePlanPlaces,
+  fetchUpdatePlan,
+} from '@/lib/apis/plan/plan.api';
 import { useScheduleModalStore } from '@/zustand/plan.store';
 
 // 복사/붙여넣기 기능을 관리하는 훅
@@ -248,6 +252,7 @@ export const useScheduleSavePlan = (
   planImg: string | null,
   userId: string | null,
   setIsPublicModalOpen: (isOpen: boolean) => void,
+  planId?: number, // 기존 일정 ID (수정 시 사용)
 ) => {
   const { toast } = useToast();
 
@@ -257,15 +262,29 @@ export const useScheduleSavePlan = (
         throw new Error('필수 정보가 누락되었습니다.');
       }
 
-      const planId = await fetchSavePlan({
-        userId: userId,
-        title: title,
-        description: description,
-        travelStartDate: startDate?.toISOString() || '',
-        travelEndDate: endDate?.toISOString() || '',
-        planImg: planImg || null,
-        public: true,
-      });
+      if (planId) {
+        // 기존 일정 수정
+        await fetchUpdatePlan(planId, {
+          userId: userId,
+          title: title,
+          description: description,
+          travelStartDate: startDate?.toISOString() || '',
+          travelEndDate: endDate?.toISOString() || '',
+          planImg: planImg || null,
+          public: true,
+        });
+      } else {
+        // 새 일정 생성
+        planId = await fetchSavePlan({
+          userId: userId,
+          title: title,
+          description: description,
+          travelStartDate: startDate?.toISOString() || '',
+          travelEndDate: endDate?.toISOString() || '',
+          planImg: planImg || null,
+          public: true,
+        });
+      }
 
       await fetchSavePlanPlaces(planId, dayPlaces);
 
@@ -284,24 +303,35 @@ export const useScheduleSavePlan = (
     }
   };
 
-  /**
-   * 일정 비공개 버튼 클릭 핸들러
-   */
   const handlePrivateClick = async () => {
     try {
       if (!startDate || !endDate || !title || !userId) {
         throw new Error('필수 정보가 누락되었습니다.');
       }
 
-      const planId = await fetchSavePlan({
-        userId: userId,
-        title: title,
-        description: description,
-        travelStartDate: startDate?.toISOString() || '',
-        travelEndDate: endDate?.toISOString() || '',
-        planImg: planImg || null,
-        public: false,
-      });
+      if (planId) {
+        // 기존 일정 수정
+        await fetchUpdatePlan(planId, {
+          userId: userId,
+          title: title,
+          description: description,
+          travelStartDate: startDate?.toISOString() || '',
+          travelEndDate: endDate?.toISOString() || '',
+          planImg: planImg || null,
+          public: false,
+        });
+      } else {
+        // 새 일정 생성
+        planId = await fetchSavePlan({
+          userId: userId,
+          title: title,
+          description: description,
+          travelStartDate: startDate?.toISOString() || '',
+          travelEndDate: endDate?.toISOString() || '',
+          planImg: planImg || null,
+          public: false,
+        });
+      }
 
       await fetchSavePlanPlaces(planId, dayPlaces);
 

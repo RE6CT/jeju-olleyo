@@ -11,6 +11,7 @@ import {
   usePlanSetStartDate,
   usePlanSetEndDate,
   usePlanSetIsReadOnly,
+  usePlanSetPlanId,
 } from '@/zustand/plan.store';
 import { useEffect, useState } from 'react';
 
@@ -40,6 +41,7 @@ const PlanForm = ({
   const setEndDate = usePlanSetEndDate();
   const setIsReadOnly = usePlanSetIsReadOnly();
   const setDayPlaces = usePlanSetDayPlaces();
+  const setPlanId = usePlanSetPlanId();
 
   // 초기값 설정
   useEffect(() => {
@@ -47,6 +49,7 @@ const PlanForm = ({
       setTitle(initialPlan.title);
       setDescription(initialPlan.description || '');
       setPlanImg(initialPlan.planImg || '');
+      setPlanId(initialPlan.planId);
       setActiveTab('전체보기');
       setStartDate(
         initialPlan.travelStartDate

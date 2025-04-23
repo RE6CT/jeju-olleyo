@@ -9,11 +9,17 @@ import { MyCommentType } from '@/types/comment.type';
  */
 export const fetchAllCommentsByUserId = async (
   userId: string,
+  page: number = 1,
+  pageSize: number = 10,
 ): Promise<MyCommentType[] | null> => {
   const supabase = await getServerClient();
-  const { data, error } = await supabase.rpc('get_user_comments', {
-    user_id_param: userId,
-  });
+
+  const startIndex = (page - 1) * pageSize;
+  const endIndex = startIndex + pageSize - 1;
+
+  const { data, error } = await supabase
+    .rpc('get_user_comments', { user_id_param: userId })
+    .range(startIndex, endIndex);
 
   if (error) throw new Error(error.message);
 

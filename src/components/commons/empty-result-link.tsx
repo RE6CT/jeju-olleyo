@@ -40,7 +40,13 @@ const EmptyResult = ({
  * @param href - 이동할 주소
  * @returns
  */
-const EmptyResultLink = ({ text, href }: { text: string; href: string }) => {
+export const EmptyResultLink = ({
+  text,
+  href,
+}: {
+  text: string;
+  href: string;
+}) => {
   return (
     <Link
       href={href}

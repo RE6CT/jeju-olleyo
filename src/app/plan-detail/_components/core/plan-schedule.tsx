@@ -12,7 +12,7 @@ import { cn } from '@/lib/utils';
 import { calculateTotalDays, formatDayDate } from '@/lib/utils/date';
 import { DayPlaces, TabType } from '@/types/plan-detail.type';
 import PlaceSidemenu from '../features/sidemenu/place-sidemenu';
-import { DragDropContext } from 'react-beautiful-dnd';
+import { DragDropContext } from '@hello-pangea/dnd';
 import ScheduleDeleteModal from '../features/modal/schedule-delete-modal';
 import ScheduleSaveModal from '../features/modal/schedule-save-modal';
 import ScheduleCreatedModal from '../features/modal/schedule-created-modal';
@@ -111,14 +111,12 @@ const PlanSchedule = memo(
 
     return (
       <div className="relative min-h-screen pb-32">
-        <DragDropContext onDragEnd={(result) => handleDragEnd(result)}>
+        <DragDropContext onDragEnd={handleDragEnd}>
           <div className="my-6">
             <div className="sticky top-[370px] z-10">
-              <div
-                className={`absolute -top-[370px] left-0 right-0 h-[370px] bg-white`}
-              />
-              <div className="bg-white py-4">
-                <div className="flex gap-2">
+              <div className="absolute -top-[370px] left-0 right-0 h-[370px] bg-white" />
+              <div className="flex bg-white py-4">
+                <div className="flex flex-1 flex-col gap-2">
                   <DropdownMenu modal={false}>
                     <DropdownMenuTrigger asChild>
                       <Button
@@ -163,180 +161,185 @@ const PlanSchedule = memo(
                       )}
                     </DropdownMenuContent>
                   </DropdownMenu>
-                </div>
-              </div>
-            </div>
 
-            <div className="mt-8 flex gap-6">
-              <div className="flex-1">
-                {startDate && endDate ? (
-                  activeTab === '전체보기' ? (
-                    <div className="flex flex-col gap-6">
-                      {Array.from({ length: dayCount }, (_, i) => i + 1).map(
-                        (day) => (
-                          <div key={day}>
-                            <div className="mb-4 flex items-center justify-between pb-4">
-                              <div className="flex items-center gap-2">
-                                <span className="text-18 font-bold text-gray-900">
-                                  DAY {day}
-                                </span>
-                                <span className="text-14 text-gray-600">
-                                  {formatDayDate(startDate, day)}
-                                </span>
-                              </div>
-                              {!isReadOnly && (
-                                <div className="flex items-center gap-4">
-                                  {copiedDay !== null && copiedDay !== day ? (
-                                    <Button
-                                      variant="ghost"
-                                      className="text-12 font-medium text-gray-500 hover:text-gray-900"
-                                      onClick={() => handlePasteDayPlaces(day)}
-                                    >
-                                      붙여넣기
-                                    </Button>
-                                  ) : (
+                  <div className="mt-8 flex gap-6">
+                    {startDate && endDate ? (
+                      activeTab === '전체보기' ? (
+                        <div className="flex flex-col gap-6">
+                          {Array.from(
+                            { length: dayCount },
+                            (_, i) => i + 1,
+                          ).map((day) => (
+                            <div key={day}>
+                              <div className="mb-4 flex items-center justify-between pb-4">
+                                <div className="flex items-center gap-2">
+                                  <span className="text-18 font-bold text-gray-900">
+                                    DAY {day}
+                                  </span>
+                                  <span className="text-14 text-gray-600">
+                                    {formatDayDate(startDate, day)}
+                                  </span>
+                                </div>
+                                {!isReadOnly && (
+                                  <div className="flex items-center gap-4">
+                                    {copiedDay !== null && copiedDay !== day ? (
+                                      <Button
+                                        variant="ghost"
+                                        className="text-12 font-medium text-gray-500 hover:text-gray-900"
+                                        onClick={() =>
+                                          handlePasteDayPlaces(day)
+                                        }
+                                      >
+                                        붙여넣기
+                                      </Button>
+                                    ) : (
+                                      <Button
+                                        variant="ghost"
+                                        className={cn(
+                                          'text-12 font-medium',
+                                          copiedDay === day
+                                            ? 'cursor-not-allowed text-gray-400'
+                                            : 'text-gray-500 hover:text-gray-900',
+                                        )}
+                                        onClick={() => handleCopyDayPlaces(day)}
+                                        disabled={copiedDay === day}
+                                      >
+                                        {copiedDay === day ? '복사됨' : '복사'}
+                                      </Button>
+                                    )}
                                     <Button
                                       variant="ghost"
                                       className={cn(
                                         'text-12 font-medium',
-                                        copiedDay === day
+                                        !dayPlaces[day] ||
+                                          dayPlaces[day].length === 0
                                           ? 'cursor-not-allowed text-gray-400'
-                                          : 'text-gray-500 hover:text-gray-900',
+                                          : 'text-red hover:bg-transparent hover:text-red/80',
                                       )}
-                                      onClick={() => handleCopyDayPlaces(day)}
-                                      disabled={copiedDay === day}
+                                      onClick={() => handleDeleteDayPlaces(day)}
+                                      disabled={
+                                        !dayPlaces[day] ||
+                                        dayPlaces[day].length === 0
+                                      }
                                     >
-                                      {copiedDay === day ? '복사됨' : '복사'}
+                                      삭제
                                     </Button>
-                                  )}
+                                  </div>
+                                )}
+                              </div>
+                              <div className="flex flex-col gap-4">
+                                <PlacesRenderer
+                                  day={day}
+                                  places={dayPlaces[day] || []}
+                                  routeSummary={routeSummary}
+                                  isReadOnly={isReadOnly}
+                                  onRemovePlace={handleRemovePlace}
+                                />
+                                {!isReadOnly && (
+                                  <AddPlacePrompt dayNumber={day} />
+                                )}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div>
+                          <div className="mb-4 flex items-center justify-between pb-4">
+                            <div className="flex items-center gap-2">
+                              <span className="text-18 font-bold text-gray-900">
+                                DAY {activeTab}
+                              </span>
+                              <span className="text-14 text-gray-600">
+                                {formatDayDate(startDate, activeTab as number)}
+                              </span>
+                            </div>
+                            {!isReadOnly && (
+                              <div className="flex items-center gap-4">
+                                {copiedDay !== null &&
+                                copiedDay !== activeTab ? (
+                                  <Button
+                                    variant="ghost"
+                                    className="text-12 font-medium text-gray-500 hover:text-gray-900"
+                                    onClick={() =>
+                                      handlePasteDayPlaces(activeTab as number)
+                                    }
+                                  >
+                                    붙여넣기
+                                  </Button>
+                                ) : (
                                   <Button
                                     variant="ghost"
                                     className={cn(
                                       'text-12 font-medium',
-                                      !dayPlaces[day] ||
-                                        dayPlaces[day].length === 0
+                                      copiedDay === activeTab
                                         ? 'cursor-not-allowed text-gray-400'
-                                        : 'text-red hover:bg-transparent hover:text-red/80',
+                                        : 'text-gray-500 hover:text-gray-900',
                                     )}
-                                    onClick={() => handleDeleteDayPlaces(day)}
-                                    disabled={
-                                      !dayPlaces[day] ||
-                                      dayPlaces[day].length === 0
+                                    onClick={() =>
+                                      handleCopyDayPlaces(activeTab as number)
                                     }
+                                    disabled={copiedDay === activeTab}
                                   >
-                                    삭제
+                                    {copiedDay === activeTab
+                                      ? '복사됨'
+                                      : '복사'}
                                   </Button>
-                                </div>
-                              )}
-                            </div>
-                            <div className="flex flex-col gap-4">
-                              <PlacesRenderer
-                                day={day}
-                                places={dayPlaces[day] || []}
-                                routeSummary={routeSummary}
-                                isReadOnly={isReadOnly}
-                                onRemovePlace={handleRemovePlace}
-                              />
-                              {!isReadOnly && (
-                                <AddPlacePrompt dayNumber={day} />
-                              )}
-                            </div>
-                          </div>
-                        ),
-                      )}
-                    </div>
-                  ) : (
-                    <div>
-                      <div className="mb-4 flex items-center justify-between pb-4">
-                        <div className="flex items-center gap-2">
-                          <span className="text-18 font-bold text-gray-900">
-                            DAY {activeTab}
-                          </span>
-                          <span className="text-14 text-gray-600">
-                            {formatDayDate(startDate, activeTab as number)}
-                          </span>
-                        </div>
-                        {!isReadOnly && (
-                          <div className="flex items-center gap-4">
-                            {copiedDay !== null && copiedDay !== activeTab ? (
-                              <Button
-                                variant="ghost"
-                                className="text-12 font-medium text-gray-500 hover:text-gray-900"
-                                onClick={() =>
-                                  handlePasteDayPlaces(activeTab as number)
-                                }
-                              >
-                                붙여넣기
-                              </Button>
-                            ) : (
-                              <Button
-                                variant="ghost"
-                                className={cn(
-                                  'text-12 font-medium',
-                                  copiedDay === activeTab
-                                    ? 'cursor-not-allowed text-gray-400'
-                                    : 'text-gray-500 hover:text-gray-900',
                                 )}
-                                onClick={() =>
-                                  handleCopyDayPlaces(activeTab as number)
-                                }
-                                disabled={copiedDay === activeTab}
-                              >
-                                {copiedDay === activeTab ? '복사됨' : '복사'}
-                              </Button>
+                                <Button
+                                  variant="ghost"
+                                  className={cn(
+                                    'text-12 font-medium',
+                                    !dayPlaces[activeTab as number] ||
+                                      dayPlaces[activeTab as number].length ===
+                                        0
+                                      ? 'cursor-not-allowed text-gray-400'
+                                      : 'text-red hover:bg-transparent hover:text-red/80',
+                                  )}
+                                  onClick={() =>
+                                    handleDeleteDayPlaces(activeTab as number)
+                                  }
+                                  disabled={
+                                    !dayPlaces[activeTab as number] ||
+                                    dayPlaces[activeTab as number].length === 0
+                                  }
+                                >
+                                  삭제
+                                </Button>
+                              </div>
                             )}
-                            <Button
-                              variant="ghost"
-                              className={cn(
-                                'text-12 font-medium',
-                                !dayPlaces[activeTab as number] ||
-                                  dayPlaces[activeTab as number].length === 0
-                                  ? 'cursor-not-allowed text-gray-400'
-                                  : 'text-red hover:bg-transparent hover:text-red/80',
-                              )}
-                              onClick={() =>
-                                handleDeleteDayPlaces(activeTab as number)
-                              }
-                              disabled={
-                                !dayPlaces[activeTab as number] ||
-                                dayPlaces[activeTab as number].length === 0
-                              }
-                            >
-                              삭제
-                            </Button>
                           </div>
-                        )}
+                          <div className="flex flex-col gap-4">
+                            <PlacesRenderer
+                              day={activeTab as number}
+                              places={dayPlaces[activeTab as number] || []}
+                              routeSummary={routeSummary}
+                              isReadOnly={isReadOnly}
+                              onRemovePlace={handleRemovePlace}
+                            />
+                            {!isReadOnly && (
+                              <AddPlacePrompt dayNumber={activeTab as number} />
+                            )}
+                          </div>
+                        </div>
+                      )
+                    ) : (
+                      <div className="flex items-center justify-center rounded-[12px] border border-dashed border-gray-200 py-4 text-14 text-gray-300">
+                        여행 기간을 선택해 주세요
                       </div>
-                      <div className="flex flex-col gap-4">
-                        <PlacesRenderer
-                          day={activeTab as number}
-                          places={dayPlaces[activeTab as number] || []}
-                          routeSummary={routeSummary}
-                          isReadOnly={isReadOnly}
-                          onRemovePlace={handleRemovePlace}
-                        />
-                        {!isReadOnly && (
-                          <AddPlacePrompt dayNumber={activeTab as number} />
-                        )}
-                      </div>
-                    </div>
-                  )
-                ) : (
-                  <div className="flex items-center justify-center rounded-[12px] border border-dashed border-gray-200 py-4 text-14 text-gray-300">
-                    여행 기간을 선택해 주세요
+                    )}
                   </div>
+                </div>
+
+                {!isReadOnly && (
+                  <PlaceSidemenu
+                    userId={userId}
+                    selectedDay={
+                      activeTab === '전체보기' ? null : (activeTab as number)
+                    }
+                    onAddPlace={(place) => handleAddPlace(place, activeTab)}
+                  />
                 )}
               </div>
-
-              {!isReadOnly && (
-                <PlaceSidemenu
-                  userId={userId}
-                  selectedDay={
-                    activeTab === '전체보기' ? null : (activeTab as number)
-                  }
-                  onAddPlace={(place) => handleAddPlace(place, activeTab)}
-                />
-              )}
             </div>
           </div>
         </DragDropContext>

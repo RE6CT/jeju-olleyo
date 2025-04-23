@@ -32,6 +32,8 @@ const PlaceSidemenu = ({
           }
           activeFilterTab={activeBookmarkTab}
           onFilterTabChange={setActiveBookmarkTab}
+          onAddPlace={onAddPlace}
+          selectedDay={selectedDay}
         />
       </div>
 

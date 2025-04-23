@@ -1,10 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
-
 import { getPopularPlaces } from '@/lib/apis/home/home.popular.api';
 import { Place } from '@/types/home.popular-place.type';
-
-import useAuth from './use-auth';
+import { useCurrentUser } from '../queries/auth-queries';
 
 /**
  * 인기 장소 데이터를 가져오고 북마크 상태를 적용하는 커스텀 훅
@@ -15,7 +13,7 @@ import useAuth from './use-auth';
  */
 export const usePopularPlaces = (category: string = '전체') => {
   const [previousData, setPreviousData] = useState<Place[]>([]);
-  const { user } = useAuth();
+  const { data: user } = useCurrentUser();
 
   // React Query를 사용한 데이터 패칭
   const { data, isLoading, error } = useQuery({

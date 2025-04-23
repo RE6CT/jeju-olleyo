@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import AuthHeader from '@/app/(auth)/_components/server/auth-header';
 import AuthLayout from '@/app/(auth)/_components/client/auth-layout';
 import { Button } from '@/components/ui/button';
@@ -8,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { AUTH_BUTTON_TEXT } from '@/constants/auth.constants';
 import { PATH } from '@/constants/path.constants';
-import useForgotPassword from '@/lib/hooks/use-forgot-password';
+import useForgotPasswordForm from '@/lib/hooks/use-forgot-password';
 import AuthFooter from '../_components/server/auth-footer';
 import AuthErrorMessage from '@/components/features/error-message/error-message';
 import ErrorMessage from '@/components/features/error-message/input-error-message';
@@ -26,7 +27,7 @@ const ForgotPasswordPage = () => {
     errors,
     handleSubmit,
     handleResetPassword,
-  } = useForgotPassword();
+  } = useForgotPasswordForm();
 
   return (
     <AuthLayout>

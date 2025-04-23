@@ -3,46 +3,37 @@ import { useState } from 'react';
 
 import { SOCIAL_AUTH } from '@/constants/auth.constants';
 import { PATH } from '@/constants/path.constants';
-import { fetchSocialLoginUrl } from '@/lib/apis/auth/auth-server.api';
-import useAuthStore from '@/zustand/auth.store';
+import { useSocialLoginUrl } from '@/lib/queries/auth-queries';
 
 /**
  * 소셜 로그인 처리를 위한 커스텀 훅
+ * TanStack Query 기반으로 리팩토링됨
  */
 const useSocialLogin = () => {
-  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
-  const [isKakaoLoading, setIsKakaoLoading] = useState(false);
-  const { setError } = useAuthStore();
+  const [error, setError] = useState<string | null>(null);
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get('redirectTo') || PATH.HOME;
+
+  // TanStack Query 기반 훅 사용
+  const socialLoginMutation = useSocialLoginUrl();
 
   /**
    * 구글 로그인 처리 함수
    */
   const handleGoogle = async () => {
+    setError(null);
+
     try {
-      setIsGoogleLoading(true);
-      const { url, error } = await fetchSocialLoginUrl(
-        SOCIAL_AUTH.PROVIDERS.GOOGLE,
+      await socialLoginMutation.mutateAsync({
+        provider: SOCIAL_AUTH.PROVIDERS.GOOGLE,
         redirectTo,
+      });
+    } catch (error) {
+      setError(
+        error instanceof Error
+          ? error.message
+          : '구글 로그인 중 오류가 발생했습니다.',
       );
-
-      if (error) {
-        setError(error.message);
-        return;
-      }
-
-      if (url) {
-        window.location.href = url;
-      }
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        setError(error.message);
-      } else {
-        setError('구글 로그인 중 오류가 발생했습니다.');
-      }
-    } finally {
-      setIsGoogleLoading(false);
     }
   };
 
@@ -50,38 +41,30 @@ const useSocialLogin = () => {
    * 카카오 로그인 처리 함수
    */
   const handleKakao = async () => {
+    setError(null);
+
     try {
-      setIsKakaoLoading(true);
-      const { url, error } = await fetchSocialLoginUrl(
-        SOCIAL_AUTH.PROVIDERS.KAKAO,
+      await socialLoginMutation.mutateAsync({
+        provider: SOCIAL_AUTH.PROVIDERS.KAKAO,
         redirectTo,
+      });
+    } catch (error) {
+      setError(
+        error instanceof Error
+          ? error.message
+          : '카카오 로그인 중 오류가 발생했습니다.',
       );
-
-      if (error) {
-        setError(error.message);
-        return;
-      }
-
-      if (url) {
-        window.location.href = url;
-      }
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        setError(error.message);
-      } else {
-        setError('카카오 로그인 중 오류가 발생했습니다.');
-      }
-    } finally {
-      setIsKakaoLoading(false);
     }
   };
 
   return {
     handleGoogle,
     handleKakao,
-    isGoogleLoading,
-    isKakaoLoading,
+    isGoogleLoading: socialLoginMutation.isPending,
+    isKakaoLoading: socialLoginMutation.isPending,
+    error,
     redirectPath: redirectTo,
+    resetError: () => setError(null),
   };
 };
 

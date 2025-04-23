@@ -13,6 +13,7 @@ import { fetchUpdateProfileImage } from '@/lib/apis/profile/update-profile.api';
 import useCustomToast from '@/lib/hooks/use-custom-toast';
 import { ProfileModalProps } from '@/types/mypage.type';
 import { useChangeImageFile } from '@/lib/hooks/use-change-image-file';
+import useUpdateProfileImageMutation from '@/lib/mutations/use-update-profile-image-mutation';
 
 /**
  * 프로필 이미지 수정 버튼을 눌렀을 때 뜨는 모달 컴포넌트
@@ -43,10 +44,10 @@ const ProfileModal = ({
     fileInputRef.current?.click();
   };
 
-  /** 이미지 변경 완료 버튼 클릭 */
-  const handleProfileImageEditCompelete = async (
-    e: FormEvent<HTMLFormElement>,
-  ) => {
+  const updateProfileImageMutation = useUpdateProfileImageMutation();
+
+  // 이미지 변경 완료 버튼 클릭 핸들러 수정
+  const handleProfileImageEditCompelete = async (e: FormEvent) => {
     e.preventDefault();
     if (!selectedFile) {
       successToast(ERROR_MESSAGES.IMAGE_DATA_MISSING);
@@ -56,16 +57,16 @@ const ProfileModal = ({
     const isConfirmed = confirm('프로필 이미지를 변경하시겠습니까?');
     if (!isConfirmed) return;
 
-    // 데이터 추가
     try {
       // formData 생성 및 파일 추가
       const formData = new FormData();
       formData.append('profileImage', selectedFile);
       formData.append('userId', userId);
 
-      const result = await fetchUpdateProfileImage(formData);
+      // 뮤테이션 사용
+      await updateProfileImageMutation.mutateAsync(formData);
 
-      successToast(result.message);
+      successToast('프로필 이미지가 성공적으로 변경되었습니다.');
     } catch (error: unknown) {
       let errorMessage = ERROR_MESSAGES.PROFILE_UPDATE_FAILED;
       if (error instanceof Error) {

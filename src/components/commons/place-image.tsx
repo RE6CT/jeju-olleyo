@@ -2,7 +2,7 @@
 
 import { PlaceImageProps } from '@/types/common.type';
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 const PlaceImage = ({
   image,
@@ -10,6 +10,7 @@ const PlaceImage = ({
   className = '',
   isPriority = false,
 }: PlaceImageProps & { isPriority?: boolean }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
   const defaultImage = '/images/default_place_image.svg';
@@ -21,9 +22,8 @@ const PlaceImage = ({
   useEffect(() => {
     // 컨테이너 크기에 맞춰 이미지 크기 계산
     const updateDimensions = () => {
-      const container = document.querySelector(`.${className.split(' ')[0]}`);
-      if (container) {
-        const width = container.clientWidth;
+      if (containerRef.current) {
+        const width = containerRef.current.clientWidth;
         setDimensions({ width, height: width }); // 정사각형 유지
       }
     };
@@ -31,7 +31,7 @@ const PlaceImage = ({
     updateDimensions();
     window.addEventListener('resize', updateDimensions);
     return () => window.removeEventListener('resize', updateDimensions);
-  }, [className]);
+  }, []);
 
   // 이미지 로드 완료 핸들러
   const handleImageLoad = () => {
@@ -45,43 +45,48 @@ const PlaceImage = ({
   };
 
   return (
-    <div className={`relative aspect-square overflow-hidden ${className}`}>
-      {isLoading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
-          <div className="h-6 w-6 animate-pulse rounded-full bg-gray-200"></div>
-        </div>
-      )}
+    <div
+      ref={containerRef}
+      className={`relative aspect-square overflow-hidden ${className}`}
+    >
+      <div className={`relative aspect-square overflow-hidden ${className}`}>
+        {isLoading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+            <div className="h-6 w-6 animate-pulse rounded-full bg-gray-200"></div>
+          </div>
+        )}
 
-      {error ? (
-        <div className="flex h-full w-full items-center justify-center bg-gray-100">
+        {error ? (
+          <div className="flex h-full w-full items-center justify-center bg-gray-100">
+            <Image
+              src={defaultImage}
+              alt={`${title} 이미지 로드 실패`}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              className="object-cover"
+            />
+          </div>
+        ) : (
           <Image
-            src={defaultImage}
-            alt={`${title} 이미지 로드 실패`}
+            src={imageSource}
+            alt={title}
             fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="object-cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 30vw, 300px"
+            className={`object-cover transition-opacity duration-300 ${
+              isLoading ? 'opacity-0' : 'opacity-100'
+            }`}
+            priority={isPriority}
+            loading={isPriority ? 'eager' : 'lazy'}
+            placeholder="blur"
+            blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI0YzRjRGNiIvPjwvc3ZnPg=="
+            onLoad={handleImageLoad}
+            onError={handleImageError}
+            quality={process.env.NODE_ENV === 'development' ? 60 : 75}
+            fetchPriority={isPriority ? 'high' : 'auto'}
+            unoptimized
           />
-        </div>
-      ) : (
-        <Image
-          src={imageSource}
-          alt={title}
-          fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 30vw, 300px"
-          className={`object-cover transition-opacity duration-300 ${
-            isLoading ? 'opacity-0' : 'opacity-100'
-          }`}
-          priority={isPriority}
-          loading={isPriority ? 'eager' : 'lazy'}
-          placeholder="blur"
-          blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI0YzRjRGNiIvPjwvc3ZnPg=="
-          onLoad={handleImageLoad}
-          onError={handleImageError}
-          quality={process.env.NODE_ENV === 'development' ? 60 : 75}
-          fetchPriority={isPriority ? 'high' : 'auto'}
-          unoptimized
-        />
-      )}
+        )}
+      </div>
     </div>
   );
 };

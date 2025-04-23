@@ -16,7 +16,7 @@ import { DragDropContext } from '@hello-pangea/dnd';
 import ScheduleDeleteModal from '../features/modal/schedule-delete-modal';
 import ScheduleSaveModal from '../features/modal/schedule-save-modal';
 import ScheduleCreatedModal from '../features/modal/schedule-created-modal';
-import PlacesRenderer from '../features/card/places-renderer';
+import PlacesRenderer from '../../server/places-renderer';
 import { DAY_COLORS } from '@/constants/map.constants';
 import { memo } from 'react';
 import {

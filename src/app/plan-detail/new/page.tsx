@@ -2,8 +2,8 @@ import Image from 'next/image';
 
 import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 
-import NotFound from '@/app/plan-detail/_components/features/notfound/not-found';
-import PlanForm from '@/app/plan-detail/_components/plan-form';
+import NotFound from '@/app/plan-detail/_components/server/not-found';
+import PlanForm from '@/app/plan-detail/_components/client/plan-form';
 
 const PlanDetailNewPage = async () => {
   const HAPPY_IMAGE = {

@@ -1,5 +1,5 @@
 import { Draggable, Droppable } from '@hello-pangea/dnd';
-import PlaceCard from './place-card';
+import PlaceCard from '../client/features/card/place-card';
 import { Place } from '@/types/search.type';
 
 /**

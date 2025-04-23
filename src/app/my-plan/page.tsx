@@ -7,8 +7,7 @@ import { PATH } from '@/constants/path.constants';
 import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 import { fetchGetAllPlansByUserId } from '@/lib/apis/plan/plan.api';
 
-import PlanFilterSection from './_components/plan-filter-section';
-import { fetchfetchAllCommentsByPlanId } from '@/lib/apis/comments/get-comments.api';
+import PlanFilterSection from '@/app/my-plan/_components/client/plan-filter-section';
 
 const IMAGE_CONSTANTS = {
   SUNGLASSES: {

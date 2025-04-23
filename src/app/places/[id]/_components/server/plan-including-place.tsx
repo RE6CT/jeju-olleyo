@@ -3,7 +3,7 @@ import { getServerClient } from '@/lib/supabase/server';
 import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 import { camelize } from '@/lib/utils/camelize';
 
-const PlanIncludingPlaceServer = async ({ placeId }: { placeId: number }) => {
+const PlanIncludingPlace = async ({ placeId }: { placeId: number }) => {
   const supabase = await getServerClient();
   const { user } = await fetchGetCurrentUser();
 
@@ -35,13 +35,20 @@ const PlanIncludingPlaceServer = async ({ placeId }: { placeId: number }) => {
     <div>
       <div className="semibold-24 mb-7 mt-[73px]">해당 장소가 포함된 일정</div>
 
+      {plans?.length === 0 && (
+        <p className="text-sm text-gray-400">
+          아직 이 장소가 포함된 일정이 없습니다.
+        </p>
+      )}
+
       <div className="grid w-full grid-cols-1 gap-x-[11px] gap-y-9 sm:grid-cols-2 md:grid-cols-3">
-        {plans.map((plan: any) => (
-          <PlanVerticalCard key={plan.planId} plan={plan} />
-        ))}
+        {plans &&
+          plans.map((plan) => (
+            <PlanVerticalCard key={plan.planId} plan={plan} />
+          ))}
       </div>
     </div>
   );
 };
 
-export default PlanIncludingPlaceServer;
+export default PlanIncludingPlace;

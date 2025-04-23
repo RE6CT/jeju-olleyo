@@ -3,9 +3,9 @@ import { camelize } from '@/lib/utils/camelize';
 import { getServerClient } from '@/lib/supabase/server';
 import { SERVER_COMPONENT_BASE_URL } from '@/constants/tour.constants';
 import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
-import PlaceDetailContent from './_components/place-detail-content';
-import PlanIncludingPlace from './_components/plan-including-place';
-import PlanIncludingPlaceServer from './_components/plan-including-place-server';
+import PlaceDetailContent from './_components/client/place-detail-content';
+import PlanIncludingPlace from './_components/server/plan-including-place';
+import PlanIncludingPlaceServer from './_components/server/plan-including-place';
 
 const PlaceDetailPage = async ({ params }: { params: { id: string } }) => {
   const supabase = await getServerClient();
@@ -44,6 +44,7 @@ const PlaceDetailPage = async ({ params }: { params: { id: string } }) => {
 
   return (
     <>
+      {/* 장소 정보 영역 */}
       <PlaceDetailContent
         place={camelizedData}
         detailJson={detailJson}
@@ -51,8 +52,10 @@ const PlaceDetailPage = async ({ params }: { params: { id: string } }) => {
       />
 
       {/* 해당 장소가 포함된 일정 영역 */}
-      <div className="w-full text-left">
-        <PlanIncludingPlaceServer placeId={placeId} />
+      <div className="mt-[73px] flex flex-col items-center justify-center px-9">
+        <div className="w-full text-left">
+          <PlanIncludingPlace placeId={placeId} />
+        </div>
       </div>
     </>
   );

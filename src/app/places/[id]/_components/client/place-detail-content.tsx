@@ -4,7 +4,6 @@ import BookmarkButton from '@/components/features/like/bookmark-button';
 import CategoryBadge from '@/components/commons/category-badge';
 import PlaceImage from '@/components/commons/place-image';
 import PlaceLocation from './place-location';
-import PlanIncludingPlace from './plan-including-place';
 import { CategoryType } from '@/types/category.type';
 import { Place } from '@/types/search.type';
 
@@ -117,11 +116,6 @@ const PlaceDetailContent = ({
             />
           </div>
         </div>
-      </div>
-
-      {/* 해당 장소가 포함된 일정 영역 */}
-      <div className="w-full text-left">
-        <PlanIncludingPlace placeId={placeId} />
       </div>
     </div>
   );

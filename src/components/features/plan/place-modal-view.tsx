@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Place } from '@/types/place.type';
 import { DetailIntroRaw } from '@/types/korea-tour.type';
 import { CategoryType } from '@/types/category.type';
-import PlanIncludingPlace from '@/app/places/[id]/_components/plan-including-place';
+import PlanIncludingPlace from '@/app/places/[id]/_components/server/plan-including-place';
 
 const PlaceModalView = ({
   place,

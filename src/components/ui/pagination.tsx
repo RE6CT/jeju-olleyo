@@ -3,6 +3,8 @@
  * @param currentPage - 현재 페이지
  * @param totalPages - 총 페이지 수
  * @param onPageChange - 페이지 변경 시 실행될 함수
+ * @param backgroundColor - 선택된 페이지 배경 색깔
+ * @param hideOnSinglePage - 페이지가 한개 있을 때 컴포넌트 숨길지 여부
  *
  * @example
  * ```tsx
@@ -38,7 +40,7 @@ const Pagination = ({
         <button
           key={index + 1}
           onClick={() => onPageChange(index + 1)}
-          className={`medium-12 flex h-6 w-6 items-center justify-center rounded-full text-gray-500 ${currentPage === index + 1 ? `bg-${backgroundColor} text-white` : 'transparent'}`}
+          className={`medium-12 flex h-6 w-6 items-center justify-center rounded-full ${currentPage === index + 1 ? `bg-${backgroundColor} text-white` : 'text-gray-500'}`}
         >
           {index + 1}
         </button>

@@ -14,7 +14,7 @@ const PlaceDetailContent = ({
   isBookmarked,
 }: {
   place: Place;
-  detailJson: any;
+  detailJson: any; // TODO : 타입 명시 필요
   isBookmarked: boolean;
 }) => {
   const placeId = place.placeId;
@@ -108,6 +108,7 @@ const PlaceDetailContent = ({
             </div>
           </div>
 
+          {/* 지도영역 */}
           <div className="mb-auto">
             <PlaceLocation
               lat={place.lat}
@@ -118,6 +119,7 @@ const PlaceDetailContent = ({
         </div>
       </div>
 
+      {/* 해당 장소가 포함된 일정 영역 */}
       <div className="w-full text-left">
         <PlanIncludingPlace placeId={placeId} />
       </div>

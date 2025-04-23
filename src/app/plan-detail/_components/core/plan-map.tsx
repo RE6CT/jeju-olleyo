@@ -11,89 +11,78 @@ import {
   POLYLINE_OPTIONS,
 } from '@/constants/map.constants';
 import { usePlanMap } from '@/lib/hooks/use-plan-map';
-import { DayPlaces, TabType } from '@/types/plan-detail.type';
 import { MarkerProps } from '@/types/kakao-map.type';
 import { memo } from 'react';
+import { usePlanActiveTab, usePlanDayPlaces } from '@/zustand/plan.store';
 
-const PlanMap = memo(
-  ({
-    dayPlaces,
-    activeTab,
-    updateRouteSummary,
-  }: {
-    dayPlaces: DayPlaces;
-    activeTab: TabType;
-    updateRouteSummary: (
-      day: number,
-      summaries: { distance: number; duration: number }[],
-    ) => void;
-  }) => {
-    console.log('PlanMap 렌더링');
+const PlanMap = memo(() => {
+  console.log('PlanMap 렌더링');
+  const dayPlaces = usePlanDayPlaces();
+  const activeTab = usePlanActiveTab();
 
-    const {
-      map,
-      isLoading,
-      error,
-      markers,
-      paths,
-      handleMapLoad,
-      handleMapError,
-    } = usePlanMap({ dayPlaces, activeTab, updateRouteSummary });
+  const {
+    map,
+    isLoading,
+    error,
+    markers,
+    paths,
+    handleMapLoad,
+    handleMapError,
+  } = usePlanMap({ dayPlaces, activeTab });
 
-    return (
-      <>
-        <div className="sticky top-0 z-40 h-10 bg-slate-50"></div>
-        <div className="sticky top-8 z-40 mt-4 h-[326px] w-full overflow-hidden rounded-[12px]">
-          {isLoading && <Loading />}
-          {error && <ErrorMessage message={error} />}
-          <KakaoMap
-            {...DEFAULT_MAP_OPTIONS}
-            onMapLoad={handleMapLoad}
-            onError={handleMapError}
-          />
-          {map && !isLoading && !error && (
-            <>
-              <Clusterer
-                map={map}
-                markers={markers}
-                gridSize={CLUSTERER_OPTIONS.GRID_SIZE}
-                minLevel={CLUSTERER_OPTIONS.MIN_LEVEL}
-                minClusterSize={CLUSTERER_OPTIONS.MIN_CLUSTER_SIZE}
-                disableClickZoom={CLUSTERER_OPTIONS.DISABLE_CLICK_ZOOM}
-                styles={[...CLUSTERER_OPTIONS.STYLES]}
-                onMarkerClick={(marker: MarkerProps) => {
-                  if (marker.onClick) {
-                    marker.onClick();
-                  }
-                }}
-              />
-              {Object.entries(paths).map(([day, path]) => {
-                if (activeTab === '전체보기' || parseInt(day) === activeTab) {
-                  return (
-                    <Polyline
-                      key={day}
-                      map={map}
-                      path={path}
-                      strokeWeight={POLYLINE_OPTIONS.STROKE_WEIGHT}
-                      strokeColor={
-                        parseInt(day) % 2 === 0
-                          ? POLYLINE_OPTIONS.COLORS.EVEN
-                          : POLYLINE_OPTIONS.COLORS.ODD
-                      }
-                      strokeOpacity={POLYLINE_OPTIONS.STROKE_OPACITY}
-                      strokeStyle={POLYLINE_OPTIONS.STROKE_STYLE}
-                    />
-                  );
+  return (
+    <>
+      <div className="sticky top-0 z-40 h-10 bg-slate-50"></div>
+      <div className="sticky top-8 z-40 mt-4 h-[326px] w-full overflow-hidden rounded-[12px]">
+        {isLoading && <Loading />}
+        {error && <ErrorMessage message={error} />}
+        <KakaoMap
+          {...DEFAULT_MAP_OPTIONS}
+          onMapLoad={handleMapLoad}
+          onError={handleMapError}
+        />
+        {map && !isLoading && !error && (
+          <>
+            <Clusterer
+              map={map}
+              markers={markers}
+              gridSize={CLUSTERER_OPTIONS.GRID_SIZE}
+              minLevel={CLUSTERER_OPTIONS.MIN_LEVEL}
+              minClusterSize={CLUSTERER_OPTIONS.MIN_CLUSTER_SIZE}
+              disableClickZoom={CLUSTERER_OPTIONS.DISABLE_CLICK_ZOOM}
+              styles={[...CLUSTERER_OPTIONS.STYLES]}
+              onMarkerClick={(marker: MarkerProps) => {
+                if (marker.onClick) {
+                  marker.onClick();
                 }
-                return null;
-              })}
-            </>
-          )}
-        </div>
-      </>
-    );
-  },
-);
+              }}
+            />
+            {Object.entries(paths).map(([day, path]) => {
+              if (activeTab === '전체보기' || parseInt(day) === activeTab) {
+                return (
+                  <Polyline
+                    key={day}
+                    map={map}
+                    path={path}
+                    strokeWeight={POLYLINE_OPTIONS.STROKE_WEIGHT}
+                    strokeColor={
+                      parseInt(day) % 2 === 0
+                        ? POLYLINE_OPTIONS.COLORS.EVEN
+                        : POLYLINE_OPTIONS.COLORS.ODD
+                    }
+                    strokeOpacity={POLYLINE_OPTIONS.STROKE_OPACITY}
+                    strokeStyle={POLYLINE_OPTIONS.STROKE_STYLE}
+                  />
+                );
+              }
+              return null;
+            })}
+          </>
+        )}
+      </div>
+    </>
+  );
+});
 
 PlanMap.displayName = 'PlanMap';
 

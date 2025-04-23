@@ -4,33 +4,79 @@ import { useToast } from '@/hooks/use-toast';
 import { DayPlaces } from '@/types/plan-detail.type';
 import { Place } from '@/types/search.type';
 import { fetchSavePlan, fetchSavePlanPlaces } from '@/lib/apis/plan/plan.api';
-import { usePlanStore } from '@/zustand/plan.store';
-import useAuthStore from '@/zustand/auth.store';
 
-export const useSchedule = () => {
-  const { toast } = useToast();
-  const {
-    startDate,
-    endDate,
-    dayPlaces,
-    setDayPlaces,
-    isReadOnly,
-    title,
-    description,
-    planImg,
-  } = usePlanStore();
-
-  const [placeCount, setPlaceCount] = useState(() =>
-    Object.values(dayPlaces).reduce((acc, places) => acc + places.length, 0),
-  ); // 초기 장소 개수 계산
-  const [copiedDay, setCopiedDay] = useState<number | null>(null);
+// 모달 상태를 관리하는 훅
+export const useScheduleModal = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [dayToDelete, setDayToDelete] = useState<number | null>(null);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const [isPublicModalOpen, setIsPublicModalOpen] = useState(false);
 
-  const { user } = useAuthStore();
-  const userId = user?.id || null;
+  return {
+    isDeleteModalOpen,
+    isSaveModalOpen,
+    isPublicModalOpen,
+    setIsDeleteModalOpen,
+    setIsSaveModalOpen,
+    setIsPublicModalOpen,
+  };
+};
+
+// 복사/붙여넣기 기능을 관리하는 훅
+export const useScheduleCopyPaste = (
+  dayPlaces: DayPlaces,
+  setDayPlaces: (dayPlaces: DayPlaces) => void,
+) => {
+  const [copiedDay, setCopiedDay] = useState<number | null>(null);
+  const [placeCount, setPlaceCount] = useState(() =>
+    Object.values(dayPlaces).reduce((acc, places) => acc + places.length, 0),
+  );
+
+  /**
+   * 특정 일자의 장소들을 복사하는 핸들러
+   * @param dayNumber 복사할 일자
+   */
+  const handleCopyDayPlaces = (dayNumber: number) => {
+    setCopiedDay(dayNumber);
+  };
+
+  /**
+   * 복사된 장소들을 붙여넣는 핸들러
+   * @param targetDay 붙여넣을 일자
+   */
+  const handlePasteDayPlaces = (targetDay: number) => {
+    if (copiedDay === null) return;
+
+    const copiedPlaces = [...(dayPlaces[copiedDay] || [])];
+    const newPlaces = copiedPlaces.map((place) => ({
+      ...place,
+      uniqueId: `${place.id}-${placeCount + copiedPlaces.indexOf(place)}`,
+    }));
+
+    const updatedDayPlaces = {
+      ...dayPlaces,
+      [targetDay]: [...(dayPlaces[targetDay] || []), ...newPlaces],
+    };
+    setDayPlaces(updatedDayPlaces);
+
+    setPlaceCount((prev) => prev + (dayPlaces[copiedDay]?.length || 0));
+    setCopiedDay(null);
+  };
+
+  return {
+    copiedDay,
+    handleCopyDayPlaces,
+    handlePasteDayPlaces,
+  };
+};
+
+// 장소 관리 기능을 담당하는 훅
+export const useSchedulePlaces = (
+  dayPlaces: DayPlaces,
+  setDayPlaces: (dayPlaces: DayPlaces) => void,
+  isReadOnly: boolean,
+  setIsDeleteModalOpen: (isOpen: boolean) => void,
+) => {
+  const [dayToDelete, setDayToDelete] = useState<number | null>(null);
 
   /**
    * 장소 추가 핸들러
@@ -43,14 +89,10 @@ export const useSchedule = () => {
    * }, 1)
    */
   const handleAddPlace = (newPlace: Place, activeTab: number | '전체보기') => {
-    if (activeTab === '전체보기') return;
+    if (activeTab === '전체보기' || isReadOnly) return;
 
     const dayNumber = activeTab as number;
-    let uniqueId = '';
-    setPlaceCount((prev) => {
-      uniqueId = `${newPlace.id}-${prev}`;
-      return prev + 1;
-    });
+    const uniqueId = `${newPlace.id}-${Date.now()}`;
     const newPlaceWithId = { ...newPlace, uniqueId };
 
     const updatedDayPlaces = {
@@ -127,37 +169,6 @@ export const useSchedule = () => {
   };
 
   /**
-   * 특정 일자의 장소들을 복사하는 핸들러
-   * @param dayNumber 복사할 일자
-   */
-  const handleCopyDayPlaces = (dayNumber: number) => {
-    setCopiedDay(dayNumber);
-  };
-
-  /**
-   * 복사된 장소들을 붙여넣는 핸들러
-   * @param targetDay 붙여넣을 일자
-   */
-  const handlePasteDayPlaces = (targetDay: number) => {
-    if (copiedDay === null) return;
-
-    const copiedPlaces = [...(dayPlaces[copiedDay] || [])];
-    const newPlaces = copiedPlaces.map((place) => ({
-      ...place,
-      uniqueId: `${place.id}-${placeCount + copiedPlaces.indexOf(place)}`,
-    }));
-
-    const updatedDayPlaces = {
-      ...dayPlaces,
-      [targetDay]: [...(dayPlaces[targetDay] || []), ...newPlaces],
-    };
-    setDayPlaces(updatedDayPlaces);
-
-    setPlaceCount((prev) => prev + (dayPlaces[copiedDay]?.length || 0));
-    setCopiedDay(null);
-  };
-
-  /**
    * 특정 일자의 장소들을 삭제하는 핸들러
    * @param dayNumber 삭제할 일자
    */
@@ -176,9 +187,26 @@ export const useSchedule = () => {
     setDayToDelete(null);
   };
 
-  /**
-   * 일정 저장 버튼 클릭 핸들러
-   */
+  return {
+    handleAddPlace,
+    handleRemovePlace,
+    handleDragEnd,
+    handleDeleteDayPlaces,
+    handleConfirmDelete,
+  };
+};
+
+// 저장 버튼 클릭 핸들러를 담당하는 훅
+export const useScheduleSaveButton = (
+  title: string,
+  startDate: Date | null,
+  endDate: Date | null,
+  dayPlaces: DayPlaces,
+  setIsSaveModalOpen: (isOpen: boolean) => void,
+  setIsPublicModalOpen: (isOpen: boolean) => void,
+) => {
+  const { toast } = useToast();
+
   const handleSaveButtonClick = () => {
     if (!title) {
       toast({
@@ -220,9 +248,22 @@ export const useSchedule = () => {
     setIsPublicModalOpen(true);
   };
 
-  /**
-   * 일정 공개 버튼 클릭 핸들러
-   */
+  return { handleSaveButtonClick };
+};
+
+// 일정 저장 기능을 담당하는 훅
+export const useScheduleSavePlan = (
+  dayPlaces: DayPlaces,
+  startDate: Date | null,
+  endDate: Date | null,
+  title: string,
+  description: string,
+  planImg: string | null,
+  userId: string | null,
+  setIsPublicModalOpen: (isOpen: boolean) => void,
+) => {
+  const { toast } = useToast();
+
   const handlePublicClick = async () => {
     try {
       if (!startDate || !endDate || !title || !userId) {
@@ -292,23 +333,5 @@ export const useSchedule = () => {
     }
   };
 
-  return {
-    copiedDay,
-    isDeleteModalOpen,
-    isSaveModalOpen,
-    isPublicModalOpen,
-    setIsDeleteModalOpen,
-    setIsSaveModalOpen,
-    setIsPublicModalOpen,
-    handleAddPlace,
-    handleRemovePlace,
-    handleDragEnd,
-    handleCopyDayPlaces,
-    handlePasteDayPlaces,
-    handleDeleteDayPlaces,
-    handleConfirmDelete,
-    handleSaveButtonClick,
-    handlePublicClick,
-    handlePrivateClick,
-  };
+  return { handlePublicClick, handlePrivateClick };
 };

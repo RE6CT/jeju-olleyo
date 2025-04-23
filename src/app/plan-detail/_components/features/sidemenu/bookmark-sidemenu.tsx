@@ -56,8 +56,8 @@ const BookmarkSidemenu = ({
   const listRef = useRef<HTMLDivElement>(null);
 
   const { user } = useAuthStore();
-  const userId = user?.id || null;
-  if (!userId) return null;
+  const userId = user?.id;
+
   const { data: countData, isLoading: isCountLoading } =
     useGetDataCount(userId);
 
@@ -139,6 +139,8 @@ const BookmarkSidemenu = ({
   const totalPages = bookmarkCount
     ? Math.ceil(bookmarkCount / ITEMS_PER_PAGE)
     : 0;
+
+  if (!userId) return null;
 
   if (error) {
     return (

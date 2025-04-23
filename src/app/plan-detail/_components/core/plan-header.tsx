@@ -12,7 +12,21 @@ import { formatTravelPeriod } from '@/lib/utils/date';
 import 'react-datepicker/dist/react-datepicker.css'; // react-datepicker 캘린더 스타일 적용
 import { useChangeImageFile } from '@/lib/hooks/use-change-image-file';
 import { LoadingSpinner } from '@/components/commons/loading-spinner';
-import { usePlanStore } from '@/zustand/plan.store';
+import {
+  usePlanTitle,
+  usePlanDescription,
+  usePlanImg,
+  usePlanIsReadOnly,
+  usePlanStartDate,
+  usePlanEndDate,
+  usePlanSetTitle,
+  usePlanSetDescription,
+  usePlanSetStartDate,
+  usePlanSetEndDate,
+  usePlanSetDayPlaces,
+  usePlanSetActiveTab,
+  usePlanDayPlaces,
+} from '@/zustand/plan.store';
 
 const EDIT_ICON_CONSTANTS = {
   WIDTH: 24,
@@ -26,18 +40,16 @@ const CALENDAR_MONTHS_SHOWN = 2;
 
 const PlanHeader = memo(() => {
   console.log('PlanHeader 렌더링');
-  const {
-    title,
-    description,
-    planImg,
-    isReadOnly,
-    setTitle,
-    setDescription,
-    startDate,
-    endDate,
-    setStartDate,
-    setEndDate,
-  } = usePlanStore();
+  const title = usePlanTitle();
+  const description = usePlanDescription();
+  const planImg = usePlanImg();
+  const isReadOnly = usePlanIsReadOnly();
+  const startDate = usePlanStartDate();
+  const endDate = usePlanEndDate();
+  const setStartDate = usePlanSetStartDate();
+  const setEndDate = usePlanSetEndDate();
+  const setTitle = usePlanSetTitle();
+  const setDescription = usePlanSetDescription();
 
   const { previewImage, isUploading, handleFileChange } =
     useChangeImageFile(planImg);

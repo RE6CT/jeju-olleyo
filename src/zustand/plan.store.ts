@@ -25,3 +25,31 @@ export const usePlanStore = create<PlanState>((set) => ({
   setActiveTab: (activeTab) => set({ activeTab }),
   setDayPlaces: (dayPlaces) => set({ dayPlaces }),
 }));
+
+// Selectors
+export const usePlanTitle = () => usePlanStore((state) => state.title);
+export const usePlanDescription = () =>
+  usePlanStore((state) => state.description);
+export const usePlanImg = () => usePlanStore((state) => state.planImg);
+export const usePlanIsReadOnly = () =>
+  usePlanStore((state) => state.isReadOnly);
+export const usePlanStartDate = () => usePlanStore((state) => state.startDate);
+export const usePlanEndDate = () => usePlanStore((state) => state.endDate);
+export const usePlanDayPlaces = () => usePlanStore((state) => state.dayPlaces);
+export const usePlanActiveTab = () => usePlanStore((state) => state.activeTab);
+
+// Setter functions
+export const usePlanSetTitle = () => usePlanStore((state) => state.setTitle);
+export const usePlanSetDescription = () =>
+  usePlanStore((state) => state.setDescription);
+export const usePlanSetImg = () => usePlanStore((state) => state.setPlanImg);
+export const usePlanSetIsReadOnly = () =>
+  usePlanStore((state) => state.setIsReadOnly);
+export const usePlanSetStartDate = () =>
+  usePlanStore((state) => state.setStartDate);
+export const usePlanSetEndDate = () =>
+  usePlanStore((state) => state.setEndDate);
+export const usePlanSetDayPlaces = () =>
+  usePlanStore((state) => state.setDayPlaces);
+export const usePlanSetActiveTab = () =>
+  usePlanStore((state) => state.setActiveTab);

@@ -16,11 +16,26 @@ import { DragDropContext } from '@hello-pangea/dnd';
 import ScheduleDeleteModal from '../features/modal/schedule-delete-modal';
 import ScheduleSaveModal from '../features/modal/schedule-save-modal';
 import ScheduleCreatedModal from '../features/modal/schedule-created-modal';
-import { useSchedule } from '@/lib/hooks/use-schedule';
 import PlacesRenderer from '../features/card/places-renderer';
 import { DAY_COLORS } from '@/constants/map.constants';
 import { memo } from 'react';
-import { usePlanStore } from '@/zustand/plan.store';
+import {
+  usePlanStartDate,
+  usePlanEndDate,
+  usePlanDayPlaces,
+  usePlanSetDayPlaces,
+  usePlanActiveTab,
+  usePlanSetActiveTab,
+  usePlanIsReadOnly,
+  usePlanTitle,
+  usePlanDescription,
+  usePlanImg,
+} from '@/zustand/plan.store';
+import { useScheduleModal } from '@/lib/hooks/use-schedule';
+import { useScheduleCopyPaste } from '@/lib/hooks/use-schedule';
+import { useSchedulePlaces } from '@/lib/hooks/use-schedule';
+import { useScheduleSaveButton } from '@/lib/hooks/use-schedule';
+import { useScheduleSavePlan } from '@/lib/hooks/use-schedule';
 import useAuthStore from '@/zustand/auth.store';
 
 const DROPDOWN_CONTENT_STYLE =
@@ -49,32 +64,123 @@ const AddPlacePrompt = ({ dayNumber }: { dayNumber: number }) => {
   );
 };
 
-const PlanSchedule = memo(() => {
-  console.log('PlanSchedule 렌더링');
-  const { startDate, endDate, dayPlaces, activeTab, setActiveTab, isReadOnly } =
-    usePlanStore();
+const SaveButton = memo(() => {
+  const startDate = usePlanStartDate();
+  const endDate = usePlanEndDate();
+  const dayPlaces = usePlanDayPlaces();
+  const { setIsSaveModalOpen, setIsPublicModalOpen } = useScheduleModal();
+  const { handleSaveButtonClick } = useScheduleSaveButton(
+    usePlanTitle(),
+    startDate,
+    endDate,
+    dayPlaces,
+    setIsSaveModalOpen,
+    setIsPublicModalOpen,
+  );
 
-  const dayCount = calculateTotalDays(startDate, endDate);
+  return (
+    <div className="absolute bottom-10 right-10">
+      <Button
+        onClick={handleSaveButtonClick}
+        className="flex items-center justify-center rounded-[12px] border border-primary-400 bg-primary-500 px-7 py-4 text-24 font-bold text-[#F8F8F8] shadow-[2px_4px_4px_0px_rgba(153,61,0,0.20)] backdrop-blur-[10px] hover:bg-primary-600"
+      >
+        저장하기
+      </Button>
+    </div>
+  );
+});
 
+SaveButton.displayName = 'SaveButton';
+
+const ScheduleModals = memo(() => {
+  const startDate = usePlanStartDate();
+  const endDate = usePlanEndDate();
+  const dayPlaces = usePlanDayPlaces();
   const {
-    copiedDay,
     isDeleteModalOpen,
     isSaveModalOpen,
     isPublicModalOpen,
     setIsDeleteModalOpen,
     setIsSaveModalOpen,
     setIsPublicModalOpen,
+  } = useScheduleModal();
+  const { user } = useAuthStore();
+  const userId = user?.id || null;
+  const { handleConfirmDelete } = useSchedulePlaces(
+    dayPlaces,
+    usePlanSetDayPlaces(),
+    usePlanIsReadOnly(),
+    setIsDeleteModalOpen,
+  );
+  const { handlePublicClick, handlePrivateClick } = useScheduleSavePlan(
+    dayPlaces,
+    startDate,
+    endDate,
+    usePlanTitle(),
+    usePlanDescription(),
+    usePlanImg(),
+    userId,
+    setIsPublicModalOpen,
+  );
+
+  return (
+    <>
+      <ScheduleDeleteModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onDeleteClick={handleConfirmDelete}
+      />
+      <ScheduleSaveModal
+        isOpen={isSaveModalOpen}
+        onClose={() => setIsSaveModalOpen(false)}
+        onSave={async () => {
+          return new Promise<void>((resolve) => {
+            setIsSaveModalOpen(false);
+            setIsPublicModalOpen(true);
+            resolve();
+          });
+        }}
+      />
+      <ScheduleCreatedModal
+        isOpen={isPublicModalOpen}
+        onClose={handlePrivateClick}
+        onPublicClick={handlePublicClick}
+        onPrivateClick={handlePrivateClick}
+      />
+    </>
+  );
+});
+
+ScheduleModals.displayName = 'SaveModals';
+
+const PlanSchedule = memo(() => {
+  console.log('PlanSchedule 렌더링');
+  const startDate = usePlanStartDate();
+  const endDate = usePlanEndDate();
+  const dayPlaces = usePlanDayPlaces();
+  const setDayPlaces = usePlanSetDayPlaces();
+  const activeTab = usePlanActiveTab();
+  const setActiveTab = usePlanSetActiveTab();
+  const isReadOnly = usePlanIsReadOnly();
+
+  const { setIsDeleteModalOpen } = useScheduleModal();
+
+  const { copiedDay, handleCopyDayPlaces, handlePasteDayPlaces } =
+    useScheduleCopyPaste(dayPlaces, setDayPlaces);
+
+  const {
     handleAddPlace,
     handleRemovePlace,
     handleDragEnd,
-    handleCopyDayPlaces,
-    handlePasteDayPlaces,
     handleDeleteDayPlaces,
-    handleConfirmDelete,
-    handleSaveButtonClick,
-    handlePublicClick,
-    handlePrivateClick,
-  } = useSchedule();
+  } = useSchedulePlaces(
+    dayPlaces,
+    setDayPlaces,
+    isReadOnly,
+    setIsDeleteModalOpen,
+  );
+
+  const dayCount = calculateTotalDays(startDate, endDate);
 
   return (
     <div className="relative min-h-screen pb-32">
@@ -283,7 +389,7 @@ const PlanSchedule = memo(() => {
                       </div>
                     )
                   ) : (
-                    <div className="flex items-center justify-center rounded-[12px] border border-dashed border-gray-200 py-4 text-14 text-gray-300">
+                    <div className="mr-10 flex h-full w-full items-center justify-center rounded-[12px] border border-dashed border-gray-200 py-4 text-14 text-gray-300">
                       여행 기간을 선택해 주세요
                     </div>
                   )}
@@ -314,38 +420,8 @@ const PlanSchedule = memo(() => {
           </div>
         </div>
       </DragDropContext>
-      {!isReadOnly && (
-        <div className="absolute bottom-10 right-10">
-          <Button
-            onClick={handleSaveButtonClick}
-            className="flex items-center justify-center rounded-[12px] border border-primary-400 bg-primary-500 px-7 py-4 text-24 font-bold text-[#F8F8F8] shadow-[2px_4px_4px_0px_rgba(153,61,0,0.20)] backdrop-blur-[10px] hover:bg-primary-600"
-          >
-            저장하기
-          </Button>
-        </div>
-      )}
-      <ScheduleDeleteModal
-        isOpen={isDeleteModalOpen}
-        onClose={() => setIsDeleteModalOpen(false)}
-        onDeleteClick={handleConfirmDelete}
-      />
-      <ScheduleSaveModal
-        isOpen={isSaveModalOpen}
-        onClose={() => setIsSaveModalOpen(false)}
-        onSave={async () => {
-          return new Promise<void>((resolve) => {
-            setIsSaveModalOpen(false);
-            setIsPublicModalOpen(true);
-            resolve();
-          });
-        }}
-      />
-      <ScheduleCreatedModal
-        isOpen={isPublicModalOpen}
-        onClose={handlePrivateClick}
-        onPublicClick={handlePublicClick}
-        onPrivateClick={handlePrivateClick}
-      />
+      {!isReadOnly && <SaveButton />}
+      <ScheduleModals />
     </div>
   );
 });

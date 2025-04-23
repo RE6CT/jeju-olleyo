@@ -59,7 +59,6 @@ const SearchSidemenu = ({
 
   const { user } = useAuthStore();
   const userId = user?.id || null;
-  if (!userId) return null;
 
   const { isBookmarked } = useBookmarkQuery(userId);
 
@@ -113,7 +112,7 @@ const SearchSidemenu = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const placesResponse = await fetchGetAllPlaces();
+        const placesResponse = await fetchGetAllPlaces(); // fetchGetPlacesByCategory로 대체하여 페이지네이션 구현
         setPlaces(placesResponse || []);
       } catch (error) {
         console.error('데이터를 가져오는데 실패했습니다:', error);
@@ -189,6 +188,8 @@ const SearchSidemenu = ({
       </PlaceSidemenuLayout>
     );
   }
+
+  if (!userId) return null;
 
   return (
     <PlaceSidemenuLayout

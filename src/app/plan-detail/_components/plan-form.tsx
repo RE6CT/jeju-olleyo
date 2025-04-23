@@ -44,11 +44,7 @@ const PlanForm = ({
   return (
     <div>
       <PlanHeader />
-      <PlanMap
-        dayPlaces={dayPlaces}
-        activeTab={activeTab}
-        updateRouteSummary={updateRouteSummary}
-      />
+      <PlanMap />
       <PlanSchedule />
     </div>
   );

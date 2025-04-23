@@ -6,6 +6,7 @@ import { PATH } from '@/constants/path.constants';
 
 import { Input } from '../ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import CloseIcon from '../icons/close-icon';
 
 /**
  * 반응형 검색바 컴포넌트
@@ -113,20 +114,7 @@ const SearchBar = () => {
                     }}
                     className="text-xs text-gray-400 hover:text-gray-600"
                   >
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 48 48"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        clipRule="evenodd"
-                        d="M12.3329 12.3329C12.9187 11.7471 13.8684 11.7471 14.4542 12.3329L24.0002 21.8788L33.5461 12.3329C34.1319 11.7471 35.0816 11.7471 35.6674 12.3329C36.2532 12.9187 36.2532 13.8684 35.6674 14.4542L26.1215 24.0002L35.6674 33.5461C36.2532 34.1319 36.2532 35.0816 35.6674 35.6674C35.0816 36.2532 34.1319 36.2532 33.5461 35.6674L24.0002 26.1215L14.4542 35.6674C13.8684 36.2532 12.9187 36.2532 12.3329 35.6674C11.7471 35.0816 11.7471 34.1319 12.3329 33.5461L21.8788 24.0002L12.3329 14.4542C11.7471 13.8684 11.7471 12.9187 12.3329 12.3329Z"
-                        fill="black"
-                      />
-                    </svg>
+                    <CloseIcon size={16} fill="gray-600" />
                   </button>
                 </li>
               ))}

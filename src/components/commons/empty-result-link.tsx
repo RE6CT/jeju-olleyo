@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import ArrowRight from '../icons/arrow-right';
 import Image from 'next/image';
+import { ArrowRight } from '../icons/arrow-icon';
 
 /**
  * 결과가 없을 때 나타내는 컴포넌트

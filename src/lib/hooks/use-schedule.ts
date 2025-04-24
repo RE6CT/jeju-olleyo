@@ -7,6 +7,7 @@ import {
   fetchSavePlan,
   fetchSavePlanPlaces,
   fetchUpdatePlan,
+  fetchGetPlanById,
 } from '@/lib/apis/plan/plan.api';
 import { useRouter } from 'next/navigation';
 import { PATH } from '@/constants/path.constants';
@@ -283,19 +284,17 @@ export const useScheduleSavePlan = (
       let targetId: number;
 
       if (planId) {
+        const currentPlan = await fetchGetPlanById(planId);
+
         const updatedPlan = {
-          planId,
-          userId,
+          ...currentPlan,
           title,
           description,
           travelStartDate: startDate?.toISOString() || '',
           travelEndDate: endDate?.toISOString() || '',
           planImg: planImg || null,
           public: true,
-          createdAt: new Date().toISOString(),
           publicAt: new Date().toISOString(),
-          nickname: '',
-          isLiked: false,
         };
         await fetchUpdatePlan(updatedPlan, userId);
         targetId = planId;
@@ -350,19 +349,17 @@ export const useScheduleSavePlan = (
       let targetId: number;
 
       if (planId) {
+        const currentPlan = await fetchGetPlanById(planId);
+
         const updatedPlan = {
-          planId,
-          userId,
+          ...currentPlan,
           title,
           description,
           travelStartDate: startDate?.toISOString() || '',
           travelEndDate: endDate?.toISOString() || '',
           planImg: planImg || null,
           public: false,
-          createdAt: new Date().toISOString(),
           publicAt: new Date().toISOString(),
-          nickname: '',
-          isLiked: false,
         };
         await fetchUpdatePlan(updatedPlan, userId);
         targetId = planId;

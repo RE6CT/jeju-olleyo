@@ -341,8 +341,13 @@ export const fetchUploadPlanImage = async (
     throw new Error('파일이 없습니다.');
   }
 
-  if (!planId) {
+  const planIdRaw = formData.get('planId');
+  if (typeof planIdRaw !== 'string') {
     throw new Error('일정 ID가 없습니다.');
+  }
+  const planIdNum = Number(planIdRaw);
+  if (!Number.isInteger(planIdNum) || planIdNum <= 0) {
+    throw new Error('유효하지 않은 일정 ID입니다.');
   }
 
   // 현재 사용자 정보 가져오기
@@ -377,7 +382,8 @@ export const fetchUploadPlanImage = async (
   const { error: updateError } = await supabase
     .from('plans')
     .update({ plan_img: publicUrl })
-    .eq('plan_id', parseInt(planId));
+    .eq('plan_id', parseInt(planId))
+    .eq('user_id', user.id);
 
   if (updateError) {
     throw new Error(

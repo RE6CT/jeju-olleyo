@@ -10,7 +10,11 @@ const DateOptions = ({
 }: DateOptionsProps) => {
   if (!baseDateStr) return null;
 
-  const baseDate = new Date(baseDateStr);
+  const year = parseInt(baseDateStr.slice(0, 4), 10);
+  const month = parseInt(baseDateStr.slice(4, 6), 10) - 1;
+  const day = parseInt(baseDateStr.slice(6, 8), 10);
+
+  const baseDate = new Date(year, month, day);
 
   const dates = Array.from({ length: 5 }, (_, i) => {
     const date = new Date(baseDate);
@@ -32,7 +36,7 @@ const DateOptions = ({
             onClick={() => {
               setFormData((prev) => ({ ...prev, [field]: dateStr }));
             }}
-            className={`rounded border px-3 py-1 text-sm ${isSelected ? 'bg-black font-semibold text-white' : 'bg-white text-black hover:bg-gray-100'}`}
+            className={`rounded-full border px-3 py-1 text-sm font-semibold text-black hover:bg-primary-100 ${isSelected ? 'border-primary-500 bg-primary-100' : 'border-gray-600 bg-white'}`}
           >
             {display}
           </Button>

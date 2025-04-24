@@ -1,41 +1,60 @@
+import dayjs from 'dayjs';
 import { Flight } from '../../../types/air-ticket-type';
 
-export type SortKey = 'airline' | 'dep' | 'arr';
-export type SortOrder = 'asc' | 'desc';
+export type SortKey =
+  | 'airline'
+  | 'dep_desc'
+  | 'arr_asc'
+  | 'dep_asc'
+  | 'arr_desc';
 
 const sortFlights = (
   flights: Flight[],
-  key: 'airline' | 'dep' | 'arr',
-  order: 'asc' | 'desc',
+  key: 'airline' | 'dep_desc' | 'arr_asc' | 'dep_asc' | 'arr_desc',
 ) => {
-  const sorted = [...flights].sort((a, b) => {
-    let aVal, bVal;
+  return [...flights].sort((a, b) => {
+    let aVal: string | number = '';
+    let bVal: string | number = '';
+    let isAsc = true;
 
-    if (key === 'airline') {
-      aVal = a.airlineKorean;
-      bVal = b.airlineKorean;
-    } else if (key === 'dep') {
-      aVal = a.depPlandTime;
-      bVal = b.depPlandTime;
-    } else if (key === 'arr') {
-      aVal = a.arrPlandTime;
-      bVal = b.arrPlandTime;
+    switch (key) {
+      case 'airline':
+        aVal = a.airlineKorean;
+        bVal = b.airlineKorean;
+        isAsc = true;
+        break;
+      case 'dep_asc':
+        aVal = a.depPlandTime;
+        bVal = b.depPlandTime;
+        isAsc = true;
+        break;
+      case 'dep_desc':
+        aVal = a.depPlandTime;
+        bVal = b.depPlandTime;
+        isAsc = false;
+        break;
+      case 'arr_asc':
+        aVal = a.arrPlandTime;
+        bVal = b.arrPlandTime;
+        isAsc = true;
+        break;
+      case 'arr_desc':
+        aVal = a.arrPlandTime;
+        bVal = b.arrPlandTime;
+        isAsc = false;
+        break;
     }
 
     if (typeof aVal === 'string' && typeof bVal === 'string') {
-      return order === 'asc'
-        ? aVal.localeCompare(bVal)
-        : bVal.localeCompare(aVal);
+      return isAsc ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
     }
 
     if (typeof aVal === 'number' && typeof bVal === 'number') {
-      return order === 'asc' ? aVal - bVal : bVal - aVal;
+      return isAsc ? aVal - bVal : bVal - aVal;
     }
 
     return 0;
   });
-
-  return sorted;
 };
 
 const formatTime = (timeStr: string) => {
@@ -48,7 +67,6 @@ type Airport = {
 };
 
 const departureList: Airport[] = [
-  { label: '서울', value: 'SEL' },
   { label: '부산', value: 'PUS' },
   { label: '김포', value: 'GMP' },
   { label: '인천', value: 'ICN' },
@@ -65,8 +83,17 @@ const departureList: Airport[] = [
   { label: '양양', value: 'YNY' },
 ];
 
+export const formatTicketPeriod = (value: string | null): string => {
+  if (!value) return '출발일자  |  도착 일자';
+  return value.replace(' - ', ' | ');
+};
+
 const getAirportLabel = (code: string): string => {
   return departureList.find((item) => item.value === code)?.label ?? code;
+};
+
+export const formatDateToString = (date: Date | string | null): string => {
+  return date ? dayjs(date).format('YYYYMMDD') : '';
 };
 
 export { sortFlights, formatTime, getAirportLabel };

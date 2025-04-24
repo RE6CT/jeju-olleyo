@@ -50,17 +50,17 @@ export const Combobox = ({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between"
+          className="relative h-full w-full justify-between pl-10 text-gray-300"
         >
           {value
             ? list.find((item) => item.value === value)?.label
-            : '검색어를 선택해주세요'}
+            : '어디서 출발 하시나요?'}
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className="w-full p-0">
         <Command>
-          <CommandInput placeholder="검색어를 선택해주세요" />
+          <CommandInput placeholder="어디서 출발 하시나요?" />
           <CommandList>
             <CommandEmpty>{defaultMessage}</CommandEmpty>
             <CommandGroup>

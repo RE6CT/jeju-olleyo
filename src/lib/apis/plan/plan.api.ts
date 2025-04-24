@@ -328,8 +328,14 @@ export const fetchUploadPlanImage = async (
   const supabase = await getServerClient();
 
   const file = formData.get('file') as File;
+  const planId = formData.get('planId') as string;
+
   if (!file) {
     throw new Error('파일이 없습니다.');
+  }
+
+  if (!planId) {
+    throw new Error('일정 ID가 없습니다.');
   }
 
   // 현재 사용자 정보 가져오기
@@ -344,21 +350,33 @@ export const fetchUploadPlanImage = async (
   // 사용자별 폴더 경로 생성
   const filePath = `${user.id}/plan-images/${Date.now()}-${file.name}`;
 
-  const { error } = await supabase.storage
+  const { error: uploadError } = await supabase.storage
     .from('plan-images')
     .upload(filePath, file, {
       cacheControl: '3600',
       upsert: false,
     });
 
-  if (error) {
-    throw new Error(`이미지 업로드에 실패했습니다: ${error.message}`);
+  if (uploadError) {
+    throw new Error(`이미지 업로드에 실패했습니다: ${uploadError.message}`);
   }
 
   // 업로드된 이미지의 공개 URL 가져오기
   const {
     data: { publicUrl },
   } = supabase.storage.from('plan-images').getPublicUrl(filePath);
+
+  // 데이터베이스에 이미지 URL 업데이트
+  const { error: updateError } = await supabase
+    .from('plans')
+    .update({ plan_img: publicUrl })
+    .eq('plan_id', parseInt(planId));
+
+  if (updateError) {
+    throw new Error(
+      `이미지 URL 업데이트에 실패했습니다: ${updateError.message}`,
+    );
+  }
 
   return publicUrl;
 };
@@ -544,31 +562,46 @@ export const fetchGetPlanDaysAndLocations = async (
 
 /**
  * 일정을 업데이트하는 API
- * @param planId - 업데이트할 일정의 ID
  * @param plan - 업데이트할 일정 데이터
+ * @param userId - 사용자 ID
+ * @returns Promise<Plan> - 업데이트된 일정
  */
 export const fetchUpdatePlan = async (
-  planId: number,
-  plan: Omit<
-    Plan,
-    'planId' | 'nickname' | 'createdAt' | 'publicAt' | 'isLiked'
-  >,
-): Promise<void> => {
+  plan: Plan,
+  userId: string,
+): Promise<Plan> => {
   const supabase = await getServerClient();
 
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from('plans')
     .update({
       title: plan.title,
       description: plan.description,
-      travel_start_date: plan.travelStartDate,
-      travel_end_date: plan.travelEndDate,
       plan_img: plan.planImg,
       public: plan.public,
+      travel_start_date: plan.travelStartDate,
+      travel_end_date: plan.travelEndDate,
     })
-    .eq('plan_id', planId);
+    .eq('plan_id', plan.planId)
+    .eq('user_id', userId)
+    .select(
+      `
+      *,
+      users:user_id (
+        nickname
+      )
+    `,
+    )
+    .single();
 
   if (error) {
-    throw new Error(`일정 업데이트에 실패했습니다. ${error.message}`);
+    throw new Error('일정 업데이트에 실패했습니다.');
   }
+
+  const camelizedData = camelize(data);
+  return {
+    ...camelizedData,
+    nickname: data.users.nickname,
+    isLiked: plan.isLiked, // 기존 plan의 isLiked 값 유지
+  };
 };

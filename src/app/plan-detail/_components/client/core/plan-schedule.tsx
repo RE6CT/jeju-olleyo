@@ -165,7 +165,6 @@ const ScheduleModals = () => {
 };
 
 const PlanSchedule = memo(() => {
-  //console.log('PlanSchedule 렌더링');
   const startDate = usePlanStartDate();
   const endDate = usePlanEndDate();
   const dayPlaces = usePlanDayPlaces();

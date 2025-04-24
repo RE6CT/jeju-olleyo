@@ -37,7 +37,6 @@ const MAX_TEXT_LENGTH = {
 const CALENDAR_MONTHS_SHOWN = 2;
 
 const PlanHeader = memo(() => {
-  //console.log('PlanHeader 렌더링');
   const title = usePlanTitle();
   const description = usePlanDescription();
   const planImg = usePlanImg();

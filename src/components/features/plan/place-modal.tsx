@@ -16,7 +16,6 @@ const PlaceModal = ({
   onAddPlace?: () => void;
   isBookmarked: boolean;
 }) => {
-  console.log('placeId:', placeId);
   const { user } = useAuth();
 
   const {

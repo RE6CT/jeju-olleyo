@@ -147,6 +147,7 @@ const BookmarkSidemenu = ({
     );
   }
 
+  console.log('북마크스', bookmarks);
   return (
     <PlaceSidemenuLayout
       isBookmarkSection

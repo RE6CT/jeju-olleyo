@@ -14,6 +14,7 @@ const PlaceModal = ({
   placeId: number;
   onAddPlace?: () => void;
 }) => {
+  console.log('placeId:', placeId);
   const { user } = useAuth();
 
   const {

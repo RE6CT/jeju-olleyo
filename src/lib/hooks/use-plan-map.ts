@@ -13,14 +13,9 @@ import { DayPlaces, TabType } from '@/types/plan-detail.type';
 export const usePlanMap = ({
   dayPlaces,
   activeTab,
-  updateRouteSummary,
 }: {
   dayPlaces: DayPlaces;
   activeTab: TabType;
-  updateRouteSummary: (
-    day: number,
-    summaries: { distance: number; duration: number }[],
-  ) => void;
 }) => {
   // 지도 인스턴스 상태
   const [map, setMap] = useState<KakaoMapInstance | null>(null);
@@ -213,7 +208,7 @@ export const usePlanMap = ({
         if (routeCache[cacheKey]) {
           const { path, sections } = routeCache[cacheKey];
           setPaths((prev) => ({ ...prev, [day]: path }));
-          updateRouteSummary(day, sections);
+          //updateRouteSummary(day, sections);
           return;
         }
 
@@ -231,13 +226,13 @@ export const usePlanMap = ({
           return sections[index];
         });
 
-        updateRouteSummary(day, placeSummaries);
+        //updateRouteSummary(day, placeSummaries);
       } catch (error) {
         console.error('경로 검색 중 오류 발생:', error);
         setError('경로 검색에 실패했습니다.');
       }
     },
-    [map, routeCache, updateRouteSummary],
+    [map, routeCache],
   );
 
   /**

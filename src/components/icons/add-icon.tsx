@@ -1,0 +1,21 @@
+const AddIcon = ({ fill, size }: { fill: string; size: number }) => {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 48 48"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M24 7.5C24.8284 7.5 25.5 8.17157 25.5 9L25.5 22.5L39 22.5C39.8284 22.5 40.5 23.1716 40.5 24C40.5 24.8284 39.8284 25.5 39 25.5L25.5 25.5V39C25.5 39.8284 24.8284 40.5 24 40.5C23.1716 40.5 22.5 39.8284 22.5 39V25.5L9 25.5C8.17157 25.5 7.5 24.8284 7.5 24C7.5 23.1716 8.17157 22.5 9 22.5L22.5 22.5L22.5 9C22.5 8.17157 23.1716 7.5 24 7.5Z"
+        fill="currentColor"
+        className={`text-${fill}`}
+      />
+    </svg>
+  );
+};
+
+export default AddIcon;

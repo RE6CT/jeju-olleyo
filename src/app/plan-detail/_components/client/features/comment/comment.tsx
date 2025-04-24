@@ -2,9 +2,11 @@
 
 import { useState } from 'react';
 
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { CommentProps } from '@/types/plan-detail.type';
+import { formatDate } from '@/lib/utils/date';
+import useAuth from '@/lib/hooks/use-auth';
+import { Separator } from '@/components/ui/separator';
 
 /**
  * 댓글 컴포넌트
@@ -21,7 +23,7 @@ const Comment = ({
   content,
   createdAt,
 }: CommentProps) => {
-  const user = ''; // 유저의 uuid 불러오는 로직 추후 추가
+  const { user } = useAuth();
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [inputText, setInputText] = useState<string>(content);
 
@@ -40,28 +42,52 @@ const Comment = ({
 
   return (
     <li>
-      {nickname}
-      {isEditMode ? (
-        <Input
-          value={inputText}
-          onChange={(e) => setInputText(e.target.value)}
-        />
-      ) : (
-        <>{content}</>
-      )}
-      {createdAt.toLocaleString()}
-      {isEditMode ? (
-        <Button onClick={handleEditCommentButtonClick}>수정 완료</Button>
-      ) : (
-        <>
-          {userId === user && (
-            <>
-              <Button onClick={() => setIsEditMode(true)}>수정</Button>
-              <Button onClick={handleDeleteCommentButtonClick}>삭제</Button>
-            </>
-          )}
-        </>
-      )}
+      <div className="flex flex-col gap-1 py-2">
+        <div className="regular-10 flex justify-between">
+          <span>{nickname}</span>
+          <span>{formatDate(createdAt)}</span>
+        </div>
+        {isEditMode ? (
+          <Input
+            className="medium-12"
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
+          />
+        ) : (
+          <p className="medium-12">{content}</p>
+        )}
+        {isEditMode ? (
+          <button
+            className="regular-10 px-[6px] py-[2px] text-gray-500"
+            onClick={handleEditCommentButtonClick}
+          >
+            수정 완료
+          </button>
+        ) : (
+          <>
+            {userId === user?.id && (
+              <div className="regular-10 flex">
+                <button
+                  className="px-[6px] py-[2px] text-gray-500"
+                  onClick={() => setIsEditMode(true)}
+                >
+                  수정
+                </button>
+                <Separator
+                  orientation="vertical"
+                  className="mx-[2px] text-gray-100"
+                />
+                <button
+                  className="px-[6px] py-[2px] text-red"
+                  onClick={handleDeleteCommentButtonClick}
+                >
+                  삭제
+                </button>
+              </div>
+            )}
+          </>
+        )}
+      </div>
     </li>
   );
 };

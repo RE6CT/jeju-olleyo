@@ -41,6 +41,7 @@ import {
 import { useCurrentUser } from '@/lib/queries/auth-queries';
 import { useGetComments } from '@/lib/queries/use-get-comments';
 import Comment from '../features/comment/comment';
+import { Separator } from '@/components/ui/separator';
 
 const DROPDOWN_CONTENT_STYLE =
   'p-0 border border-[#E7EDF0] bg-[#F9FAFB] rounded-[12px] w-[140px] [&>*:hover]:bg-primary-100 [&>*:hover]:text-primary-500';
@@ -429,15 +430,23 @@ const PlanSchedule = memo(() => {
                       댓글 {comments?.length}
                     </h3>
                     <ul>
-                      {comments?.map((comment) => (
-                        <Comment
-                          key={comment.planCommentId}
-                          planCommentId={comment.planCommentId}
-                          userId={comment.userId}
-                          nickname={comment.nickname}
-                          createdAt={comment.createdAt}
-                          content={comment.content}
-                        />
+                      {comments?.map((comment, index) => (
+                        <>
+                          <Comment
+                            key={comment.planCommentId}
+                            planCommentId={comment.planCommentId}
+                            userId={comment.userId}
+                            nickname={comment.nickname}
+                            createdAt={comment.createdAt}
+                            content={comment.content}
+                          />
+                          {index < comments.length - 1 && (
+                            <Separator
+                              key={`separator-${index}`}
+                              className="my-1"
+                            />
+                          )}
+                        </>
                       ))}
                     </ul>
                   </div>

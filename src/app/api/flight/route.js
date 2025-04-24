@@ -8,7 +8,7 @@ export async function GET(req) {
 
   const serviceKey = process.env.NEXT_PUBLIC_FLIGHT_API_KEY;
 
-  const url = `http://openapi.airport.co.kr/service/rest/FlightScheduleList/getDflightScheduleList?serviceKey=${serviceKey}&schDate=${schDate}&schDeptCityCode=${schDeptCityCode}&schArrvCityCode=${schArrvCityCode}&_type=json`; // ✅ JSON 응답 요청
+  const url = `http://openapi.airport.co.kr/service/rest/FlightScheduleList/getDflightScheduleList?serviceKey=${serviceKey}&schDate=${schDate}&schDeptCityCode=${schDeptCityCode}&schArrvCityCode=${schArrvCityCode}&_type=json`;
 
   try {
     const response = await axios.get(url);

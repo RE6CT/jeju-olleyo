@@ -146,7 +146,7 @@ export const useBookmarkQuery = (userId: string | null) => {
         );
       }
     },
-    onSuccess: async () => {
+    onSettled: async () => {
       // 성공 시 캐시 무효화만 수행 (리패치는 toggleBookmark에서 처리)
       queryClient.invalidateQueries({
         queryKey: ['bookmarks', userId],
@@ -199,5 +199,6 @@ export const useBookmarkQuery = (userId: string | null) => {
     toggleBookmark,
     isLoading:
       addBookmarkMutation.isPending || deleteBookmarkMutation.isPending,
+    error: addBookmarkMutation.error || deleteBookmarkMutation.error,
   };
 };

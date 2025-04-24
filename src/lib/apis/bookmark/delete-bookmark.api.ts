@@ -17,7 +17,7 @@ const fetchDeleteBookmark = async (bookmarkId: number) => {
     .eq('bookmark_id', bookmarkId);
 
   if (error) throw new Error(error.message);
-  revalidatePath(PATH.PLACES);
+  //revalidatePath(PATH.PLACES);
 };
 
 export default fetchDeleteBookmark;

@@ -3,7 +3,11 @@
 import { useEffect, useRef } from 'react';
 
 import { createMarkerImage } from '@/lib/utils/map.util';
-import { MarkerInstance, MarkerProps } from '@/types/kakao-map.type';
+import {
+  InfoWindowInstance,
+  MarkerInstance,
+  MarkerProps,
+} from '@/types/kakao-map.type';
 
 /**
  * 카카오맵 마커 컴포넌트
@@ -23,8 +27,10 @@ const Marker = ({
   draggable = false,
   day,
   onClick,
+  address,
 }: MarkerProps) => {
   const markerInstance = useRef<MarkerInstance | null>(null);
+  const infowindowInstance = useRef<InfoWindowInstance | null>(null);
 
   // 마커 초기화
   useEffect(() => {
@@ -43,23 +49,47 @@ const Marker = ({
 
     markerInstance.current = marker;
 
-    if (onClick) {
-      window.kakao.maps.event.addListener(marker, 'click', onClick);
-    }
+    // 인포윈도우 생성
+    const content = `
+      <div className="inline-flex flex-col gap-1 px-5 py-4 items-end rounded-3xl bg-white">
+        <div className="self-stretch"><span className="semibold-16">${title}</span></div>
+        <div className="self-stretch"><span className="semibold-12 text-gray-600">${address || ''}</span></div>
+      </div>
+    `;
+
+    const infowindow = new window.kakao.maps.InfoWindow({
+      content,
+      position: new window.kakao.maps.LatLng(position.lat, position.lng),
+    });
+
+    infowindowInstance.current = infowindow;
+
+    // 마커 클릭 이벤트 핸들러
+    const handleMarkerClick = () => {
+      if (infowindowInstance.current) {
+        infowindowInstance.current.open(map, marker);
+      }
+      if (onClick) {
+        onClick();
+      }
+    };
+
+    window.kakao.maps.event.addListener(marker, 'click', handleMarkerClick);
 
     return () => {
       if (markerInstance.current) {
+        window.kakao.maps.event.removeListener(
+          markerInstance.current,
+          'click',
+          handleMarkerClick,
+        );
         markerInstance.current.setMap(null);
-        if (onClick) {
-          window.kakao.maps.event.removeListener(
-            markerInstance.current,
-            'click',
-            onClick,
-          );
-        }
+      }
+      if (infowindowInstance.current) {
+        infowindowInstance.current.close();
       }
     };
-  }, [map, position, title, clickable, draggable, onClick, day]);
+  }, [map, position, title, clickable, draggable, onClick, day, address]);
 
   // 마커 속성 업데이트
   useEffect(() => {

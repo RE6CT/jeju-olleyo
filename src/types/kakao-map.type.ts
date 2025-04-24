@@ -60,6 +60,7 @@ export type MarkerInstance = {
 export type MarkerProps = MarkerOptions & {
   map?: KakaoMapInstance; // 마커가 표시될 지도
   onClick?: () => void; // 클릭 이벤트 핸들러
+  address?: string; // 주소 정보
 };
 
 /**
@@ -302,6 +303,10 @@ export type KakaoMapAPI = {
       draggable?: boolean;
       image?: MarkerImage;
     }) => MarkerInstance;
+    InfoWindow: new (options: {
+      content: string;
+      position: LatLng;
+    }) => InfoWindowInstance;
     MarkerImage: new (
       src: string,
       size: Size,
@@ -330,4 +335,12 @@ export type KakaoMapAPI = {
     };
     load: (callback: () => void) => void;
   };
+};
+
+// InfoWindow 타입 추가
+export type InfoWindowInstance = {
+  open: (map: KakaoMapInstance, marker: MarkerInstance) => void;
+  close: () => void;
+  setContent: (content: string) => void;
+  setPosition: (position: LatLng) => void;
 };

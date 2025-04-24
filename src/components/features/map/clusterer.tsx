@@ -99,13 +99,35 @@ const Clusterer = ({ map, markers, ...options }: ClustererOptions) => {
           image: marker.image,
         });
 
-        if (marker.onClick) {
-          window.kakao.maps.event.addListener(
-            kakaoMarker,
-            'click',
-            marker.onClick,
-          );
-        }
+        // 인포윈도우 생성
+        const content = `
+          <div className="inline-flex flex-col gap-1 px-5 py-4 items-end rounded-3xl bg-white">
+            <div className="self-stretch"><span className="semibold-16">${marker.title}</span></div>
+            <div className="self-stretch"><span className="semibold-12 text-gray-600">${marker.address || ''}</span></div>
+          </div>
+        `;
+
+        const infowindow = new window.kakao.maps.InfoWindow({
+          content,
+          position: new window.kakao.maps.LatLng(
+            marker.position.lat,
+            marker.position.lng,
+          ),
+        });
+
+        // 마커 클릭 이벤트 핸들러
+        const handleMarkerClick = () => {
+          infowindow.open(map, kakaoMarker);
+          if (marker.onClick) {
+            marker.onClick();
+          }
+        };
+
+        window.kakao.maps.event.addListener(
+          kakaoMarker,
+          'click',
+          handleMarkerClick,
+        );
 
         return kakaoMarker;
       });

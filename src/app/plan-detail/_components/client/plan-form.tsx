@@ -91,7 +91,7 @@ const PlanForm = ({
     setIsMounted(true);
   }, []);
 
-  if (!isMounted || !userId) {
+  if (!isMounted) {
     return null;
   }
 

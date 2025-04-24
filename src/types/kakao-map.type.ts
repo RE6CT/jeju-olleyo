@@ -243,6 +243,12 @@ export type KakaoMapEventTarget =
 
 export type KakaoMapAPI = {
   maps: {
+    LatLng: new (lat: number, lng: number) => LatLng;
+    Map: new (
+      container: HTMLElement,
+      options: { center: LatLng; level: number },
+    ) => KakaoMapInstance;
+    CustomOverlay: new (options: CustomOverlayOptions) => CustomOverlayInstance;
     services: {
       Geocoder: new () => {
         addressSearch: (
@@ -287,14 +293,6 @@ export type KakaoMapAPI = {
         ) => void;
       };
     };
-    LatLng: new (lat: number, lng: number) => LatLng;
-    Map: new (
-      container: HTMLElement,
-      options: {
-        center: LatLng;
-        level: number;
-      },
-    ) => KakaoMapInstance;
     Marker: new (options: {
       position: LatLng;
       map?: KakaoMapInstance;
@@ -303,10 +301,6 @@ export type KakaoMapAPI = {
       draggable?: boolean;
       image?: MarkerImage;
     }) => MarkerInstance;
-    InfoWindow: new (options: {
-      content: string;
-      position: LatLng;
-    }) => InfoWindowInstance;
     MarkerImage: new (
       src: string,
       size: Size,
@@ -337,10 +331,21 @@ export type KakaoMapAPI = {
   };
 };
 
-// InfoWindow 타입 추가
-export type InfoWindowInstance = {
-  open: (map: KakaoMapInstance, marker: MarkerInstance) => void;
-  close: () => void;
-  setContent: (content: string) => void;
+// 커스텀 오버레이 옵션 타입
+export type CustomOverlayOptions = {
+  content: string;
+  position: LatLng;
+  xAnchor?: number;
+  yAnchor?: number;
+  zIndex?: number;
+};
+
+// 커스텀 오버레이 인스턴스 타입
+export type CustomOverlayInstance = {
+  setMap: (map: KakaoMapInstance | null) => void;
+  getMap: () => KakaoMapInstance | null;
+  getPosition: () => LatLng;
   setPosition: (position: LatLng) => void;
+  setContent: (content: string) => void;
+  getContent: () => string;
 };

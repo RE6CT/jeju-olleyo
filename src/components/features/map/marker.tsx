@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react';
 
 import { createMarkerImage } from '@/lib/utils/map.util';
 import {
-  InfoWindowInstance,
+  CustomOverlayInstance,
   MarkerInstance,
   MarkerProps,
 } from '@/types/kakao-map.type';
@@ -30,7 +30,7 @@ const Marker = ({
   address,
 }: MarkerProps) => {
   const markerInstance = useRef<MarkerInstance | null>(null);
-  const infowindowInstance = useRef<InfoWindowInstance | null>(null);
+  const overlayInstance = useRef<CustomOverlayInstance | null>(null);
 
   // 마커 초기화
   useEffect(() => {
@@ -49,25 +49,24 @@ const Marker = ({
 
     markerInstance.current = marker;
 
-    // 인포윈도우 생성
-    const content = `
-      <div className="inline-flex flex-col gap-1 px-5 py-4 items-end rounded-3xl bg-white">
-        <div className="self-stretch"><span className="semibold-16">${title}</span></div>
-        <div className="self-stretch"><span className="semibold-12 text-gray-600">${address || ''}</span></div>
-      </div>
-    `;
-
-    const infowindow = new window.kakao.maps.InfoWindow({
-      content,
+    const customOverlay = new window.kakao.maps.CustomOverlay({
+      content: `
+        <div style="padding: 8px 12px; display: flex; flex-direction: column; gap: 4px; border-radius: 8px; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+          <div style="font-weight: 600; font-size: 14px;">${title}</div>
+          <div style="font-size: 12px; color: #666;">${address || ''}</div>
+        </div>
+      `,
       position: new window.kakao.maps.LatLng(position.lat, position.lng),
+      xAnchor: 0.5,
+      yAnchor: 1.7,
     });
 
-    infowindowInstance.current = infowindow;
+    overlayInstance.current = customOverlay;
 
     // 마커 클릭 이벤트 핸들러
     const handleMarkerClick = () => {
-      if (infowindowInstance.current) {
-        infowindowInstance.current.open(map, marker);
+      if (overlayInstance.current) {
+        overlayInstance.current.setMap(map);
       }
       if (onClick) {
         onClick();
@@ -85,8 +84,8 @@ const Marker = ({
         );
         markerInstance.current.setMap(null);
       }
-      if (infowindowInstance.current) {
-        infowindowInstance.current.close();
+      if (overlayInstance.current) {
+        overlayInstance.current.setMap(null);
       }
     };
   }, [map, position, title, clickable, draggable, onClick, day, address]);

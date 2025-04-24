@@ -2,7 +2,12 @@
 
 import { useEffect, useRef } from 'react';
 
-import { ClustererInstance, ClustererOptions } from '@/types/kakao-map.type';
+import {
+  ClustererInstance,
+  ClustererOptions,
+  CustomOverlayInstance,
+  MarkerProps,
+} from '@/types/kakao-map.type';
 
 /**
  * 카카오맵 마커 클러스터링 컴포넌트
@@ -31,6 +36,7 @@ import { ClustererInstance, ClustererOptions } from '@/types/kakao-map.type';
  */
 const Clusterer = ({ map, markers, ...options }: ClustererOptions) => {
   const clustererInstance = useRef<ClustererInstance | null>(null);
+  const overlayInstance = useRef<CustomOverlayInstance | null>(null);
 
   // 클러스터러 스타일 속성 설정
   // styles 배열의 인덱스는 calculator에 지정된 개수에 따라 자동 지정
@@ -99,34 +105,42 @@ const Clusterer = ({ map, markers, ...options }: ClustererOptions) => {
           image: marker.image,
         });
 
-        // 인포윈도우 생성
-        const content = `
-          <div className="inline-flex flex-col gap-1 px-5 py-4 items-end rounded-3xl bg-white">
-            <div className="self-stretch"><span className="semibold-16">${marker.title}</span></div>
-            <div className="self-stretch"><span className="semibold-12 text-gray-600">${marker.address || ''}</span></div>
-          </div>
-        `;
-
-        const infowindow = new window.kakao.maps.InfoWindow({
-          content,
-          position: new window.kakao.maps.LatLng(
-            marker.position.lat,
-            marker.position.lng,
-          ),
-        });
-
         // 마커 클릭 이벤트 핸들러
-        const handleMarkerClick = () => {
-          infowindow.open(map, kakaoMarker);
-          if (marker.onClick) {
-            marker.onClick();
+        const handleMarkerClick = (marker: MarkerProps) => {
+          if (overlayInstance.current) {
+            overlayInstance.current.setMap(null);
           }
+
+          const content = `
+            <div style="padding: 8px 12px; display: flex; flex-direction: column; gap: 4px; border-radius: 8px; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+              <div style="font-weight: 600; font-size: 14px;">${marker.title}</div>
+              <div style="font-size: 12px; color: #666;">${marker.address || ''}</div>
+            </div>
+          `;
+
+          const customOverlay = new window.kakao.maps.CustomOverlay({
+            content,
+            position: new window.kakao.maps.LatLng(
+              marker.position.lat,
+              marker.position.lng,
+            ),
+            xAnchor: 0.5,
+            yAnchor: 1.7,
+          });
+
+          overlayInstance.current = customOverlay;
+          overlayInstance.current.setMap(map);
         };
 
-        window.kakao.maps.event.addListener(
-          kakaoMarker,
-          'click',
-          handleMarkerClick,
+        // 지도 클릭 이벤트 핸들러 - 오버레이 닫기
+        window.kakao.maps.event.addListener(map, 'click', function () {
+          if (overlayInstance.current) {
+            overlayInstance.current.setMap(null);
+          }
+        });
+
+        window.kakao.maps.event.addListener(kakaoMarker, 'click', () =>
+          handleMarkerClick(marker),
         );
 
         return kakaoMarker;

@@ -90,7 +90,7 @@ const PlaceCard = ({
       <div className="flex w-full items-center gap-5 rounded-lg border border-gray-100 bg-white p-4 shadow-[0px_2px_4px_1px_rgba(0,0,0,0.10)] transition-shadow duration-200 hover:shadow-[0px_4px_8px_2px_rgba(0,0,0,0.15)]">
         {/* 장소 이미지 */}
         <div
-          className={`h-[${PLACE_IMAGE_SIZE.height}px] w-[${PLACE_IMAGE_SIZE.width}px] shrink-0 overflow-hidden rounded-lg bg-gray-100`}
+          className={`h-[120px] w-[120px] shrink-0 overflow-hidden rounded-lg bg-gray-100`}
         >
           <Image
             src={displayImageUrl}

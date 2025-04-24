@@ -32,7 +32,7 @@ const PlanMap = memo(() => {
 
   return (
     <>
-      <div className="sticky top-0 z-40 h-10 bg-slate-50"></div>
+      <div className="sticky top-0 z-40 h-10 bg-white"></div>
       <div className="sticky top-8 z-40 mt-4 h-[218px] w-full overflow-hidden rounded-[12px]">
         {isLoading && <Loading />}
         {error && <ErrorMessage message={error} />}

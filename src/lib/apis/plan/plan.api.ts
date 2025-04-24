@@ -135,7 +135,9 @@ export const fetchGetAllPlans = async (
     .range(startIndex, endIndex);
 
   const { data, error: dataError } = await query;
-  const { count, error: CountError } = await supabase.from('plans').select('*');
+  const { count, error: CountError } = await supabase
+    .from('plans')
+    .select('*', { count: 'exact' });
 
   if (dataError) throw new Error(dataError.message);
   if (CountError) throw new Error(CountError.message);

@@ -6,8 +6,6 @@ import TicketSearchSelector from './ticket-search-selector';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { ko } from 'date-fns/locale';
-import { useState } from 'react';
-import { formatTicketPeriod } from '../_utils/ticket-uitls';
 
 const TicketSearchForm = ({
   departureList,
@@ -19,8 +17,11 @@ const TicketSearchForm = ({
   endDate,
   setStartDate,
   setEndDate,
+  passengers,
+  setPassengers,
+  classType,
+  setClassType,
 }: TicketSearchFormProps) => {
-  const [calendarOpen, setCalendarOpen] = useState(false);
   const handleChange = (dates: [Date | null, Date | null]) => {
     const [start, end] = dates;
     setStartDate(start);
@@ -42,7 +43,12 @@ const TicketSearchForm = ({
         } gap-4`}
       >
         <div className="col-span-3">
-          <TicketSearchSelector />
+          <TicketSearchSelector
+            passengers={passengers}
+            setPassengers={setPassengers}
+            classType={classType}
+            setClassType={setClassType}
+          />
         </div>
         <div>
           <span className="mb-2 block text-18 font-medium">출발지</span>
@@ -100,12 +106,15 @@ const TicketSearchForm = ({
                 selectsRange
                 dateFormat="yyyy-MM-dd"
                 className="w-full rounded border p-2 pl-9 text-16 text-black"
+                minDate={new Date()}
               />
             </div>
             {showInnerButton && (
               <Button
                 type="submit"
+                form="ticketForm"
                 className="h-11 w-24 !rounded-12 bg-secondary-300 px-6 py-[10px] text-white hover:bg-secondary-400"
+                onClick={handleSubmit}
               >
                 조회 하기
               </Button>

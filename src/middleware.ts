@@ -176,12 +176,6 @@ export async function middleware(request: NextRequest) {
       );
     }
 
-    if (pathname === PATH.CATEGORIES) {
-      return NextResponse.redirect(
-        new URL(`${PATH.CATEGORIES}/all`, request.url),
-      );
-    }
-
     return response;
   } catch (error) {
     console.error('미들웨어 실행 중 오류 발생:', error);

@@ -1,6 +1,6 @@
 import { CategoryParamType } from '@/types/category.type';
 
-import CategoryClient from './category-client';
+import CategoryClient from '../_components/_client/category-client';
 import { Metadata } from 'next';
 import { CATEGORY_KR_MAP } from '@/constants/home.constants';
 

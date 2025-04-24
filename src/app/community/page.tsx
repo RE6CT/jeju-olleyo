@@ -4,7 +4,7 @@ import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 import { fetchGetAllPlans } from '@/lib/apis/plan/plan.api';
 import { CommunitySortType } from '@/types/community.type';
 
-import CommunityPlanList from './_components/community-plan-list';
+import CommunityPlanList from './_components/_client/community-plan-list';
 
 export const metadata = {
   title: '커뮤니티',

@@ -34,7 +34,7 @@ export const fetchAllPlans = async (userId: string | null, limit?: number) => {
  */
 export const getPopularPlaces = async (
   category: string = '전체',
-  userId?: string,
+  userId?: string | null,
 ): Promise<Place[]> => {
   try {
     // 함수 인자를 명시적으로 타입 지정

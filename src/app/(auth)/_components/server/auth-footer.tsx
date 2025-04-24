@@ -9,11 +9,15 @@ import { AuthFooterProps } from '@/types/auth.type';
  * @param linkText 링크 텍스트
  * @param linkHref 링크 URL
  */
-const AuthFooter = ({ linkText, linkHref }: AuthFooterProps) => {
+const AuthFooter = ({ linkText, linkHref, onClick }: AuthFooterProps) => {
   return (
     <CardFooter className="flex justify-center">
       <div className="text-14 text-gray-600">
-        <Link href={linkHref} className="text-black hover:text-blue">
+        <Link
+          href={linkHref}
+          onClick={onClick}
+          className="text-black hover:text-blue"
+        >
           {linkText}
         </Link>
       </div>

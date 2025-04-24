@@ -155,14 +155,28 @@ export const fetchLogout = async (): Promise<AuthResult> => {
 
 /**
  * 현재 로그인한 사용자 정보를 가져오는 서버 액션
+ * @returns 사용자 정보 또는 오류 객체
  */
 export const fetchGetCurrentUser = async () => {
-  const supabase = await getServerClient();
-
   try {
+    // 세션 먼저 확인하여 불필요한 getUser 호출 방지
+    const supabase = await getServerClient();
+    const { data: sessionData } = await supabase.auth.getSession();
+
+    // 세션이 없는 경우 즉시 null 반환 (오류로 처리하지 않음)
+    if (!sessionData.session) {
+      return { user: null, error: null };
+    }
+
+    // 세션이 있는 경우에만 사용자 정보 조회
     const { data, error } = await supabase.auth.getUser();
 
     if (error) {
+      // 세션 누락 오류인 경우 특별 처리
+      if (error.message?.includes('Auth session missing')) {
+        return { user: null, error: null };
+      }
+
       const handled = handleError('사용자 정보 조회', error);
       return { user: null, error: handled.error };
     }
@@ -177,18 +191,26 @@ export const fetchGetCurrentUser = async () => {
       id: data.user.id,
       email: data.user.email ?? null,
       avatar_url:
-        data.user.user_metadata.profile_img ||
-        data.user.user_metadata.avatar_url ||
+        data.user.user_metadata?.profile_img ||
+        data.user.user_metadata?.avatar_url ||
         null,
       nickname:
-        data.user.user_metadata.nickname ||
-        data.user.user_metadata.full_name ||
+        data.user.user_metadata?.nickname ||
+        data.user.user_metadata?.full_name ||
         '사용자',
-      phone: data.user.user_metadata.phone || null,
+      phone: data.user.user_metadata?.phone || null,
     };
 
     return { user: userInfo, error: null };
   } catch (error: unknown) {
+    // 세션 관련 오류인 경우 특별 처리
+    if (
+      error instanceof Error &&
+      error.message?.includes('Auth session missing')
+    ) {
+      return { user: null, error: null };
+    }
+
     const handled = handleError('사용자 정보 조회', error);
     return { user: null, error: handled.error };
   }

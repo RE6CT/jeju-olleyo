@@ -29,14 +29,6 @@ const PlanDetailPage = async ({
     const { user } = await fetchGetCurrentUser();
     const userId = user?.id;
 
-    // 비공개 일정인 경우 로그인 필수
-    if (!plan.public) {
-      // 로그인하지 않은 경우, 작성자가 아닌 경우
-      if (!userId || plan.userId !== userId) {
-        return <NotFound />;
-      }
-    }
-
     const dayPlaces = await fetchGetPlanDaysAndLocations(Number(params.planId));
 
     const initialPlan = {

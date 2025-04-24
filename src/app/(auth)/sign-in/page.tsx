@@ -82,7 +82,7 @@ const LoginPage = () => {
         />
       </section>
 
-      <section aria-label="소셜 로그인">
+      <section className="mt-[34px]" aria-label="소셜 로그인">
         <SocialLogin />
       </section>
     </AuthLayout>

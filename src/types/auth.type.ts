@@ -53,6 +53,7 @@ export type AuthHeaderProps = {
 export type AuthFooterProps = {
   linkText: string;
   linkHref: string;
+  onClick: () => void;
 };
 
 /**
@@ -142,4 +143,11 @@ export type ResetPasswordState = {
   decrementCountdown: () => void;
   setError: (error: string | null) => void;
   reset: () => void;
+};
+
+// 인증체크 프롭
+export type UseAuthCheckProps = {
+  redirectTo?: string;
+  redirectIfFound?: boolean;
+  skipCheck?: boolean;
 };

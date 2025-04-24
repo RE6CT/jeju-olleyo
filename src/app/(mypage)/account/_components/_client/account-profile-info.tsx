@@ -16,18 +16,6 @@ import { nicknameSchema } from '@/lib/schemas/auth-schema';
 import AccountProfileImage from './account-profile-image';
 import useUpdateNicknameMutation from '@/lib/mutations/use-update-nickname-mutation';
 
-const PROFILE_INFO_STYLE = {
-  container:
-    'px-8 py-6 rounded-24 bg-white border-gray-100 border border-gray-100',
-  title: 'semibold-18 col-span-4 w-full',
-  input:
-    'rounded-[12px] border border-gray-200 px-4 py-[10px] !placeholder-gray-200',
-  rowLabel:
-    'text-[16px] text-gray-900 whitespace-nowrap w-[107px] p-[10px] font-medium',
-  rowValue: 'whitespace-nowrap medium-16 p-[10px]',
-  button: 'medium-16 bg-transparent text-secondary-300 hover:bg-gray-100',
-};
-
 /**
  * 회원정보 수정 페이지의 프로필 섹션 컴포넌트
  * @param userId - 유저의 uuid
@@ -114,70 +102,95 @@ const ProfileInfo = ({
   };
 
   return (
-    <div
-      className={`m-1 grid grid-cols-[auto_auto_1fr_auto] gap-3 ${PROFILE_INFO_STYLE.container}`}
+    <section
+      className="m-1 rounded-24 border border-gray-100 bg-white px-8 py-6"
+      aria-labelledby="profile-heading"
     >
-      <h3 className={PROFILE_INFO_STYLE.title}>프로필</h3>
-      <div className="w-[120px] py-[14px]">
-        <AccountProfileImage
-          userId={userId}
-          profileImage={profileImage}
-          provider={provider}
-        />
-      </div>
-      <form className="contents" onSubmit={handleSubmit(handleEditComplete)}>
-        <Label htmlFor="nickname" className={PROFILE_INFO_STYLE.rowLabel}>
-          닉네임
-        </Label>
-        {isEditMode ? (
-          <div className="relative">
-            <Input
-              id="nickname"
-              placeholder="새 닉네임을 입력하세요"
-              {...register('nickname')}
-              className={PROFILE_INFO_STYLE.input}
+      <h3 id="profile-heading" className="semibold-18 w-full">
+        프로필
+      </h3>
+      <form onSubmit={handleSubmit(handleEditComplete)}>
+        <div className="flex">
+          <figure className="w-[120px] flex-shrink-0 py-[14px]">
+            <AccountProfileImage
+              userId={userId}
+              profileImage={profileImage}
+              provider={provider}
             />
-            {errors.nickname && (
-              <p className="regular-14 absolute m-2 text-red">
-                {errors.nickname.message}
-              </p>
-            )}
-          </div>
-        ) : (
-          <span className={PROFILE_INFO_STYLE.rowValue}>{nickname}</span>
-        )}
-        {isEditMode ? (
-          <div>
-            <Button
-              type="submit"
-              disabled={!isValid || currentNickname === nickname}
-              className={PROFILE_INFO_STYLE.button}
+          </figure>
+          <div className="flex flex-grow">
+            <Label
+              htmlFor="nickname"
+              className="w-[125px] flex-shrink-0 whitespace-nowrap p-[10px] text-[16px] font-medium text-gray-900"
             >
-              완료
-            </Button>
-            <Button
-              onClick={handleEditCancelButtonClick}
-              className={PROFILE_INFO_STYLE.button}
+              닉네임
+            </Label>
+            <div>
+              {isEditMode ? (
+                <div className="relative">
+                  <Input
+                    id="nickname"
+                    placeholder="새 닉네임을 입력하세요"
+                    {...register('nickname')}
+                    className="w-full rounded-[12px] border border-gray-200 px-4 py-[10px] !placeholder-gray-200"
+                    aria-invalid={errors.nickname ? 'true' : 'false'}
+                  />
+                  {errors.nickname && (
+                    <p
+                      className="regular-14 absolute m-2 text-red"
+                      aria-live="polite"
+                      role="alert"
+                    >
+                      {errors.nickname.message}
+                    </p>
+                  )}
+                </div>
+              ) : (
+                <span className="medium-16 block w-full whitespace-nowrap p-[10px]">
+                  {nickname}
+                </span>
+              )}
+            </div>
+            <div
+              role="group"
+              aria-label="프로필 편집 컨트롤"
+              className="ml-auto"
             >
-              취소
-            </Button>
+              {isEditMode ? (
+                <div className="flex">
+                  <Button
+                    type="submit"
+                    disabled={!isValid || currentNickname === nickname}
+                    className="medium-16 bg-transparent text-secondary-300 hover:bg-gray-100"
+                  >
+                    완료
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={handleEditCancelButtonClick}
+                    className="medium-16 bg-transparent text-secondary-300 hover:bg-gray-100"
+                  >
+                    취소
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  {provider === 'email' && (
+                    <Button
+                      type="button"
+                      className="medium-16 bg-transparent text-secondary-300 hover:bg-gray-100"
+                      onClick={handleEditButtonClick}
+                    >
+                      수정
+                    </Button>
+                  )}
+                </>
+              )}
+            </div>
           </div>
-        ) : (
-          <>
-            {provider !== 'email' ? (
-              <div className="invisible" />
-            ) : (
-              <Button
-                className={PROFILE_INFO_STYLE.button}
-                onClick={handleEditButtonClick}
-              >
-                수정
-              </Button>
-            )}
-          </>
-        )}
+        </div>
       </form>
-    </div>
+    </section>
   );
 };
 

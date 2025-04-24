@@ -14,19 +14,6 @@ import useProviderFromCookie from '@/lib/hooks/use-get-provider';
 import { changePasswordSchema } from '@/lib/schemas/change-password-schema';
 import PasswordInput from '@/components/features/input/password-input';
 
-const SECURITY_INFO_STYLE = {
-  container:
-    'px-8 py-6 rounded-24 bg-white border-gray-100 border border-gray-100',
-  invisibleBox: 'invisible w-[120px]',
-  title: 'semibold-18 col-span-4 w-full',
-  input:
-    'rounded-[12px] border border-gray-200 px-4 py-[10px] !placeholder-gray-200',
-  rowLabel:
-    'text-[16px] text-gray-900 whitespace-nowrap w-[107px] p-[10px] font-medium',
-  rowValue: 'whitespace-nowrap medium-16 p-[10px]',
-  button: 'medium-16 bg-transparent text-secondary-300 hover:bg-gray-100',
-};
-
 /** 회원정보 수정 페이지의 보안 섹션 컴포넌트 */
 const SecurityInfo = ({ userId }: { userId: string }) => {
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
@@ -83,108 +70,160 @@ const SecurityInfo = ({ userId }: { userId: string }) => {
   };
 
   return (
-    <div
-      className={`m-1 grid grid-cols-[auto_auto_1fr_auto] gap-3 ${SECURITY_INFO_STYLE.container}`}
+    <section
+      className="m-1 rounded-24 border border-gray-100 bg-white px-8 py-6"
+      aria-labelledby="security-heading"
     >
-      <h3 className={SECURITY_INFO_STYLE.title}>보안</h3>
+      <h3 id="security-heading" className="semibold-18 w-full">
+        보안
+      </h3>
       {isEditMode ? (
-        <form
-          className="contents"
-          onSubmit={handleSubmit(handleEditCompleteButtonClick)}
-        >
-          <div className={SECURITY_INFO_STYLE.invisibleBox} />
-          <Label
-            htmlFor="currentPassword"
-            className={SECURITY_INFO_STYLE.rowLabel}
-          >
-            현재 비밀번호
-          </Label>
-          <div className="flex flex-col">
-            <PasswordInput
-              id="currentPassword"
-              placeholder="현재 비밀번호를 입력하세요"
-              register={register('password')}
-              autoComplete="current-password"
-            />
-            {errors.password && (
-              <p className="regular-14 m-2 text-red">
-                {errors.password.message}
-              </p>
-            )}
-          </div>
-          <div className="invisible" />
-          <div className="invisible" />
-          <Label htmlFor="newPassword" className={SECURITY_INFO_STYLE.rowLabel}>
-            새 비밀번호
-          </Label>
-          <div className="flex flex-col">
-            <PasswordInput
-              id="newPassword"
-              placeholder="새 비밀번호를 입력하세요"
-              register={register('newPassword')}
-              autoComplete="new-password"
-            />
-            {errors.newPassword && (
-              <p className="regular-14 m-2 text-red">
-                {errors.newPassword.message}
-              </p>
-            )}
-          </div>
-          <div className="invisible" />
-          <div className="invisible" />
-          <Label
-            htmlFor="newPasswordCheck"
-            className={SECURITY_INFO_STYLE.rowLabel}
-          >
-            새 비밀번호 확인
-          </Label>
-          <div className="flex flex-col">
-            <PasswordInput
-              id="newPasswordCheck"
-              placeholder="새 비밀번호를 입력하세요"
-              register={register('confirmNewPassword')}
-              autoComplete="new-password"
-            />
-            {errors.confirmNewPassword && (
-              <p className="regular-14 m-2 text-red">
-                {errors.confirmNewPassword.message}
-              </p>
-            )}
-          </div>
-          <div>
-            <Button
-              type="submit"
-              className={SECURITY_INFO_STYLE.button}
-              disabled={!isValid}
-            >
-              완료
-            </Button>
-            <Button
-              className={SECURITY_INFO_STYLE.button}
-              onClick={handleEditCancelButtonClick}
-            >
-              취소
-            </Button>
-          </div>
+        <form onSubmit={handleSubmit(handleEditCompleteButtonClick)}>
+          <fieldset>
+            <legend className="sr-only">비밀번호 변경</legend>
+            <div className="flex">
+              <div
+                className="invisible w-[120px] flex-shrink-0"
+                aria-hidden="true"
+              />
+              <Label
+                htmlFor="currentPassword"
+                className="w-[125px] flex-shrink-0 whitespace-nowrap p-[10px] text-[16px] font-medium text-gray-900"
+              >
+                현재 비밀번호
+              </Label>
+              <div className="flex flex-col">
+                <PasswordInput
+                  id="currentPassword"
+                  placeholder="현재 비밀번호를 입력하세요"
+                  register={register('password')}
+                  autoComplete="current-password"
+                  aria-required="true"
+                />
+                {errors.password && (
+                  <p
+                    className="regular-14 m-2 text-red"
+                    role="alert"
+                    aria-live="polite"
+                  >
+                    {errors.password.message}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <div className="flex">
+              <div
+                className="invisible w-[120px] flex-shrink-0"
+                aria-hidden="true"
+              />
+              <Label
+                htmlFor="newPassword"
+                className="w-[125px] flex-shrink-0 whitespace-nowrap p-[10px] text-[16px] font-medium text-gray-900"
+              >
+                새 비밀번호
+              </Label>
+              <div className="flex flex-col">
+                <PasswordInput
+                  id="newPassword"
+                  placeholder="새 비밀번호를 입력하세요"
+                  register={register('newPassword')}
+                  autoComplete="new-password"
+                  aria-required="true"
+                />
+                {errors.newPassword && (
+                  <p
+                    className="regular-14 m-2 text-red"
+                    role="alert"
+                    aria-live="polite"
+                  >
+                    {errors.newPassword.message}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <div className="flex">
+              <div
+                className="invisible w-[120px] flex-shrink-0"
+                aria-hidden="true"
+              />
+              <Label
+                htmlFor="newPasswordCheck"
+                className="w-[125px] flex-shrink-0 whitespace-nowrap p-[10px] text-[16px] font-medium text-gray-900"
+              >
+                새 비밀번호 확인
+              </Label>
+              <div className="flex flex-col">
+                <PasswordInput
+                  id="newPasswordCheck"
+                  placeholder="새 비밀번호를 입력하세요"
+                  register={register('confirmNewPassword')}
+                  autoComplete="new-password"
+                  aria-required="true"
+                />
+                {errors.confirmNewPassword && (
+                  <p
+                    className="regular-14 m-2 text-red"
+                    role="alert"
+                    aria-live="polite"
+                  >
+                    {errors.confirmNewPassword.message}
+                  </p>
+                )}
+              </div>
+              <div
+                className="ml-auto flex"
+                role="group"
+                aria-label="비밀번호 변경 컨트롤"
+              >
+                <Button
+                  type="submit"
+                  className="medium-16 bg-transparent text-secondary-300 hover:bg-gray-100"
+                  disabled={!isValid}
+                >
+                  완료
+                </Button>
+                <Button
+                  type="button"
+                  className="medium-16 bg-transparent text-secondary-300 hover:bg-gray-100"
+                  onClick={handleEditCancelButtonClick}
+                >
+                  취소
+                </Button>
+              </div>
+            </div>
+          </fieldset>
         </form>
       ) : (
-        <>
-          <div className={SECURITY_INFO_STYLE.invisibleBox} />
-          <div className={SECURITY_INFO_STYLE.rowLabel}>현재 비밀번호</div>
-          <div className={SECURITY_INFO_STYLE.rowValue}>********</div>
+        <div className="flex">
+          <div
+            className="invisible w-[120px] flex-shrink-0"
+            aria-hidden="true"
+          />
+          <div className="w-[125px] flex-shrink-0 whitespace-nowrap p-[10px] text-[16px] font-medium text-gray-900">
+            현재 비밀번호
+          </div>
+          <output
+            className="medium-16 block w-full whitespace-nowrap p-[10px]"
+            aria-label="비밀번호(마스킹됨)"
+          >
+            ********
+          </output>
           {provider !== 'email' ? (
-            <div className="invisible" />
+            <div className="invisible" aria-hidden="true" />
           ) : (
             <Button
-              className={SECURITY_INFO_STYLE.button}
+              type="button"
+              className="medium-16 bg-transparent text-secondary-300 hover:bg-gray-100"
               onClick={handleEditButtonClick}
             >
               수정
             </Button>
           )}
-        </>
+        </div>
       )}
-    </div>
+    </section>
   );
 };
 

@@ -13,19 +13,6 @@ import { fetchUpdatePhoneByUserId } from '@/lib/apis/profile/update-profile.api'
 import useCustomToast from '@/lib/hooks/use-custom-toast';
 import { phoneSchema } from '@/lib/schemas/auth-schema';
 
-const PERSONAL_INFO_STYLE = {
-  container:
-    'px-8 py-6 rounded-24 bg-white border-gray-100 border border-gray-100',
-  invisibleBox: 'invisible w-[120px]',
-  title: 'semibold-18 col-span-4 w-full',
-  input:
-    'rounded-[12px] border border-gray-200 px-4 py-[10px] !placeholder-gray-200',
-  rowLabel:
-    'text-[16px] text-gray-900 whitespace-nowrap w-[107px] p-[10px] font-medium',
-  rowValue: 'whitespace-nowrap medium-16 p-[10px]',
-  button: 'medium-16 bg-transparent text-secondary-300 hover:bg-gray-100',
-};
-
 /** 회원정보 수정 페이지의 개인 정보 섹션 컴포넌트 */
 const PersonalInfo = ({
   userId,
@@ -94,60 +81,95 @@ const PersonalInfo = ({
   };
 
   return (
-    <div
-      className={`m-1 grid grid-cols-[auto_auto_1fr_auto] gap-3 ${PERSONAL_INFO_STYLE.container}`}
+    <section
+      className="m-1 rounded-24 border border-gray-100 bg-white px-8 py-6"
+      aria-labelledby="profile-heading"
     >
-      <h3 className={PERSONAL_INFO_STYLE.title}>개인 정보</h3>
-      <div className={PERSONAL_INFO_STYLE.invisibleBox} />
-      <div className={PERSONAL_INFO_STYLE.rowLabel}>이메일</div>
-      <div className={PERSONAL_INFO_STYLE.rowValue}>{email}</div>
-      <div className="invisible" />
-      <div className="invisible" />
-      <form className="contents" onSubmit={handleSubmit(handleEditComplete)}>
-        <Label htmlFor="phone" className={PERSONAL_INFO_STYLE.rowLabel}>
+      <h3 id="profile-heading" className="semibold-18 w-full">
+        개인 정보
+      </h3>
+
+      <dl className="flex flex-col gap-2">
+        <div className="flex">
+          <div
+            className="invisible w-[120px] flex-shrink-0"
+            aria-hidden="true"
+          />
+          <dt className="w-[125px] flex-shrink-0 whitespace-nowrap p-[10px] text-[16px] font-medium text-gray-900">
+            이메일
+          </dt>
+          <dd className="medium-16 block w-full whitespace-nowrap p-[10px]">
+            {email}
+          </dd>
+        </div>
+      </dl>
+
+      <form className="flex" onSubmit={handleSubmit(handleEditComplete)}>
+        <div className="invisible w-[120px] flex-shrink-0" aria-hidden="true" />
+        <Label
+          htmlFor="phone"
+          className="w-[125px] flex-shrink-0 whitespace-nowrap p-[10px] text-[16px] font-medium text-gray-900"
+        >
           휴대폰
         </Label>
-        {isEditMode ? (
-          <div className="flex flex-col">
-            <Input
-              id="phone"
-              placeholder="휴대폰 번호를 입력하세요"
-              {...register('phone')}
-              className={PERSONAL_INFO_STYLE.input}
-            />
-            {errors.phone && (
-              <p className="regular-14 m-2 text-red">{errors.phone.message}</p>
-            )}
-          </div>
-        ) : (
-          <span className={PERSONAL_INFO_STYLE.rowValue}>{phone}</span>
-        )}
-        {isEditMode ? (
-          <div>
+
+        <div>
+          {isEditMode ? (
+            <div className="flex flex-col">
+              <Input
+                id="phone"
+                placeholder="휴대폰 번호를 입력하세요"
+                {...register('phone')}
+                className="w-full rounded-[12px] border border-gray-200 px-4 py-[10px] !placeholder-gray-200"
+                aria-invalid={errors.phone ? 'true' : 'false'}
+              />
+              {errors.phone && (
+                <p
+                  className="regular-14 m-2 text-red"
+                  role="alert"
+                  aria-live="polite"
+                >
+                  {errors.phone.message}
+                </p>
+              )}
+            </div>
+          ) : (
+            <output className="medium-16 block w-full whitespace-nowrap p-[10px]">
+              {phone}
+            </output>
+          )}
+        </div>
+
+        <div role="group" aria-label="편집 제어" className="ml-auto">
+          {isEditMode ? (
+            <div className="flex">
+              <Button
+                type="submit"
+                className="medium-16 bg-transparent text-secondary-300 hover:bg-gray-100"
+                disabled={!isValid || currentPhone === phone}
+              >
+                완료
+              </Button>
+              <Button
+                type="button"
+                className="medium-16 bg-transparent text-secondary-300 hover:bg-gray-100"
+                onClick={handleEditCancelButtonClick}
+              >
+                취소
+              </Button>
+            </div>
+          ) : (
             <Button
-              type="submit"
-              className={PERSONAL_INFO_STYLE.button}
-              disabled={!isValid || currentPhone === phone}
+              type="button"
+              className="medium-16 bg-transparent text-secondary-300 hover:bg-gray-100"
+              onClick={handleEditButtonClick}
             >
-              완료
+              수정
             </Button>
-            <Button
-              className={PERSONAL_INFO_STYLE.button}
-              onClick={handleEditCancelButtonClick}
-            >
-              취소
-            </Button>
-          </div>
-        ) : (
-          <Button
-            className={PERSONAL_INFO_STYLE.button}
-            onClick={handleEditButtonClick}
-          >
-            수정
-          </Button>
-        )}
+          )}
+        </div>
       </form>
-    </div>
+    </section>
   );
 };
 

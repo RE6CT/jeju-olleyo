@@ -4,16 +4,23 @@ import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { CommentType } from '@/types/plan-detail.type';
+import { CommentProps } from '@/types/plan-detail.type';
 
 /**
  * 댓글 컴포넌트
- * @param CommentType.userId - 댓글 작성한 유저의 id
- * @param CommentType.nickname - 댓글 작성한 유저의 닉네임
- * @param CommentType.content - 댓글 내용
- * @param CommentType.createdAt - 댓글 작성 시간
+ * @param planCommentId - 댓글의 id
+ * @param userId - 댓글 작성한 유저의 id
+ * @param nickname - 댓글 작성한 유저의 닉네임
+ * @param content - 댓글 내용
+ * @param createdAt - 댓글 작성 시간
  */
-const Comment = ({ userId, nickname, content, createdAt }: CommentType) => {
+const Comment = ({
+  planCommentId,
+  userId,
+  nickname,
+  content,
+  createdAt,
+}: CommentProps) => {
   const user = ''; // 유저의 uuid 불러오는 로직 추후 추가
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [inputText, setInputText] = useState<string>(content);

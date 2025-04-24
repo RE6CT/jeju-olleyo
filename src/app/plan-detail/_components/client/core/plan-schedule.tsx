@@ -39,6 +39,8 @@ import {
   useScheduleSavePlan,
 } from '@/lib/hooks/use-schedule';
 import { useCurrentUser } from '@/lib/queries/auth-queries';
+import { useGetComments } from '@/lib/queries/use-get-comments';
+import Comment from '../features/comment/comment';
 
 const DROPDOWN_CONTENT_STYLE =
   'p-0 border border-[#E7EDF0] bg-[#F9FAFB] rounded-[12px] w-[140px] [&>*:hover]:bg-primary-100 [&>*:hover]:text-primary-500';
@@ -190,6 +192,8 @@ const PlanSchedule = memo(() => {
   );
 
   const dayCount = calculateTotalDays(startDate, endDate);
+  const planId = usePlanId();
+  const { data: comments } = useGetComments(planId);
 
   return (
     <div className="relative min-h-screen pb-32">
@@ -419,15 +423,25 @@ const PlanSchedule = memo(() => {
                 </div>
               )}
               {isReadOnly && (
-                <div className="relative h-full w-[400px] border-l border-gray-200 p-6">
-                  <div className="mb-4 text-18 font-bold">댓글 0</div>
-                  <div className="space-y-4">
-                    <div className="rounded-lg bg-gray-50 p-4">
-                      <div className="whitespace-pre-line py-8 text-center text-gray-400">
-                        댓글 영역입니다. {'\n'} 이후 버전에서 구현될 예정입니다
-                      </div>
-                    </div>
+                <div className="relative h-full w-[400px] border-gray-200 p-6">
+                  <div className="flex flex-col gap-2 rounded-12 border border-gray-100 bg-gray-50 px-5 py-2">
+                    <h3 className="semibold-16 my-3">
+                      댓글 {comments?.length}
+                    </h3>
+                    <ul>
+                      {comments?.map((comment) => (
+                        <Comment
+                          key={comment.planCommentId}
+                          planCommentId={comment.planCommentId}
+                          userId={comment.userId}
+                          nickname={comment.nickname}
+                          createdAt={comment.createdAt}
+                          content={comment.content}
+                        />
+                      ))}
+                    </ul>
                   </div>
+
                   <div className="absolute bottom-[-70px] right-[40px]">
                     <SaveButton />
                   </div>

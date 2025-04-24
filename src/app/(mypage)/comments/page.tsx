@@ -1,5 +1,5 @@
 import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
-import { fetchAllCommentsByUserId } from '@/lib/apis/comments/get-comments.api';
+import { fetchAllCommentsByUserId } from '@/lib/apis/comments/get-user-comments.api';
 
 import MypageDataCounts from '../_components/mypage-data-counts';
 import CommentsList from './_components/comments-list';

@@ -161,18 +161,15 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
           >
             {isLoading ? AUTH_BUTTON_TEXT.LOADING : buttonText}
           </Button>
-          <nav className="flex flex-row justify-center">
+          <nav className="mt-4 flex flex-row justify-center gap-5">
             {/* 비밀번호 찾기 링크 */}
             <Link
               href={PATH.FORGOT_PASSWORD}
-              className="regular-12 p-2.5 text-gray-600"
+              className="regular-12 text-gray-600"
             >
               비밀번호 찾기
             </Link>
-            <Link
-              href={PATH.SIGNUP}
-              className="medium-12 p-2.5 text-secondary-300"
-            >
+            <Link href={PATH.SIGNUP} className="medium-12 text-secondary-300">
               회원가입
             </Link>
           </nav>

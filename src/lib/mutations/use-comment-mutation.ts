@@ -2,8 +2,10 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { CommentType } from '@/types/comment.type';
 import {
   fetchAddComment,
+  fetchDeleteCommentsByCommentId,
   fetchUpdateCommentsByCommentId,
 } from '../apis/comments/client-comments.api';
+import useCustomToast from '../hooks/use-custom-toast';
 
 /**
  * 댓글 생성 뮤테이션 훅
@@ -32,6 +34,7 @@ export const useAddComment = () => {
  */
 export const useUpdateComment = () => {
   const queryClient = useQueryClient();
+  const { successToast } = useCustomToast();
 
   return useMutation({
     mutationFn: ({
@@ -62,6 +65,24 @@ export const useUpdateComment = () => {
       return previousData;
     },
     onSuccess: () => {
+      successToast('댓글이 수정되었습니다.');
+      queryClient.invalidateQueries({ queryKey: ['comments'] });
+    },
+  });
+};
+
+/**
+ * 댓글 삭제 뮤테이션 훅
+ */
+export const useDeleteComment = () => {
+  const queryClient = useQueryClient();
+  const { successToast } = useCustomToast();
+
+  return useMutation({
+    mutationFn: (commentId: number) =>
+      fetchDeleteCommentsByCommentId(commentId),
+    onSuccess: () => {
+      successToast('댓글이 삭제되었습니다.');
       queryClient.invalidateQueries({ queryKey: ['comments'] });
     },
   });

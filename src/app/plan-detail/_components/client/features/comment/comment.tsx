@@ -7,8 +7,10 @@ import { CommentProps } from '@/types/plan-detail.type';
 import { formatDate } from '@/lib/utils/date';
 import useAuth from '@/lib/hooks/use-auth';
 import { Separator } from '@/components/ui/separator';
-import { useUpdateComment } from '@/lib/mutations/use-comment-mutation';
-import useCustomToast from '@/lib/hooks/use-custom-toast';
+import {
+  useDeleteComment,
+  useUpdateComment,
+} from '@/lib/mutations/use-comment-mutation';
 
 /**
  * 댓글 컴포넌트
@@ -28,20 +30,26 @@ const Comment = ({
   const { user } = useAuth();
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [inputText, setInputText] = useState<string>(content);
-  const { mutate } = useUpdateComment();
-  const { successToast } = useCustomToast();
+  const { mutate: updateComment } = useUpdateComment();
+  const { mutate: deleteComment } = useDeleteComment();
 
   /** 댓글 삭제 핸들러 함수 */
   const handleDeleteCommentButtonClick = () => {
     const isConfirmed = confirm('댓글을 삭제하시겠습니까?');
-    if (isConfirmed) return;
+    if (!isConfirmed) return;
+    deleteComment(planCommentId);
   };
 
   /** 댓글 수정 핸들러 함수 */
   const handleEditCommentButtonClick = () => {
-    mutate({ commentId: planCommentId, content: inputText });
+    updateComment({ commentId: planCommentId, content: inputText });
     setIsEditMode(false);
-    successToast('댓글이 수정되었습니다.');
+  };
+
+  /** 댓글 수정 취소 핸들러 함수 */
+  const handleEditCancel = () => {
+    setIsEditMode(false);
+    setInputText(content);
   };
 
   return (
@@ -61,12 +69,24 @@ const Comment = ({
           <p className="medium-12">{content}</p>
         )}
         {isEditMode ? (
-          <button
-            className="regular-10 px-[6px] py-[2px] text-gray-500"
-            onClick={handleEditCommentButtonClick}
-          >
-            수정 완료
-          </button>
+          <div className="regular-10 flex">
+            <button
+              className="regular-10 px-[6px] py-[2px] text-gray-500"
+              onClick={handleEditCommentButtonClick}
+            >
+              수정 완료
+            </button>
+            <Separator
+              orientation="vertical"
+              className="mx-[2px] text-gray-100"
+            />
+            <button
+              className="px-[6px] py-[2px] text-red"
+              onClick={handleEditCancel}
+            >
+              취소
+            </button>
+          </div>
         ) : (
           <>
             {userId === user?.id && (

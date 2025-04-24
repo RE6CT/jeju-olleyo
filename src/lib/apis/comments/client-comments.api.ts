@@ -58,3 +58,18 @@ export const fetchUpdateCommentsByCommentId = async (
 
   if (error) throw new Error('댓글을 업데이트하는 도중 오류가 발생했습니다.');
 };
+
+/**
+ * 댓글을 삭제하는 함수
+ * @param commentId - 댓글의 id
+ */
+export const fetchDeleteCommentsByCommentId = async (commentId: number) => {
+  const supabase = await getBrowserClient();
+
+  const { error } = await supabase
+    .from('plan_comments')
+    .delete()
+    .eq('plan_comment_id', commentId);
+
+  if (error) throw new Error('댓글을 삭제하는 도중 오류가 발생했습니다.');
+};

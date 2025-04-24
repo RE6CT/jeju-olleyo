@@ -97,66 +97,98 @@ export async function middleware(request: NextRequest) {
     return NextResponse.rewrite(new URL('/not-found', request.url));
   }
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name) {
-          return request.cookies.get(name)?.value;
-        },
-        set(name, value, options) {
-          response.cookies.set(name, value, options);
-        },
-        remove(name) {
-          response.cookies.delete(name);
+  try {
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          get(name) {
+            return request.cookies.get(name)?.value;
+          },
+          set(name, value, options) {
+            response.cookies.set(name, value, options);
+          },
+          remove(name) {
+            response.cookies.delete(name);
+          },
         },
       },
-    },
-  );
-
-  // 세션 확인
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  // 공개 페이지 확인 (루트 경로 특별 처리)
-  const isPublicPage = AUTH_ROUTES.PUBLIC_ROUTES.some((page) => {
-    // 루트 경로('/')는 정확히 일치할 때만 true
-    if (page === '/') {
-      return pathname === '/';
-    }
-    // 다른 경로는 startsWith 사용
-    return pathname.startsWith(page);
-  });
-
-  const isAuthPage = pathname === PATH.SIGNIN || pathname === PATH.SIGNUP;
-
-  // 유효한 경로이면서 인증이 필요한 페이지에 로그인 없이 접근 시
-  if (!session && !isPublicPage) {
-    // 인증되지 않은 사용자가 보호된 경로에 접근, 로그인 페이지로 리다이렉트
-    const url = request.nextUrl.clone();
-    url.pathname = PATH.SIGNIN;
-    url.searchParams.set('redirectTo', pathname);
-    return NextResponse.redirect(url);
-  }
-
-  // 이미 인증된 사용자가 로그인/회원가입 페이지에 접근할 경우 홈으로 리다이렉트
-  if (session && isAuthPage) {
-    return NextResponse.redirect(new URL(PATH.HOME, request.url));
-  }
-
-  if (pathname === PATH.BOOKMARKS) {
-    return NextResponse.redirect(new URL(`${PATH.BOOKMARKS}/all`, request.url));
-  }
-
-  if (pathname === PATH.CATEGORIES) {
-    return NextResponse.redirect(
-      new URL(`${PATH.CATEGORIES}/all`, request.url),
     );
-  }
 
-  return response;
+    // 세션 확인
+    const {
+      data: { session },
+      error: sessionError,
+    } = await supabase.auth.getSession();
+
+    // 세션 오류 처리
+    if (sessionError) {
+      console.error('세션 확인 중 오류 발생:', sessionError);
+
+      // 세션 오류가 발생한 경우에도 공개 페이지는 접근 가능하도록 함
+      const isPublicPage = AUTH_ROUTES.PUBLIC_ROUTES.some((page) => {
+        if (page === '/') return pathname === '/';
+        return pathname.startsWith(page);
+      });
+
+      if (!isPublicPage) {
+        // 보호된 페이지의 경우 로그인 페이지로 리다이렉트
+        const url = request.nextUrl.clone();
+        url.pathname = PATH.SIGNIN;
+        url.searchParams.set('redirectTo', pathname);
+        return NextResponse.redirect(url);
+      }
+
+      // 공개 페이지는 계속 진행
+      return response;
+    }
+
+    // 공개 페이지 확인 (루트 경로 특별 처리)
+    const isPublicPage = AUTH_ROUTES.PUBLIC_ROUTES.some((page) => {
+      // 루트 경로('/')는 정확히 일치할 때만 true
+      if (page === '/') {
+        return pathname === '/';
+      }
+      // 다른 경로는 startsWith 사용
+      return pathname.startsWith(page);
+    });
+
+    const isAuthPage = pathname === PATH.SIGNIN || pathname === PATH.SIGNUP;
+
+    // 유효한 경로이면서 인증이 필요한 페이지에 로그인 없이 접근 시
+    if (!session && !isPublicPage) {
+      // 인증되지 않은 사용자가 보호된 경로에 접근, 로그인 페이지로 리다이렉트
+      const url = request.nextUrl.clone();
+      url.pathname = PATH.SIGNIN;
+      url.searchParams.set('redirectTo', pathname);
+      return NextResponse.redirect(url);
+    }
+
+    // 이미 인증된 사용자가 로그인/회원가입 페이지에 접근할 경우 홈으로 리다이렉트
+    if (session && isAuthPage) {
+      return NextResponse.redirect(new URL(PATH.HOME, request.url));
+    }
+
+    if (pathname === PATH.BOOKMARKS) {
+      return NextResponse.redirect(
+        new URL(`${PATH.BOOKMARKS}/all`, request.url),
+      );
+    }
+
+    if (pathname === PATH.CATEGORIES) {
+      return NextResponse.redirect(
+        new URL(`${PATH.CATEGORIES}/all`, request.url),
+      );
+    }
+
+    return response;
+  } catch (error) {
+    console.error('미들웨어 실행 중 오류 발생:', error);
+
+    // 오류 발생 시 기본적으로 응답 반환 (공개 페이지는 접근 가능하도록)
+    return response;
+  }
 }
 
 // 매처 패턴 - 미들웨어를 적용할 경로 지정

@@ -34,13 +34,28 @@ export const useCurrentUser = (options = {}) => {
   return useQuery({
     queryKey: USER_QUERY_KEY,
     queryFn: async () => {
-      const { user, error } = await fetchGetCurrentUser();
-      if (error) {
-        throw new Error(error.message);
+      try {
+        const { user, error } = await fetchGetCurrentUser();
+
+        // 세션이 없는 경우 null 반환 (오류로 처리하지 않음)
+        if (error?.message?.includes('Auth session missing')) {
+          return null;
+        }
+
+        if (error) {
+          throw new Error(error.message);
+        }
+
+        return user;
+      } catch (error) {
+        console.error('사용자 정보 조회 실패:', error);
+        return null; // 오류 발생 시 null 반환하여 예외 처리
       }
-      return user;
     },
-    staleTime: 5 * 60 * 1000, // 5분 동안 최신 데이터로 간주
+    staleTime: Infinity,
+    gcTime: 1000 * 60 * 60,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
     retry: false,
     ...options,
   });

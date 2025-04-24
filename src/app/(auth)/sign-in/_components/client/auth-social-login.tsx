@@ -14,7 +14,7 @@ const SocialLogin = () => {
 
   return (
     <CardContent className="pt-0">
-      <div className="space-y-4">
+      <div>
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
             <Separator className="w-full" />
@@ -25,7 +25,7 @@ const SocialLogin = () => {
         </div>
 
         <nav
-          className="flex flex-row items-center justify-center space-x-4"
+          className="mt-[22px] flex flex-row items-center justify-center space-x-4"
           aria-label="소셜 로그인"
         >
           {/* 구글 로그인 버튼 */}

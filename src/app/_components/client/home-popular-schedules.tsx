@@ -5,16 +5,16 @@ import React from 'react';
 
 import { usePopularPlans } from '@/lib/queries/use-get-popular-plans';
 import { PlanType } from '@/types/plan.type';
-import useAuthStore from '@/zustand/auth.store';
 
 import PlanVerticalCard from '../../../components/features/card/plan-vertical-card';
+import { useCurrentUser } from '@/lib/queries/auth-queries';
 
 /**
  * 인기 일정을 표시하는 클라이언트 컴포넌트
  * 타입 안정성이 적용된 버전
  */
 const PopularSchedules = () => {
-  const { user } = useAuthStore();
+  const { data: user } = useCurrentUser();
   const userId = user?.id || null;
 
   // 타입이 적용된 쿼리 훅 사용

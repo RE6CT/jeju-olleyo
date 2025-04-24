@@ -22,6 +22,9 @@ import { FilterMenu } from './plan-filter-menu';
 import { usePlanFilter } from '@/lib/hooks/use-plan-filter';
 import { usePagination } from '@/lib/hooks/use-pagination';
 import { usePopover } from '@/lib/hooks/use-popover';
+import { useRouter } from 'next/navigation';
+import { PATH } from '@/constants/path.constants';
+import EmptyResult from '@/components/commons/empty-result-link';
 
 /**
  * 여행 계획 필터 섹션 컴포넌트
@@ -49,6 +52,8 @@ const PlanFilterSection = ({
   userId: string;
   userNickname: string;
 }) => {
+  const router = useRouter();
+
   const {
     filter,
     selectedFilter,
@@ -64,7 +69,6 @@ const PlanFilterSection = ({
     isDatePickerFocused,
     setIsDatePickerFocused,
     resetFilter,
-    handleEdit,
     handleApplyFilter,
     handleDelete,
     handleFilterClick,
@@ -87,18 +91,23 @@ const PlanFilterSection = ({
     setCurrentPage(INITIAL_PAGE);
   };
 
+  const handleEdit = (planId: number) => {
+    router.push(`${PATH.PLAN_DETAIL}/${planId}`);
+  };
+
   if (isPlansLoading) {
     return <Loading />;
   }
 
   return (
-    <>
-      <div className="flex items-center gap-2">
+    <div className="flex flex-col items-center">
+      <div className="flex w-full items-center justify-start gap-2">
         <Popover open={isOpen} onOpenChange={setIsOpen}>
           <PopoverTrigger
             asChild
             onMouseEnter={() => setIsOpen(true)}
             onMouseLeave={() => handleMouseLeave(isDatePickerFocused)}
+            className="border-none"
           >
             <Button variant="outline" size="sm" disabled={isPlansLoading}>
               <Image
@@ -106,7 +115,6 @@ const PlanFilterSection = ({
                 alt="filter icon"
                 width={20}
                 height={20}
-                className="mr-2"
               />
               필터
             </Button>
@@ -160,9 +168,11 @@ const PlanFilterSection = ({
       </div>
 
       {(plans ?? []).length === 0 ? (
-        <div className="flex h-[400px] items-center justify-center rounded-lg border-2 border-dashed border-gray-200 bg-gray-50">
-          <p className="medium-16 text-gray-500">여행 계획이 없습니다.</p>
-        </div>
+        <EmptyResult
+          buttonText="내 일정 만들러 가기"
+          href={PATH.PLAN_NEW}
+          imagePath="/empty-result/empty_plans.png"
+        />
       ) : (
         <>
           <div className="grid grid-cols-1 gap-6">
@@ -184,7 +194,7 @@ const PlanFilterSection = ({
           />
         </>
       )}
-    </>
+    </div>
   );
 };
 

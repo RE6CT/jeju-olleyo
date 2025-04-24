@@ -13,7 +13,7 @@ import LikeButton from '../like/like-button';
  */
 const PlanVerticalCard = ({ plan }: PlanVerticalCardProps) => {
   return (
-    <Link href={`/plan-detail/${plan.planId}`}>
+    <Link href={`/plan-detail/${plan.planId}?isReadOnly=true`}>
       <div className="relative">
         <div className="relative aspect-[310/216]">
           <PlanImage

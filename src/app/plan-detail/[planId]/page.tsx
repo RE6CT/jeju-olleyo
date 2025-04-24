@@ -9,7 +9,13 @@ import {
 
 import NotFound from '@/app/plan-detail/_components/features/notfound/not-found';
 
-const PlanDetailPage = async ({ params }: { params: { planId: string } }) => {
+const PlanDetailPage = async ({
+  params,
+  searchParams,
+}: {
+  params: { planId: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+}) => {
   const HAPPY_IMAGE = {
     width: 37,
     height: 36,
@@ -45,27 +51,30 @@ const PlanDetailPage = async ({ params }: { params: { planId: string } }) => {
     };
 
     const isOwner = plan.userId === userId;
+    const isReadOnly = searchParams.isReadOnly === 'true' || !isOwner;
 
     return (
       <div className="flex flex-col">
         <div className="border-b px-9">
           {/* 헤더 영역 */}
-          <div className="flex gap-3 pt-6">
-            <span className="text-28 font-bold leading-[130%]">
-              {isOwner ? '내 일정 수정하기' : '일정 보기'}
-            </span>
-            <Image
-              src="/character/happy_color.svg"
-              alt="happy icon"
-              width={HAPPY_IMAGE.width}
-              height={HAPPY_IMAGE.height}
-            />
-          </div>
+          {!isReadOnly && (
+            <div className="flex gap-3 pt-6">
+              <span className="text-28 font-bold leading-[130%]">
+                내 일정 수정하기
+              </span>
+              <Image
+                src="/character/happy_color.svg"
+                alt="happy icon"
+                width={HAPPY_IMAGE.width}
+                height={HAPPY_IMAGE.height}
+              />
+            </div>
+          )}
           <PlanForm
             userId={userId || ''}
             initialPlan={initialPlan}
             initialDayPlaces={dayPlaces}
-            isReadOnly={!isOwner}
+            isReadOnly={isReadOnly}
           />
         </div>
       </div>

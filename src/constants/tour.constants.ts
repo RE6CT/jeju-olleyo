@@ -6,3 +6,5 @@ export const KOREA_TOUR_BASE_URL =
   'https://apis.data.go.kr/B551011/KorService1/detailIntro1';
 
 export const KOREA_TOUR_API_KEY = process.env.NEXT_PUBLIC_KOREA_TOUR_API_KEY!;
+
+export const SERVER_COMPONENT_BASE_URL = 'https://jeju-olleyo.vercel.app';

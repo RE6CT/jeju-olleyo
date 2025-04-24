@@ -175,7 +175,7 @@ export const fetchGetCurrentUser = async () => {
     // 사용자 정보 포맷팅
     const userInfo = {
       id: data.user.id,
-      email: data.user.email,
+      email: data.user.email ?? null,
       avatar_url:
         data.user.user_metadata.profile_img ||
         data.user.user_metadata.avatar_url ||
@@ -191,6 +191,65 @@ export const fetchGetCurrentUser = async () => {
   } catch (error: unknown) {
     const handled = handleError('사용자 정보 조회', error);
     return { user: null, error: handled.error };
+  }
+};
+
+/**
+ * 비밀번호 재설정 이메일 전송 서버 액션
+ */
+export const fetchSendPasswordResetEmail = async (
+  email: string,
+): Promise<AuthResult> => {
+  const supabase = await getServerClient();
+
+  try {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}${PATH.RESET_PASSWORD}`,
+    });
+
+    if (error) {
+      return {
+        success: false,
+        error: { message: error.message, status: error.status || 500 },
+      };
+    }
+
+    return { success: true, error: null };
+  } catch (error: unknown) {
+    const handled = handleError('비밀번호 재설정 메일 전송', error);
+    return { success: false, error: handled.error };
+  }
+};
+
+/**
+ * 비밀번호 업데이트 서버 액션
+ */
+export const fetchUpdatePassword = async (
+  password: string,
+): Promise<AuthResult> => {
+  const supabase = await getServerClient();
+
+  try {
+    const { error } = await supabase.auth.updateUser({ password });
+
+    if (error) {
+      return {
+        success: false,
+        error: { message: error.message, status: error.status || 500 },
+      };
+    }
+
+    // 비밀번호 변경 성공 시 provider 쿠키 설정
+    cookies().set('provider', 'email', {
+      path: PATH.HOME,
+      maxAge: 60 * 60 * 24 * 7, // 7일간 유지
+      httpOnly: false,
+    });
+
+    return { success: true, error: null };
+  } catch (error: unknown) {
+    const handled = handleError('비밀번호 업데이트', error);
+    return { success: false, error: handled.error };
   }
 };
 

@@ -11,7 +11,7 @@ import { MyCommentType } from '@/types/comment.type';
 const MyComment = ({ comment }: { comment: MyCommentType }) => {
   return (
     <Link
-      href={`${PATH.PLAN_DETAIL}/${comment.planId}`}
+      href={`${PATH.PLAN_DETAIL}/${comment.planId}?isReadOnly=true`}
       className="flex flex-col gap-2 rounded-24 bg-white p-5"
     >
       <div className="flex justify-between gap-2">

@@ -70,8 +70,8 @@ const BookmarksList = ({ category }: { category: CategoryParamType }) => {
       </div>
       {bookmarks?.length === 0 ? (
         <EmptyResult
-          buttonText="인기 일정 보러가기"
-          href={PATH.COMMUNITY}
+          buttonText="제주도 여행지 보러가기"
+          href={`${PATH.CATEGORIES}/all`}
           imagePath="/empty-result/empty_bookmarks.png"
         />
       ) : (

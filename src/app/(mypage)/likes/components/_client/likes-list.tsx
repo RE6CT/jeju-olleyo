@@ -27,8 +27,8 @@ const LikesList = ({ likes }: { likes: Plan[] }) => {
     <>
       {countData?.likeCount === 0 ? (
         <EmptyResult
-          buttonText="제주도 인기 장소 보러가기"
-          href={PATH.CATEGORIES}
+          buttonText="인기 일정 보러가기"
+          href={PATH.COMMUNITY}
           imagePath="/empty-result/empty_likes.png"
         />
       ) : (

@@ -85,7 +85,7 @@ export const FilterInput = ({
       </div>
     )}
     <Button
-      className="semibold-16 mt-2 flex items-center justify-center rounded-[20px] bg-primary-500 px-5 py-1 font-['Pretendard'] leading-[150%] text-white hover:bg-primary-600"
+      className="semibold-16 mt-2 flex items-center justify-center rounded-[20px] bg-primary-500 px-5 py-1 text-white hover:bg-primary-600"
       disabled={
         selectedFilter === FILTER_TYPES.PUBLIC
           ? filter.value === selectedPublicOption

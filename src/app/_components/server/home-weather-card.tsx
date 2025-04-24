@@ -25,7 +25,7 @@ const WeatherCard = memo(({ weather, isToday = false }: WeatherCardProps) => {
       </div>
 
       {/* 날씨 아이콘 */}
-      <div className="relative my-2 h-10 w-10 sm:my-2.5 sm:h-10 sm:w-10 md:my-3 md:h-12 md:w-12 lg:my-3 lg:h-14 lg:w-14">
+      <div className="relative my-2 h-10 w-10 sm:my-2.5 sm:h-10 sm:w-10 md:my-3 md:h-12 md:w-12 lg:my-3 lg:h-20 lg:w-20">
         <Image
           src={iconSrc}
           alt={weather.weatherCondition}

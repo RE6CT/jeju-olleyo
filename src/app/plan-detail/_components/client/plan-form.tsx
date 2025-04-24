@@ -1,6 +1,6 @@
 'use client';
 
-import { DayPlaces, TabType } from '@/types/plan-detail.type';
+import { DayPlaces } from '@/types/plan-detail.type';
 import { Plan } from '@/types/plan.type';
 import {
   usePlanSetTitle,
@@ -91,7 +91,7 @@ const PlanForm = ({
     setIsMounted(true);
   }, []);
 
-  if (!isMounted || !userId) {
+  if (!isMounted) {
     return null;
   }
 

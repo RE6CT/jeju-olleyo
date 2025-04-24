@@ -141,6 +141,7 @@ export const usePlanMap = ({
             day: place.day,
             order: place.order,
             showDay: place.showDay,
+            address: place.address,
             onClick: () =>
               handleMarkerClick({
                 position,
@@ -148,6 +149,7 @@ export const usePlanMap = ({
                 day: place.day,
                 order: place.order,
                 showDay: place.showDay,
+                address: place.address,
               }),
           };
         })

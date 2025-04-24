@@ -23,6 +23,7 @@ import {
   usePlanSetDescription,
   usePlanSetStartDate,
   usePlanSetEndDate,
+  usePlanSetActiveTab,
 } from '@/zustand/plan.store';
 
 const EDIT_ICON_CONSTANTS = {
@@ -47,6 +48,7 @@ const PlanHeader = memo(() => {
   const setEndDate = usePlanSetEndDate();
   const setTitle = usePlanSetTitle();
   const setDescription = usePlanSetDescription();
+  const setActiveTab = usePlanSetActiveTab();
 
   const { previewImage, isUploading, handleFileChange } =
     useChangeImageFile(planImg);
@@ -59,6 +61,7 @@ const PlanHeader = memo(() => {
     setEndDate(end);
     if (end) {
       setIsCalendarOpen(false);
+      setActiveTab(1);
     }
   };
 
@@ -130,11 +133,11 @@ const PlanHeader = memo(() => {
 
           <div className="relative w-full">
             <div className="flex items-center gap-7 px-5 pb-5 text-14">
-              <span className="text-black-900">여행 기간</span>
+              <span>여행 기간</span>
               <Button
                 type="button"
                 variant="outline"
-                className="text-black-900 disabled:text-black-900 h-7 w-fit justify-start border-transparent bg-gray-50 px-5 py-1 text-left text-14 font-normal disabled:opacity-100"
+                className="disabled:text-black-900 h-7 w-fit justify-start border-transparent bg-gray-50 px-5 py-1 text-left text-14 font-normal disabled:opacity-100"
                 onClick={() =>
                   !isReadOnly && setIsCalendarOpen(!isCalendarOpen)
                 }
@@ -144,7 +147,7 @@ const PlanHeader = memo(() => {
               </Button>
             </div>
             {isCalendarOpen && (
-              <div className="absolute left-0 top-full z-50 mt-1">
+              <div className="absolute left-0 top-full z-[100] mt-1">
                 <DatePicker
                   selected={startDate}
                   onChange={handleDateChange}
@@ -162,7 +165,7 @@ const PlanHeader = memo(() => {
       </div>
 
       {/* 일정 설명 입력 */}
-      <div className="relative mt-4">
+      <div className="relative z-50 mt-4">
         {!isReadOnly && (
           <Image
             src="/icons/edit.svg"
@@ -177,11 +180,9 @@ const PlanHeader = memo(() => {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           maxLength={MAX_TEXT_LENGTH.DESCRIPTION}
-          className={`h-[160px] w-full resize-none rounded-[12px] border-gray-200 py-5 ${
-            isReadOnly ? 'pl-5' : 'pl-12'
-          } text-14 focus-visible:ring-0 focus-visible:ring-offset-0 ${
-            isReadOnly ? 'cursor-default' : ''
-          }`}
+          className={`h-[160px] w-full resize-none rounded-[12px] border border-gray-200 py-5 ${
+            isReadOnly ? 'cursor-default pl-5' : 'pl-12'
+          } text-14 focus-visible:ring-0 focus-visible:ring-offset-0`}
           readOnly={isReadOnly}
           showCount={!isReadOnly}
         />

@@ -30,9 +30,6 @@ const PlaceModal = ({
     error: detailError,
   } = useGetPlaceDetailInfo(placeId, place?.content_type_id ?? 0);
 
-  // const { data: isBookmarked = false, isPending: bookmarkPending } =
-  //   useGetBookmarkCheck(placeId, user?.id ?? '');
-
   const {
     data: planIncludingPlace,
     isPending: planPending,

@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { fetchDeletePlan } from '../apis/plan/plan.api';
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from '@/lib/hooks/use-toast';
 /**
  * 일정을 삭제하는 React Query 훅
  * @param userId - 사용자 ID

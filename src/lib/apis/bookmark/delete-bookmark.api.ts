@@ -1,8 +1,6 @@
 'use server';
 
-import { PATH } from '@/constants/path.constants';
 import { getServerClient } from '@/lib/supabase/server';
-import { revalidatePath } from 'next/cache';
 
 /**
  * 북마크 삭제 함수

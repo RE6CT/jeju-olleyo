@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { DropResult } from 'react-beautiful-dnd';
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from '@/lib/hooks/use-toast';
 import { DayPlaces } from '@/types/plan-detail.type';
 import { Place } from '@/types/search.type';
 import {

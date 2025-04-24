@@ -40,9 +40,6 @@ import {
 } from '@/lib/hooks/use-schedule';
 import { useCurrentUser } from '@/lib/queries/auth-queries';
 import { useGetComments } from '@/lib/queries/use-get-comments';
-import Comment from '../features/comment/comment';
-import { Separator } from '@/components/ui/separator';
-import CommentInput from '../features/comment/comment-input';
 import CommentsSection from '../features/comment/comments-section';
 
 const DROPDOWN_CONTENT_STYLE =
@@ -168,7 +165,6 @@ const ScheduleModals = () => {
 };
 
 const PlanSchedule = memo(() => {
-  //console.log('PlanSchedule 렌더링');
   const startDate = usePlanStartDate();
   const endDate = usePlanEndDate();
   const dayPlaces = usePlanDayPlaces();

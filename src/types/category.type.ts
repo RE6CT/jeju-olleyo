@@ -7,6 +7,7 @@ export type CategoryParamType =
   | 'cafe'
   | 'accommodation';
 export type CategoryType = '전체' | '명소' | '맛집' | '카페' | '숙박';
+export type RegionType = '전체' | '제주시' | '서귀포시';
 
 export type BadgeType = 'filter' | 'modal' | 'card';
 

@@ -239,6 +239,7 @@ const SearchSidemenu = ({
                     isBookmarked={isBookmarked(place.placeId)}
                     toggleBookmark={() => handleBookmarkToggle(place.placeId)}
                     onAddPlace={() => handleAddPlace(place)}
+                    placeId={place.placeId}
                   />
                 </motion.div>
               ))}

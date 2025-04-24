@@ -1,8 +1,6 @@
 'use server';
 
-import { PATH } from '@/constants/path.constants';
 import { getServerClient } from '@/lib/supabase/server';
-import { revalidatePath } from 'next/cache';
 
 /**
  * 장소에 대한 북마크 추가

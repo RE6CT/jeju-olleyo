@@ -2,6 +2,10 @@ import { EmptyResultLink } from '@/components/commons/empty-result-link';
 import { PATH } from '@/constants/path.constants';
 import Image from 'next/image';
 
+export const metadata = {
+  title: '마이페이지 - 항공권 예약 내역',
+};
+
 const ReservationsPage = () => {
   return (
     <div className="flex flex-col items-center justify-center gap-5">

@@ -16,7 +16,6 @@ import { memo } from 'react';
 import { usePlanActiveTab, usePlanDayPlaces } from '@/zustand/plan.store';
 
 const PlanMap = memo(() => {
-  //console.log('PlanMap 렌더링');
   const dayPlaces = usePlanDayPlaces();
   const activeTab = usePlanActiveTab();
 

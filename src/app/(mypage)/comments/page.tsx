@@ -1,8 +1,12 @@
 import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 
-import MypageDataCounts from '../_components/mypage-data-counts';
-import CommentsList from './_components/comments-list';
+import MypageDataCounts from '../_components/_client/mypage-data-counts';
 import { fetchAllCommentsByUserId } from '@/lib/apis/comments/server-comments.api';
+import CommentsList from './_components/_client/comments-list';
+
+export const metadata = {
+  title: '마이페이지 - 내가 쓴 댓글',
+};
 
 const PAGE_SIZE = 10;
 

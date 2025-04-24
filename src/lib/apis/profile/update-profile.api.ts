@@ -71,18 +71,15 @@ export const fetchUpdateNickname = async (userId: string, nickname: string) => {
 export const fetchUpdateProfileImage = async (formData: FormData) => {
   try {
     const supabase = await getServerClient();
-
+    const { user } = await fetchGetCurrentUser();
     const file = formData.get('profileImage') as File;
-    const userId = formData.get('userId') as string;
 
-    if (!userId) throw new Error(ERROR_MESSAGES.USER_DATA_MISSING);
-    if (!file) {
-      throw new Error(ERROR_MESSAGES.IMAGE_DATA_MISSING);
-    }
+    if (!user) throw new Error(ERROR_MESSAGES.USER_DATA_MISSING);
+    if (!file) throw new Error(ERROR_MESSAGES.IMAGE_DATA_MISSING);
 
     // 확장자 추출 및 이름 지정
     const fileExtension = file.name.split('.').pop();
-    const fileName = `${userId}/profile_${dayjs().valueOf()}.${fileExtension}`;
+    const fileName = `${user.id}/profile_${dayjs().valueOf()}.${fileExtension}`;
 
     // Supabase Storage에 이미지 업로드
     const { error: imageUploadError } = await supabase.storage
@@ -92,6 +89,14 @@ export const fetchUpdateProfileImage = async (formData: FormData) => {
     if (imageUploadError) {
       throw new Error(ERROR_MESSAGES.PROFILE_UPDATE_FAILED);
     }
+
+    // 이전 이미지 삭제
+    const previousImageName = user.avatar_url.split('/').pop();
+    const { error: dataDeleteError } = await supabase.storage
+      .from('profile-images')
+      .remove([`${user.id}/${previousImageName}`]);
+
+    if (dataDeleteError) throw new Error(ERROR_MESSAGES.USER_UPDATE_FAILED);
 
     // URL 생성
     const { data: urlData } = supabase.storage
@@ -104,7 +109,7 @@ export const fetchUpdateProfileImage = async (formData: FormData) => {
       .update({
         profile_img: urlData.publicUrl,
       })
-      .eq('user_id', userId);
+      .eq('user_id', user.id);
 
     if (dataUpdateError) {
       throw new Error(ERROR_MESSAGES.USER_UPDATE_FAILED);

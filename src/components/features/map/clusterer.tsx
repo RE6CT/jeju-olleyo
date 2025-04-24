@@ -8,6 +8,7 @@ import {
   CustomOverlayInstance,
   MarkerProps,
 } from '@/types/kakao-map.type';
+import { SCREEN_OFFSET } from '@/constants/map.constants';
 
 /**
  * 카카오맵 마커 클러스터링 컴포넌트
@@ -110,6 +111,14 @@ const Clusterer = ({ map, markers, ...options }: ClustererOptions) => {
           if (overlayInstance.current) {
             overlayInstance.current.setMap(null);
           }
+
+          // 클릭된 마커의 위치로 지도 중심 이동
+          const position = new window.kakao.maps.LatLng(
+            marker.position.lat + SCREEN_OFFSET.LAT,
+            marker.position.lng,
+          );
+          map.setCenter(position);
+          map.setLevel(4);
 
           const content = `
             <div style="padding: 8px 12px; display: flex; flex-direction: column; gap: 4px; border-radius: 8px; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">

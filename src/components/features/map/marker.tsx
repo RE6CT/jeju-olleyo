@@ -8,6 +8,7 @@ import {
   MarkerInstance,
   MarkerProps,
 } from '@/types/kakao-map.type';
+import { SCREEN_OFFSET } from '@/constants/map.constants';
 
 /**
  * 카카오맵 마커 컴포넌트
@@ -68,6 +69,15 @@ const Marker = ({
       if (overlayInstance.current) {
         overlayInstance.current.setMap(map);
       }
+
+      // 클릭된 마커의 위치로 지도 중심 이동
+      const latlng = new window.kakao.maps.LatLng(
+        position.lat + SCREEN_OFFSET.LAT,
+        position.lng,
+      );
+      map.setCenter(latlng);
+      map.setLevel(4);
+
       if (onClick) {
         onClick();
       }

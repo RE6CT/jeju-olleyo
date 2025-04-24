@@ -144,7 +144,7 @@ const PlanHeader = memo(() => {
               </Button>
             </div>
             {isCalendarOpen && (
-              <div className="absolute left-0 top-full z-50 mt-1">
+              <div className="absolute left-0 top-full z-[100] mt-1">
                 <DatePicker
                   selected={startDate}
                   onChange={handleDateChange}

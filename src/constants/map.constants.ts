@@ -54,3 +54,8 @@ export const DAY_COLORS = {
   ODD: 'bg-primary-500',
   EVEN: 'bg-secondary-300',
 } as const;
+
+// 화면 좌표계 조정값
+export const SCREEN_OFFSET = {
+  LAT: 0.0005, // 위도 조정값
+} as const;

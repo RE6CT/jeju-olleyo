@@ -6,10 +6,17 @@ import PlaceListSkeleton from '@/components/commons/place-list-skeleton';
 import PlaceCard from '@/components/features/card/place-card';
 import useInfiniteScroll from '@/lib/hooks/use-infinite-scroll';
 import { useGetPlacesByCategoryInfiniteQuery } from '@/lib/queries/use-get-places';
-import { CategoryParamType } from '@/types/category.type';
+import { CategoryParamType, RegionType } from '@/types/category.type';
+import CategoryRegionTabs from './category-region-tabs';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { PATH } from '@/constants/path.constants';
 
 /** 서버에서 가져온 데이터를 표시하는 클라이언트 컴포넌트 (카테고리 리스트)) */
 const CategoryClient = ({ category }: { category: CategoryParamType }) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const region = (searchParams.get('region') || '전체') as RegionType;
+
   const {
     data,
     fetchNextPage,
@@ -17,22 +24,35 @@ const CategoryClient = ({ category }: { category: CategoryParamType }) => {
     isFetchingNextPage,
     isPending,
     isError,
-  } = useGetPlacesByCategoryInfiniteQuery(category);
+  } = useGetPlacesByCategoryInfiniteQuery(category, region);
 
-  // useInView 대신 커스텀 훅 사용
+  // 커스텀 훅 사용
   const observerRef = useInfiniteScroll(() => {
     if (hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
   });
 
+  /**
+   * 탭 이동 핸들러
+   * @param tab - 현재 탭
+   */
+  const handleFilterTabChange = (tab: RegionType) => {
+    router.push(`${PATH.CATEGORIES}/${category}?region=${tab}`);
+  };
+
   if (isError) return <ErrorMessage message="장소 불러오기 오류 발생" />;
 
-  // 데이터 평탄화
   const allPlaces = data?.pages?.flatMap((page) => page?.data ?? []) ?? [];
 
   return (
-    <>
+    <div className="flex w-full flex-col gap-5">
+      <div className="ml-auto w-full">
+        <CategoryRegionTabs
+          defaultTab={region}
+          onTabChange={handleFilterTabChange}
+        />
+      </div>
       {/* 카드 그리드로 바로 표시 */}
       <div className="grid grid-cols-2 gap-[11px] sm:grid-cols-3 md:grid-cols-4">
         {isPending ? (
@@ -68,7 +88,7 @@ const CategoryClient = ({ category }: { category: CategoryParamType }) => {
         ref={observerRef}
         className="flex h-[50px] w-full items-center justify-center"
       ></div>
-    </>
+    </div>
   );
 };
 

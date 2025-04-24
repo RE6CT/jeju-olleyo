@@ -1,7 +1,7 @@
 'use client';
 
 const PlaceListSkeleton = ({ count }: { count: number }) => (
-  <div className="grid grid-cols-2 gap-[11px] sm:grid-cols-3 md:grid-cols-4">
+  <>
     {Array(count)
       .fill(null)
       .map((_, index) => (
@@ -15,7 +15,7 @@ const PlaceListSkeleton = ({ count }: { count: number }) => (
           )}
         </div>
       ))}
-  </div>
+  </>
 );
 
 export default PlaceListSkeleton;

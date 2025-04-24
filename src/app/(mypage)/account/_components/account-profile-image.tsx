@@ -61,7 +61,7 @@ const AccountProfileImage = ({
           image={profileImage}
           width={IMAGE_SIZE}
           height={IMAGE_SIZE}
-          className="aspect-square rounded-full"
+          className="aspect-square"
         />
         {provider === 'email' && (
           <ProfileImageButton

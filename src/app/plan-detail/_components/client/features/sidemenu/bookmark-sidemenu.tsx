@@ -15,6 +15,7 @@ import PlaceCardSidemenu from '../card/place-card-sidemenu';
 import PlaceSidemenuLayout from './place-sidemenu-layout';
 import DaySelectRequiredModal from '../modal/day-select-required-modal';
 import { useGetDataCount } from '@/lib/queries/use-get-data-count';
+import { useCurrentUser } from '@/lib/queries/auth-queries';
 
 const ITEMS_PER_PAGE = 7;
 const INITIAL_ITEMS = 3;
@@ -34,14 +35,12 @@ const DEBOUNCE_TIME = 200;
  * @param selectedDay - 선택된 날짜
  */
 const BookmarkSidemenu = ({
-  userId,
   filterTabs,
   activeFilterTab,
   onFilterTabChange,
   onAddPlace,
   selectedDay,
 }: {
-  userId: string;
   filterTabs: CategoryType[];
   activeFilterTab: CategoryType;
   onFilterTabChange: (tab: CategoryType) => void;
@@ -55,6 +54,9 @@ const BookmarkSidemenu = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const resizeTimeoutRef = useRef<NodeJS.Timeout>();
   const listRef = useRef<HTMLDivElement>(null);
+
+  const { data: user } = useCurrentUser();
+  const userId = user?.id || undefined;
 
   const { data: countData, isLoading: isCountLoading } =
     useGetDataCount(userId);
@@ -138,6 +140,8 @@ const BookmarkSidemenu = ({
     ? Math.ceil(bookmarkCount / ITEMS_PER_PAGE)
     : 0;
 
+  if (!userId) return null;
+
   if (error) {
     return (
       <ErrorMessage
@@ -197,7 +201,6 @@ const BookmarkSidemenu = ({
                         category={place.category as CategoryType}
                         imageUrl={place.image}
                         isBookmarked={true}
-                        onBookmarkToggle={() => {}}
                         onAddPlace={() => handleAddPlace(place)}
                       />
                     </motion.div>

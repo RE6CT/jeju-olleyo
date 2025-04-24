@@ -1,13 +1,13 @@
 import Image from 'next/image';
 
-import PlanForm from '@/app/plan-detail/_components/plan-form';
+import PlanForm from '@/app/plan-detail/_components/client/plan-form';
 import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 import {
   fetchGetPlanById,
   fetchGetPlanDaysAndLocations,
 } from '@/lib/apis/plan/plan.api';
 
-import NotFound from '@/app/plan-detail/_components/features/notfound/not-found';
+import NotFound from '@/app/plan-detail/_components/server/not-found';
 
 const PlanDetailPage = async ({
   params,
@@ -71,7 +71,6 @@ const PlanDetailPage = async ({
             </div>
           )}
           <PlanForm
-            userId={userId || ''}
             initialPlan={initialPlan}
             initialDayPlaces={dayPlaces}
             isReadOnly={isReadOnly}

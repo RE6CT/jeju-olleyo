@@ -5,17 +5,17 @@ import { useEffect, useRef, useState } from 'react';
 import { DEPARTURE_LIST } from '@/constants/ticket.constants';
 import useAlertStore from '@/zustand/alert.store';
 
-import { Flight } from '../../types/air-ticket-type';
+import { Flight, FlightResponseItem } from '../../types/air-ticket-type';
 import Loading from '../loading';
 
 import DateOptions from './_components/date-options';
 import TicketList from './_components/ticket-list';
-import FlightSearchForm from './_components/ticket-search-form';
+import TicketSearchForm from './_components/ticket-search-form';
 import {
+  formatDateToString,
   getAirportLabel,
   sortFlights,
   SortKey,
-  SortOrder,
 } from './_utils/ticket-uitls';
 
 export default function FlightSearch() {
@@ -29,24 +29,15 @@ export default function FlightSearch() {
   const [returnFlights, setReturnFlights] = useState<Flight[]>([]);
   const [loading, setLoading] = useState(false);
 
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
+
   const [goSortKey, setGoSortKey] = useState<SortKey>('airline');
-  const [goSortOrder, setGoSortOrder] = useState<SortOrder>('asc');
 
   const [comeSortKey, setComeSortKey] = useState<SortKey>('airline');
-  const [comeSortOrder, setComeSortOrder] = useState<SortOrder>('asc');
-
+  const [showInnerButton, setShowInnerButton] = useState(false);
   const didMount = useRef(false);
   const { open } = useAlertStore();
-  useEffect(() => {
-    if (!didMount.current) {
-      didMount.current = true;
-      return;
-    }
-
-    if (formData.schDate && formData.returnDate && departure) {
-      handleSubmit(new Event('submit') as any);
-    }
-  }, [formData.schDate, formData.returnDate, departure]);
 
   const dateAlert = () => {
     open({
@@ -68,11 +59,14 @@ export default function FlightSearch() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!startDate || !endDate) {
+      dateAlert();
+      return;
+    }
     setLoading(true);
-
-    const goDate = formData.schDate.replace(/-/g, '');
-    const returnDate = formData.returnDate.replace(/-/g, '');
-
+    setShowInnerButton(true);
+    const goDate: string = formatDateToString(startDate);
+    const returnDate: string = formatDateToString(endDate);
     if (returnDate < goDate) {
       setLoading(false);
       dateAlert();
@@ -97,7 +91,7 @@ export default function FlightSearch() {
         }),
       ]);
 
-      const mapFlights = (items: any[]): Flight[] =>
+      const mapFlights = (items: FlightResponseItem[]): Flight[] =>
         items.map((item) => ({
           airlineKorean: item.airlineKorean,
           flightId: item.domesticNum,
@@ -113,30 +107,53 @@ export default function FlightSearch() {
       setLoading(false);
     }
   };
+  useEffect(() => {
+    if (!didMount.current) {
+      didMount.current = true;
+      return;
+    }
+
+    if (formData.schDate && formData.returnDate && departure) {
+      // handleSubmit(new Event('submit') as any);
+    }
+  }, [formData.schDate, formData.returnDate, departure, handleSubmit]);
 
   return (
-    <div className="mx-auto max-w-7xl p-6">
-      <FlightSearchForm
+    <div className="mx-auto max-w-5xl p-6">
+      <TicketSearchForm
         departureList={DEPARTURE_LIST}
         departure={departure}
         setDeparture={setDeparture}
-        formData={formData}
-        handleChange={(e) =>
-          setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }))
-        }
         handleSubmit={handleSubmit}
+        // formData={formData}
+        showInnerButton={showInnerButton}
+        setShowInnerButton={setShowInnerButton}
+        startDate={startDate}
+        endDate={endDate}
+        setStartDate={setStartDate}
+        setEndDate={setEndDate}
       />
 
       {loading ? (
         <Loading />
       ) : (
         departure && (
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <div className="mx-7 grid max-w-4xl gap-6 px-9 py-8 md:grid-cols-[1fr_1fr_auto]">
             <section>
-              <h2 className="mb-2 text-lg font-semibold">가는편</h2>
-              <p>{getAirportLabel(departure)} ➡ 제주</p>
+              <div className="flex items-end gap-2">
+                <h2 className="text-24 font-semibold">가는편</h2>
+                <p className="mb-2 flex text-14 text-gray-300">
+                  {getAirportLabel(departure)}
+                  <img
+                    alt="오른쪽 화살표"
+                    src="/icons/arrow_right.svg"
+                    className="mx-2 h-4 w-4 pt-1"
+                  />
+                  제주
+                </p>
+              </div>
               <DateOptions
-                baseDateStr={formData.schDate}
+                baseDateStr={formatDateToString(startDate)}
                 field="schDate"
                 formData={formData}
                 setFormData={setFormData}
@@ -144,18 +161,26 @@ export default function FlightSearch() {
               <TicketList
                 flights={goFlights}
                 sortKey={goSortKey}
-                sortOrder={goSortOrder}
                 sortFlights={sortFlights}
                 setSortKey={setGoSortKey}
-                setSortOrder={setGoSortOrder}
               />
             </section>
 
             <section>
-              <h2 className="mb-2 text-lg font-semibold">오는편</h2>
-              <p>제주 ➡ {getAirportLabel(departure)}</p>
+              <div className="flex items-end gap-2">
+                <h2 className="text-24 font-semibold">오는편</h2>
+                <p className="mb-2 flex text-14 text-gray-300">
+                  제주
+                  <img
+                    alt="오른쪽 화살표"
+                    src="/icons/arrow_right.svg"
+                    className="mx-2 h-4 w-4 pt-1"
+                  />
+                  {getAirportLabel(departure)}
+                </p>
+              </div>
               <DateOptions
-                baseDateStr={formData.returnDate}
+                baseDateStr={formatDateToString(endDate)}
                 field="returnDate"
                 formData={formData}
                 setFormData={setFormData}
@@ -163,14 +188,24 @@ export default function FlightSearch() {
               <TicketList
                 flights={returnFlights}
                 sortKey={comeSortKey}
-                sortOrder={comeSortOrder}
                 sortFlights={sortFlights}
                 setSortKey={setComeSortKey}
-                setSortOrder={setComeSortOrder}
               />
             </section>
+            <button className="col-start-3 h-11 w-24 self-start rounded-12 bg-primary-500 px-4 py-[10px] text-white">
+              예약 하기
+            </button>
           </div>
         )
+      )}
+      {!showInnerButton && (
+        <footer className="mt-10 flex justify-center">
+          <img
+            src="/banner-images/airplane_footer.png"
+            alt="푸터 이미지"
+            className="h-auto w-auto object-cover"
+          />
+        </footer>
       )}
     </div>
   );

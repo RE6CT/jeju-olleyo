@@ -5,7 +5,6 @@ import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 
 import { Button } from '@/components/ui/button';
 import DynamicPagination from '@/components/ui/dynamic-pagination';
-import { Input } from '@/components/ui/input';
 import fetchGetAllPlaces from '@/lib/apis/search/get-place.api';
 import { useBookmarkQuery } from '@/lib/queries/use-bookmark-query';
 import { CategoryType } from '@/types/category.type';
@@ -14,6 +13,7 @@ import { Place } from '@/types/search.type';
 import DaySelectRequiredModal from '../modal/day-select-required-modal';
 import PlaceCardSidemenu from '../card/place-card-sidemenu';
 import PlaceSidemenuLayout from './place-sidemenu-layout';
+import { useCurrentUser } from '@/lib/queries/auth-queries';
 
 const ITEMS_PER_PAGE = 7;
 const INITIAL_ITEMS = 3;
@@ -33,14 +33,12 @@ const DEBOUNCE_TIME = 200;
  * @param selectedDay - 선택된 날짜
  */
 const SearchSidemenu = ({
-  userId,
   filterTabs,
   activeFilterTab,
   onFilterTabChange,
   onAddPlace,
   selectedDay,
 }: {
-  userId: string;
   filterTabs: CategoryType[];
   activeFilterTab: CategoryType;
   onFilterTabChange: (tab: CategoryType) => void;
@@ -56,10 +54,12 @@ const SearchSidemenu = ({
   const [isDaySelectModalOpen, setIsDaySelectModalOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const resizeTimeoutRef = useRef<NodeJS.Timeout>();
-  const [scrollPosition, setScrollPosition] = useState(0);
   const listRef = useRef<HTMLDivElement>(null);
 
-  const { isBookmarked, toggleBookmark } = useBookmarkQuery(userId);
+  const { data: user } = useCurrentUser();
+  const userId = user?.id || null;
+
+  const { isBookmarked } = useBookmarkQuery(userId);
 
   const filteredPlaces = places.filter((place) => {
     const matchesCategory =
@@ -111,7 +111,7 @@ const SearchSidemenu = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const placesResponse = await fetchGetAllPlaces();
+        const placesResponse = await fetchGetAllPlaces(); // fetchGetPlacesByCategory로 대체하여 페이지네이션 구현
         setPlaces(placesResponse || []);
       } catch (error) {
         console.error('데이터를 가져오는데 실패했습니다:', error);
@@ -122,26 +122,6 @@ const SearchSidemenu = ({
 
     fetchData();
   }, [userId]);
-
-  const handleBookmarkToggle = async (placeId: number) => {
-    try {
-      // 현재 스크롤 위치 저장
-      if (listRef.current) {
-        setScrollPosition(listRef.current.scrollTop);
-      }
-
-      await toggleBookmark(placeId);
-
-      // 북마크 상태 변경 후 스크롤 위치 복원
-      setTimeout(() => {
-        if (listRef.current) {
-          listRef.current.scrollTop = scrollPosition;
-        }
-      }, 0);
-    } catch (error) {
-      console.error('북마크 토글에 실패했습니다:', error);
-    }
-  };
 
   const handleAddPlace = (place: Place) => {
     if (selectedDay === null) {
@@ -208,6 +188,8 @@ const SearchSidemenu = ({
     );
   }
 
+  if (!userId) return null;
+
   return (
     <PlaceSidemenuLayout
       isBookmarkSection={false}
@@ -235,7 +217,6 @@ const SearchSidemenu = ({
                     category={place.category as CategoryType}
                     imageUrl={place.image || ''}
                     isBookmarked={isBookmarked(place.placeId)}
-                    onBookmarkToggle={() => handleBookmarkToggle(place.placeId)}
                     onAddPlace={() => handleAddPlace(place)}
                   />
                 </motion.div>

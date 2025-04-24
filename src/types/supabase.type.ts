@@ -479,6 +479,17 @@ export type Database = {
           is_bookmarked: boolean;
         }[];
       };
+      get_comments: {
+        Args: { plan_id_param: number };
+        Returns: {
+          plan_comment_id: number;
+          plan_id: number;
+          user_id: string;
+          nickname: string;
+          content: string;
+          created_at: string;
+        }[];
+      };
     };
     Enums: {
       [_ in never]: never;

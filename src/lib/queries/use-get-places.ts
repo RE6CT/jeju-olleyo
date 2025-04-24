@@ -1,6 +1,10 @@
 import { QueryClient, useInfiniteQuery } from '@tanstack/react-query';
 
-import { CategoryParamType, PlaceResponse } from '@/types/category.type';
+import {
+  CategoryParamType,
+  PlaceResponse,
+  RegionType,
+} from '@/types/category.type';
 
 import { fetchGetPlacesByCategory } from '../apis/category/get-place.api';
 
@@ -11,8 +15,9 @@ import { fetchGetPlacesByCategory } from '../apis/category/get-place.api';
  */
 export const useGetPlacesByCategoryInfiniteQuery = (
   category: CategoryParamType,
+  region: RegionType = '전체',
 ) => {
-  return useInfiniteQuery(getPlacesByCategoryQueryOptions(category));
+  return useInfiniteQuery(getPlacesByCategoryQueryOptions(category, region));
 };
 
 /**
@@ -31,7 +36,7 @@ export const prefetchPlacesByCategory = async (
   }
 
   await queryClient.prefetchInfiniteQuery(
-    getPlacesByCategoryQueryOptions(category),
+    getPlacesByCategoryQueryOptions(category, '전체'),
   );
 };
 
@@ -40,10 +45,13 @@ export const prefetchPlacesByCategory = async (
  * @param category - 조회할 카테고리 타입
  * @returns 인피니트 쿼리 설정 객체
  */
-const getPlacesByCategoryQueryOptions = (category: CategoryParamType) => ({
-  queryKey: ['places', category] as const,
+const getPlacesByCategoryQueryOptions = (
+  category: CategoryParamType,
+  region: RegionType,
+) => ({
+  queryKey: ['places', category, region] as const,
   queryFn: ({ pageParam = 0 }: { pageParam: number }) =>
-    fetchGetPlacesByCategory(category, pageParam),
+    fetchGetPlacesByCategory(category, pageParam, undefined, region),
   getNextPageParam: (lastPage: PlaceResponse, allPages: PlaceResponse[]) => {
     if (!lastPage) return undefined;
 

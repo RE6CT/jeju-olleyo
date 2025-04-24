@@ -194,6 +194,7 @@ const BookmarkSidemenu = ({
                         isBookmarked={isBookmarked(place.placeId)}
                         toggleBookmark={() => toggleBookmark(place.placeId)}
                         onAddPlace={() => handleAddPlace(place)}
+                        placeId={place.placeId}
                       />
                     </motion.div>
                   ))}

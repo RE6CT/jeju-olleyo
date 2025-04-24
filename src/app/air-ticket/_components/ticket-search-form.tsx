@@ -21,7 +21,7 @@ const TicketSearchForm = ({
   setPassengers,
   classType,
   setClassType,
-}: TicketSearchFormProps & any) => {
+}: TicketSearchFormProps) => {
   const handleChange = (dates: [Date | null, Date | null]) => {
     const [start, end] = dates;
     setStartDate(start);

@@ -11,7 +11,6 @@ export type TicketSearchFormProps = {
   departureList: { label: string; value: string }[];
   departure: string;
   setDeparture: Dispatch<SetStateAction<string>>;
-  // formData: { schDate: string; returnDate: string; schArrvCityCode: string };
   handleSubmit: (e: React.FormEvent) => void;
   startDate: Date | null;
   endDate: Date | null;
@@ -19,6 +18,10 @@ export type TicketSearchFormProps = {
   setShowInnerButton: Dispatch<SetStateAction<boolean>>;
   setStartDate: Dispatch<SetStateAction<Date | null>>;
   setEndDate: Dispatch<SetStateAction<Date | null>>;
+  passengers: number;
+  setPassengers: Dispatch<SetStateAction<number>>;
+  classType: string;
+  setClassType: Dispatch<SetStateAction<string>>;
 };
 
 export type FlightResponseItem = {
@@ -47,7 +50,6 @@ export type TicketListProps = {
 
 export type DateOptionsProps = {
   baseDateStr: string;
-  field: 'schDate' | 'returnDate';
   startDate: Date | null;
   setStartDate?: (date: Date | null) => void;
 };
@@ -56,4 +58,11 @@ export type TicketCardProps = {
   flight: Flight;
   isSelected: boolean;
   onClick: () => void;
+};
+
+export type TicketSearchSelectorProps = {
+  passengers: number;
+  setPassengers: Dispatch<SetStateAction<number>>;
+  classType: string;
+  setClassType: Dispatch<SetStateAction<string>>;
 };

@@ -21,12 +21,20 @@ const TicketCard = ({ flight, isSelected, onClick }: TicketCardProps) => {
         </div>
         <div className="mt-2 flex justify-start space-x-2 text-10 font-regular text-gray-500">
           <span className="mr-2 flex items-center">
-            <img src="icons/plane_departure.svg" className="h-3 w-3" />
+            <img
+              src="icons/plane_departure.svg"
+              alt="departure"
+              className="h-3 w-3"
+            />
             {formatTime(flight.depPlandTime)}
           </span>
           -
           <span className="flex items-center">
-            <img src="icons/plane_land.svg" className="h-3 w-3" />
+            <img
+              src="icons/plane_land.svg"
+              alt="plane_land"
+              className="h-3 w-3"
+            />
             {formatTime(flight.arrPlandTime)}
           </span>
         </div>

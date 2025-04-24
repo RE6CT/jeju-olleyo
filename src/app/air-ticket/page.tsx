@@ -20,7 +20,7 @@ import {
 import { getBrowserClient } from '@/lib/supabase/client';
 import { useCurrentUser } from '@/lib/queries/auth-queries';
 
-export default function FlightSearch() {
+const FlightSearch = () => {
   const [departure, setDeparture] = useState('');
   const [goFlights, setGoFlights] = useState<Flight[]>([]);
   const [returnFlights, setReturnFlights] = useState<Flight[]>([]);
@@ -87,10 +87,9 @@ export default function FlightSearch() {
         // price: flight!.price || null,
       });
       if (error) {
-        console.error('저장 오류:', error.message);
+        console.error(error.message);
         alert('예약 중 오류가 발생했습니다!');
       }
-      console.log(flightsToSave);
     }
     alert('항공권이 예약되었습니다!');
     setSelectedGoFlight(null);
@@ -228,7 +227,6 @@ export default function FlightSearch() {
                 selectedFlight={selectedGoFlight}
                 setSelectedFlight={setSelectedGoFlight}
                 baseDateStr={formatDateToString(startDate)}
-                field="schDate"
                 startDate={startDate}
                 setStartDate={setStartDate}
               />
@@ -280,7 +278,6 @@ export default function FlightSearch() {
                 selectedFlight={selectedReturnFlight}
                 setSelectedFlight={setSelectedReturnFlight}
                 baseDateStr={formatDateToString(endDate)}
-                field="returnDate"
                 startDate={endDate}
                 setStartDate={setEndDate}
               />
@@ -310,4 +307,6 @@ export default function FlightSearch() {
       )}
     </div>
   );
-}
+};
+
+export default FlightSearch;

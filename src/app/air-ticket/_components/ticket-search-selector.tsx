@@ -1,9 +1,11 @@
+import { TicketSearchSelectorProps } from '@/types/air-ticket-type';
+
 const TicketSearchSelector = ({
   passengers,
   setPassengers,
   classType,
   setClassType,
-}: any) => {
+}: TicketSearchSelectorProps) => {
   const handlePassengerChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setPassengers(Number(e.target.value));
   };

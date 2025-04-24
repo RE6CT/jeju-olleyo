@@ -1,5 +1,3 @@
-'use client';
-import { useState } from 'react';
 import {
   DateOptionsProps,
   TicketListProps,
@@ -13,11 +11,8 @@ const TicketList = ({
   flights,
   sortKey,
   sortFlights,
-  setSortKey,
   selectedFlight,
   setSelectedFlight,
-  baseDateStr,
-  field,
   startDate,
   setStartDate,
 }: TicketListProps & DateOptionsProps) => {
@@ -27,7 +22,6 @@ const TicketList = ({
     <div>
       <DateOptions
         baseDateStr={formatDateToString(startDate)}
-        field={field}
         startDate={startDate}
         setStartDate={setStartDate}
       />

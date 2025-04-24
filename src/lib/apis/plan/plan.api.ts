@@ -152,6 +152,8 @@ export const fetchSavePlan = async (
 ): Promise<number> => {
   const supabase = await getServerClient();
 
+  //console.log('일정 저장 시도:', plan);
+
   const { data, error } = await supabase
     .from('plans')
     .insert({
@@ -167,9 +169,16 @@ export const fetchSavePlan = async (
     .single();
 
   if (error) {
+    console.error('일정 저장 실패:', error);
     throw new Error(`일정 저장에 실패했습니다. ${error.message}`);
   }
 
+  if (!data || !data.plan_id) {
+    console.error('일정 ID가 없음:', data);
+    throw new Error('일정 ID를 가져오는데 실패했습니다.');
+  }
+
+  //console.log('일정 저장 성공, plan_id:', data.plan_id);
   return data.plan_id;
 };
 
@@ -185,13 +194,24 @@ export const fetchSavePlanPlaces = async (
   const supabase = await getServerClient();
 
   try {
+    // plan_id 유효성 검사
+    const { data: planData, error: planError } = await supabase
+      .from('plans')
+      .select('plan_id')
+      .eq('plan_id', planId)
+      .single();
+
+    if (planError || !planData) {
+      throw new Error(`유효하지 않은 plan_id입니다: ${planId}`);
+    }
+
     // 1. days 테이블에 일자 데이터 삽입
     const daysToInsert = Object.keys(dayPlaces).map((day) => ({
       plan_id: planId,
       day: parseInt(day),
     }));
 
-    // console.log('daysToInsert:', daysToInsert);
+    //console.log('daysToInsert:', daysToInsert);
 
     const { data: daysData, error: daysError } = await supabase
       .from('days')
@@ -199,35 +219,34 @@ export const fetchSavePlanPlaces = async (
       .select('day_id, day');
 
     if (daysError) {
-      // console.error('days 테이블 삽입 에러:', daysError);
+      console.error('days 테이블 삽입 에러:', daysError);
       throw new Error(`일정 일자 저장에 실패했습니다: ${daysError.message}`);
     }
 
     if (!daysData || daysData.length === 0) {
-      // console.error('days 데이터가 없음');
+      console.error('days 데이터가 없음');
       throw new Error('일정 일자 데이터가 없습니다.');
     }
 
-    // console.log('daysData:', daysData);
+    //console.log('daysData:', daysData);
 
     // 2. locations 테이블에 장소 데이터 삽입
     const locationsToInsert = daysData.flatMap((dayData) => {
       const day = dayData.day;
       if (typeof day !== 'number') {
-        // console.error('유효하지 않은 day 값:', day);
+        console.error('유효하지 않은 day 값:', day);
         return [];
       }
 
       const places = dayPlaces[day] || [];
       if (places.length === 0) {
-        // console.log(`day ${day}에 장소가 없음`);
         return [];
       }
 
       return places
         .filter((place) => {
           if (!place.id) {
-            // console.error('장소 ID가 없음:', place);
+            console.error('장소 ID가 없음:', place);
             return false;
           }
           return true;
@@ -239,16 +258,15 @@ export const fetchSavePlanPlaces = async (
         }));
     });
 
-    // console.log('locationsToInsert:', locationsToInsert);
+    //console.log('locationsToInsert:', locationsToInsert);
 
     if (locationsToInsert.length === 0) {
-      // console.log('저장할 장소가 없음');
       return;
     }
 
     // 장소 ID의 유효성을 검사
     const placeIds = locationsToInsert.map((location) => location.place_id);
-    // console.log('검사할 장소 ID들:', placeIds);
+    //console.log('검사할 장소 ID들:', placeIds);
 
     const { data: existingPlaces, error: placesError } = await supabase
       .from('places')
@@ -256,11 +274,11 @@ export const fetchSavePlanPlaces = async (
       .in('place_id', placeIds);
 
     if (placesError) {
-      // console.error('장소 ID 검증 에러:', placesError);
+      console.error('장소 ID 검증 에러:', placesError);
       throw new Error(`장소 ID 검증에 실패했습니다: ${placesError.message}`);
     }
 
-    // console.log('존재하는 장소 ID들:', existingPlaces);
+    //console.log('존재하는 장소 ID들:', existingPlaces);
 
     const existingPlaceIds = new Set(
       existingPlaces?.map((p) => p.place_id) || [],
@@ -268,7 +286,7 @@ export const fetchSavePlanPlaces = async (
     const invalidPlaceIds = placeIds.filter((id) => !existingPlaceIds.has(id));
 
     if (invalidPlaceIds.length > 0) {
-      // console.error('유효하지 않은 장소 ID:', invalidPlaceIds);
+      console.error('유효하지 않은 장소 ID:', invalidPlaceIds);
       throw new Error(
         `다음 장소 ID가 places 테이블에 존재하지 않습니다: ${invalidPlaceIds.join(', ')}`,
       );
@@ -281,16 +299,14 @@ export const fetchSavePlanPlaces = async (
       .select();
 
     if (locationsError) {
-      // console.error('locations 테이블 삽입 에러:', locationsError);
-      // console.error('삽입 시도한 데이터:', locationsToInsert);
+      console.error('locations 테이블 삽입 에러:', locationsError);
+      console.error('삽입 시도한 데이터:', locationsToInsert);
       throw new Error(
         `일정 장소 저장에 실패했습니다: ${locationsError.message}`,
       );
     }
-
-    // console.log('성공적으로 저장된 locations 데이터:', locationsData);
   } catch (error) {
-    // console.error('fetchSavePlanPlaces 전체 에러:', error);
+    console.error('fetchSavePlanPlaces 전체 에러:', error);
     if (error instanceof Error) {
       throw new Error(`일정 장소 저장에 실패했습니다: ${error.message}`);
     } else {

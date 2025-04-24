@@ -261,19 +261,11 @@ export const useScheduleSavePlan = (
         throw new Error('필수 정보가 누락되었습니다.');
       }
 
-      const targetId =
-        planId ??
-        (await fetchSavePlan({
-          userId: userId,
-          title: title,
-          description: description,
-          travelStartDate: startDate?.toISOString() || '',
-          travelEndDate: endDate?.toISOString() || '',
-          planImg: planImg || null,
-          public: true,
-        }));
+      //console.log('일정 저장 시작 - planId:', planId);
+      let targetId: number;
 
       if (planId) {
+        //console.log('기존 일정 수정 시도 - planId:', planId);
         // 기존 일정 수정
         await fetchUpdatePlan(planId, {
           userId: userId,
@@ -284,8 +276,24 @@ export const useScheduleSavePlan = (
           planImg: planImg || null,
           public: true,
         });
+        targetId = planId;
+        //console.log('기존 일정 수정 완료 - targetId:', targetId);
+      } else {
+        // 새 일정 생성
+        const newPlanId = await fetchSavePlan({
+          userId: userId,
+          title: title,
+          description: description,
+          travelStartDate: startDate?.toISOString() || '',
+          travelEndDate: endDate?.toISOString() || '',
+          planImg: planImg || null,
+          public: true,
+        });
+        targetId = newPlanId;
+        //console.log('새 일정 생성 완료 - targetId:', targetId);
       }
 
+      //console.log('장소 저장 시도 - targetId:', targetId);
       await fetchSavePlanPlaces(targetId, dayPlaces);
 
       setIsPublicModalOpen(false);
@@ -310,19 +318,11 @@ export const useScheduleSavePlan = (
         throw new Error('필수 정보가 누락되었습니다.');
       }
 
-      const targetId =
-        planId ??
-        (await fetchSavePlan({
-          userId: userId,
-          title: title,
-          description: description,
-          travelStartDate: startDate?.toISOString() || '',
-          travelEndDate: endDate?.toISOString() || '',
-          planImg: planImg || null,
-          public: false,
-        }));
+      //console.log('일정 저장 시작 - planId:', planId);
+      let targetId: number;
 
       if (planId) {
+        //console.log('기존 일정 수정 시도 - planId:', planId);
         // 기존 일정 수정
         await fetchUpdatePlan(planId, {
           userId: userId,
@@ -333,8 +333,25 @@ export const useScheduleSavePlan = (
           planImg: planImg || null,
           public: false,
         });
+        targetId = planId;
+        //console.log('기존 일정 수정 완료 - targetId:', targetId);
+      } else {
+        //console.log('새 일정 생성 시도');
+        // 새 일정 생성
+        const newPlanId = await fetchSavePlan({
+          userId: userId,
+          title: title,
+          description: description,
+          travelStartDate: startDate?.toISOString() || '',
+          travelEndDate: endDate?.toISOString() || '',
+          planImg: planImg || null,
+          public: false,
+        });
+        targetId = newPlanId;
+        //console.log('새 일정 생성 완료 - targetId:', targetId);
       }
 
+      //console.log('장소 저장 시도 - targetId:', targetId);
       await fetchSavePlanPlaces(targetId, dayPlaces);
 
       setIsPublicModalOpen(false);

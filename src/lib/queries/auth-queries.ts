@@ -38,7 +38,7 @@ export const useCurrentUser = (options = {}) => {
         const { user, error } = await fetchGetCurrentUser();
 
         // 세션이 없는 경우 null 반환 (오류로 처리하지 않음)
-        if (error && error.message.includes('Auth session missing')) {
+        if (error?.message?.includes('Auth session missing')) {
           return null;
         }
 

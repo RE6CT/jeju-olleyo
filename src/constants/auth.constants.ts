@@ -10,7 +10,7 @@ export const ERROR_MESSAGES = {
   EMAIL_EXISTS: '이미 사용 중인 이메일입니다.',
   EMAIL_NOT_FOUND: '등록되지 않은 이메일입니다.',
   EMAIL_NOT_REGISTERED_MESSAGE: '가입되지 않은 이메일입니다.',
-  EMAIL_ADDRESS_IS_INVALIDL: '유효하지 않은 이메일입니다.',
+  EMAIL_ADDRESS_IS_INVALID: '유효하지 않은 이메일입니다.',
 
   // 비밀번호 관련
   REQUIRED_PASSWORD: '비밀번호를 입력해주세요.',

@@ -9,10 +9,10 @@ import { usePathname } from 'next/navigation';
 const Footer = () => {
   const pathname = usePathname();
 
-  const isWithoutFooterComponent = pathname === '/';
+  const isHomePage = pathname === '/';
 
-  if (!isWithoutFooterComponent) {
-    return;
+  if (!isHomePage) {
+    return null;
   }
 
   return (

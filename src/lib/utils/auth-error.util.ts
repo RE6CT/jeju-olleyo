@@ -26,7 +26,7 @@ export const getAuthErrorMessage = (errorMessage: string): string[] => {
     lowerCaseMessage.includes('email address') &&
     lowerCaseMessage.includes('is invalid')
   ) {
-    return [ERROR_MESSAGES.EMAIL_ADDRESS_IS_INVALIDL];
+    return [ERROR_MESSAGES.EMAIL_ADDRESS_IS_INVALID];
   }
 
   // 요청 제한

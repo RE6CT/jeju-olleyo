@@ -12,10 +12,10 @@ import { usePathname } from 'next/navigation';
 const Header = () => {
   const pathname = usePathname();
   const isWithoutHeaderComponent =
-    pathname.includes('sign-in') ||
-    pathname.includes('sign-up') ||
-    pathname.includes('forgot-password') ||
-    pathname.includes('reset-password');
+    pathname.includes(PATH.SIGNIN.substring(1)) ||
+    pathname.includes(PATH.SIGNUP.substring(1)) ||
+    pathname.includes(PATH.FORGOT_PASSWORD.substring(1)) ||
+    pathname.includes(PATH.RESET_PASSWORD.substring(1));
   if (isWithoutHeaderComponent) {
     return (
       <header className="flex h-[86px] w-full items-center justify-between gap-2 bg-white px-9">

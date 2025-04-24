@@ -1,7 +1,6 @@
 'use client';
 
-import { usePathname, useRouter } from 'next/navigation';
-
+import { useRouter } from 'next/navigation';
 import { PATH } from '@/constants/path.constants';
 import useAlert from '@/lib/hooks/use-alert';
 import { JejuBannerProps } from '@/types/common.type';

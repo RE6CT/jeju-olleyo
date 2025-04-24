@@ -50,7 +50,7 @@ const ProfileInfo = ({
   } = useForm<NicknameValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      nickname: '',
+      nickname: nickname,
     },
     mode: 'onChange',
   });

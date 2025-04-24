@@ -41,7 +41,7 @@ const PersonalInfo = ({
   } = useForm<PhoneValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      phone: '',
+      phone: phone,
     },
     mode: 'onChange',
   });

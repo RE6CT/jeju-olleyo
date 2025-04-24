@@ -3,7 +3,6 @@
 import Image from 'next/image';
 import { useMemo } from 'react';
 
-import BookmarkIcon from '@/components/commons/bookmark-icon';
 import { Button } from '@/components/ui/button';
 import { CategoryType } from '@/types/category.type';
 import BookmarkButton from '@/components/features/like/bookmark-button';

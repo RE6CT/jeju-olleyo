@@ -7,6 +7,8 @@ import { CommentProps } from '@/types/plan-detail.type';
 import { formatDate } from '@/lib/utils/date';
 import useAuth from '@/lib/hooks/use-auth';
 import { Separator } from '@/components/ui/separator';
+import { useCommentMutation } from '@/lib/mutations/use-comment-mutation';
+import useCustomToast from '@/lib/hooks/use-custom-toast';
 
 /**
  * 댓글 컴포넌트
@@ -26,18 +28,20 @@ const Comment = ({
   const { user } = useAuth();
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [inputText, setInputText] = useState<string>(content);
+  const { mutate } = useCommentMutation();
+  const { successToast } = useCustomToast();
 
   /** 댓글 삭제 핸들러 함수 */
   const handleDeleteCommentButtonClick = () => {
     const isConfirmed = confirm('댓글을 삭제하시겠습니까?');
     if (isConfirmed) return;
-    // 댓글 삭제 로직
   };
 
   /** 댓글 수정 핸들러 함수 */
   const handleEditCommentButtonClick = () => {
-    // 댓글 업데이트 로직
+    mutate({ commentId: planCommentId, content: inputText });
     setIsEditMode(false);
+    successToast('댓글이 수정되었습니다.');
   };
 
   return (

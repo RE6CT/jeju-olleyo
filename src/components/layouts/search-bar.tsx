@@ -6,11 +6,9 @@ import {
   useRouter,
   useSearchParams,
 } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { PATH } from '@/constants/path.constants';
-
 import { Input } from '../ui/input';
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 
 /**
  * 반응형 검색바 컴포넌트
@@ -18,8 +16,8 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
  */
 const SearchBar = () => {
   const [keywords, setKeywords] = useState<string[]>([]);
-
   const [open, setOpen] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const router = useRouter();
   const params = useParams();
@@ -30,10 +28,11 @@ const SearchBar = () => {
   const [inputValue, setInputValue] = useState(queryFromUrl);
 
   const category = params.category ?? 'all';
+
   useEffect(() => {
     const urlQuery = searchParams.get('query') ?? '';
     setInputValue(urlQuery);
-  }, [path]);
+  }, [path, searchParams]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -65,15 +64,28 @@ const SearchBar = () => {
     setKeywords([]);
   };
 
+  // 클릭 이벤트 핸들러
+  const handleInputClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setOpen(true);
+    // 포커스 설정
+    setTimeout(() => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    }, 0);
+  };
+
   return (
     <div className="relative">
-      <SearchIcon className="absolute left-2 top-1/2 -translate-y-1/2 transform" />
+      <SearchIcon className="absolute left-2 top-1/2 z-10 -translate-y-1/2 transform" />
       <Input
+        ref={inputRef}
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
         placeholder="제주 여행, 어디부터 시작할까요?"
         className="placeholder:medium-14 medium-14 h-10 rounded-full border-none bg-gray-50 pl-[42px] placeholder:text-gray-400"
-        onFocus={() => setOpen(true)}
+        onClick={handleInputClick}
         onKeyDown={(e) => {
           if (e.key === 'Enter') {
             e.preventDefault();
@@ -81,20 +93,18 @@ const SearchBar = () => {
           }
         }}
       />
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <button
-            className="pointer-events-none absolute inset-0"
-            aria-label="트리거"
-          />
-          {/* 투명 클릭 트리거 */}
-        </PopoverTrigger>
+      <div
+        className={`absolute left-0 right-0 top-full z-50 mt-1 ${!open ? 'hidden' : ''}`}
+      >
         {keywords.length ? (
-          <PopoverContent className="w-[357px] rounded-xl border-none bg-gray-50">
+          <div className="w-full rounded-xl border-none bg-gray-50 shadow">
             <div className="medium-12 flex items-center justify-between px-4 py-3 text-gray-600">
               <span>최근 검색어</span>
               <button
-                onClick={handleClearKeywords}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleClearKeywords();
+                }}
                 className="medium-12 text-gray-400 hover:text-gray-500"
               >
                 전체 삭제
@@ -105,15 +115,25 @@ const SearchBar = () => {
                 <li
                   key={keyword}
                   className="flex cursor-pointer items-center justify-between hover:text-gray-900"
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
                     setInputValue(keyword);
-                    handleSearch();
+                    // 검색어 클릭 후 즉시 검색 실행
+                    setTimeout(() => {
+                      handleAddKeyword(keyword);
+                      router.push(
+                        `${PATH.SEARCH}/${category}?query=${keyword}`,
+                      );
+                      setOpen(false);
+                    }, 0);
                   }}
                 >
                   <span className="truncate">{keyword}</span>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
+                      e.preventDefault();
                       setKeywords((prev) => prev.filter((k) => k !== keyword));
                     }}
                     className="text-xs text-gray-400 hover:text-gray-600"
@@ -136,13 +156,18 @@ const SearchBar = () => {
                 </li>
               ))}
             </ul>
-          </PopoverContent>
+          </div>
         ) : (
-          <PopoverContent className="medium-12 w-[357px] truncate rounded-xl border-none bg-gray-50 text-gray-400">
+          <div className="medium-12 w-full rounded-xl border-none bg-gray-50 px-4 py-3 text-gray-400 shadow">
             최근 검색어가 없습니다.
-          </PopoverContent>
+          </div>
         )}
-      </Popover>
+      </div>
+
+      {/* 클릭 바깥영역 감지용 오버레이 */}
+      {open && (
+        <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
+      )}
     </div>
   );
 };

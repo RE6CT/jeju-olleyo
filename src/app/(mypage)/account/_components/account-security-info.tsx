@@ -21,7 +21,8 @@ const SECURITY_INFO_STYLE = {
   title: 'semibold-18 col-span-4 w-full',
   input:
     'rounded-[12px] border border-gray-200 px-4 py-[10px] !placeholder-gray-200',
-  rowLabel: 'medium-16 text-[16px] whitespace-nowrap w-[107px] p-[10px]',
+  rowLabel:
+    'text-[16px] text-gray-900 whitespace-nowrap w-[107px] p-[10px] font-medium',
   rowValue: 'whitespace-nowrap medium-16 p-[10px]',
   button: 'medium-16 bg-transparent text-secondary-300 hover:bg-gray-100',
 };
@@ -101,7 +102,7 @@ const SecurityInfo = ({ userId }: { userId: string }) => {
           <div className="flex flex-col">
             <PasswordInput
               id="currentPassword"
-              placeholder="********"
+              placeholder="현재 비밀번호를 입력하세요"
               register={register('password')}
               autoComplete="current-password"
             />
@@ -119,7 +120,7 @@ const SecurityInfo = ({ userId }: { userId: string }) => {
           <div className="flex flex-col">
             <PasswordInput
               id="newPassword"
-              placeholder="숫자, 문자, 특수문자를 포함하여 8자 이상"
+              placeholder="새 비밀번호를 입력하세요"
               register={register('newPassword')}
               autoComplete="new-password"
             />
@@ -140,7 +141,7 @@ const SecurityInfo = ({ userId }: { userId: string }) => {
           <div className="flex flex-col">
             <PasswordInput
               id="newPasswordCheck"
-              placeholder="숫자, 문자, 특수문자를 포함하여 8자 이상"
+              placeholder="새 비밀번호를 입력하세요"
               register={register('confirmNewPassword')}
               autoComplete="new-password"
             />

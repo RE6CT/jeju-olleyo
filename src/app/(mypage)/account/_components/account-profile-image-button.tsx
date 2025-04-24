@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button';
+import EditIcon from '@/components/icons/edit-icon';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,13 +9,12 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { ProfileImageButtonProps } from '@/types/mypage.type';
 
-// TODO - shadcn 버튼 수정 - bg, hover:bg, shadow
 const BUTTON_STYLE =
-  "absolute bottom-0 right-0 h-8 w-8 rounded-full bg-[url('/icons/edit.svg')] bg-center bg-no-repeat [background-size:18px_18px] bg-white hover:bg-gray-50 shadow-button focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0";
+  'absolute bottom-0 right-0 h-8 w-8 rounded-full bg-white hover:bg-gray-50 shadow-button focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 flex items-center justify-center';
 
 const DROPDOWN_STYLE = {
   box: 'border-none rounded-[12px] py-2 px-2 shadow-dropdown',
-  item: 'm-0 py-2 px-2',
+  item: 'm-0 py-2 px-2 medium-16',
 };
 
 /**
@@ -27,7 +26,9 @@ const ProfileImageButton = ({ onEdit, onDelete }: ProfileImageButtonProps) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size="icon" className={BUTTON_STYLE} />
+        <button className={BUTTON_STYLE}>
+          <EditIcon fill="gray-900" size={18} />
+        </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className={DROPDOWN_STYLE.box}>
         <DropdownMenuGroup>

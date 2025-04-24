@@ -2,6 +2,7 @@ import { FILTER_TYPES, PUBLIC_OPTIONS } from '@/constants/plan.constants';
 
 import { CamelCaseObject } from './common.type';
 import { Database } from './supabase.type';
+import { DayPlaces, TabType } from './plan-detail.type';
 
 /**
  * 계획(Plan) 관련 타입들
@@ -163,4 +164,44 @@ export type PlanType = {
   travelEndDate: string;
   /** 좋아요 여부 */
   isLiked: boolean;
+};
+
+export type PlanState = {
+  // 여행 기간
+  startDate: Date | null;
+  endDate: Date | null;
+  setStartDate: (date: Date | null) => void;
+  setEndDate: (date: Date | null) => void;
+
+  // 계획 기본 정보
+  title: string;
+  description: string;
+  planImg: string;
+  isReadOnly: boolean;
+  planId: number;
+  setTitle: (title: string) => void;
+  setDescription: (description: string) => void;
+  setPlanImg: (planImg: string) => void;
+  setIsReadOnly: (isReadOnly: boolean) => void;
+  setPlanId: (planId: number) => void;
+
+  // 일정 관련 정보
+  dayPlaces: DayPlaces; // 일정별 장소 정보
+  setDayPlaces: (dayPlaces: DayPlaces) => void;
+  activeTab: TabType; // 현재 활성화된 탭
+  setActiveTab: (activeTab: TabType) => void;
+};
+
+/**
+ * 일정 모달 상태 타입
+ */
+export type ScheduleModalStore = {
+  isDeleteModalOpen: boolean;
+  isSaveModalOpen: boolean;
+  isPublicModalOpen: boolean;
+  dayToDelete: number | null;
+  setIsDeleteModalOpen: (isOpen: boolean) => void;
+  setIsSaveModalOpen: (isOpen: boolean) => void;
+  setIsPublicModalOpen: (isOpen: boolean) => void;
+  setDayToDelete: (day: number | null) => void;
 };

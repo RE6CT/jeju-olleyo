@@ -525,3 +525,34 @@ export const fetchGetPlanDaysAndLocations = async (
 
   return dayPlaces;
 };
+
+/**
+ * 일정을 업데이트하는 API
+ * @param planId - 업데이트할 일정의 ID
+ * @param plan - 업데이트할 일정 데이터
+ */
+export const fetchUpdatePlan = async (
+  planId: number,
+  plan: Omit<
+    Plan,
+    'planId' | 'nickname' | 'createdAt' | 'publicAt' | 'isLiked'
+  >,
+): Promise<void> => {
+  const supabase = await getServerClient();
+
+  const { error } = await supabase
+    .from('plans')
+    .update({
+      title: plan.title,
+      description: plan.description,
+      travel_start_date: plan.travelStartDate,
+      travel_end_date: plan.travelEndDate,
+      plan_img: plan.planImg,
+      public: plan.public,
+    })
+    .eq('plan_id', planId);
+
+  if (error) {
+    throw new Error(`일정 업데이트에 실패했습니다. ${error.message}`);
+  }
+};

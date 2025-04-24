@@ -112,6 +112,7 @@ export type ClustererOptions = {
     textAlign: string;
     lineHeight: string;
   }[]; // 클러스터 스타일
+  onMarkerClick?: (marker: MarkerProps) => void; // 마커 클릭 이벤트 핸들러
 };
 
 // 클러스터 인스턴스 타입

@@ -127,7 +127,7 @@ export const fetchGetAllPlans = async (
   const startIndex = (page - 1) * pageSize;
   const endIndex = startIndex + pageSize - 1;
 
-  let query = supabase
+  const query = supabase
     .rpc('get_plans', {
       user_id_param: userId,
       sort_option: sortOption,

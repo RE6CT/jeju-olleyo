@@ -25,6 +25,8 @@ const ProfileModal = ({ isModalOpen, setModalOpen }: ProfileModalProps) => {
   const { successToast } = useCustomToast();
   const { previewImage, selectedFile, handleFileChange, resetFile } =
     useChangeImageFile();
+  const { mutate: updateProfileImage, isPending } =
+    useUpdateProfileImageMutation();
 
   // 모달이 닫히면 파일 상태 초기화
   useEffect(() => {
@@ -38,11 +40,8 @@ const ProfileModal = ({ isModalOpen, setModalOpen }: ProfileModalProps) => {
     fileInputRef.current?.click();
   };
 
-  const { mutate: updateProfileImage, isPending } =
-    useUpdateProfileImageMutation();
-
   // 이미지 변경 완료 버튼 클릭 핸들러 수정
-  const handleProfileImageEditCompelete = async (e: FormEvent) => {
+  const handleProfileImageEditCompelete = (e: FormEvent) => {
     e.preventDefault();
     if (!selectedFile) {
       successToast(ERROR_MESSAGES.IMAGE_DATA_MISSING);
@@ -52,24 +51,25 @@ const ProfileModal = ({ isModalOpen, setModalOpen }: ProfileModalProps) => {
     const isConfirmed = confirm('프로필 이미지를 변경하시겠습니까?');
     if (!isConfirmed) return;
 
-    try {
-      // formData 생성 및 파일 추가
-      const formData = new FormData();
-      formData.append('profileImage', selectedFile);
+    // formData 생성 및 파일 추가
+    const formData = new FormData();
+    formData.append('profileImage', selectedFile);
 
-      // 뮤테이션 사용
-      updateProfileImage(formData);
-
-      successToast('프로필 이미지가 변경되었습니다.');
-    } catch (error: unknown) {
-      let errorMessage = ERROR_MESSAGES.PROFILE_UPDATE_FAILED;
-      if (error instanceof Error) {
-        errorMessage = error.message;
-      }
-      successToast(errorMessage);
-    } finally {
-      setModalOpen(false);
-    }
+    // 프로필 이미지 업데이트
+    updateProfileImage(formData, {
+      onSuccess: () => {
+        successToast('프로필 이미지가 변경되었습니다.');
+        setModalOpen(false);
+      },
+      onError: (error) => {
+        let errorMessage = ERROR_MESSAGES.PROFILE_UPDATE_FAILED;
+        if (error instanceof Error) {
+          errorMessage = error.message;
+        }
+        successToast(errorMessage);
+        setModalOpen(false);
+      },
+    });
   };
 
   return (

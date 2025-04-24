@@ -142,7 +142,7 @@ export const fetchGetAllPlans = async (
 
   return {
     data: data.map(camelize),
-    totalPage: Math.ceil(count ?? 1 / pageSize),
+    totalPage: Math.ceil((count ?? 1) / pageSize),
   };
 };
 

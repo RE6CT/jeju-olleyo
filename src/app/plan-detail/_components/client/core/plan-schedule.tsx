@@ -70,6 +70,7 @@ const SaveButton = memo(() => {
   const startDate = usePlanStartDate();
   const endDate = usePlanEndDate();
   const dayPlaces = usePlanDayPlaces();
+  const isReadOnly = usePlanIsReadOnly();
   const { setIsSaveModalOpen, setIsPublicModalOpen } = useScheduleModalStore();
   const { handleSaveButtonClick } = useScheduleSaveButton(
     usePlanTitle(),
@@ -82,12 +83,14 @@ const SaveButton = memo(() => {
 
   return (
     <div className="mt-[70px]">
-      <Button
-        onClick={handleSaveButtonClick}
-        className="flex items-center justify-center rounded-[12px] border border-primary-400 bg-primary-500 px-7 py-4 text-24 font-bold leading-[130%] text-[#F8F8F8] shadow-[2px_4px_4px_0px_rgba(153,61,0,0.20)] backdrop-blur-[10px] hover:bg-primary-600"
-      >
-        저장하기
-      </Button>
+      {!isReadOnly && (
+        <Button
+          onClick={handleSaveButtonClick}
+          className="flex items-center justify-center rounded-[12px] border border-primary-400 bg-primary-500 px-7 py-4 text-24 font-bold leading-[130%] text-[#F8F8F8] shadow-[2px_4px_4px_0px_rgba(153,61,0,0.20)] backdrop-blur-[10px] hover:bg-primary-600"
+        >
+          저장하기
+        </Button>
+      )}
     </div>
   );
 });

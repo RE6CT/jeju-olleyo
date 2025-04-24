@@ -10,7 +10,7 @@ import TimeIcon from '@/components/icons/time-icon';
 import PhoneIcon from '@/components/icons/phone-icon';
 import AddIcon from '@/components/icons/add-icon';
 import { PlaceModal } from '@/types/place-modal.type';
-import PlanVerticalCard from '../card/plan-vertical-card';
+// import PlanVerticalCard from '../card/plan-vertical-card';
 
 const PlaceModalView = ({
   place,
@@ -80,7 +80,7 @@ const PlaceModalView = ({
         내 일정에 추가하기 <AddIcon size={20} fill="primary-500" />
       </button>
 
-      <div>
+      {/* <div>
         <div className="semibold-24 mb-7 mt-10">해당 장소가 포함된 일정</div>
 
         {planIncludingPlace?.length === 0 && (
@@ -94,7 +94,7 @@ const PlaceModalView = ({
             ?.slice(0, 4)
             .map((plan) => <PlanVerticalCard key={plan.planId} plan={plan} />)}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

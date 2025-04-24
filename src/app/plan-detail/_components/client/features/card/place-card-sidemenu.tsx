@@ -58,10 +58,6 @@ const PlaceCardSidemenu = ({
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  console.log('타이틀', title);
-  console.log('카테고리', category);
-  console.log('프랍으로 내려준 플레이스아이디', placeId);
-
   return (
     <>
       <div className="flex w-[240px] items-center justify-between py-3">
@@ -120,7 +116,11 @@ const PlaceCardSidemenu = ({
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTitle className="sr-only">장소 상세 정보</DialogTitle>
         <DialogContent>
-          <PlaceModal placeId={placeId} onAddPlace={onAddPlace} />
+          <PlaceModal
+            placeId={placeId}
+            onAddPlace={onAddPlace}
+            isBookmarked={isBookmarked}
+          />
         </DialogContent>
       </Dialog>
     </>

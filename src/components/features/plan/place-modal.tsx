@@ -10,9 +10,11 @@ import { useGetPlans } from '@/lib/queries/use-get-plans';
 const PlaceModal = ({
   placeId,
   onAddPlace,
+  isBookmarked,
 }: {
   placeId: number;
   onAddPlace?: () => void;
+  isBookmarked: boolean;
 }) => {
   console.log('placeId:', placeId);
   const { user } = useAuth();
@@ -29,8 +31,8 @@ const PlaceModal = ({
     error: detailError,
   } = useGetPlaceDetailInfo(placeId, place?.content_type_id ?? 0);
 
-  const { data: isBookmarked = false, isPending: bookmarkPending } =
-    useGetBookmarkCheck(placeId, user?.id ?? '');
+  // const { data: isBookmarked = false, isPending: bookmarkPending } =
+  //   useGetBookmarkCheck(placeId, user?.id ?? '');
 
   const {
     data: planIncludingPlace,
@@ -38,8 +40,7 @@ const PlaceModal = ({
     error: planError,
   } = useGetPlans(placeId, user?.id ?? '');
 
-  const loading =
-    placePending || detailPending || bookmarkPending || planPending;
+  const loading = placePending || detailPending || planPending;
   const error =
     placeError?.message || detailError?.message || planError?.message;
 

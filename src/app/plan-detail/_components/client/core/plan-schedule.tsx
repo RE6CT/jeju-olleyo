@@ -42,6 +42,7 @@ import { useCurrentUser } from '@/lib/queries/auth-queries';
 import { useGetComments } from '@/lib/queries/use-get-comments';
 import Comment from '../features/comment/comment';
 import { Separator } from '@/components/ui/separator';
+import CommentInput from '../features/comment/comment-input';
 
 const DROPDOWN_CONTENT_STYLE =
   'p-0 border border-[#E7EDF0] bg-[#F9FAFB] rounded-[12px] w-[140px] [&>*:hover]:bg-primary-100 [&>*:hover]:text-primary-500';
@@ -429,6 +430,7 @@ const PlanSchedule = memo(() => {
                     <h3 className="semibold-16 my-3">
                       댓글 {comments?.length}
                     </h3>
+                    <CommentInput planId={planId} />
                     <ul>
                       {comments?.map((comment, index) => (
                         <>

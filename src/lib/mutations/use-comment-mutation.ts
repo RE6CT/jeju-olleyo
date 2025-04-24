@@ -1,11 +1,36 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { CommentType } from '@/types/comment.type';
-import { fetchUpdateCommentsByCommentId } from '../apis/comments/client-comments.api';
+import {
+  fetchAddComment,
+  fetchUpdateCommentsByCommentId,
+} from '../apis/comments/client-comments.api';
+
+/**
+ * 댓글 생성 뮤테이션 훅
+ */
+export const useAddComment = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      userId,
+      content,
+      planId,
+    }: {
+      userId: string;
+      content: string;
+      planId: number;
+    }) => fetchAddComment(userId, content, planId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['comments'] });
+    },
+  });
+};
 
 /**
  * 댓글 내용 업데이트 뮤테이션 훅
  */
-export const useCommentMutation = () => {
+export const useUpdateComment = () => {
   const queryClient = useQueryClient();
 
   return useMutation({

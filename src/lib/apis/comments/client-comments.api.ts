@@ -21,6 +21,26 @@ export const fetchfetchAllCommentsByPlanId = async (planId: number) => {
 };
 
 /**
+ * 댓글을 생성하는 함수
+ * @param userId - 유저의 uuid
+ * @param content - 댓글 내용
+ * @param planId - 일정의 id
+ */
+export const fetchAddComment = async (
+  userId: string,
+  content: string,
+  planId: number,
+) => {
+  const supabase = await getBrowserClient();
+
+  const { error } = await supabase
+    .from('plan_comments')
+    .insert({ user_id: userId, plan_id: planId, content });
+
+  if (error) throw new Error('댓글을 등록하는 도중 오류가 발생했습니다.');
+};
+
+/**
  * 댓글 내용을 바꾸는 함수
  * @param commentId - 댓글 id
  * @param content - 수정한 새로운 내용

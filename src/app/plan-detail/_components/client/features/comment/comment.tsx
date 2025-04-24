@@ -7,7 +7,7 @@ import { CommentProps } from '@/types/plan-detail.type';
 import { formatDate } from '@/lib/utils/date';
 import useAuth from '@/lib/hooks/use-auth';
 import { Separator } from '@/components/ui/separator';
-import { useCommentMutation } from '@/lib/mutations/use-comment-mutation';
+import { useUpdateComment } from '@/lib/mutations/use-comment-mutation';
 import useCustomToast from '@/lib/hooks/use-custom-toast';
 
 /**
@@ -28,7 +28,7 @@ const Comment = ({
   const { user } = useAuth();
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [inputText, setInputText] = useState<string>(content);
-  const { mutate } = useCommentMutation();
+  const { mutate } = useUpdateComment();
   const { successToast } = useCustomToast();
 
   /** 댓글 삭제 핸들러 함수 */

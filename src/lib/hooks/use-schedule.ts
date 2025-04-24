@@ -8,9 +8,9 @@ import {
   fetchSavePlanPlaces,
   fetchUpdatePlan,
 } from '@/lib/apis/plan/plan.api';
-import { useScheduleModalStore } from '@/zustand/plan.store';
 import { useRouter } from 'next/navigation';
 import { PATH } from '@/constants/path.constants';
+import { nanoid } from 'nanoid';
 
 // 복사/붙여넣기 기능을 관리하는 훅
 export const useScheduleCopyPaste = (
@@ -18,9 +18,6 @@ export const useScheduleCopyPaste = (
   setDayPlaces: (dayPlaces: DayPlaces) => void,
 ) => {
   const [copiedDay, setCopiedDay] = useState<number | null>(null);
-  const [placeCount, setPlaceCount] = useState(() =>
-    Object.values(dayPlaces).reduce((acc, places) => acc + places.length, 0),
-  );
 
   /**
    * 특정 일자의 장소들을 복사하는 핸들러
@@ -40,7 +37,7 @@ export const useScheduleCopyPaste = (
     const copiedPlaces = [...(dayPlaces[copiedDay] || [])];
     const newPlaces = copiedPlaces.map((place) => ({
       ...place,
-      uniqueId: `${place.id}-${placeCount + copiedPlaces.indexOf(place)}`,
+      uniqueId: nanoid(),
     }));
 
     const updatedDayPlaces = {
@@ -49,7 +46,6 @@ export const useScheduleCopyPaste = (
     };
     setDayPlaces(updatedDayPlaces);
 
-    setPlaceCount((prev) => prev + (dayPlaces[copiedDay]?.length || 0));
     setCopiedDay(null);
   };
 
@@ -85,7 +81,7 @@ export const useSchedulePlaces = (
     if (activeTab === '전체보기' || isReadOnly) return;
 
     const dayNumber = activeTab as number;
-    const uniqueId = `${newPlace.id}-${Date.now()}`;
+    const uniqueId = nanoid();
     const newPlaceWithId = { ...newPlace, uniqueId };
 
     const updatedDayPlaces = {
@@ -265,6 +261,18 @@ export const useScheduleSavePlan = (
         throw new Error('필수 정보가 누락되었습니다.');
       }
 
+      const targetId =
+        planId ??
+        (await fetchSavePlan({
+          userId: userId,
+          title: title,
+          description: description,
+          travelStartDate: startDate?.toISOString() || '',
+          travelEndDate: endDate?.toISOString() || '',
+          planImg: planImg || null,
+          public: true,
+        }));
+
       if (planId) {
         // 기존 일정 수정
         await fetchUpdatePlan(planId, {
@@ -276,20 +284,9 @@ export const useScheduleSavePlan = (
           planImg: planImg || null,
           public: true,
         });
-      } else {
-        // 새 일정 생성
-        planId = await fetchSavePlan({
-          userId: userId,
-          title: title,
-          description: description,
-          travelStartDate: startDate?.toISOString() || '',
-          travelEndDate: endDate?.toISOString() || '',
-          planImg: planImg || null,
-          public: true,
-        });
       }
 
-      await fetchSavePlanPlaces(planId, dayPlaces);
+      await fetchSavePlanPlaces(targetId, dayPlaces);
 
       setIsPublicModalOpen(false);
       toast({
@@ -313,6 +310,18 @@ export const useScheduleSavePlan = (
         throw new Error('필수 정보가 누락되었습니다.');
       }
 
+      const targetId =
+        planId ??
+        (await fetchSavePlan({
+          userId: userId,
+          title: title,
+          description: description,
+          travelStartDate: startDate?.toISOString() || '',
+          travelEndDate: endDate?.toISOString() || '',
+          planImg: planImg || null,
+          public: false,
+        }));
+
       if (planId) {
         // 기존 일정 수정
         await fetchUpdatePlan(planId, {
@@ -324,20 +333,9 @@ export const useScheduleSavePlan = (
           planImg: planImg || null,
           public: false,
         });
-      } else {
-        // 새 일정 생성
-        planId = await fetchSavePlan({
-          userId: userId,
-          title: title,
-          description: description,
-          travelStartDate: startDate?.toISOString() || '',
-          travelEndDate: endDate?.toISOString() || '',
-          planImg: planImg || null,
-          public: false,
-        });
       }
 
-      await fetchSavePlanPlaces(planId, dayPlaces);
+      await fetchSavePlanPlaces(targetId, dayPlaces);
 
       setIsPublicModalOpen(false);
       toast({

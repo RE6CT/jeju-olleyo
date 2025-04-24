@@ -72,7 +72,20 @@ const PlanForm = ({
       setIsReadOnly(isReadOnly);
       setDayPlaces({});
     }
-  }, [initialPlan, setTitle, setDescription, setPlanImg, setDayPlaces]);
+  }, [
+    initialPlan,
+    isReadOnly,
+    initialDayPlaces,
+    setTitle,
+    setDescription,
+    setPlanImg,
+    setPlanId,
+    setActiveTab,
+    setStartDate,
+    setEndDate,
+    setIsReadOnly,
+    setDayPlaces,
+  ]);
 
   useEffect(() => {
     setIsMounted(true);

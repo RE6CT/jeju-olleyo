@@ -9,14 +9,15 @@ import CommunityPlanList from './_components/community-plan-list';
 const Community = async ({
   searchParams,
 }: {
-  searchParams: { sort?: string };
+  searchParams: { sort?: string; page?: number };
 }) => {
   const user = await fetchGetCurrentUser();
   const userId = user.user?.id || null;
 
   // 쿼리 파라미터에서 sort 값 가져오기
   const sort = (searchParams.sort as CommunitySortType) || 'popular';
-  const plans = await fetchGetAllPlans(userId, sort);
+  const page = searchParams.page || 1;
+  const { data: plans, totalPage } = await fetchGetAllPlans(userId, sort, page);
 
   return (
     <>
@@ -26,7 +27,7 @@ const Community = async ({
         buttonText="내 일정 만들러 가기"
         buttonUrl={PATH.PLAN_NEW}
       />
-      <CommunityPlanList plans={plans} />
+      <CommunityPlanList plans={plans} totalPage={totalPage} />
     </>
   );
 };

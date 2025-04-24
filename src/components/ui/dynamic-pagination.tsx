@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight } from '../icons/arrow-icon';
 
 /**
  * 동적 영역을 갖는 페이지네이션 컴포넌트

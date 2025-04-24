@@ -11,6 +11,8 @@ import {
 import { useRouter } from 'next/navigation';
 import { PATH } from '@/constants/path.constants';
 import { nanoid } from 'nanoid';
+import { useQueryClient } from '@tanstack/react-query';
+import { usePlanStore } from '@/zustand/plan.store';
 
 // 복사/붙여넣기 기능을 관리하는 훅
 export const useScheduleCopyPaste = (
@@ -18,6 +20,7 @@ export const useScheduleCopyPaste = (
   setDayPlaces: (dayPlaces: DayPlaces) => void,
 ) => {
   const [copiedDay, setCopiedDay] = useState<number | null>(null);
+  const { setDayPlaces: setStoreDayPlaces } = usePlanStore();
 
   /**
    * 특정 일자의 장소들을 복사하는 핸들러
@@ -45,6 +48,7 @@ export const useScheduleCopyPaste = (
       [targetDay]: [...(dayPlaces[targetDay] || []), ...newPlaces],
     };
     setDayPlaces(updatedDayPlaces);
+    setStoreDayPlaces(updatedDayPlaces);
 
     setCopiedDay(null);
   };
@@ -66,6 +70,7 @@ export const useSchedulePlaces = (
   setDayToDelete: (day: number | null) => void,
 ) => {
   const { toast } = useToast();
+  const { setDayPlaces: setStoreDayPlaces } = usePlanStore();
 
   /**
    * 장소 추가 핸들러
@@ -89,6 +94,7 @@ export const useSchedulePlaces = (
       [dayNumber]: [...(dayPlaces[dayNumber] || []), newPlaceWithId],
     };
     setDayPlaces(updatedDayPlaces);
+    setStoreDayPlaces(updatedDayPlaces);
   };
 
   /**
@@ -107,6 +113,7 @@ export const useSchedulePlaces = (
       [day]: dayPlaces[day].filter((place) => place.uniqueId !== uniqueId),
     };
     setDayPlaces(updatedDayPlaces);
+    setStoreDayPlaces(updatedDayPlaces);
   };
 
   /**
@@ -140,6 +147,7 @@ export const useSchedulePlaces = (
         [dayNumber]: places,
       };
       setDayPlaces(updatedDayPlaces);
+      setStoreDayPlaces(updatedDayPlaces);
     } else {
       const sourceDay = parseInt(source.droppableId);
       const destDay = parseInt(destination.droppableId);
@@ -154,6 +162,7 @@ export const useSchedulePlaces = (
         [destDay]: destPlaces,
       };
       setDayPlaces(updatedDayPlaces);
+      setStoreDayPlaces(updatedDayPlaces);
     }
   };
 
@@ -171,6 +180,7 @@ export const useSchedulePlaces = (
       const updatedDayPlaces = { ...dayPlaces };
       delete updatedDayPlaces[dayToDelete];
       setDayPlaces(updatedDayPlaces);
+      setStoreDayPlaces(updatedDayPlaces);
     }
     setIsDeleteModalOpen(false);
     setDayToDelete(null);
@@ -250,10 +260,19 @@ export const useScheduleSavePlan = (
   planImg: string | null,
   userId: string | null,
   setIsPublicModalOpen: (isOpen: boolean) => void,
-  planId?: number, // 기존 일정 ID (수정 시 사용)
+  planId?: number,
 ) => {
   const { toast } = useToast();
   const router = useRouter();
+  const queryClient = useQueryClient();
+  const {
+    setTitle,
+    setDescription,
+    setPlanImg,
+    setStartDate,
+    setEndDate,
+    setDayPlaces,
+  } = usePlanStore();
 
   const handlePublicClick = async () => {
     try {
@@ -261,25 +280,26 @@ export const useScheduleSavePlan = (
         throw new Error('필수 정보가 누락되었습니다.');
       }
 
-      //console.log('일정 저장 시작 - planId:', planId);
       let targetId: number;
 
       if (planId) {
-        //console.log('기존 일정 수정 시도 - planId:', planId);
-        // 기존 일정 수정
-        await fetchUpdatePlan(planId, {
-          userId: userId,
-          title: title,
-          description: description,
+        const updatedPlan = {
+          planId,
+          userId,
+          title,
+          description,
           travelStartDate: startDate?.toISOString() || '',
           travelEndDate: endDate?.toISOString() || '',
           planImg: planImg || null,
           public: true,
-        });
+          createdAt: new Date().toISOString(),
+          publicAt: new Date().toISOString(),
+          nickname: '',
+          isLiked: false,
+        };
+        await fetchUpdatePlan(updatedPlan, userId);
         targetId = planId;
-        //console.log('기존 일정 수정 완료 - targetId:', targetId);
       } else {
-        // 새 일정 생성
         const newPlanId = await fetchSavePlan({
           userId: userId,
           title: title,
@@ -290,18 +310,27 @@ export const useScheduleSavePlan = (
           public: true,
         });
         targetId = newPlanId;
-        //console.log('새 일정 생성 완료 - targetId:', targetId);
       }
 
-      //console.log('장소 저장 시도 - targetId:', targetId);
       await fetchSavePlanPlaces(targetId, dayPlaces);
+
+      // 일정 목록 캐시 무효화
+      queryClient.invalidateQueries({ queryKey: ['filteredPlans', userId] });
+
+      // Zustand 상태 초기화
+      setTitle('');
+      setDescription('');
+      setPlanImg(null);
+      setStartDate(null);
+      setEndDate(null);
+      setDayPlaces({});
 
       setIsPublicModalOpen(false);
       toast({
         title: '일정 저장 완료',
         description: '일정이 성공적으로 저장되었습니다.',
       });
-      router.push(`${PATH.MYPLAN}`); // 내 일정 페이지로 이동
+      router.push(`${PATH.MYPLAN}`);
     } catch (error) {
       console.error('일정 공개 설정 실패:', error);
       toast({
@@ -318,26 +347,26 @@ export const useScheduleSavePlan = (
         throw new Error('필수 정보가 누락되었습니다.');
       }
 
-      //console.log('일정 저장 시작 - planId:', planId);
       let targetId: number;
 
       if (planId) {
-        //console.log('기존 일정 수정 시도 - planId:', planId);
-        // 기존 일정 수정
-        await fetchUpdatePlan(planId, {
-          userId: userId,
-          title: title,
-          description: description,
+        const updatedPlan = {
+          planId,
+          userId,
+          title,
+          description,
           travelStartDate: startDate?.toISOString() || '',
           travelEndDate: endDate?.toISOString() || '',
           planImg: planImg || null,
           public: false,
-        });
+          createdAt: new Date().toISOString(),
+          publicAt: new Date().toISOString(),
+          nickname: '',
+          isLiked: false,
+        };
+        await fetchUpdatePlan(updatedPlan, userId);
         targetId = planId;
-        //console.log('기존 일정 수정 완료 - targetId:', targetId);
       } else {
-        //console.log('새 일정 생성 시도');
-        // 새 일정 생성
         const newPlanId = await fetchSavePlan({
           userId: userId,
           title: title,
@@ -348,18 +377,27 @@ export const useScheduleSavePlan = (
           public: false,
         });
         targetId = newPlanId;
-        //console.log('새 일정 생성 완료 - targetId:', targetId);
       }
 
-      //console.log('장소 저장 시도 - targetId:', targetId);
       await fetchSavePlanPlaces(targetId, dayPlaces);
+
+      // 일정 목록 캐시 무효화
+      queryClient.invalidateQueries({ queryKey: ['filteredPlans', userId] });
+
+      // Zustand 상태 초기화
+      setTitle('');
+      setDescription('');
+      setPlanImg(null);
+      setStartDate(null);
+      setEndDate(null);
+      setDayPlaces({});
 
       setIsPublicModalOpen(false);
       toast({
         title: '일정 저장 완료',
         description: '일정이 성공적으로 저장되었습니다.',
       });
-      router.push(`${PATH.MYPLAN}`); // 내 일정 페이지로 이동
+      router.push(`${PATH.MYPLAN}`);
     } catch (error) {
       console.error('일정 비공개 설정 실패:', error);
       toast({

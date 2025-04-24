@@ -98,6 +98,8 @@ export type PlanHorizontalCardProps = {
   onEdit?: (planId: number) => void;
   /** 삭제 핸들러 함수 */
   onDelete?: (planId: number) => void;
+  /** 업데이트 핸들러 함수 */
+  onUpdate?: (plan: Plan) => void;
 };
 
 /**

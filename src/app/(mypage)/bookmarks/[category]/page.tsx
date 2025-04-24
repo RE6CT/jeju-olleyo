@@ -1,6 +1,10 @@
 import { CategoryParamType } from '@/types/category.type';
 import BookmarksList from '../_components/bookmarks-list';
 
+export const metadata = {
+  title: '마이페이지 - 내가 북마크한 장소',
+};
+
 const BookmarksPage = async ({
   params,
 }: {

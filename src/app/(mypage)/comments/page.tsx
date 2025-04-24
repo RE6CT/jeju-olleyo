@@ -4,6 +4,10 @@ import MypageDataCounts from '../_components/mypage-data-counts';
 import CommentsList from './_components/comments-list';
 import { fetchAllCommentsByUserId } from '@/lib/apis/comments/server-comments.api';
 
+export const metadata = {
+  title: '마이페이지 - 내가 쓴 댓글',
+};
+
 const PAGE_SIZE = 10;
 
 const CommentsPage = async ({

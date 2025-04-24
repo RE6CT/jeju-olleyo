@@ -3,6 +3,10 @@ import LikesList from './components/likes-list';
 import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 import MypageDataCounts from '../_components/mypage-data-counts';
 
+export const metadata = {
+  title: '마이페이지 - 내가 좋아요한 일정',
+};
+
 const PAGE_SIZE = 4;
 
 const LikesPage = async ({

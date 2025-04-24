@@ -6,6 +6,11 @@ import { CommunitySortType } from '@/types/community.type';
 
 import CommunityPlanList from './_components/community-plan-list';
 
+export const metadata = {
+  title: '커뮤니티',
+  description: '다양한 제주도 여행 계획을 살펴보세요!',
+};
+
 const Community = async ({
   searchParams,
 }: {

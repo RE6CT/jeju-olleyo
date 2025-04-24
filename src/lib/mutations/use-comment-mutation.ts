@@ -47,11 +47,14 @@ export const useUpdateComment = () => {
     onMutate: async ({ commentId, content }) => {
       await queryClient.cancelQueries({ queryKey: ['comments'] });
 
-      const previousData = queryClient.getQueryData(['comments']);
+      const previousData = queryClient.getQueryData<CommentType[]>([
+        'comments',
+      ]);
 
       queryClient.setQueriesData(
         { queryKey: ['comments'], exact: false },
         (oldData: CommentType[]) => {
+          if (!oldData) return [];
           return oldData.map((comment) => {
             if (comment.planCommentId === commentId) {
               return { ...comment, content };

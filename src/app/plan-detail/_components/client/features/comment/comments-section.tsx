@@ -4,6 +4,7 @@ import Comment from '@/app/plan-detail/_components/client/features/comment/comme
 import CommentInput from '@/app/plan-detail/_components/client/features/comment/comment-input';
 import { Separator } from '@/components/ui/separator';
 import { CommentType } from '@/types/comment.type';
+import React from 'react';
 
 /**
  * 댓글 입력창과 댓글 리스트를 포함하는 전체 댓글 섹션
@@ -21,7 +22,7 @@ const CommentsSection = ({
       <CommentInput planId={planId} />
       <ul>
         {comments?.map((comment, index) => (
-          <>
+          <React.Fragment key={comment.planCommentId}>
             <Comment
               key={comment.planCommentId}
               planCommentId={comment.planCommentId}
@@ -33,7 +34,7 @@ const CommentsSection = ({
             {index < comments.length - 1 && (
               <Separator key={`separator-${index}`} className="my-1" />
             )}
-          </>
+          </React.Fragment>
         ))}
       </ul>
     </div>

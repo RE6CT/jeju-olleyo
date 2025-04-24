@@ -7,7 +7,7 @@ import { CommentType } from '@/types/comment.type';
  * @param planId - 일정 id
  * @returns 해당 일정의 댓글 목록
  */
-export const fetchfetchAllCommentsByPlanId = async (planId: number) => {
+export const fetchAllCommentsByPlanId = async (planId: number) => {
   const supabase = await getBrowserClient();
 
   const { data, error } = await supabase.rpc('get_comments', {

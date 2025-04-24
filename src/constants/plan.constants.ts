@@ -17,6 +17,7 @@ export const TEXT = {
   dateSeparator: '-',
   edit: '수정하기',
   delete: '삭제하기',
+  update: '업데이트',
 } as const;
 
 export const ITEMS_PER_PAGE = 10; // 페이지당 표시할 일정 수

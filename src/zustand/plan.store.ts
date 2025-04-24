@@ -11,7 +11,7 @@ export const usePlanStore = create<PlanState>((set) => ({
   // 계획 기본 정보
   title: '',
   description: '',
-  planImg: '',
+  planImg: null,
   isReadOnly: false,
   planId: 0,
   setTitle: (title) => set({ title }),
@@ -25,6 +25,10 @@ export const usePlanStore = create<PlanState>((set) => ({
   activeTab: '전체보기',
   setActiveTab: (activeTab) => set({ activeTab }),
   setDayPlaces: (dayPlaces) => set({ dayPlaces }),
+
+  // 경로 요약 정보
+  routeSummary: {},
+  setRouteSummary: (routeSummary) => set({ routeSummary }),
 }));
 
 // Selectors
@@ -47,7 +51,7 @@ export const usePlanSetDescription = () =>
 export const usePlanSetImg = () => usePlanStore((state) => state.setPlanImg);
 export const usePlanSetIsReadOnly = () =>
   usePlanStore((state) => state.setIsReadOnly);
-export const usePlanSetPlanId = () => usePlanStore((state) => state.setPlanId);
+export const usePlanSetId = () => usePlanStore((state) => state.setPlanId);
 export const usePlanSetStartDate = () =>
   usePlanStore((state) => state.setStartDate);
 export const usePlanSetEndDate = () =>
@@ -56,6 +60,12 @@ export const usePlanSetDayPlaces = () =>
   usePlanStore((state) => state.setDayPlaces);
 export const usePlanSetActiveTab = () =>
   usePlanStore((state) => state.setActiveTab);
+
+export const usePlanRouteSummary = () => {
+  const routeSummary = usePlanStore((state) => state.routeSummary);
+  const setRouteSummary = usePlanStore((state) => state.setRouteSummary);
+  return { routeSummary, setRouteSummary };
+};
 
 export const useScheduleModalStore = create<ScheduleModalStore>((set) => ({
   isDeleteModalOpen: false,

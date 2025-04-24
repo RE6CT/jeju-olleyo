@@ -35,14 +35,6 @@ export type PlaceImageProps = {
   isPriority?: boolean;
 };
 
-// 수정/삭제를 하는 드롭다운 컴포넌트의 props
-export type EditAndDeleteDropdownProps = {
-  plan: Plan;
-  onEdit: (id: number) => void;
-  onDelete: (id: number) => void;
-  children: ReactNode;
-};
-
 // 날짜 기간 표시 컴포넌트의 props
 export type DurationProps = {
   start: string;

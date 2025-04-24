@@ -11,7 +11,7 @@ export const usePlanStore = create<PlanState>((set) => ({
   // 계획 기본 정보
   title: '',
   description: '',
-  planImg: '',
+  planImg: null,
   isReadOnly: false,
   planId: 0,
   setTitle: (title) => set({ title }),
@@ -51,7 +51,7 @@ export const usePlanSetDescription = () =>
 export const usePlanSetImg = () => usePlanStore((state) => state.setPlanImg);
 export const usePlanSetIsReadOnly = () =>
   usePlanStore((state) => state.setIsReadOnly);
-export const usePlanSetPlanId = () => usePlanStore((state) => state.setPlanId);
+export const usePlanSetId = () => usePlanStore((state) => state.setPlanId);
 export const usePlanSetStartDate = () =>
   usePlanStore((state) => state.setStartDate);
 export const usePlanSetEndDate = () =>

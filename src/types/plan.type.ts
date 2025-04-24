@@ -95,9 +95,9 @@ export type PlanHorizontalCardProps = {
   /** 작성자 닉네임 (선택적) */
   nickname?: string;
   /** 수정 핸들러 함수 */
-  onEdit?: (id: number) => void;
+  onEdit?: (planId: number) => void;
   /** 삭제 핸들러 함수 */
-  onDelete?: (id: number) => void;
+  onDelete?: (planId: number) => void;
 };
 
 /**
@@ -166,7 +166,7 @@ export type PlanType = {
   isLiked: boolean;
 };
 
-export interface PlanState {
+export type PlanState = {
   // 여행 기간
   startDate: Date | null;
   endDate: Date | null;
@@ -176,12 +176,12 @@ export interface PlanState {
   // 계획 기본 정보
   title: string;
   description: string;
-  planImg: string;
+  planImg: string | null;
   isReadOnly: boolean;
   planId: number;
   setTitle: (title: string) => void;
   setDescription: (description: string) => void;
-  setPlanImg: (planImg: string) => void;
+  setPlanImg: (planImg: string | null) => void;
   setIsReadOnly: (isReadOnly: boolean) => void;
   setPlanId: (planId: number) => void;
 
@@ -197,7 +197,7 @@ export interface PlanState {
   setRouteSummary: (routeSummary: {
     [key: number]: { distance: number; duration: number }[];
   }) => void;
-}
+};
 
 /**
  * 일정 모달 상태 타입

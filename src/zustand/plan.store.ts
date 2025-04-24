@@ -25,6 +25,10 @@ export const usePlanStore = create<PlanState>((set) => ({
   activeTab: '전체보기',
   setActiveTab: (activeTab) => set({ activeTab }),
   setDayPlaces: (dayPlaces) => set({ dayPlaces }),
+
+  // 경로 요약 정보
+  routeSummary: {},
+  setRouteSummary: (routeSummary) => set({ routeSummary }),
 }));
 
 // Selectors
@@ -56,6 +60,12 @@ export const usePlanSetDayPlaces = () =>
   usePlanStore((state) => state.setDayPlaces);
 export const usePlanSetActiveTab = () =>
   usePlanStore((state) => state.setActiveTab);
+
+export const usePlanRouteSummary = () => {
+  const routeSummary = usePlanStore((state) => state.routeSummary);
+  const setRouteSummary = usePlanStore((state) => state.setRouteSummary);
+  return { routeSummary, setRouteSummary };
+};
 
 export const useScheduleModalStore = create<ScheduleModalStore>((set) => ({
   isDeleteModalOpen: false,

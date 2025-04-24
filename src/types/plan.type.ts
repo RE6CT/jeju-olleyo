@@ -166,7 +166,7 @@ export type PlanType = {
   isLiked: boolean;
 };
 
-export type PlanState = {
+export interface PlanState {
   // 여행 기간
   startDate: Date | null;
   endDate: Date | null;
@@ -190,7 +190,14 @@ export type PlanState = {
   setDayPlaces: (dayPlaces: DayPlaces) => void;
   activeTab: TabType; // 현재 활성화된 탭
   setActiveTab: (activeTab: TabType) => void;
-};
+
+  routeSummary: {
+    [key: number]: { distance: number; duration: number }[];
+  };
+  setRouteSummary: (routeSummary: {
+    [key: number]: { distance: number; duration: number }[];
+  }) => void;
+}
 
 /**
  * 일정 모달 상태 타입

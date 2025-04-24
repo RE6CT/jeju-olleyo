@@ -43,6 +43,7 @@ import { useGetComments } from '@/lib/queries/use-get-comments';
 import Comment from '../features/comment/comment';
 import { Separator } from '@/components/ui/separator';
 import CommentInput from '../features/comment/comment-input';
+import CommentsSection from '../features/comment/comments-section';
 
 const DROPDOWN_CONTENT_STYLE =
   'p-0 border border-[#E7EDF0] bg-[#F9FAFB] rounded-[12px] w-[140px] [&>*:hover]:bg-primary-100 [&>*:hover]:text-primary-500';
@@ -426,33 +427,8 @@ const PlanSchedule = memo(() => {
               )}
               {isReadOnly && (
                 <div className="relative h-full w-[400px] border-gray-200 p-6">
-                  <div className="flex flex-col gap-2 rounded-12 border border-gray-100 bg-gray-50 px-5 py-2">
-                    <h3 className="semibold-16 my-3">
-                      댓글 {comments?.length}
-                    </h3>
-                    <CommentInput planId={planId} />
-                    <ul>
-                      {comments?.map((comment, index) => (
-                        <>
-                          <Comment
-                            key={comment.planCommentId}
-                            planCommentId={comment.planCommentId}
-                            userId={comment.userId}
-                            nickname={comment.nickname}
-                            createdAt={comment.createdAt}
-                            content={comment.content}
-                          />
-                          {index < comments.length - 1 && (
-                            <Separator
-                              key={`separator-${index}`}
-                              className="my-1"
-                            />
-                          )}
-                        </>
-                      ))}
-                    </ul>
-                  </div>
-
+                  {/* 댓글 섹션 */}
+                  <CommentsSection comments={comments || []} planId={planId} />
                   <div className="absolute bottom-[-70px] right-[40px]">
                     <SaveButton />
                   </div>

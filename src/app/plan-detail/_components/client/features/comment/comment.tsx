@@ -73,6 +73,7 @@ const Comment = ({
             <button
               className="regular-10 px-[6px] py-[2px] text-gray-500"
               onClick={handleEditCommentButtonClick}
+              disabled={inputText === ''}
             >
               수정 완료
             </button>

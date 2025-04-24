@@ -21,6 +21,10 @@ const CommentInput = ({ planId }: { planId: number }) => {
       successToast('로그인이 필요합니다.');
       return;
     }
+    if (inputText === '') {
+      successToast('댓글을 입력해주세요.');
+      return;
+    }
     mutate({ userId: user.id, content: inputText, planId });
     successToast('댓글이 등록되었습니다.');
     setInputText('');

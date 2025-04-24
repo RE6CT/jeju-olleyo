@@ -119,24 +119,31 @@ export const fetchDeletePlan = async (planId: number) => {
 export const fetchGetAllPlans = async (
   userId: string | null = null,
   sortOption: CommunitySortType = 'popular',
-  limit?: number,
+  page: number = 1,
+  pageSize: number = 12,
 ) => {
   const supabase = await getServerClient();
 
-  let query = supabase.rpc('get_plans', {
-    user_id_param: userId,
-    sort_option: sortOption,
-  });
+  const startIndex = (page - 1) * pageSize;
+  const endIndex = startIndex + pageSize - 1;
 
-  if (limit) {
-    query = query.limit(limit);
-  }
+  const query = supabase
+    .rpc('get_plans', {
+      user_id_param: userId,
+      sort_option: sortOption,
+    })
+    .range(startIndex, endIndex);
 
-  const { data, error } = await query;
+  const { data, error: dataError } = await query;
+  const { count, error: CountError } = await supabase.from('plans').select('*');
 
-  if (error) throw new Error(error.message);
+  if (dataError) throw new Error(dataError.message);
+  if (CountError) throw new Error(CountError.message);
 
-  return data.map(camelize);
+  return {
+    data: data.map(camelize),
+    totalPage: Math.ceil((count ?? 1) / pageSize),
+  };
 };
 
 /**

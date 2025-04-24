@@ -39,7 +39,6 @@ export type ProfileImageButtonProps = {
 };
 
 export type ProfileModalProps = {
-  userId: string;
   isModalOpen: boolean;
   setModalOpen: Dispatch<SetStateAction<boolean>>;
 };

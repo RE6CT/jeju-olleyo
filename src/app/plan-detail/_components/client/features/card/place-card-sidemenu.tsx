@@ -3,9 +3,9 @@
 import Image from 'next/image';
 import { useMemo } from 'react';
 
-import BookmarkIcon from '@/components/commons/bookmark-icon';
 import { Button } from '@/components/ui/button';
 import { CategoryType } from '@/types/category.type';
+import BookmarkIcon from '@/components/commons/bookmark-icon';
 
 const PLACE_IMAGE_SIZE = {
   width: 40,

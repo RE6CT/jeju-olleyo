@@ -9,7 +9,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ERROR_MESSAGES } from '@/constants/mypage.constants';
-import { fetchUpdateNickname } from '@/lib/apis/profile/update-profile.api';
 import useCustomToast from '@/lib/hooks/use-custom-toast';
 import useProviderFromCookie from '@/lib/hooks/use-get-provider';
 import { nicknameSchema } from '@/lib/schemas/auth-schema';

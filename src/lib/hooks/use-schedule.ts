@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { DropResult } from 'react-beautiful-dnd';
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from '@/lib/hooks/use-toast';
 import { DayPlaces } from '@/types/plan-detail.type';
 import { Place } from '@/types/search.type';
 import {
@@ -65,8 +65,6 @@ export const useSchedulePlaces = (
   dayToDelete: number | null,
   setDayToDelete: (day: number | null) => void,
 ) => {
-  const { toast } = useToast();
-
   /**
    * 장소 추가 핸들러
    * @param newPlace 추가할 장소 데이터

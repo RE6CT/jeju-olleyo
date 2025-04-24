@@ -7,6 +7,10 @@ import PersonalInfo from './_components/account-personal-info';
 import ProfileInfo from './_components/account-profile-info';
 import SecurityInfo from './_components/account-security-info';
 
+export const metadata = {
+  title: '마이페이지 - 회원정보 수정',
+};
+
 const AccountPage = async () => {
   const { user } = await fetchGetCurrentUser();
 

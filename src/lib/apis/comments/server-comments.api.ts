@@ -1,7 +1,6 @@
-import { getBrowserClient } from '@/lib/supabase/client';
 import { getServerClient } from '@/lib/supabase/server';
 import { camelize } from '@/lib/utils/camelize';
-import { CommentType, MyCommentType } from '@/types/comment.type';
+import { MyCommentType } from '@/types/comment.type';
 
 /**
  * 유저의 댓글 목록을 최신순으로 가져오는 함수

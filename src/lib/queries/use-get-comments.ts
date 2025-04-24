@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchfetchAllCommentsByPlanId } from '../apis/comments/get-plan-comments.api';
+import { fetchfetchAllCommentsByPlanId } from '../apis/comments/client-comments.api';
 
 /**
  * 일정의 댓글 전체를 불러오는 쿼리 훅

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { fetchUpdateCommentsByCommentId } from '../apis/comments/update-comments.api';
 import { CommentType } from '@/types/comment.type';
+import { fetchUpdateCommentsByCommentId } from '../apis/comments/client-comments.api';
 
 /**
  * 댓글 내용 업데이트 뮤테이션 훅

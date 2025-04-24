@@ -128,11 +128,11 @@ const MypageModal = ({
       ref={modalRef}
       className="absolute right-0 top-10 z-50 w-[254px] rounded-12 bg-white p-4 shadow-dropdown"
     >
-      {/* 섹션1 - 프로필 영역 */}
-      <div className="flex flex-col gap-3">
+      {/* 섹션 1 - 프로필 영역 */}
+      <div className="flex w-fit flex-col gap-3">
         <section
           onClick={() => onLinkClick(PATH.ACCOUNT)}
-          className="flex cursor-pointer items-center gap-3"
+          className="flex w-fit cursor-pointer items-center gap-3"
         >
           <ProfileImage
             image={userInfo.profileImg}
@@ -140,16 +140,16 @@ const MypageModal = ({
             height={58}
             className="aspect-square"
           />
-          <div className="flex flex-col gap-1">
-            <div className="flex items-center gap-2">
-              <h3 className="semibold-20 whitespace-nowrap">
+          <div className="flex w-[143px] flex-col gap-1">
+            <div className="flex w-[110px] items-center gap-2">
+              <h3 className="semibold-16 truncate whitespace-nowrap">
                 {userInfo.nickname}
               </h3>
               {localUser && cookieProvider && (
                 <ProviderIcon provider={cookieProvider ?? 'email'} />
               )}
             </div>
-            <p className="regular-14">{userInfo.email}</p>
+            <p className="regular-14 truncate">{userInfo.email}</p>
           </div>
         </section>
         <Separator />

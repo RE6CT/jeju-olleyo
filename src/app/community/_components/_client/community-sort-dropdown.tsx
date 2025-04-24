@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Separator } from '@/components/ui/separator';
 import { CommunitySortType } from '@/types/community.type';
+import { Checkbox } from '@/components/ui/checkbox';
 
 const sortTypeLabels = {
   popular: '인기순',
@@ -53,14 +54,28 @@ const SortDropdown = ({ sortType }: { sortType: CommunitySortType }) => {
           onClick={() => handleSortClick('popular')}
           className="medium-16"
         >
-          인기순
+          <div className="flex gap-[10px]">
+            <Checkbox
+              id="popular"
+              checked={sortType === 'popular'}
+              className="flex h-5 w-5 items-center justify-center rounded-none border border-solid border-gray-100 bg-white"
+            />
+            인기순
+          </div>
         </DropdownMenuItem>
         <Separator className="my-[6px]" />
         <DropdownMenuItem
           onClick={() => handleSortClick('recent')}
           className="medium-16"
         >
-          최신순
+          <div className="flex gap-[10px]">
+            <Checkbox
+              id="recent"
+              checked={sortType === 'recent'}
+              className="flex h-5 w-5 items-center justify-center rounded-none border border-solid border-gray-100 bg-white"
+            />
+            최신순
+          </div>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

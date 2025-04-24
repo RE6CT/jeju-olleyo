@@ -7,7 +7,7 @@ import { PATH } from '@/constants/path.constants';
 import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 import { fetchGetAllPlansByUserId } from '@/lib/apis/plan/plan.api';
 
-import PlanFilterSection from './_components/plan-filter-section';
+import PlanFilterSection from '@/app/my-plan/_components/client/plan-filter-section';
 import AddIcon from '@/components/icons/add-icon';
 
 const IMAGE_CONSTANTS = {

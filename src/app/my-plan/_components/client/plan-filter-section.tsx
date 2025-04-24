@@ -1,5 +1,4 @@
 'use client';
-
 import Image from 'next/image';
 import Loading from '@/app/loading';
 import PlanHorizontalCard from '@/components/features/card/plan-horizontal_card';
@@ -17,8 +16,8 @@ import {
 } from '@/constants/plan.constants';
 import { useGetFilteredPlans } from '@/lib/queries/use-get-filtered-plans';
 import { Plan } from '@/types/plan.type';
-import { FilterInput } from './plan-filter-input';
-import { FilterMenu } from './plan-filter-menu';
+import { FilterInput } from '@/app/my-plan/_components/client/plan-filter-input';
+import FilterMenu from '@/app/my-plan/_components/client/plan-filter-menu';
 import { usePlanFilter } from '@/lib/hooks/use-plan-filter';
 import { usePagination } from '@/lib/hooks/use-pagination';
 import { usePopover } from '@/lib/hooks/use-popover';
@@ -175,7 +174,7 @@ const PlanFilterSection = ({
         />
       ) : (
         <>
-          <div className="grid grid-cols-1 gap-6">
+          <div className="grid w-full grid-cols-1 gap-6">
             {currentPagePlans.map((plan) => (
               <PlanHorizontalCard
                 key={plan.planId}

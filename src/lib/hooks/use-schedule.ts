@@ -3,28 +3,69 @@ import { DropResult } from 'react-beautiful-dnd';
 import { useToast } from '@/hooks/use-toast';
 import { DayPlaces } from '@/types/plan-detail.type';
 import { Place } from '@/types/search.type';
-import { fetchSavePlan, fetchSavePlanPlaces } from '@/lib/apis/plan/plan.api';
+import {
+  fetchSavePlan,
+  fetchSavePlanPlaces,
+  fetchUpdatePlan,
+} from '@/lib/apis/plan/plan.api';
+import { useRouter } from 'next/navigation';
+import { PATH } from '@/constants/path.constants';
+import { nanoid } from 'nanoid';
 
-export const useSchedule = (
-  userId: string,
-  planTitle: string,
-  planDescription: string,
-  planImage: string,
-  startDate: Date | null,
-  endDate: Date | null,
+// 복사/붙여넣기 기능을 관리하는 훅
+export const useScheduleCopyPaste = (
   dayPlaces: DayPlaces,
-  setDayPlaces: React.Dispatch<React.SetStateAction<DayPlaces>>,
+  setDayPlaces: (dayPlaces: DayPlaces) => void,
+) => {
+  const [copiedDay, setCopiedDay] = useState<number | null>(null);
+
+  /**
+   * 특정 일자의 장소들을 복사하는 핸들러
+   * @param dayNumber 복사할 일자
+   */
+  const handleCopyDayPlaces = (dayNumber: number) => {
+    setCopiedDay(dayNumber);
+  };
+
+  /**
+   * 복사된 장소들을 붙여넣는 핸들러
+   * @param targetDay 붙여넣을 일자
+   */
+  const handlePasteDayPlaces = (targetDay: number) => {
+    if (copiedDay === null) return;
+
+    const copiedPlaces = [...(dayPlaces[copiedDay] || [])];
+    const newPlaces = copiedPlaces.map((place) => ({
+      ...place,
+      uniqueId: nanoid(),
+    }));
+
+    const updatedDayPlaces = {
+      ...dayPlaces,
+      [targetDay]: [...(dayPlaces[targetDay] || []), ...newPlaces],
+    };
+    setDayPlaces(updatedDayPlaces);
+
+    setCopiedDay(null);
+  };
+
+  return {
+    copiedDay,
+    handleCopyDayPlaces,
+    handlePasteDayPlaces,
+  };
+};
+
+// 장소 관리 기능을 담당하는 훅
+export const useSchedulePlaces = (
+  dayPlaces: DayPlaces,
+  setDayPlaces: (dayPlaces: DayPlaces) => void,
   isReadOnly: boolean,
+  setIsDeleteModalOpen: (isOpen: boolean) => void,
+  dayToDelete: number | null,
+  setDayToDelete: (day: number | null) => void,
 ) => {
   const { toast } = useToast();
-  const [placeCount, setPlaceCount] = useState(() =>
-    Object.values(dayPlaces).reduce((acc, places) => acc + places.length, 0),
-  ); // 초기 장소 개수 계산
-  const [copiedDay, setCopiedDay] = useState<number | null>(null);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [dayToDelete, setDayToDelete] = useState<number | null>(null);
-  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
-  const [isPublicModalOpen, setIsPublicModalOpen] = useState(false);
 
   /**
    * 장소 추가 핸들러
@@ -37,20 +78,17 @@ export const useSchedule = (
    * }, 1)
    */
   const handleAddPlace = (newPlace: Place, activeTab: number | '전체보기') => {
-    if (activeTab === '전체보기') return;
+    if (activeTab === '전체보기' || isReadOnly) return;
 
     const dayNumber = activeTab as number;
-    let uniqueId = '';
-    setPlaceCount((prev) => {
-      uniqueId = `${newPlace.id}-${prev}`;
-      return prev + 1;
-    }); // 함수형 업데이트로 최신 장소 개수 보장(여러 장소가 동시에 추가되는 경우에도 고유 ID를 갖게 하여 충돌 방지)
+    const uniqueId = nanoid();
     const newPlaceWithId = { ...newPlace, uniqueId };
 
-    setDayPlaces((prev: DayPlaces) => ({
-      ...prev,
-      [dayNumber]: [...(prev[dayNumber] || []), newPlaceWithId],
-    }));
+    const updatedDayPlaces = {
+      ...dayPlaces,
+      [dayNumber]: [...(dayPlaces[dayNumber] || []), newPlaceWithId],
+    };
+    setDayPlaces(updatedDayPlaces);
   };
 
   /**
@@ -64,13 +102,11 @@ export const useSchedule = (
   const handleRemovePlace = (day: number, uniqueId: string) => {
     if (isReadOnly) return;
 
-    setDayPlaces((prev) => {
-      const newDayPlaces = { ...prev };
-      newDayPlaces[day] = newDayPlaces[day].filter(
-        (place) => place.uniqueId !== uniqueId,
-      );
-      return newDayPlaces;
-    });
+    const updatedDayPlaces = {
+      ...dayPlaces,
+      [day]: dayPlaces[day].filter((place) => place.uniqueId !== uniqueId),
+    };
+    setDayPlaces(updatedDayPlaces);
   };
 
   /**
@@ -94,65 +130,31 @@ export const useSchedule = (
     const { source, destination } = result;
 
     if (source.droppableId === destination.droppableId) {
-      setDayPlaces((prev: DayPlaces) => {
-        const dayNumber = parseInt(source.droppableId);
-        const places = [...(prev[dayNumber] || [])];
-        const [removed] = places.splice(source.index, 1);
-        places.splice(destination.index, 0, removed);
+      const dayNumber = parseInt(source.droppableId);
+      const places = [...(dayPlaces[dayNumber] || [])];
+      const [removed] = places.splice(source.index, 1);
+      places.splice(destination.index, 0, removed);
 
-        return {
-          ...prev,
-          [dayNumber]: places,
-        };
-      });
-    } else {
-      setDayPlaces((prev: DayPlaces) => {
-        const sourceDay = parseInt(source.droppableId);
-        const destDay = parseInt(destination.droppableId);
-        const sourcePlaces = [...(prev[sourceDay] || [])];
-        const destPlaces = [...(prev[destDay] || [])];
-        const [removed] = sourcePlaces.splice(source.index, 1);
-        destPlaces.splice(destination.index, 0, removed);
-
-        return {
-          ...prev,
-          [sourceDay]: sourcePlaces,
-          [destDay]: destPlaces,
-        };
-      });
-    }
-  };
-
-  /**
-   * 특정 일자의 장소들을 복사하는 핸들러
-   * @param dayNumber 복사할 일자
-   */
-  const handleCopyDayPlaces = (dayNumber: number) => {
-    setCopiedDay(dayNumber);
-  };
-
-  /**
-   * 복사된 장소들을 붙여넣는 핸들러
-   * @param targetDay 붙여넣을 일자
-   */
-  const handlePasteDayPlaces = (targetDay: number) => {
-    if (copiedDay === null) return;
-
-    setDayPlaces((prev: DayPlaces) => {
-      const copiedPlaces = [...(prev[copiedDay] || [])];
-      const newPlaces = copiedPlaces.map((place) => ({
-        ...place,
-        uniqueId: `${place.id}-${placeCount + copiedPlaces.indexOf(place)}`,
-      }));
-
-      return {
-        ...prev,
-        [targetDay]: [...(prev[targetDay] || []), ...newPlaces],
+      const updatedDayPlaces = {
+        ...dayPlaces,
+        [dayNumber]: places,
       };
-    });
+      setDayPlaces(updatedDayPlaces);
+    } else {
+      const sourceDay = parseInt(source.droppableId);
+      const destDay = parseInt(destination.droppableId);
+      const sourcePlaces = [...(dayPlaces[sourceDay] || [])];
+      const destPlaces = [...(dayPlaces[destDay] || [])];
+      const [removed] = sourcePlaces.splice(source.index, 1);
+      destPlaces.splice(destination.index, 0, removed);
 
-    setPlaceCount((prev) => prev + (dayPlaces[copiedDay]?.length || 0));
-    setCopiedDay(null);
+      const updatedDayPlaces = {
+        ...dayPlaces,
+        [sourceDay]: sourcePlaces,
+        [destDay]: destPlaces,
+      };
+      setDayPlaces(updatedDayPlaces);
+    }
   };
 
   /**
@@ -166,21 +168,36 @@ export const useSchedule = (
 
   const handleConfirmDelete = () => {
     if (dayToDelete !== null) {
-      setDayPlaces((prev: DayPlaces) => {
-        const newDayPlaces = { ...prev };
-        delete newDayPlaces[dayToDelete];
-        return newDayPlaces;
-      });
+      const updatedDayPlaces = { ...dayPlaces };
+      delete updatedDayPlaces[dayToDelete];
+      setDayPlaces(updatedDayPlaces);
     }
     setIsDeleteModalOpen(false);
     setDayToDelete(null);
   };
 
-  /**
-   * 일정 저장 버튼 클릭 핸들러
-   */
+  return {
+    handleAddPlace,
+    handleRemovePlace,
+    handleDragEnd,
+    handleDeleteDayPlaces,
+    handleConfirmDelete,
+  };
+};
+
+// 저장 버튼 클릭 핸들러를 담당하는 훅
+export const useScheduleSaveButton = (
+  title: string,
+  startDate: Date | null,
+  endDate: Date | null,
+  dayPlaces: DayPlaces,
+  setIsSaveModalOpen: (isOpen: boolean) => void,
+  setIsPublicModalOpen: (isOpen: boolean) => void,
+) => {
+  const { toast } = useToast();
+
   const handleSaveButtonClick = () => {
-    if (!planTitle) {
+    if (!title) {
       toast({
         title: '일정 제목 누락',
         description: '일정 제목을 입력해주세요.',
@@ -220,32 +237,63 @@ export const useSchedule = (
     setIsPublicModalOpen(true);
   };
 
-  /**
-   * 일정 공개 버튼 클릭 핸들러
-   */
+  return { handleSaveButtonClick };
+};
+
+// 일정 저장 기능을 담당하는 훅
+export const useScheduleSavePlan = (
+  dayPlaces: DayPlaces,
+  startDate: Date | null,
+  endDate: Date | null,
+  title: string,
+  description: string,
+  planImg: string | null,
+  userId: string | null,
+  setIsPublicModalOpen: (isOpen: boolean) => void,
+  planId?: number, // 기존 일정 ID (수정 시 사용)
+) => {
+  const { toast } = useToast();
+  const router = useRouter();
+
   const handlePublicClick = async () => {
     try {
-      if (!startDate || !endDate || !planTitle) {
+      if (!startDate || !endDate || !title || !userId) {
         throw new Error('필수 정보가 누락되었습니다.');
       }
 
-      const planId = await fetchSavePlan({
-        userId: userId,
-        title: planTitle,
-        description: planDescription,
-        travelStartDate: startDate?.toISOString() || '',
-        travelEndDate: endDate?.toISOString() || '',
-        planImg: planImage || null,
-        public: true,
-      });
+      const targetId =
+        planId ??
+        (await fetchSavePlan({
+          userId: userId,
+          title: title,
+          description: description,
+          travelStartDate: startDate?.toISOString() || '',
+          travelEndDate: endDate?.toISOString() || '',
+          planImg: planImg || null,
+          public: true,
+        }));
 
-      await fetchSavePlanPlaces(planId, dayPlaces);
+      if (planId) {
+        // 기존 일정 수정
+        await fetchUpdatePlan(planId, {
+          userId: userId,
+          title: title,
+          description: description,
+          travelStartDate: startDate?.toISOString() || '',
+          travelEndDate: endDate?.toISOString() || '',
+          planImg: planImg || null,
+          public: true,
+        });
+      }
+
+      await fetchSavePlanPlaces(targetId, dayPlaces);
 
       setIsPublicModalOpen(false);
       toast({
         title: '일정 저장 완료',
         description: '일정이 성공적으로 저장되었습니다.',
       });
+      router.push(`${PATH.MYPLAN}`); // 내 일정 페이지로 이동
     } catch (error) {
       console.error('일정 공개 설정 실패:', error);
       toast({
@@ -256,32 +304,45 @@ export const useSchedule = (
     }
   };
 
-  /**
-   * 일정 비공개 버튼 클릭 핸들러
-   */
   const handlePrivateClick = async () => {
     try {
-      if (!startDate || !endDate || !planTitle) {
+      if (!startDate || !endDate || !title || !userId) {
         throw new Error('필수 정보가 누락되었습니다.');
       }
 
-      const planId = await fetchSavePlan({
-        userId: userId,
-        title: planTitle,
-        description: planDescription,
-        travelStartDate: startDate?.toISOString() || '',
-        travelEndDate: endDate?.toISOString() || '',
-        planImg: planImage || null,
-        public: false,
-      });
+      const targetId =
+        planId ??
+        (await fetchSavePlan({
+          userId: userId,
+          title: title,
+          description: description,
+          travelStartDate: startDate?.toISOString() || '',
+          travelEndDate: endDate?.toISOString() || '',
+          planImg: planImg || null,
+          public: false,
+        }));
 
-      await fetchSavePlanPlaces(planId, dayPlaces);
+      if (planId) {
+        // 기존 일정 수정
+        await fetchUpdatePlan(planId, {
+          userId: userId,
+          title: title,
+          description: description,
+          travelStartDate: startDate?.toISOString() || '',
+          travelEndDate: endDate?.toISOString() || '',
+          planImg: planImg || null,
+          public: false,
+        });
+      }
+
+      await fetchSavePlanPlaces(targetId, dayPlaces);
 
       setIsPublicModalOpen(false);
       toast({
         title: '일정 저장 완료',
         description: '일정이 성공적으로 저장되었습니다.',
       });
+      router.push(`${PATH.MYPLAN}`); // 내 일정 페이지로 이동
     } catch (error) {
       console.error('일정 비공개 설정 실패:', error);
       toast({
@@ -292,23 +353,5 @@ export const useSchedule = (
     }
   };
 
-  return {
-    copiedDay,
-    isDeleteModalOpen,
-    isSaveModalOpen,
-    isPublicModalOpen,
-    setIsDeleteModalOpen,
-    setIsSaveModalOpen,
-    setIsPublicModalOpen,
-    handleAddPlace,
-    handleRemovePlace,
-    handleDragEnd,
-    handleCopyDayPlaces,
-    handlePasteDayPlaces,
-    handleDeleteDayPlaces,
-    handleConfirmDelete,
-    handleSaveButtonClick,
-    handlePublicClick,
-    handlePrivateClick,
-  };
+  return { handlePublicClick, handlePrivateClick };
 };

@@ -1,8 +1,10 @@
+'use client';
+
 import { FILTER_TYPES } from '@/constants/plan.constants';
 import { FilterState, FilterType } from '@/types/plan.type';
-import FilterButton from './filter-button';
+import FilterButton from '@/app/my-plan/_components/server/filter-button';
 
-export const FilterMenu = ({
+const FilterMenu = ({
   selectedFilter,
   setSelectedFilter,
   filter,
@@ -62,3 +64,5 @@ export const FilterMenu = ({
     />
   </div>
 );
+
+export default FilterMenu;

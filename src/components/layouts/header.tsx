@@ -8,6 +8,8 @@ import { PATH } from '@/constants/path.constants';
 import Nav from './nav';
 import SearchBar from './search-bar';
 import { usePathname } from 'next/navigation';
+import { Suspense } from 'react';
+import { LoadingSpinner } from '../commons/loading-spinner';
 
 const Header = () => {
   const pathname = usePathname();
@@ -57,7 +59,9 @@ const Header = () => {
 
           {/* 검색바 */}
           <div className="w-full sm:w-[357px]">
-            <SearchBar />
+            <Suspense fallback={<LoadingSpinner />}>
+              <SearchBar />
+            </Suspense>
           </div>
         </div>
 

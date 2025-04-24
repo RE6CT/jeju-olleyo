@@ -41,6 +41,7 @@ const PlaceCardSidemenu = ({
   isBookmarked = false,
   toggleBookmark,
   onAddPlace,
+  placeId,
 }: {
   title: string;
   imageUrl: string;
@@ -48,6 +49,7 @@ const PlaceCardSidemenu = ({
   isBookmarked: boolean;
   toggleBookmark: () => void;
   onAddPlace?: () => void;
+  placeId: number;
 }) => {
   const defaultImage = useMemo(() => getRandomDefaultImage(), []);
   const displayImageUrl = imageUrl || defaultImage;

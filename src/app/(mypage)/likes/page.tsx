@@ -1,7 +1,7 @@
 import { fetchGetAllLikesByUserId } from '@/lib/apis/like/get-like.api';
-import LikesList from './components/likes-list';
+import LikesList from './components/_client/likes-list';
 import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
-import MypageDataCounts from '../_components/mypage-data-counts';
+import MypageDataCounts from '../_components/_client/mypage-data-counts';
 
 export const metadata = {
   title: '마이페이지 - 내가 좋아요한 일정',

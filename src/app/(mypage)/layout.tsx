@@ -1,4 +1,4 @@
-import MypageSidebar from './_components/mypage-sidebar';
+import MypageSidebar from './_components/_client/mypage-sidebar';
 
 const Layout = ({
   children,

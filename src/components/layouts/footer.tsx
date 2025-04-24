@@ -1,8 +1,20 @@
+'use client';
+
+import { usePathname } from 'next/navigation';
+
 /**
  * 웹사이트 푸터 컴포넌트
  * 로고, 개발자 정보, 디자이너 및 튜터 정보를 표시합니다.
  */
 const Footer = () => {
+  const pathname = usePathname();
+
+  const isWithoutFooterComponent = pathname === '/';
+
+  if (!isWithoutFooterComponent) {
+    return;
+  }
+
   return (
     <footer className="mx-auto flex w-full max-w-[1024px] flex-col items-center gap-[50px] bg-gray-50 px-4 py-6 md:flex-row md:gap-[100px] md:px-9 md:py-8">
       {/* 로고 및 카피라이트 */}

@@ -34,17 +34,28 @@ export const useCurrentUser = (options = {}) => {
   return useQuery({
     queryKey: USER_QUERY_KEY,
     queryFn: async () => {
-      const { user, error } = await fetchGetCurrentUser();
-      if (error) {
-        throw new Error(error.message);
+      try {
+        const { user, error } = await fetchGetCurrentUser();
+
+        // 세션이 없는 경우 null 반환 (오류로 처리하지 않음)
+        if (error && error.message.includes('Auth session missing')) {
+          return null;
+        }
+
+        if (error) {
+          throw new Error(error.message);
+        }
+
+        return user;
+      } catch (error) {
+        console.error('사용자 정보 조회 실패:', error);
+        return null; // 오류 발생 시 null 반환하여 예외 처리
       }
-      return user;
     },
-    // 중요: 인증 상태가 자주 변경되지 않도록 설정
-    staleTime: Infinity, // 명시적으로 무효화하기 전까지 다시 가져오지 않음
-    gcTime: 1000 * 60 * 60, // 캐시 유지 시간 (1시간)
-    refetchOnMount: false, // 컴포넌트 마운트 시 다시 가져오지 않음
-    refetchOnWindowFocus: false, // 창 포커스 시 다시 가져오지 않음
+    staleTime: Infinity,
+    gcTime: 1000 * 60 * 60,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
     retry: false,
     ...options,
   });

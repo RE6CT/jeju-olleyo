@@ -10,13 +10,7 @@ import { CategoryTabsProps, TravelCategory } from '@/types/home.category.type';
 
 /**
  * 여행 관련 카테고리를 선택할 수 있는 탭 컴포넌트
- *
  * @description 카테고리 탭을 통해 사용자가 다른 카테고리로 이동할 수 있도록 합니다.
- * 최적화를 위해 React.memo와 useCallback을 사용하여 불필요한 리렌더링을 방지합니다.
- * 항공권 카테고리는 구분선 뒤에 별도의 링크로 표시됩니다.
- * 아이콘 크기는 24x24px, 탭 간 간격은 16px, 양쪽 패딩은 36px입니다.
- * 텍스트는 semibold-16 스타일을 적용합니다.
- *
  * @param className 추가할 CSS 클래스
  */
 const CategoryTabs = memo(({ className }: CategoryTabsProps) => {
@@ -74,10 +68,10 @@ const CategoryTabs = memo(({ className }: CategoryTabsProps) => {
             key={category}
             onClick={createCategoryClickHandler(category)}
             className={cn(
-              'flex items-center justify-center gap-2 py-2.5',
+              'flex items-center justify-center gap-2 border-b-2 py-2.5 transition-all',
               activeCategory === category
-                ? 'text-primary-500'
-                : 'text-gray-600 hover:text-gray-800',
+                ? 'border-primary-500 text-gray-600'
+                : 'border-transparent text-gray-600 hover:text-gray-800',
             )}
             aria-current={activeCategory === category ? 'page' : undefined}
           >
@@ -94,10 +88,10 @@ const CategoryTabs = memo(({ className }: CategoryTabsProps) => {
       <Link
         href={CATEGORY_ROUTES.항공권}
         className={cn(
-          'flex items-center justify-center gap-2 py-2.5',
+          'flex items-center justify-center gap-2 border-b-2 py-2.5 transition-all',
           activeCategory === '항공권'
-            ? 'text-primary-500'
-            : 'text-gray-600 hover:text-gray-800',
+            ? 'border-primary-500 text-gray-600'
+            : 'border-transparent text-gray-600 hover:text-gray-800',
         )}
       >
         {getCategoryIcon('항공권')}

@@ -27,6 +27,7 @@ const ForgotPasswordPage = () => {
     errors,
     handleSubmit,
     handleResetPassword,
+    resetError,
   } = useForgotPasswordForm();
 
   return (
@@ -91,7 +92,11 @@ const ForgotPasswordPage = () => {
         )}
       </CardContent>
       <footer>
-        <AuthFooter linkHref={PATH.SIGNIN} linkText="로그인으로 돌아가기" />
+        <AuthFooter
+          linkHref={PATH.SIGNIN}
+          linkText="로그인으로 돌아가기"
+          onClick={resetError}
+        />
       </footer>
     </AuthLayout>
   );

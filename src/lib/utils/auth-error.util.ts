@@ -22,6 +22,13 @@ export const getAuthErrorMessage = (errorMessage: string): string[] => {
     return [ERROR_MESSAGES.INVALID_EMAIL_OR_PASSWORD_ERROR];
   }
 
+  if (
+    lowerCaseMessage.includes('email address') &&
+    lowerCaseMessage.includes('is invalid')
+  ) {
+    return [ERROR_MESSAGES.EMAIL_ADDRESS_IS_INVALIDL];
+  }
+
   // 요청 제한
   if (
     lowerCaseMessage.includes('too many requests') ||

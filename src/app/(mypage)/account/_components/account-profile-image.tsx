@@ -69,11 +69,7 @@ const AccountProfileImage = ({
             onDelete={handleProfileImageDelete}
           />
         )}
-        <ProfileModal
-          userId={userId}
-          isModalOpen={isModalOpen}
-          setModalOpen={setModalOpen}
-        />
+        <ProfileModal isModalOpen={isModalOpen} setModalOpen={setModalOpen} />
       </div>
     </>
   );

@@ -9,7 +9,6 @@ import {
   DialogTitle,
 } from '@/components/ui/modal';
 import { ERROR_MESSAGES } from '@/constants/mypage.constants';
-import { fetchUpdateProfileImage } from '@/lib/apis/profile/update-profile.api';
 import useCustomToast from '@/lib/hooks/use-custom-toast';
 import { ProfileModalProps } from '@/types/mypage.type';
 import { useChangeImageFile } from '@/lib/hooks/use-change-image-file';
@@ -17,16 +16,11 @@ import useUpdateProfileImageMutation from '@/lib/mutations/use-update-profile-im
 
 /**
  * 프로필 이미지 수정 버튼을 눌렀을 때 뜨는 모달 컴포넌트
- * @param userId - 유저의 uuid
  * @param isModalOpen - 모달 오픈 여부
  * @param setModalOpen - 모달 오픈 set 함수
  * @returns
  */
-const ProfileModal = ({
-  userId,
-  isModalOpen,
-  setModalOpen,
-}: ProfileModalProps) => {
+const ProfileModal = ({ isModalOpen, setModalOpen }: ProfileModalProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { successToast } = useCustomToast();
   const { previewImage, selectedFile, handleFileChange, resetFile } =
@@ -44,7 +38,8 @@ const ProfileModal = ({
     fileInputRef.current?.click();
   };
 
-  const updateProfileImageMutation = useUpdateProfileImageMutation();
+  const { mutate: updateProfileImage, isPending } =
+    useUpdateProfileImageMutation();
 
   // 이미지 변경 완료 버튼 클릭 핸들러 수정
   const handleProfileImageEditCompelete = async (e: FormEvent) => {
@@ -61,12 +56,11 @@ const ProfileModal = ({
       // formData 생성 및 파일 추가
       const formData = new FormData();
       formData.append('profileImage', selectedFile);
-      formData.append('userId', userId);
 
       // 뮤테이션 사용
-      await updateProfileImageMutation.mutateAsync(formData);
+      updateProfileImage(formData);
 
-      successToast('프로필 이미지가 성공적으로 변경되었습니다.');
+      successToast('프로필 이미지가 변경되었습니다.');
     } catch (error: unknown) {
       let errorMessage = ERROR_MESSAGES.PROFILE_UPDATE_FAILED;
       if (error instanceof Error) {
@@ -120,6 +114,7 @@ const ProfileModal = ({
           <Button
             type="submit"
             className="semibold-16 w-full rounded-[12px] border border-primary-500 bg-white font-semibold text-primary-500 hover:bg-white"
+            disabled={isPending}
           >
             완료
           </Button>

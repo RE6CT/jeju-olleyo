@@ -9,8 +9,8 @@ import useAuth from '@/lib/hooks/use-auth';
 import { useGetBookMarks } from '@/lib/queries/use-get-bookmarks';
 import { CategoryParamType, CategoryType } from '@/types/category.type';
 import { useRouter, useSearchParams } from 'next/navigation';
-import MypageDataCounts from '../../_components/mypage-data-counts';
-import MypagePagination from '../../_components/mypage-pagination';
+import MypageDataCounts from '../../../_components/_client/mypage-data-counts';
+import MypagePagination from '../../../_components/_client/mypage-pagination';
 import EmptyResult from '@/components/commons/empty-result-link';
 
 const PAGE_SIZE = 9;

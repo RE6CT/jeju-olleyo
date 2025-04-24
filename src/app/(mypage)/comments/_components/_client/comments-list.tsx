@@ -5,9 +5,9 @@ import MyComment from './my-comment';
 import useAuth from '@/lib/hooks/use-auth';
 import { useGetDataCount } from '@/lib/queries/use-get-data-count';
 import Loading from '@/app/loading';
-import MypagePagination from '../../_components/mypage-pagination';
 import EmptyResult from '@/components/commons/empty-result-link';
 import { PATH } from '@/constants/path.constants';
+import MypagePagination from '@/app/(mypage)/_components/_client/mypage-pagination';
 
 /**
  * 댓글 리스트 컴포넌트

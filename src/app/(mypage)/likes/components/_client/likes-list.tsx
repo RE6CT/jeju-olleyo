@@ -4,7 +4,7 @@ import PlanHorizontalCard from '@/components/features/card/plan-horizontal_card'
 import useAuth from '@/lib/hooks/use-auth';
 import { useGetDataCount } from '@/lib/queries/use-get-data-count';
 import { Plan } from '@/types/plan.type';
-import MypagePagination from '../../_components/mypage-pagination';
+import MypagePagination from '../../../_components/_client/mypage-pagination';
 import Loading from '@/app/loading';
 import EmptyResult from '@/components/commons/empty-result-link';
 import { PATH } from '@/constants/path.constants';

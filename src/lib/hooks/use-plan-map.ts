@@ -3,8 +3,7 @@ import { getCarRoute, createRouteInfo } from '@/lib/apis/map/directions';
 import { getLatLng, createMarkerImage } from '@/lib/utils/map.util';
 import { KakaoMapInstance, MarkerProps } from '@/types/kakao-map.type';
 import { DayPlaces, TabType } from '@/types/plan-detail.type';
-import { usePlanRouteSummary } from '@/zustand/plan.store';
-import { usePlanStore } from '@/zustand/plan.store';
+import { usePlanRouteSummary, usePlanStore } from '@/zustand/plan.store';
 
 /**
  * 여행 계획 지도 관련 로직을 관리하는 커스텀 훅

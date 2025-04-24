@@ -8,7 +8,7 @@ import { Place } from './search.type';
 /**
  * 계획의 댓글 정보를 나타내는 타입
  */
-export type CommentType = {
+export type CommentProps = {
   /** 댓글의 고유 식별자 */
   planCommentId: number;
   /** 댓글 작성자의 사용자 ID */
@@ -18,7 +18,7 @@ export type CommentType = {
   /** 댓글 내용 */
   content: string;
   /** 댓글 작성 시간 */
-  createdAt: Date;
+  createdAt: string;
 };
 
 /**

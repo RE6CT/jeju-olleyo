@@ -4,7 +4,6 @@ import { useGetPlaceBasicInfo } from '@/lib/queries/use-get-place-basic-info';
 import PlaceModalView from './place-modal-view';
 import useAuth from '@/lib/hooks/use-auth';
 import { useGetPlaceDetailInfo } from '@/lib/queries/use-get-place-detail-info';
-import { useGetBookmarkCheck } from '@/lib/queries/use-get-bookmark-check';
 import { useGetPlans } from '@/lib/queries/use-get-plans';
 
 const PlaceModal = ({

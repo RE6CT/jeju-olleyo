@@ -40,26 +40,20 @@ export type TicketListProps = {
       'airline' | 'dep_desc' | 'arr_asc' | 'dep_asc' | 'arr_desc'
     >
   >;
+  selectedFlight: Flight | null;
+  setSelectedFlight: (flight: Flight) => void;
+  startDate: Date | null;
 };
 
 export type DateOptionsProps = {
-  formData: {
-    schDate: string;
-    returnDate: string;
-    schArrvCityCode: string;
-  };
-  setFormData: React.Dispatch<
-    React.SetStateAction<{
-      schDate: string;
-      returnDate: string;
-      schArrvCityCode: string;
-    }>
-  >;
-  field: 'schDate' | 'returnDate';
   baseDateStr: string;
+  field: 'schDate' | 'returnDate';
+  startDate: Date | null;
+  setStartDate?: (date: Date | null) => void;
 };
 
 export type TicketCardProps = {
   flight: Flight;
-  idx: number;
+  isSelected: boolean;
+  onClick: () => void;
 };

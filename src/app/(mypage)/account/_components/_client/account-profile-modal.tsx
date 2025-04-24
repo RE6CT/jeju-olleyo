@@ -84,6 +84,7 @@ const ProfileModal = ({ isModalOpen, setModalOpen }: ProfileModalProps) => {
         <button
           onClick={() => setModalOpen(false)}
           className="ml-auto h-[24px] w-[24px] bg-gray-300 [mask-image:url(/icons/close.svg)] [mask-repeat:no-repeat] [mask-size:contain]"
+          aria-label="닫기"
         />
         <button
           onClick={handleSelectFile}
@@ -97,19 +98,36 @@ const ProfileModal = ({ isModalOpen, setModalOpen }: ProfileModalProps) => {
                 }
               : {}
           }
+          aria-label={previewImage ? '이미지 변경하기' : '이미지 선택하기'}
+          aria-describedby="image-selection-hint"
         >
           {!previewImage && (
-            <div className="h-[80px] w-[80px] bg-gray-300 [mask-image:url(/icons/add.svg)] [mask-repeat:no-repeat] [mask-size:contain]" />
+            <div
+              className="h-[80px] w-[80px] bg-gray-300 [mask-image:url(/icons/add.svg)] [mask-repeat:no-repeat] [mask-size:contain]"
+              role="img"
+              aria-label="이미지 추가 아이콘"
+            />
           )}
         </button>
+        <p id="image-selection-hint" className="sr-only">
+          클릭하여 프로필 이미지를 선택하세요
+        </p>
 
-        <form onSubmit={handleProfileImageEditCompelete}>
+        <form
+          onSubmit={handleProfileImageEditCompelete}
+          aria-label="프로필 이미지 업로드 폼"
+        >
+          <label htmlFor="profile-image-input" className="sr-only">
+            프로필 이미지 선택
+          </label>
           <input
+            id="profile-image-input"
             type="file"
             ref={fileInputRef}
             className="hidden"
             accept=".png, .jpg, .jpeg"
             onChange={handleFileChange}
+            aria-required="true"
           />
           <Button
             type="submit"

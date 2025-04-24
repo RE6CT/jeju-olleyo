@@ -25,6 +25,7 @@ export const useAddComment = () => {
     }) => fetchAddComment(userId, content, planId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['comments'] });
+      queryClient.invalidateQueries({ queryKey: ['dataCount'] });
     },
   });
 };
@@ -70,6 +71,7 @@ export const useUpdateComment = () => {
     onSuccess: () => {
       successToast('댓글이 수정되었습니다.');
       queryClient.invalidateQueries({ queryKey: ['comments'] });
+      queryClient.invalidateQueries({ queryKey: ['dataCount'] });
     },
   });
 };
@@ -87,6 +89,7 @@ export const useDeleteComment = () => {
     onSuccess: () => {
       successToast('댓글이 삭제되었습니다.');
       queryClient.invalidateQueries({ queryKey: ['comments'] });
+      queryClient.invalidateQueries({ queryKey: ['dataCount'] });
     },
   });
 };

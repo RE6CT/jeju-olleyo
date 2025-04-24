@@ -87,28 +87,30 @@ const SearchResultsPage = ({
         <EmptyResult />
       ) : (
         <>
-          {isPending ? (
-            <PlaceListSkeleton count={16} />
-          ) : (
-            <div className="grid grid-cols-2 gap-[11px] sm:grid-cols-3 md:grid-cols-4">
-              {places.map((place, idx) => (
-                <div key={place.placeId} className="contents">
-                  <PlaceCard
-                    placeId={place.placeId}
-                    image={place.image}
-                    title={place.title}
-                    isDragging={false}
-                    isBookmarked={place.isBookmarked}
-                  />
-                  {idx === 7 && (
-                    <div className="col-span-full my-4 flex w-full items-center justify-center">
-                      <Banner key={`banner-${idx}`} />
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
+          <div className="grid grid-cols-2 gap-[11px] sm:grid-cols-3 md:grid-cols-4">
+            {isPending ? (
+              <PlaceListSkeleton count={16} />
+            ) : (
+              <>
+                {places.map((place, idx) => (
+                  <div key={place.placeId} className="contents">
+                    <PlaceCard
+                      placeId={place.placeId}
+                      image={place.image}
+                      title={place.title}
+                      isDragging={false}
+                      isBookmarked={place.isBookmarked}
+                    />
+                    {idx === 7 && (
+                      <div className="col-span-full my-4 flex w-full items-center justify-center">
+                        <Banner key={`banner-${idx}`} />
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </>
+            )}
+          </div>
 
           {/* 무한스크롤 트리거 */}
           <div

@@ -3,7 +3,12 @@
 import { useEffect, useRef } from 'react';
 
 import { createMarkerImage } from '@/lib/utils/map.util';
-import { MarkerInstance, MarkerProps } from '@/types/kakao-map.type';
+import {
+  CustomOverlayInstance,
+  MarkerInstance,
+  MarkerProps,
+} from '@/types/kakao-map.type';
+import { SCREEN_OFFSET } from '@/constants/map.constants';
 
 /**
  * 카카오맵 마커 컴포넌트
@@ -23,8 +28,10 @@ const Marker = ({
   draggable = false,
   day,
   onClick,
+  address,
 }: MarkerProps) => {
   const markerInstance = useRef<MarkerInstance | null>(null);
+  const overlayInstance = useRef<CustomOverlayInstance | null>(null);
 
   // 마커 초기화
   useEffect(() => {
@@ -43,23 +50,55 @@ const Marker = ({
 
     markerInstance.current = marker;
 
-    if (onClick) {
-      window.kakao.maps.event.addListener(marker, 'click', onClick);
-    }
+    const customOverlay = new window.kakao.maps.CustomOverlay({
+      content: `
+        <div style="padding: 8px 12px; display: flex; flex-direction: column; gap: 4px; border-radius: 8px; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+          <div style="font-weight: 600; font-size: 14px;">${title}</div>
+          <div style="font-size: 12px; color: #666;">${address || ''}</div>
+        </div>
+      `,
+      position: new window.kakao.maps.LatLng(position.lat, position.lng),
+      xAnchor: 0.5,
+      yAnchor: 1.7,
+    });
+
+    overlayInstance.current = customOverlay;
+
+    // 마커 클릭 이벤트 핸들러
+    const handleMarkerClick = () => {
+      if (overlayInstance.current) {
+        overlayInstance.current.setMap(map);
+      }
+
+      // 클릭된 마커의 위치로 지도 중심 이동
+      const latlng = new window.kakao.maps.LatLng(
+        position.lat + SCREEN_OFFSET.LAT,
+        position.lng,
+      );
+      map.setCenter(latlng);
+      map.setLevel(4);
+
+      if (onClick) {
+        onClick();
+      }
+    };
+
+    window.kakao.maps.event.addListener(marker, 'click', handleMarkerClick);
 
     return () => {
       if (markerInstance.current) {
+        window.kakao.maps.event.removeListener(
+          markerInstance.current,
+          'click',
+          handleMarkerClick,
+        );
         markerInstance.current.setMap(null);
-        if (onClick) {
-          window.kakao.maps.event.removeListener(
-            markerInstance.current,
-            'click',
-            onClick,
-          );
-        }
+      }
+      if (overlayInstance.current) {
+        overlayInstance.current.setMap(null);
       }
     };
-  }, [map, position, title, clickable, draggable, onClick, day]);
+  }, [map, position, title, clickable, draggable, onClick, day, address]);
 
   // 마커 속성 업데이트
   useEffect(() => {

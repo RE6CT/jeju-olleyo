@@ -6,7 +6,6 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import ErrorMessage from '@/components/features/alert/error-message';
 import { Button } from '@/components/ui/button';
 import DynamicPagination from '@/components/ui/dynamic-pagination';
-import { useGetBookMarks } from '@/lib/queries/use-get-bookmarks';
 import { CategoryType } from '@/types/category.type';
 import { Place } from '@/types/search.type';
 import { CATEGORY_EN_MAP } from '@/constants/home.constants';
@@ -16,6 +15,7 @@ import PlaceSidemenuLayout from './place-sidemenu-layout';
 import DaySelectRequiredModal from '../modal/day-select-required-modal';
 import { useGetDataCount } from '@/lib/queries/use-get-data-count';
 import { useCurrentUser } from '@/lib/queries/auth-queries';
+import { useBookmarkQuery } from '@/lib/queries/use-bookmark-query';
 
 const ITEMS_PER_PAGE = 7;
 const INITIAL_ITEMS = 3;
@@ -61,16 +61,8 @@ const BookmarkSidemenu = ({
   const { data: countData, isLoading: isCountLoading } =
     useGetDataCount(userId);
 
-  const {
-    data: bookmarks,
-    isLoading,
-    error,
-  } = useGetBookMarks(
-    userId,
-    currentPage,
-    isExpanded ? ITEMS_PER_PAGE : INITIAL_ITEMS,
-    activeFilterTab === '전체' ? undefined : activeFilterTab,
-  );
+  const { bookmarks, toggleBookmark, isBookmarked, isLoading, error } =
+    useBookmarkQuery(userId || null);
 
   const calculateMaxVisiblePages = useCallback(() => {
     if (!containerRef.current || !countData) return 3;
@@ -174,7 +166,7 @@ const BookmarkSidemenu = ({
             className="space-y-2 overflow-hidden"
             ref={containerRef}
           >
-            {isLoading || isCountLoading ? (
+            {isCountLoading ? (
               <div className="flex items-center justify-center py-4 text-gray-500">
                 불러오는 중...
               </div>
@@ -197,10 +189,10 @@ const BookmarkSidemenu = ({
                     >
                       <PlaceCardSidemenu
                         title={place.title}
-                        placeId={place.placeId}
                         category={place.category as CategoryType}
                         imageUrl={place.image}
-                        isBookmarked={true}
+                        isBookmarked={isBookmarked(place.placeId)}
+                        toggleBookmark={() => toggleBookmark(place.placeId)}
                         onAddPlace={() => handleAddPlace(place)}
                       />
                     </motion.div>

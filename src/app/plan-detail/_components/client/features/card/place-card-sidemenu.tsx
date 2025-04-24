@@ -5,7 +5,6 @@ import { useMemo } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { CategoryType } from '@/types/category.type';
-import BookmarkButton from '@/components/features/like/bookmark-button';
 
 const PLACE_IMAGE_SIZE = {
   width: 40,
@@ -36,17 +35,17 @@ const handleImageLoadError = (e: React.SyntheticEvent<HTMLImageElement>) => {
 
 const PlaceCardSidemenu = ({
   title,
-  placeId,
   imageUrl,
   category,
   isBookmarked = false,
+  toggleBookmark,
   onAddPlace,
 }: {
   title: string;
-  placeId: number;
   imageUrl: string;
   category: CategoryType;
   isBookmarked: boolean;
+  toggleBookmark: () => void;
   onAddPlace?: () => void;
 }) => {
   const defaultImage = useMemo(() => getRandomDefaultImage(), []);
@@ -80,9 +79,9 @@ const PlaceCardSidemenu = ({
 
       {/* 버튼 영역 */}
       <div className="flex items-center gap-2">
-        <BookmarkButton
+        <BookmarkIcon
           isBookmarked={isBookmarked}
-          placeId={placeId}
+          onToggle={toggleBookmark}
           className="h-6 w-6"
         />
         {onAddPlace && (

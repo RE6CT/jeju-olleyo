@@ -18,7 +18,7 @@ const fetchAddBookmarkByIdQuery = async (place_id: number, user_id: string) => {
   });
 
   if (error) throw new Error(error.message);
-  revalidatePath(PATH.PLACES);
+  //revalidatePath(PATH.PLACES);
 };
 
 export default fetchAddBookmarkByIdQuery;

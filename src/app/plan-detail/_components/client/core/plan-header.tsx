@@ -23,6 +23,7 @@ import {
   usePlanSetDescription,
   usePlanSetStartDate,
   usePlanSetEndDate,
+  usePlanSetActiveTab,
 } from '@/zustand/plan.store';
 
 const EDIT_ICON_CONSTANTS = {
@@ -47,6 +48,7 @@ const PlanHeader = memo(() => {
   const setEndDate = usePlanSetEndDate();
   const setTitle = usePlanSetTitle();
   const setDescription = usePlanSetDescription();
+  const setActiveTab = usePlanSetActiveTab();
 
   const { previewImage, isUploading, handleFileChange } =
     useChangeImageFile(planImg);
@@ -59,6 +61,7 @@ const PlanHeader = memo(() => {
     setEndDate(end);
     if (end) {
       setIsCalendarOpen(false);
+      setActiveTab(1);
     }
   };
 

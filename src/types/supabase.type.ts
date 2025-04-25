@@ -322,11 +322,11 @@ export type Database = {
           arrive_location: string;
           arrive_time: string;
           carrier_code: string;
-          created_at: string;
+          created_at?: string;
           departure_location: string;
           departure_time: string;
           price: number | null;
-          ticket_id: number;
+          ticket_id?: number;
           user_id: string;
           size: number;
           class: string | null;
@@ -336,11 +336,11 @@ export type Database = {
           arrive_location: string;
           arrive_time: string;
           carrier_code: string;
-          created_at: string;
+          created_at?: string;
           departure_location: string;
           departure_time: string;
           price: number | null;
-          ticket_id: number;
+          ticket_id?: number;
           user_id: string;
           size: number;
           class: string | null;

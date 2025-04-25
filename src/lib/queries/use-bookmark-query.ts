@@ -96,9 +96,13 @@ export const useBookmarkQuery = (userId: string | null) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['bookmarks', userId],
+        queryKey: ['bookmarks'],
         refetchType: 'active',
-        exact: true,
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ['dataCount'],
+        refetchType: 'active',
       });
     },
     onError: (_err, _newBookmark, context) => {
@@ -149,9 +153,13 @@ export const useBookmarkQuery = (userId: string | null) => {
     onSettled: async () => {
       // 성공 시 캐시 무효화만 수행 (리패치는 toggleBookmark에서 처리)
       queryClient.invalidateQueries({
-        queryKey: ['bookmarks', userId],
+        queryKey: ['bookmarks'],
         refetchType: 'active',
-        exact: true,
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ['dataCount'],
+        refetchType: 'active',
       });
     },
   });

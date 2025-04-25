@@ -73,23 +73,24 @@ const PlanHeader = memo(() => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (!planId) {
-      console.error('일정 ID가 없습니다.');
-      return;
-    }
-
     try {
       // 먼저 미리보기 이미지 업데이트
       await handleFileChange(e);
 
-      // 그 다음 서버에 이미지 업로드
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('planId', planId.toString());
+      if (planId) {
+        // 일정 수정 시: 서버에 이미지 업로드
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('planId', planId.toString());
 
-      const response = await fetchUploadPlanImage(formData);
-      if (response) {
-        setPlanImg(response);
+        const response = await fetchUploadPlanImage(formData);
+        if (response) {
+          setPlanImg(response);
+        }
+      } else {
+        // 일정 생성 시: 임시 URL만 저장
+        const imageUrl = URL.createObjectURL(file);
+        setPlanImg(imageUrl);
       }
     } catch (error) {
       console.error('이미지 업로드 중 오류:', error);

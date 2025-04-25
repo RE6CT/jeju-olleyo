@@ -8,6 +8,7 @@ import Header from '@/components/layouts/header';
 import { Toaster } from '@/components/ui/toaster';
 import AuthProvider from '@/config/auth-provider';
 import Providers from '@/config/tq-provider';
+import EasterEggWrapper from '@/components/commons/EasterEggWrapper';
 export const metadata: Metadata = {
   title: '제주 올레요',
   description: '제주 여행을 떠나기 위한 일정 만들어요!',
@@ -40,6 +41,7 @@ export default function RootLayout({
             </div>
             <AlertModal />
             <Toaster />
+            <EasterEggWrapper />
           </AuthProvider>
         </Providers>
       </body>

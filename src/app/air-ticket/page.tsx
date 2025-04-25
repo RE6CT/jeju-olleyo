@@ -65,7 +65,6 @@ const FlightSearch = () => {
     const flightsToSave = [selectedGoFlight, selectedReturnFlight].filter(
       (flight): flight is Flight => flight !== null,
     );
-    console.log('qwe', flightsToSave);
     for (const flight of flightsToSave) {
       const isGoFlight = flight === selectedGoFlight;
       const baseDate = isGoFlight ? startDate : endDate;
@@ -306,7 +305,7 @@ const FlightSearch = () => {
         )
       )}
       {!showInnerButton && (
-        <footer className="mt-10 flex justify-center">
+        <footer className="fixed bottom-0 left-0 mt-10 flex w-full justify-center bg-white">
           <img
             src="/banner-images/airplane_footer.png"
             alt="푸터 이미지"

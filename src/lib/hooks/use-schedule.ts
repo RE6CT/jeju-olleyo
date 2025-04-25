@@ -351,6 +351,9 @@ export const useScheduleSavePlan = (
 
       if (planId) {
         const currentPlan = await fetchGetPlanById(planId);
+        if (!currentPlan) {
+          throw new Error('일정을 찾을 수 없습니다.');
+        }
 
         const updatedPlan = {
           ...currentPlan,
@@ -362,22 +365,38 @@ export const useScheduleSavePlan = (
           public: false,
           publicAt: new Date().toISOString(),
         };
-        await fetchUpdatePlan(updatedPlan, userId);
-        targetId = planId;
+
+        try {
+          await fetchUpdatePlan(updatedPlan, userId);
+          targetId = planId;
+        } catch (error) {
+          console.error('일정 업데이트 실패:', error);
+          throw new Error('일정 업데이트에 실패했습니다.');
+        }
       } else {
-        const newPlanId = await fetchSavePlan({
-          userId: userId,
-          title: title,
-          description: description,
-          travelStartDate: startDate?.toISOString() || '',
-          travelEndDate: endDate?.toISOString() || '',
-          planImg: planImg || getDefaultPlanImage(),
-          public: false,
-        });
-        targetId = newPlanId;
+        try {
+          const newPlanId = await fetchSavePlan({
+            userId: userId,
+            title: title,
+            description: description,
+            travelStartDate: startDate?.toISOString() || '',
+            travelEndDate: endDate?.toISOString() || '',
+            planImg: planImg || getDefaultPlanImage(),
+            public: false,
+          });
+          targetId = newPlanId;
+        } catch (error) {
+          console.error('일정 저장 실패:', error);
+          throw new Error('일정 저장에 실패했습니다.');
+        }
       }
 
-      await fetchSavePlanPlaces(targetId, dayPlaces);
+      try {
+        await fetchSavePlanPlaces(targetId, dayPlaces);
+      } catch (error) {
+        console.error('일정 장소 저장 실패:', error);
+        throw new Error('일정 장소 저장에 실패했습니다.');
+      }
 
       // 일정 목록 캐시 무효화
       queryClient.invalidateQueries({ queryKey: ['filteredPlans', userId] });
@@ -400,7 +419,10 @@ export const useScheduleSavePlan = (
       console.error('일정 비공개 설정 실패:', error);
       toast({
         title: '일정 저장 실패',
-        description: '일정 비공개 설정에 실패했습니다.',
+        description:
+          error instanceof Error
+            ? error.message
+            : '일정 비공개 설정에 실패했습니다.',
         variant: 'destructive',
       });
     }

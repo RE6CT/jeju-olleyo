@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { DEPARTURE_LIST } from '@/constants/ticket.constants';
 import useAlertStore from '@/zustand/alert.store';
 
-import { Flight, FlightResponseItem } from '../../types/air-ticket-type';
+import { Flight, FlightResponseItem } from '../../types/air-ticket.type';
 import Loading from '../loading';
 
 import TicketList from './_components/ticket-list';

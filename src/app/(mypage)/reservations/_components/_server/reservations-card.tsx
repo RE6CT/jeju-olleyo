@@ -1,24 +1,32 @@
-import { FlightInfoType } from '@/types/mypage.type';
+import { FlightInfoType, ReservationType } from '@/types/mypage.type';
 import ReservationsCardArrow from './reservations-card-arrow';
 import ReservationsFlightInfo from './reservations-flight-info';
 
 const ReservationsCard = ({
-  departureInfo,
-  arrivalInfo,
-  airplaneName,
-  carrierCode,
+  reservation,
 }: {
-  departureInfo: FlightInfoType;
-  arrivalInfo: FlightInfoType;
-  airplaneName: string;
-  carrierCode: string;
+  reservation: ReservationType;
 }) => {
+  const departureInfo: FlightInfoType = {
+    dateTime: reservation.departureTime,
+    size: reservation.size,
+    location: reservation.departureLocation,
+    airplaneName: reservation.airplaneName,
+    carrierCode: reservation.carrierCode,
+  };
+  const arrivalInfo: FlightInfoType = {
+    dateTime: reservation.arriveTime,
+    size: reservation.size,
+    location: reservation.arriveLocation,
+    airplaneName: reservation.airplaneName,
+    carrierCode: reservation.carrierCode,
+  };
   return (
     <article className="flex gap-7 rounded-24 bg-white px-4 py-5">
       <ReservationsFlightInfo {...departureInfo} />
       <ReservationsCardArrow
-        airplaneName={airplaneName}
-        carrierCode={carrierCode}
+        airplaneName={reservation.airplaneName}
+        carrierCode={reservation.carrierCode}
       />
       <ReservationsFlightInfo {...arrivalInfo} />
     </article>

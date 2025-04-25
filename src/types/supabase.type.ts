@@ -304,40 +304,46 @@ export type Database = {
       };
       tickets: {
         Row: {
-          airplane_name: string | null;
-          arrive_location: string | null;
-          arrive_time: string | null;
-          carrier_code: string | null;
-          created_at: string | null;
-          departure_location: string | null;
-          departure_time: string | null;
+          airplane_name: string;
+          arrive_location: string;
+          arrive_time: string;
+          carrier_code: string;
+          created_at: string;
+          departure_location: string;
+          departure_time: string;
           price: number | null;
           ticket_id: number;
           user_id: string;
+          size: number;
+          class: string | null;
         };
         Insert: {
-          airplane_name?: string | null;
-          arrive_location?: string | null;
-          arrive_time?: string | null;
-          carrier_code?: string | null;
-          created_at?: string | null;
-          departure_location?: string | null;
-          departure_time?: string | null;
-          price?: number | null;
-          ticket_id?: never;
+          airplane_name: string;
+          arrive_location: string;
+          arrive_time: string;
+          carrier_code: string;
+          created_at: string;
+          departure_location: string;
+          departure_time: string;
+          price: number | null;
+          ticket_id: number;
           user_id: string;
+          size: number;
+          class: string | null;
         };
         Update: {
-          airplane_name?: string | null;
-          arrive_location?: string | null;
-          arrive_time?: string | null;
-          carrier_code?: string | null;
-          created_at?: string | null;
-          departure_location?: string | null;
-          departure_time?: string | null;
-          price?: number | null;
-          ticket_id?: never;
-          user_id?: string;
+          airplane_name: string;
+          arrive_location: string;
+          arrive_time: string;
+          carrier_code: string;
+          created_at: string;
+          departure_location: string;
+          departure_time: string;
+          price: number | null;
+          ticket_id: number;
+          user_id: string;
+          size: number;
+          class: string | null;
         };
         Relationships: [
           {

@@ -7,12 +7,14 @@ const ReservationsFlightInfo = ({
   size,
   location,
   airplaneName,
+  carrierCode,
 }: FlightInfoType) => {
+  console.log('carrierCode ➡️', carrierCode);
   return (
     <div className="flex items-center gap-3 p-4">
       <figure className="relative h-[60px] w-[60px] overflow-hidden rounded-[4px]">
         <Image
-          src="/images/default_profile.svg"
+          src={`https://media.interparkcdn.net/interpark-tour/image/upload/q_auto,f_auto/air/airline/icon/${carrierCode.slice(0, 2)}.png`}
           alt={airplaneName}
           fill
           className="object-cover"

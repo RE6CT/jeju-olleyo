@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { Flight } from '../../../types/air-ticket-type';
+import { Flight } from '../../../types/air-ticket.type';
 
 export type SortKey =
   | 'airline'

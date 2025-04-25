@@ -20,7 +20,9 @@ export async function generateMetadata({
   const plan = await fetchGetPlanById(planId);
 
   return {
-    title: plan.title ? `${plan.title}` : PLAN_PAGE_META.DEFAULT.title,
+    title: plan.title
+      ? `${plan.title} | 제주올래`
+      : PLAN_PAGE_META.DEFAULT.title,
     description: plan.description || PLAN_PAGE_META.DEFAULT.description,
   };
 }

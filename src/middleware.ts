@@ -46,7 +46,6 @@ export async function middleware(request: NextRequest) {
     PATH.RESERVATIONS,
     PATH.TICKET,
     PATH.PLACES,
-    PATH.RESERVATIONS,
   ];
 
   // 유효한 경로 패턴을 더 세밀하게 정의

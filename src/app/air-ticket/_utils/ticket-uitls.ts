@@ -57,7 +57,8 @@ const sortFlights = (
   });
 };
 
-const formatTime = (timeStr: string) => {
+const formatTime = (timeString: string | number) => {
+  const timeStr = timeString.toString();
   if (!timeStr || timeStr.length !== 4) return timeStr;
   return `${timeStr.slice(0, 2)}:${timeStr.slice(2)}`;
 };

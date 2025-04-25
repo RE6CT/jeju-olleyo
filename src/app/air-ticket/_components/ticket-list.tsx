@@ -28,7 +28,7 @@ const TicketList = ({
       {isEmpty ? (
         <div className="flex flex-col items-center justify-center py-10 text-center text-gray-600">
           <img
-            src="../emptyresult/ticket_empty_result.png"
+            src="../empty-result/ticket_empty_result.png"
             alt="검색 결과가 없어요"
             className="mb-4"
           />

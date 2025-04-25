@@ -73,23 +73,53 @@ const PlanHeader = memo(() => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (!planId) {
-      console.error('일정 ID가 없습니다.');
-      return;
-    }
-
     try {
       // 먼저 미리보기 이미지 업데이트
       await handleFileChange(e);
 
-      // 그 다음 서버에 이미지 업로드
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('planId', planId.toString());
+      if (planId) {
+        // 일정 수정 시: 서버에 이미지 업로드
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('planId', planId.toString());
 
-      const response = await fetchUploadPlanImage(formData);
-      if (response) {
-        setPlanImg(response);
+        // 최대 3번까지 재시도
+        let retryCount = 0;
+        const maxRetries = 3;
+        let response: string | null = null;
+
+        while (retryCount < maxRetries) {
+          try {
+            const result = await Promise.race([
+              fetchUploadPlanImage(formData),
+              new Promise(
+                (_, reject) =>
+                  setTimeout(
+                    () => reject(new Error('업로드 시간 초과')),
+                    10000,
+                  ), // 10초 타임아웃
+              ),
+            ]);
+
+            if (typeof result === 'string') {
+              response = result;
+              break;
+            }
+          } catch (error) {
+            retryCount++;
+            if (retryCount === maxRetries) throw error;
+            // 재시도 전 0.5초 대기
+            await new Promise((resolve) => setTimeout(resolve, 500));
+          }
+        }
+
+        if (response) {
+          setPlanImg(response);
+        }
+      } else {
+        // 일정 생성 시: 임시 URL만 저장
+        const imageUrl = URL.createObjectURL(file);
+        setPlanImg(imageUrl);
       }
     } catch (error) {
       console.error('이미지 업로드 중 오류:', error);

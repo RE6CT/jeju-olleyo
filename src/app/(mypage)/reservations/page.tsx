@@ -19,17 +19,25 @@ const ReservationsPage = async () => {
         <p className="medium-16 text-secondary-300">0건의 예약 내역이 있어요</p>
         <h2 className="semibold-28 w-full">항공권 예약 내역</h2>
       </div>
-      <ul className="flex flex-col">
+      <ul className="flex flex-col gap-5">
         {reservations.map((reservation) => (
           <li>
-            {/* ticketId: {reservation.ticketId}
-            departureTime: {reservation.departureTime}
-            arriveTime: {reservation.arriveTime}
-            airplaneName: {reservation.airplaneName}
-            carrierCode: {reservation.carrierCode}
-            departureLocation: {reservation.departureLocation}
-            arriveLocation: {reservation.arriveLocation} */}
-            <ReservationsCard />
+            <ReservationsCard
+              departureInfo={{
+                dateTime: reservation.departureTime,
+                size: 3,
+                location: reservation.departureLocation,
+                airplaneName: reservation.airplaneName ?? '정보 없음',
+              }}
+              arrivalInfo={{
+                dateTime: reservation.arriveTime,
+                size: 3,
+                location: reservation.arriveLocation,
+                airplaneName: reservation.airplaneName ?? '정보 없음',
+              }}
+              airplaneName="대한항공"
+              carrierCode="KE1009"
+            />
           </li>
         ))}
       </ul>

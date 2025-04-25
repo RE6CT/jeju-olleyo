@@ -10,6 +10,28 @@ export const formatDate = (date: string | null): string => {
 };
 
 /**
+ * 시간을 '오전/오후 H:MM' 형식으로 포맷팅하는 함수
+ * @param time - 포맷팅할 시간 문자열 또는 Date 객체
+ * @returns 포맷팅된 시간 문자열 (예: '오후 6:20')
+ */
+export const formatTime = (time: string | Date | null): string => {
+  if (!time) return '시간 미정';
+
+  const date = typeof time === 'string' ? new Date(time) : time;
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+
+  // 오전/오후 구분
+  const ampm = hours < 12 ? '오전' : '오후';
+  const formattedHours = hours === 0 ? 12 : hours > 12 ? hours - 12 : hours;
+
+  // 분은 항상 두 자리로 표시
+  const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+
+  return `${ampm} ${formattedHours}:${formattedMinutes}`;
+};
+
+/**
  * 날짜가 특정 날짜보다 크거나 같은지 확인하는 함수 (시간 무시)
  * @param date - 비교할 날짜
  * @param targetDate - 기준 날짜

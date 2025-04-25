@@ -42,3 +42,11 @@ export type ProfileModalProps = {
   isModalOpen: boolean;
   setModalOpen: Dispatch<SetStateAction<boolean>>;
 };
+
+/** 항공권 예약 페이지 카드의 각 장소 정보 props 타입 */
+export type FlightInfoType = {
+  dateTime: string | null;
+  size: number;
+  location: string | null;
+  airplaneName: string;
+};

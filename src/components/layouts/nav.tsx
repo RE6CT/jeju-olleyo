@@ -40,7 +40,7 @@ const Nav = () => {
   return (
     <nav className="flex items-center">
       {user ? (
-        <div className="flex gap-6 whitespace-nowrap text-xs font-medium sm:text-xs md:text-sm lg:text-base">
+        <div className="flex gap-14 whitespace-nowrap text-xs font-medium sm:text-xs md:text-sm lg:text-base">
           <Link href={PATH.MYPLAN} onClick={handleMyPlanClick}>
             내 여행
           </Link>
@@ -48,7 +48,7 @@ const Nav = () => {
           <MypageButton userId={user?.id} />
         </div>
       ) : (
-        <div className="flex items-center gap-6 whitespace-nowrap text-xs font-medium sm:text-xs md:text-sm lg:text-base">
+        <div className="flex items-center gap-14 whitespace-nowrap text-xs font-medium sm:text-xs md:text-sm lg:text-base">
           <Link href={PATH.MYPLAN} onClick={handleMyPlanClick}>
             내 여행
           </Link>

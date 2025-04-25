@@ -1,7 +1,7 @@
 import {
   DateOptionsProps,
   TicketListProps,
-} from '../../../types/air-ticket-type';
+} from '../../../types/air-ticket.type';
 
 import TicketCard from './ticket-card';
 import DateOptions from './date-options';

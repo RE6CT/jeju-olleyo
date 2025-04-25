@@ -43,6 +43,7 @@ export async function middleware(request: NextRequest) {
     PATH.BOOKMARKS,
     PATH.LIKES,
     PATH.COMMENTS,
+    PATH.RESERVATIONS,
     PATH.TICKET,
     PATH.PLACES,
     PATH.RESERVATIONS,

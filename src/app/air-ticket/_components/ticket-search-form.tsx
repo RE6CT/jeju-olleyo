@@ -1,7 +1,7 @@
 import { Combobox } from '@/components/commons/combo-box';
 import { Button } from '@/components/ui/button';
 
-import { TicketSearchFormProps } from '../../../types/air-ticket-type';
+import { TicketSearchFormProps } from '../../../types/air-ticket.type';
 import TicketSearchSelector from './ticket-search-selector';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';

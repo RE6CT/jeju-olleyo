@@ -18,7 +18,7 @@ const MyComment = ({ comment }: { comment: MyCommentType }) => {
             {formatDate(comment.createdAt)}
           </time>
         </div>
-        <p className="medium-16">{comment.content}</p>
+        <p className="medium-16 break-all">{comment.content}</p>
       </Link>
     </article>
   );

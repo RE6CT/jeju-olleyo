@@ -91,12 +91,14 @@ export const fetchUpdateProfileImage = async (formData: FormData) => {
     }
 
     // 이전 이미지 삭제
-    const previousImageName = user.avatar_url.split('/').pop();
-    const { error: dataDeleteError } = await supabase.storage
-      .from('profile-images')
-      .remove([`${user.id}/${previousImageName}`]);
+    if (user.avatar_url) {
+      const previousImageName = user.avatar_url.split('/').pop();
+      const { error: dataDeleteError } = await supabase.storage
+        .from('profile-images')
+        .remove([`${user.id}/${previousImageName}`]);
 
-    if (dataDeleteError) throw new Error(ERROR_MESSAGES.USER_UPDATE_FAILED);
+      if (dataDeleteError) throw new Error(ERROR_MESSAGES.USER_UPDATE_FAILED);
+    }
 
     // URL 생성
     const { data: urlData } = supabase.storage

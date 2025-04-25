@@ -202,7 +202,7 @@ const PlanHeader = memo(() => {
               onChange={(e) => setTitle(e.target.value)}
               className={`w-full resize-none border-0 bg-transparent py-5 ${
                 isReadOnly ? 'pl-5' : 'pl-12'
-              } text-14 focus-visible:ring-0 focus-visible:ring-offset-0 ${
+              } text-14 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 ${
                 isReadOnly ? 'cursor-default' : ''
               }`}
               readOnly={isReadOnly}

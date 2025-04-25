@@ -39,23 +39,27 @@ const CommunityPlanList = ({
 
   return (
     <div className="flex w-full max-w-[1024px] flex-col gap-3 p-9">
-      <div className="flex">
+      <section className="flex">
         <h2 className="semibold-22 flex-1">올레 인기 일정</h2>
         <SortDropdown sortType={sortOption} />
-      </div>
+      </section>
       <div className="flex flex-col gap-20">
-        <div className="grid w-full grid-cols-1 gap-x-3 gap-y-5 sm:grid-cols-2 md:grid-cols-3">
+        <ul className="grid w-full list-none grid-cols-1 gap-x-3 gap-y-5 p-0 sm:grid-cols-2 md:grid-cols-3">
           {plans.map((plan) => (
-            <PlanVerticalCard key={plan.planId} plan={plan} />
+            <li key={plan.planId}>
+              <PlanVerticalCard plan={plan} />
+            </li>
           ))}
-        </div>
-        <DynamicPagination
-          currentPage={currentPage}
-          totalPages={totalPage}
-          maxVisiblePages={10}
-          onPageChange={handlePageChange}
-          backgroundColor="primary-500"
-        />
+        </ul>
+        <nav aria-label="페이지 탐색">
+          <DynamicPagination
+            currentPage={currentPage}
+            totalPages={totalPage}
+            maxVisiblePages={10}
+            onPageChange={handlePageChange}
+            backgroundColor="primary-500"
+          />
+        </nav>
       </div>
     </div>
   );

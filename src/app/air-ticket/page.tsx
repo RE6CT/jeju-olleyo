@@ -1,11 +1,11 @@
 'use client';
 import axios from 'axios';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { DEPARTURE_LIST } from '@/constants/ticket.constants';
 import useAlertStore from '@/zustand/alert.store';
 
-import { Flight, FlightResponseItem } from '../../types/air-ticket-type';
+import { Flight, FlightResponseItem } from '../../types/air-ticket.type';
 import Loading from '../loading';
 
 import TicketList from './_components/ticket-list';
@@ -83,7 +83,7 @@ const FlightSearch = () => {
         arrive_location: isGoFlight ? '제주' : getAirportLabel(departure),
         size: passengers,
         class: classType,
-        // price: flight!.price || null,
+        price: null,
       });
       if (error) {
         console.error(error.message);

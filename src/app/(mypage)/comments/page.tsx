@@ -8,7 +8,7 @@ export const metadata = {
   title: '마이페이지 - 내가 쓴 댓글',
 };
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 5;
 
 const CommentsPage = async ({
   searchParams,
@@ -35,7 +35,7 @@ const CommentsPage = async ({
     throw new Error('내가 쓴 댓글 목록을 가져오는 도중 에러가 발생했습니다.');
 
   return (
-    <div className="flex w-full flex-col gap-5">
+    <div className="flex h-full flex-col gap-5">
       <section className="flex flex-col gap-4">
         <MypageDataCounts pageType="comments" />
         <h2 className="semibold-28 w-full">내가 쓴 댓글</h2>

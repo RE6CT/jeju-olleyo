@@ -42,3 +42,28 @@ export type ProfileModalProps = {
   isModalOpen: boolean;
   setModalOpen: Dispatch<SetStateAction<boolean>>;
 };
+
+/** 항공권 예약 카드에 들어가는 예약 내역 타입 */
+export type ReservationType = {
+  airplaneName: string;
+  arriveLocation: string;
+  arriveTime: string;
+  carrierCode: string;
+  createdAt: string;
+  departureLocation: string;
+  departureTime: string;
+  price: number | null;
+  ticketId: number;
+  userId: string;
+  size: number;
+  class: string | null;
+};
+
+/** 항공권 예약 페이지 카드의 각 장소 정보 props 타입 */
+export type FlightInfoType = {
+  dateTime: string;
+  size: number;
+  location: string;
+  airplaneName: string;
+  carrierCode: string;
+};

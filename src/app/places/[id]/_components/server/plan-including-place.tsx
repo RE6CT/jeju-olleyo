@@ -7,13 +7,9 @@ const PlanIncludingPlace = async ({ placeId }: { placeId: number }) => {
   const supabase = await getServerClient();
   const { user } = await fetchGetCurrentUser();
 
-  if (!user) {
-    return <p className="text-sm text-gray-400">로그인이 필요합니다.</p>;
-  }
-
   const { data, error } = await supabase.rpc('get_plans_by_place_id', {
     input_place_id: placeId,
-    user_id_param: user.id,
+    user_id_param: user?.id as string,
   });
 
   if (error) {

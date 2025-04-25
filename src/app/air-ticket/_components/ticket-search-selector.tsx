@@ -1,4 +1,4 @@
-import { TicketSearchSelectorProps } from '@/types/air-ticket-type';
+import { TicketSearchSelectorProps } from '@/types/air-ticket.type';
 
 const TicketSearchSelector = ({
   passengers,

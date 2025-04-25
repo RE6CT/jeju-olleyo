@@ -293,7 +293,7 @@ export const useScheduleSavePlan = (
           description,
           travelStartDate: startDate?.toISOString() || '',
           travelEndDate: endDate?.toISOString() || '',
-          planImg: planImg || getDefaultPlanImage(),
+          planImg: planImg || currentPlan.planImg,
           public: true,
           publicAt: new Date().toISOString(),
         };
@@ -358,7 +358,7 @@ export const useScheduleSavePlan = (
           description,
           travelStartDate: startDate?.toISOString() || '',
           travelEndDate: endDate?.toISOString() || '',
-          planImg: planImg || getDefaultPlanImage(),
+          planImg: planImg || currentPlan.planImg,
           public: false,
           publicAt: new Date().toISOString(),
         };

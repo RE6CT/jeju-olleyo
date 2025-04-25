@@ -92,16 +92,24 @@ const PlanHeader = memo(() => {
     if (!file) return;
 
     try {
+      // 파일 크기 제한 (5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast({
+          title: '파일 크기 초과',
+          description: '이미지 파일은 5MB 이하만 업로드 가능합니다.',
+          variant: 'destructive',
+        });
+        return;
+      }
+
       // 먼저 미리보기 이미지 업데이트
       await handleFileChange(e);
 
       if (planId) {
-        // 일정 수정 시: 서버에 이미지 업로드
         const formData = new FormData();
         formData.append('file', file);
         formData.append('planId', planId.toString());
 
-        // 최대 3번까지 재시도
         let retryCount = 0;
         const maxRetries = 3;
         let response: string | null = null;
@@ -110,12 +118,8 @@ const PlanHeader = memo(() => {
           try {
             const result = await Promise.race([
               fetchUploadPlanImage(formData),
-              new Promise(
-                (_, reject) =>
-                  setTimeout(
-                    () => reject(new Error('업로드 시간 초과')),
-                    10000,
-                  ), // 10초 타임아웃
+              new Promise((_, reject) =>
+                setTimeout(() => reject(new Error('업로드 시간 초과')), 10000),
               ),
             ]);
 
@@ -124,23 +128,39 @@ const PlanHeader = memo(() => {
               break;
             }
           } catch (error) {
+            console.error(`이미지 업로드 시도 ${retryCount + 1} 실패:`, error);
             retryCount++;
-            if (retryCount === maxRetries) throw error;
-            // 재시도 전 0.5초 대기
+            if (retryCount === maxRetries) {
+              toast({
+                title: '이미지 업로드 실패',
+                description: '이미지 업로드에 실패했습니다. 다시 시도해주세요.',
+                variant: 'destructive',
+              });
+              throw error;
+            }
             await new Promise((resolve) => setTimeout(resolve, 500));
           }
         }
 
         if (response) {
+          // Zustand 상태 업데이트
           setPlanImg(response);
+          toast({
+            title: '이미지 업로드 성공',
+            description: '이미지가 성공적으로 업로드되었습니다.',
+          });
         }
       } else {
-        // 일정 생성 시: 임시 URL만 저장
         const imageUrl = URL.createObjectURL(file);
         setPlanImg(imageUrl);
       }
     } catch (error) {
       console.error('이미지 업로드 중 오류:', error);
+      toast({
+        title: '이미지 업로드 실패',
+        description: '이미지 업로드 중 오류가 발생했습니다. 다시 시도해주세요.',
+        variant: 'destructive',
+      });
     }
   };
 

@@ -367,18 +367,8 @@ const PlanSchedule = memo(() => {
                             </span>
                           </div>
                           {!isReadOnly && (
-                            <div className="flex items-center gap-4">
-                              {copiedDay !== null && copiedDay !== activeTab ? (
-                                <Button
-                                  variant="ghost"
-                                  className="text-12 font-medium text-gray-500 hover:text-gray-900"
-                                  onClick={() =>
-                                    handlePasteDayPlaces(activeTab as number)
-                                  }
-                                >
-                                  붙여넣기
-                                </Button>
-                              ) : (
+                            <div className="flex items-center gap-2">
+                              {typeof activeTab === 'number' && (
                                 <Button
                                   variant="ghost"
                                   className={cn(
@@ -387,9 +377,7 @@ const PlanSchedule = memo(() => {
                                       ? 'cursor-not-allowed text-gray-400'
                                       : 'text-gray-500 hover:text-gray-900',
                                   )}
-                                  onClick={() =>
-                                    handleCopyDayPlaces(activeTab as number)
-                                  }
+                                  onClick={() => handleCopyDayPlaces(activeTab)}
                                   disabled={copiedDay === activeTab}
                                 >
                                   {copiedDay === activeTab ? '복사됨' : '복사'}

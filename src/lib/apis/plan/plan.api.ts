@@ -330,6 +330,24 @@ export const fetchSavePlanPlaces = async (
 };
 
 /**
+ * 파일 이름을 영어로 변환하고 특수문자를 제거하는 함수
+ * @param fileName - 원본 파일 이름
+ * @returns 변환된 파일 이름
+ */
+const sanitizeFileName = (fileName: string): string => {
+  // 확장자 추출
+  const extension = fileName.split('.').pop()?.toLowerCase() || '';
+  // 파일 이름에서 확장자 제거
+  const nameWithoutExtension = fileName.slice(0, -(extension.length + 1));
+  // 파일 이름을 영어로 변환하고 특수문자 제거
+  const sanitizedName = nameWithoutExtension
+    .replace(/[^a-zA-Z0-9]/g, '_') // 영문자와 숫자가 아닌 모든 문자를 언더스코어로 변환
+    .toLowerCase();
+  // 타임스탬프 추가
+  return `${Date.now()}_${sanitizedName}.${extension}`;
+};
+
+/**
  * 이미지를 Supabase Storage에 업로드하는 API
  * @param formData - FormData 객체 (file 필드 포함)
  * @returns Promise<string> - 업로드된 이미지의 URL
@@ -364,8 +382,10 @@ export const fetchUploadPlanImage = async (
     throw new Error('인증된 사용자만 이미지를 업로드할 수 있습니다.');
   }
 
+  // 파일 이름 정리
+  const sanitizedFileName = sanitizeFileName(file.name);
   // 사용자별 폴더 경로 생성
-  const filePath = `${user.id}/plan-images/${Date.now()}-${file.name}`;
+  const filePath = `${user.id}/plan-images/${sanitizedFileName}`;
 
   const { error: uploadError } = await supabase.storage
     .from('plan-images')

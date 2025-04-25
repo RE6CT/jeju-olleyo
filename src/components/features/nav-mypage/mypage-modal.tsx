@@ -126,7 +126,7 @@ const MypageModal = ({
   return (
     <div
       ref={modalRef}
-      className="absolute right-0 top-10 z-50 w-[254px] rounded-12 bg-white p-4 shadow-dropdown"
+      className="absolute right-0 top-10 z-40 w-[254px] rounded-12 bg-white p-4 shadow-dropdown"
     >
       {/* 섹션 1 - 프로필 영역 */}
       <div className="flex w-fit flex-col gap-3">

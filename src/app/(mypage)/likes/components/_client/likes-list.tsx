@@ -38,7 +38,7 @@ const LikesList = ({ likes }: { likes: Plan[] }) => {
           <ul className="grid list-none grid-cols-1 gap-6 p-0">
             {likes?.map((plan) => (
               <li key={plan.planId}>
-                <PlanHorizontalCard plan={plan} />
+                <PlanHorizontalCard plan={plan} nickname={plan.nickname} />
               </li>
             ))}
           </ul>

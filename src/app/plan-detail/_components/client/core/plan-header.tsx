@@ -226,7 +226,7 @@ const PlanHeader = memo(() => {
       </div>
 
       {/* 일정 설명 입력 */}
-      <div className="relative z-50 mt-4">
+      <div className="relative z-30 mt-4">
         {!isReadOnly && (
           <Image
             src="/icons/edit.svg"

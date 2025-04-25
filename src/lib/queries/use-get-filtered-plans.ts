@@ -54,5 +54,8 @@ export const useGetFilteredPlans = (userId: string, filter: FilterState) => {
       return fetchGetFilteredPlansByUserId(userId, filterOptions);
     },
     enabled: !!userId,
+    staleTime: 5 * 60 * 1000, // 5분 동안 캐시 유지
+    gcTime: 10 * 60 * 1000, // 10분 동안 캐시 데이터 유지
+    refetchOnWindowFocus: false, // 탭 전환시 자동 리페치 비활성화
   });
 };

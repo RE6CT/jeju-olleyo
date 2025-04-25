@@ -8,7 +8,7 @@ import { CategoryType } from '@/types/category.type';
 import BookmarkIcon from '@/components/commons/bookmark-icon';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import PlaceModal from '@/components/features/plan/place-modal';
-import { getDefaultPlanImage } from '@/lib/utils/get-default-plan-image';
+import { getDefaultPlanOrPlaceImage } from '@/lib/utils/get-default-plan-image';
 
 const PLACE_IMAGE_SIZE = {
   width: 40,
@@ -42,7 +42,7 @@ const PlaceCardSidemenu = ({
   onAddPlace?: () => void;
   placeId: number;
 }) => {
-  const defaultImage = useMemo(() => getDefaultPlanImage(), []);
+  const defaultImage = useMemo(() => getDefaultPlanOrPlaceImage(placeId), []);
   const displayImageUrl = imageUrl || defaultImage;
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);

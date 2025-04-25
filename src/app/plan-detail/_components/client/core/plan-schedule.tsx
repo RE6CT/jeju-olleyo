@@ -198,7 +198,7 @@ const PlanSchedule = memo(() => {
   const { data: comments } = useGetComments(planId);
 
   return (
-    <div className="relative min-h-screen pb-32">
+    <div className="relative pb-32">
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className="my-6">
           <div className="sticky top-[370px] z-10">

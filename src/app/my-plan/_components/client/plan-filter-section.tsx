@@ -188,6 +188,7 @@ const PlanFilterSection = ({
                 nickname={userNickname}
                 onEdit={handleEdit}
                 onDelete={() => handleDelete(plan.planId)}
+                onUpdate={handleUpdatePlan}
               />
             ))}
           </div>

@@ -83,7 +83,36 @@ const PlanHeader = memo(() => {
         formData.append('file', file);
         formData.append('planId', planId.toString());
 
-        const response = await fetchUploadPlanImage(formData);
+        // 최대 3번까지 재시도
+        let retryCount = 0;
+        const maxRetries = 3;
+        let response: string | null = null;
+
+        while (retryCount < maxRetries) {
+          try {
+            const result = await Promise.race([
+              fetchUploadPlanImage(formData),
+              new Promise(
+                (_, reject) =>
+                  setTimeout(
+                    () => reject(new Error('업로드 시간 초과')),
+                    10000,
+                  ), // 10초 타임아웃
+              ),
+            ]);
+
+            if (typeof result === 'string') {
+              response = result;
+              break;
+            }
+          } catch (error) {
+            retryCount++;
+            if (retryCount === maxRetries) throw error;
+            // 재시도 전 0.5초 대기
+            await new Promise((resolve) => setTimeout(resolve, 500));
+          }
+        }
+
         if (response) {
           setPlanImg(response);
         }

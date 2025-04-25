@@ -8,23 +8,38 @@ import {
   fetchGetPlanDaysAndLocations,
 } from '@/lib/apis/plan/plan.api';
 import { PLAN_PAGE_META } from '@/constants/plan.constants';
-
 import NotFound from '@/app/plan-detail/_components/server/not-found';
+import { checkPlanAccess } from '@/lib/utils/plan.util';
 
 export async function generateMetadata({
   params,
 }: {
   params: { planId: string };
 }): Promise<Metadata> {
-  const planId = parseInt(params.planId);
-  const plan = await fetchGetPlanById(planId);
+  try {
+    const [plan, { user }] = await Promise.all([
+      fetchGetPlanById(parseInt(params.planId)),
+      fetchGetCurrentUser(),
+    ]);
 
-  return {
-    title: plan.title
-      ? `${plan.title} | 제주올래`
-      : PLAN_PAGE_META.DEFAULT.title,
-    description: plan.description || PLAN_PAGE_META.DEFAULT.description,
-  };
+    // 비공개 일정이면서 해당 일정의 작성자가 아닌 경우 메타데이터도 제한
+    if (!checkPlanAccess(plan, user)) {
+      return {
+        title: PLAN_PAGE_META.DEFAULT.title,
+        description: PLAN_PAGE_META.DEFAULT.description,
+      };
+    }
+
+    return {
+      title: plan.title ? plan.title : PLAN_PAGE_META.DEFAULT.title,
+      description: plan.description || PLAN_PAGE_META.DEFAULT.description,
+    };
+  } catch (error) {
+    return {
+      title: PLAN_PAGE_META.DEFAULT.title,
+      description: PLAN_PAGE_META.DEFAULT.description,
+    };
+  }
 }
 
 const PlanDetailPage = async ({
@@ -42,24 +57,17 @@ const PlanDetailPage = async ({
   try {
     // 병렬로 API 호출 실행
     const [plan, { user }, dayPlaces] = await Promise.all([
-      fetchGetPlanById(Number(params.planId)),
+      fetchGetPlanById(parseInt(params.planId)),
       fetchGetCurrentUser(),
-      fetchGetPlanDaysAndLocations(Number(params.planId)),
+      fetchGetPlanDaysAndLocations(parseInt(params.planId)),
     ]);
 
+    // 비공개 일정이면서 해당 일정의 작성자가 아닌 경우 접근 차단
+    if (!checkPlanAccess(plan, user)) {
+      return <NotFound />;
+    }
+
     const userId = user?.id;
-
-    const initialPlan = {
-      planId: plan.planId,
-      userId: plan.userId,
-      title: plan.title,
-      description: plan.description,
-      travelStartDate: plan.travelStartDate,
-      travelEndDate: plan.travelEndDate,
-      planImg: plan.planImg,
-      public: plan.public,
-    };
-
     const isOwner = plan.userId === userId;
     const isReadOnly = searchParams.isReadOnly === 'true' || !isOwner;
 
@@ -81,14 +89,14 @@ const PlanDetailPage = async ({
             </div>
           )}
           <PlanForm
-            initialPlan={initialPlan}
+            initialPlan={plan}
             initialDayPlaces={dayPlaces}
             isReadOnly={isReadOnly}
           />
         </div>
       </div>
     );
-  } catch {
+  } catch (error) {
     // 일정을 찾을 수 없는 경우
     return <NotFound />;
   }

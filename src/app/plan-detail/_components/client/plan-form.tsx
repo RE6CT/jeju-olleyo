@@ -1,7 +1,7 @@
 'use client';
 
 import { DayPlaces } from '@/types/plan-detail.type';
-import { Plan } from '@/types/plan.type';
+import { PlanWithDays } from '@/types/plan.type';
 import {
   usePlanSetTitle,
   usePlanSetDescription,
@@ -25,7 +25,7 @@ const PlanForm = ({
   initialDayPlaces,
   isReadOnly = true,
 }: {
-  initialPlan?: Omit<Plan, 'nickname' | 'createdAt' | 'publicAt' | 'isLiked'>;
+  initialPlan?: PlanWithDays;
   initialDayPlaces?: DayPlaces;
   isReadOnly?: boolean;
 }) => {

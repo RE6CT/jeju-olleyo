@@ -70,9 +70,15 @@ const FlightSearch = () => {
       const baseDate = isGoFlight ? startDate : endDate;
 
       if (!baseDate) continue;
+      if (startDate && endDate && startDate > endDate) {
+        return dateAlert('오는날은 가는날보다 빠를수 없어요.');
+      }
+      if (flightsToSave[0].arrPlandTime > flightsToSave[1].depPlandTime)
+        return dateAlert('가는편의 도착시간이 오는편의 출발시간보다 빨라요!');
 
       const departure_time = combineDateAndTime(baseDate, flight.depPlandTime);
       const arrive_time = combineDateAndTime(baseDate, flight.arrPlandTime);
+
       const { error } = await supabase.from('tickets').insert({
         user_id: user.id,
         departure_time,

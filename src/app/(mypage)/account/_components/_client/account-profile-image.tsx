@@ -24,13 +24,13 @@ const AccountProfileImage = ({
 }) => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const { successToast } = useCustomToast();
+  const { mutate: deleteProfileImage, isPending } =
+    useDeleteProfileImageMutation();
 
   /** 드롭다운 [사진 변경] 메뉴 클릭 핸들러 */
   const handleProfileImageEdit = () => {
     setModalOpen(true);
   };
-
-  const deleteProfileImageMutation = useDeleteProfileImageMutation();
 
   /** 프로필 사진 초기화 핸들러 */
   const handleProfileImageDelete = async () => {
@@ -39,19 +39,23 @@ const AccountProfileImage = ({
     );
     if (!isConfirmed) return;
 
-    try {
-      // 뮤테이션 사용
-      await deleteProfileImageMutation.mutateAsync({ userId, profileImage });
-      successToast(SUCCESS_MESSAGES.PROFILE_IMAGE_RESET);
-    } catch (error: unknown) {
-      let errorMessage = ERROR_MESSAGES.PROFILE_UPDATE_FAILED;
-      if (error instanceof Error) {
-        errorMessage = error.message;
-      }
-      successToast(errorMessage);
-    } finally {
-      setModalOpen(false);
-    }
+    deleteProfileImage(
+      { userId, profileImage },
+      {
+        onSuccess: () => {
+          successToast('프로필 이미지가 변경되었습니다.');
+          setModalOpen(false);
+        },
+        onError: (error) => {
+          let errorMessage = ERROR_MESSAGES.PROFILE_UPDATE_FAILED;
+          if (error instanceof Error) {
+            errorMessage = error.message;
+          }
+          successToast(errorMessage);
+          setModalOpen(false);
+        },
+      },
+    );
   };
 
   return (

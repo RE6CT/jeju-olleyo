@@ -160,12 +160,6 @@ const ConsoleEasterEgg = () => {
       };
     }
 
-    // 시작시 가이드 메시지 표시
-    console.log(
-      '%c🔍 이스터에그 명령어를 사용하려면 다음과 같이 입력하세요: window.easterEggCommands.help()',
-      'color: #9c27b0; font-size: 14px; font-weight: bold;',
-    );
-
     return () => {
       // 컴포넌트 언마운트시 null 처리 (delete 대신)
       if (window.easterEggCommands) {

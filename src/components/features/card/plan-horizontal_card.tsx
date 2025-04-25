@@ -38,7 +38,6 @@ const PlanHorizontalCard = ({
   nickname,
   onEdit,
   onDelete,
-  onUpdate,
 }: PlanHorizontalCardProps) => {
   return (
     <div className="group relative flex gap-4 rounded-lg p-4 transition-colors hover:bg-gray-50">
@@ -72,12 +71,7 @@ const PlanHorizontalCard = ({
               className="absolute right-4 top-2"
               onClick={(e) => e.stopPropagation()}
             >
-              <PlanDropdown
-                plan={plan}
-                onEdit={onEdit}
-                onDelete={onDelete}
-                onUpdate={onUpdate}
-              >
+              <PlanDropdown plan={plan} onEdit={onEdit} onDelete={onDelete}>
                 <Button
                   variant="ghost"
                   size="icon"

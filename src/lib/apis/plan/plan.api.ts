@@ -162,34 +162,36 @@ export const fetchSavePlan = async (
 ): Promise<number> => {
   const supabase = await getServerClient();
 
-  //console.log('일정 저장 시도:', plan);
+  try {
+    const { data, error } = await supabase
+      .from('plans')
+      .insert({
+        user_id: plan.userId,
+        title: plan.title,
+        description: plan.description,
+        travel_start_date: plan.travelStartDate,
+        travel_end_date: plan.travelEndDate,
+        plan_img: plan.planImg,
+        public: plan.public,
+      })
+      .select('plan_id')
+      .single();
 
-  const { data, error } = await supabase
-    .from('plans')
-    .insert({
-      user_id: plan.userId,
-      title: plan.title,
-      description: plan.description,
-      travel_start_date: plan.travelStartDate,
-      travel_end_date: plan.travelEndDate,
-      plan_img: plan.planImg,
-      public: plan.public,
-    })
-    .select('plan_id')
-    .single();
+    if (error) {
+      console.error('일정 저장 실패 - Supabase 에러:', error);
+      throw new Error(`일정 저장에 실패했습니다. ${error.message}`);
+    }
 
-  if (error) {
-    console.error('일정 저장 실패:', error);
-    throw new Error(`일정 저장에 실패했습니다. ${error.message}`);
+    if (!data || !data.plan_id) {
+      console.error('일정 ID가 없음:', data);
+      throw new Error('일정 ID를 가져오는데 실패했습니다.');
+    }
+
+    return data.plan_id;
+  } catch (error) {
+    console.error('일정 저장 중 예외 발생:', error);
+    throw error;
   }
-
-  if (!data || !data.plan_id) {
-    console.error('일정 ID가 없음:', data);
-    throw new Error('일정 ID를 가져오는데 실패했습니다.');
-  }
-
-  //console.log('일정 저장 성공, plan_id:', data.plan_id);
-  return data.plan_id;
 };
 
 /**

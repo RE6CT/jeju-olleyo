@@ -25,17 +25,15 @@ const PlanDetailNewPage = async () => {
     if (!userId) return <NotFound />;
 
     return (
-      <main className="flex flex-col">
-        <header className="border-b px-9">
-          <div className="flex gap-3 pt-6">
-            <h1 className="text-28 font-bold leading-[130%]">내 일정 만들기</h1>
-            <Image
-              src="/character/happy_color.svg"
-              alt="happy icon"
-              width={HAPPY_IMAGE.width}
-              height={HAPPY_IMAGE.height}
-            />
-          </div>
+      <main className="mx-auto flex w-full max-w-[1024px] flex-col">
+        <header className="flex gap-3 pt-6">
+          <h1 className="text-28 font-bold leading-[130%]">내 일정 만들기</h1>
+          <Image
+            src="/character/happy_color.svg"
+            alt="happy icon"
+            width={HAPPY_IMAGE.width}
+            height={HAPPY_IMAGE.height}
+          />
         </header>
         <section>
           <PlanForm isReadOnly={false} />

@@ -13,6 +13,7 @@ import 'react-datepicker/dist/react-datepicker.css'; // react-datepicker 캘린�
 import { useChangeImageFile } from '@/lib/hooks/use-change-image-file';
 import { LoadingSpinner } from '@/components/commons/loading-spinner';
 import { fetchUploadPlanImage } from '@/lib/apis/plan/plan.api';
+import { useToast } from '@/lib/hooks/use-toast';
 import {
   usePlanTitle,
   usePlanDescription,
@@ -40,6 +41,7 @@ const MAX_TEXT_LENGTH = {
 const CALENDAR_MONTHS_SHOWN = 2;
 
 const PlanHeader = memo(() => {
+  const { toast } = useToast();
   const title = usePlanTitle();
   const description = usePlanDescription();
   const planImg = usePlanImg();
@@ -61,6 +63,22 @@ const PlanHeader = memo(() => {
 
   const handleDateChange = (dates: [Date | null, Date | null]) => {
     const [start, end] = dates;
+    if (start && end) {
+      // 시작일로부터 14일 후의 날짜 계산
+      const maxEndDate = new Date(start);
+      maxEndDate.setDate(maxEndDate.getDate() + 14);
+
+      // 선택된 종료일이 최대 종료일보다 이후인 경우
+      if (end > maxEndDate) {
+        setEndDate(maxEndDate);
+        toast({
+          title: '여행 기간 제한',
+          description: '여행 기간은 최대 14박 15일까지만 선택 가능합니다.',
+          variant: 'destructive',
+        });
+        return;
+      }
+    }
     setStartDate(start);
     setEndDate(end);
     if (end) {
@@ -184,7 +202,7 @@ const PlanHeader = memo(() => {
               onChange={(e) => setTitle(e.target.value)}
               className={`w-full resize-none border-0 bg-transparent py-5 ${
                 isReadOnly ? 'pl-5' : 'pl-12'
-              } text-14 focus-visible:ring-0 focus-visible:ring-offset-0 ${
+              } text-14 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 ${
                 isReadOnly ? 'cursor-default' : ''
               }`}
               readOnly={isReadOnly}
@@ -218,6 +236,13 @@ const PlanHeader = memo(() => {
                   inline
                   locale={ko}
                   monthsShown={CALENDAR_MONTHS_SHOWN}
+                  maxDate={
+                    startDate
+                      ? new Date(
+                          new Date(startDate).setDate(startDate.getDate() + 14),
+                        )
+                      : undefined
+                  }
                 />
               </div>
             )}

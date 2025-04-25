@@ -41,6 +41,7 @@ import {
 import { useCurrentUser } from '@/lib/queries/auth-queries';
 import { useGetComments } from '@/lib/queries/use-get-comments';
 import CommentsSection from '../features/comment/comments-section';
+import { toast, useToast } from '@/lib/hooks/use-toast';
 
 const DROPDOWN_CONTENT_STYLE =
   'p-0 border border-[#E7EDF0] bg-[#F9FAFB] rounded-[12px] w-[140px] [&>*:hover]:bg-primary-100 [&>*:hover]:text-primary-500';
@@ -136,6 +137,30 @@ const ScheduleModals = () => {
     planId,
   );
 
+  const handlePublicClickWrapper = async (): Promise<{ error?: string }> => {
+    const result = await handlePublicClick();
+    if (result?.error) {
+      toast({
+        title: '일정 저장 실패',
+        description: result.error,
+        variant: 'destructive',
+      });
+    }
+    return result;
+  };
+
+  const handlePrivateClickWrapper = async (): Promise<{ error?: string }> => {
+    const result = await handlePrivateClick();
+    if (result?.error) {
+      toast({
+        title: '일정 저장 실패',
+        description: result.error,
+        variant: 'destructive',
+      });
+    }
+    return result;
+  };
+
   return (
     <>
       <ScheduleDeleteModal
@@ -156,9 +181,9 @@ const ScheduleModals = () => {
       />
       <ScheduleCreatedModal
         isOpen={isPublicModalOpen}
-        onClose={handlePrivateClick}
-        onPublicClick={handlePublicClick}
-        onPrivateClick={handlePrivateClick}
+        onClose={() => setIsPublicModalOpen(false)}
+        onPublicClick={handlePublicClickWrapper}
+        onPrivateClick={handlePrivateClickWrapper}
       />
     </>
   );
@@ -196,6 +221,8 @@ const PlanSchedule = memo(() => {
   const dayCount = calculateTotalDays(startDate, endDate);
   const planId = usePlanId();
   const { data: comments } = useGetComments(planId);
+
+  const { toast } = useToast();
 
   return (
     <div className="relative pb-32">

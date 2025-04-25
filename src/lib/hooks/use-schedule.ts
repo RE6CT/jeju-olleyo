@@ -276,10 +276,10 @@ export const useScheduleSavePlan = (
     setDayPlaces,
   } = usePlanStore();
 
-  const handlePublicClick = async () => {
+  const handlePublicClick = async (): Promise<{ error?: string }> => {
     try {
       if (!startDate || !endDate || !title || !userId) {
-        throw new Error('필수 정보가 누락되었습니다.');
+        return { error: '필수 정보가 누락되었습니다.' };
       }
 
       let targetId: number;
@@ -331,20 +331,17 @@ export const useScheduleSavePlan = (
         description: '일정이 성공적으로 저장되었습니다.',
       });
       router.push(`${PATH.MYPLAN}`);
+      return {};
     } catch (error) {
       console.error('일정 공개 설정 실패:', error);
-      toast({
-        title: '일정 저장 실패',
-        description: '일정 공개 설정에 실패했습니다.',
-        variant: 'destructive',
-      });
+      return { error: '일정 공개 설정에 실패했습니다.' };
     }
   };
 
-  const handlePrivateClick = async () => {
+  const handlePrivateClick = async (): Promise<{ error?: string }> => {
     try {
       if (!startDate || !endDate || !title || !userId) {
-        throw new Error('필수 정보가 누락되었습니다.');
+        return { error: '필수 정보가 누락되었습니다.' };
       }
 
       let targetId: number;
@@ -415,16 +412,10 @@ export const useScheduleSavePlan = (
         description: '일정이 성공적으로 저장되었습니다.',
       });
       router.push(`${PATH.MYPLAN}`);
+      return {};
     } catch (error) {
       console.error('일정 비공개 설정 실패:', error);
-      toast({
-        title: '일정 저장 실패',
-        description:
-          error instanceof Error
-            ? error.message
-            : '일정 비공개 설정에 실패했습니다.',
-        variant: 'destructive',
-      });
+      return { error: '일정 비공개 설정에 실패했습니다.' };
     }
   };
 

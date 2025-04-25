@@ -64,7 +64,7 @@ const PlanDetailPage = async ({
     const isReadOnly = searchParams.isReadOnly === 'true' || !isOwner;
 
     return (
-      <div className="flex flex-col">
+      <div className="mx-auto flex w-full max-w-[1024px] flex-col">
         <div className="border-b px-9">
           {/* 헤더 영역 */}
           {!isReadOnly && (

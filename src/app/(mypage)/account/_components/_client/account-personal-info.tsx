@@ -135,7 +135,7 @@ const PersonalInfo = ({
             </div>
           ) : (
             <output className="medium-16 block w-full whitespace-nowrap p-[10px]">
-              {phone}
+              {phone ?? '번호가 등록되지 않았습니다.'}
             </output>
           )}
         </div>

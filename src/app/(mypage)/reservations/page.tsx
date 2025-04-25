@@ -1,5 +1,6 @@
 import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 import { fetchGetReservationsByUserId } from '@/lib/apis/flight/get-reservations.api';
+import ReservationsCard from './_components/_server/reservations-card';
 
 const ReservationsPage = async () => {
   const { user } = await fetchGetCurrentUser();
@@ -20,15 +21,15 @@ const ReservationsPage = async () => {
       </div>
       <ul className="flex flex-col">
         {reservations.map((reservation) => (
-          <li className="flex rounded-24 bg-white px-4 py-5">
-            ticketId: {reservation.ticketId}
+          <li>
+            {/* ticketId: {reservation.ticketId}
             departureTime: {reservation.departureTime}
             arriveTime: {reservation.arriveTime}
             airplaneName: {reservation.airplaneName}
             carrierCode: {reservation.carrierCode}
             departureLocation: {reservation.departureLocation}
-            arriveLocation: {reservation.arriveLocation}
-            price: {reservation.price}
+            arriveLocation: {reservation.arriveLocation} */}
+            <ReservationsCard />
           </li>
         ))}
       </ul>

@@ -26,20 +26,27 @@ const LikesList = ({ likes }: { likes: Plan[] }) => {
   return (
     <>
       {countData?.likeCount === 0 ? (
-        <EmptyResult
-          buttonText="인기 일정 보러가기"
-          href={PATH.COMMUNITY}
-          imagePath="/empty-result/empty_likes.png"
-        />
-      ) : (
-        <div className="flex flex-col gap-20">
-          <div className="grid grid-cols-1 gap-6">
-            {likes?.map((plan) => (
-              <PlanHorizontalCard key={plan.planId} plan={plan} />
-            ))}
-          </div>
-          <MypagePagination pageType="likes" pageSize={PAGE_SIZE} />
+        <div role="region" aria-label="좋아요한 일정 없음">
+          <EmptyResult
+            buttonText="인기 일정 보러가기"
+            href={PATH.COMMUNITY}
+            imagePath="/empty-result/empty_likes.png"
+          />
         </div>
+      ) : (
+        <section className="flex flex-col gap-20">
+          <ul className="grid list-none grid-cols-1 gap-6 p-0">
+            {likes?.map((plan) => (
+              <li key={plan.planId}>
+                <PlanHorizontalCard plan={plan} />
+              </li>
+            ))}
+          </ul>
+
+          <nav aria-label="페이지 탐색">
+            <MypagePagination pageType="likes" pageSize={PAGE_SIZE} />
+          </nav>
+        </section>
       )}
     </>
   );

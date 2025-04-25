@@ -10,6 +10,7 @@ import { CategoryParamType, RegionType } from '@/types/category.type';
 import CategoryRegionTabs from './category-region-tabs';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { PATH } from '@/constants/path.constants';
+import React from 'react';
 
 /** 서버에서 가져온 데이터를 표시하는 클라이언트 컴포넌트 (카테고리 리스트)) */
 const CategoryClient = ({ category }: { category: CategoryParamType }) => {
@@ -47,46 +48,50 @@ const CategoryClient = ({ category }: { category: CategoryParamType }) => {
 
   return (
     <div className="flex w-full flex-col gap-5">
-      <div className="ml-auto w-full">
+      <nav className="ml-auto w-full" aria-label="지역 필터">
         <CategoryRegionTabs
           defaultTab={region}
           onTabChange={handleFilterTabChange}
         />
-      </div>
-      {/* 카드 그리드로 바로 표시 */}
-      <div className="grid grid-cols-2 gap-[11px] sm:grid-cols-3 md:grid-cols-4">
-        {isPending ? (
-          <PlaceListSkeleton count={16} />
-        ) : (
-          allPlaces.map((place, index) => (
-            <>
-              <PlaceCard
-                key={place.placeId}
-                placeId={place.placeId}
-                image={place.image}
-                title={place.title}
-                isBookmarked={place.isBookmarked}
-                isDragging={false}
-              />
-              {/* 8번째 아이템 이후에 배너 삽입 (첫 페이지의 마지막에만 적용) */}
-              {index === 7 && (
-                <div
-                  key={`banner-${index}`}
-                  className="col-span-full my-4 flex w-full items-center justify-center"
-                >
-                  <Banner />
-                  {/* 배너 컴포넌트 또는 광고를 여기에 삽입 */}
-                </div>
-              )}
-            </>
-          ))
-        )}
-      </div>
+      </nav>
+
+      {/* 카드 그리드 */}
+      <section>
+        <ul className="grid list-none grid-cols-2 gap-[11px] p-0 sm:grid-cols-3 md:grid-cols-4">
+          {isPending ? (
+            <PlaceListSkeleton count={16} />
+          ) : (
+            allPlaces.map((place, index) => (
+              <React.Fragment key={place.placeId}>
+                <li>
+                  <PlaceCard
+                    placeId={place.placeId}
+                    image={place.image}
+                    title={place.title}
+                    isBookmarked={place.isBookmarked}
+                    isDragging={false}
+                  />
+                </li>
+                {/* 8번째 아이템 이후에 배너 삽입 (첫 페이지의 마지막에만 적용) */}
+                {index === 7 && (
+                  <li
+                    key={`banner-${index}`}
+                    className="col-span-full my-4 flex w-full items-center justify-center"
+                  >
+                    <Banner />
+                  </li>
+                )}
+              </React.Fragment>
+            ))
+          )}
+        </ul>
+      </section>
 
       {/* 로딩 인디케이터 및 다음 페이지 로드 트리거 */}
       <div
         ref={observerRef}
         className="flex h-[50px] w-full items-center justify-center"
+        aria-hidden="true"
       ></div>
     </div>
   );

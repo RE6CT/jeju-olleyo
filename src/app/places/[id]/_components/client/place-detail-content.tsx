@@ -58,19 +58,19 @@ const PlaceDetailContent = ({
           </div>
 
           <div className="mt-2 space-y-[9.5px] text-gray-300">
-            <div className="medium-18 flex gap-[6px]">
+            <div className="medium-18 flex items-center gap-2">
               <TimeIcon size={20} fill="gray-300" />
               {isHotel ? '체크인/체크아웃' : ''}
               {openSummary}
             </div>
-            <div className="medium-18 flex items-center gap-[6px]">
+            <div className="medium-18 flex items-center gap-2">
               <PhoneIcon size={20} fill="gray-300" />
               {detailJson?.phone || '전화번호 미제공'}
             </div>
           </div>
 
           <div className="semibold-18 mt-[11px] text-gray-300">
-            <div className="medium-18 flex items-center gap-[6px]">
+            <div className="medium-18 flex items-center gap-2">
               <LocationIcon size={20} fill="gray-300" />
               {place.address}
             </div>

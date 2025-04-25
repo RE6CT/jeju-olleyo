@@ -53,67 +53,65 @@ const Comment = ({
   };
 
   return (
-    <li>
-      <div className="flex flex-col gap-1 py-2">
-        <div className="regular-10 flex justify-between">
-          <span>{nickname}</span>
-          <span>{formatDate(createdAt)}</span>
-        </div>
-        {isEditMode ? (
-          <Input
-            className="medium-12"
-            value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
-          />
-        ) : (
-          <p className="medium-12">{content}</p>
-        )}
-        {isEditMode ? (
-          <div className="regular-10 flex">
-            <button
-              className="regular-10 px-[6px] py-[2px] text-gray-500"
-              onClick={handleEditCommentButtonClick}
-              disabled={inputText === ''}
-            >
-              수정 완료
-            </button>
-            <Separator
-              orientation="vertical"
-              className="mx-[2px] text-gray-100"
-            />
-            <button
-              className="px-[6px] py-[2px] text-red"
-              onClick={handleEditCancel}
-            >
-              취소
-            </button>
-          </div>
-        ) : (
-          <>
-            {userId === user?.id && (
-              <div className="regular-10 flex">
-                <button
-                  className="px-[6px] py-[2px] text-gray-500"
-                  onClick={() => setIsEditMode(true)}
-                >
-                  수정
-                </button>
-                <Separator
-                  orientation="vertical"
-                  className="mx-[2px] text-gray-100"
-                />
-                <button
-                  className="px-[6px] py-[2px] text-red"
-                  onClick={handleDeleteCommentButtonClick}
-                >
-                  삭제
-                </button>
-              </div>
-            )}
-          </>
-        )}
+    <div className="flex flex-col gap-1 py-2">
+      <div className="regular-10 flex justify-between">
+        <span>{nickname}</span>
+        <span>{formatDate(createdAt)}</span>
       </div>
-    </li>
+      {isEditMode ? (
+        <Input
+          className="medium-12"
+          value={inputText}
+          onChange={(e) => setInputText(e.target.value)}
+        />
+      ) : (
+        <p className="medium-12 break-all">{content}</p>
+      )}
+      {isEditMode ? (
+        <div className="regular-10 flex">
+          <button
+            className="regular-10 px-[6px] py-[2px] text-gray-500"
+            onClick={handleEditCommentButtonClick}
+            disabled={inputText === ''}
+          >
+            수정 완료
+          </button>
+          <Separator
+            orientation="vertical"
+            className="mx-[2px] text-gray-100"
+          />
+          <button
+            className="px-[6px] py-[2px] text-red"
+            onClick={handleEditCancel}
+          >
+            취소
+          </button>
+        </div>
+      ) : (
+        <>
+          {userId === user?.id && (
+            <div className="regular-10 flex">
+              <button
+                className="px-[6px] py-[2px] text-gray-500"
+                onClick={() => setIsEditMode(true)}
+              >
+                수정
+              </button>
+              <Separator
+                orientation="vertical"
+                className="mx-[2px] text-gray-100"
+              />
+              <button
+                className="px-[6px] py-[2px] text-red"
+                onClick={handleDeleteCommentButtonClick}
+              >
+                삭제
+              </button>
+            </div>
+          )}
+        </>
+      )}
+    </div>
   );
 };
 

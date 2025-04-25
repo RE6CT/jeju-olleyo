@@ -1,13 +1,11 @@
 import { Combobox } from '@/components/commons/combo-box';
 import { Button } from '@/components/ui/button';
 
-import { TicketSearchFormProps } from '../../../types/air-ticket-type';
+import { TicketSearchFormProps } from '../../../types/air-ticket.type';
 import TicketSearchSelector from './ticket-search-selector';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { ko } from 'date-fns/locale';
-import { useState } from 'react';
-import { formatTicketPeriod } from '../_utils/ticket-uitls';
 
 const TicketSearchForm = ({
   departureList,
@@ -19,8 +17,11 @@ const TicketSearchForm = ({
   endDate,
   setStartDate,
   setEndDate,
+  passengers,
+  setPassengers,
+  classType,
+  setClassType,
 }: TicketSearchFormProps) => {
-  const [calendarOpen, setCalendarOpen] = useState(false);
   const handleChange = (dates: [Date | null, Date | null]) => {
     const [start, end] = dates;
     setStartDate(start);
@@ -29,20 +30,21 @@ const TicketSearchForm = ({
   return (
     <>
       {!showInnerButton && (
-        <header className="mb-8 flex justify-center gap-0 text-center text-4xl">
+        <header
+          className={`mb-8 flex justify-center gap-0 text-center text-4xl`}
+        >
           항공권
           <img src="/icons/plane.svg" alt="비행기 로고" className="ml-3" />
         </header>
       )}
-      <form
-        className={`mx-auto mb-9 grid max-w-4xl bg-gray-50 p-4 px-9 py-8 shadow-md ${
-          showInnerButton
-            ? 'grid-cols-[1fr_180px_2fr]'
-            : 'grid-cols-[1fr_1fr_1fr]'
-        } gap-4`}
-      >
+      <form className="mx-auto mb-9 grid max-w-4xl grid-cols-[2fr_1fr_3fr] gap-4 bg-gray-50 p-4 px-9 py-8 shadow-md">
         <div className="col-span-3">
-          <TicketSearchSelector />
+          <TicketSearchSelector
+            passengers={passengers}
+            setPassengers={setPassengers}
+            classType={classType}
+            setClassType={setClassType}
+          />
         </div>
         <div>
           <span className="mb-2 block text-18 font-medium">출발지</span>
@@ -74,7 +76,7 @@ const TicketSearchForm = ({
               name="schArrvCityCode"
               placeholder="제주"
               disabled
-              className={`self-end rounded border bg-gray-100 p-2 pl-9 text-black placeholder-gray-300 ${showInnerButton ? 'w-[180px]' : 'w-full'}`}
+              className={`self-end rounded border bg-gray-100 p-2 pl-9 text-black placeholder-gray-300 ${showInnerButton ? 'w-full' : 'w-full'}`}
             />
           </div>
           <input type="hidden" name="schArrvCityCode" value="CJU" />
@@ -100,20 +102,25 @@ const TicketSearchForm = ({
                 selectsRange
                 dateFormat="yyyy-MM-dd"
                 className="w-full rounded border p-2 pl-9 text-16 text-black"
+                minDate={new Date()}
               />
             </div>
-            {showInnerButton && (
-              <Button
-                type="submit"
-                className="h-11 w-24 !rounded-12 bg-secondary-300 px-6 py-[10px] text-white hover:bg-secondary-400"
-              >
-                조회 하기
-              </Button>
-            )}
+            <Button
+              type="submit"
+              form="ticketForm"
+              className={`h-11 w-24 !rounded-12 px-6 py-[10px] text-white ${
+                showInnerButton
+                  ? 'bg-secondary-400 hover:bg-secondary-500'
+                  : 'bg-primary-500 hover:bg-primary-400'
+              }`}
+              onClick={handleSubmit}
+            >
+              조회 하기
+            </Button>
           </div>
         </div>
       </form>
-      {!showInnerButton && (
+      {/* {!showInnerButton && (
         <div className="mb-12 flex justify-center">
           <Button
             type="submit"
@@ -124,7 +131,7 @@ const TicketSearchForm = ({
             조회 하기
           </Button>
         </div>
-      )}
+      )} */}
     </>
   );
 };

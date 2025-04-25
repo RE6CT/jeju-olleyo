@@ -1,7 +1,6 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-
 import { PATH } from '@/constants/path.constants';
 import useAlert from '@/lib/hooks/use-alert';
 import { JejuBannerProps } from '@/types/common.type';
@@ -21,7 +20,10 @@ const JejuBanner = ({
   buttonText = '내 일정 만들러 가기 >',
   buttonUrl = '/planner',
 }: JejuBannerProps) => {
-  const { isAuthenticated } = useAuthCheck();
+  // 현재 경로가 홈이면 리다이렉션 방지
+  const { isAuthenticated } = useAuthCheck({
+    skipCheck: true,
+  });
   const router = useRouter();
   const { showQuestion } = useAlert();
 
@@ -43,7 +45,7 @@ const JejuBanner = ({
   };
 
   return (
-    <div className="relative w-full overflow-hidden">
+    <div className="relative mt-11 w-full overflow-hidden">
       {/* 배경 이미지  */}
       <img src={imageUrl} alt="제주 여행 배너" className="aspect-auto w-full" />
       {/* 텍스트와 버튼 오버레이 - 왼쪽 상단에 배치 */}

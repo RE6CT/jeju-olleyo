@@ -124,7 +124,7 @@ const PopularPlaces = () => {
         <div className="relative overflow-hidden">
           <div
             ref={scrollContainerRef}
-            className="flex cursor-grab select-none overflow-x-auto pb-4"
+            className="flex cursor-grab select-none overflow-x-auto"
             style={{
               scrollbarWidth: 'none',
               msOverflowStyle: 'none',

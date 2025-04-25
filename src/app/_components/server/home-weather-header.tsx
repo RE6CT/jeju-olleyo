@@ -16,7 +16,8 @@ const WeatherHeader: React.FC<WeatherHeaderProps> = ({
 }: WeatherHeaderProps) => {
   const headerContainerClasses =
     'flex w-full flex-col items-start justify-center gap-1 sm:gap-1 md:gap-1.5 lg:gap-2';
-  const titleClasses = 'flex w-full justify-center text-center semibold-16';
+  const titleClasses =
+    'flex w-full items-center justify-center text-center semibold-16';
   const subtitleClasses = 'self-stretch text-center semibold-20 text-gray-900';
 
   return (

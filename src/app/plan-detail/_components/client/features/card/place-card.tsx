@@ -4,18 +4,13 @@ import Image from 'next/image';
 import { useMemo } from 'react';
 
 import CategoryBadge from '@/components/commons/category-badge';
-import { DEFAULT_IMAGES } from '@/constants/plan.constants';
 import { cn } from '@/lib/utils';
 import { CategoryType } from '@/types/category.type';
+import { getDefaultPlanImage } from '@/lib/utils/get-default-plan-image';
 
 const PLACE_IMAGE_SIZE = {
   width: 120,
   height: 120,
-};
-
-const getRandomDefaultImage = () => {
-  const randomIndex = Math.floor(Math.random() * DEFAULT_IMAGES.length);
-  return DEFAULT_IMAGES[randomIndex];
 };
 
 const BUTTON_SIZE = {
@@ -68,7 +63,7 @@ const PlaceCard = ({
   isDragging?: boolean;
 }) => {
   const dayColorSet = dayNumber % 2 === 1 ? COLORS.ODD : COLORS.EVEN;
-  const defaultImage = useMemo(() => getRandomDefaultImage(), []);
+  const defaultImage = useMemo(() => getDefaultPlanImage(), []);
   const displayImageUrl = imageUrl || defaultImage;
 
   return (
@@ -90,7 +85,7 @@ const PlaceCard = ({
       <div className="flex w-full items-center gap-5 rounded-lg border border-gray-100 bg-white p-4 shadow-[0px_2px_4px_1px_rgba(0,0,0,0.10)] transition-shadow duration-200 hover:shadow-[0px_4px_8px_2px_rgba(0,0,0,0.15)]">
         {/* 장소 이미지 */}
         <div
-          className={`h-[${PLACE_IMAGE_SIZE.height}px] w-[${PLACE_IMAGE_SIZE.width}px] shrink-0 overflow-hidden rounded-lg bg-gray-100`}
+          className={`h-[120px] w-[120px] shrink-0 overflow-hidden rounded-lg bg-gray-100`}
         >
           <Image
             src={displayImageUrl}

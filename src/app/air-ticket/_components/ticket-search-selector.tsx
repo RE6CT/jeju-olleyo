@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import { TicketSearchSelectorProps } from '@/types/air-ticket.type';
 
-const TicketSearchSelector = () => {
-  const [passengers, setPassengers] = useState(1);
-  const [classType, setClassType] = useState('economy');
-
+const TicketSearchSelector = ({
+  passengers,
+  setPassengers,
+  classType,
+  setClassType,
+}: TicketSearchSelectorProps) => {
   const handlePassengerChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setPassengers(Number(e.target.value));
   };

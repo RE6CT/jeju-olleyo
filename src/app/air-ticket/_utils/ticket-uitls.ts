@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { Flight } from '../../../types/air-ticket-type';
+import { Flight } from '../../../types/air-ticket.type';
 
 export type SortKey =
   | 'airline'
@@ -94,6 +94,20 @@ const getAirportLabel = (code: string): string => {
 
 export const formatDateToString = (date: Date | string | null): string => {
   return date ? dayjs(date).format('YYYYMMDD') : '';
+};
+export const combineDateAndTime = (
+  date: Date,
+  timeStr: string | number,
+): string => {
+  const year = date.getFullYear();
+  const month = `${date.getMonth() + 1}`.padStart(2, '0');
+  const day = `${date.getDate()}`.padStart(2, '0');
+  const hours = timeStr.toString().slice(0, 2);
+  const minutes = timeStr.toString().slice(2, 4);
+
+  return new Date(
+    `${year}-${month}-${day}T${hours}:${minutes}:00`,
+  ).toISOString();
 };
 
 export { sortFlights, formatTime, getAirportLabel };

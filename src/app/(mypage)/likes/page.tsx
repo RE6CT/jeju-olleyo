@@ -1,7 +1,11 @@
 import { fetchGetAllLikesByUserId } from '@/lib/apis/like/get-like.api';
-import LikesList from './components/likes-list';
+import LikesList from './components/_client/likes-list';
 import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
-import MypageDataCounts from '../_components/mypage-data-counts';
+import MypageDataCounts from '../_components/_client/mypage-data-counts';
+
+export const metadata = {
+  title: '마이페이지 - 내가 좋아요한 일정',
+};
 
 const PAGE_SIZE = 4;
 
@@ -29,10 +33,10 @@ const LikesPage = async ({
 
   return (
     <div className="flex w-full flex-col gap-5">
-      <div className="flex flex-col gap-4">
+      <section className="flex flex-col gap-4">
         <MypageDataCounts pageType="likes" />
         <h2 className="semibold-28 w-full">내가 좋아요한 일정</h2>
-      </div>
+      </section>
       <LikesList likes={likes} />
     </div>
   );

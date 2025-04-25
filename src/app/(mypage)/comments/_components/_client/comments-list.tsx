@@ -5,9 +5,9 @@ import MyComment from './my-comment';
 import useAuth from '@/lib/hooks/use-auth';
 import { useGetDataCount } from '@/lib/queries/use-get-data-count';
 import Loading from '@/app/loading';
-import MypagePagination from '../../_components/mypage-pagination';
 import EmptyResult from '@/components/commons/empty-result-link';
 import { PATH } from '@/constants/path.constants';
+import MypagePagination from '@/app/(mypage)/_components/_client/mypage-pagination';
 
 /**
  * 댓글 리스트 컴포넌트
@@ -30,21 +30,27 @@ const CommentsList = ({
   return (
     <>
       {countData?.commentCount === 0 ? (
-        <EmptyResult
-          buttonText="인기 일정 보러가기"
-          href={PATH.COMMUNITY}
-          imagePath="/empty-result/empty_comments.png"
-        />
-      ) : (
-        <div className="flex flex-col gap-20">
-          <div className="flex flex-col gap-5">
-            {comments.map((comment) => (
-              <MyComment key={comment.planId} comment={comment} />
-            ))}
-          </div>
-
-          <MypagePagination pageType="comments" pageSize={pageSize} />
+        <div role="region" aria-label="댓글 없음">
+          <EmptyResult
+            buttonText="인기 일정 보러가기"
+            href={PATH.COMMUNITY}
+            imagePath="/empty-result/empty_comments.png"
+          />
         </div>
+      ) : (
+        <section className="flex flex-col gap-20">
+          <ul className="flex list-none flex-col gap-5 p-0">
+            {comments.map((comment) => (
+              <li key={comment.planId}>
+                <MyComment comment={comment} />
+              </li>
+            ))}
+          </ul>
+
+          <nav aria-label="페이지 탐색">
+            <MypagePagination pageType="comments" pageSize={pageSize} />
+          </nav>
+        </section>
       )}
     </>
   );

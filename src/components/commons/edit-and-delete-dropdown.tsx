@@ -7,14 +7,19 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { TEXT } from '@/constants/plan.constants';
-import { EditAndDeleteDropdownProps } from '@/types/common.type';
+import { Plan } from '@/types/plan.type';
 
 const PlanDropdown = ({
   plan,
   onEdit,
   onDelete,
   children,
-}: EditAndDeleteDropdownProps) => {
+}: {
+  plan: Plan;
+  onEdit: (planId: number) => void;
+  onDelete: (planId: number) => void;
+  children: React.ReactNode;
+}) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>

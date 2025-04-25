@@ -9,8 +9,8 @@ import useAuth from '@/lib/hooks/use-auth';
 import { useGetBookMarks } from '@/lib/queries/use-get-bookmarks';
 import { CategoryParamType, CategoryType } from '@/types/category.type';
 import { useRouter, useSearchParams } from 'next/navigation';
-import MypageDataCounts from '../../_components/mypage-data-counts';
-import MypagePagination from '../../_components/mypage-pagination';
+import MypageDataCounts from '../../../_components/_client/mypage-data-counts';
+import MypagePagination from '../../../_components/_client/mypage-pagination';
 import EmptyResult from '@/components/commons/empty-result-link';
 
 const PAGE_SIZE = 9;
@@ -53,11 +53,11 @@ const BookmarksList = ({ category }: { category: CategoryParamType }) => {
 
   return (
     <>
-      <div>
+      <section className="flex flex-col gap-4">
         <MypageDataCounts pageType="bookmarks" />
         <h2 className="semibold-28 w-full pb-5 pt-4">내가 북마크한 장소</h2>
 
-        <div className="w-fit">
+        <nav className="w-fit">
           <CategoryFilterTabs
             tabs={Object.keys(TAB_LIST) as CategoryType[]}
             defaultTab={CATEGORY_KR_MAP[category] as CategoryType}
@@ -66,30 +66,37 @@ const BookmarksList = ({ category }: { category: CategoryParamType }) => {
             tabPaddingClass="px-5 py-2"
             tabFontClass="semibold-16"
           />
-        </div>
-      </div>
+        </nav>
+      </section>
+
       {bookmarks?.length === 0 ? (
-        <EmptyResult
-          buttonText="인기 일정 보러가기"
-          href={PATH.COMMUNITY}
-          imagePath="/empty-result/empty_bookmarks.png"
-        />
-      ) : (
-        <div className="flex flex-col gap-20">
-          <div className="grid grid-cols-2 gap-x-3 gap-y-5 md:grid-cols-3">
-            {bookmarks?.map((place) => (
-              <PlaceCard
-                key={place.placeId}
-                placeId={place.placeId}
-                image={place.image}
-                title={place.title}
-                isBookmarked={true}
-                isDragging={false}
-              />
-            ))}
-          </div>
-          <MypagePagination pageType="bookmarks" pageSize={PAGE_SIZE} />
+        <div role="region" aria-label="북마크한 장소 없음">
+          <EmptyResult
+            buttonText="제주도 여행지 보러가기"
+            href={`${PATH.CATEGORIES}/all`}
+            imagePath="/empty-result/empty_bookmarks.png"
+          />
         </div>
+      ) : (
+        <section className="flex flex-col gap-20">
+          <ul className="grid list-none grid-cols-2 gap-x-3 gap-y-5 p-0 md:grid-cols-3">
+            {bookmarks?.map((place) => (
+              <li key={place.placeId}>
+                <PlaceCard
+                  placeId={place.placeId}
+                  image={place.image}
+                  title={place.title}
+                  isBookmarked={true}
+                  isDragging={false}
+                />
+              </li>
+            ))}
+          </ul>
+
+          <nav aria-label="페이지 탐색">
+            <MypagePagination pageType="bookmarks" pageSize={PAGE_SIZE} />
+          </nav>
+        </section>
       )}
     </>
   );

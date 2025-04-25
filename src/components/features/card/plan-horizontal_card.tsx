@@ -21,6 +21,7 @@ export const CARD = {
  * @param plan - 일정 데이터
  * @param onEdit - 수정 버튼 클릭 시 실행될 함수
  * @param onDelete - 삭제 버튼 클릭 시 실행될 함수
+ * @param onUpdate - 일정 업데이트 시 실행될 함수
  *
  * @example
  * ```tsx
@@ -28,11 +29,13 @@ export const CARD = {
  *   plan={planData}
  *   onEdit={(id) => handleEdit(id)}
  *   onDelete={(id) => handleDelete(id)}
+ *   onUpdate={(plan) => handleUpdate(plan)}
  * />
  * ```
  */
 const PlanHorizontalCard = ({
   plan,
+  nickname,
   onEdit,
   onDelete,
 }: PlanHorizontalCardProps) => {
@@ -88,7 +91,7 @@ const PlanHorizontalCard = ({
 
         {/* 닉네임 및 날짜 영역 */}
         <div className="medium-12 flex items-center gap-2 text-gray-500">
-          <span className="whitespace-nowrap">{plan.nickname}</span>
+          <span className="whitespace-nowrap">{nickname}</span>
           <Separator orientation="vertical" className="h-[11px] bg-gray-300" />
           <Duration
             start={plan.travelStartDate}

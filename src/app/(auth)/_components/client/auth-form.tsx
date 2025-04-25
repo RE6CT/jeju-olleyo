@@ -133,7 +133,7 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
           </fieldset>
 
           <div className="flex items-center justify-between pb-3">
-            <div className="flex items-center gap-2">
+            <div className="flex gap-2">
               {/* 아이디 저장 체크박스 */}
               <Controller
                 name="remember"
@@ -147,7 +147,7 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
                   />
                 )}
               />
-              <Label htmlFor="remember" className="regular-12 color-[#797979]">
+              <Label htmlFor="remember" className="mt-1">
                 아이디 저장
               </Label>
             </div>
@@ -161,18 +161,15 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
           >
             {isLoading ? AUTH_BUTTON_TEXT.LOADING : buttonText}
           </Button>
-          <nav className="flex flex-row justify-center">
+          <nav className="mt-4 flex flex-row justify-center gap-5">
             {/* 비밀번호 찾기 링크 */}
             <Link
               href={PATH.FORGOT_PASSWORD}
-              className="regular-12 p-2.5 text-gray-600"
+              className="regular-12 text-gray-600"
             >
               비밀번호 찾기
             </Link>
-            <Link
-              href={PATH.SIGNUP}
-              className="medium-12 p-2.5 text-secondary-300"
-            >
+            <Link href={PATH.SIGNUP} className="medium-12 text-secondary-300">
               회원가입
             </Link>
           </nav>

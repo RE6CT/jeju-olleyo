@@ -15,6 +15,9 @@ export const useInvalidateLikes = () => {
     queryClient.invalidateQueries({
       queryKey: ['filteredPlans'],
     });
+    queryClient.invalidateQueries({
+      queryKey: ['plansByPlaceId'],
+    });
   };
 
   return {

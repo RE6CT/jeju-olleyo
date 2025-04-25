@@ -58,7 +58,7 @@ const LoginPage = () => {
 
   return (
     <AuthLayout>
-      <header className="flex h-[146px] w-full items-center justify-center">
+      <header className="flex h-[146px] items-center justify-center">
         <Image
           src={'/logo/color_logo.png'}
           alt="logo"
@@ -82,7 +82,7 @@ const LoginPage = () => {
         />
       </section>
 
-      <section aria-label="소셜 로그인">
+      <section className="mt-[34px]" aria-label="소셜 로그인">
         <SocialLogin />
       </section>
     </AuthLayout>

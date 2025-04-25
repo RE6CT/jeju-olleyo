@@ -3,12 +3,12 @@ import { getCarRoute, createRouteInfo } from '@/lib/apis/map/directions';
 import { getLatLng, createMarkerImage } from '@/lib/utils/map.util';
 import { KakaoMapInstance, MarkerProps } from '@/types/kakao-map.type';
 import { DayPlaces, TabType } from '@/types/plan-detail.type';
+import { usePlanRouteSummary, usePlanStore } from '@/zustand/plan.store';
 
 /**
  * 여행 계획 지도 관련 로직을 관리하는 커스텀 훅
  * @param dayPlaces - 각 일차별 여행지 정보
  * @param activeTab - 현재 활성화된 탭 (전체보기 또는 특정 일차)
- * @param updateRouteSummary - 경로 요약 정보를 업데이트하는 콜백 함수
  */
 export const usePlanMap = ({
   dayPlaces,
@@ -17,6 +17,7 @@ export const usePlanMap = ({
   dayPlaces: DayPlaces;
   activeTab: TabType;
 }) => {
+  const { setRouteSummary } = usePlanRouteSummary();
   // 지도 인스턴스 상태
   const [map, setMap] = useState<KakaoMapInstance | null>(null);
   // 로딩 상태
@@ -141,6 +142,7 @@ export const usePlanMap = ({
             day: place.day,
             order: place.order,
             showDay: place.showDay,
+            address: place.address,
             onClick: () =>
               handleMarkerClick({
                 position,
@@ -148,6 +150,7 @@ export const usePlanMap = ({
                 day: place.day,
                 order: place.order,
                 showDay: place.showDay,
+                address: place.address,
               }),
           };
         })
@@ -208,7 +211,8 @@ export const usePlanMap = ({
         if (routeCache[cacheKey]) {
           const { path, sections } = routeCache[cacheKey];
           setPaths((prev) => ({ ...prev, [day]: path }));
-          //updateRouteSummary(day, sections);
+          const prevSummary = usePlanStore.getState().routeSummary;
+          setRouteSummary({ ...prevSummary, [day]: sections });
           return;
         }
 
@@ -225,14 +229,13 @@ export const usePlanMap = ({
           if (index === markers.length - 1) return { distance: 0, duration: 0 };
           return sections[index];
         });
-
-        //updateRouteSummary(day, placeSummaries);
+        const prevSummary = usePlanStore.getState().routeSummary;
+        setRouteSummary({ ...prevSummary, [day]: placeSummaries });
       } catch (error) {
-        console.error('경로 검색 중 오류 발생:', error);
         setError('경로 검색에 실패했습니다.');
       }
     },
-    [map, routeCache],
+    [map, routeCache, setRouteSummary],
   );
 
   /**

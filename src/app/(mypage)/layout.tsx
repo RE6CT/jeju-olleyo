@@ -1,4 +1,4 @@
-import MypageSidebar from './_components/mypage-sidebar';
+import MypageSidebar from './_components/_client/mypage-sidebar';
 
 const Layout = ({
   children,
@@ -6,7 +6,7 @@ const Layout = ({
   children: React.ReactNode;
 }>) => {
   return (
-    <div className="flex gap-10 bg-gray-50 px-9 py-12">
+    <div className="flex h-full min-w-[1024px] gap-10 bg-gray-50 px-9 py-12">
       <MypageSidebar className="sticky top-[132px] h-fit" />
       <div className="w-full">{children}</div>
     </div>

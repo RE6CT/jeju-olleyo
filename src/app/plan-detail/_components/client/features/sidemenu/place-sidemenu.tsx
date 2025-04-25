@@ -8,6 +8,8 @@ import { Place } from '@/types/search.type';
 import BookmarkSidemenu from './bookmark-sidemenu';
 import SearchSidemenu from './search-sidemenu';
 
+const CATEGORIES: CategoryType[] = ['전체', '명소', '맛집', '카페', '숙박'];
+
 const PlaceSidemenu = ({
   selectedDay,
   onAddPlace,
@@ -24,9 +26,7 @@ const PlaceSidemenu = ({
       {/* 북마크 섹션 */}
       <div className="rounded-[12px] border border-gray-200 p-5">
         <BookmarkSidemenu
-          filterTabs={
-            ['전체', '명소', '맛집', '카페', '숙박'] as CategoryType[]
-          }
+          filterTabs={CATEGORIES}
           activeFilterTab={activeBookmarkTab}
           onFilterTabChange={setActiveBookmarkTab}
           onAddPlace={onAddPlace}
@@ -37,9 +37,7 @@ const PlaceSidemenu = ({
       {/* 검색 섹션 */}
       <div className="rounded-[12px] border border-gray-200 p-5">
         <SearchSidemenu
-          filterTabs={
-            ['전체', '명소', '맛집', '카페', '숙박'] as CategoryType[]
-          }
+          filterTabs={CATEGORIES}
           activeFilterTab={activeSearchTab}
           onFilterTabChange={setActiveSearchTab}
           onAddPlace={onAddPlace}

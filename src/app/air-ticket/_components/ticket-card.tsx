@@ -1,14 +1,14 @@
-import { TicketCardProps } from '../../../types/air-ticket-type';
+import { TicketCardProps } from '../../../types/air-ticket.type';
 import { formatTime } from '../_utils/ticket-uitls';
 
-const TicketCard = ({ flight, idx }: TicketCardProps) => {
+const TicketCard = ({ flight, isSelected, onClick }: TicketCardProps) => {
   return (
     <div
-      key={idx}
-      className="flex items-center overflow-hidden rounded-lg bg-white p-4 text-sm shadow-lg transition-shadow duration-300 hover:shadow-xl"
+      onClick={onClick}
+      className={`flex cursor-pointer items-center overflow-hidden rounded-lg border p-4 text-sm transition-shadow duration-300 ${isSelected ? 'border-primary-400 bg-primary-100 shadow-xl' : 'border-transparent bg-white shadow-lg hover:shadow-xl'}`}
     >
       <img
-        src={`https://content.airhex.com/content/logos/airlines_${flight.flightId.slice(0, 2)}_100_50_r.png`}
+        src={`https://media.interparkcdn.net/interpark-tour/image/upload/q_auto,f_auto/air/airline/icon/${flight.flightId.slice(0, 2)}.png`}
         alt="항공사 로고"
         className="h-[60px] w-[60px] object-cover"
       />
@@ -21,12 +21,20 @@ const TicketCard = ({ flight, idx }: TicketCardProps) => {
         </div>
         <div className="mt-2 flex justify-start space-x-2 text-10 font-regular text-gray-500">
           <span className="mr-2 flex items-center">
-            <img src="icons/plane_departure.svg" className="h-3 w-3" />
+            <img
+              src="icons/plane_departure.svg"
+              alt="departure"
+              className="h-3 w-3"
+            />
             {formatTime(flight.depPlandTime)}
           </span>
           -
           <span className="flex items-center">
-            <img src="icons/plane_land.svg" className="h-3 w-3" />
+            <img
+              src="icons/plane_land.svg"
+              alt="plane_land"
+              className="h-3 w-3"
+            />
             {formatTime(flight.arrPlandTime)}
           </span>
         </div>

@@ -1,10 +1,22 @@
+'use client';
+
+import { usePathname } from 'next/navigation';
+
 /**
  * 웹사이트 푸터 컴포넌트
  * 로고, 개발자 정보, 디자이너 및 튜터 정보를 표시합니다.
  */
 const Footer = () => {
+  const pathname = usePathname();
+
+  const isHomePage = pathname === '/';
+
+  if (!isHomePage) {
+    return null;
+  }
+
   return (
-    <footer className="mx-auto flex w-full max-w-[1024px] flex-col items-center gap-[50px] px-4 py-6 md:flex-row md:gap-[100px] md:px-9 md:py-8">
+    <footer className="mx-auto flex w-full flex-col items-center gap-[50px] bg-gray-50 px-4 py-6 md:flex-row md:gap-[100px] md:px-9 md:py-8">
       {/* 로고 및 카피라이트 */}
       <div className="flex w-full shrink-0 flex-col items-center justify-center md:h-[189px] md:w-[244px]">
         <div className="flex flex-col items-start gap-2 self-stretch">
@@ -12,7 +24,7 @@ const Footer = () => {
             <img src="/logo/color_logo.png" alt="Logo" />
           </div>
           <p className="medium-14 self-stretch text-gray-600">
-            2025 리윅트. All right reserved.
+            2025 리윅트. All rights reserved.
           </p>
         </div>
       </div>

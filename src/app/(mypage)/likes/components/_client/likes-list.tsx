@@ -4,7 +4,7 @@ import PlanHorizontalCard from '@/components/features/card/plan-horizontal_card'
 import useAuth from '@/lib/hooks/use-auth';
 import { useGetDataCount } from '@/lib/queries/use-get-data-count';
 import { Plan } from '@/types/plan.type';
-import MypagePagination from '../../_components/mypage-pagination';
+import MypagePagination from '../../../_components/_client/mypage-pagination';
 import Loading from '@/app/loading';
 import EmptyResult from '@/components/commons/empty-result-link';
 import { PATH } from '@/constants/path.constants';
@@ -26,20 +26,27 @@ const LikesList = ({ likes }: { likes: Plan[] }) => {
   return (
     <>
       {countData?.likeCount === 0 ? (
-        <EmptyResult
-          buttonText="제주도 인기 장소 보러가기"
-          href={PATH.CATEGORIES}
-          imagePath="/empty-result/empty_likes.png"
-        />
-      ) : (
-        <div className="flex flex-col gap-20">
-          <div className="grid grid-cols-1 gap-6">
-            {likes?.map((plan) => (
-              <PlanHorizontalCard key={plan.planId} plan={plan} />
-            ))}
-          </div>
-          <MypagePagination pageType="likes" pageSize={PAGE_SIZE} />
+        <div role="region" aria-label="좋아요한 일정 없음">
+          <EmptyResult
+            buttonText="인기 일정 보러가기"
+            href={PATH.COMMUNITY}
+            imagePath="/empty-result/empty_likes.png"
+          />
         </div>
+      ) : (
+        <section className="flex flex-col gap-20">
+          <ul className="grid list-none grid-cols-1 gap-6 p-0">
+            {likes?.map((plan) => (
+              <li key={plan.planId}>
+                <PlanHorizontalCard plan={plan} nickname={plan.nickname} />
+              </li>
+            ))}
+          </ul>
+
+          <nav aria-label="페이지 탐색">
+            <MypagePagination pageType="likes" pageSize={PAGE_SIZE} />
+          </nav>
+        </section>
       )}
     </>
   );

@@ -1,6 +1,6 @@
 'use client';
 
-import { DayPlaces, TabType } from '@/types/plan-detail.type';
+import { DayPlaces } from '@/types/plan-detail.type';
 import { Plan } from '@/types/plan.type';
 import {
   usePlanSetTitle,
@@ -11,7 +11,7 @@ import {
   usePlanSetStartDate,
   usePlanSetEndDate,
   usePlanSetIsReadOnly,
-  usePlanSetPlanId,
+  usePlanSetId,
 } from '@/zustand/plan.store';
 import { useEffect, useState } from 'react';
 
@@ -41,7 +41,7 @@ const PlanForm = ({
   const setEndDate = usePlanSetEndDate();
   const setIsReadOnly = usePlanSetIsReadOnly();
   const setDayPlaces = usePlanSetDayPlaces();
-  const setPlanId = usePlanSetPlanId();
+  const setPlanId = usePlanSetId();
 
   // 초기값 설정
   useEffect(() => {
@@ -91,7 +91,7 @@ const PlanForm = ({
     setIsMounted(true);
   }, []);
 
-  if (!isMounted || !userId) {
+  if (!isMounted) {
     return null;
   }
 

@@ -1,53 +1,43 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Place } from '@/types/place.type';
-import { DetailIntroRaw } from '@/types/korea-tour.type';
-import { getBrowserClient } from '@/lib/supabase/client';
+import { useGetPlaceBasicInfo } from '@/lib/queries/use-get-place-basic-info';
 import PlaceModalView from './place-modal-view';
+import useAuth from '@/lib/hooks/use-auth';
+import { useGetPlaceDetailInfo } from '@/lib/queries/use-get-place-detail-info';
+import { useGetPlans } from '@/lib/queries/use-get-plans';
 
 const PlaceModal = ({
   placeId,
-  contentTypeId,
+  onAddPlace,
+  isBookmarked,
 }: {
   placeId: number;
-  contentTypeId: number;
+  onAddPlace?: () => void;
+  isBookmarked: boolean;
 }) => {
-  const [place, setPlace] = useState<Place | null>(null);
-  const [detailInfo, setDetailInfo] = useState<DetailIntroRaw | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const { user } = useAuth();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const supabase = await getBrowserClient();
+  const {
+    data: place,
+    isPending: placePending,
+    error: placeError,
+  } = useGetPlaceBasicInfo(placeId);
 
-        const { data: placeData, error: placeError } = await supabase
-          .from('places')
-          .select('*')
-          .eq('place_id', placeId)
-          .single();
+  const {
+    data: detailInfo,
+    isPending: detailPending,
+    error: detailError,
+  } = useGetPlaceDetailInfo(placeId, place?.content_type_id ?? 0);
 
-        if (placeError || !placeData) throw new Error('장소 정보 없음');
-        setPlace(placeData);
+  const {
+    data: planIncludingPlace,
+    isPending: planPending,
+    error: planError,
+  } = useGetPlans(placeId, user?.id ?? '');
 
-        const detailRes = await fetch(
-          `/api/korea-tour/detail?contentId=${placeId}&contentTypeId=${contentTypeId}`,
-        );
-        if (!detailRes.ok) throw new Error('상세정보 fetch 실패');
-
-        const detailJson = await detailRes.json();
-        setDetailInfo(detailJson);
-      } catch (err: any) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [placeId, contentTypeId]);
+  const loading = placePending || detailPending || planPending;
+  const error =
+    placeError?.message || detailError?.message || planError?.message;
 
   if (loading) {
     return (
@@ -63,7 +53,15 @@ const PlaceModal = ({
     );
   }
 
-  return <PlaceModalView place={place} detailInfo={detailInfo} />;
+  return (
+    <PlaceModalView
+      place={place}
+      detailInfo={detailInfo ?? null}
+      onAddPlace={onAddPlace}
+      isBookmarked={isBookmarked}
+      planIncludingPlace={planIncludingPlace!}
+    />
+  );
 };
 
 export default PlaceModal;

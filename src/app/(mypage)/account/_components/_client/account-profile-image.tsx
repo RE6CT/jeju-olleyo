@@ -55,27 +55,26 @@ const AccountProfileImage = ({
   };
 
   return (
-    <>
-      <div className="relative w-fit">
-        <ProfileImage
-          image={profileImage}
-          width={IMAGE_SIZE}
-          height={IMAGE_SIZE}
-          className="aspect-square"
+    <div
+      className="relative w-fit"
+      role="group"
+      aria-label="프로필 이미지 컨트롤"
+    >
+      <ProfileImage
+        image={profileImage}
+        width={IMAGE_SIZE}
+        height={IMAGE_SIZE}
+        className="aspect-square"
+      />
+      {provider === 'email' && (
+        <ProfileImageButton
+          onEdit={handleProfileImageEdit}
+          onDelete={handleProfileImageDelete}
+          aria-label="프로필 이미지 편집 옵션"
         />
-        {provider === 'email' && (
-          <ProfileImageButton
-            onEdit={handleProfileImageEdit}
-            onDelete={handleProfileImageDelete}
-          />
-        )}
-        <ProfileModal
-          userId={userId}
-          isModalOpen={isModalOpen}
-          setModalOpen={setModalOpen}
-        />
-      </div>
-    </>
+      )}
+      <ProfileModal isModalOpen={isModalOpen} setModalOpen={setModalOpen} />
+    </div>
   );
 };
 

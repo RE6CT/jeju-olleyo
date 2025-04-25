@@ -13,13 +13,11 @@ const PlanDropdown = ({
   plan,
   onEdit,
   onDelete,
-  onUpdate,
   children,
 }: {
   plan: Plan;
   onEdit: (planId: number) => void;
   onDelete: (planId: number) => void;
-  onUpdate?: (plan: Plan) => void;
   children: React.ReactNode;
 }) => {
   return (
@@ -39,12 +37,6 @@ const PlanDropdown = ({
           >
             <Trash2 className="mr-2 h-4 w-4" />
             {TEXT.delete}
-          </DropdownMenuItem>
-        )}
-        {onUpdate && (
-          <DropdownMenuItem onClick={() => onUpdate(plan)}>
-            <Pencil className="mr-2 h-4 w-4" />
-            {TEXT.update}
           </DropdownMenuItem>
         )}
       </DropdownMenuContent>

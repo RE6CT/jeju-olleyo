@@ -52,9 +52,9 @@ const PlaceDetailContent = ({
 
           <div className="mb-[10px] mt-[10px] flex items-center gap-2">
             <div className="bold-28 text-xl">{place.title}</div>
-            <div className="ml-auto">
+            {/* <div className="ml-auto">
               <BookmarkButton isBookmarked={isBookmarked} placeId={placeId} />
-            </div>
+            </div> */}
           </div>
 
           <div className="mt-2 space-y-[9.5px] text-gray-300">

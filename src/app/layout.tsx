@@ -11,6 +11,9 @@ import Providers from '@/config/tq-provider';
 export const metadata: Metadata = {
   title: '제주 올레요',
   description: '제주 여행을 떠나기 위한 일정 만들어요!',
+  icons: {
+    icon: '/logo/color_logo_single_bg.png',
+  },
 };
 const pretendard = localFont({
   src: '../../public/fonts/PretendardVariable.woff2',
@@ -24,13 +27,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="ko">
       <body
-        className={`${pretendard.variable} font-pretendard flex min-h-screen w-full flex-col items-center justify-center antialiased`}
+        className={`${pretendard.variable} font-pretendard flex flex-col items-center justify-center antialiased`}
       >
         <Providers>
           <AuthProvider>
-            <div className="flex w-full max-w-[1024px] flex-1 flex-col">
+            <div className="flex h-full w-full max-w-[1024px] flex-col">
               <Header />
               <main className="flex-1">{children}</main>
               <Footer />

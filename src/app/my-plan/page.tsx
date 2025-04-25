@@ -1,9 +1,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { Metadata } from 'next';
 
 import ErrorMessage from '@/components/features/alert/error-message';
 import { Button } from '@/components/ui/button';
 import { PATH } from '@/constants/path.constants';
+import { PLAN_PAGE_META } from '@/constants/plan.constants';
 import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 import { fetchGetAllPlansByUserId } from '@/lib/apis/plan/plan.api';
 
@@ -15,11 +17,12 @@ const IMAGE_CONSTANTS = {
     width: 37,
     height: 36,
   },
-  ADD_ICON: {
-    width: 20,
-    height: 20,
-  },
 } as const;
+
+export const metadata: Metadata = {
+  title: PLAN_PAGE_META.MY_PLAN.title,
+  description: PLAN_PAGE_META.MY_PLAN.description,
+};
 
 const MyPlanPage = async () => {
   try {
@@ -46,8 +49,8 @@ const MyPlanPage = async () => {
     const plans = await fetchGetAllPlansByUserId(user.id);
 
     return (
-      <div className="container mx-auto px-9 py-8">
-        <div className="mb-8 flex flex-col gap-4">
+      <main className="container mx-auto px-9 py-8">
+        <header className="mb-8 flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <h1 className="bold-28 leading-[130%]">지난 일정 보기</h1>
@@ -67,13 +70,15 @@ const MyPlanPage = async () => {
               </Button>
             </Link>
           </div>
+        </header>
+        <section>
           <PlanFilterSection
             plansList={plans ?? []}
             userId={user.id}
             userNickname={user.nickname}
           />
-        </div>
-      </div>
+        </section>
+      </main>
     );
   } catch (error) {
     return (

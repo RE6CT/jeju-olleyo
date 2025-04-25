@@ -19,7 +19,7 @@ const ScheduleCreatedModal = ({
       onClose={onClose}
       characterSrc="/character/happy_color.svg"
       title="일정 생성이 완료 되었어요!"
-      description="나 멋진 일정을 공개할까요?"
+      description="멋진 일정을 공개할까요?"
       primaryButton={{
         text: '공개하기',
         onClick: onPublicClick,

@@ -31,7 +31,17 @@ export const FilterInput = ({
   filter: FilterState;
   applyFilter: () => void;
 }) => (
-  <div className="flex w-[250px] flex-col gap-2 border-l border-gray-200 p-2">
+  <section className="flex flex-col gap-4">
+    <div className="flex items-center gap-2">
+      <h3 className="text-16 font-medium">검색</h3>
+      <input
+        type="text"
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+        placeholder="일정 제목을 입력하세요"
+        className="flex-1 rounded-md border p-2"
+      />
+    </div>
     {selectedFilter === FILTER_TYPES.PUBLIC ? (
       <div className="flex flex-col gap-2">
         {Object.values(PUBLIC_OPTIONS).map((option) => (
@@ -97,5 +107,5 @@ export const FilterInput = ({
     >
       적용
     </Button>
-  </div>
+  </section>
 );

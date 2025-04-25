@@ -12,6 +12,9 @@ export const ERROR_MESSAGES = {
   PHONE_DUPLICATE: '이미 사용중인 번호입니다.',
   PASSWORD_UPDATE_FAILED: '비밀번호 변경 중 오류가 발생했습니다.',
   PASSWORD_INVALID: '현재 비밀번호가 올바르지 않습니다.',
+  PLAN_DATA_MISSING: '일정 정보가 없습니다.',
+  PLAN_UPDATE_FAILED: '일정 업데이트에 실패했습니다.',
+  UNKNOWN_ERROR: '알 수 없는 오류가 발생했습니다.',
 };
 
 export const SUCCESS_MESSAGES = {

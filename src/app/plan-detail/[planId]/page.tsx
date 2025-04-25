@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { Metadata } from 'next';
 
 import PlanForm from '@/app/plan-detail/_components/client/plan-form';
 import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
@@ -6,8 +7,25 @@ import {
   fetchGetPlanById,
   fetchGetPlanDaysAndLocations,
 } from '@/lib/apis/plan/plan.api';
+import { PLAN_PAGE_META } from '@/constants/plan.constants';
 
 import NotFound from '@/app/plan-detail/_components/server/not-found';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { planId: string };
+}): Promise<Metadata> {
+  const planId = parseInt(params.planId);
+  const plan = await fetchGetPlanById(planId);
+
+  return {
+    title: plan.title
+      ? `${plan.title} | 제주올래`
+      : PLAN_PAGE_META.DEFAULT.title,
+    description: plan.description || PLAN_PAGE_META.DEFAULT.description,
+  };
+}
 
 const PlanDetailPage = async ({
   params,
@@ -22,14 +40,14 @@ const PlanDetailPage = async ({
   };
 
   try {
-    // 먼저 일정 정보를 가져옵니다.
-    const plan = await fetchGetPlanById(Number(params.planId));
+    // 병렬로 API 호출 실행
+    const [plan, { user }, dayPlaces] = await Promise.all([
+      fetchGetPlanById(Number(params.planId)),
+      fetchGetCurrentUser(),
+      fetchGetPlanDaysAndLocations(Number(params.planId)),
+    ]);
 
-    // 현재 로그인한 사용자 정보를 가져옵니다.
-    const { user } = await fetchGetCurrentUser();
     const userId = user?.id;
-
-    const dayPlaces = await fetchGetPlanDaysAndLocations(Number(params.planId));
 
     const initialPlan = {
       planId: plan.planId,

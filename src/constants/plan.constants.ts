@@ -17,6 +17,7 @@ export const TEXT = {
   dateSeparator: '-',
   edit: '수정하기',
   delete: '삭제하기',
+  update: '업데이트',
 } as const;
 
 export const ITEMS_PER_PAGE = 10; // 페이지당 표시할 일정 수
@@ -28,3 +29,18 @@ export const DEFAULT_IMAGES = [
   `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/plan-images/default/plan_default_3.png`,
   `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/plan-images/default/plan_default_4.png`,
 ];
+
+export const PLAN_PAGE_META = {
+  DEFAULT: {
+    title: '일정 상세',
+    description: '제주 여행 일정을 확인해보세요.',
+  },
+  MY_PLAN: {
+    title: '내 일정',
+    description: '나의 제주 여행 일정을 관리해보세요.',
+  },
+  NEW: {
+    title: '새 일정 만들기',
+    description: '새로운 제주 여행 일정을 만들어보세요.',
+  },
+} as const;

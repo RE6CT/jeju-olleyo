@@ -1,7 +1,7 @@
 import { CATEGORY_KR_MAP } from '@/constants/home.constants';
 import { getBrowserClient } from '@/lib/supabase/client';
 import { camelize } from '@/lib/utils/camelize';
-import { CategoryParamType } from '@/types/category.type';
+import { CategoryParamType, RegionType } from '@/types/category.type';
 import { getCurrentSession } from '../auth/auth-browser.api';
 
 /**
@@ -15,6 +15,7 @@ export const fetchGetPlacesByCategory = async (
   urlCategory: CategoryParamType,
   pageParam = 0,
   searchQuery?: string,
+  region: RegionType = '전체',
 ) => {
   const supabase = await getBrowserClient();
   const pageSize = 16; // 한 페이지에 표시할 아이템 수
@@ -52,6 +53,11 @@ export const fetchGetPlacesByCategory = async (
     countQuery = countQuery.or(
       `title.ilike.%${searchQuery}%,address.ilike.%${searchQuery}%`,
     );
+  }
+
+  if (region !== '전체') {
+    dataQuery = dataQuery.like('address', `제주특별자치도 ${region}%`);
+    countQuery = countQuery.like('address', `제주특별자치도 ${region}%`);
   }
 
   const [{ error: countError, count }, { error: dataError, data }] =

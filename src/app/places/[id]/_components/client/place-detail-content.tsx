@@ -77,7 +77,7 @@ const PlaceDetailContent = ({
           </div>
 
           {/* 지도영역 */}
-          <div className="mb-auto">
+          <div className="min-h-[150px] w-full">
             <PlaceLocation
               lat={place.lat}
               lng={place.lng}

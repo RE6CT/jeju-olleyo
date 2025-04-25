@@ -32,7 +32,7 @@ const PlaceLocation = ({
     },
   ];
   return (
-    <div className="pt-auto h-[150px] w-full">
+    <>
       <KakaoMap
         center={{ lat, lng }}
         level={3}
@@ -40,7 +40,7 @@ const PlaceLocation = ({
         onError={handleError}
       />
       {map && <Clusterer map={map} markers={markers} />}
-    </div>
+    </>
   );
 };
 

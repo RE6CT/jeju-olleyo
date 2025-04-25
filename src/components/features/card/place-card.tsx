@@ -35,19 +35,19 @@ const PlaceCard = ({
   };
 
   return (
-    <div
+    <article
       onClick={handleCardClick}
       draggable="false"
       className={`${className} cursor-pointer transition-all`}
     >
       <div className="relative flex flex-col gap-2">
-        <div className="relative aspect-square">
+        <figure className="relative aspect-square">
           <PlaceImage
             image={image}
             title={title}
             className="pointer-events-none rounded-12"
           />
-        </div>
+        </figure>
         <h4 className="medium-16 truncate px-2">{title}</h4>
         {/* 북마크 버튼 */}
         <BookmarkButton
@@ -56,7 +56,7 @@ const PlaceCard = ({
           className="absolute right-2 top-2"
         />
       </div>
-    </div>
+    </article>
   );
 };
 

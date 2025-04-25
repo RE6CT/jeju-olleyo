@@ -1,11 +1,13 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { Metadata } from 'next';
 
 import ErrorMessage from '@/components/features/alert/error-message';
 import { Button } from '@/components/ui/button';
 import { PATH } from '@/constants/path.constants';
 import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 import { fetchGetAllPlansByUserId } from '@/lib/apis/plan/plan.api';
+import { PLAN_PAGE_META } from '@/constants/plan.constants';
 
 import PlanFilterSection from '@/app/my-plan/_components/client/plan-filter-section';
 import AddIcon from '@/components/icons/add-icon';
@@ -20,6 +22,11 @@ const IMAGE_CONSTANTS = {
     height: 20,
   },
 } as const;
+
+export const metadata: Metadata = {
+  title: PLAN_PAGE_META.MY_PLAN.title,
+  description: PLAN_PAGE_META.MY_PLAN.description,
+};
 
 const MyPlanPage = async () => {
   try {

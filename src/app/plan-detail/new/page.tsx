@@ -1,9 +1,16 @@
 import Image from 'next/image';
+import { Metadata } from 'next';
+import { PLAN_PAGE_META } from '@/constants/plan.constants';
 
 import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 
 import NotFound from '@/app/plan-detail/_components/server/not-found';
 import PlanForm from '@/app/plan-detail/_components/client/plan-form';
+
+export const metadata: Metadata = {
+  title: PLAN_PAGE_META.NEW.title,
+  description: PLAN_PAGE_META.NEW.description,
+};
 
 const PlanDetailNewPage = async () => {
   const HAPPY_IMAGE = {

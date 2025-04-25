@@ -36,9 +36,9 @@ const PlaceDetailContent = ({
   const openSummary = rawSummary.replace(/<br\s*\/?>/gi, '\n');
 
   return (
-    <div className="mt-[73px] flex flex-col items-center justify-center px-9">
+    <div className="mt-[73px] flex flex-col items-center justify-center">
       <div className="flex gap-8">
-        <div className="relative aspect-square w-[479px] bg-no-repeat object-cover">
+        <div className="relative mr-[50px] aspect-square w-[479px] items-start bg-no-repeat object-cover">
           <PlaceImage image={place.image} title={place.title} />
         </div>
 

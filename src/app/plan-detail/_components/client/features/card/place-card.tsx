@@ -4,18 +4,13 @@ import Image from 'next/image';
 import { useMemo } from 'react';
 
 import CategoryBadge from '@/components/commons/category-badge';
-import { DEFAULT_IMAGES } from '@/constants/plan.constants';
 import { cn } from '@/lib/utils';
 import { CategoryType } from '@/types/category.type';
+import { getDefaultPlanImage } from '@/lib/utils/get-default-plan-image';
 
 const PLACE_IMAGE_SIZE = {
   width: 120,
   height: 120,
-};
-
-const getRandomDefaultImage = () => {
-  const randomIndex = Math.floor(Math.random() * DEFAULT_IMAGES.length);
-  return DEFAULT_IMAGES[randomIndex];
 };
 
 const BUTTON_SIZE = {
@@ -68,7 +63,7 @@ const PlaceCard = ({
   isDragging?: boolean;
 }) => {
   const dayColorSet = dayNumber % 2 === 1 ? COLORS.ODD : COLORS.EVEN;
-  const defaultImage = useMemo(() => getRandomDefaultImage(), []);
+  const defaultImage = useMemo(() => getDefaultPlanImage(), []);
   const displayImageUrl = imageUrl || defaultImage;
 
   return (

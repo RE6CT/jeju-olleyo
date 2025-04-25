@@ -40,11 +40,11 @@ const FlightSearch = () => {
   const { open } = useAlertStore();
   const { data: user } = useCurrentUser();
 
-  const dateAlert = () => {
+  const dateAlert = (message: string) => {
     open({
       type: 'warning',
       title: 'WARNING!',
-      message: '돌아오는 날짜는 가는 날짜보다 빠를 수 없습니다.',
+      message,
       confirmText: '확인',
     });
   };
@@ -65,7 +65,7 @@ const FlightSearch = () => {
     const flightsToSave = [selectedGoFlight, selectedReturnFlight].filter(
       (flight): flight is Flight => flight !== null,
     );
-
+    console.log('qwe', flightsToSave);
     for (const flight of flightsToSave) {
       const isGoFlight = flight === selectedGoFlight;
       const baseDate = isGoFlight ? startDate : endDate;
@@ -98,19 +98,20 @@ const FlightSearch = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!startDate || !endDate) {
-      dateAlert();
+    const goDate: string = formatDateToString(startDate);
+    const returnDate: string = formatDateToString(endDate);
+    if (departure === '') {
+      dateAlert('출발지를 선택해 주세요!');
+      return;
+    } else if (!startDate || !endDate) {
+      dateAlert('날짜를 선택해 주세요!');
+      return;
+    } else if (returnDate < goDate) {
+      dateAlert('돌아오는 날짜는 가는 날짜보다 빠를 수 없습니다.');
       return;
     }
     setLoading(true);
     setShowInnerButton(true);
-    const goDate: string = formatDateToString(startDate);
-    const returnDate: string = formatDateToString(endDate);
-    if (returnDate < goDate) {
-      setLoading(false);
-      dateAlert();
-      return;
-    }
 
     try {
       const [goRes, returnRes] = await Promise.all([
@@ -130,13 +131,21 @@ const FlightSearch = () => {
         }),
       ]);
 
-      const mapFlights = (items: FlightResponseItem[]): Flight[] =>
-        items.map((item) => ({
-          airlineKorean: item.airlineKorean,
-          flightId: item.domesticNum,
-          depPlandTime: item.domesticStartTime,
-          arrPlandTime: item.domesticArrivalTime,
-        }));
+      const mapFlights = (items: FlightResponseItem[]): Flight[] => {
+        const seen = new Set<string>();
+        return items
+          .map((item) => ({
+            airlineKorean: item.airlineKorean,
+            flightId: item.domesticNum,
+            depPlandTime: item.domesticStartTime,
+            arrPlandTime: item.domesticArrivalTime,
+          }))
+          .filter((flight) => {
+            if (seen.has(flight.flightId)) return false;
+            seen.add(flight.flightId);
+            return true;
+          });
+      };
 
       setGoFlights(mapFlights(goRes.data.items || []));
       setReturnFlights(mapFlights(returnRes.data.items || []));

@@ -14,6 +14,7 @@ import { PATH } from '@/constants/path.constants';
 import { nanoid } from 'nanoid';
 import { useQueryClient } from '@tanstack/react-query';
 import { usePlanStore } from '@/zustand/plan.store';
+import { getDefaultPlanImage } from '@/lib/utils/get-default-plan-image';
 
 // 복사/붙여넣기 기능을 관리하는 훅
 export const useScheduleCopyPaste = (
@@ -292,7 +293,7 @@ export const useScheduleSavePlan = (
           description,
           travelStartDate: startDate?.toISOString() || '',
           travelEndDate: endDate?.toISOString() || '',
-          planImg: planImg || null,
+          planImg: planImg || getDefaultPlanImage(),
           public: true,
           publicAt: new Date().toISOString(),
         };
@@ -305,7 +306,7 @@ export const useScheduleSavePlan = (
           description: description,
           travelStartDate: startDate?.toISOString() || '',
           travelEndDate: endDate?.toISOString() || '',
-          planImg: planImg || null,
+          planImg: planImg || getDefaultPlanImage(),
           public: true,
         });
         targetId = newPlanId;
@@ -357,7 +358,7 @@ export const useScheduleSavePlan = (
           description,
           travelStartDate: startDate?.toISOString() || '',
           travelEndDate: endDate?.toISOString() || '',
-          planImg: planImg || null,
+          planImg: planImg || getDefaultPlanImage(),
           public: false,
           publicAt: new Date().toISOString(),
         };
@@ -370,7 +371,7 @@ export const useScheduleSavePlan = (
           description: description,
           travelStartDate: startDate?.toISOString() || '',
           travelEndDate: endDate?.toISOString() || '',
-          planImg: planImg || null,
+          planImg: planImg || getDefaultPlanImage(),
           public: false,
         });
         targetId = newPlanId;

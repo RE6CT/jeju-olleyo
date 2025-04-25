@@ -95,12 +95,15 @@ const getAirportLabel = (code: string): string => {
 export const formatDateToString = (date: Date | string | null): string => {
   return date ? dayjs(date).format('YYYYMMDD') : '';
 };
-export const combineDateAndTime = (date: Date, timeStr: string): string => {
+export const combineDateAndTime = (
+  date: Date,
+  timeStr: string | number,
+): string => {
   const year = date.getFullYear();
   const month = `${date.getMonth() + 1}`.padStart(2, '0');
   const day = `${date.getDate()}`.padStart(2, '0');
-  const hours = timeStr.slice(0, 2);
-  const minutes = timeStr.slice(2, 4);
+  const hours = timeStr.toString().slice(0, 2);
+  const minutes = timeStr.toString().slice(2, 4);
 
   return new Date(
     `${year}-${month}-${day}T${hours}:${minutes}:00`,

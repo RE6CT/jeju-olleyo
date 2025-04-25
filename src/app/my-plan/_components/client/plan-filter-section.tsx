@@ -105,7 +105,7 @@ const PlanFilterSection = ({
   }
 
   return (
-    <div className="flex flex-col items-center">
+    <section className="flex flex-col items-center">
       <div className="flex w-full items-center justify-start gap-2">
         <Popover open={isOpen} onOpenChange={setIsOpen}>
           <PopoverTrigger
@@ -188,6 +188,7 @@ const PlanFilterSection = ({
                 nickname={userNickname}
                 onEdit={handleEdit}
                 onDelete={() => handleDelete(plan.planId)}
+                onUpdate={handleUpdatePlan}
               />
             ))}
           </div>
@@ -199,7 +200,7 @@ const PlanFilterSection = ({
           />
         </>
       )}
-    </div>
+    </section>
   );
 };
 

@@ -21,9 +21,16 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
       description: '요청한 장소 정보를 불러올 수 없습니다.',
     };
   }
+
+  const description = `${data.title}의 운영 시간, 전화번호, 주소, 위치 등을 확인해보세요.`;
+
   return {
-    title: `장소 상세정보 - ${data.title}`,
-    description: `${data.title}의 운영 시간, 전화번호, 주소, 위치 등을 파악해 보세요!`,
+    title: `제주도 여행지 상세정보 - ${data.title}`,
+    description,
+    openGraph: {
+      title: `제주도 여행지 상세정보 - ${data.title}`,
+      description,
+    },
     keywords: [
       '제주도',
       data.title,

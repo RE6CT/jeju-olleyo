@@ -137,7 +137,8 @@ export const fetchGetAllPlans = async (
   const { data, error: dataError } = await query;
   const { count, error: CountError } = await supabase
     .from('plans')
-    .select('*', { count: 'exact' });
+    .select('*', { count: 'exact' })
+    .eq('public', true);
 
   if (dataError) throw new Error(dataError.message);
   if (CountError) throw new Error(CountError.message);

@@ -33,10 +33,10 @@ const LikesPage = async ({
 
   return (
     <div className="flex w-full flex-col gap-5">
-      <div className="flex flex-col gap-4">
+      <section className="flex flex-col gap-4">
         <MypageDataCounts pageType="likes" />
         <h2 className="semibold-28 w-full">내가 좋아요한 일정</h2>
-      </div>
+      </section>
       <LikesList likes={likes} />
     </div>
   );

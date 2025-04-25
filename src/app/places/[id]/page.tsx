@@ -6,6 +6,39 @@ import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 import PlaceDetailContent from './_components/client/place-detail-content';
 import PlanIncludingPlace from './_components/server/plan-including-place';
 
+export async function generateMetadata({ params }: { params: { id: string } }) {
+  const supabase = getServerClient();
+
+  const { data, error } = await supabase
+    .from('places')
+    .select('title')
+    .eq('place_id', Number(params.id))
+    .single();
+
+  if (error || !data) {
+    return {
+      title: '장소 정보 없음',
+      description: '요청한 장소 정보를 불러올 수 없습니다.',
+    };
+  }
+  return {
+    title: `장소 상세정보 - ${data.title}`,
+    description: `${data.title}의 운영 시간, 전화번호, 주소, 위치 등을 파악해 보세요!`,
+    keywords: [
+      '제주도',
+      data.title,
+      '명소',
+      '제주도 명소',
+      '맛집',
+      '제주도 맛집',
+      '호텔',
+      '제주도 호텔',
+      '카페',
+      '제주도 카페',
+    ],
+  };
+}
+
 const PlaceDetailPage = async ({ params }: { params: { id: string } }) => {
   const supabase = await getServerClient();
   const { user } = await fetchGetCurrentUser();

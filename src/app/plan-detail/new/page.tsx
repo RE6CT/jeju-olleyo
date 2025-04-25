@@ -11,30 +11,34 @@ const PlanDetailNewPage = async () => {
     height: 36,
   };
 
-  const { user } = await fetchGetCurrentUser();
-  const userId = user?.id;
+  try {
+    const { user } = await fetchGetCurrentUser();
+    const userId = user?.id;
 
-  if (!userId) return <NotFound />;
+    if (!userId) return <NotFound />;
 
-  return (
-    <div className="flex flex-col">
-      <div className="border-b px-9">
-        {/* 헤더 영역 */}
-        <div className="flex gap-3 pt-6">
-          <span className="text-28 font-bold leading-[130%]">
-            내 일정 만들기
-          </span>
-          <Image
-            src="/character/happy_color.svg"
-            alt="happy icon"
-            width={HAPPY_IMAGE.width}
-            height={HAPPY_IMAGE.height}
-          />
+    return (
+      <div className="flex flex-col">
+        <div className="border-b px-9">
+          {/* 헤더 영역 */}
+          <div className="flex gap-3 pt-6">
+            <span className="text-28 font-bold leading-[130%]">
+              내 일정 만들기
+            </span>
+            <Image
+              src="/character/happy_color.svg"
+              alt="happy icon"
+              width={HAPPY_IMAGE.width}
+              height={HAPPY_IMAGE.height}
+            />
+          </div>
+          <PlanForm isReadOnly={false} />
         </div>
-        <PlanForm isReadOnly={false} />
       </div>
-    </div>
-  );
+    );
+  } catch (error) {
+    return <NotFound />;
+  }
 };
 
 export default PlanDetailNewPage;

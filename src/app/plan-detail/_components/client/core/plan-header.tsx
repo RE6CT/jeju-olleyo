@@ -2,7 +2,7 @@
 
 import { ko } from 'date-fns/locale';
 import Image from 'next/image';
-import { memo, useState } from 'react';
+import { memo, useState, ChangeEvent } from 'react';
 import DatePicker from 'react-datepicker';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,6 +12,7 @@ import { formatTravelPeriod } from '@/lib/utils/date';
 import 'react-datepicker/dist/react-datepicker.css'; // react-datepicker 캘린더 스타일 적용
 import { useChangeImageFile } from '@/lib/hooks/use-change-image-file';
 import { LoadingSpinner } from '@/components/commons/loading-spinner';
+import { fetchUploadPlanImage } from '@/lib/apis/plan/plan.api';
 import {
   usePlanTitle,
   usePlanDescription,
@@ -24,6 +25,8 @@ import {
   usePlanSetStartDate,
   usePlanSetEndDate,
   usePlanSetActiveTab,
+  usePlanSetImg,
+  usePlanId,
 } from '@/zustand/plan.store';
 
 const EDIT_ICON_CONSTANTS = {
@@ -40,6 +43,7 @@ const PlanHeader = memo(() => {
   const title = usePlanTitle();
   const description = usePlanDescription();
   const planImg = usePlanImg();
+  const planId = usePlanId();
   const isReadOnly = usePlanIsReadOnly();
   const startDate = usePlanStartDate();
   const endDate = usePlanEndDate();
@@ -48,6 +52,7 @@ const PlanHeader = memo(() => {
   const setTitle = usePlanSetTitle();
   const setDescription = usePlanSetDescription();
   const setActiveTab = usePlanSetActiveTab();
+  const setPlanImg = usePlanSetImg();
 
   const { previewImage, isUploading, handleFileChange } =
     useChangeImageFile(planImg);
@@ -61,6 +66,63 @@ const PlanHeader = memo(() => {
     if (end) {
       setIsCalendarOpen(false);
       setActiveTab(1);
+    }
+  };
+
+  const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      // 먼저 미리보기 이미지 업데이트
+      await handleFileChange(e);
+
+      if (planId) {
+        // 일정 수정 시: 서버에 이미지 업로드
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('planId', planId.toString());
+
+        // 최대 3번까지 재시도
+        let retryCount = 0;
+        const maxRetries = 3;
+        let response: string | null = null;
+
+        while (retryCount < maxRetries) {
+          try {
+            const result = await Promise.race([
+              fetchUploadPlanImage(formData),
+              new Promise(
+                (_, reject) =>
+                  setTimeout(
+                    () => reject(new Error('업로드 시간 초과')),
+                    10000,
+                  ), // 10초 타임아웃
+              ),
+            ]);
+
+            if (typeof result === 'string') {
+              response = result;
+              break;
+            }
+          } catch (error) {
+            retryCount++;
+            if (retryCount === maxRetries) throw error;
+            // 재시도 전 0.5초 대기
+            await new Promise((resolve) => setTimeout(resolve, 500));
+          }
+        }
+
+        if (response) {
+          setPlanImg(response);
+        }
+      } else {
+        // 일정 생성 시: 임시 URL만 저장
+        const imageUrl = URL.createObjectURL(file);
+        setPlanImg(imageUrl);
+      }
+    } catch (error) {
+      console.error('이미지 업로드 중 오류:', error);
     }
   };
 
@@ -79,7 +141,7 @@ const PlanHeader = memo(() => {
             id="thumbnail"
             accept="image/*"
             className="hidden px-[58px] py-7"
-            onChange={handleFileChange}
+            onChange={handleImageChange}
             disabled={isUploading || isReadOnly}
           />
           {previewImage ? (

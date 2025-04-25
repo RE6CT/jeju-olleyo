@@ -22,14 +22,14 @@ const PlanDetailPage = async ({
   };
 
   try {
-    // 먼저 일정 정보를 가져옵니다.
-    const plan = await fetchGetPlanById(Number(params.planId));
+    // 병렬로 API 호출 실행
+    const [plan, { user }, dayPlaces] = await Promise.all([
+      fetchGetPlanById(Number(params.planId)),
+      fetchGetCurrentUser(),
+      fetchGetPlanDaysAndLocations(Number(params.planId)),
+    ]);
 
-    // 현재 로그인한 사용자 정보를 가져옵니다.
-    const { user } = await fetchGetCurrentUser();
     const userId = user?.id;
-
-    const dayPlaces = await fetchGetPlanDaysAndLocations(Number(params.planId));
 
     const initialPlan = {
       planId: plan.planId,

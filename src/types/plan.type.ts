@@ -95,9 +95,11 @@ export type PlanHorizontalCardProps = {
   /** 작성자 닉네임 (선택적) */
   nickname?: string;
   /** 수정 핸들러 함수 */
-  onEdit?: (id: number) => void;
+  onEdit?: (planId: number) => void;
   /** 삭제 핸들러 함수 */
-  onDelete?: (id: number) => void;
+  onDelete?: (planId: number) => void;
+  /** 업데이트 핸들러 함수 */
+  onUpdate?: (plan: Plan) => void;
 };
 
 /**
@@ -176,12 +178,12 @@ export type PlanState = {
   // 계획 기본 정보
   title: string;
   description: string;
-  planImg: string;
+  planImg: string | null;
   isReadOnly: boolean;
   planId: number;
   setTitle: (title: string) => void;
   setDescription: (description: string) => void;
-  setPlanImg: (planImg: string) => void;
+  setPlanImg: (planImg: string | null) => void;
   setIsReadOnly: (isReadOnly: boolean) => void;
   setPlanId: (planId: number) => void;
 
@@ -190,6 +192,13 @@ export type PlanState = {
   setDayPlaces: (dayPlaces: DayPlaces) => void;
   activeTab: TabType; // 현재 활성화된 탭
   setActiveTab: (activeTab: TabType) => void;
+
+  routeSummary: {
+    [key: number]: { distance: number; duration: number }[];
+  };
+  setRouteSummary: (routeSummary: {
+    [key: number]: { distance: number; duration: number }[];
+  }) => void;
 };
 
 /**

@@ -1,12 +1,10 @@
 import { Button } from '@/components/ui/button';
-
 import { DateOptionsProps } from '../../../types/air-ticket-type';
 
 const DateOptions = ({
-  formData,
-  setFormData,
-  field,
   baseDateStr,
+  setStartDate,
+  startDate,
 }: DateOptionsProps) => {
   if (!baseDateStr) return null;
 
@@ -23,20 +21,27 @@ const DateOptions = ({
   });
 
   return (
-    <div className="mt-2 flex gap-2">
+    <div className="mb-[30px] mt-4 flex gap-2">
       {dates.map((date) => {
         const dateStr = date.toISOString().split('T')[0];
         const display = `${date.getMonth() + 1}.${date.getDate()}`;
-        const isSelected = formData[field] === dateStr;
+        const selectedDateStr = startDate
+          ? startDate.toISOString().split('T')[0]
+          : '';
+        const isSelected = selectedDateStr === dateStr;
 
         return (
           <Button
             key={dateStr}
             type="button"
             onClick={() => {
-              setFormData((prev) => ({ ...prev, [field]: dateStr }));
+              setStartDate?.(date);
             }}
-            className={`rounded-full border px-3 py-1 text-sm font-semibold text-black hover:bg-primary-100 ${isSelected ? 'border-primary-500 bg-primary-100' : 'border-gray-600 bg-white'}`}
+            className={`rounded-full border px-3 py-1 text-sm font-semibold text-black hover:bg-primary-100 ${
+              isSelected
+                ? 'border-primary-500 bg-primary-100'
+                : 'border-gray-600 bg-white'
+            }`}
           >
             {display}
           </Button>

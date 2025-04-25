@@ -30,22 +30,27 @@ const CategoryRegionTabs = ({
   };
 
   return (
-    <div className="flex w-fit items-center gap-3">
+    <ul className="flex w-fit list-none items-center gap-3 p-0" role="tablist">
       {tabs.map((tab) => (
-        <button
-          key={tab}
-          onClick={() => handleTabClick(tab)}
-          className={cn(
-            'semibold-16 flex flex-1 items-center justify-center gap-[10px] whitespace-nowrap rounded-[28px] px-5 py-2 transition-all',
-            activeTab === tab
-              ? 'border border-primary-500 bg-primary-100 text-primary-800'
-              : 'border-[0.6px] border-gray-600 text-gray-600 hover:text-gray-900',
-          )}
-        >
-          {tab}
-        </button>
+        <li key={tab} role="presentation">
+          <button
+            onClick={() => handleTabClick(tab)}
+            className={cn(
+              'semibold-16 flex flex-1 items-center justify-center gap-[10px] whitespace-nowrap rounded-[28px] px-5 py-2 transition-all',
+              activeTab === tab
+                ? 'border border-primary-500 bg-primary-100 text-primary-800'
+                : 'border-[0.6px] border-gray-600 text-gray-600 hover:text-gray-900',
+            )}
+            role="tab"
+            aria-selected={activeTab === tab}
+            aria-controls={`tabpanel-${tab}`}
+            id={`tab-${tab}`}
+          >
+            {tab}
+          </button>
+        </li>
       ))}
-    </div>
+    </ul>
   );
 };
 

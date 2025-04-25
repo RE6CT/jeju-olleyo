@@ -24,6 +24,7 @@ import { usePopover } from '@/lib/hooks/use-popover';
 import { useRouter } from 'next/navigation';
 import { PATH } from '@/constants/path.constants';
 import EmptyResult from '@/components/commons/empty-result-link';
+import { useUpdatePlanMutation } from '@/lib/mutations/use-update-plan-mutation';
 
 /**
  * 여행 계획 필터 섹션 컴포넌트
@@ -52,6 +53,7 @@ const PlanFilterSection = ({
   userNickname: string;
 }) => {
   const router = useRouter();
+  const { mutate: updatePlan } = useUpdatePlanMutation(userId);
 
   const {
     filter,
@@ -92,6 +94,10 @@ const PlanFilterSection = ({
 
   const handleEdit = (planId: number) => {
     router.push(`${PATH.PLAN_DETAIL}/${planId}`);
+  };
+
+  const handleUpdatePlan = (updatedPlan: Plan) => {
+    updatePlan(updatedPlan);
   };
 
   if (isPlansLoading) {
@@ -182,6 +188,7 @@ const PlanFilterSection = ({
                 nickname={userNickname}
                 onEdit={handleEdit}
                 onDelete={() => handleDelete(plan.planId)}
+                onUpdate={handleUpdatePlan}
               />
             ))}
           </div>

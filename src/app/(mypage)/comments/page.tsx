@@ -36,11 +36,11 @@ const CommentsPage = async ({
 
   return (
     <div className="flex w-full flex-col gap-5">
-      <div className="flex flex-col gap-4">
+      <section className="flex flex-col gap-4">
         <MypageDataCounts pageType="comments" />
         <h2 className="semibold-28 w-full">내가 쓴 댓글</h2>
-        <CommentsList comments={comments} pageSize={PAGE_SIZE} />
-      </div>
+      </section>
+      <CommentsList comments={comments} pageSize={PAGE_SIZE} />
     </div>
   );
 };

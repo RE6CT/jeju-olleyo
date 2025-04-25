@@ -8,6 +8,7 @@ import { CategoryType } from '@/types/category.type';
 import BookmarkIcon from '@/components/commons/bookmark-icon';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import PlaceModal from '@/components/features/plan/place-modal';
+import { getDefaultPlanImage } from '@/lib/utils/get-default-plan-image';
 
 const PLACE_IMAGE_SIZE = {
   width: 40,
@@ -16,18 +17,6 @@ const PLACE_IMAGE_SIZE = {
 const ADD_PLACE_ICON_SIZE = {
   width: 20,
   height: 20,
-};
-
-const DEFAULT_IMAGES = [
-  `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/plan-images/default/plan_default_1.png`,
-  `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/plan-images/default/plan_default_2.png`,
-  `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/plan-images/default/plan_default_3.png`,
-  `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/plan-images/default/plan_default_4.png`,
-];
-
-const getRandomDefaultImage = () => {
-  const randomIndex = Math.floor(Math.random() * DEFAULT_IMAGES.length);
-  return DEFAULT_IMAGES[randomIndex];
 };
 
 const handleImageLoadError = (e: React.SyntheticEvent<HTMLImageElement>) => {
@@ -53,7 +42,7 @@ const PlaceCardSidemenu = ({
   onAddPlace?: () => void;
   placeId: number;
 }) => {
-  const defaultImage = useMemo(() => getRandomDefaultImage(), []);
+  const defaultImage = useMemo(() => getDefaultPlanImage(), []);
   const displayImageUrl = imageUrl || defaultImage;
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);

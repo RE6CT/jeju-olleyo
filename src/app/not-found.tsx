@@ -5,7 +5,7 @@ import EmptyResult from '@/components/commons/empty-result-link';
 
 const NotFound = () => {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-white px-4 text-center">
+    <div className="flex h-full flex-col items-center justify-center bg-white px-4 text-center">
       <EmptyResult
         buttonText="홈으로 돌아가기"
         href={PATH.HOME}

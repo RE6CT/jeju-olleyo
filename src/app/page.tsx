@@ -19,7 +19,7 @@ export const revalidate = 86400; // 24시간마다 재검증
 
 const Home = () => {
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex flex-col">
       {/* 카테고리 탭 영역 */}
       <section>
         <CategoryTabs />

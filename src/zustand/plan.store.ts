@@ -29,6 +29,19 @@ export const usePlanStore = create<PlanState>((set) => ({
   // 경로 요약 정보
   routeSummary: {},
   setRouteSummary: (routeSummary) => set({ routeSummary }),
+
+  // 이미지 업데이트 후 상태 초기화 함수 추가
+  resetPlanState: () =>
+    set({
+      title: '',
+      description: '',
+      planImg: null,
+      isReadOnly: false,
+      planId: 0,
+      dayPlaces: {},
+      activeTab: '전체보기',
+      routeSummary: {},
+    }),
 }));
 
 // Selectors
@@ -77,3 +90,6 @@ export const useScheduleModalStore = create<ScheduleModalStore>((set) => ({
   setIsPublicModalOpen: (isOpen) => set({ isPublicModalOpen: isOpen }),
   setDayToDelete: (day) => set({ dayToDelete: day }),
 }));
+
+export const usePlanResetState = () =>
+  usePlanStore((state) => state.resetPlanState);

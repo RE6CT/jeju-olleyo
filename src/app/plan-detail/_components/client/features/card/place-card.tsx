@@ -6,7 +6,7 @@ import { useMemo } from 'react';
 import CategoryBadge from '@/components/commons/category-badge';
 import { cn } from '@/lib/utils';
 import { CategoryType } from '@/types/category.type';
-import { getDefaultPlanImage } from '@/lib/utils/get-default-plan-image';
+import { getDefaultPlanOrPlaceImage } from '@/lib/utils/get-default-plan-image';
 
 const PLACE_IMAGE_SIZE = {
   width: 92,
@@ -39,6 +39,7 @@ const PlaceCard = ({
   index,
   dayNumber,
   category,
+  placeId,
   title,
   address,
   distance,
@@ -52,6 +53,7 @@ const PlaceCard = ({
   index: number;
   dayNumber: number;
   category: string;
+  placeId: number;
   title: string;
   address: string;
   distance?: number;
@@ -63,7 +65,7 @@ const PlaceCard = ({
   isDragging?: boolean;
 }) => {
   const dayColorSet = dayNumber % 2 === 1 ? COLORS.ODD : COLORS.EVEN;
-  const defaultImage = useMemo(() => getDefaultPlanImage(), []);
+  const defaultImage = useMemo(() => getDefaultPlanOrPlaceImage(placeId), []);
   const displayImageUrl = imageUrl || defaultImage;
 
   return (

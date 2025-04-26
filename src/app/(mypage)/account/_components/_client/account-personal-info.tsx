@@ -20,8 +20,8 @@ const PersonalInfo = ({
   phone,
 }: {
   userId: string;
-  email: string;
-  phone: string;
+  email: string | null;
+  phone: string | null;
 }) => {
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const { successToast } = useCustomToast();
@@ -41,7 +41,7 @@ const PersonalInfo = ({
   } = useForm<PhoneValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      phone: phone,
+      phone: phone || '',
     },
     mode: 'onChange',
   });

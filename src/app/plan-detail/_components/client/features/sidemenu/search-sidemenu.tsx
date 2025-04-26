@@ -53,25 +53,68 @@ const SearchSidemenu = ({
   const [maxVisiblePages, setMaxVisiblePages] = useState(3);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [isDaySelectModalOpen, setIsDaySelectModalOpen] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const resizeTimeoutRef = useRef<NodeJS.Timeout>();
   const listRef = useRef<HTMLDivElement>(null);
+  const searchTimeoutRef = useRef<NodeJS.Timeout>();
+  const [containerHeight, setContainerHeight] = useState(0);
 
   const { data: user } = useCurrentUser();
   const userId = user?.id || null;
 
   const { toggleBookmark, isBookmarked } = useBookmarkQuery(userId);
 
-  const filteredPlaces = places.filter((place) => {
-    const matchesCategory =
-      activeFilterTab === '전체' || place.category === activeFilterTab;
-    const matchesSearch =
-      place.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      place.address.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
+  const filteredPlaces = useMemo(() => {
+    return places.filter((place) => {
+      const matchesCategory =
+        activeFilterTab === '전체' || place.category === activeFilterTab;
+      const matchesSearch =
+        place.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        place.address.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesCategory && matchesSearch;
+    });
+  }, [places, searchQuery, activeFilterTab]);
 
   const totalPages = Math.ceil(filteredPlaces.length / ITEMS_PER_PAGE);
+
+  // 현재 페이지의 아이템들을 가져옴
+  const currentPageItems = filteredPlaces.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE,
+  );
+
+  // 접힌 상태일 때는 현재 페이지 아이템 중 처음 3개만, 펼친 상태일 때는 모든 아이템이 보이도록 현재 페이지 아이템을 가져옴
+  const displayedPlaces = isExpanded
+    ? currentPageItems
+    : currentPageItems.slice(0, ITEMS_PER_PAGE);
+
+  // 컨테이너 높이 계산
+  useEffect(() => {
+    if (containerRef.current) {
+      const height = containerRef.current.offsetHeight;
+      setContainerHeight(height);
+    }
+  }, [displayedPlaces.length, isExpanded]);
+
+  // 검색어가 변경될 때 페이지를 1로 초기화
+  useEffect(() => {
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+
+    setIsSearching(true);
+    searchTimeoutRef.current = setTimeout(() => {
+      setCurrentPage(1);
+      setIsSearching(false);
+    }, 300);
+
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+    };
+  }, [searchQuery, activeFilterTab]);
 
   const calculateMaxVisiblePages = useCallback(() => {
     if (!containerRef.current) return 3;
@@ -167,17 +210,6 @@ const SearchSidemenu = ({
     }
   };
 
-  // 현재 페이지의 아이템들을 가져옴
-  const currentPageItems = filteredPlaces.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE,
-  );
-
-  // 접힌 상태일 때는 현재 페이지 아이템 중 처음 3개만, 펼친 상태일 때는 모든 아이템이 보이도록 현재 페이지 아이템을 가져옴
-  const displayedPlaces = isExpanded
-    ? currentPageItems
-    : currentPageItems.slice(0, ITEMS_PER_PAGE);
-
   if (isLoading) {
     return (
       <PlaceSidemenuLayout
@@ -222,9 +254,9 @@ const SearchSidemenu = ({
               {displayedPlaces.map((place) => (
                 <motion.div
                   key={place.id}
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
                   transition={{ duration: 0.2 }}
                 >
                   <PlaceCardSidemenu
@@ -257,7 +289,7 @@ const SearchSidemenu = ({
             )}
           </div>
         ) : (
-          <div className="flex items-center justify-center p-4">
+          <div className="flex h-full items-center justify-center p-4">
             <p>검색 결과가 없습니다.</p>
           </div>
         )}

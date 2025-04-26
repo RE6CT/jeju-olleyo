@@ -15,8 +15,7 @@ import PlaceCardSidemenu from '../card/place-card-sidemenu';
 import PlaceSidemenuLayout from './place-sidemenu-layout';
 import { useCurrentUser } from '@/lib/queries/auth-queries';
 
-const ITEMS_PER_PAGE = 7;
-const INITIAL_ITEMS = 3;
+const ITEMS_PER_PAGE = 5;
 const NAVIGATION_BUTTON_WIDTH = 42.4;
 const NAVIGATION_BUTTON_GAP = 12;
 const BUTTON_WIDTH = 24;
@@ -48,7 +47,7 @@ const SearchSidemenu = ({
   const [places, setPlaces] = useState<Place[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-  const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const [isExpanded, setIsExpanded] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [maxVisiblePages, setMaxVisiblePages] = useState(3);
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -176,7 +175,7 @@ const SearchSidemenu = ({
   // 접힌 상태일 때는 현재 페이지 아이템 중 처음 3개만, 펼친 상태일 때는 모든 아이템이 보이도록 현재 페이지 아이템을 가져옴
   const displayedPlaces = isExpanded
     ? currentPageItems
-    : currentPageItems.slice(0, INITIAL_ITEMS);
+    : currentPageItems.slice(0, ITEMS_PER_PAGE);
 
   const searchBar = (
     <div className="w-[240px] rounded-[12px] bg-gray-100 px-3 py-2">
@@ -244,14 +243,14 @@ const SearchSidemenu = ({
                 </motion.div>
               ))}
             </AnimatePresence>
-            {currentPageItems.length > INITIAL_ITEMS && (
+            {/* {currentPageItems.length > INITIAL_ITEMS && (
               <Button
                 className="flex h-[36px] w-full flex-shrink-0 items-center justify-center gap-1 rounded-xl border border-secondary-300 bg-gray-50 text-sm font-normal text-secondary-300 transition-colors hover:bg-gray-100"
                 onClick={toggleExpand}
               >
                 {isExpanded ? '접기' : '더보기'}
               </Button>
-            )}
+            )} */}
             {isExpanded && totalPages > 1 && (
               <DynamicPagination
                 currentPage={currentPage}

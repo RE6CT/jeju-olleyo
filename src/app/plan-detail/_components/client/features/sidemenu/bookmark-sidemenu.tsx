@@ -175,7 +175,7 @@ const BookmarkSidemenu = ({
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="space-y-2 overflow-hidden"
+            className="space-y-2 overflow-hidden pb-5"
             ref={containerRef}
           >
             {isCountLoading ? (

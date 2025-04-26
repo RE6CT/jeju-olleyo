@@ -24,7 +24,7 @@ const PlaceSidemenu = ({
   return (
     <div className="w-[280px] space-y-6">
       {/* 북마크 섹션 */}
-      <div className="rounded-[12px] border border-gray-200 p-5">
+      <div className="rounded-[12px] border border-gray-200 px-5">
         <BookmarkSidemenu
           filterTabs={CATEGORIES}
           activeFilterTab={activeBookmarkTab}

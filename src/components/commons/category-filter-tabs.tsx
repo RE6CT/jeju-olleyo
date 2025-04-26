@@ -34,7 +34,7 @@ const CategoryFilterTabs = ({
           key={tab}
           onClick={() => handleTabClick(tab)}
           className={cn(
-            'flex flex-1 items-center justify-center gap-[10px] whitespace-nowrap rounded-[28px] py-1 transition-all',
+            'flex flex-1 items-center justify-center whitespace-nowrap rounded-[28px] py-1 transition-all',
             tabFontClass,
             tabPaddingClass,
             activeTab === tab

@@ -9,8 +9,8 @@ import { CategoryType } from '@/types/category.type';
 import { getDefaultPlanImage } from '@/lib/utils/get-default-plan-image';
 
 const PLACE_IMAGE_SIZE = {
-  width: 120,
-  height: 120,
+  width: 92,
+  height: 92,
 };
 
 const BUTTON_SIZE = {
@@ -82,10 +82,10 @@ const PlaceCard = ({
       </div>
 
       {/* 카드 본문 */}
-      <div className="flex w-full items-center gap-5 rounded-lg border border-gray-100 bg-white p-4 shadow-[0px_2px_4px_1px_rgba(0,0,0,0.10)] transition-shadow duration-200 hover:shadow-[0px_4px_8px_2px_rgba(0,0,0,0.15)]">
+      <div className="flex w-full items-center gap-5 rounded-lg border border-gray-100 bg-white p-3 shadow-[0px_2px_4px_1px_rgba(0,0,0,0.10)] transition-shadow duration-200 hover:shadow-[0px_4px_8px_2px_rgba(0,0,0,0.15)]">
         {/* 장소 이미지 */}
         <div
-          className={`h-[120px] w-[120px] shrink-0 overflow-hidden rounded-lg bg-gray-100`}
+          className={`h-[92px] w-[92px] shrink-0 overflow-hidden rounded-lg bg-gray-100`}
         >
           <Image
             src={displayImageUrl}
@@ -97,26 +97,24 @@ const PlaceCard = ({
         </div>
 
         {/* 장소 정보 */}
-        <div className="flex flex-1 shrink-0 flex-col items-start gap-2">
+        <div className="flex h-[92px] flex-1 shrink-0 flex-col items-start justify-start gap-1">
           <div className="w-fit">
             <CategoryBadge
               category={category as CategoryType}
               badgeType="card"
               variant="primary"
               className={cn(
-                'inline-flex h-[20px] items-center justify-center rounded-[10px] border-[0.5px] px-2 text-10 font-normal',
+                'inline-flex h-[20px] items-center justify-center rounded-[10px] border-[0.5px] px-2 py-[2px] text-10 font-normal',
                 dayColorSet.border,
                 dayColorSet.text,
               )}
             />
           </div>
           <div className="flex w-full flex-col">
-            <span className="semibold-20 font-[600] text-gray-900">
+            <span className="semibold-16 font-semibold text-gray-900">
               {title}
             </span>
-            <span className="regular-16 font-[400] text-gray-400">
-              {address}
-            </span>
+            <span className="regular-12 text-gray-400">{address}</span>
           </div>
           {!isLastItem && (
             <div className="flex items-center gap-1 text-12">

@@ -73,7 +73,7 @@ const DynamicPagination = ({
   const pageNumbers = getPageNumbers();
 
   return (
-    <div className="mt-6 flex justify-center gap-3">
+    <div className="mt-3 flex justify-center gap-3">
       <button
         onClick={handlePrevClick}
         disabled={currentPage === 1}

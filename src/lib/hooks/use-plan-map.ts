@@ -4,6 +4,7 @@ import { getLatLng, createMarkerImage } from '@/lib/utils/map.util';
 import { KakaoMapInstance, MarkerProps } from '@/types/kakao-map.type';
 import { DayPlaces, TabType } from '@/types/plan-detail.type';
 import { usePlanRouteSummary, usePlanStore } from '@/zustand/plan.store';
+import { MAP_ZOOM_LEVEL } from '@/constants/map.constants';
 
 /**
  * 여행 계획 지도 관련 로직을 관리하는 커스텀 훅
@@ -84,7 +85,7 @@ export const usePlanMap = ({
         );
 
         map.setCenter(position);
-        map.setLevel(4);
+        map.setLevel(MAP_ZOOM_LEVEL.CLICK);
       } catch (error) {
         console.error('마커 포커스 중 오류 발생:', error);
       }

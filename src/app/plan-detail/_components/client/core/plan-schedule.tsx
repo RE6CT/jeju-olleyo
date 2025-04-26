@@ -10,7 +10,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 import { calculateTotalDays, formatDayDate } from '@/lib/utils/date';
-import PlaceSidemenu from '../features/sidemenu/place-sidemenu';
 import { DragDropContext } from '@hello-pangea/dnd';
 import ScheduleDeleteModal from '../features/modal/schedule-delete-modal';
 import ScheduleSaveModal from '../features/modal/schedule-save-modal';
@@ -172,23 +171,18 @@ const PlanSchedule = memo(() => {
   const { copiedDay, handleCopyDayPlaces, handlePasteDayPlaces } =
     useScheduleCopyPaste(dayPlaces, setDayPlaces);
 
-  const {
-    handleAddPlace,
-    handleRemovePlace,
-    handleDragEnd,
-    handleDeleteDayPlaces,
-  } = useSchedulePlaces(
-    dayPlaces,
-    setDayPlaces,
-    isReadOnly,
-    setIsDeleteModalOpen,
-    dayToDelete,
-    setDayToDelete,
-  );
+  const { handleRemovePlace, handleDragEnd, handleDeleteDayPlaces } =
+    useSchedulePlaces(
+      dayPlaces,
+      setDayPlaces,
+      isReadOnly,
+      setIsDeleteModalOpen,
+      dayToDelete,
+      setDayToDelete,
+    );
 
   const dayCount = calculateTotalDays(startDate, endDate);
   const planId = usePlanId();
-  const { data: comments } = useGetComments(planId);
 
   const { toast } = useToast();
 
@@ -405,22 +399,6 @@ const PlanSchedule = memo(() => {
                   )}
                 </div>
               </div>
-              {!isReadOnly && (
-                <div className="flex flex-col">
-                  <PlaceSidemenu
-                    selectedDay={
-                      activeTab === '전체보기' ? null : (activeTab as number)
-                    }
-                    onAddPlace={(place) => handleAddPlace(place, activeTab)}
-                  />
-                </div>
-              )}
-              {isReadOnly && (
-                <div className="relative h-full w-[400px] border-gray-200 p-6">
-                  {/* 댓글 섹션 */}
-                  <CommentsSection comments={comments || []} planId={planId} />
-                </div>
-              )}
             </div>
           </div>
         </div>

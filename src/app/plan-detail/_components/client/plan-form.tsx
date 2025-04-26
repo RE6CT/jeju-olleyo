@@ -18,6 +18,7 @@ import { useEffect, useState } from 'react';
 import PlanHeader from './core/plan-header';
 import PlanMap from './core/plan-map';
 import PlanSchedule from './core/plan-schedule';
+import PlanSidemenu from './core/plan-sidemenu';
 import { useCurrentUser } from '@/lib/queries/auth-queries';
 
 const PlanForm = ({
@@ -96,11 +97,16 @@ const PlanForm = ({
   }
 
   return (
-    <>
+    <div className="flex h-full flex-col gap-4">
       <PlanHeader />
-      <PlanMap />
-      <PlanSchedule />
-    </>
+      <div className="flex flex-1 gap-4">
+        <div className="flex flex-1 flex-col gap-4">
+          <PlanMap />
+          <PlanSchedule />
+        </div>
+        <PlanSidemenu />
+      </div>
+    </div>
   );
 };
 

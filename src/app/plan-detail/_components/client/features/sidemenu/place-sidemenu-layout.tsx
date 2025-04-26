@@ -26,7 +26,7 @@ const PlaceSidemenuLayout = ({
   onToggleExpand?: () => void;
 }) => {
   return (
-    <div className="w-[240px] space-y-4">
+    <div className="w-[240px] space-y-3">
       {/* 섹션 제목 */}
       {isBookmarkSection && (
         <div className="flex items-center justify-center gap-2 px-4 py-3">

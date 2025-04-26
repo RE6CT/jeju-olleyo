@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { DropResult } from 'react-beautiful-dnd';
 import { useToast } from '@/lib/hooks/use-toast';
 import { DayPlaces } from '@/types/plan-detail.type';
-import { Place } from '@/types/search.type';
 import {
   fetchSavePlan,
   fetchSavePlanPlaces,
@@ -73,31 +72,6 @@ export const useSchedulePlaces = (
 ) => {
   const { toast } = useToast();
   const { setDayPlaces: setStoreDayPlaces } = usePlanStore();
-
-  /**
-   * 장소 추가 핸들러
-   * @param newPlace 추가할 장소 데이터
-   * @param activeTab 현재 활성화된 탭
-   * @example
-   * handleAddPlace({
-   *   id: 1,
-   *   title: '장소 제목',...
-   * }, 1)
-   */
-  const handleAddPlace = (newPlace: Place, activeTab: number | '전체보기') => {
-    if (activeTab === '전체보기' || isReadOnly) return;
-
-    const dayNumber = activeTab as number;
-    const uniqueId = nanoid();
-    const newPlaceWithId = { ...newPlace, uniqueId };
-
-    const updatedDayPlaces = {
-      ...dayPlaces,
-      [dayNumber]: [...(dayPlaces[dayNumber] || []), newPlaceWithId],
-    };
-    setDayPlaces(updatedDayPlaces);
-    setStoreDayPlaces(updatedDayPlaces);
-  };
 
   /**
    * 장소 삭제 핸들러
@@ -189,7 +163,6 @@ export const useSchedulePlaces = (
   };
 
   return {
-    handleAddPlace,
     handleRemovePlace,
     handleDragEnd,
     handleDeleteDayPlaces,

@@ -14,6 +14,7 @@ import DaySelectRequiredModal from '../modal/day-select-required-modal';
 import PlaceCardSidemenu from '../card/place-card-sidemenu';
 import PlaceSidemenuLayout from './place-sidemenu-layout';
 import { useCurrentUser } from '@/lib/queries/auth-queries';
+import PlaceSearchBar from './place-searchbar';
 
 const ITEMS_PER_PAGE = 5;
 const NAVIGATION_BUTTON_WIDTH = 42.4;
@@ -177,21 +178,6 @@ const SearchSidemenu = ({
     ? currentPageItems
     : currentPageItems.slice(0, ITEMS_PER_PAGE);
 
-  const searchBar = (
-    <div className="w-[240px] rounded-[12px] bg-gray-100 px-3 py-2">
-      <div className="flex items-center gap-3">
-        <img src="/icons/search.svg" alt="검색" className="h-5 w-5" />
-        <input
-          type="text"
-          placeholder="장소를 검색해 추가하세요"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="medium-14 border-none bg-transparent text-gray-500 placeholder:text-gray-400 focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
-        />
-      </div>
-    </div>
-  );
-
   if (isLoading) {
     return (
       <PlaceSidemenuLayout
@@ -199,7 +185,12 @@ const SearchSidemenu = ({
         filterTabs={filterTabs}
         activeFilterTab={activeFilterTab}
         onFilterTabChange={onFilterTabChange}
-        topContent={searchBar}
+        topContent={
+          <PlaceSearchBar
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+          />
+        }
       >
         <div className="flex items-center justify-center p-4">
           <p>로딩 중...</p>
@@ -216,7 +207,12 @@ const SearchSidemenu = ({
       filterTabs={filterTabs}
       activeFilterTab={activeFilterTab}
       onFilterTabChange={onFilterTabChange}
-      topContent={searchBar}
+      topContent={
+        <PlaceSearchBar
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+        />
+      }
     >
       {/* 검색 결과 */}
       <div className="w-[240px]" ref={containerRef}>

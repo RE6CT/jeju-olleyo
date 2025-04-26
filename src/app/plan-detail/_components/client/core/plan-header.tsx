@@ -143,8 +143,10 @@ const PlanHeader = memo(() => {
         }
 
         if (response) {
-          // Zustand 상태 업데이트
+          // Zustand 상태 업데이트 및 로컬 스토리지에 저장
           setPlanImg(response);
+          localStorage.setItem(`planImg_${planId}`, response);
+
           toast({
             title: '이미지 업로드 성공',
             description: '이미지가 성공적으로 업로드되었습니다.',

@@ -12,6 +12,7 @@ import {
   usePlanSetEndDate,
   usePlanSetIsReadOnly,
   usePlanSetId,
+  usePlanResetState,
 } from '@/zustand/plan.store';
 import { useEffect, useState } from 'react';
 
@@ -42,13 +43,23 @@ const PlanForm = ({
   const setIsReadOnly = usePlanSetIsReadOnly();
   const setDayPlaces = usePlanSetDayPlaces();
   const setPlanId = usePlanSetId();
+  const resetPlanState = usePlanResetState();
 
   // 초기값 설정
   useEffect(() => {
     if (initialPlan) {
+      // 상태 초기화 후 새로운 값 설정
+      resetPlanState();
+
       setTitle(initialPlan.title);
       setDescription(initialPlan.description || '');
-      setPlanImg(initialPlan.planImg || '');
+
+      // 로컬 스토리지에서 이미지 URL 확인
+      const storedImageUrl = localStorage.getItem(
+        `planImg_${initialPlan.planId}`,
+      );
+      setPlanImg(storedImageUrl || initialPlan.planImg || '');
+
       setPlanId(initialPlan.planId);
       setActiveTab('전체보기');
       setStartDate(
@@ -63,14 +74,8 @@ const PlanForm = ({
       setDayPlaces(initialDayPlaces || {});
     } else {
       // 새로운 일정을 만들 때는 모든 데이터를 초기화
-      setTitle('');
-      setDescription('');
-      setPlanImg('');
-      setActiveTab('전체보기');
-      setStartDate(null);
-      setEndDate(null);
+      resetPlanState();
       setIsReadOnly(isReadOnly);
-      setDayPlaces({});
     }
   }, [
     initialPlan,
@@ -85,6 +90,7 @@ const PlanForm = ({
     setEndDate,
     setIsReadOnly,
     setDayPlaces,
+    resetPlanState,
   ]);
 
   useEffect(() => {

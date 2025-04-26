@@ -63,6 +63,7 @@ const PlacesRenderer = ({
                         address={place.address}
                         distance={currentRoute?.distance}
                         duration={currentRoute?.duration}
+                        placeId={place.placeId}
                         imageUrl={place.image || ''}
                         isLastItem={index === places.length - 1}
                         onDelete={

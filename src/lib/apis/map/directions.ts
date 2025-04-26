@@ -24,6 +24,23 @@ export const getCarRoute = async (
     throw new Error('출발지와 도착지를 설정해 주세요.');
   }
 
+  // 동일한 좌표가 연속해서 있는지 확인
+  const allPoints = [routeInfo.start, ...routeInfo.via, routeInfo.end];
+  const uniquePoints = allPoints.filter(
+    (point, index, self) =>
+      index ===
+      self.findIndex((p) => p.lat === point.lat && p.lng === point.lng),
+  );
+
+  // 동일한 좌표가 연속해서 있으면 빈 경로 반환
+  if (uniquePoints.length !== allPoints.length) {
+    return {
+      path: [],
+      summary: { distance: 0, duration: 0 },
+      sections: [],
+    };
+  }
+
   const origin = `${routeInfo.start.lng},${routeInfo.start.lat}`;
   const destination = `${routeInfo.end.lng},${routeInfo.end.lat}`;
   const viaPoints = routeInfo.via

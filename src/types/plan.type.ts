@@ -199,6 +199,9 @@ export type PlanState = {
   setRouteSummary: (routeSummary: {
     [key: number]: { distance: number; duration: number }[];
   }) => void;
+
+  // 상태 초기화 함수
+  resetPlanState: () => void;
 };
 
 /**

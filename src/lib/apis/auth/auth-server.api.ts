@@ -11,6 +11,7 @@ import {
   RegisterFormValues,
   AuthResult,
 } from '@/types/auth.type';
+import { User } from '@/types/user.type';
 
 /**
  * 로그인 서버 액션
@@ -157,7 +158,10 @@ export const fetchLogout = async (): Promise<AuthResult> => {
  * 현재 로그인한 사용자 정보를 가져오는 서버 액션
  * @returns 사용자 정보 또는 오류 객체
  */
-export const fetchGetCurrentUser = async () => {
+export const fetchGetCurrentUser = async (): Promise<{
+  user: User | null;
+  error: { message: string; status: number } | null;
+}> => {
   try {
     // 세션 먼저 확인하여 불필요한 getUser 호출 방지
     const supabase = await getServerClient();

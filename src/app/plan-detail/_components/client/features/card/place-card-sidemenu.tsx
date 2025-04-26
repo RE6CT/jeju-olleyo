@@ -109,6 +109,7 @@ const PlaceCardSidemenu = ({
             placeId={placeId}
             onAddPlace={onAddPlace}
             isBookmarked={isBookmarked}
+            onClose={() => setIsDialogOpen(false)}
           />
         </DialogContent>
       </Dialog>

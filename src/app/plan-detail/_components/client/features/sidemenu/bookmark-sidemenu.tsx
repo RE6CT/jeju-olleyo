@@ -134,9 +134,7 @@ const BookmarkSidemenu = ({
       activeFilterTab === '전체' ? true : place.category === activeFilterTab,
     ) || [];
 
-  const totalPages = bookmarkCount
-    ? Math.ceil(bookmarkCount / ITEMS_PER_PAGE)
-    : 0;
+  const totalPages = Math.ceil(filteredBookmarks.length / ITEMS_PER_PAGE);
 
   // 현재 페이지에 해당하는 북마크 아이템만 필터링
   const currentPageBookmarks = filteredBookmarks.slice(

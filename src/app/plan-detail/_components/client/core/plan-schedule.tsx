@@ -37,8 +37,6 @@ import {
   useScheduleSavePlan,
 } from '@/lib/hooks/use-schedule';
 import { useCurrentUser } from '@/lib/queries/auth-queries';
-import { useGetComments } from '@/lib/queries/use-get-comments';
-import CommentsSection from '../features/comment/comments-section';
 import { toast, useToast } from '@/lib/hooks/use-toast';
 
 const DROPDOWN_CONTENT_STYLE =
@@ -54,7 +52,7 @@ const AddPlacePrompt = ({ dayNumber }: { dayNumber: number }) => {
   const dayColor = dayNumber % 2 === 1 ? DAY_COLORS.ODD : DAY_COLORS.EVEN;
 
   return (
-    <div className="mt-4 flex items-center gap-3">
+    <div className="flex w-full items-center gap-3">
       <div
         className={`flex h-[24px] w-[24px] flex-col items-center justify-center gap-[10px] rounded-[12px] ${dayColor} px-2 text-white`}
       >
@@ -182,20 +180,17 @@ const PlanSchedule = memo(() => {
     );
 
   const dayCount = calculateTotalDays(startDate, endDate);
-  const planId = usePlanId();
-
-  const { toast } = useToast();
 
   return (
-    <div className="relative bg-white">
+    <div className="relative w-full bg-white">
       <DragDropContext onDragEnd={handleDragEnd}>
-        <div className="flex flex-1 flex-col gap-2">
+        <div className="flex w-full flex-1 flex-col gap-2">
           <div className="sticky top-[240px] z-40 bg-white">
             <DropdownMenu modal={false}>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="outline"
-                  className="flex w-[140px] items-center justify-center gap-2 rounded-[12px] border border-[#E7EDF0] bg-[#F9FAFB] px-5 py-2.5 text-14 font-medium"
+                  className="flex w-[140px] items-center justify-center gap-2 rounded-[12px] border border-[#E7EDF0] bg-[#F9FAFB] px-5 py-[10px] text-14 font-medium"
                 >
                   {activeTab === '전체보기' ? '전체보기' : `DAY ${activeTab}`}
                   <ChevronDown className="h-4 w-4" />
@@ -237,11 +232,11 @@ const PlanSchedule = memo(() => {
           <div className="mt-4 flex w-full gap-6">
             {startDate && endDate ? (
               activeTab === '전체보기' ? (
-                <div className="flex flex-col gap-6">
+                <div className="flex w-full flex-col gap-6">
                   {Array.from({ length: dayCount }, (_, i) => i + 1).map(
                     (day) => (
                       <div key={day}>
-                        <div className="mb-4 flex items-center justify-between pb-4">
+                        <div className="mb-4 flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             <span className="text-18 font-bold text-gray-900">
                               DAY {day}
@@ -251,7 +246,7 @@ const PlanSchedule = memo(() => {
                             </span>
                           </div>
                           {!isReadOnly && (
-                            <div className="flex items-center gap-4">
+                            <div className="flex items-center">
                               {copiedDay !== null && copiedDay !== day ? (
                                 <Button
                                   variant="ghost"
@@ -307,8 +302,8 @@ const PlanSchedule = memo(() => {
                   )}
                 </div>
               ) : (
-                <div>
-                  <div className="mb-4 flex items-center justify-between pb-4">
+                <div className="w-full">
+                  <div className="mb-4 flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <span className="text-18 font-bold text-gray-900">
                         DAY {activeTab}
@@ -318,7 +313,7 @@ const PlanSchedule = memo(() => {
                       </span>
                     </div>
                     {!isReadOnly && (
-                      <div className="flex items-center gap-4">
+                      <div className="flex items-center">
                         {copiedDay !== null && copiedDay !== activeTab ? (
                           <Button
                             variant="ghost"

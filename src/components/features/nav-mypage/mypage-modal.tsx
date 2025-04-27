@@ -32,6 +32,7 @@ const MypageModal = ({
   setClose,
   modalRef,
   userId,
+  className,
 }: MypageModalProps) => {
   const router = useRouter();
   // useCurrentUser 훅을 사용할 때 refetch 옵션 활성화
@@ -126,7 +127,7 @@ const MypageModal = ({
   return (
     <div
       ref={modalRef}
-      className="absolute right-0 top-10 z-40 w-[254px] rounded-12 bg-white p-4 shadow-dropdown"
+      className={`absolute z-40 w-[254px] rounded-12 bg-white p-4 shadow-dropdown ${className}`}
     >
       {/* 섹션 1 - 프로필 영역 */}
       <div className="flex w-fit flex-col gap-3">
@@ -255,6 +256,7 @@ const MypageModal = ({
 const MYPAGE_PROVIER_IMAGE_SIZE = 24;
 
 const ProviderIcon = ({ provider }: { provider: string }) => {
+  if (provider === 'email') return null;
   return (
     <Image
       src={`/images/${provider}_mypage.png`}

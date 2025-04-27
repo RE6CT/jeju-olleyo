@@ -16,6 +16,7 @@ export type MypageModalProps = {
   onLinkClick: (path: ModalPath) => void;
   setClose: () => void;
   modalRef: RefObject<HTMLDivElement>;
+  className?: string;
 };
 
 /** 유저의 북마크 목록에서 사용하는 북마크 타입 */

@@ -68,6 +68,7 @@ const MypageButton = ({ userId }: { userId: string }) => {
           onLinkClick={handleLinkClick}
           setClose={setClose}
           modalRef={modalRef}
+          className="right-0 top-10"
         />
       )}
     </div>

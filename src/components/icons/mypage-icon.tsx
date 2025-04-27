@@ -5,7 +5,6 @@ const MypageIcon = ({ fill, size }: { fill: string; size: number }) => {
       height={size}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
-      fill="none"
     >
       <path
         fillRule="evenodd"

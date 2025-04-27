@@ -33,7 +33,7 @@ const BookmarksList = ({ category }: { category: CategoryParamType }) => {
   const searchParams = useSearchParams();
   const currentPage = parseInt(searchParams.get('page') || '1');
 
-  const { user, isLoading } = useAuth();
+  const { user } = useAuth();
   const { data: bookmarks } = useGetBookMarks(
     user?.id,
     currentPage,
@@ -48,8 +48,6 @@ const BookmarksList = ({ category }: { category: CategoryParamType }) => {
   const handleFilterTabChange = (tab: CategoryType) => {
     router.push(`${PATH.BOOKMARKS}/${TAB_LIST[tab]}?page=1`);
   };
-
-  if (isLoading) return <Loading />;
 
   return (
     <>

@@ -63,7 +63,7 @@ const BottomNav = () => {
   };
 
   return (
-    <nav className="bottom-tabs fixed bottom-0 flex w-full min-w-[375px] justify-between bg-white px-4 pb-5 pt-2 md:hidden">
+    <nav className="bottom-tabs fixed bottom-0 flex w-full min-w-[375px] justify-between border-t border-gray-100 bg-white px-4 pb-5 pt-2 md:hidden">
       <Link href={PATH.HOME} className={LINK_STYLE}>
         <HomeIcon
           fill={pathname === PATH.HOME ? 'primary-300' : 'gray-300'}

@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { MouseEvent, useState, useEffect } from 'react';
+import { motion } from 'framer-motion'; // framer-motion 임포트 추가
 
 import ProfileImage from '@/components/commons/profile-image';
 import { PATH } from '@/constants/path.constants';
@@ -125,9 +126,13 @@ const MypageModal = ({
     : defaultUser;
 
   return (
-    <div
+    <motion.div
       ref={modalRef}
       className={`absolute z-40 w-[254px] rounded-12 bg-white p-4 shadow-dropdown ${className}`}
+      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: 10, scale: 0.95 }}
+      transition={{ duration: 0.2, ease: 'easeOut' }}
     >
       {/* 섹션 1 - 프로필 영역 */}
       <div className="flex w-fit flex-col gap-3">
@@ -249,7 +254,7 @@ const MypageModal = ({
           </section>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

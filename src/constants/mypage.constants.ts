@@ -1,3 +1,6 @@
+import { ModalPath } from '@/types/mypage.type';
+import { PATH } from './path.constants';
+
 // 에러 메시지 상수
 export const ERROR_MESSAGES = {
   USER_DATA_MISSING: '사용자 정보가 없습니다.',
@@ -24,3 +27,11 @@ export const SUCCESS_MESSAGES = {
   PASSWORD_UPDATED: '비밀번호가 변경되었습니다.',
   PROFILE_IMAGE_RESET: '프로필 이미지가 성공적으로 초기화되었습니다.',
 };
+
+export const MYPAGE_PATH_LIST: ModalPath[] = [
+  PATH.ACCOUNT,
+  PATH.BOOKMARKS,
+  PATH.LIKES,
+  PATH.COMMENTS,
+  PATH.RESERVATIONS,
+];

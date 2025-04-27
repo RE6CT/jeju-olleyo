@@ -14,6 +14,7 @@ import useAuthCheck from '@/lib/hooks/use-auth-check';
 import { ModalPath } from '@/types/mypage.type';
 import MypageModal from '../features/nav-mypage/mypage-modal';
 import useAuth from '@/lib/hooks/use-auth';
+import { MYPAGE_PATH_LIST } from '@/constants/mypage.constants';
 
 const LINK_STYLE =
   'flex h-[57px] w-[52px] flex-col items-center justify-end gap-[7px] regular-12';
@@ -21,6 +22,7 @@ const LINK_STYLE =
 /** 모바일 버전에서 나타나는 바텀 탭 */
 const BottomNav = () => {
   const pathname = usePathname();
+  const firstPath = '/' + pathname.split('/')[1];
   const router = useRouter();
 
   const { isAuthenticated } = useAuthCheck();
@@ -66,22 +68,22 @@ const BottomNav = () => {
     <nav className="bottom-tabs fixed bottom-0 flex w-full min-w-[375px] justify-between border-t border-gray-100 bg-white px-4 pb-5 pt-2 md:hidden">
       <Link href={PATH.HOME} className={LINK_STYLE}>
         <HomeIcon
-          fill={pathname === PATH.HOME ? 'primary-300' : 'gray-300'}
+          fill={firstPath === PATH.HOME ? 'primary-300' : 'gray-300'}
           size={24}
         />
         <span
-          className={`regular-12 ${pathname === PATH.HOME ? 'text-primary-300' : 'text-gray-300'}`}
+          className={`regular-12 ${firstPath === PATH.HOME ? 'text-primary-300' : 'text-gray-300'}`}
         >
           홈
         </span>
       </Link>
       <Link href={PATH.COMMUNITY} className={LINK_STYLE}>
         <CommunityIcon
-          fill={pathname === PATH.COMMUNITY ? 'primary-300' : 'gray-300'}
+          fill={firstPath === PATH.COMMUNITY ? 'primary-300' : 'gray-300'}
           size={24}
         />
         <span
-          className={`${pathname === PATH.COMMUNITY ? 'text-primary-300' : 'text-gray-300'}`}
+          className={`${firstPath === PATH.COMMUNITY ? 'text-primary-300' : 'text-gray-300'}`}
         >
           커뮤니티
         </span>
@@ -94,11 +96,11 @@ const BottomNav = () => {
       </Link>
       <Link href={PATH.MYPLAN} className={LINK_STYLE}>
         <CalendarIcon
-          fill={pathname === PATH.MYPLAN ? 'primary-300' : 'gray-300'}
+          fill={firstPath === PATH.MYPLAN ? 'primary-300' : 'gray-300'}
           size={24}
         />
         <span
-          className={`${pathname === PATH.MYPLAN ? 'text-primary-300' : 'text-gray-300'}`}
+          className={`${firstPath === PATH.MYPLAN ? 'text-primary-300' : 'text-gray-300'}`}
         >
           내 여행
         </span>
@@ -110,11 +112,15 @@ const BottomNav = () => {
           ref={buttonRef}
         >
           <MypageIcon
-            fill={pathname === PATH.ACCOUNT ? 'primary-300' : 'gray-300'}
+            fill={
+              MYPAGE_PATH_LIST.includes(firstPath as ModalPath)
+                ? 'primary-300'
+                : 'gray-300'
+            }
             size={24}
           />
           <span
-            className={`${pathname === PATH.ACCOUNT ? 'text-primary-300' : 'text-gray-300'}`}
+            className={`${MYPAGE_PATH_LIST.includes(firstPath as ModalPath) ? 'text-primary-300' : 'text-gray-300'}`}
           >
             마이페이지
           </span>

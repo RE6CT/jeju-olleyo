@@ -27,24 +27,26 @@ const PlanSidemenu = () => {
   );
 
   return (
-    <>
-      {!isReadOnly && (
-        <div className="flex flex-col">
-          <PlaceSidemenu
-            selectedDay={
-              activeTab === '전체보기' ? null : (activeTab as number)
-            }
-            onAddPlace={(place) => handleAddPlace(place, activeTab)}
-          />
-        </div>
-      )}
-      {isReadOnly && (
-        <div className="relative h-full w-[400px] border-gray-200 p-6">
-          {/* 댓글 섹션 */}
-          <CommentsSection comments={comments || []} planId={planId} />
-        </div>
-      )}
-    </>
+    <div className="mt-4">
+      <div className="sticky top-4 h-fit">
+        {!isReadOnly && (
+          <div className="flex flex-col">
+            <PlaceSidemenu
+              selectedDay={
+                activeTab === '전체보기' ? null : (activeTab as number)
+              }
+              onAddPlace={(place) => handleAddPlace(place, activeTab)}
+            />
+          </div>
+        )}
+        {isReadOnly && (
+          <div className="relative h-full w-[400px] border-gray-200 p-6">
+            {/* 댓글 섹션 */}
+            <CommentsSection comments={comments || []} planId={planId} />
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 

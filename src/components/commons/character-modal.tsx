@@ -49,9 +49,9 @@ const CharacterModal = ({
 }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="flex w-[336px] flex-col items-center gap-6 p-5">
+      <DialogContent className="flex w-[336px] flex-col items-center gap-6 rounded-[24px] p-5">
         <DialogTitle className="sr-only">{title}</DialogTitle>
-        <div className="flex flex-col items-center gap-6">
+        <div className="mt-6 flex flex-col items-center">
           <Image
             src={characterSrc}
             alt="캐릭터 이미지"
@@ -60,7 +60,7 @@ const CharacterModal = ({
           />
         </div>
         <div className="flex flex-col items-center gap-8 self-stretch">
-          <div className="flex flex-col items-center gap-2">
+          <div className="flex flex-col items-center">
             <h2 className="text-24 font-bold text-gray-800">{title}</h2>
             <p className="text-16 text-gray-600">{description}</p>
           </div>

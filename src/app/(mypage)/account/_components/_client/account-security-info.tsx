@@ -71,28 +71,30 @@ const SecurityInfo = ({ userId }: { userId: string }) => {
 
   return (
     <section
-      className="m-1 rounded-24 border border-gray-100 bg-white px-8 py-6"
+      className="rounded-16 flex flex-col gap-4 border border-gray-100 bg-white p-4 md:rounded-24 md:px-8 md:py-6 lg:gap-0"
       aria-labelledby="security-heading"
     >
-      <h3 id="security-heading" className="semibold-18 w-full">
+      <h3 id="security-heading" className="semibold-18 hidden w-full md:block">
         보안
       </h3>
       {isEditMode ? (
+        // 비밀번호 input
         <form onSubmit={handleSubmit(handleEditCompleteButtonClick)}>
-          <fieldset>
+          <fieldset className="flex flex-col gap-4">
             <legend className="sr-only">비밀번호 변경</legend>
-            <div className="flex">
+            {/* 현재 비밀번호 영역 */}
+            <div className="flex flex-col gap-1 md:flex-row">
               <div
-                className="invisible w-[120px] flex-shrink-0"
+                className="invisible hidden w-[120px] flex-shrink-0 lg:block"
                 aria-hidden="true"
               />
               <Label
                 htmlFor="currentPassword"
-                className="w-[125px] flex-shrink-0 whitespace-nowrap p-[10px] text-[16px] font-medium text-gray-900"
+                className="regular-12 w-[125px] flex-shrink-0 whitespace-nowrap text-description md:p-[10px] md:text-[16px] md:font-medium md:text-gray-900"
               >
                 현재 비밀번호
               </Label>
-              <div className="flex flex-col">
+              <div className="flex w-full flex-col lg:w-[235px]">
                 <PasswordInput
                   id="currentPassword"
                   placeholder="현재 비밀번호를 입력하세요"
@@ -112,18 +114,19 @@ const SecurityInfo = ({ userId }: { userId: string }) => {
               </div>
             </div>
 
-            <div className="flex">
+            {/* 새 비밀번호 영역 */}
+            <div className="flex flex-col gap-1 md:flex-row">
               <div
-                className="invisible w-[120px] flex-shrink-0"
+                className="invisible hidden w-[120px] flex-shrink-0 lg:block"
                 aria-hidden="true"
               />
               <Label
                 htmlFor="newPassword"
-                className="w-[125px] flex-shrink-0 whitespace-nowrap p-[10px] text-[16px] font-medium text-gray-900"
+                className="regular-12 w-[125px] flex-shrink-0 whitespace-nowrap text-description md:p-[10px] md:text-[16px] md:font-medium md:text-gray-900"
               >
                 새 비밀번호
               </Label>
-              <div className="flex flex-col">
+              <div className="flex w-full flex-col lg:w-[235px]">
                 <PasswordInput
                   id="newPassword"
                   placeholder="새 비밀번호를 입력하세요"
@@ -143,34 +146,37 @@ const SecurityInfo = ({ userId }: { userId: string }) => {
               </div>
             </div>
 
-            <div className="flex">
-              <div
-                className="invisible w-[120px] flex-shrink-0"
-                aria-hidden="true"
-              />
-              <Label
-                htmlFor="newPasswordCheck"
-                className="w-[125px] flex-shrink-0 whitespace-nowrap p-[10px] text-[16px] font-medium text-gray-900"
-              >
-                새 비밀번호 확인
-              </Label>
-              <div className="flex flex-col">
-                <PasswordInput
-                  id="newPasswordCheck"
-                  placeholder="새 비밀번호를 입력하세요"
-                  register={register('confirmNewPassword')}
-                  autoComplete="new-password"
-                  aria-required="true"
+            {/* 새 비밀번호 확인 영역 */}
+            <div className="flex flex-col gap-1 md:gap-0 lg:flex-row">
+              <div className="flex flex-col gap-1 md:flex-row">
+                <div
+                  className="invisible hidden w-[120px] flex-shrink-0 lg:block"
+                  aria-hidden="true"
                 />
-                {errors.confirmNewPassword && (
-                  <p
-                    className="regular-14 m-2 text-red"
-                    role="alert"
-                    aria-live="polite"
-                  >
-                    {errors.confirmNewPassword.message}
-                  </p>
-                )}
+                <Label
+                  htmlFor="newPasswordCheck"
+                  className="regular-12 w-[125px] flex-shrink-0 whitespace-nowrap text-description md:p-[10px] md:text-[16px] md:font-medium md:text-gray-900"
+                >
+                  새 비밀번호 확인
+                </Label>
+                <div className="flex w-full flex-col lg:w-[235px]">
+                  <PasswordInput
+                    id="newPasswordCheck"
+                    placeholder="새 비밀번호를 입력하세요"
+                    register={register('confirmNewPassword')}
+                    autoComplete="new-password"
+                    aria-required="true"
+                  />
+                  {errors.confirmNewPassword && (
+                    <p
+                      className="regular-14 m-2 text-red"
+                      role="alert"
+                      aria-live="polite"
+                    >
+                      {errors.confirmNewPassword.message}
+                    </p>
+                  )}
+                </div>
               </div>
               <div
                 className="ml-auto flex"
@@ -196,31 +202,37 @@ const SecurityInfo = ({ userId }: { userId: string }) => {
           </fieldset>
         </form>
       ) : (
-        <div className="flex">
+        // 현재 비밀번호 라벨
+        <div className="flex flex-col gap-1 md:flex-row md:gap-0">
           <div
-            className="invisible w-[120px] flex-shrink-0"
+            className="invisible hidden w-[120px] flex-shrink-0 lg:block"
             aria-hidden="true"
           />
-          <div className="w-[125px] flex-shrink-0 whitespace-nowrap p-[10px] text-[16px] font-medium text-gray-900">
+          <div className="regular-12 w-[125px] flex-shrink-0 whitespace-nowrap text-description md:p-[10px] md:text-[16px] md:font-medium md:text-gray-900">
             현재 비밀번호
           </div>
-          <output
-            className="medium-16 block w-full whitespace-nowrap p-[10px]"
-            aria-label="비밀번호(마스킹됨)"
-          >
-            ********
-          </output>
-          {provider !== 'email' ? (
-            <div className="invisible" aria-hidden="true" />
-          ) : (
-            <Button
-              type="button"
-              className="medium-16 bg-transparent text-secondary-300 hover:bg-gray-100"
-              onClick={handleEditButtonClick}
+          <div className="flex w-full">
+            <output
+              className="medium-16 block w-full whitespace-nowrap py-1 md:p-[10px]"
+              aria-label="비밀번호(마스킹됨)"
             >
-              수정
-            </Button>
-          )}
+              ********
+            </output>
+            {provider !== 'email' ? (
+              <div
+                className="invisible hidden w-[120px] flex-shrink-0 lg:block"
+                aria-hidden="true"
+              />
+            ) : (
+              <Button
+                type="button"
+                className="medium-16 bg-transparent text-secondary-300 hover:bg-gray-100"
+                onClick={handleEditButtonClick}
+              >
+                수정
+              </Button>
+            )}
+          </div>
         </div>
       )}
     </section>

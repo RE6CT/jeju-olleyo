@@ -1,14 +1,15 @@
 import { Dispatch, RefObject, SetStateAction } from 'react';
 
 import { CamelCaseObject } from './common.type';
+import { PATH } from '@/constants/path.constants';
 
 /** 모달의 링크 path를 제한하는 타입 */
 export type ModalPath =
-  | '/account'
-  | '/bookmarks'
-  | '/likes'
-  | '/comments'
-  | '/reservations';
+  | typeof PATH.ACCOUNT
+  | typeof PATH.BOOKMARKS
+  | typeof PATH.LIKES
+  | typeof PATH.COMMENTS
+  | typeof PATH.RESERVATIONS;
 
 /** 모달의 props 타입 */
 export type MypageModalProps = {
@@ -16,6 +17,7 @@ export type MypageModalProps = {
   onLinkClick: (path: ModalPath) => void;
   setClose: () => void;
   modalRef: RefObject<HTMLDivElement>;
+  className?: string;
 };
 
 /** 유저의 북마크 목록에서 사용하는 북마크 타입 */

@@ -15,6 +15,10 @@ const TITLE = {
   comments: '내가 쓴 댓글',
 };
 
+/**
+ * 마이페이지의 내 활동 링크를 담은 드롭다운 (sm 이하에서만 표시)
+ * @param pageType - 페이지 타입 (북마크, 좋아요, 댓글)
+ */
 const MypageActivitiesDropdown = ({
   pageType,
 }: {

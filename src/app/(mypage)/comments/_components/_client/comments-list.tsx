@@ -21,12 +21,9 @@ const CommentsList = ({
   comments: MyCommentType[];
   pageSize: number;
 }) => {
-  const { user, isLoading } = useAuth();
-  const { data: countData, isLoading: isCountLoading } = useGetDataCount(
-    user?.id,
-  );
+  const { user } = useAuth();
+  const { data: countData } = useGetDataCount(user?.id);
 
-  if (isLoading || isCountLoading) return <Loading />;
   return (
     <>
       {countData?.commentCount === 0 ? (
@@ -39,7 +36,7 @@ const CommentsList = ({
         </div>
       ) : (
         <section className="flex flex-col gap-20">
-          <ul className="flex list-none flex-col gap-5 p-0">
+          <ul className="flex list-none flex-col gap-2 p-0 md:gap-5">
             {comments.map((comment) => (
               <li key={comment.planId}>
                 <MyComment comment={comment} />

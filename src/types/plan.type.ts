@@ -71,11 +71,11 @@ export type PlanCardType = {
   /** 계획의 고유 식별자 */
   planId: number;
   /** 계획의 대표 이미지 URL */
-  planImg: string;
+  planImg: string | null;
   /** 계획의 제목 */
   title: string;
   /** 계획의 설명 */
-  description: string;
+  description: string | null;
   /** 작성자 닉네임 */
   nickname: string;
   /** 여행 시작일 */

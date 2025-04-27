@@ -14,9 +14,9 @@ import DaySelectRequiredModal from '../modal/day-select-required-modal';
 import PlaceCardSidemenu from '../card/place-card-sidemenu';
 import PlaceSidemenuLayout from './place-sidemenu-layout';
 import { useCurrentUser } from '@/lib/queries/auth-queries';
+import PlaceSearchBar from './place-searchbar';
 
-const ITEMS_PER_PAGE = 7;
-const INITIAL_ITEMS = 3;
+const ITEMS_PER_PAGE = 5;
 const NAVIGATION_BUTTON_WIDTH = 42.4;
 const NAVIGATION_BUTTON_GAP = 12;
 const BUTTON_WIDTH = 24;
@@ -48,7 +48,7 @@ const SearchSidemenu = ({
   const [places, setPlaces] = useState<Place[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-  const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const [isExpanded, setIsExpanded] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [maxVisiblePages, setMaxVisiblePages] = useState(3);
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -87,7 +87,7 @@ const SearchSidemenu = ({
   // 접힌 상태일 때는 현재 페이지 아이템 중 처음 3개만, 펼친 상태일 때는 모든 아이템이 보이도록 현재 페이지 아이템을 가져옴
   const displayedPlaces = isExpanded
     ? currentPageItems
-    : currentPageItems.slice(0, INITIAL_ITEMS);
+    : currentPageItems.slice(0, ITEMS_PER_PAGE);
 
   // 컨테이너 높이 계산
   useEffect(() => {
@@ -210,21 +210,6 @@ const SearchSidemenu = ({
     }
   };
 
-  const searchBar = (
-    <div className="w-[240px] rounded-[12px] bg-gray-100 px-3 py-2">
-      <div className="flex items-center gap-3">
-        <img src="/icons/search.svg" alt="검색" className="h-5 w-5" />
-        <input
-          type="text"
-          placeholder="장소를 검색해 추가하세요"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="medium-14 border-none bg-transparent text-gray-500 placeholder:text-gray-400 focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
-        />
-      </div>
-    </div>
-  );
-
   if (isLoading) {
     return (
       <PlaceSidemenuLayout
@@ -232,7 +217,12 @@ const SearchSidemenu = ({
         filterTabs={filterTabs}
         activeFilterTab={activeFilterTab}
         onFilterTabChange={onFilterTabChange}
-        topContent={searchBar}
+        topContent={
+          <PlaceSearchBar
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+          />
+        }
       >
         <div className="flex items-center justify-center p-4">
           <p>로딩 중...</p>
@@ -249,15 +239,16 @@ const SearchSidemenu = ({
       filterTabs={filterTabs}
       activeFilterTab={activeFilterTab}
       onFilterTabChange={onFilterTabChange}
-      topContent={searchBar}
+      topContent={
+        <PlaceSearchBar
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+        />
+      }
     >
       {/* 검색 결과 */}
-      <div className="space-y-2" ref={containerRef}>
-        {isSearching ? (
-          <div className="flex h-full items-center justify-center">
-            <div className="h-6 w-6 animate-spin rounded-full border-2 border-secondary-300 border-t-transparent" />
-          </div>
-        ) : displayedPlaces.length > 0 ? (
+      <div className="w-[240px]" ref={containerRef}>
+        {displayedPlaces.length > 0 ? (
           <div ref={listRef} className="overflow-y-auto">
             <AnimatePresence initial={false}>
               {displayedPlaces.map((place) => (
@@ -280,14 +271,14 @@ const SearchSidemenu = ({
                 </motion.div>
               ))}
             </AnimatePresence>
-            {currentPageItems.length > INITIAL_ITEMS && (
+            {/* {currentPageItems.length > INITIAL_ITEMS && (
               <Button
                 className="flex h-[36px] w-full flex-shrink-0 items-center justify-center gap-1 rounded-xl border border-secondary-300 bg-gray-50 text-sm font-normal text-secondary-300 transition-colors hover:bg-gray-100"
                 onClick={toggleExpand}
               >
                 {isExpanded ? '접기' : '더보기'}
               </Button>
-            )}
+            )} */}
             {isExpanded && totalPages > 1 && (
               <DynamicPagination
                 currentPage={currentPage}

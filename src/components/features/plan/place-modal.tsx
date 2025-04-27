@@ -5,15 +5,18 @@ import PlaceModalView from './place-modal-view';
 import useAuth from '@/lib/hooks/use-auth';
 import { useGetPlaceDetailInfo } from '@/lib/queries/use-get-place-detail-info';
 import { useGetPlans } from '@/lib/queries/use-get-plans';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 
 const PlaceModal = ({
   placeId,
   onAddPlace,
   isBookmarked,
+  onClose,
 }: {
   placeId: number;
   onAddPlace?: () => void;
   isBookmarked: boolean;
+  onClose: () => void;
 }) => {
   const { user } = useAuth();
 
@@ -54,13 +57,18 @@ const PlaceModal = ({
   }
 
   return (
-    <PlaceModalView
-      place={place}
-      detailInfo={detailInfo ?? null}
-      onAddPlace={onAddPlace}
-      isBookmarked={isBookmarked}
-      planIncludingPlace={planIncludingPlace!}
-    />
+    <Dialog open onOpenChange={onClose}>
+      <DialogContent className="max-w-[500px]">
+        <PlaceModalView
+          place={place}
+          detailInfo={detailInfo ?? null}
+          onAddPlace={onAddPlace}
+          isBookmarked={isBookmarked}
+          planIncludingPlace={planIncludingPlace!}
+          onClose={onClose}
+        />
+      </DialogContent>
+    </Dialog>
   );
 };
 

@@ -18,12 +18,14 @@ const PlaceModalView = ({
   onAddPlace,
   isBookmarked,
   planIncludingPlace,
+  onClose,
 }: {
   place: Place;
   detailInfo: DetailIntroRaw | null;
   onAddPlace?: () => void;
   isBookmarked: boolean;
   planIncludingPlace: PlaceModal[];
+  onClose: () => void;
 }) => {
   const isHotel = place.content_type_id === 32;
 
@@ -37,6 +39,13 @@ const PlaceModalView = ({
         : '정보 없음';
 
   const openSummary = rawSummary.replace(/<br\s*\/?>/gi, '\n');
+
+  const handleAddPlace = () => {
+    if (onAddPlace) {
+      onAddPlace();
+      onClose();
+    }
+  };
 
   return (
     <div className="max-h-[80vh] w-full space-y-4 overflow-y-auto overflow-x-hidden p-4">
@@ -74,7 +83,7 @@ const PlaceModalView = ({
       </div>
 
       <button
-        onClick={onAddPlace}
+        onClick={handleAddPlace}
         className="semibold-22 mt-7 flex w-full items-center justify-center gap-[6px] rounded-12 border-2 border-primary-500 text-primary-500"
       >
         내 일정에 추가하기 <AddIcon size={20} fill="primary-500" />

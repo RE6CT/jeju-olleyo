@@ -30,7 +30,7 @@ const PlanVerticalCard = ({ plan }: PlanVerticalCardProps) => {
       </div>
 
       <div className="flex flex-col gap-1 p-2">
-        <div className="flex flex-col gap-2">
+        <div className="order-2 flex flex-col gap-2 md:order-1">
           <p className="medium-16 line-clamp-1 overflow-hidden text-ellipsis text-gray-900">
             {plan.title}
           </p>
@@ -38,7 +38,7 @@ const PlanVerticalCard = ({ plan }: PlanVerticalCardProps) => {
             {plan.description}
           </p>
         </div>
-        <div className="medium-12 flex items-center gap-2 text-gray-500">
+        <div className="medium-12 order-1 flex items-center gap-2 text-gray-500 md:order-2">
           <span className="whitespace-nowrap">{plan.nickname}</span>
           <Separator orientation="vertical" className="h-[11px] bg-gray-300" />
           <Duration

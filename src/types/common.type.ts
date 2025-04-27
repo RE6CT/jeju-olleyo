@@ -1,7 +1,3 @@
-import { ReactNode } from 'react';
-
-import { Plan } from './plan.type';
-
 /** 문자열을 카멜 케이스로 변환하는 타입 */
 type CamelCase<S extends string> = S extends `${infer P}_${infer Q}`
   ? `${P}${Capitalize<CamelCase<Q>>}`

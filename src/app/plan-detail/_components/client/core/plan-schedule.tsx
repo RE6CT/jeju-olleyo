@@ -10,7 +10,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 import { calculateTotalDays, formatDayDate } from '@/lib/utils/date';
-import PlaceSidemenu from '../features/sidemenu/place-sidemenu';
 import { DragDropContext } from '@hello-pangea/dnd';
 import ScheduleDeleteModal from '../features/modal/schedule-delete-modal';
 import ScheduleSaveModal from '../features/modal/schedule-save-modal';
@@ -35,7 +34,6 @@ import {
 import {
   useScheduleCopyPaste,
   useSchedulePlaces,
-  useScheduleSaveButton,
   useScheduleSavePlan,
 } from '@/lib/hooks/use-schedule';
 import { useCurrentUser } from '@/lib/queries/auth-queries';
@@ -68,37 +66,6 @@ const AddPlacePrompt = ({ dayNumber }: { dayNumber: number }) => {
     </div>
   );
 };
-
-const SaveButton = memo(() => {
-  const startDate = usePlanStartDate();
-  const endDate = usePlanEndDate();
-  const dayPlaces = usePlanDayPlaces();
-  const isReadOnly = usePlanIsReadOnly();
-  const { setIsSaveModalOpen, setIsPublicModalOpen } = useScheduleModalStore();
-  const { handleSaveButtonClick } = useScheduleSaveButton(
-    usePlanTitle(),
-    startDate,
-    endDate,
-    dayPlaces,
-    setIsSaveModalOpen,
-    setIsPublicModalOpen,
-  );
-
-  return (
-    <div className="mt-[70px]">
-      {!isReadOnly && (
-        <Button
-          onClick={handleSaveButtonClick}
-          className="flex items-center justify-center rounded-[12px] border border-primary-400 bg-primary-500 px-7 py-4 text-24 font-bold leading-[130%] text-[#F8F8F8] shadow-[2px_4px_4px_0px_rgba(153,61,0,0.20)] backdrop-blur-[10px] hover:bg-primary-600"
-        >
-          저장하기
-        </Button>
-      )}
-    </div>
-  );
-});
-
-SaveButton.displayName = 'SaveButton';
 
 const ScheduleModals = () => {
   const startDate = usePlanStartDate();
@@ -204,23 +171,18 @@ const PlanSchedule = memo(() => {
   const { copiedDay, handleCopyDayPlaces, handlePasteDayPlaces } =
     useScheduleCopyPaste(dayPlaces, setDayPlaces);
 
-  const {
-    handleAddPlace,
-    handleRemovePlace,
-    handleDragEnd,
-    handleDeleteDayPlaces,
-  } = useSchedulePlaces(
-    dayPlaces,
-    setDayPlaces,
-    isReadOnly,
-    setIsDeleteModalOpen,
-    dayToDelete,
-    setDayToDelete,
-  );
+  const { handleRemovePlace, handleDragEnd, handleDeleteDayPlaces } =
+    useSchedulePlaces(
+      dayPlaces,
+      setDayPlaces,
+      isReadOnly,
+      setIsDeleteModalOpen,
+      dayToDelete,
+      setDayToDelete,
+    );
 
   const dayCount = calculateTotalDays(startDate, endDate);
   const planId = usePlanId();
-  const { data: comments } = useGetComments(planId);
 
   const { toast } = useToast();
 
@@ -437,29 +399,6 @@ const PlanSchedule = memo(() => {
                   )}
                 </div>
               </div>
-
-              {!isReadOnly && (
-                <div className="flex flex-col">
-                  <PlaceSidemenu
-                    selectedDay={
-                      activeTab === '전체보기' ? null : (activeTab as number)
-                    }
-                    onAddPlace={(place) => handleAddPlace(place, activeTab)}
-                  />
-                  <div className="mr-[40px] flex justify-end">
-                    <SaveButton />
-                  </div>
-                </div>
-              )}
-              {isReadOnly && (
-                <div className="relative h-full w-[400px] border-gray-200 p-6">
-                  {/* 댓글 섹션 */}
-                  <CommentsSection comments={comments || []} planId={planId} />
-                  <div className="absolute bottom-[-70px] right-[40px]">
-                    <SaveButton />
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         </div>

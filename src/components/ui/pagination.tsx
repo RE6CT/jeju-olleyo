@@ -29,7 +29,7 @@ const Pagination = ({
   if (hideOnSinglePage && totalPages <= 1) return null; // 페이지가 1개 이하면 렌더링 하지 않음
 
   return (
-    <div className="mt-6 flex justify-center gap-3">
+    <div className="mt-3 flex justify-center gap-3">
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}

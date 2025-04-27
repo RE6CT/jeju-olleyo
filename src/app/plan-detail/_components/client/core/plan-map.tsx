@@ -31,8 +31,8 @@ const PlanMap = memo(() => {
 
   return (
     <>
-      <div className="sticky top-0 z-40 h-10 bg-white"></div>
-      <div className="sticky top-8 z-40 mt-4 h-[218px] w-full overflow-hidden rounded-[12px]">
+      {/* 스크롤시 상단 overflow 내용 가리는 용도 */}
+      <div className="sticky top-8 z-40 h-[228px] w-[656px] overflow-hidden rounded-[12px]">
         {isLoading && <Loading />}
         {error && <ErrorMessage message={error} />}
         <KakaoMap

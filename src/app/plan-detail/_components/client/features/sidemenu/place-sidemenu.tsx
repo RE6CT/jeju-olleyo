@@ -22,9 +22,9 @@ const PlaceSidemenu = ({
   const [activeSearchTab, setActiveSearchTab] = useState<CategoryType>('전체');
 
   return (
-    <div className="w-[280px] space-y-6">
+    <div className="sticky top-8 h-fit w-[280px] space-y-4">
       {/* 북마크 섹션 */}
-      <div className="rounded-[12px] border border-gray-200 p-5">
+      <div className="rounded-[12px] border border-gray-200 px-5">
         <BookmarkSidemenu
           filterTabs={CATEGORIES}
           activeFilterTab={activeBookmarkTab}

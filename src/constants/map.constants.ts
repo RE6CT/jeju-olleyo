@@ -11,12 +11,20 @@ export const MARKER = {
     x: 28,
     y: 33,
   } as Point,
+  X_ANCHOR: 0.5,
+  Y_ANCHOR: 1.7,
+} as const;
+
+// 맵 줌 레벨 조정값
+export const MAP_ZOOM_LEVEL = {
+  DEFAULT: 10,
+  CLICK: 4,
 } as const;
 
 // 초기 설정 map option
 export const DEFAULT_MAP_OPTIONS: KakaoMapOptions = {
   center: { lat: 33.3616666, lng: 126.5291666 },
-  level: 10,
+  level: MAP_ZOOM_LEVEL.DEFAULT,
 };
 
 // map marker 클러스터링 옵션

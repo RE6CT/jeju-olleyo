@@ -15,7 +15,7 @@ const BookmarksPage = async ({
   const category = params.category || 'all';
 
   return (
-    <div className="flex w-full flex-col gap-5">
+    <div className="flex w-full flex-col gap-4 md:gap-5">
       <Suspense fallback={<Loading />}>
         <BookmarksList category={category} />
       </Suspense>

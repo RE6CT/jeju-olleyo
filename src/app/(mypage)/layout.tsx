@@ -6,7 +6,7 @@ const Layout = ({
   children: React.ReactNode;
 }>) => {
   return (
-    <div className="flex h-full min-w-[1024px] gap-10 bg-gray-50 px-9 py-12">
+    <div className="flex h-full gap-4 bg-gray-50 py-12 md:px-7 lg:gap-10 lg:px-9">
       <MypageSidebar className="sticky top-[132px] h-fit" />
       <div className="w-full">{children}</div>
     </div>

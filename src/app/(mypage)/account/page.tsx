@@ -17,8 +17,8 @@ const AccountPage = async () => {
   if (!user) return null;
 
   return (
-    <div className="flex w-full flex-col gap-9">
-      <h2 className="semibold-28 w-full">회원정보 수정</h2>
+    <div className="flex w-full flex-col gap-7 lg:gap-9">
+      <h2 className="bold-24 lg:semibold-28 w-full">회원정보 수정</h2>
       <Suspense fallback={<Loading />}>
         <ProfileInfo
           userId={user.id}

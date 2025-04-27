@@ -103,14 +103,14 @@ const ProfileInfo = ({
 
   return (
     <section
-      className="m-1 flex flex-col gap-4 rounded-24 border border-gray-100 bg-white px-8 py-6 lg:gap-0"
+      className="rounded-16 flex flex-col gap-4 border border-gray-100 bg-white p-4 md:rounded-24 md:px-8 md:py-6 lg:gap-0"
       aria-labelledby="profile-heading"
     >
-      <h3 id="profile-heading" className="semibold-18 w-full">
+      <h3 id="profile-heading" className="semibold-18 hidden w-full md:block">
         프로필
       </h3>
       <form onSubmit={handleSubmit(handleEditComplete)}>
-        <div className="flex">
+        <div className="flex flex-col items-center md:w-full md:flex-row">
           <figure className="w-[125px] flex-shrink-0 py-[14px] lg:w-[120px]">
             <AccountProfileImage
               userId={userId}
@@ -118,11 +118,11 @@ const ProfileInfo = ({
               provider={provider}
             />
           </figure>
-          <div className="flex w-full flex-col lg:flex-row">
+          <div className="flex w-full flex-col gap-1 md:gap-0 lg:flex-row lg:items-center">
             {/* 닉네임 라벨 */}
             <Label
               htmlFor="nickname"
-              className="w-[125px] flex-shrink-0 whitespace-nowrap p-[10px] text-[16px] font-medium text-gray-900"
+              className="regular-12 m-0 w-[125px] flex-shrink-0 whitespace-nowrap text-description md:p-[10px] md:text-[16px] md:font-medium md:text-gray-900"
             >
               닉네임
             </Label>
@@ -140,7 +140,7 @@ const ProfileInfo = ({
                       id="nickname"
                       placeholder="새 닉네임을 입력하세요"
                       {...register('nickname')}
-                      className="w-full rounded-[12px] border border-gray-200 px-4 py-[10px] !placeholder-gray-200 lg:w-[235px]"
+                      className="w-full rounded-[12px] border border-gray-200 py-[10px] !placeholder-gray-200 md:px-4 lg:w-[235px]"
                       aria-invalid={errors.nickname ? 'true' : 'false'}
                     />
                     {errors.nickname && (
@@ -155,7 +155,7 @@ const ProfileInfo = ({
                   </div>
                 ) : (
                   // 실제 닉네임
-                  <span className="medium-16 block w-full whitespace-nowrap p-[10px]">
+                  <span className="medium-16 block w-full whitespace-nowrap py-1 md:p-[10px]">
                     {nickname}
                   </span>
                 )}

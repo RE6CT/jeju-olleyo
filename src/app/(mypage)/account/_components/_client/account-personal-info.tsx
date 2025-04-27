@@ -82,39 +82,42 @@ const PersonalInfo = ({
 
   return (
     <section
-      className="m-1 flex flex-col gap-6 rounded-24 border border-gray-100 bg-white px-8 py-6 lg:gap-0"
+      className="rounded-16 flex flex-col gap-4 border border-gray-100 bg-white p-4 md:rounded-24 md:px-8 md:py-6 lg:gap-0"
       aria-labelledby="profile-heading"
     >
-      <h3 id="profile-heading" className="semibold-18 w-full">
+      <h3 id="profile-heading" className="semibold-18 hidden w-full md:block">
         개인 정보
       </h3>
 
       {/* 이메일 영역 */}
       <div className="flex flex-col gap-3">
         <dl className="flex flex-col gap-2">
-          <div className="flex">
+          <div className="flex flex-col gap-1 md:flex-row md:gap-0">
             <div
               className="invisible hidden w-[120px] flex-shrink-0 lg:block"
               aria-hidden="true"
             />
-            <dt className="w-[125px] flex-shrink-0 whitespace-nowrap p-[10px] text-[16px] font-medium text-gray-900">
+            <dt className="regular-12 w-[125px] flex-shrink-0 whitespace-nowrap text-description md:p-[10px] md:text-[16px] md:font-medium md:text-gray-900">
               이메일
             </dt>
-            <dd className="medium-16 block w-full whitespace-nowrap p-[10px]">
+            <dd className="medium-16 block w-full whitespace-nowrap py-1 md:p-[10px]">
               {email}
             </dd>
           </div>
         </dl>
 
         {/* 휴대폰 영역 */}
-        <form className="flex" onSubmit={handleSubmit(handleEditComplete)}>
+        <form
+          className="flex flex-col gap-1 md:flex-row md:gap-0"
+          onSubmit={handleSubmit(handleEditComplete)}
+        >
           <div
             className="invisible hidden w-[120px] flex-shrink-0 lg:block"
             aria-hidden="true"
           />
           <Label
             htmlFor="phone"
-            className="w-[125px] flex-shrink-0 whitespace-nowrap p-[10px] text-[16px] font-medium text-gray-900"
+            className="regular-12 w-[125px] flex-shrink-0 whitespace-nowrap text-description md:p-[10px] md:text-[16px] md:font-medium md:text-gray-900"
           >
             휴대폰
           </Label>
@@ -146,7 +149,7 @@ const PersonalInfo = ({
                 </div>
               ) : (
                 // 실제 휴대폰 번호
-                <output className="medium-16 block w-full whitespace-nowrap p-[10px]">
+                <output className="medium-16 block w-full whitespace-nowrap py-1 md:p-[10px]">
                   {phone ?? '번호가 등록되지 않았습니다.'}
                 </output>
               )}

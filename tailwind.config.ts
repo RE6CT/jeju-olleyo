@@ -101,6 +101,7 @@ const config: Config = {
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
         '12': '12px',
+        '16': '16px',
         '24': '24px',
       },
       boxShadow: {

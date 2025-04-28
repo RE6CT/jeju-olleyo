@@ -7,7 +7,7 @@ const Layout = ({
   children: React.ReactNode;
 }>) => {
   return (
-    <div className="h-screen w-full bg-gray-50">
+    <div className="min-h-screen w-full bg-gray-50">
       <MypageTopTabs />
       <div className="flex h-full gap-4 px-4 py-5 md:px-7 md:py-10 lg:gap-10 lg:px-9 lg:py-12">
         <MypageSidebar className="sticky h-fit" />

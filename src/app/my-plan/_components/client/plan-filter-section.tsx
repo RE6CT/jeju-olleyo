@@ -54,17 +54,15 @@ const PlanFilterSection = ({
   const router = useRouter();
 
   const {
-    filter,
+    filters,
     selectedFilter,
     setSelectedFilter,
     inputValue,
     setInputValue,
     selectedPublicOption,
     setSelectedPublicOption,
-    startDate,
-    setStartDate,
-    endDate,
-    setEndDate,
+    date,
+    setDate,
     isDatePickerFocused,
     setIsDatePickerFocused,
     resetFilter,
@@ -74,7 +72,7 @@ const PlanFilterSection = ({
   } = usePlanFilter(userId);
 
   const { data: plans = plansList, isLoading: isPlansLoading } =
-    useGetFilteredPlans(userId, filter);
+    useGetFilteredPlans(userId, filters);
 
   const { currentPage, setCurrentPage, handlePageChange } = usePagination();
   const { isOpen, setIsOpen, handleMouseLeave } = usePopover();
@@ -128,7 +126,7 @@ const PlanFilterSection = ({
             <FilterMenu
               selectedFilter={selectedFilter}
               setSelectedFilter={setSelectedFilter}
-              filter={filter}
+              filters={filters}
               setInputValue={setInputValue}
               handleFilterClick={handleFilterClick}
             />
@@ -139,18 +137,18 @@ const PlanFilterSection = ({
                 setInputValue={setInputValue}
                 selectedPublicOption={selectedPublicOption}
                 setSelectedPublicOption={setSelectedPublicOption}
-                startDate={startDate}
-                setStartDate={setStartDate}
-                endDate={endDate}
-                setEndDate={setEndDate}
+                date={date}
+                setDate={setDate}
                 setIsDatePickerFocused={setIsDatePickerFocused}
-                filter={filter}
+                filters={filters}
                 applyFilter={handleApplyFilterAndClose}
               />
             )}
           </PopoverContent>
         </Popover>
-        {filter.type && filter.value !== PUBLIC_OPTIONS.ALL && (
+        {(filters.keyword ||
+          filters.date ||
+          (filters.public && filters.public !== PUBLIC_OPTIONS.ALL)) && (
           <Button
             variant="ghost"
             size="sm"

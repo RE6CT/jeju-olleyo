@@ -1,7 +1,5 @@
-import { PATH } from '@/constants/path.constants';
 import { PUBLIC_OPTIONS, FILTER_TYPES } from '@/constants/plan.constants';
 import { FilterState, FilterType, PublicOption } from '@/types/plan.type';
-import router from 'next/router';
 import { useState } from 'react';
 import { useDeletePlanMutation } from '@/lib/mutations/use-delete-plan-mutation';
 
@@ -13,32 +11,33 @@ import { useDeletePlanMutation } from '@/lib/mutations/use-delete-plan-mutation'
 export const usePlanFilter = (userId: string) => {
   const { mutate: deletePlan } = useDeletePlanMutation(userId);
 
-  const [filter, setFilter] = useState<FilterState>({
-    type: FILTER_TYPES.PUBLIC,
-    value: PUBLIC_OPTIONS.ALL,
-  });
+  const [filters, setFilters] = useState<{
+    keyword?: string;
+    date?: string;
+    public?: PublicOption;
+  }>({});
   const [selectedFilter, setSelectedFilter] = useState<FilterType>(null);
   const [inputValue, setInputValue] = useState('');
   const [selectedPublicOption, setSelectedPublicOption] =
     useState<PublicOption>(PUBLIC_OPTIONS.ALL);
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const [date, setDate] = useState('');
   const [isDatePickerFocused, setIsDatePickerFocused] = useState(false);
 
   /**
-   * 선택된 필터를 적용하는 함수
+   * 필터 적용 함수 (여러 조건 동시 적용)
    * @throws 필터링 중 오류가 발생할 경우 에러를 콘솔에 출력
    */
   const handleApplyFilter = async () => {
     try {
-      setFilter({
-        type: selectedFilter,
-        value:
-          selectedFilter === FILTER_TYPES.PUBLIC
-            ? selectedPublicOption
-            : selectedFilter === FILTER_TYPES.DATE
-              ? `${startDate} ~ ${endDate}`
-              : inputValue,
+      setFilters((prev) => {
+        if (selectedFilter === FILTER_TYPES.PUBLIC) {
+          return { ...prev, public: selectedPublicOption };
+        } else if (selectedFilter === FILTER_TYPES.DATE) {
+          return { ...prev, date: date };
+        } else if (selectedFilter === FILTER_TYPES.KEYWORD) {
+          return { ...prev, keyword: inputValue };
+        }
+        return prev;
       });
     } catch (error) {
       console.error('필터링 중 오류 발생:', error);
@@ -46,17 +45,27 @@ export const usePlanFilter = (userId: string) => {
   };
 
   /**
-   * 필터 상태를 초기화하는 함수
+   * 특정 필터 조건 삭제
+   * @param type - 삭제할 필터 타입
+   */
+  const removeFilter = (type: FilterType) => {
+    setFilters((prev) => {
+      const newFilters = { ...prev };
+      if (type === FILTER_TYPES.DATE) delete newFilters.date;
+      if (type === FILTER_TYPES.KEYWORD) delete newFilters.keyword;
+      if (type === FILTER_TYPES.PUBLIC) delete newFilters.public;
+      return newFilters;
+    });
+  };
+
+  /**
+   * 전체 필터 초기화
    */
   const resetFilter = () => {
-    setFilter({
-      type: FILTER_TYPES.PUBLIC,
-      value: PUBLIC_OPTIONS.ALL,
-    });
+    setFilters({});
     setSelectedFilter(null);
     setInputValue('');
-    setStartDate('');
-    setEndDate('');
+    setDate('');
     setSelectedPublicOption(PUBLIC_OPTIONS.ALL);
   };
 
@@ -75,41 +84,41 @@ export const usePlanFilter = (userId: string) => {
    * @param filterType - 선택된 필터 타입 (제목(title), 날짜(date), 공개상태(public))
    * @param setSelectedFilter - 선택된 필터를 설정하는 함수
    * @param setInputValue - 입력값을 설정하는 함수
-   * @param filter - 현재 적용된 필터 상태
+   * @param filters - 현재 적용된 필터 상태
    */
   const handleFilterClick = (
     filterType: FilterType,
     setSelectedFilter: (filter: FilterType) => void,
     setInputValue: (value: string) => void,
-    filter: FilterState,
+    filters: { keyword?: string; date?: string; public?: PublicOption },
   ) => {
     setSelectedFilter(filterType);
-    setInputValue(
-      filterType === FILTER_TYPES.PUBLIC
-        ? ''
-        : filter.type === filterType
-          ? filter.value
-          : '',
-    );
+    if (filterType === FILTER_TYPES.KEYWORD) {
+      setInputValue(filters.keyword || '');
+    } else if (filterType === FILTER_TYPES.DATE) {
+      setDate(filters.date || '');
+    } else if (filterType === FILTER_TYPES.PUBLIC) {
+      setSelectedPublicOption(filters.public || PUBLIC_OPTIONS.ALL);
+    }
   };
 
   return {
-    filter,
+    filters,
+    setFilters,
     selectedFilter,
     setSelectedFilter,
     inputValue,
     setInputValue,
     selectedPublicOption,
     setSelectedPublicOption,
-    startDate,
-    setStartDate,
-    endDate,
-    setEndDate,
+    date,
+    setDate,
     isDatePickerFocused,
     setIsDatePickerFocused,
     resetFilter,
     handleApplyFilter,
     handleDelete,
     handleFilterClick,
+    removeFilter,
   };
 };

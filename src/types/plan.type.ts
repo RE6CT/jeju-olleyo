@@ -114,14 +114,12 @@ export type PlanVerticalCardProps = {
  * 계획 필터링 옵션 타입
  */
 export type PlanFilterOptions = {
-  /** 제목 검색 */
-  title?: string;
-  /** 시작일 */
-  startDate?: string;
-  /** 종료일 */
-  endDate?: string;
+  /** 키워드 검색 */
+  keyword?: string;
   /** 공개 여부 */
   isPublic?: boolean;
+  /** 포함시키려는 일자 */
+  date?: string;
 };
 
 /**

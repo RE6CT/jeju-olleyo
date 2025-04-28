@@ -10,12 +10,10 @@ export const FilterInput = ({
   setInputValue,
   selectedPublicOption,
   setSelectedPublicOption,
-  startDate,
-  setStartDate,
-  endDate,
-  setEndDate,
+  date,
+  setDate,
   setIsDatePickerFocused,
-  filter,
+  filters,
   applyFilter,
 }: {
   selectedFilter: FilterType;
@@ -23,12 +21,10 @@ export const FilterInput = ({
   setInputValue: (value: string) => void;
   selectedPublicOption: PublicOption;
   setSelectedPublicOption: (option: PublicOption) => void;
-  startDate: string;
-  setStartDate: (date: string) => void;
-  endDate: string;
-  setEndDate: (date: string) => void;
+  date: string;
+  setDate: (date: string) => void;
   setIsDatePickerFocused: (focused: boolean) => void;
-  filter: FilterState;
+  filters: { keyword?: string; date?: string; public?: string };
   applyFilter: () => void;
 }) => (
   <section className="flex w-[151px] flex-col items-start rounded-[12px]">
@@ -64,20 +60,9 @@ export const FilterInput = ({
           <Label className="medium-14 text-gray-900">여행 시작 날짜</Label>
           <Input
             type="date"
-            value={startDate}
+            value={date}
             className="medium-14 w-[140px] border-gray-200 text-gray-900"
-            onChange={(e) => setStartDate(e.target.value)}
-            onFocus={() => setIsDatePickerFocused(true)}
-            onBlur={() => setIsDatePickerFocused(false)}
-          />
-        </div>
-        <div className="flex flex-col gap-1">
-          <Label className="medium-14 text-gray-900">여행 종료 날짜</Label>
-          <Input
-            type="date"
-            value={endDate}
-            className="medium-14 w-[140px] border-gray-200 text-gray-900"
-            onChange={(e) => setEndDate(e.target.value)}
+            onChange={(e) => setDate(e.target.value)}
             onFocus={() => setIsDatePickerFocused(true)}
             onBlur={() => setIsDatePickerFocused(false)}
           />
@@ -97,9 +82,9 @@ export const FilterInput = ({
       className="semibold-16 mt-2 flex items-center justify-center rounded-[20px] bg-primary-500 px-5 py-1 text-white hover:bg-primary-600"
       disabled={
         selectedFilter === FILTER_TYPES.PUBLIC
-          ? filter.value === selectedPublicOption
+          ? filters.public === selectedPublicOption
           : selectedFilter === FILTER_TYPES.DATE
-            ? !startDate || !endDate
+            ? !date
             : !inputValue
       }
       onClick={applyFilter}

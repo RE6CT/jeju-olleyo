@@ -4,7 +4,6 @@ import { MyCommentType } from '@/types/comment.type';
 import MyComment from './my-comment';
 import useAuth from '@/lib/hooks/use-auth';
 import { useGetDataCount } from '@/lib/queries/use-get-data-count';
-import Loading from '@/app/loading';
 import EmptyResult from '@/components/commons/empty-result-link';
 import { PATH } from '@/constants/path.constants';
 import MypagePagination from '@/app/(mypage)/_components/_client/mypage-pagination';
@@ -21,12 +20,9 @@ const CommentsList = ({
   comments: MyCommentType[];
   pageSize: number;
 }) => {
-  const { user, isLoading } = useAuth();
-  const { data: countData, isLoading: isCountLoading } = useGetDataCount(
-    user?.id,
-  );
+  const { user } = useAuth();
+  const { data: countData } = useGetDataCount(user?.id);
 
-  if (isLoading || isCountLoading) return <Loading />;
   return (
     <>
       {countData?.commentCount === 0 ? (
@@ -39,7 +35,7 @@ const CommentsList = ({
         </div>
       ) : (
         <section className="flex flex-col gap-20">
-          <ul className="flex list-none flex-col gap-5 p-0">
+          <ul className="flex list-none flex-col gap-2 p-0 md:gap-5">
             {comments.map((comment) => (
               <li key={comment.planId}>
                 <MyComment comment={comment} />

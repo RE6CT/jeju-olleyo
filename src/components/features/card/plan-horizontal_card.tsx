@@ -11,10 +11,6 @@ import { PlanHorizontalCardProps } from '@/types/plan.type';
 
 import LikeButton from '../like/like-button';
 
-export const CARD = {
-  imageSize: 'w-[310px] h-[216px]',
-} as const;
-
 /**
  * 일정 카드 컴포넌트
  *
@@ -40,15 +36,13 @@ const PlanHorizontalCard = ({
   onDelete,
 }: PlanHorizontalCardProps) => {
   return (
-    <div className="group relative flex gap-4 rounded-lg p-4 transition-colors hover:bg-gray-50">
-      <Link
-        href={`/plan-detail/${plan.planId}?isReadOnly=true`}
-        className="absolute inset-0"
-      />
-
+    <Link
+      href={`/plan-detail/${plan.planId}?isReadOnly=true`}
+      className="group relative inset-0 flex gap-4"
+    >
       {/* 이미지 영역 */}
       <div className="relative">
-        <div className={`relative ${CARD.imageSize}`}>
+        <div className="relative h-[116px] w-[166px] md:h-[140px] md:w-[200px] lg:h-[216px] lg:w-[310px]">
           <PlanImage
             image={plan.planImg}
             title={plan.title}
@@ -58,7 +52,7 @@ const PlanHorizontalCard = ({
         <LikeButton
           planId={plan.planId}
           isLiked={plan.isLiked}
-          className="absolute right-4 top-4"
+          className="absolute right-2 top-2 lg:right-4 lg:top-4"
         />
       </div>
 
@@ -68,7 +62,7 @@ const PlanHorizontalCard = ({
           {/* 드롭다운 메뉴 */}
           {onEdit && onDelete && (
             <div
-              className="absolute right-4 top-2"
+              className="absolute right-0"
               onClick={(e) => e.stopPropagation()}
             >
               <PlanDropdown plan={plan} onEdit={onEdit} onDelete={onDelete}>
@@ -105,7 +99,7 @@ const PlanHorizontalCard = ({
           {plan.description || TEXT.noDescription}
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

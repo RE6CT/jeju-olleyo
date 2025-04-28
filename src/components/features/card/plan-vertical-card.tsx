@@ -25,12 +25,13 @@ const PlanVerticalCard = ({ plan }: PlanVerticalCardProps) => {
         <LikeButton
           planId={plan.planId}
           isLiked={plan.isLiked}
-          className="absolute right-4 top-4"
+          className="absolute right-2 top-2 md:right-4 md:top-4"
         />
       </div>
 
       <div className="flex flex-col gap-1 p-2">
-        <div className="flex flex-col gap-2">
+        {/* 제목과 내용 영역 */}
+        <div className="flex flex-col gap-1 md:gap-2">
           <p className="medium-16 line-clamp-1 overflow-hidden text-ellipsis text-gray-900">
             {plan.title}
           </p>
@@ -38,9 +39,13 @@ const PlanVerticalCard = ({ plan }: PlanVerticalCardProps) => {
             {plan.description}
           </p>
         </div>
-        <div className="medium-12 flex items-center gap-2 text-gray-500">
+        {/* 닉네임과 날짜 영역  */}
+        <div className="medium-12 flex flex-col items-start text-gray-500 md:flex-row md:items-center md:gap-2">
           <span className="whitespace-nowrap">{plan.nickname}</span>
-          <Separator orientation="vertical" className="h-[11px] bg-gray-300" />
+          <Separator
+            orientation="vertical"
+            className="hidden h-[11px] bg-gray-300 md:block"
+          />
           <Duration
             start={plan.travelStartDate}
             end={plan.travelEndDate}

@@ -15,13 +15,13 @@ const ReservationsCardArrow = ({
 }) => {
   return (
     <section
-      className="flex flex-col items-center justify-center gap-1"
+      className="mr-auto flex flex-row items-center justify-center gap-5 md:m-0 md:flex-col md:gap-1"
       role="separator"
     >
       <ArrowLeftLong aria-hidden="true" />
       <div className="flex items-center gap-[2px]">
         <FlightIcon fill="gray-300" size={12} aria-hidden="true" />
-        <p className="medium-12 text-gray-500">{`${airplaneName} ${carrierCode}`}</p>
+        <p className="regular-10 lg:medium-12 text-gray-500">{`${airplaneName} ${carrierCode}`}</p>
       </div>
     </section>
   );

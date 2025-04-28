@@ -26,7 +26,7 @@ const ReservationsCard = ({
     carrierCode: reservation.carrierCode,
   };
   return (
-    <article className="flex gap-7 rounded-24 bg-white px-4 py-5">
+    <article className="flex flex-col justify-center gap-[10px] rounded-12 bg-white px-5 py-5 md:flex-row md:gap-7 md:rounded-24 md:px-6 lg:px-4">
       <ReservationsFlightInfo {...departureInfo} aria-label="출발 정보" />
       <ReservationsCardArrow
         airplaneName={reservation.airplaneName}

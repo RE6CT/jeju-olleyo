@@ -27,6 +27,8 @@ import EmptyResult from '@/components/commons/empty-result-link';
 import FilterTag from './filter-tag';
 import { FILTER_TYPES } from '@/constants/plan.constants';
 
+const FILTER_ICON_SIZE = 20;
+const POPOVER_SIDE_OFFSET = 5;
 /**
  * 여행 계획 필터 섹션 컴포넌트
  * @param plansList - 여행 계획 목록
@@ -113,8 +115,8 @@ const PlanFilterSection = ({
               <Image
                 src="/icons/mdi_filter.svg"
                 alt="filter icon"
-                width={20}
-                height={20}
+                width={FILTER_ICON_SIZE}
+                height={FILTER_ICON_SIZE}
               />
               필터
             </Button>
@@ -122,7 +124,7 @@ const PlanFilterSection = ({
           <PopoverContent
             className="mt-[-4px] flex gap-2 rounded-md border bg-popover p-1"
             align="start"
-            sideOffset={5}
+            sideOffset={POPOVER_SIDE_OFFSET}
             onMouseEnter={() => setIsOpen(true)}
             onMouseLeave={() => handleMouseLeave(isDatePickerFocused)}
           >

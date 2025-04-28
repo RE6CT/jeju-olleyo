@@ -1,7 +1,7 @@
 'use client';
 
 import { FILTER_TYPES } from '@/constants/plan.constants';
-import { FilterState, FilterType, PublicOption } from '@/types/plan.type';
+import { FilterType, PublicOption } from '@/types/plan.type';
 import FilterButton from '@/app/my-plan/_components/server/filter-button';
 
 const FilterMenu = ({
@@ -22,7 +22,7 @@ const FilterMenu = ({
     filters: { keyword?: string; date?: string; public?: PublicOption },
   ) => void;
 }) => (
-  <div className="flex w-[120px] flex-col gap-[9px] px-4 py-2">
+  <div className="flex w-[97px] flex-col gap-[9px] px-4 py-2">
     <FilterButton
       type={FILTER_TYPES.KEYWORD}
       selectedFilter={selectedFilter}
@@ -36,7 +36,6 @@ const FilterMenu = ({
       }
       label="키워드"
     />
-    <div className="h-[1px] w-[120px] bg-gray-100" />
     <FilterButton
       type={FILTER_TYPES.DATE}
       selectedFilter={selectedFilter}
@@ -50,7 +49,6 @@ const FilterMenu = ({
       }
       label="날짜"
     />
-    <div className="h-[1px] w-[120px] bg-gray-100" />
     <FilterButton
       type={FILTER_TYPES.PUBLIC}
       selectedFilter={selectedFilter}

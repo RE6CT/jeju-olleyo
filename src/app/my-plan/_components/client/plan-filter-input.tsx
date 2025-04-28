@@ -2,7 +2,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { FILTER_TYPES, PUBLIC_OPTIONS } from '@/constants/plan.constants';
-import { FilterState, FilterType, PublicOption } from '@/types/plan.type';
+import { FilterType, PublicOption } from '@/types/plan.type';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Check } from 'lucide-react';
+import { CheckboxSecondary } from '@/components/ui/checkbox-secondary';
 
 export const FilterInput = ({
   selectedFilter,
@@ -26,70 +29,73 @@ export const FilterInput = ({
   setIsDatePickerFocused: (focused: boolean) => void;
   filters: { keyword?: string; date?: string; public?: string };
   applyFilter: () => void;
-}) => (
-  <section className="flex w-[151px] flex-col items-start rounded-[12px]">
-    <div className="flex items-center gap-[10px] self-stretch p-[12px_16px_8px_16px]">
-      <h3 className="text-16 font-medium">
-        {selectedFilter === FILTER_TYPES.KEYWORD
-          ? '키워드'
-          : selectedFilter === FILTER_TYPES.DATE
-            ? '날짜'
-            : '공개상태'}
-      </h3>
-    </div>
-    {selectedFilter === FILTER_TYPES.PUBLIC ? (
-      <div className="flex flex-col gap-2">
-        {Object.values(PUBLIC_OPTIONS).map((option) => (
-          <Button
-            key={option}
-            variant={selectedPublicOption === option ? 'default' : 'ghost'}
-            className={`medium-14 w-full justify-start bg-transparent hover:bg-transparent hover:text-primary-300 ${
-              selectedPublicOption === option
-                ? 'text-primary-500'
-                : 'text-gray-500'
-            }`}
-            onClick={() => setSelectedPublicOption(option)}
-          >
-            {option}
-          </Button>
-        ))}
-      </div>
-    ) : selectedFilter === FILTER_TYPES.DATE ? (
-      <div className="flex flex-col gap-2">
-        <div className="flex flex-col gap-1">
-          <Label className="medium-14 text-gray-900">여행 시작 날짜</Label>
+}) => {
+  const renderFilterInput = () => {
+    if (selectedFilter === FILTER_TYPES.KEYWORD) {
+      return (
+        <div className="flex flex-col items-center justify-center gap-[10px] self-stretch pr-4">
+          <Input
+            placeholder="예) 첫 제주"
+            value={inputValue}
+            className="medium-14 border-gray-200 text-gray-900"
+            onChange={(e) => setInputValue(e.target.value)}
+          />
+        </div>
+      );
+    } else if (selectedFilter === FILTER_TYPES.DATE) {
+      return (
+        <div className="flex flex-col items-center justify-center gap-[10px] self-stretch pr-4">
           <Input
             type="date"
             value={date}
-            className="medium-14 w-[140px] border-gray-200 text-gray-900"
+            className="medium-14 border-gray-200 text-gray-900"
             onChange={(e) => setDate(e.target.value)}
             onFocus={() => setIsDatePickerFocused(true)}
             onBlur={() => setIsDatePickerFocused(false)}
+            placeholder="예) 2025.01.01"
           />
         </div>
+      );
+    } else if (selectedFilter === FILTER_TYPES.PUBLIC) {
+      return (
+        <div className="flex flex-col items-center justify-center gap-[10px] self-stretch pr-4">
+          <div className="flex flex-col items-start justify-center self-stretch pr-4">
+            {Object.values(PUBLIC_OPTIONS).map((option) => (
+              <label
+                key={option}
+                className="medium-14 flex cursor-pointer items-center gap-[10px] py-[6px] text-gray-900"
+              >
+                <CheckboxSecondary
+                  checked={selectedPublicOption === option}
+                  onCheckedChange={() => setSelectedPublicOption(option)}
+                />
+                {option}
+              </label>
+            ))}
+          </div>
+        </div>
+      );
+    }
+  };
+
+  return (
+    <section className="flex h-[212px] w-[183px] flex-col items-start rounded-r-[12px] rounded-bl-[12px] py-4">
+      {renderFilterInput()}
+      <div className="flex flex-col items-end gap-[10px] self-stretch pb-3 pl-0 pr-4 pt-2">
+        <Button
+          className="semibold-16 flex h-[40px] items-center justify-center rounded-[20px] bg-primary-500 px-5 py-1 text-white hover:bg-primary-600"
+          disabled={
+            selectedFilter === FILTER_TYPES.PUBLIC
+              ? filters.public === selectedPublicOption
+              : selectedFilter === FILTER_TYPES.DATE
+                ? !date
+                : !inputValue
+          }
+          onClick={applyFilter}
+        >
+          적용
+        </Button>
       </div>
-    ) : (
-      <div className="flex flex-col gap-2">
-        <Input
-          placeholder="제목 입력"
-          value={inputValue}
-          className="medium-14 border-gray-200 text-gray-900"
-          onChange={(e) => setInputValue(e.target.value)}
-        />
-      </div>
-    )}
-    <Button
-      className="semibold-16 mt-2 flex items-center justify-center rounded-[20px] bg-primary-500 px-5 py-1 text-white hover:bg-primary-600"
-      disabled={
-        selectedFilter === FILTER_TYPES.PUBLIC
-          ? filters.public === selectedPublicOption
-          : selectedFilter === FILTER_TYPES.DATE
-            ? !date
-            : !inputValue
-      }
-      onClick={applyFilter}
-    >
-      적용
-    </Button>
-  </section>
-);
+    </section>
+  );
+};

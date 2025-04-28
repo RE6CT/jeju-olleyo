@@ -69,7 +69,7 @@ const ForgotPasswordPage = () => {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="name@example.com"
+                  placeholder="6-20자 영문, 숫자"
                   {...register('email')}
                   aria-required="true"
                   aria-invalid={errors.email ? 'true' : 'false'}

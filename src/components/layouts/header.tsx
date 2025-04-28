@@ -46,7 +46,7 @@ const Header = () => {
               width={116}
               height={61}
               priority
-              className="hidden object-cover md:block"
+              className="hidden object-cover md:mr-[42px] md:block"
             />
             {/* 태블릿용 */}
             <Image
@@ -55,7 +55,7 @@ const Header = () => {
               width={86.7}
               height={45.1}
               priority
-              className="hidden object-cover sm:block md:hidden"
+              className="hidden object-cover sm:mr-[30px] sm:block md:hidden"
             />
             {/* 모바일용 */}
             <Image
@@ -64,7 +64,7 @@ const Header = () => {
               width={80.1}
               height={41}
               priority
-              className="block object-cover sm:hidden"
+              className="mr-[13px] block object-cover sm:hidden"
             />
           </Link>
 

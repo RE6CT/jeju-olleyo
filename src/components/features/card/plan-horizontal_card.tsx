@@ -40,7 +40,7 @@ const PlanHorizontalCard = ({
   onDelete,
 }: PlanHorizontalCardProps) => {
   return (
-    <div className="group relative flex gap-4 rounded-lg p-4 transition-colors hover:bg-gray-50">
+    <div className="group relative flex gap-4 rounded-lg transition-colors hover:bg-gray-50">
       <Link
         href={`/plan-detail/${plan.planId}?isReadOnly=true`}
         className="absolute inset-0"
@@ -68,7 +68,7 @@ const PlanHorizontalCard = ({
           {/* 드롭다운 메뉴 */}
           {onEdit && onDelete && (
             <div
-              className="absolute right-4 top-2"
+              className="absolute right-0"
               onClick={(e) => e.stopPropagation()}
             >
               <PlanDropdown plan={plan} onEdit={onEdit} onDelete={onDelete}>

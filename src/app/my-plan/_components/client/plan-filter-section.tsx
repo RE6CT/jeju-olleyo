@@ -99,7 +99,7 @@ const PlanFilterSection = ({
   }
 
   return (
-    <section className="flex flex-col items-center">
+    <section className="flex flex-col items-center gap-[21px]">
       <div className="flex w-full items-center justify-start gap-2">
         <Popover open={isOpen} onOpenChange={setIsOpen}>
           <PopoverTrigger
@@ -119,7 +119,7 @@ const PlanFilterSection = ({
             </Button>
           </PopoverTrigger>
           <PopoverContent
-            className="mt-[-4px] flex w-[400px] gap-2 rounded-md border bg-popover p-1"
+            className="mt-[-4px] flex gap-2 rounded-md border bg-popover p-1"
             align="start"
             sideOffset={5}
             onMouseEnter={() => setIsOpen(true)}
@@ -174,7 +174,7 @@ const PlanFilterSection = ({
         />
       ) : (
         <>
-          <div className="grid w-full grid-cols-1 gap-6">
+          <div className="grid w-full grid-cols-1 gap-5">
             {currentPagePlans.map((plan) => (
               <PlanHorizontalCard
                 key={plan.planId}

@@ -22,20 +22,21 @@ const FilterMenu = ({
     filter: FilterState,
   ) => void;
 }) => (
-  <div className="flex w-[120px] flex-col gap-2">
+  <div className="flex w-[120px] flex-col gap-[9px] px-4 py-2">
     <FilterButton
-      type={FILTER_TYPES.TITLE}
+      type={FILTER_TYPES.KEYWORD}
       selectedFilter={selectedFilter}
       onClick={() =>
         handleFilterClick(
-          FILTER_TYPES.TITLE,
+          FILTER_TYPES.KEYWORD,
           setSelectedFilter,
           setInputValue,
           filter,
         )
       }
-      label="제목"
+      label="키워드"
     />
+    <div className="h-[1px] w-[120px] bg-gray-100" />
     <FilterButton
       type={FILTER_TYPES.DATE}
       selectedFilter={selectedFilter}
@@ -49,6 +50,7 @@ const FilterMenu = ({
       }
       label="날짜"
     />
+    <div className="h-[1px] w-[120px] bg-gray-100" />
     <FilterButton
       type={FILTER_TYPES.PUBLIC}
       selectedFilter={selectedFilter}
@@ -60,7 +62,7 @@ const FilterMenu = ({
           filter,
         )
       }
-      label="공개상태"
+      label="공개 상태"
     />
   </div>
 );

@@ -22,7 +22,7 @@ const FilterButton = ({
   return (
     <Button
       variant={selectedFilter === type ? 'default' : 'ghost'}
-      className={`medium-14 w-full justify-start bg-transparent hover:bg-transparent hover:text-primary-300 ${
+      className={`medium-16 w-[120px] items-center justify-start bg-transparent py-2 hover:bg-transparent hover:text-primary-500 ${
         selectedFilter === type ? 'text-primary-500' : 'text-gray-500'
       }`}
       onClick={onClick}

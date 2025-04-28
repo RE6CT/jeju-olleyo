@@ -38,7 +38,7 @@ const PlaceDetailContent = ({
   return (
     <div className="mt-[73px] flex flex-col items-center justify-center">
       <div className="flex gap-8">
-        <div className="relative mr-[50px] aspect-square w-[479px] items-start bg-no-repeat object-cover sm:aspect-square sm:w-[300px]">
+        <div className="relative mr-[50px] aspect-square w-full items-start bg-no-repeat object-cover md:w-[300px] lg:w-[479px]">
           <PlaceImage image={place.image} title={place.title} />
         </div>
 
@@ -51,7 +51,7 @@ const PlaceDetailContent = ({
           </div>
 
           <div className="mb-[10px] mt-[10px] flex items-center gap-2">
-            <div className="bold-28 text-xl">{place.title}</div>
+            <div className="bold-28">{place.title}</div>
             {/* <div className="ml-auto">
               <BookmarkButton isBookmarked={isBookmarked} placeId={placeId} />
             </div> */}

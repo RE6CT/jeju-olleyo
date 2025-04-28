@@ -39,19 +39,30 @@ const Header = () => {
       <div className="flex h-[86px] w-full items-center justify-between gap-2 bg-white px-9">
         <div className="flex items-center gap-5 sm:gap-[42px]">
           <Link href={PATH.HOME} className="flex-shrink-0">
+            {/* 웹용 */}
             <Image
               src="/logo/color_logo.png"
               alt="로고"
               width={116}
               height={61}
               priority
-              className="hidden object-cover sm:block"
+              className="hidden object-cover md:block"
             />
+            {/* 태블릿용 */}
             <Image
-              src="/logo/color_logo_single.png"
+              src="/logo/color_logo.png"
               alt="로고"
-              width={28}
-              height={28}
+              width={86.7}
+              height={45.1}
+              priority
+              className="hidden object-cover sm:block md:hidden"
+            />
+            {/* 모바일용 */}
+            <Image
+              src="/logo/color_logo.png"
+              alt="로고"
+              width={80.1}
+              height={41}
               priority
               className="block object-cover sm:hidden"
             />

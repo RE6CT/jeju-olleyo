@@ -24,6 +24,8 @@ import { usePopover } from '@/lib/hooks/use-popover';
 import { useRouter } from 'next/navigation';
 import { PATH } from '@/constants/path.constants';
 import EmptyResult from '@/components/commons/empty-result-link';
+import FilterTag from './filter-tag';
+import { FILTER_TYPES } from '@/constants/plan.constants';
 
 /**
  * 여행 계획 필터 섹션 컴포넌트
@@ -69,6 +71,7 @@ const PlanFilterSection = ({
     handleApplyFilter,
     handleDelete,
     handleFilterClick,
+    removeFilter,
   } = usePlanFilter(userId);
 
   const { data: plans = plansList, isLoading: isPlansLoading } =
@@ -146,6 +149,40 @@ const PlanFilterSection = ({
             )}
           </PopoverContent>
         </Popover>
+        {/* 필터 카드 렌더링 */}
+        {filters.keyword && (
+          <FilterTag
+            onRemove={() => {
+              removeFilter(FILTER_TYPES.KEYWORD);
+              setCurrentPage(INITIAL_PAGE);
+            }}
+            ariaLabel="키워드 필터 삭제"
+          >
+            #{filters.keyword}
+          </FilterTag>
+        )}
+        {filters.date && (
+          <FilterTag
+            onRemove={() => {
+              removeFilter(FILTER_TYPES.DATE);
+              setCurrentPage(INITIAL_PAGE);
+            }}
+            ariaLabel="날짜 필터 삭제"
+          >
+            #{filters.date}
+          </FilterTag>
+        )}
+        {filters.public && filters.public !== PUBLIC_OPTIONS.ALL && (
+          <FilterTag
+            onRemove={() => {
+              removeFilter(FILTER_TYPES.PUBLIC);
+              setCurrentPage(INITIAL_PAGE);
+            }}
+            ariaLabel="공개상태 필터 삭제"
+          >
+            #{filters.public === PUBLIC_OPTIONS.PUBLIC ? '공개' : '비공개'}
+          </FilterTag>
+        )}
         {(filters.keyword ||
           filters.date ||
           (filters.public && filters.public !== PUBLIC_OPTIONS.ALL)) && (

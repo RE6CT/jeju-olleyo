@@ -37,6 +37,7 @@ export type DurationProps = {
   end: string;
   separator: string;
   className?: string;
+  showShortYear?: boolean;
 };
 
 // 제주 여행 배너 컴포넌트 props

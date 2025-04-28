@@ -10,6 +10,15 @@ export const formatDate = (date: string | null): string => {
 };
 
 /**
+ * 날짜를 YY.MM.DD 형식으로 포맷팅하는 함수
+ * @param date - 포맷팅할 날짜 문자열
+ * @returns 포맷팅된 날짜 문자열
+ */
+export const formatDateShortYear = (date: string | null): string => {
+  return date ? dayjs(date).format('YY.MM.DD') : '날짜 미정';
+};
+
+/**
  * 시간을 '오전/오후 H:MM' 형식으로 포맷팅하는 함수
  * @param time - 포맷팅할 시간 문자열 또는 Date 객체
  * @returns 포맷팅된 시간 문자열 (예: '오후 6:20')

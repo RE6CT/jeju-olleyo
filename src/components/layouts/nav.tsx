@@ -45,7 +45,7 @@ const Nav = () => {
   };
 
   return (
-    <nav className="flex items-center">
+    <nav className="hidden items-center sm:flex">
       {user ? (
         <div className="flex gap-14 whitespace-nowrap text-xs font-medium sm:text-xs md:text-sm lg:text-base">
           <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>

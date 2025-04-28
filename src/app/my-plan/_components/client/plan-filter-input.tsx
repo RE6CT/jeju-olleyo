@@ -1,10 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { FILTER_TYPES, PUBLIC_OPTIONS } from '@/constants/plan.constants';
 import { FilterType, PublicOption } from '@/types/plan.type';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Check } from 'lucide-react';
 import { CheckboxSecondary } from '@/components/ui/checkbox-secondary';
 
 export const FilterInput = ({

@@ -1,5 +1,5 @@
 import { PUBLIC_OPTIONS, FILTER_TYPES } from '@/constants/plan.constants';
-import { FilterState, FilterType, PublicOption } from '@/types/plan.type';
+import { FilterType, PublicOption } from '@/types/plan.type';
 import { useState } from 'react';
 import { useDeletePlanMutation } from '@/lib/mutations/use-delete-plan-mutation';
 

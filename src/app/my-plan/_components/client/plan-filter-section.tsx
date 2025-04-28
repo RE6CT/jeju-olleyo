@@ -13,6 +13,7 @@ import {
   ITEMS_PER_PAGE,
   PUBLIC_OPTIONS,
   INITIAL_PAGE,
+  FILTER_TYPES,
 } from '@/constants/plan.constants';
 import { useGetFilteredPlans } from '@/lib/queries/use-get-filtered-plans';
 import { Plan } from '@/types/plan.type';
@@ -25,7 +26,6 @@ import { useRouter } from 'next/navigation';
 import { PATH } from '@/constants/path.constants';
 import EmptyResult from '@/components/commons/empty-result-link';
 import FilterTag from './filter-tag';
-import { FILTER_TYPES } from '@/constants/plan.constants';
 
 const FILTER_ICON_SIZE = 20;
 const POPOVER_SIDE_OFFSET = 5;
@@ -103,7 +103,7 @@ const PlanFilterSection = ({
 
   return (
     <section className="flex flex-col items-center gap-[21px]">
-      <div className="flex w-full items-center justify-start gap-2">
+      <div className="flex w-full items-center justify-start gap-10">
         <Popover open={isOpen} onOpenChange={setIsOpen}>
           <PopoverTrigger
             asChild
@@ -152,55 +152,57 @@ const PlanFilterSection = ({
           </PopoverContent>
         </Popover>
         {/* 필터 카드 렌더링 */}
-        {filters.keyword && (
-          <FilterTag
-            onRemove={() => {
-              removeFilter(FILTER_TYPES.KEYWORD);
-              setCurrentPage(INITIAL_PAGE);
-            }}
-            ariaLabel="키워드 필터 삭제"
-          >
-            #{filters.keyword}
-          </FilterTag>
-        )}
-        {filters.date && (
-          <FilterTag
-            onRemove={() => {
-              removeFilter(FILTER_TYPES.DATE);
-              setCurrentPage(INITIAL_PAGE);
-            }}
-            ariaLabel="날짜 필터 삭제"
-          >
-            #{filters.date}
-          </FilterTag>
-        )}
-        {filters.public && filters.public !== PUBLIC_OPTIONS.ALL && (
-          <FilterTag
-            onRemove={() => {
-              removeFilter(FILTER_TYPES.PUBLIC);
-              setCurrentPage(INITIAL_PAGE);
-            }}
-            ariaLabel="공개상태 필터 삭제"
-          >
-            #{filters.public === PUBLIC_OPTIONS.PUBLIC ? '공개' : '비공개'}
-          </FilterTag>
-        )}
-        {(filters.keyword ||
-          filters.date ||
-          (filters.public && filters.public !== PUBLIC_OPTIONS.ALL)) && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => {
-              resetFilter();
-              setCurrentPage(INITIAL_PAGE);
-            }}
-            className="medium-14 text-gray-500 hover:text-gray-900"
-            disabled={isPlansLoading}
-          >
-            필터 초기화
-          </Button>
-        )}
+        <div className="flex items-center gap-3">
+          {filters.keyword && (
+            <FilterTag
+              onRemove={() => {
+                removeFilter(FILTER_TYPES.KEYWORD);
+                setCurrentPage(INITIAL_PAGE);
+              }}
+              ariaLabel="키워드 필터 삭제"
+            >
+              #{filters.keyword}
+            </FilterTag>
+          )}
+          {filters.date && (
+            <FilterTag
+              onRemove={() => {
+                removeFilter(FILTER_TYPES.DATE);
+                setCurrentPage(INITIAL_PAGE);
+              }}
+              ariaLabel="날짜 필터 삭제"
+            >
+              #{filters.date}
+            </FilterTag>
+          )}
+          {filters.public && filters.public !== PUBLIC_OPTIONS.ALL && (
+            <FilterTag
+              onRemove={() => {
+                removeFilter(FILTER_TYPES.PUBLIC);
+                setCurrentPage(INITIAL_PAGE);
+              }}
+              ariaLabel="공개상태 필터 삭제"
+            >
+              #{filters.public === PUBLIC_OPTIONS.PUBLIC ? '공개' : '비공개'}
+            </FilterTag>
+          )}
+          {(filters.keyword ||
+            filters.date ||
+            (filters.public && filters.public !== PUBLIC_OPTIONS.ALL)) && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                resetFilter();
+                setCurrentPage(INITIAL_PAGE);
+              }}
+              className="medium-14 px-3 text-gray-500 hover:text-gray-900"
+              disabled={isPlansLoading}
+            >
+              필터 초기화
+            </Button>
+          )}
+        </div>
       </div>
 
       {(plans ?? []).length === 0 ? (

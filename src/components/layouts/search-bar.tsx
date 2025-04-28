@@ -84,7 +84,7 @@ const SearchBar = () => {
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
         placeholder="제주 여행, 어디부터 시작할까요?"
-        className="placeholder:medium-14 medium-14 h-10 rounded-full border-none bg-gray-50 pl-[42px] placeholder:text-gray-400"
+        className="placeholder:medium-14 medium-14 h-10 rounded-full border-none bg-white pl-[42px] placeholder:text-gray-400 md:bg-gray-50"
         onClick={handleInputClick}
         onKeyDown={(e) => {
           if (e.key === 'Enter') {

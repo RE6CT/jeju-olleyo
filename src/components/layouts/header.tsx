@@ -20,7 +20,7 @@ const Header = () => {
     pathname.includes(PATH.RESET_PASSWORD.substring(1));
   if (isWithoutHeaderComponent) {
     return (
-      <header className="flex h-[86px] w-full items-center justify-between gap-2 bg-white px-9">
+      <header className="flex h-[86px] w-full items-center justify-between gap-2 bg-transparent px-9 md:bg-white">
         <Link href={PATH.HOME} className="flex-shrink-0">
           <Image
             src="/logo/color_logo.png"
@@ -36,7 +36,7 @@ const Header = () => {
   }
   return (
     <header className="flex flex-col">
-      <div className="flex h-[86px] w-full items-center justify-between gap-2 bg-white px-9">
+      <div className="flex h-[86px] w-full items-center justify-between gap-2 bg-transparent px-9 md:bg-white">
         <div className="flex items-center gap-5 sm:gap-[42px]">
           <Link href={PATH.HOME} className="flex-shrink-0">
             <Image

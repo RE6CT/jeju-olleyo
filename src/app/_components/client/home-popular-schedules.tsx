@@ -22,14 +22,26 @@ const PopularSchedules = () => {
 
   // 스켈레톤 UI 렌더링
   const renderSkeleton = () => (
-    <div className="grid w-full list-none grid-cols-2 gap-x-3 gap-y-5 p-0 md:grid-cols-3">
+    <div
+      className="grid w-full list-none grid-cols-2 grid-rows-2 gap-x-3 gap-y-5 overflow-hidden p-0 md:grid-cols-3"
+      style={{
+        gridTemplateRows: 'repeat(2, minmax(0, 1fr))',
+        gridAutoRows: '0',
+      }}
+    >
       {Array(6)
         .fill(null)
         .map((_, index) => (
           <div
             key={`skeleton-${index}`}
-            className="h-64 animate-pulse rounded-lg bg-gray-200"
-          />
+            className="flex flex-col overflow-hidden rounded-lg bg-white shadow-md"
+          >
+            <div
+              className="w-full animate-pulse bg-gray-200"
+              style={{ aspectRatio: '310/216' }}
+            />
+            <div className="h-[112px] w-full animate-pulse bg-gray-200" />
+          </div>
         ))}
     </div>
   );
@@ -42,7 +54,7 @@ const PopularSchedules = () => {
         </h2>
         <Link
           href={'/community'}
-          className="regular-16 text-gray-600 hover:text-black"
+          className="regular-14 md:regular-16 text-gray-600 hover:text-black"
         >
           더보기
         </Link>
@@ -51,7 +63,13 @@ const PopularSchedules = () => {
       {isLoading ? (
         renderSkeleton()
       ) : (
-        <div className="grid w-full list-none grid-cols-2 gap-x-3 gap-y-5 p-0 md:grid-cols-3">
+        <div
+          className="grid w-full list-none grid-cols-2 grid-rows-2 gap-x-3 gap-y-5 overflow-hidden p-0 md:grid-cols-3"
+          style={{
+            gridTemplateRows: 'repeat(2, minmax(0, 1fr))',
+            gridAutoRows: '0',
+          }}
+        >
           {plans.map((plan: PlanType) => (
             <PlanVerticalCard key={plan.planId} plan={plan} />
           ))}

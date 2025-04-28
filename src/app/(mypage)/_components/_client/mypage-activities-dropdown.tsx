@@ -1,3 +1,5 @@
+'use client';
+
 import { ArrowDown } from '@/components/icons/arrow-icon';
 import {
   DropdownMenu,
@@ -8,6 +10,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { PATH } from '@/constants/path.constants';
 import Link from 'next/link';
+import { useState } from 'react';
 
 const TITLE = {
   bookmarks: '내가 북마크한 장소',
@@ -24,9 +27,18 @@ const MypageActivitiesDropdown = ({
 }: {
   pageType: 'bookmarks' | 'likes' | 'comments';
 }) => {
+  const [open, setOpen] = useState(false);
+
+  /**
+   * 아이템 클릭 시 드롭다운을 닫는 핸들러
+   */
+  const handleItemClick = () => {
+    setOpen(false);
+  };
+
   return (
     <nav className="block md:hidden" aria-label="내 활동 네비게이션">
-      <DropdownMenu>
+      <DropdownMenu open={open} onOpenChange={setOpen}>
         <DropdownMenuTrigger
           asChild
           className="focus:outline-none focus-visible:outline-none"
@@ -48,8 +60,10 @@ const MypageActivitiesDropdown = ({
           aria-labelledby="activity-dropdown-button"
         >
           <DropdownMenuItem
-            className="medium-16 py-2 text-gray-900 focus:text-primary-500"
+            className={`medium-16 py-2 focus:bg-gray-50 ${pageType === 'bookmarks' ? 'text-primary-500' : 'text-gray-900'}`}
             role="menuitem"
+            asChild
+            onClick={handleItemClick}
           >
             <Link
               href={PATH.BOOKMARKS}
@@ -61,8 +75,10 @@ const MypageActivitiesDropdown = ({
           </DropdownMenuItem>
           <DropdownMenuSeparator className="text-gray-100" aria-hidden="true" />
           <DropdownMenuItem
-            className="medium-16 py-2 text-gray-900 focus:text-primary-500"
+            className={`medium-16 py-2 focus:bg-gray-50 ${pageType === 'likes' ? 'text-primary-500' : 'text-gray-900'}`}
             role="menuitem"
+            asChild
+            onClick={handleItemClick}
           >
             <Link
               href={PATH.LIKES}
@@ -74,8 +90,10 @@ const MypageActivitiesDropdown = ({
           </DropdownMenuItem>
           <DropdownMenuSeparator className="text-gray-100" aria-hidden="true" />
           <DropdownMenuItem
-            className="medium-16 py-2 text-gray-900 focus:text-primary-500"
+            className={`medium-16 py-2 focus:bg-gray-50 ${pageType === 'comments' ? 'text-primary-500' : 'text-gray-900'}`}
             role="menuitem"
+            asChild
+            onClick={handleItemClick}
           >
             <Link
               href={PATH.COMMENTS}

@@ -69,7 +69,7 @@ const Header = () => {
           </Link>
 
           {/* 검색바 */}
-          <div className="w-full sm:w-[357px]">
+          <div className="w-[228px] sm:w-[251px] md:w-[335px]">
             <Suspense fallback={<LoadingSpinner />}>
               <SearchBar />
             </Suspense>

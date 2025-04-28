@@ -42,42 +42,40 @@ const PlaceDetailContent = ({
           <PlaceImage image={place.image} title={place.title} />
         </div>
 
-        <div className="flex flex-col justify-start space-y-3 pt-2">
+        <div className="flex flex-col justify-start space-y-3 md:pt-0 lg:pt-2">
           <div className="flex items-center gap-2">
             <CategoryBadge
               category={place.category as CategoryType}
               badgeType="modal"
+              className="lg:semibold-16 md:medium-16"
             />
           </div>
 
           <div className="mb-[10px] mt-[10px] flex items-center gap-2">
-            <div className="bold-28">{place.title}</div>
-            {/* <div className="ml-auto">
-              <BookmarkButton isBookmarked={isBookmarked} placeId={placeId} />
-            </div> */}
+            <div className="md:bold-22 lg:bold-28">{place.title}</div>
           </div>
 
           <div className="mt-2 space-y-[9.5px] text-gray-300">
-            <div className="medium-18 flex items-center gap-2">
+            <div className="lg:medium-18 md:medium-14 flex items-center gap-2">
               <TimeIcon size={20} fill="gray-300" />
               {isHotel ? '체크인/체크아웃' : ''}
               {openSummary}
             </div>
-            <div className="medium-18 flex items-center gap-2">
+            <div className="lg:medium-18 md:medium-14 flex items-center gap-2">
               <PhoneIcon size={20} fill="gray-300" />
               {detailJson?.phone || '전화번호 미제공'}
             </div>
           </div>
 
           <div className="semibold-18 mt-[11px] text-gray-300">
-            <div className="medium-18 flex items-center gap-2">
+            <div className="lg:medium-18 md:medium-14 flex items-center gap-2">
               <LocationIcon size={20} fill="gray-300" />
               {place.address}
             </div>
           </div>
 
           {/* 지도영역 */}
-          <div className="min-h-[150px] w-full">
+          <div className="w-full md:min-h-[100px] lg:min-h-[150px]">
             <PlaceLocation
               lat={place.lat}
               lng={place.lng}

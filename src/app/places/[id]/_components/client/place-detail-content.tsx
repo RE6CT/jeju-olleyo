@@ -38,7 +38,7 @@ const PlaceDetailContent = ({
   return (
     <div className="mt-[73px] flex flex-col items-center justify-center">
       <div className="flex gap-8">
-        <div className="relative mr-[50px] aspect-square w-[479px] items-start bg-no-repeat object-cover">
+        <div className="relative mr-[50px] aspect-square w-[479px] items-start bg-no-repeat object-cover sm:aspect-square sm:w-[300px]">
           <PlaceImage image={place.image} title={place.title} />
         </div>
 

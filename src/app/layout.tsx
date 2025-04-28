@@ -38,7 +38,7 @@ export default function RootLayout({
       >
         <Providers>
           <AuthProvider>
-            <div className="flex h-full w-[375px] max-w-[1024px] flex-col md:w-full">
+            <div className="bg-home-gradient flex h-full w-[375px] max-w-[1024px] flex-col md:w-full md:bg-none">
               <Header />
               <div className="h-full w-full pb-[85px] md:pb-0">
                 <main className="flex-1">{children}</main>

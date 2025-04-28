@@ -62,7 +62,7 @@ const PlanHorizontalCard = ({
           {/* 드롭다운 메뉴 */}
           {onEdit && onDelete && (
             <div
-              className="absolute right-4 top-2"
+              className="absolute right-0"
               onClick={(e) => e.stopPropagation()}
             >
               <PlanDropdown plan={plan} onEdit={onEdit} onDelete={onDelete}>

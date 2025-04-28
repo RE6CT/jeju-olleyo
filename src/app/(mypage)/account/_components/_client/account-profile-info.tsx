@@ -103,7 +103,7 @@ const ProfileInfo = ({
 
   return (
     <section
-      className="rounded-16 flex flex-col gap-4 border border-gray-100 bg-white p-4 md:rounded-24 md:px-8 md:py-6 lg:gap-0"
+      className="flex flex-col gap-4 rounded-16 border-gray-100 bg-white p-4 md:rounded-24 md:border md:px-8 md:py-6 lg:gap-0"
       aria-labelledby="profile-heading"
     >
       <h3 id="profile-heading" className="semibold-18 hidden w-full md:block">

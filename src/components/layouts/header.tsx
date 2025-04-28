@@ -64,12 +64,12 @@ const Header = () => {
               width={80.1}
               height={41}
               priority
-              className="block object-cover pr-[13px] sm:hidden"
+              className="block object-cover sm:hidden"
             />
           </Link>
 
           {/* 검색바 */}
-          <div className="w-full sm:w-[251px] md:w-[335px]">
+          <div className="w-[330px] sm:w-[251px] md:w-[335px]">
             <Suspense fallback={<LoadingSpinner />}>
               <SearchBar />
             </Suspense>

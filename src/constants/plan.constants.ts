@@ -1,5 +1,5 @@
 export const FILTER_TYPES = {
-  TITLE: 'title',
+  KEYWORD: 'keyword',
   DATE: 'date',
   PUBLIC: 'public',
 } as const; // string을 리터럴 타입으로 추론되게 하기 위해

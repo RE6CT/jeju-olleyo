@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect, useRef, useCallback } from 'react';
 
 import ErrorMessage from '@/components/features/alert/error-message';
-import { Button } from '@/components/ui/button';
 import DynamicPagination from '@/components/ui/dynamic-pagination';
 import { CategoryType } from '@/types/category.type';
 import { Place } from '@/types/search.type';
@@ -17,12 +16,12 @@ import { useGetDataCount } from '@/lib/queries/use-get-data-count';
 import { useCurrentUser } from '@/lib/queries/auth-queries';
 import { useBookmarkQuery } from '@/lib/queries/use-bookmark-query';
 
-const ITEMS_PER_PAGE = 7;
-const INITIAL_ITEMS = 3;
+const ITEMS_PER_PAGE = 3;
 const NAVIGATION_BUTTON_WIDTH = 42.4;
 const NAVIGATION_BUTTON_GAP = 12;
 const BUTTON_WIDTH = 24;
 const DEBOUNCE_TIME = 200;
+const DEFAULT_VISIBLE_PAGES = 3;
 
 /**
  * 북마크된 장소들을 사이드메뉴에 표시하는 컴포넌트
@@ -47,9 +46,9 @@ const BookmarkSidemenu = ({
   onAddPlace: (place: Place) => void;
   selectedDay: number | null;
 }) => {
-  const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const [isExpanded, setIsExpanded] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [maxVisiblePages, setMaxVisiblePages] = useState(3);
+  const [maxVisiblePages, setMaxVisiblePages] = useState(DEFAULT_VISIBLE_PAGES);
   const [isDaySelectModalOpen, setIsDaySelectModalOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const resizeTimeoutRef = useRef<NodeJS.Timeout>();
@@ -61,11 +60,12 @@ const BookmarkSidemenu = ({
   const { data: countData, isLoading: isCountLoading } =
     useGetDataCount(userId);
 
-  const { bookmarks, toggleBookmark, isBookmarked, isLoading, error } =
-    useBookmarkQuery(userId || null);
+  const { bookmarks, toggleBookmark, isBookmarked, error } = useBookmarkQuery(
+    userId || null,
+  );
 
   const calculateMaxVisiblePages = useCallback(() => {
-    if (!containerRef.current || !countData) return 3;
+    if (!containerRef.current || !countData) return DEFAULT_VISIBLE_PAGES;
 
     const containerWidth = containerRef.current.offsetWidth;
 
@@ -128,9 +128,19 @@ const BookmarkSidemenu = ({
       CATEGORY_EN_MAP[activeFilterTab] as keyof typeof countData.bookmarkCount
     ];
 
-  const totalPages = bookmarkCount
-    ? Math.ceil(bookmarkCount / ITEMS_PER_PAGE)
-    : 0;
+  // 현재 선택된 카테고리에 따라 북마크 필터링
+  const filteredBookmarks =
+    bookmarks?.filter((place) =>
+      activeFilterTab === '전체' ? true : place.category === activeFilterTab,
+    ) || [];
+
+  const totalPages = Math.ceil(filteredBookmarks.length / ITEMS_PER_PAGE);
+
+  // 현재 페이지에 해당하는 북마크 아이템만 필터링
+  const currentPageBookmarks = filteredBookmarks.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE,
+  );
 
   if (!userId) return null;
 
@@ -163,14 +173,14 @@ const BookmarkSidemenu = ({
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="space-y-2 overflow-hidden"
+            className="space-y-2 overflow-hidden pb-5"
             ref={containerRef}
           >
             {isCountLoading ? (
               <div className="flex items-center justify-center py-4 text-gray-500">
                 불러오는 중...
               </div>
-            ) : !bookmarks || bookmarks.length === 0 ? (
+            ) : !filteredBookmarks || filteredBookmarks.length === 0 ? (
               <div className="flex items-center justify-center py-4 text-gray-500">
                 {activeFilterTab === '전체'
                   ? '북마크한 장소 정보가 없습니다.'
@@ -179,7 +189,7 @@ const BookmarkSidemenu = ({
             ) : (
               <div ref={listRef} className="overflow-y-auto">
                 <AnimatePresence initial={false}>
-                  {bookmarks.map((place) => (
+                  {currentPageBookmarks.map((place) => (
                     <motion.div
                       key={place.placeId}
                       initial={{ opacity: 0, height: 0 }}
@@ -199,22 +209,12 @@ const BookmarkSidemenu = ({
                     </motion.div>
                   ))}
                 </AnimatePresence>
-                {!isExpanded && (
-                  <Button
-                    className="flex h-[36px] w-full flex-shrink-0 items-center justify-center gap-1 rounded-xl border border-secondary-300 bg-gray-50 text-sm font-normal text-secondary-300 transition-colors hover:bg-gray-100"
-                    onClick={toggleExpand}
-                  >
-                    더보기
-                  </Button>
-                )}
-                {isExpanded && (
-                  <DynamicPagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={handlePageChange}
-                    maxVisiblePages={maxVisiblePages}
-                  />
-                )}
+                <DynamicPagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={handlePageChange}
+                  maxVisiblePages={maxVisiblePages}
+                />
               </div>
             )}
           </motion.div>

@@ -82,93 +82,111 @@ const PersonalInfo = ({
 
   return (
     <section
-      className="m-1 rounded-24 border border-gray-100 bg-white px-8 py-6"
+      className="flex flex-col gap-4 rounded-16 border-gray-100 bg-white p-4 md:rounded-24 md:border md:px-8 md:py-6 lg:gap-0"
       aria-labelledby="profile-heading"
     >
-      <h3 id="profile-heading" className="semibold-18 w-full">
+      <h3 id="profile-heading" className="semibold-18 hidden w-full md:block">
         개인 정보
       </h3>
 
-      <dl className="flex flex-col gap-2">
-        <div className="flex">
+      {/* 이메일 영역 */}
+      <div className="flex flex-col gap-3">
+        <dl className="flex flex-col gap-2">
+          <div className="flex flex-col gap-1 md:flex-row md:gap-0">
+            <div
+              className="invisible hidden w-[120px] flex-shrink-0 lg:block"
+              aria-hidden="true"
+            />
+            <dt className="regular-12 w-[125px] flex-shrink-0 whitespace-nowrap text-description md:p-[10px] md:text-[16px] md:font-medium md:text-gray-900">
+              이메일
+            </dt>
+            <dd className="medium-16 block w-full whitespace-nowrap py-1 md:p-[10px]">
+              {email}
+            </dd>
+          </div>
+        </dl>
+
+        {/* 휴대폰 영역 */}
+        <form
+          className="flex flex-col gap-1 md:flex-row md:gap-0"
+          onSubmit={handleSubmit(handleEditComplete)}
+        >
           <div
-            className="invisible w-[120px] flex-shrink-0"
+            className="invisible hidden w-[120px] flex-shrink-0 lg:block"
             aria-hidden="true"
           />
-          <dt className="w-[125px] flex-shrink-0 whitespace-nowrap p-[10px] text-[16px] font-medium text-gray-900">
-            이메일
-          </dt>
-          <dd className="medium-16 block w-full whitespace-nowrap p-[10px]">
-            {email}
-          </dd>
-        </div>
-      </dl>
+          <Label
+            htmlFor="phone"
+            className="regular-12 w-[125px] flex-shrink-0 whitespace-nowrap text-description md:p-[10px] md:text-[16px] md:font-medium md:text-gray-900"
+          >
+            휴대폰
+          </Label>
 
-      <form className="flex" onSubmit={handleSubmit(handleEditComplete)}>
-        <div className="invisible w-[120px] flex-shrink-0" aria-hidden="true" />
-        <Label
-          htmlFor="phone"
-          className="w-[125px] flex-shrink-0 whitespace-nowrap p-[10px] text-[16px] font-medium text-gray-900"
-        >
-          휴대폰
-        </Label>
-
-        <div>
-          {isEditMode ? (
-            <div className="flex flex-col">
-              <Input
-                id="phone"
-                placeholder="휴대폰 번호를 입력하세요"
-                {...register('phone')}
-                className="w-full rounded-[12px] border border-gray-200 px-4 py-[10px] !placeholder-gray-200"
-                aria-invalid={errors.phone ? 'true' : 'false'}
-              />
-              {errors.phone && (
-                <p
-                  className="regular-14 m-2 text-red"
-                  role="alert"
-                  aria-live="polite"
-                >
-                  {errors.phone.message}
-                </p>
+          {/* 휴대폰 input과 버튼 */}
+          <div
+            className={`flex w-full ${isEditMode ? 'flex-col gap-1 lg:flex-row lg:gap-0' : 'flex-row'}`}
+          >
+            <div>
+              {isEditMode ? (
+                // 휴대폰 input 영역
+                <div className="flex flex-col">
+                  <Input
+                    id="phone"
+                    placeholder="휴대폰 번호를 입력하세요"
+                    {...register('phone')}
+                    className="w-full rounded-[12px] border border-gray-200 px-4 py-[10px] !placeholder-gray-200 lg:w-[235px]"
+                    aria-invalid={errors.phone ? 'true' : 'false'}
+                  />
+                  {errors.phone && (
+                    <p
+                      className="regular-14 m-2 text-red"
+                      role="alert"
+                      aria-live="polite"
+                    >
+                      {errors.phone.message}
+                    </p>
+                  )}
+                </div>
+              ) : (
+                // 실제 휴대폰 번호
+                <output className="medium-16 block w-full whitespace-nowrap py-1 md:p-[10px]">
+                  {phone ?? '번호가 등록되지 않았습니다.'}
+                </output>
               )}
             </div>
-          ) : (
-            <output className="medium-16 block w-full whitespace-nowrap p-[10px]">
-              {phone ?? '번호가 등록되지 않았습니다.'}
-            </output>
-          )}
-        </div>
 
-        <div role="group" aria-label="편집 제어" className="ml-auto">
-          {isEditMode ? (
-            <div className="flex">
-              <Button
-                type="submit"
-                className="medium-16 bg-transparent text-secondary-300 hover:bg-gray-100"
-                disabled={!isValid || currentPhone === phone}
-              >
-                완료
-              </Button>
-              <Button
-                type="button"
-                className="medium-16 bg-transparent text-secondary-300 hover:bg-gray-100"
-                onClick={handleEditCancelButtonClick}
-              >
-                취소
-              </Button>
+            {/* 버튼 영역 */}
+            <div role="group" aria-label="편집 제어" className="ml-auto">
+              {isEditMode ? (
+                <div className="flex">
+                  <Button
+                    type="submit"
+                    className="medium-16 bg-transparent text-secondary-300 hover:bg-gray-100"
+                    disabled={!isValid || currentPhone === phone}
+                  >
+                    완료
+                  </Button>
+                  <Button
+                    type="button"
+                    className="medium-16 bg-transparent text-secondary-300 hover:bg-gray-100"
+                    onClick={handleEditCancelButtonClick}
+                  >
+                    취소
+                  </Button>
+                </div>
+              ) : (
+                <Button
+                  type="button"
+                  className="medium-16 bg-transparent text-secondary-300 hover:bg-gray-100"
+                  onClick={handleEditButtonClick}
+                >
+                  수정
+                </Button>
+              )}
             </div>
-          ) : (
-            <Button
-              type="button"
-              className="medium-16 bg-transparent text-secondary-300 hover:bg-gray-100"
-              onClick={handleEditButtonClick}
-            >
-              수정
-            </Button>
-          )}
-        </div>
-      </form>
+          </div>
+        </form>
+      </div>
     </section>
   );
 };

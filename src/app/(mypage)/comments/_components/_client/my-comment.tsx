@@ -10,10 +10,13 @@ import { MyCommentType } from '@/types/comment.type';
  */
 const MyComment = ({ comment }: { comment: MyCommentType }) => {
   return (
-    <article className="flex flex-col gap-2 rounded-24 bg-white p-5">
-      <Link href={`${PATH.PLAN_DETAIL}/${comment.planId}?isReadOnly=true`}>
+    <article>
+      <Link
+        href={`${PATH.PLAN_DETAIL}/${comment.planId}?isReadOnly=true`}
+        className="flex flex-col gap-2 rounded-24 bg-white p-5"
+      >
         <div className="flex justify-between gap-2">
-          <h4 className="medium-12 text-gray-600">{comment.title}</h4>
+          <h4 className="medium-12 truncate text-gray-600">{comment.title}</h4>
           <time className="medium-12 text-gray-500">
             {formatDate(comment.createdAt)}
           </time>

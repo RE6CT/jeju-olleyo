@@ -9,6 +9,7 @@ import {
 } from '@/lib/apis/plan/plan.api';
 import { PLAN_PAGE_META } from '@/constants/plan.constants';
 import NotFound from '@/app/plan-detail/_components/server/not-found';
+import PlanSaveButton from '../_components/client/features/button/plan-save-button';
 import { checkPlanAccess } from '@/lib/utils/plan.util';
 
 export async function generateMetadata({
@@ -72,29 +73,29 @@ const PlanDetailPage = async ({
     const isReadOnly = searchParams.isReadOnly === 'true' || !isOwner;
 
     return (
-      <div className="mx-auto flex w-full max-w-[1024px] flex-col">
-        <div className="border-b px-9">
-          {/* 헤더 영역 */}
-          {!isReadOnly && (
-            <div className="flex gap-3 pt-6">
-              <span className="text-28 font-bold leading-[130%]">
-                내 일정 수정하기
-              </span>
-              <Image
-                src="/character/happy_color.svg"
-                alt="happy icon"
-                width={HAPPY_IMAGE.width}
-                height={HAPPY_IMAGE.height}
-              />
-            </div>
-          )}
+      <main className="mx-auto flex w-full max-w-[1024px] flex-col">
+        <header className="flex items-center justify-between gap-3 pt-6">
+          <div className="flex gap-3 pt-6">
+            <h1 className="text-28 font-bold leading-[130%]">
+              내 일정 수정하기
+            </h1>
+            <Image
+              src="/character/happy_color.svg"
+              alt="happy icon"
+              width={HAPPY_IMAGE.width}
+              height={HAPPY_IMAGE.height}
+            />
+          </div>
+          {!isReadOnly && <PlanSaveButton />}
+        </header>
+        <section>
           <PlanForm
             initialPlan={plan}
             initialDayPlaces={dayPlaces}
             isReadOnly={isReadOnly}
           />
-        </div>
-      </div>
+        </section>
+      </main>
     );
   } catch (error) {
     // 일정을 찾을 수 없는 경우

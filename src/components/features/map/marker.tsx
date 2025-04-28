@@ -8,7 +8,11 @@ import {
   MarkerInstance,
   MarkerProps,
 } from '@/types/kakao-map.type';
-import { SCREEN_OFFSET } from '@/constants/map.constants';
+import {
+  MAP_ZOOM_LEVEL,
+  MARKER,
+  SCREEN_OFFSET,
+} from '@/constants/map.constants';
 
 /**
  * 카카오맵 마커 컴포넌트
@@ -58,8 +62,8 @@ const Marker = ({
         </div>
       `,
       position: new window.kakao.maps.LatLng(position.lat, position.lng),
-      xAnchor: 0.5,
-      yAnchor: 1.7,
+      xAnchor: MARKER.X_ANCHOR,
+      yAnchor: MARKER.Y_ANCHOR,
     });
 
     overlayInstance.current = customOverlay;
@@ -76,7 +80,7 @@ const Marker = ({
         position.lng,
       );
       map.setCenter(latlng);
-      map.setLevel(4);
+      map.setLevel(MAP_ZOOM_LEVEL.CLICK);
 
       if (onClick) {
         onClick();

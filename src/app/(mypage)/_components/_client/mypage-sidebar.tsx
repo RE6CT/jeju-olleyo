@@ -10,7 +10,7 @@ import { PATH } from '@/constants/path.constants';
 const MypageSidebar = ({ className }: { className: string }) => {
   return (
     <aside
-      className={`flex min-w-[200px] flex-col gap-5 rounded-24 border border-gray-100 bg-white p-6 ${className}`}
+      className={`hidden min-w-[200px] flex-col gap-5 rounded-24 border border-gray-100 bg-white p-6 md:flex ${className}`}
     >
       <section className="flex flex-col gap-3">
         <h3 className="medium-12 text-gray-600">내 정보</h3>

@@ -8,7 +8,11 @@ import {
   CustomOverlayInstance,
   MarkerProps,
 } from '@/types/kakao-map.type';
-import { SCREEN_OFFSET } from '@/constants/map.constants';
+import {
+  MAP_ZOOM_LEVEL,
+  MARKER,
+  SCREEN_OFFSET,
+} from '@/constants/map.constants';
 
 /**
  * 카카오맵 마커 클러스터링 컴포넌트
@@ -118,7 +122,7 @@ const Clusterer = ({ map, markers, ...options }: ClustererOptions) => {
             marker.position.lng,
           );
           map.setCenter(position);
-          map.setLevel(4);
+          map.setLevel(MAP_ZOOM_LEVEL.CLICK);
 
           const content = `
             <div style="padding: 8px 12px; display: flex; flex-direction: column; gap: 4px; border-radius: 8px; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
@@ -133,8 +137,8 @@ const Clusterer = ({ map, markers, ...options }: ClustererOptions) => {
               marker.position.lat,
               marker.position.lng,
             ),
-            xAnchor: 0.5,
-            yAnchor: 1.7,
+            xAnchor: MARKER.X_ANCHOR,
+            yAnchor: MARKER.Y_ANCHOR,
           });
 
           overlayInstance.current = customOverlay;

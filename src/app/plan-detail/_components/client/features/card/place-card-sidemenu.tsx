@@ -49,7 +49,7 @@ const PlaceCardSidemenu = ({
 
   return (
     <>
-      <div className="flex w-[240px] items-center justify-between py-3">
+      <div className="flex h-[56px] w-[240px] items-center justify-between py-3">
         <div className="flex gap-3">
           {/* 장소 이미지 */}
           <div
@@ -109,6 +109,7 @@ const PlaceCardSidemenu = ({
             placeId={placeId}
             onAddPlace={onAddPlace}
             isBookmarked={isBookmarked}
+            onClose={() => setIsDialogOpen(false)}
           />
         </DialogContent>
       </Dialog>

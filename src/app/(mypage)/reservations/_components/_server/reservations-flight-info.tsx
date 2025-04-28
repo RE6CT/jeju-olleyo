@@ -18,7 +18,7 @@ const ReservationsFlightInfo = ({
   carrierCode,
 }: FlightInfoType) => {
   return (
-    <section className="flex items-center gap-3 p-4">
+    <section className="flex flex-row items-center gap-3 p-0 md:flex-col md:p-4 lg:flex-row">
       <figure className="relative h-[60px] w-[60px] overflow-hidden rounded-[4px]">
         <Image
           src={`https://media.interparkcdn.net/interpark-tour/image/upload/q_auto,f_auto/air/airline/icon/${carrierCode.slice(0, 2)}.png`}
@@ -28,7 +28,7 @@ const ReservationsFlightInfo = ({
         />
         <figcaption className="sr-only">{airplaneName} 항공사 로고</figcaption>
       </figure>
-      <div>
+      <div className="flex flex-col md:items-center lg:items-start">
         <p className="medium-12">
           <time dateTime={dateTime}>{formatDate(dateTime)}</time> | {size}명
         </p>

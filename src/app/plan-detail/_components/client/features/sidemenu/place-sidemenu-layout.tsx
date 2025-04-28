@@ -26,11 +26,11 @@ const PlaceSidemenuLayout = ({
   onToggleExpand?: () => void;
 }) => {
   return (
-    <div className="w-[240px] space-y-4">
+    <div className="w-[240px] space-y-3">
       {/* 섹션 제목 */}
       {isBookmarkSection && (
-        <div className="flex items-center justify-center gap-2 self-stretch px-4 py-3">
-          <span className="text-16 font-semibold">내가 북마크한 장소</span>
+        <div className="flex items-center justify-center gap-2 px-4 py-3">
+          <span className="semibold-16">내가 북마크한 장소</span>
           {onToggleExpand && (
             <button
               onClick={onToggleExpand}
@@ -54,16 +54,16 @@ const PlaceSidemenuLayout = ({
       )}
 
       {(isExpanded === undefined || isExpanded === true) && (
-        <>
+        <div className="flex flex-col items-start">
           {/* 필터 */}
           <CategoryFilterTabs
             tabs={filterTabs}
             defaultTab={activeFilterTab}
             onTabChange={onFilterTabChange}
             tabsGapClass="gap-[10px]"
-            tabPaddingClass="px-2"
+            tabPaddingClass="px-[9px]"
           />
-        </>
+        </div>
       )}
 
       {/* 컨텐츠 영역 */}

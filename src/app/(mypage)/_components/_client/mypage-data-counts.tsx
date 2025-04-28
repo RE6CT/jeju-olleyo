@@ -42,7 +42,7 @@ const MypageDataCounts = ({
       message = '데이터가 없습니다';
   }
 
-  return <p className="medium-16 text-secondary-300">{message}</p>;
+  return <p className="medium-14 lg:medium-16 text-secondary-300">{message}</p>;
 };
 
 export default MypageDataCounts;

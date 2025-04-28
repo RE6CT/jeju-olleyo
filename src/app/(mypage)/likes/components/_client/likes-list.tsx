@@ -8,6 +8,7 @@ import MypagePagination from '../../../_components/_client/mypage-pagination';
 import Loading from '@/app/loading';
 import EmptyResult from '@/components/commons/empty-result-link';
 import { PATH } from '@/constants/path.constants';
+import PlanVerticalCard from '@/components/features/card/plan-vertical-card';
 
 const PAGE_SIZE = 4;
 
@@ -35,10 +36,17 @@ const LikesList = ({ likes }: { likes: Plan[] }) => {
         </div>
       ) : (
         <section className="flex flex-col gap-20">
-          <ul className="grid list-none grid-cols-1 gap-6 p-0">
+          <ul className="hidden list-none grid-cols-1 gap-5 p-0 md:grid">
             {likes?.map((plan) => (
               <li key={plan.planId}>
                 <PlanHorizontalCard plan={plan} nickname={plan.nickname} />
+              </li>
+            ))}
+          </ul>
+          <ul className="grid list-none grid-cols-2 gap-3 p-0 md:hidden">
+            {likes?.map((plan) => (
+              <li key={plan.planId}>
+                <PlanVerticalCard plan={plan} />
               </li>
             ))}
           </ul>

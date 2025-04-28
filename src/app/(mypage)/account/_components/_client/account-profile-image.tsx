@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import ProfileImage from '@/components/commons/profile-image';
-import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/constants/mypage.constants';
+import { ERROR_MESSAGES } from '@/constants/mypage.constants';
 import useCustomToast from '@/lib/hooks/use-custom-toast';
 import ProfileImageButton from './account-profile-image-button';
 import ProfileModal from './account-profile-modal';

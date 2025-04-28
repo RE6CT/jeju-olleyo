@@ -4,6 +4,9 @@ import { PATH } from '@/constants/path.constants';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
+/**
+ * 마이페이지에서 디스플레이 sm 이하일 때 사이드바 대신 표시할 상단 바
+ */
 const MypageTopTabs = ({ className }: { className?: string }) => {
   const pathname = usePathname();
   const firstPath = '/' + pathname.split('/')[1];

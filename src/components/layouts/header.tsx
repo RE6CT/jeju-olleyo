@@ -20,7 +20,7 @@ const Header = () => {
     pathname.includes(PATH.RESET_PASSWORD.substring(1));
   if (isWithoutHeaderComponent) {
     return (
-      <header className="flex h-[86px] w-full items-center justify-between gap-2 bg-white px-9">
+      <header className="flex h-[86px] w-full flex-col items-center justify-between gap-2 bg-white px-[16px] pt-[51px] sm:px-[28px] sm:pt-0 md:px-[36px]">
         <Link href={PATH.HOME} className="flex-shrink-0">
           <Image
             src="/logo/color_logo.png"
@@ -46,7 +46,7 @@ const Header = () => {
               width={116}
               height={61}
               priority
-              className="hidden object-cover md:mr-[42px] md:block"
+              className="hidden object-cover md:block md:pr-[42px]"
             />
             {/* 태블릿용 */}
             <Image
@@ -55,7 +55,7 @@ const Header = () => {
               width={86.7}
               height={45.1}
               priority
-              className="hidden object-cover sm:mr-[30px] sm:block md:hidden"
+              className="hidden object-cover sm:block sm:pr-[30px] md:hidden"
             />
             {/* 모바일용 */}
             <Image
@@ -64,12 +64,12 @@ const Header = () => {
               width={80.1}
               height={41}
               priority
-              className="mr-[13px] block object-cover sm:hidden"
+              className="block object-cover pr-[13px] sm:hidden"
             />
           </Link>
 
           {/* 검색바 */}
-          <div className="w-[228px] sm:w-[251px] md:w-[335px]">
+          <div className="w-full sm:w-[251px] md:w-[335px]">
             <Suspense fallback={<LoadingSpinner />}>
               <SearchBar />
             </Suspense>

@@ -57,8 +57,8 @@ export const fetchGetFilteredPlansByUserId = async (
     user_id_param: userId,
   });
 
-  if (filterOptions.title) {
-    query = query.or(`title.ilike.%${filterOptions.title}%`);
+  if (filterOptions.keyword) {
+    query = query.or(`title.ilike.%${filterOptions.keyword}%`);
   }
   if (filterOptions.isPublic !== undefined) {
     query = query.eq('public', filterOptions.isPublic);
@@ -72,17 +72,11 @@ export const fetchGetFilteredPlansByUserId = async (
 
   // 날짜 필터링은 클라이언트 측에서 처리
   let filteredDataByDate = data;
-  if (filterOptions.startDate) {
-    filteredDataByDate = filteredDataByDate.filter((plan) =>
-      isDateGreaterThanOrEqual(
-        plan.travel_start_date,
-        filterOptions.startDate!,
-      ),
-    );
-  }
-  if (filterOptions.endDate) {
-    filteredDataByDate = filteredDataByDate.filter((plan) =>
-      isDateLessThanOrEqual(plan.travel_end_date, filterOptions.endDate!),
+  if (filterOptions.date) {
+    filteredDataByDate = filteredDataByDate.filter(
+      (plan) =>
+        isDateGreaterThanOrEqual(filterOptions.date!, plan.travel_start_date) &&
+        isDateLessThanOrEqual(filterOptions.date!, plan.travel_end_date),
     );
   }
 

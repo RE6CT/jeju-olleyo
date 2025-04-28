@@ -2,7 +2,7 @@
 
 import { FILTER_TYPES } from '@/constants/plan.constants';
 import { FilterType, PublicOption } from '@/types/plan.type';
-import FilterButton from '@/app/my-plan/_components/server/filter-button';
+import FilterButton from '@/app/my-plan/_components/client/filter-button';
 
 const FilterMenu = ({
   selectedFilter,

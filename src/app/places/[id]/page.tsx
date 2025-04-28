@@ -91,7 +91,7 @@ const PlaceDetailPage = async ({ params }: { params: { id: string } }) => {
       />
 
       {/* 해당 장소가 포함된 일정 영역 */}
-      <div className="mt-[73px] flex flex-col items-center justify-center px-9">
+      <div className="flex flex-col items-center justify-center px-9 md:mt-[32px] lg:mt-[73px]">
         <div className="w-full text-left">
           <PlanIncludingPlace placeId={placeId} />
         </div>

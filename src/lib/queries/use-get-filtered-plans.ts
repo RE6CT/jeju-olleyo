@@ -2,53 +2,55 @@
 
 import { useQuery } from '@tanstack/react-query';
 
-import { FILTER_TYPES, PUBLIC_OPTIONS } from '@/constants/plan.constants';
+import { PUBLIC_OPTIONS } from '@/constants/plan.constants';
 import {
   fetchGetAllPlansByUserId,
   fetchGetFilteredPlansByUserId,
 } from '@/lib/apis/plan/plan.api';
-import { FilterState } from '@/types/plan.type';
 
 /**
  * 필터링된 여행 계획 목록을 가져오는 React Query 훅
  * @param userId - 사용자 ID
- * @param filter - 필터 상태 (타입과 값)
+ * @param filters - 필터 상태 (키워드, 날짜, 공개상태)
  * @returns 필터링된 여행 계획 목록과 쿼리 상태
  *
  * @example
  * ```typescript
  * const { data: plans, isLoading } = useGetFilteredPlans(userId, {
- *   type: 'title',
- *   value: '제주도'
+ *   keyword: '제주도',
+ *   date: '2024-05-01',
+ *   public: 'public'
  * });
  * ```
  */
-export const useGetFilteredPlans = (userId: string, filter: FilterState) => {
+export const useGetFilteredPlans = (
+  userId: string,
+  filters: { keyword?: string; date?: string; public?: string },
+) => {
   return useQuery({
-    queryKey: ['filteredPlans', userId, filter.type, filter.value],
+    queryKey: [
+      'filteredPlans',
+      userId,
+      filters.keyword,
+      filters.date,
+      filters.public,
+    ],
     queryFn: async () => {
-      // 필터가 없거나 ALL인 경우 모든 일정을 가져옴
+      // 필터가 모두 없거나 공개상태가 ALL이면 전체 조회
       if (
-        !filter.type ||
-        (filter.type === FILTER_TYPES.PUBLIC &&
-          filter.value === PUBLIC_OPTIONS.ALL)
+        !filters.keyword &&
+        !filters.date &&
+        (!filters.public || filters.public === PUBLIC_OPTIONS.ALL)
       ) {
         return fetchGetAllPlansByUserId(userId);
       }
 
       const filterOptions = {
-        title: filter.type === FILTER_TYPES.TITLE ? filter.value : undefined,
-        startDate:
-          filter.type === FILTER_TYPES.DATE
-            ? filter.value.split('~')[0].trim()
-            : undefined,
-        endDate:
-          filter.type === FILTER_TYPES.DATE
-            ? filter.value.split('~')[1].trim()
-            : undefined,
+        keyword: filters.keyword,
+        date: filters.date,
         isPublic:
-          filter.type === FILTER_TYPES.PUBLIC
-            ? filter.value === PUBLIC_OPTIONS.PUBLIC
+          filters.public && filters.public !== PUBLIC_OPTIONS.ALL
+            ? filters.public === PUBLIC_OPTIONS.PUBLIC
             : undefined,
       };
       return fetchGetFilteredPlansByUserId(userId, filterOptions);

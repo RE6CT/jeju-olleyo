@@ -3,6 +3,9 @@ import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 import MypageDataCounts from '../_components/_client/mypage-data-counts';
 import { fetchAllCommentsByUserId } from '@/lib/apis/comments/server-comments.api';
 import CommentsList from './_components/_client/comments-list';
+import { Suspense } from 'react';
+import Loading from '@/app/loading';
+import MypageActivitiesDropdown from '../_components/_client/mypage-activities-dropdown';
 
 export const metadata = {
   title: '마이페이지 - 내가 쓴 댓글',
@@ -35,12 +38,15 @@ const CommentsPage = async ({
     throw new Error('내가 쓴 댓글 목록을 가져오는 도중 에러가 발생했습니다.');
 
   return (
-    <div className="flex h-full flex-col gap-5">
-      <section className="flex flex-col gap-4">
-        <MypageDataCounts pageType="comments" />
-        <h2 className="semibold-28 w-full">내가 쓴 댓글</h2>
-      </section>
-      <CommentsList comments={comments} pageSize={PAGE_SIZE} />
+    <div className="flex w-full flex-col gap-4 md:gap-5">
+      <Suspense fallback={<Loading />}>
+        <MypageActivitiesDropdown pageType="comments" />
+        <section className="hidden flex-col md:flex md:gap-2 lg:gap-4">
+          <MypageDataCounts pageType="comments" />
+          <h2 className="md:bold-24 lg:semibold-28 w-full">내가 쓴 댓글</h2>
+        </section>
+        <CommentsList comments={comments} pageSize={PAGE_SIZE} />
+      </Suspense>
     </div>
   );
 };

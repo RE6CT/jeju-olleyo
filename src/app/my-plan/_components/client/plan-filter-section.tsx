@@ -13,6 +13,7 @@ import {
   ITEMS_PER_PAGE,
   PUBLIC_OPTIONS,
   INITIAL_PAGE,
+  FILTER_TYPES,
 } from '@/constants/plan.constants';
 import { useGetFilteredPlans } from '@/lib/queries/use-get-filtered-plans';
 import { Plan } from '@/types/plan.type';
@@ -24,7 +25,10 @@ import { usePopover } from '@/lib/hooks/use-popover';
 import { useRouter } from 'next/navigation';
 import { PATH } from '@/constants/path.constants';
 import EmptyResult from '@/components/commons/empty-result-link';
+import FilterTag from './filter-tag';
 
+const FILTER_ICON_SIZE = 20;
+const POPOVER_SIDE_OFFSET = 5;
 /**
  * 여행 계획 필터 섹션 컴포넌트
  * @param plansList - 여행 계획 목록
@@ -54,27 +58,26 @@ const PlanFilterSection = ({
   const router = useRouter();
 
   const {
-    filter,
+    filters,
     selectedFilter,
     setSelectedFilter,
     inputValue,
     setInputValue,
     selectedPublicOption,
     setSelectedPublicOption,
-    startDate,
-    setStartDate,
-    endDate,
-    setEndDate,
+    date,
+    setDate,
     isDatePickerFocused,
     setIsDatePickerFocused,
     resetFilter,
     handleApplyFilter,
     handleDelete,
     handleFilterClick,
+    removeFilter,
   } = usePlanFilter(userId);
 
   const { data: plans = plansList, isLoading: isPlansLoading } =
-    useGetFilteredPlans(userId, filter);
+    useGetFilteredPlans(userId, filters);
 
   const { currentPage, setCurrentPage, handlePageChange } = usePagination();
   const { isOpen, setIsOpen, handleMouseLeave } = usePopover();
@@ -99,8 +102,8 @@ const PlanFilterSection = ({
   }
 
   return (
-    <section className="flex flex-col items-center">
-      <div className="flex w-full items-center justify-start gap-2">
+    <section className="flex flex-col items-center gap-[21px]">
+      <div className="flex w-full items-center justify-start gap-10">
         <Popover open={isOpen} onOpenChange={setIsOpen}>
           <PopoverTrigger
             asChild
@@ -112,23 +115,23 @@ const PlanFilterSection = ({
               <Image
                 src="/icons/mdi_filter.svg"
                 alt="filter icon"
-                width={20}
-                height={20}
+                width={FILTER_ICON_SIZE}
+                height={FILTER_ICON_SIZE}
               />
               필터
             </Button>
           </PopoverTrigger>
           <PopoverContent
-            className="mt-[-4px] flex w-[400px] gap-2 rounded-md border bg-popover p-1"
+            className="mt-[-4px] flex gap-2 rounded-md border bg-popover p-1"
             align="start"
-            sideOffset={5}
+            sideOffset={POPOVER_SIDE_OFFSET}
             onMouseEnter={() => setIsOpen(true)}
             onMouseLeave={() => handleMouseLeave(isDatePickerFocused)}
           >
             <FilterMenu
               selectedFilter={selectedFilter}
               setSelectedFilter={setSelectedFilter}
-              filter={filter}
+              filters={filters}
               setInputValue={setInputValue}
               handleFilterClick={handleFilterClick}
             />
@@ -139,31 +142,67 @@ const PlanFilterSection = ({
                 setInputValue={setInputValue}
                 selectedPublicOption={selectedPublicOption}
                 setSelectedPublicOption={setSelectedPublicOption}
-                startDate={startDate}
-                setStartDate={setStartDate}
-                endDate={endDate}
-                setEndDate={setEndDate}
+                date={date}
+                setDate={setDate}
                 setIsDatePickerFocused={setIsDatePickerFocused}
-                filter={filter}
+                filters={filters}
                 applyFilter={handleApplyFilterAndClose}
               />
             )}
           </PopoverContent>
         </Popover>
-        {filter.type && filter.value !== PUBLIC_OPTIONS.ALL && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => {
-              resetFilter();
-              setCurrentPage(INITIAL_PAGE);
-            }}
-            className="medium-14 text-gray-500 hover:text-gray-900"
-            disabled={isPlansLoading}
-          >
-            필터 초기화
-          </Button>
-        )}
+        {/* 필터 카드 렌더링 */}
+        <div className="flex items-center gap-3">
+          {filters.keyword && (
+            <FilterTag
+              onRemove={() => {
+                removeFilter(FILTER_TYPES.KEYWORD);
+                setCurrentPage(INITIAL_PAGE);
+              }}
+              ariaLabel="키워드 필터 삭제"
+            >
+              #{filters.keyword}
+            </FilterTag>
+          )}
+          {filters.date && (
+            <FilterTag
+              onRemove={() => {
+                removeFilter(FILTER_TYPES.DATE);
+                setCurrentPage(INITIAL_PAGE);
+              }}
+              ariaLabel="날짜 필터 삭제"
+            >
+              #{filters.date}
+            </FilterTag>
+          )}
+          {filters.public && filters.public !== PUBLIC_OPTIONS.ALL && (
+            <FilterTag
+              onRemove={() => {
+                removeFilter(FILTER_TYPES.PUBLIC);
+                setCurrentPage(INITIAL_PAGE);
+              }}
+              ariaLabel="공개상태 필터 삭제"
+            >
+              #{filters.public === PUBLIC_OPTIONS.PUBLIC ? '공개' : '비공개'}
+            </FilterTag>
+          )}
+          {(filters.keyword ||
+            filters.date ||
+            (filters.public && filters.public !== PUBLIC_OPTIONS.ALL)) && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                resetFilter();
+                setCurrentPage(INITIAL_PAGE);
+              }}
+              className="medium-14 px-3 text-gray-500 hover:text-gray-900"
+              disabled={isPlansLoading}
+            >
+              필터 초기화
+            </Button>
+          )}
+        </div>
       </div>
 
       {(plans ?? []).length === 0 ? (
@@ -174,7 +213,7 @@ const PlanFilterSection = ({
         />
       ) : (
         <>
-          <div className="grid w-full grid-cols-1 gap-6">
+          <div className="grid w-full grid-cols-1 gap-5">
             {currentPagePlans.map((plan) => (
               <PlanHorizontalCard
                 key={plan.planId}

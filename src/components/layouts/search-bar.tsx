@@ -78,13 +78,13 @@ const SearchBar = () => {
 
   return (
     <div className="relative">
-      <SearchIcon className="absolute left-2 top-1/2 z-10 -translate-y-1/2 transform" />
+      <SearchIcon className="absolute left-2 top-1/2 z-10 h-[20px] w-[20px] -translate-y-1/2 transform sm:h-[17.93px] sm:w-[17.93px] md:h-[24px] md:w-[24px]" />
       <Input
         ref={inputRef}
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
         placeholder="제주 여행, 어디부터 시작할까요?"
-        className="placeholder:medium-14 medium-14 h-10 rounded-full border-none bg-gray-50 pl-[42px] placeholder:text-gray-400"
+        className="medium-14 placeholder:medium-14 sm:medium-10 sm:placeholder:medium-10 md:medium-14 md:placeholder:medium-14 h-[28px] rounded-full border-none bg-gray-50 pl-[42px] placeholder:text-gray-400 sm:h-[25.9px] md:h-[32px]"
         onClick={handleInputClick}
         onKeyDown={(e) => {
           if (e.key === 'Enter') {

@@ -90,7 +90,7 @@ const SearchBar = () => {
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
         placeholder="제주 여행, 어디부터 시작할까요?"
-        className="medium-14 placeholder:medium-14 md:medium-14 md:placeholder:medium-14 rounded-full border-none bg-white py-[7.5px] pl-[38px] placeholder:text-gray-400 md:h-[32px] md:bg-gray-50"
+        className="medium-14 placeholder:medium-14 md:medium-14 md:placeholder:medium-14 rounded-full border-none bg-white py-[7.5px] pl-[38px] pr-[10px] placeholder:text-gray-400 md:bg-gray-50 md:py-2 lg:py-[9.5px]"
         onClick={handleInputClick}
         onKeyDown={(e) => {
           if (e.key === 'Enter') {

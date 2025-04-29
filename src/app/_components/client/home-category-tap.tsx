@@ -62,7 +62,7 @@ const CategoryTabs = memo(({ className }: CategoryTabsProps) => {
   return (
     <div
       className={cn(
-        'mb-[13px] mt-[19px] flex w-full items-center justify-between px-4 md:justify-start md:gap-6 md:bg-white md:px-9',
+        'mb-[13px] flex w-full items-center justify-between px-4 md:mt-[10px] md:justify-start md:gap-6 md:bg-white md:px-9',
         className,
       )}
     >

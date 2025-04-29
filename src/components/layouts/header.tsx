@@ -64,8 +64,8 @@ const Header = () => {
   // 일반 페이지 헤더
   return (
     <header className="flex flex-col">
-      <div className="mt-3 flex h-fit w-full items-center justify-between gap-2 bg-transparent px-4 md:mt-0 md:h-[86px] md:bg-white">
-        <div className="flex items-center gap-5 lg:gap-[42px]">
+      <div className="my-3 flex h-fit w-full items-center justify-between gap-2 bg-transparent px-4 md:my-0 md:h-[64px] md:bg-white md:px-7 lg:h-[86px] lg:px-9">
+        <div className="flex items-center gap-[13px] md:gap-[30px] lg:gap-[42px]">
           <Link href={PATH.HOME} className="flex-shrink-0">
             {/* 웹용 */}
             <Image
@@ -74,7 +74,7 @@ const Header = () => {
               width={116}
               height={61}
               priority
-              className="hidden object-cover lg:block lg:pr-[42px]"
+              className="hidden object-cover lg:block"
             />
             {/* 태블릿용 */}
             <Image

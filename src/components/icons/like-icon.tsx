@@ -1,0 +1,18 @@
+const LikesIcon = ({ fill, size }: { fill: string; size: number }) => {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 48 48"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M15.0855 7C9.06817 7 4.18994 11.8782 4.18994 17.8955C4.18994 28.7911 17.0665 38.6961 24 41C30.9335 38.6961 43.81 28.7911 43.81 17.8955C43.81 11.8782 38.9318 7 32.9145 7C29.2298 7 25.9711 8.82946 24 11.6296C22.9951 10.1987 21.6604 9.03094 20.1087 8.22508C18.557 7.41923 16.834 6.99901 15.0855 7Z"
+        fill="currentColor"
+        className={`text-${fill}`}
+      />
+    </svg>
+  );
+};
+
+export default LikesIcon;

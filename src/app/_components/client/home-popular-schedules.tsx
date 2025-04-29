@@ -38,14 +38,26 @@ const PopularSchedules = () => {
   const { data: plans = [], isLoading } = usePopularPlans(userId, planCount);
 
   const renderSkeleton = () => (
-    <div className="grid w-full grid-cols-2 gap-x-3 gap-y-5 md:grid-cols-2 lg:grid-cols-3">
-      {Array(planCount)
+    <div
+      className="grid w-full list-none grid-cols-2 grid-rows-2 gap-x-3 gap-y-5 overflow-hidden p-0 md:grid-cols-3"
+      style={{
+        gridTemplateRows: 'repeat(2, minmax(0, 1fr))',
+        gridAutoRows: '0',
+      }}
+    >
+      {Array(6)
         .fill(null)
         .map((_, index) => (
           <div
             key={`skeleton-${index}`}
-            className="h-64 animate-pulse rounded-lg bg-gray-200"
-          />
+            className="flex flex-col overflow-hidden rounded-lg bg-white shadow-md"
+          >
+            <div
+              className="w-full animate-pulse bg-gray-200"
+              style={{ aspectRatio: '310/216' }}
+            />
+            <div className="h-[112px] w-full animate-pulse bg-gray-200" />
+          </div>
         ))}
     </div>
   );

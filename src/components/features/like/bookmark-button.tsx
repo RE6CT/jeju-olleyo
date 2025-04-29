@@ -1,3 +1,4 @@
+import BookmarkIcon from '@/components/icons/bookmark-icon';
 import useCustomToast from '@/lib/hooks/use-custom-toast';
 import { useBookmarkMutation } from '@/lib/mutations/use-bookmark-mutation';
 import { useCurrentUser } from '@/lib/queries/auth-queries';
@@ -42,7 +43,7 @@ const BookmarkButton = ({
   return (
     <button
       onClick={handleBookmarkClick}
-      className={`flex cursor-pointer items-center justify-center rounded-12 border-none bg-white/10 ${className}`}
+      className={`flex h-10 w-10 cursor-pointer items-center justify-center rounded-[8px] border-none bg-white/10 md:h-14 md:w-14 lg:rounded-12 ${className}`}
       aria-label={isBookmarked ? '북마크 해제' : '북마크'}
     >
       <svg
@@ -58,6 +59,10 @@ const BookmarkButton = ({
           className={isBookmarked ? 'text-primary-500' : 'text-gray-200'}
         />
       </svg>
+      {/* <BookmarkIcon
+        fill={isBookmarked ? 'primary-500' : 'gray-200'}
+        size={56}
+      /> */}
     </button>
   );
 };

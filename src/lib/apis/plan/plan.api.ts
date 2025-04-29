@@ -2,10 +2,7 @@
 
 import { getServerClient } from '@/lib/supabase/server';
 import { camelize } from '@/lib/utils/camelize';
-import {
-  isDateGreaterThanOrEqual,
-  isDateLessThanOrEqual,
-} from '@/lib/utils/date';
+import { isDateInRange } from '@/lib/utils/date';
 import { CommunitySortType } from '@/types/community.type';
 import { LocationData } from '@/types/kakao-map.type';
 import { DayPlaces } from '@/types/plan-detail.type';
@@ -73,10 +70,14 @@ export const fetchGetFilteredPlansByUserId = async (
   // 날짜 필터링은 클라이언트 측에서 처리
   let filteredDataByDate = data;
   if (filterOptions.date) {
-    filteredDataByDate = filteredDataByDate.filter(
-      (plan) =>
-        isDateGreaterThanOrEqual(filterOptions.date!, plan.travel_start_date) &&
-        isDateLessThanOrEqual(filterOptions.date!, plan.travel_end_date),
+    const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone; // 브라우저 사용자의 시간대를 가져온다.
+    filteredDataByDate = filteredDataByDate.filter((plan) =>
+      isDateInRange(
+        filterOptions.date!,
+        plan.travel_start_date,
+        plan.travel_end_date,
+        userTimezone,
+      ),
     );
   }
 

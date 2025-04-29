@@ -13,7 +13,7 @@ const PlanVerticalCard = ({ plan }: PlanVerticalCardProps) => {
   return (
     <Link href={`/plan-detail/${plan.planId}?isReadOnly=true`}>
       <div className="relative">
-        <div className="relative aspect-[310/216]">
+        <div className="relative aspect-[83/58] h-[116px] w-[166px] md:aspect-[310/216] md:h-auto md:w-full">
           <PlanImage
             image={plan.planImg}
             title={plan.title}
@@ -47,7 +47,8 @@ const PlanVerticalCard = ({ plan }: PlanVerticalCardProps) => {
           <Duration
             start={plan.travelStartDate}
             end={plan.travelEndDate}
-            separator="-"
+            separator="~"
+            showShortYear
           />
         </div>
       </div>

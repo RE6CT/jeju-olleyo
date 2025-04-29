@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { DropResult } from 'react-beautiful-dnd';
+import { DropResult } from '@hello-pangea/dnd';
 import { useToast } from '@/lib/hooks/use-toast';
 import { DayPlaces } from '@/types/plan-detail.type';
 import {

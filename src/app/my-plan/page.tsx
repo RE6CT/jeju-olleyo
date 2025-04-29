@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { Metadata } from 'next';
 
 import ErrorMessage from '@/components/features/alert/error-message';
-import { Button } from '@/components/ui/button';
 import { PATH } from '@/constants/path.constants';
 import { PLAN_PAGE_META } from '@/constants/plan.constants';
 import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';

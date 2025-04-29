@@ -42,7 +42,7 @@ const PlaceCard = ({
       </div>
 
       {/* 제목 (반응형 폰트) */}
-      <h4 className="mt-2 truncate px-1 text-xs font-medium text-gray-900 sm:text-sm md:text-base">
+      <h4 className="medium-12 md:medium-16 mt-2 truncate px-1 font-medium text-gray-900">
         {title}
       </h4>
     </article>

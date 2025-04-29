@@ -36,7 +36,7 @@ const CategoryRegionTabs = ({
           <button
             onClick={() => handleTabClick(tab)}
             className={cn(
-              'semibold-16 flex flex-1 items-center justify-center gap-[10px] whitespace-nowrap rounded-[28px] px-5 py-2 transition-all',
+              'medium-12 md:semibold-16 flex flex-1 items-center justify-center gap-[10px] whitespace-nowrap rounded-[28px] px-3 py-1 transition-all md:px-5 md:py-2',
               activeTab === tab
                 ? 'border border-primary-500 bg-primary-100 text-primary-800'
                 : 'border-[0.6px] border-gray-600 text-gray-600 hover:text-gray-900',

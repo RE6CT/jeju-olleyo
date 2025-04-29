@@ -23,16 +23,16 @@ export const passwordSchema = z
   .string()
   .min(1, { message: ERROR_MESSAGES.REQUIRED_PASSWORD })
   .min(VALIDATION_RULES.PASSWORD.MIN, {
-    message: ERROR_MESSAGES.MIN_PASSWORD_LENGTH,
+    message: ERROR_MESSAGES.PASSWORD_CHECK,
   })
   .regex(VALIDATION_RULES.PASSWORD_REGEX.LETTER, {
-    message: ERROR_MESSAGES.PASSWORD_LETTER,
+    message: ERROR_MESSAGES.PASSWORD_CHECK,
   })
   .regex(VALIDATION_RULES.PASSWORD_REGEX.NUMBER, {
-    message: ERROR_MESSAGES.PASSWORD_NUMBER,
+    message: ERROR_MESSAGES.PASSWORD_CHECK,
   })
   .regex(VALIDATION_RULES.PASSWORD_REGEX.SPECIAL, {
-    message: ERROR_MESSAGES.PASSWORD_SPECIAL_CHAR,
+    message: ERROR_MESSAGES.PASSWORD_CHECK,
   });
 
 /**
@@ -88,7 +88,9 @@ export const registerSchema = z
       { message: ERROR_MESSAGES.EMAIL_EXISTS },
     ),
     password: passwordSchema,
-    confirmPassword: z.string(),
+    confirmPassword: z
+      .string()
+      .min(1, { message: ERROR_MESSAGES.CHECK_REQUIRED_PASSWORD }),
     nickname: nicknameSchema,
     phone: phoneSchema.refine(
       async (phone) => {

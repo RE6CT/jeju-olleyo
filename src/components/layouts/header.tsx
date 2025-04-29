@@ -35,8 +35,11 @@ const Header = () => {
   // 인증 페이지일 때 로고만 있는 헤더 (모바일에서는 CSS로 숨김)
   if (isOtherAuthPage) {
     return (
-      <header className="hidden md:flex h-[86px] w-full flex-col items-center justify-between gap-2 bg-white px-[16px] pt-[51px] sm:px-[28px] sm:pt-0 md:px-[36px]">
-        <Link href={PATH.HOME} className="flex-shrink-0">
+      <header className="hidden h-[86px] w-full flex-col justify-between gap-2 bg-white px-[16px] pt-[51px] sm:px-[28px] sm:pt-0 md:flex md:px-[36px]">
+        <Link
+          href={PATH.HOME}
+          className="flex h-full flex-shrink-0 items-center"
+        >
           <Image
             src="/logo/color_logo.png"
             alt="로고"

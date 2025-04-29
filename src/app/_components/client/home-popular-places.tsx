@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useState, useEffect, useMemo } from 'react';
 
 import { CATEGORIES } from '@/constants/home.constants';
-import { Category } from '@/types/home.popular-place.type';
+import { Category, Place } from '@/types/home.popular-place.type';
 import PlaceCard from '@/components/features/card/place-card';
 import { usePopularPlaces } from '@/lib/hooks/use-popular-places';
 
@@ -60,7 +60,7 @@ const PopularPlaces = () => {
   // 스켈레톤 & 카드 리스트 생성
   const placeCards = useMemo(() => {
     const items = isFirstLoading
-      ? Array.from({ length: placeCount })
+      ? Array.from({ length: placeCount }, () => ({} as Place))
       : places.slice(0, placeCount);
 
     if (!items.length) {
@@ -71,7 +71,7 @@ const PopularPlaces = () => {
       );
     }
 
-    return items.map((place: any, idx: number) => {
+    return items.map((place: Place, idx: number) => {
       if (isFirstLoading) {
         return (
           <div

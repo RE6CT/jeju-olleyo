@@ -34,13 +34,13 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body
-        className={`${pretendard.variable} font-pretendard flex flex-col items-center justify-center antialiased`}
+        className={`${pretendard.variable} font-pretendard h-full antialiased`}
       >
         <Providers>
           <AuthProvider>
-            <div className="bg-home-gradient flex w-full min-w-[375px] max-w-[375px] flex-col md:max-w-[769px] md:bg-none lg:max-w-[1024px]">
+            <div className="mx-auto flex h-full w-full min-w-[375px] max-w-[375px] flex-col overflow-hidden bg-home-gradient pb-[86px] md:max-w-[769px] md:bg-none lg:max-w-[1024px]">
               <Header />
-              <div className="mb-[86px] flex h-full w-full flex-col md:pb-0">
+              <div className="flex h-full w-full flex-col overflow-auto md:pb-0">
                 <main className="flex-1">{children}</main>
                 <Footer />
               </div>

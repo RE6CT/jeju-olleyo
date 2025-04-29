@@ -1,4 +1,13 @@
 import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.extend(isSameOrAfter);
+dayjs.extend(isSameOrBefore);
 
 /**
  * 날짜를 YYYY.MM.DD 형식으로 포맷팅하는 함수
@@ -136,4 +145,28 @@ export const formatDayDate = (
     .add(dayIndex - 1, 'day')
     .toDate();
   return formatDateWithKoreanDay(date);
+};
+
+/**
+ * 특정 날짜가 시작일과 종료일 사이에 있는지 확인하는 함수
+ * @param date - 확인할 날짜
+ * @param startDate - 시작 날짜
+ * @param endDate - 종료 날짜
+ * @param timezone - 브라우저 사용자 시간대 (기본값: 'Asia/Seoul')
+ * @returns boolean
+ */
+export const isDateInRange = (
+  date: string,
+  startDate: string,
+  endDate: string,
+  timezone: string = 'Asia/Seoul',
+) => {
+  const targetDate = dayjs(date).tz(timezone);
+  const start = dayjs(startDate).tz(timezone);
+  const end = dayjs(endDate).tz(timezone);
+
+  return (
+    targetDate.isSameOrAfter(start, 'day') &&
+    targetDate.isSameOrBefore(end, 'day')
+  );
 };

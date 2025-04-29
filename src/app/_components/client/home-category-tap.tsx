@@ -72,9 +72,9 @@ const CategoryTabs = memo(({ className }: CategoryTabsProps) => {
           key={category}
           onClick={createCategoryClickHandler(category)}
           className={cn(
-            'flex flex-col items-center justify-center gap-2 border-b-2 py-2.5 transition-all md:flex-row',
+            'flex flex-col items-center justify-center gap-2 py-2.5 transition-all md:flex-row md:border-b-2',
             activeCategory === category
-              ? 'border-primary-500 text-gray-600'
+              ? 'text-gray-600 md:border-primary-500'
               : 'border-transparent text-gray-600 hover:text-gray-800',
           )}
           aria-current={activeCategory === category ? 'page' : undefined}

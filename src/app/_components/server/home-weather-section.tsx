@@ -37,7 +37,7 @@ const WeatherSection = async () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center gap-4 self-stretch px-2 sm:gap-5 sm:px-3 md:gap-7 md:px-4 lg:gap-9 lg:px-4">
+    <div className="flex flex-col items-center justify-center gap-4 self-stretch px-0 sm:gap-5 md:gap-7 md:px-4 lg:gap-9 lg:px-4">
       <WeatherHeader
         month={month}
         day={day}

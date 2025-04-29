@@ -3,6 +3,7 @@ import { memo } from 'react';
 
 import { weatherUtil } from '@/lib/utils/home.weather.util';
 import { WeatherCardProps } from '@/types/home.weather.type';
+import { Separator } from '@/components/ui/separator';
 
 /**
  * 날씨 카드 컴포넌트
@@ -15,11 +16,11 @@ const WeatherCard = memo(({ weather, isToday = false }: WeatherCardProps) => {
   const iconSrc = weatherUtil.getWeatherIconSrc(weather.weatherIcon);
 
   return (
-    <div className="flex flex-1 flex-col items-center">
+    <div className="flex w-[100px] flex-1 flex-col items-center rounded-12 bg-white px-3 py-[10px] md:w-[64px] md:bg-none md:p-0">
       {/* 날짜 */}
-      <div className="regular-12 flex justify-center text-center text-gray-500">
+      <div className="regular-12 flex items-center justify-center gap-1 whitespace-nowrap text-center text-gray-500">
         {isToday ? '오늘' : weather.dayOfWeek + '요일'}{' '}
-        <div className="mx-1 h-4 w-px bg-gray-300 sm:mx-2 sm:h-4"></div>
+        <Separator orientation="vertical" className="h-3 bg-gray-200" />
         {weather.date.slice(weather.date.length - 2, weather.date.length) +
           '일'}
       </div>

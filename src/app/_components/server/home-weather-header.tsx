@@ -23,7 +23,7 @@ const WeatherHeader: React.FC<WeatherHeaderProps> = ({
   return (
     <div className={headerContainerClasses}>
       <div className={titleClasses}>
-        <h2 className="text-primary-500/60">
+        <h2 className="text-primary-500">
           {month}월 {day}일
         </h2>
         <span className="mr-1 text-secondary-300">,</span>

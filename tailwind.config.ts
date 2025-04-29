@@ -135,6 +135,10 @@ const config: Config = {
       letterSpacing: {
         'tight-2': '-0.02em',
       },
+      backgroundImage: {
+        'home-gradient':
+          'linear-gradient(180deg, rgba(231, 237, 240, 0.60) 0%, rgba(255, 255, 255, 0.00) 100%)',
+      },
     },
   },
   plugins: [require('tailwindcss-animate')],

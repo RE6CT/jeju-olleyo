@@ -36,8 +36,8 @@ const Header = () => {
   }
   return (
     <header className="flex flex-col">
-      <div className="flex h-[86px] w-full items-center justify-between gap-2 bg-white px-9">
-        <div className="flex items-center gap-5 sm:gap-[42px]">
+      <div className="flex h-[86px] w-full items-center justify-between gap-2 bg-transparent px-9 md:bg-white">
+        <div className="flex items-center gap-5 lg:gap-[42px]">
           <Link href={PATH.HOME} className="flex-shrink-0">
             {/* 웹용 */}
             <Image

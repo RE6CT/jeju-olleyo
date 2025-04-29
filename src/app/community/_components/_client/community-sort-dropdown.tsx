@@ -58,7 +58,7 @@ const SortDropdown = ({ sortType }: { sortType: CommunitySortType }) => {
         >
           <DropdownMenuItem
             onClick={() => handleSortClick('popular')}
-            className="medium-16"
+            className="medium-16 hover:bg-gray-50"
             role="menuitemradio"
             aria-checked={sortType === 'popular'}
           >
@@ -74,7 +74,7 @@ const SortDropdown = ({ sortType }: { sortType: CommunitySortType }) => {
           <Separator className="my-[6px]" />
           <DropdownMenuItem
             onClick={() => handleSortClick('recent')}
-            className="medium-16"
+            className="medium-16 hover:bg-gray-50"
             role="menuitemradio"
             aria-checked={sortType === 'recent'}
           >

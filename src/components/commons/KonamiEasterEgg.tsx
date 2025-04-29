@@ -73,10 +73,13 @@ const KonamiEasterEgg = () => {
       // Check if the sequence matches the Konami code
       const isKonamiCode =
         updatedKeys.length === KONAMI_CODE.length &&
-        updatedKeys.every(
-          (key, index) =>
-            key.toLowerCase() === KONAMI_CODE[index].toLowerCase(),
-        );
+        updatedKeys.every((key, index) => {
+          // 안전하게 key 값 확인 (undefined나 null인 경우 처리)
+          if (key === undefined || key === null) return false;
+          // 문자열이 아닌 경우 String으로 변환하여 처리
+          const keyStr = String(key).toLowerCase();
+          return keyStr === KONAMI_CODE[index].toLowerCase();
+        });
 
       if (isKonamiCode) {
         activate();

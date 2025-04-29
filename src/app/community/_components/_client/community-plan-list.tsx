@@ -46,7 +46,7 @@ const CommunityPlanList = ({
         <SortDropdown sortType={sortOption} />
       </section>
       <div className="flex flex-col gap-20">
-        <ul className="grid w-full list-none grid-cols-2 gap-x-3 gap-y-5 p-0 md:grid-cols-3">
+        <ul className="grid w-full list-none grid-cols-2 gap-x-3 gap-y-5 p-0 lg:grid-cols-3">
           {plans.map((plan) => (
             <li key={plan.planId}>
               <PlanVerticalCard plan={plan} />

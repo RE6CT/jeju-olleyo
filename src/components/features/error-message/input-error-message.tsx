@@ -9,7 +9,7 @@ const ErrorMessage = ({ message }: { message: string | undefined }) => {
   return (
     <div className="flex h-6 min-h-6 items-center">
       {message && (
-        <p className="regular-14 text-red" role="alert">
+        <p className="regular-12 md:regular-14 text-red" role="alert">
           {message}
         </p>
       )}

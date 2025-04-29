@@ -26,7 +26,7 @@ const Community = async ({
 
   return (
     <div className="w-full">
-      <section className="m-4 overflow-hidden rounded-12">
+      <section className="m-4 overflow-hidden rounded-12 md:m-0 md:rounded-none">
         <JejuBanner
           imageUrl="/banner-images/plan-banner.jpg"
           title="나만의 제주 여행 계획하기"

@@ -118,9 +118,7 @@ const PopularPlaces = () => {
       </div>
 
       {/* 로딩 인디케이터 */}
-      {isLoading && !isFirstLoading && (
-        <div className="mt-4 text-center text-gray-500">로딩 중…</div>
-      )}
+      {isLoading && !isFirstLoading}
     </section>
   );
 };

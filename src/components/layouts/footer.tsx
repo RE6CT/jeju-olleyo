@@ -63,9 +63,9 @@ const Footer = () => {
               </a>
             </div>
             <div className="mb-2 mr-2 flex min-w-[85px] items-center gap-1">
-              <span className="medium-14 text-gray-600">고용준</span>
+              <span className="medium-14 text-gray-600">강푸른</span>
               <a
-                href="https://github.com/mbdyjk"
+                href="https://github.com/PureunKang"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -77,9 +77,9 @@ const Footer = () => {
               </a>
             </div>
             <div className="mb-2 mr-2 flex min-w-[85px] items-center gap-1">
-              <span className="medium-14 text-gray-600">강푸른</span>
+              <span className="medium-14 text-gray-600">고용준</span>
               <a
-                href="https://github.com/PureunKang"
+                href="https://github.com/mbdyjk"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -112,10 +112,10 @@ const Footer = () => {
           <h3 className="semibold-16 w-[80px] text-gray-600">디자이너</h3>
           <div className="flex flex-wrap">
             <span className="medium-14 mb-2 mr-2 min-w-[85px] text-gray-600">
-              최시현
+              유진희
             </span>
             <span className="medium-14 mb-2 mr-2 min-w-[85px] text-gray-600">
-              유진희
+              최시현
             </span>
           </div>
         </div>

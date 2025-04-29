@@ -52,7 +52,7 @@ const Home = () => {
       </section>
 
       {/* 내 일정 만들러 가기 배너 섹션*/}
-      <section>
+      <section className="mt-10 md:mt-[54px] lg:mt-[120px]">
         <JejuBanner
           imageUrl={SCHEDULE_BANNER.SCHEDULE_BANNER_IMAGE_URL}
           title={SCHEDULE_BANNER.SCHEDULE_BANNER_TITLE}

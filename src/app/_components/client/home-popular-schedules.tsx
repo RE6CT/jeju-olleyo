@@ -81,7 +81,7 @@ const PopularSchedules = () => {
       {isLoading ? (
         renderSkeleton()
       ) : (
-        <div className="grid w-full grid-cols-2 gap-x-3 gap-y-5 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid w-full grid-cols-2 gap-x-3 gap-y-5 md:grid-cols-2 md:gap-x-4 lg:grid-cols-3 lg:gap-x-3">
           {plans.map((plan: PlanType) => (
             <PlanVerticalCard key={plan.planId} plan={plan} />
           ))}

@@ -30,15 +30,15 @@ const PlanVerticalCard = ({ plan }: PlanVerticalCardProps) => {
       <div className="mt-2 flex flex-col gap-1">
         {/* 제목과 내용 영역 */}
         <div className="flex flex-col gap-1 md:gap-2">
-          <p className="medium-12 overflow-hidden text-ellipsis whitespace-nowrap text-gray-900">
+          <p className="medium-12 md:medium-18 lg:medium-16 overflow-hidden text-ellipsis whitespace-nowrap text-gray-900">
             {plan.title}
           </p>
-          <p className="regular-10 overflow-hidden text-ellipsis whitespace-nowrap text-description">
+          <p className="regular-10 md:regular-16 lg:regular-14 overflow-hidden text-ellipsis whitespace-nowrap text-description">
             {plan.description}
           </p>
         </div>
         {/* 닉네임과 날짜 영역  */}
-        <div className="medium-12 text-gray-500">
+        <div className="medium-12 flex flex-col items-start text-gray-500 md:flex-row md:items-center md:gap-2">
           <span className="whitespace-nowrap">{plan.nickname}</span>
           <Separator
             orientation="vertical"

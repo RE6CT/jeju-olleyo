@@ -59,7 +59,7 @@
 
   html,
   body {
-    @apply min-h-full bg-white font-sans leading-normal text-gray-900;
+    @apply h-full bg-white font-sans leading-normal text-gray-900;
   }
 
   html body[data-scroll-locked] {
@@ -97,6 +97,9 @@
   .semibold-16 {
     @apply text-16 font-semibold;
   }
+  .semibold-12 {
+    @apply text-12 font-semibold;
+  }
 
   .medium-20 {
     @apply text-20 font-medium;
@@ -112,6 +115,9 @@
   }
   .medium-12 {
     @apply text-12 font-medium;
+  }
+  .medium-10 {
+    @apply text-10 font-medium;
   }
 
   .regular-18 {

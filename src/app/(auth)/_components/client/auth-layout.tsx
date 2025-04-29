@@ -62,7 +62,7 @@ const AuthLayout = ({ children }: AuthProps) => {
       {/* 인증 페이지 레이아웃 */}
       <div className="flex flex-1 items-center justify-center">
         {isMobile ? (
-          <div className="mx-4 h-full w-full max-w-md rounded-3xl bg-white px-4">
+          <div className="mx-4 h-full w-full max-w-md rounded-3xl bg-white px-4 py-4">
             {children}
           </div>
         ) : (

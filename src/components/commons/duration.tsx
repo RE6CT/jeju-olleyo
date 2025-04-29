@@ -15,9 +15,9 @@ const Duration = ({ start, end, separator, className }: DurationProps) => {
     <div
       className={`flex gap-1 text-xs font-medium text-gray-500 ${className}`}
     >
-      <span>{formatDate(start)}</span>
+      <span>{formatDate(start).slice(2)}</span>
       <span>{separator}</span>
-      <span>{formatDate(end)}</span>
+      <span>{formatDate(end).slice(2)}</span>
     </div>
   );
 };

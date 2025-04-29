@@ -45,7 +45,7 @@ const Home = () => {
       </section>
 
       {/* 인기 장소 섹션 */}
-      <section>
+      <section className="mt-9">
         <Suspense fallback={<Loading />}>
           <PopularPlaces />
         </Suspense>

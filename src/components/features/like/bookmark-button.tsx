@@ -3,18 +3,22 @@ import { useBookmarkMutation } from '@/lib/mutations/use-bookmark-mutation';
 import { useCurrentUser } from '@/lib/queries/auth-queries';
 
 /**
- * 북마크 버튼 컴포넌트
+ * 북마크 버튼 컴포넌트 - 반응형 지원
  * @param isBookmarked - 북마크 여부
  * @param placeId - 카드의 장소 id
+ * @param className - 추가 스타일 클래스
+ * @param isMobile - 모바일 화면 여부
  */
 const BookmarkButton = ({
   isBookmarked,
   placeId,
   className,
+  isMobile = false,
 }: {
   isBookmarked: boolean;
   placeId: number;
   className?: string;
+  isMobile?: boolean;
 }) => {
   const { mutate: toggleBookmark, isPending } = useBookmarkMutation();
   const { data: user } = useCurrentUser();
@@ -33,6 +37,8 @@ const BookmarkButton = ({
     }
   };
 
+  const iconSize = isMobile ? 18 : 24;
+
   return (
     <button
       onClick={handleBookmarkClick}
@@ -40,8 +46,8 @@ const BookmarkButton = ({
       aria-label={isBookmarked ? '북마크 해제' : '북마크'}
     >
       <svg
-        width={56}
-        height={56}
+        width={iconSize}
+        height={iconSize}
         viewBox="0 0 25 25"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

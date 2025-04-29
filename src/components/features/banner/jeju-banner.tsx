@@ -45,25 +45,28 @@ const JejuBanner = ({
   };
 
   return (
-    <div className="relative mt-11 w-full overflow-hidden">
+    <div className="relative mt-[40px] w-full overflow-hidden lg:mt-[120px]">
       {/* 배경 이미지  */}
       <img src={imageUrl} alt="제주 여행 배너" className="aspect-auto w-full" />
-      {/* 텍스트와 버튼 오버레이 - 왼쪽 상단에 배치 */}
-      <div className="absolute left-1/2 top-[10%] flex -translate-x-1/2 transform flex-row items-center gap-4 sm:left-[5%] sm:transform-none sm:flex-col sm:items-start">
-        <h2 className="bold-28 whitespace-nowrap leading-[130%] tracking-[-0.56px] text-gray-900">
+      {/* 텍스트와 버튼 오버레이 - 모바일에서는 왼쪽 상단에 배치 */}
+      <div className="md:gap=3 absolute left-4 top-[10%] flex flex-col items-start gap-2 sm:left-[5%] lg:gap-4">
+        <h2 className="semibold-16 md:bold-22 lg:bold-28 whitespace-nowrap leading-[130%] tracking-[-0.56px] text-gray-900">
           {title}
         </h2>
         <button
           onClick={handleGotoNewPlan}
-          className="flex h-10 items-center justify-center gap-1 rounded-[28px] bg-primary-500 px-4 py-2"
+          className="lg-h-10 flex h-6 items-center justify-center gap-1 rounded-[20px] bg-primary-500 px-3 py-1.5 sm:h-9 sm:px-3.5 sm:py-2 md:h-8 md:px-4 md:py-2"
         >
-          <span className="semibold-16 text-white">{buttonText}</span>
+          <span className="medium-12 md:semibold-16 lg:semibold-16 text-white">
+            {buttonText}
+          </span>
           <svg
-            width="12"
-            height="12"
+            width="10"
+            height="10"
             viewBox="0 0 48 48"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
+            className="sm:h-[12px] sm:w-[12px]"
           >
             <path
               fillRule="evenodd"
@@ -77,4 +80,5 @@ const JejuBanner = ({
     </div>
   );
 };
+
 export default JejuBanner;

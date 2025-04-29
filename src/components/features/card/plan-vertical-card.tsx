@@ -1,5 +1,4 @@
 import Link from 'next/link';
-
 import Duration from '@/components/commons/duration';
 import PlanImage from '@/components/commons/plan-image';
 import { Separator } from '@/components/ui/separator';
@@ -29,18 +28,18 @@ const PlanVerticalCard = ({ plan }: PlanVerticalCardProps) => {
         />
       </div>
 
-      <div className="flex flex-col gap-1 p-2">
+      <div className="mt-2 flex flex-col gap-1">
         {/* 제목과 내용 영역 */}
         <div className="flex flex-col gap-1 md:gap-2">
-          <p className="medium-16 line-clamp-1 overflow-hidden text-ellipsis text-gray-900">
+          <p className="medium-12 overflow-hidden text-ellipsis whitespace-nowrap text-gray-900">
             {plan.title}
           </p>
-          <p className="regular-14 line-clamp-2 text-description">
+          <p className="regular-10 overflow-hidden text-ellipsis whitespace-nowrap text-description">
             {plan.description}
           </p>
         </div>
         {/* 닉네임과 날짜 영역  */}
-        <div className="medium-12 flex flex-col items-start text-gray-500 md:flex-row md:items-center md:gap-2">
+        <div className="medium-12 text-gray-500">
           <span className="whitespace-nowrap">{plan.nickname}</span>
           <Separator
             orientation="vertical"

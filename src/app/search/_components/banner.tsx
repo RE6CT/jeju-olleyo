@@ -15,11 +15,7 @@ const Banner = () => {
 
   return (
     <>
-      <img
-        src={randomImage}
-        alt="랜덤 배너"
-        className="mt-[42px] aspect-auto w-full"
-      />
+      <img src={randomImage} alt="랜덤 배너" className="aspect-auto w-full" />
     </>
   );
 };

@@ -8,8 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { TEXT } from '@/constants/plan.constants';
 import { PlanHorizontalCardProps } from '@/types/plan.type';
-
-import LikeButton from '../like/like-button';
+import LikeButton from '@/components/commons/like-button';
 
 /**
  * 일정 카드 컴포넌트

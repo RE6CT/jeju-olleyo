@@ -33,7 +33,7 @@ const LikeButton = ({
   return (
     <button
       onClick={(e) => handleClick(e)}
-      className={`flex h-10 w-10 cursor-pointer items-center justify-center rounded-[8px] border-none bg-white/10 p-1 lg:h-14 lg:w-14 lg:rounded-12 lg:p-0 ${className}`}
+      className={`flex h-8 w-8 cursor-pointer items-center justify-center gap-[5.714px] rounded-12 border-none bg-white/10 p-[5.714px] md:h-14 md:w-14 md:gap-2.5 md:p-2.5 lg:h-14 lg:w-14 lg:gap-2.5 lg:p-2.5 ${className}`}
       aria-label={isLiked ? '좋아요 취소' : '좋아요'}
     >
       <LikesIcon fill={isLiked ? 'primary-500' : 'gray-200'} size={40} />

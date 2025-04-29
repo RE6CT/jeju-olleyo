@@ -18,7 +18,7 @@ const EmptyResult = ({
   imagePath: string;
 }) => {
   return (
-    <div className="flex w-full min-w-[300px] max-w-[625px] flex-col items-center">
+    <div className="flex w-full flex-col items-center md:h-[387px] md:w-[624.49px]">
       <div className="w-full">
         <Image
           src={imagePath}

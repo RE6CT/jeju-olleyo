@@ -30,7 +30,10 @@ const CategoryRegionTabs = ({
   };
 
   return (
-    <ul className="flex w-fit list-none items-center gap-3 p-0" role="tablist">
+    <ul
+      className="flex w-fit list-none items-center gap-2 p-0 md:gap-3"
+      role="tablist"
+    >
       {tabs.map((tab) => (
         <li key={tab} role="presentation">
           <button

@@ -27,8 +27,16 @@ const Header = () => {
     pathname.includes(PATH.FORGOT_PASSWORD.substring(1)) ||
     pathname.includes(PATH.RESET_PASSWORD.substring(1));
 
+  // 마이페이지인지 체크
+  const isMyPage =
+    pathname.includes(PATH.ACCOUNT.substring(1)) ||
+    pathname.includes(PATH.BOOKMARKS.substring(1)) ||
+    pathname.includes(PATH.LIKES.substring(1)) ||
+    pathname.includes(PATH.COMMENTS.substring(1)) ||
+    pathname.includes(PATH.RESERVATIONS.substring(1));
+
   // 로그인 페이지에서는 무조건 헤더를 숨김
-  if (isSignInPage) {
+  if (isSignInPage || isMyPage) {
     return null;
   }
 

@@ -4,9 +4,10 @@ import { useBookmarkMutation } from '@/lib/mutations/use-bookmark-mutation';
 import { useCurrentUser } from '@/lib/queries/auth-queries';
 
 /**
- * 북마크 버튼 컴포넌트
+ * 북마크 버튼 컴포넌트 - 반응형 지원
  * @param isBookmarked - 북마크 여부
  * @param placeId - 카드의 장소 id
+ * @param className - 추가 스타일 클래스
  */
 const BookmarkButton = ({
   isBookmarked,

@@ -24,5 +24,4 @@ export type PlaceCardProps = {
   title: string;
   isBookmarked: boolean;
   className?: string;
-  isDragging: boolean;
 };

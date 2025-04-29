@@ -78,4 +78,5 @@ const JejuBanner = ({
     </div>
   );
 };
+
 export default JejuBanner;

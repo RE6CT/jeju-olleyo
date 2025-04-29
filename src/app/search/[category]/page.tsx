@@ -98,7 +98,6 @@ const SearchResultsPage = ({
                       placeId={place.placeId}
                       image={place.image}
                       title={place.title}
-                      isDragging={false}
                       isBookmarked={place.isBookmarked}
                     />
                     {idx === 7 && (

@@ -62,7 +62,7 @@ const CategoryTabs = memo(({ className }: CategoryTabsProps) => {
   return (
     <div
       className={cn(
-        'flex w-full items-center justify-between px-4 md:justify-start md:gap-6 md:bg-white md:px-9',
+        'mb-[13px] mt-[19px] flex w-full items-center justify-between px-4 md:justify-start md:gap-6 md:bg-white md:px-9',
         className,
       )}
     >
@@ -72,7 +72,7 @@ const CategoryTabs = memo(({ className }: CategoryTabsProps) => {
           key={category}
           onClick={createCategoryClickHandler(category)}
           className={cn(
-            'flex flex-col items-center justify-center gap-2 py-2.5 transition-all md:flex-row md:border-b-2',
+            'flex flex-col items-center justify-center gap-2 transition-all md:flex-row md:border-b-2',
             activeCategory === category
               ? 'text-gray-600 md:border-primary-500'
               : 'border-transparent text-gray-600 hover:text-gray-800',
@@ -95,7 +95,7 @@ const CategoryTabs = memo(({ className }: CategoryTabsProps) => {
       <Link
         href={CATEGORY_ROUTES.항공권}
         className={cn(
-          'flex flex-col items-center justify-center gap-2 border-b-2 py-2.5 transition-all md:flex-row',
+          'flex flex-col items-center justify-center gap-2 border-b-2 transition-all md:flex-row',
           activeCategory === '항공권'
             ? 'border-primary-500 text-gray-600'
             : 'border-transparent text-gray-600 hover:text-gray-800',

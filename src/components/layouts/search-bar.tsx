@@ -81,8 +81,8 @@ const SearchBar = () => {
   return (
     <div className="relative">
       <SearchIcon
-        className="absolute left-2 top-1/2 z-10 h-[15px] w-[15px] -translate-y-1/2 transform sm:h-[17.93px] sm:w-[17.93px] md:h-[24px] md:w-[24px]"
-        size={24}
+        className="absolute left-[10px] top-1/2 z-10 -translate-y-1/2 transform"
+        size={20}
         fill="gray-400"
       />
       <Input
@@ -90,7 +90,7 @@ const SearchBar = () => {
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
         placeholder="제주 여행, 어디부터 시작할까요?"
-        className="medium-14 medium-14 placeholder:medium-14 sm:medium-10 sm:placeholder:medium-10 md:medium-14 md:placeholder:medium-14 h-[28px] rounded-full border-none bg-white pl-[25px] placeholder:text-gray-400 sm:h-[25.9px] sm:pl-[42px] md:h-[32px] md:bg-gray-50"
+        className="medium-14 placeholder:medium-14 md:medium-14 md:placeholder:medium-14 rounded-full border-none bg-white py-[7.5px] pl-[38px] placeholder:text-gray-400 md:h-[32px] md:bg-gray-50"
         onClick={handleInputClick}
         onKeyDown={(e) => {
           if (e.key === 'Enter') {

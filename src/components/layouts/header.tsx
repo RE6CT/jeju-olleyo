@@ -64,7 +64,7 @@ const Header = () => {
   // 일반 페이지 헤더
   return (
     <header className="flex flex-col">
-      <div className="flex h-[86px] w-full items-center justify-between gap-2 bg-transparent px-9 md:bg-white">
+      <div className="mt-3 flex h-fit w-full items-center justify-between gap-2 bg-transparent px-4 md:mt-0 md:h-[86px] md:bg-white">
         <div className="flex items-center gap-5 lg:gap-[42px]">
           <Link href={PATH.HOME} className="flex-shrink-0">
             {/* 웹용 */}
@@ -74,7 +74,7 @@ const Header = () => {
               width={116}
               height={61}
               priority
-              className="hidden object-cover md:block md:pr-[42px]"
+              className="hidden object-cover lg:block lg:pr-[42px]"
             />
             {/* 태블릿용 */}
             <Image
@@ -83,7 +83,7 @@ const Header = () => {
               width={86.7}
               height={45.1}
               priority
-              className="hidden object-cover sm:block sm:pr-[30px] md:hidden"
+              className="hidden object-cover md:block lg:hidden"
             />
             {/* 모바일용 */}
             <Image
@@ -92,7 +92,7 @@ const Header = () => {
               width={80.1}
               height={41}
               priority
-              className="block object-cover sm:hidden"
+              className="block object-cover md:hidden"
             />
           </Link>
           {/* 검색바 */}

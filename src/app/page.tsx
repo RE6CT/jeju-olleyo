@@ -31,7 +31,7 @@ const Home = () => {
       </section>
 
       {/* 날씨 섹션 */}
-      <section className="mt-[58px]">
+      <section className="mb-10 mt-9 lg:mb-[58px]">
         <Suspense fallback={<Loading />}>
           <WeatherSection />
         </Suspense>

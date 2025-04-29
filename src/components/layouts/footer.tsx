@@ -24,7 +24,7 @@ const Footer = () => {
             <img src="/logo/color_logo.png" alt="Logo" />
           </div>
           <p className="medium-14 self-stretch text-gray-600">
-            2025 리윅트. All rights reserved.
+            2025 리왹트. All rights reserved.
           </p>
         </div>
       </div>

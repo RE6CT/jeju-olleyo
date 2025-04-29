@@ -1,11 +1,9 @@
 import Link from 'next/link';
-
 import Duration from '@/components/commons/duration';
 import PlanImage from '@/components/commons/plan-image';
 import { Separator } from '@/components/ui/separator';
 import { PlanVerticalCardProps } from '@/types/plan.type';
-
-import LikeButton from '../like/like-button';
+import LikeButton from '@/components/commons/like-button';
 
 /**
  * vertical한 플랜 카드 컴포넌트
@@ -29,13 +27,13 @@ const PlanVerticalCard = ({ plan }: PlanVerticalCardProps) => {
         />
       </div>
 
-      <div className="flex flex-col gap-1 p-2">
+      <div className="mt-2 flex flex-col gap-1">
         {/* 제목과 내용 영역 */}
-        <div className="flex flex-col md:gap-2">
-          <p className="md:medium-16 medium-12 line-clamp-2 min-h-[38px] flex-1 overflow-hidden text-ellipsis whitespace-normal text-gray-900 md:line-clamp-1 md:h-auto md:text-[16px]">
+        <div className="flex flex-col gap-1 md:gap-2">
+          <p className="medium-12 md:medium-18 lg:medium-16 overflow-hidden text-ellipsis whitespace-nowrap text-gray-900">
             {plan.title}
           </p>
-          <p className="line-clamp-2 min-h-[32px] flex-1 overflow-hidden text-ellipsis whitespace-normal text-[10px] text-description md:h-[32px] md:whitespace-nowrap md:text-[14px] md:text-description">
+          <p className="regular-10 md:regular-16 lg:regular-14 overflow-hidden text-ellipsis whitespace-nowrap text-description">
             {plan.description}
           </p>
         </div>

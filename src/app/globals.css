@@ -59,7 +59,7 @@
 
   html,
   body {
-    @apply h-full bg-white font-sans leading-normal text-gray-900;
+    @apply min-h-full bg-white font-sans leading-normal text-gray-900;
   }
 
   html body[data-scroll-locked] {

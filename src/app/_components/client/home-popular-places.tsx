@@ -1,146 +1,124 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState, useRef, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
 import { CATEGORIES } from '@/constants/home.constants';
-import useDragScroll from '@/lib/hooks/use-drag-scroll';
-import { usePopularPlaces } from '@/lib/hooks/use-popular-places';
-import { Category } from '@/types/home.popular-place.type';
-
+import { Category, Place } from '@/types/home.popular-place.type';
 import PlaceCard from '@/components/features/card/place-card';
+import { usePopularPlaces } from '@/lib/hooks/use-popular-places';
 
 /**
  * 인기 장소를 카테고리별로 표시하는 컴포넌트
- * 카테고리 전환 시 UI 깜빡임을 방지하는 최적화 적용
+ * 그리드 레이아웃 + 반응형 카테고리 버튼/텍스트
  */
 const PopularPlaces = () => {
   const router = useRouter();
   const [activeCategory, setActiveCategory] = useState<Category>('전체');
+  const [placeCount, setPlaceCount] = useState(9);
   const { places, isLoading, isFirstLoading } =
     usePopularPlaces(activeCategory);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const { isDragging } = useDragScroll(scrollContainerRef, { threshold: 5 });
 
-  const handleViewMore = () => {
-    router.push('/categories/all');
+  // 화면 크기에 따라 불러올 카드 개수 조절
+  useEffect(() => {
+    const updateCount = () => {
+      if (window.innerWidth >= 1024)
+        setPlaceCount(8); // lg: 4×2
+      else if (window.innerWidth >= 768)
+        setPlaceCount(6); // md: 3×2
+      else setPlaceCount(9); // sm: 3×3
+    };
+    updateCount();
+    window.addEventListener('resize', updateCount);
+    return () => window.removeEventListener('resize', updateCount);
+  }, []);
+
+  const handleViewMore = () => router.push('/categories/all');
+  const handleCategoryChange = (cat: Category) => {
+    if (cat !== activeCategory) setActiveCategory(cat);
   };
 
-  // 카테고리 변경 처리 함수
-  const handleCategoryChange = (category: Category) => {
-    if (category === activeCategory) return; // 같은 카테고리 클릭 시 무시
-    setActiveCategory(category);
-  };
-
-  // 카테고리 버튼 메모이제이션
-  const categoryButtons = useMemo(() => {
-    return CATEGORIES.map((category) => (
-      <button
-        key={category}
-        onClick={() => handleCategoryChange(category)}
-        className={`semibold-16 rounded-[28px] border-[0.6px] border-solid px-5 py-2 transition-colors ${
-          activeCategory === category
-            ? 'border-[#F60] bg-primary-100 text-primary-800'
-            : 'border-[color:var(--Gray-600,#537384)] text-gray-600'
-        }`}
-      >
-        {category}
-      </button>
-    ));
-  }, [activeCategory]);
-
-  // 장소 카드 메모이제이션
-  const placeCards = useMemo(() => {
-    if (isFirstLoading) {
-      // 첫 로딩 시에만 스켈레톤 UI 표시
-      return Array.from({ length: 4 }).map((_, idx) => (
-        <div
-          key={idx}
-          className="flex-shrink-0 animate-pulse rounded-lg bg-gray-200"
-          style={{ width: '230px', height: '270px' }}
-        />
-      ));
-    }
-
-    // places가 배열인지 확인
-    if (!Array.isArray(places)) {
-      console.error('places is not an array:', places);
-      return <div>데이터 형식 오류가 발생했습니다.</div>;
-    }
-
-    if (places.length > 0) {
-      // 장소 카드 렌더링
-      return places.map((place, index) => (
-        <div
-          key={place.id}
-          className="flex-shrink-0 transition-opacity duration-200"
-          style={{ width: '230px' }}
+  // 카테고리 버튼 (반응형 패딩·폰트)
+  const categoryButtons = useMemo(
+    () =>
+      CATEGORIES.map((cat) => (
+        <button
+          key={cat}
+          onClick={() => handleCategoryChange(cat)}
+          className={`flex h-7 w-[46px] items-center justify-center md:h-8 md:w-[56px] lg:w-[66px] ${
+            activeCategory === cat
+              ? 'medium-12 rounded-[36px] border-[0.665px] border-solid border-primary-600 bg-primary-100 text-primary-800'
+              : 'medium-12 rounded-[36px] border-[0.665px] border-solid border-gray-500 text-gray-600'
+          } `}
         >
-          <PlaceCard
-            key={place.id}
-            placeId={place.id}
-            image={place.image || '/images/default_place_image.svg'}
-            title={place.title}
-            isBookmarked={place.isBookmarked}
-            isDragging={isDragging}
-            className="cursor-pointer select-none"
-          />
+          {cat}
+        </button>
+      )),
+    [activeCategory],
+  );
+
+  // 스켈레톤 & 카드 리스트 생성
+  const placeCards = useMemo(() => {
+    const items = isFirstLoading
+      ? Array.from({ length: placeCount }, () => ({} as Place))
+      : places.slice(0, placeCount);
+
+    if (!items.length) {
+      return (
+        <div className="col-span-full py-12 text-center text-gray-500">
+          {activeCategory}에 인기 장소가 없습니다.
         </div>
-      ));
+      );
     }
 
-    // 데이터가 없을 때
-    return (
-      <div className="w-full py-12 text-center text-gray-500">
-        {typeof activeCategory === 'string'
-          ? activeCategory
-          : '선택된 카테고리'}
-        에 인기 장소가 없습니다.
-      </div>
-    );
-  }, [places, isFirstLoading, isDragging, activeCategory]);
+    return items.map((place: Place, idx: number) => {
+      if (isFirstLoading) {
+        return (
+          <div
+            key={idx}
+            className="w-full animate-pulse rounded-12 bg-gray-200 pb-[100%]"
+          />
+        );
+      }
+      return (
+        <PlaceCard
+          key={place.id}
+          placeId={place.id}
+          image={place.image}
+          title={place.title}
+          isBookmarked={place.isBookmarked}
+        />
+      );
+    });
+  }, [places, isFirstLoading, placeCount, activeCategory]);
 
   return (
-    <section className="w-full px-4 py-6">
-      <div style={{ width: '952px' }} className="mx-auto">
-        <div className="mb-5 flex items-center justify-between">
-          <h2 className="semibold-22">올레 인기 장소</h2>
-          <div className="p-2.5">
-            <button
-              onClick={handleViewMore}
-              className="regular-16 text-gray-600 hover:text-black"
-            >
-              더보기
-            </button>
-          </div>
-        </div>
-
-        {/* 카테고리 탭 */}
-        <div className="mb-5 flex space-x-3 overflow-x-auto">
-          {categoryButtons}
-        </div>
-
-        {/* 장소 카드 슬라이더 */}
-        <div className="relative overflow-hidden">
-          <div
-            ref={scrollContainerRef}
-            className="flex cursor-grab select-none overflow-x-auto"
-            style={{
-              scrollbarWidth: 'none',
-              msOverflowStyle: 'none',
-              WebkitOverflowScrolling: 'touch',
-              userSelect: 'none',
-              gap: '11px', // 카드 간 간격 11px로 설정
-              minHeight: '270px', // 최소 높이 유지로 레이아웃 안정화
-            }}
+    <section className="flex w-[375px] flex-col items-start gap-3 px-4 py-0 md:w-full lg:w-full">
+      {/* 헤더 */}
+      <div className="flex items-center justify-between self-stretch">
+        <h2 className="semibold-20 lg:semibold-22 text-center text-gray-900">
+          올레 인기 장소
+        </h2>
+        <div className="flex items-center justify-center gap-2.5 p-2.5">
+          <button
+            onClick={handleViewMore}
+            className="regular-14 md:regular-16 text-center text-gray-600"
           >
-            {placeCards}
-          </div>
-
-          {/* 로딩 인디케이터 오버레이 (첫 로딩이 아닌 경우에만) */}
-          {isLoading && !isFirstLoading}
+            더보기
+          </button>
         </div>
       </div>
+
+      {/* 카테고리 탭: 한 줄 고정 가로 스크롤 */}
+      <div className="flex items-center gap-2 md:gap-3">{categoryButtons}</div>
+
+      {/* 카드 그리드: sm 3col, md 3col, lg 4col */}
+      <div className="grid w-full grid-cols-3 gap-[11px] md:grid-cols-3 lg:grid-cols-4">
+        {placeCards}
+      </div>
+
+      {/* 로딩 인디케이터 */}
+      {isLoading && !isFirstLoading}
     </section>
   );
 };

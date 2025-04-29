@@ -110,7 +110,7 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
             <Input
               id="email"
               type="email"
-              placeholder="name@example.com"
+              placeholder="6-20자 영문, 숫자"
               {...registerLogin('email')}
               aria-required="true"
               aria-invalid={errorsLogin.email ? 'true' : 'false'}
@@ -123,7 +123,7 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
             <Label htmlFor="password">비밀번호</Label>
             <PasswordInput
               id="password"
-              placeholder="비밀번호를 입력하세요"
+              placeholder="8-12자 영문, 숫자, 특수문자"
               autoComplete="current-password"
               register={registerLogin('password')}
               aria-required="true"
@@ -188,7 +188,7 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
             <Input
               id="email"
               type="email"
-              placeholder="name@example.com"
+              placeholder="6-20자 영문, 숫자"
               {...registerSignup('email')}
               aria-required="true"
               aria-invalid={errorsSignup.email ? 'true' : 'false'}
@@ -201,7 +201,7 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
             <Label htmlFor="password">비밀번호</Label>
             <PasswordInput
               id="password"
-              placeholder="비밀번호를 입력하세요"
+              placeholder="8-12자 영문, 숫자, 특수문자"
               register={registerSignup('password')}
               autoComplete="new-password"
               aria-required="true"
@@ -215,7 +215,7 @@ const AuthForm = <T extends LoginFormValues | RegisterFormValues>({
             <Label htmlFor="confirmPassword">비밀번호 확인</Label>
             <PasswordInput
               id="confirmPassword"
-              placeholder="비밀번호를 다시 입력하세요"
+              placeholder="8-12자 영문, 숫자, 특수문자"
               register={registerSignup('confirmPassword')}
               autoComplete="new-password"
               aria-required="true"

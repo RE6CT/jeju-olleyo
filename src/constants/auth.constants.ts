@@ -5,20 +5,19 @@ import { PATH } from './path.constants';
  */
 export const ERROR_MESSAGES = {
   // 이메일 관련
-  REQUIRED_EMAIL: '이메일을 입력해주세요.',
+  REQUIRED_EMAIL: '이메일은 필수 입력 항목입니다.',
   INVALID_EMAIL: '올바른 이메일 형식이 아닙니다.',
-  EMAIL_EXISTS: '이미 사용 중인 이메일입니다.',
+  EMAIL_EXISTS: '이미 존재하는 이메일입니다.',
   EMAIL_NOT_FOUND: '등록되지 않은 이메일입니다.',
   EMAIL_NOT_REGISTERED_MESSAGE: '가입되지 않은 이메일입니다.',
-  EMAIL_ADDRESS_IS_INVALID: '유효하지 않은 이메일입니다.',
+  EMAIL_ADDRESS_IS_INVALID: '유효하지 않은 이메일입니다. 다시 입력해주세요.',
 
   // 비밀번호 관련
-  REQUIRED_PASSWORD: '비밀번호를 입력해주세요.',
-  MIN_PASSWORD_LENGTH: '비밀번호는 최소 8자 이상이어야 합니다.',
-  PASSWORD_LETTER: '비밀번호는 최소 하나의 문자를 포함해야 합니다.',
-  PASSWORD_NUMBER: '비밀번호는 최소 하나의 숫자를 포함해야 합니다.',
-  PASSWORD_SPECIAL_CHAR: '비밀번호는 최소 하나의 특수문자를 포함해야 합니다.',
-  PASSWORD_MISMATCH: '비밀번호가 일치하지 않습니다.',
+  REQUIRED_PASSWORD: '비밀번호는 필수 입력항목입니다.',
+  CHECK_REQUIRED_PASSWORD: '비밀번호 확인은 필수 입력 항목입니다.',
+  PASSWORD_CHECK:
+    '8-12자의 영문, 숫자, 특수문자 중 2가지 이상으로만 가능합니다.',
+  PASSWORD_MISMATCH: '비밀번호가 일치하지 않습니다. 다시 입력해주세요.',
   PASSWORD_REQUIREMENTS_ERROR: '비밀번호가 보안 요구사항을 충족하지 않습니다.',
   PASSWORD_RESET_LINK_EXPIRED_ERROR: '비밀번호 재설정 링크가 만료되었습니다.',
   PASSWORD_SAME_AS_OLD: '이전과 동일한 비밀번호는 사용할 수 없습니다.',
@@ -27,12 +26,12 @@ export const ERROR_MESSAGES = {
   REQUIRED_NICKNAME: '닉네임을 입력해주세요.',
   MIN_NICKNAME_LENGTH: '닉네임은 최소 2자 이상이어야 합니다.',
   MAX_NICKNAME_LENGTH: '닉네임은 최대 10자까지 가능합니다.',
-  NICKNAME_EXISTS: '이미 사용 중인 닉네임입니다.',
+  NICKNAME_EXISTS: '이미 존재하는 닉네임입니다.',
 
   // 전화번호 관련
-  REQUIRED_PHONE: '휴대폰 번호를 입력해주세요.',
+  REQUIRED_PHONE: '전화번호는 필수 입력 항목입니다.',
   INVALID_PHONE: '올바른 형식의 휴대폰 번호를 입력해주세요.',
-  PHONE_EXISTS: '이미 등록된 휴대폰 번호입니다.',
+  PHONE_EXISTS: '이미 가입된 전화번호입니다.',
 
   // 일반 오류
   NETWORK_ERROR: '네트워크 연결에 문제가 있습니다.',
@@ -75,11 +74,11 @@ export const AUTH_BUTTON_TEXT = {
     DEFAULT: '회원가입',
   },
   FORGOT_PASSWORD: {
-    DEFAULT: '비밀번호 재설정 링크 받기',
+    DEFAULT: '이메일 확인',
     COMPLETE: '메일 발송 완료!',
   },
   RESET_PASSWORD: {
-    DEFAULT: '비밀번호 변경하기',
+    DEFAULT: '비밀번호 재설정',
   },
   SOCIAL: {
     GOOGLE: {

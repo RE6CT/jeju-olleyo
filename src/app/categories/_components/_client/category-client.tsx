@@ -57,7 +57,7 @@ const CategoryClient = ({ category }: { category: CategoryParamType }) => {
 
       {/* 카드 그리드 */}
       <section>
-        <ul className="grid list-none grid-cols-2 gap-[11px] p-0 sm:grid-cols-3 md:grid-cols-4">
+        <ul className="grid list-none grid-cols-2 gap-x-[11px] gap-y-[22px] p-0 sm:grid-cols-3 md:grid-cols-4">
           {isPending ? (
             <PlaceListSkeleton count={16} />
           ) : (
@@ -69,14 +69,13 @@ const CategoryClient = ({ category }: { category: CategoryParamType }) => {
                     image={place.image}
                     title={place.title}
                     isBookmarked={place.isBookmarked}
-                    isDragging={false}
                   />
                 </li>
                 {/* 8번째 아이템 이후에 배너 삽입 (첫 페이지의 마지막에만 적용) */}
                 {index === 7 && (
                   <li
                     key={`banner-${index}`}
-                    className="col-span-full my-4 flex w-full items-center justify-center"
+                    className="col-span-full my-2 flex w-full items-center justify-center"
                   >
                     <Banner />
                   </li>

@@ -38,7 +38,7 @@ const CategoryPage = async ({
 
   return (
     // <HydrationBoundary state={dehydrate(queryClient)}>
-    <div className="flex flex-col items-center justify-center p-9">
+    <div className="flex flex-col items-center justify-center bg-white p-4 md:p-7 lg:p-9">
       <CategoryClient category={urlCategory} />
     </div>
     // </HydrationBoundary>

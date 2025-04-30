@@ -88,18 +88,14 @@ const PlaceDetailContent = ({
       </div>
       {/* 모바일 레이아웃 */}
       <div className="flex flex-col md:hidden">
-        {/* 이미지 */}
-        <div className="w-full overflow-hidden rounded-[12px]">
+        {/* 이미지 및 카테고리 뱃지 */}
+        <div className="relative w-full overflow-hidden">
           <PlaceImage image={place.image} title={place.title} />
-        </div>
-
-        {/* 카테고리 뱃지 */}
-        <div className="bg-blue-100 mt-2 w-fit rounded-full px-2 py-1 text-xs text-white">
-          <CategoryBadge
-            category={place.category as CategoryType}
-            badgeType="page"
-            className="text-[12px] text-white"
-          />
+          <div className="absolute bottom-4 left-4 z-10">
+            <CategoryBadge category="명소" badgeType="page" />
+          </div>
+          {/* 하단 그라데이션 */}
+          <div className="absolute bottom-0 left-0 h-[80px] w-full bg-gradient-to-t from-white to-transparent" />
         </div>
 
         {/* 제목 */}

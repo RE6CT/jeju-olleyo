@@ -17,7 +17,7 @@ const getStyleByBadgeType = (
         ? 'bg-transparent text-primary-500 border-[0.5px] border-primary-500'
         : 'bg-transparent text-secondary-300 border-[0.5px] border-secondary-300';
     case 'page':
-      return 'bg-secondary-300 text-white';
+      return 'text-white';
     default:
       return '';
   }
@@ -34,7 +34,7 @@ const getLayoutByBadgeType = (
     case 'card':
       return 'px-2 py-[2px] text-sm h-[20px] rounded-[10px]';
     case 'page':
-      return 'px-4 py-2 text-sm rounded-[20px]';
+      return 'px-4 py-2 semibold-16 rounded-[20px]';
     default:
       return '';
   }
@@ -58,8 +58,16 @@ const CategoryBadge = ({
   const styleClass = getStyleByBadgeType(badgeType, selected, variant);
   const layoutClass = getLayoutByBadgeType(badgeType);
 
+  const inlineStyle =
+    badgeType === 'page'
+      ? { backgroundColor: 'rgba(56, 172, 188, 0.8)' }
+      : undefined;
+
   return (
-    <span className={`${baseClass} ${styleClass} ${layoutClass} ${className}`}>
+    <span
+      className={`${baseClass} ${styleClass} ${layoutClass} ${className}`}
+      style={inlineStyle}
+    >
       {category}
     </span>
   );

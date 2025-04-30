@@ -78,7 +78,7 @@ const SearchResultsPage = ({
           defaultTab={CATEGORY_KR_MAP[urlCategory] as CategoryType}
           onTabChange={onFilterTabChange}
           tabsGapClass="gap-2 md:gap-3"
-          tabPaddingClass="p-[0.66px] md:px-5 md:py-2"
+          tabPaddingClass="p-1 md:px-5 md:py-2"
           tabFontClass="text-[11px] md:semibold-16"
         />
       </div>

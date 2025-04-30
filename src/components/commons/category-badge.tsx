@@ -24,11 +24,11 @@ const getStyleByBadgeType = (
 const getLayoutByBadgeType = (badgeType: 'filter' | 'modal' | 'card') => {
   switch (badgeType) {
     case 'filter':
-      return 'px-5 py-2 text-sm rounded-[28px]';
+      return 'px-5 py-2 rounded-[28px]';
     case 'modal':
-      return 'px-4 py-2 text-sm rounded-[20px]';
+      return 'px-4 py-2 rounded-[20px]';
     case 'card':
-      return 'px-2 py-[2px] text-sm h-[20px] rounded-[10px]';
+      return 'px-2 py-[2px] rounded-[10px]';
     default:
       return '';
   }

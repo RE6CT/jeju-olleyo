@@ -35,46 +35,96 @@ const PlaceDetailContent = ({
   const openSummary = rawSummary.replace(/<br\s*\/?>/gi, '\n');
 
   return (
-    <div className="mt-[73px] flex flex-col items-center justify-center">
-      <div className="flex gap-8">
-        <div className="relative aspect-square w-full items-start bg-no-repeat object-cover md:mr-[28px] md:w-[300px] lg:mr-[50px] lg:w-[479px]">
+    <>
+      {/* 태블릿 및 피씨 레이아웃 */}
+      <div className="mt-[73px] hidden flex-col items-center justify-center md:flex">
+        <div className="flex gap-8">
+          <div className="relative aspect-square w-full items-start bg-no-repeat object-cover md:mr-[28px] md:w-[300px] lg:mr-[50px] lg:w-[479px]">
+            <PlaceImage image={place.image} title={place.title} />
+          </div>
+
+          <div className="flex flex-col justify-start space-y-3 md:pt-0 lg:pt-2">
+            <div className="flex items-center gap-2">
+              <CategoryBadge
+                category={place.category as CategoryType}
+                badgeType="modal"
+                className="lg:semibold-16 md:medium-16"
+              />
+            </div>
+
+            <div className="mb-[10px] mt-[10px] flex items-center gap-2">
+              <div className="md:bold-22 lg:bold-28">{place.title}</div>
+            </div>
+
+            <div className="mt-2 space-y-[9.5px] text-gray-300">
+              <div className="lg:medium-18 md:medium-14 flex items-center gap-2">
+                <TimeIcon size={20} fill="gray-300" />
+                {isHotel ? '체크인/체크아웃' : ''}
+                {openSummary}
+              </div>
+              <div className="lg:medium-18 md:medium-14 flex items-center gap-2">
+                <PhoneIcon size={20} fill="gray-300" />
+                {detailJson?.phone || '전화번호 미제공'}
+              </div>
+            </div>
+
+            <div className="semibold-18 mt-[11px] text-gray-300">
+              <div className="lg:medium-18 md:medium-14 flex items-center gap-2">
+                <LocationIcon size={20} fill="gray-300" />
+                {place.address}
+              </div>
+            </div>
+
+            {/* 지도영역 */}
+            <div className="w-full md:min-h-[100px] lg:min-h-[150px]">
+              <PlaceLocation
+                lat={place.lat}
+                lng={place.lng}
+                title={place.title}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* 모바일 레이아웃 */}
+      <div className="flex flex-col px-4 pt-4 md:hidden">
+        {/* 이미지 */}
+        <div className="w-full overflow-hidden rounded-[12px]">
           <PlaceImage image={place.image} title={place.title} />
         </div>
 
-        <div className="flex flex-col justify-start space-y-3 md:pt-0 lg:pt-2">
-          <div className="flex items-center gap-2">
-            <CategoryBadge
-              category={place.category as CategoryType}
-              badgeType="modal"
-              className="lg:semibold-16 md:medium-16"
-            />
-          </div>
+        {/* 카테고리 뱃지 */}
+        <div className="bg-blue-100 mt-2 w-fit rounded-full px-2 py-1 text-xs text-white">
+          <CategoryBadge
+            category={place.category as CategoryType}
+            badgeType="modal"
+            className="text-[12px] text-white"
+          />
+        </div>
 
-          <div className="mb-[10px] mt-[10px] flex items-center gap-2">
-            <div className="md:bold-22 lg:bold-28">{place.title}</div>
-          </div>
+        {/* 제목 */}
+        <div className="mt-2 text-[20px] font-bold">{place.title}</div>
 
-          <div className="mt-2 space-y-[9.5px] text-gray-300">
-            <div className="lg:medium-18 md:medium-14 flex items-center gap-2">
-              <TimeIcon size={20} fill="gray-300" />
-              {isHotel ? '체크인/체크아웃' : ''}
-              {openSummary}
+        {/* 정보 박스 */}
+        <div className="mt-2 rounded-[12px] bg-gray-50 px-4 py-3 shadow-sm">
+          <div className="space-y-2 text-[14px] text-gray-500">
+            <div className="flex items-center gap-2">
+              <TimeIcon size={16} fill="gray-300" />
+              {isHotel ? '체크인/체크아웃 ' : ''}
+              <span className="text-red-500">{openSummary}</span>
             </div>
-            <div className="lg:medium-18 md:medium-14 flex items-center gap-2">
-              <PhoneIcon size={20} fill="gray-300" />
+            <div className="flex items-center gap-2">
+              <PhoneIcon size={16} fill="gray-300" />
               {detailJson?.phone || '전화번호 미제공'}
             </div>
-          </div>
-
-          <div className="semibold-18 mt-[11px] text-gray-300">
-            <div className="lg:medium-18 md:medium-14 flex items-center gap-2">
-              <LocationIcon size={20} fill="gray-300" />
+            <div className="flex items-start gap-2">
+              <LocationIcon size={16} fill="gray-300" />
               {place.address}
             </div>
           </div>
 
-          {/* 지도영역 */}
-          <div className="w-full md:min-h-[100px] lg:min-h-[150px]">
+          {/* 지도 */}
+          <div className="mt-3 h-[150px] w-full overflow-hidden rounded-[8px]">
             <PlaceLocation
               lat={place.lat}
               lng={place.lng}
@@ -83,7 +133,7 @@ const PlaceDetailContent = ({
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -5,6 +5,7 @@ import { SERVER_COMPONENT_BASE_URL } from '@/constants/tour.constants';
 import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 import PlaceDetailContent from './_components/client/place-detail-content';
 import PlanIncludingPlace from './_components/server/plan-including-place';
+import PlacesHeader from './_components/client/places-header';
 
 export async function generateMetadata({ params }: { params: { id: string } }) {
   const supabase = getServerClient();
@@ -83,6 +84,10 @@ const PlaceDetailPage = async ({ params }: { params: { id: string } }) => {
 
   return (
     <>
+      {/* 모바일 헤더 */}
+      <div className="border-b-0.6 border-gray-100 bg-white md:hidden">
+        <PlacesHeader title={camelizedData.title} />
+      </div>
       {/* 장소 정보 영역 */}
       <PlaceDetailContent
         place={camelizedData}

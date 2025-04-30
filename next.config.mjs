@@ -4,6 +4,7 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   transpilePackages: ['lucide-react'], // 특정 패키지 트랜스파일링
+  compress: true,
 
   images: {
     formats: ['image/avif', 'image/webp'],

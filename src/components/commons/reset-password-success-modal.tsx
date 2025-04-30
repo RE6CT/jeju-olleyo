@@ -3,7 +3,11 @@
 import Image from 'next/image';
 import { useEffect } from 'react';
 
-import { Dialog, DialogContent } from '@/components/ui/no-close-button-dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+} from '@/components/ui/no-close-button-dialog';
 import { ResetPasswordSuccessModalProps } from '@/types/auth.type';
 
 const ResetPasswordSuccessModal = ({
@@ -30,6 +34,7 @@ const ResetPasswordSuccessModal = ({
 
       <Dialog open={open} onOpenChange={() => {}}>
         <DialogContent className="reset-password-success-modal flex flex-col items-center justify-center p-6 sm:max-w-xs">
+          <DialogTitle className="sr-only">비밀번호 재설정 성공</DialogTitle>
           <Image
             src="/character/happy_color.svg"
             alt="성공 캐릭터"

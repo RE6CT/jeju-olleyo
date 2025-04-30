@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { createMarkerImage } from '@/lib/utils/map.util';
 import {
@@ -11,6 +11,7 @@ import {
 import {
   MAP_ZOOM_LEVEL,
   MARKER,
+  MOBILE_SCREEN_OFFSET,
   SCREEN_OFFSET,
 } from '@/constants/map.constants';
 
@@ -36,6 +37,19 @@ const Marker = ({
 }: MarkerProps) => {
   const markerInstance = useRef<MarkerInstance | null>(null);
   const overlayInstance = useRef<CustomOverlayInstance | null>(null);
+  const [screenOffset, setScreenOffset] = useState(SCREEN_OFFSET);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenOffset(
+        window.innerWidth <= 768 ? MOBILE_SCREEN_OFFSET : SCREEN_OFFSET,
+      );
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // 마커 초기화
   useEffect(() => {
@@ -76,7 +90,7 @@ const Marker = ({
 
       // 클릭된 마커의 위치로 지도 중심 이동
       const latlng = new window.kakao.maps.LatLng(
-        position.lat + SCREEN_OFFSET.LAT,
+        position.lat + screenOffset.LAT,
         position.lng,
       );
       map.setCenter(latlng);
@@ -102,7 +116,17 @@ const Marker = ({
         overlayInstance.current.setMap(null);
       }
     };
-  }, [map, position, title, clickable, draggable, onClick, day, address]);
+  }, [
+    map,
+    position,
+    title,
+    clickable,
+    draggable,
+    onClick,
+    day,
+    address,
+    screenOffset,
+  ]);
 
   // 마커 속성 업데이트
   useEffect(() => {

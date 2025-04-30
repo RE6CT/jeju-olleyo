@@ -71,7 +71,7 @@ const PlaceCard = ({
   return (
     <div
       className={cn(
-        'flex w-[640px] gap-3',
+        'flex gap-3 md:w-[498px] lg:w-[640px]',
         !isReadOnly && 'cursor-grab active:cursor-grabbing',
         isDragging && 'opacity-50',
       )}
@@ -84,10 +84,10 @@ const PlaceCard = ({
       </div>
 
       {/* 카드 본문 */}
-      <div className="flex w-full items-center gap-5 rounded-lg border border-gray-100 bg-white p-3 shadow-[0px_2px_4px_1px_rgba(0,0,0,0.10)] transition-shadow duration-200 hover:shadow-[0px_4px_8px_2px_rgba(0,0,0,0.15)]">
+      <div className="flex w-full items-center gap-[15px] rounded-lg border border-gray-100 bg-white p-[8.72px] shadow-[0px_2px_4px_1px_rgba(0,0,0,0.10)] transition-shadow duration-200 hover:shadow-[0px_4px_8px_2px_rgba(0,0,0,0.15)] md:gap-5 md:p-3">
         {/* 장소 이미지 */}
         <div
-          className={`h-[92px] w-[92px] shrink-0 overflow-hidden rounded-lg bg-gray-100`}
+          className={`h-[72px] w-[72px] shrink-0 overflow-hidden rounded-lg bg-gray-100 md:h-[92px] md:w-[92px]`}
         >
           <Image
             src={displayImageUrl}
@@ -99,29 +99,29 @@ const PlaceCard = ({
         </div>
 
         {/* 장소 정보 */}
-        <div className="flex h-[92px] flex-1 shrink-0 flex-col items-start justify-start gap-1">
+        <div className="flex flex-1 shrink-0 flex-col items-start justify-start md:h-[92px] md:gap-1">
           <div className="w-fit">
             <CategoryBadge
               category={category as CategoryType}
               badgeType="card"
               variant="primary"
               className={cn(
-                'inline-flex h-[20px] items-center justify-center rounded-[10px] border-[0.5px] px-2 py-[2px] text-10 font-normal',
+                'inline-flex h-[15px] items-center justify-center rounded-[10px] border-[0.5px] px-2 py-[2px] text-[8px] font-normal md:h-[20px] md:text-sm',
                 dayColorSet.border,
                 dayColorSet.text,
               )}
             />
           </div>
           <div className="flex w-full flex-col">
-            <span className="semibold-16 font-semibold text-gray-900">
+            <span className="semibold-12 md:semibold-16 text-gray-900">
               {title}
             </span>
-            <span className="regular-12 text-gray-400">{address}</span>
+            <span className="text-9 text-gray-400">{address}</span>
           </div>
           {!isLastItem && (
-            <div className="flex items-center gap-1 text-12">
+            <div className="text-9 mt-auto flex items-center gap-[2.91px] md:gap-1">
               <div
-                className={`regular-12 flex aspect-square h-[20px] w-[20px] shrink-0 flex-col items-center justify-center gap-[10px] rounded-[12px] ${dayColorSet.bg} p-[3px_9px] text-white`}
+                className={`text-8 md:regular-12 flex aspect-square h-[15px] w-[15px] shrink-0 flex-col items-center justify-center gap-[10px] rounded-[12px] md:h-[20px] md:w-[20px] ${dayColorSet.bg} text-white md:p-[3px_9px]`}
               >
                 {index + 1}
               </div>

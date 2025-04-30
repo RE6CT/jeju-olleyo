@@ -72,7 +72,7 @@ const SearchResultsPage = ({
     <div className="px-4">
       <div className="semibold-20 md:semibold-24 lg:semibold-28 mb-[11px] md:mb-4 lg:mb-5">{`'${query}'의 검색 결과`}</div>
 
-      <div className="mb-[17px] mt-5 h-[40px] w-full max-w-[388px]">
+      <div className="mb-[11px] mt-5 h-[40px] w-full max-w-[388px] md:mb-5 lg:mb-[18px]">
         <CategoryFilterTabs
           tabs={Object.keys(TAB_LIST) as CategoryType[]}
           defaultTab={CATEGORY_KR_MAP[urlCategory] as CategoryType}

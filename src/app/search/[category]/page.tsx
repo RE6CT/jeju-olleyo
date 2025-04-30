@@ -70,16 +70,16 @@ const SearchResultsPage = ({
 
   return (
     <div className="px-4">
-      <div className="mb-6 text-2xl font-bold">{`'${query}'의 검색 결과`}</div>
+      <div className="semibold-20 md:semibold-24 lg:semibold-28 mb-[11px] md:mb-4 lg:mb-5">{`'${query}'의 검색 결과`}</div>
 
-      <div className="mb-[17px] mt-5 h-[40px] w-full max-w-[388px]">
+      <div className="mb-[11px] mt-5 h-[40px] w-[262px] md:mb-5 md:w-[188px] lg:mb-[18px] lg:w-[388px]">
         <CategoryFilterTabs
           tabs={Object.keys(TAB_LIST) as CategoryType[]}
           defaultTab={CATEGORY_KR_MAP[urlCategory] as CategoryType}
           onTabChange={onFilterTabChange}
-          tabsGapClass="gap-[10px]"
-          tabPaddingClass="px-5 py-2"
-          tabFontClass="semibold-16"
+          tabsGapClass="gap-2 md:gap-3"
+          tabPaddingClass="p-1 md:px-5 md:py-2"
+          tabFontClass="text-[11px] md:semibold-16"
         />
       </div>
 
@@ -87,7 +87,7 @@ const SearchResultsPage = ({
         <EmptyResult />
       ) : (
         <>
-          <div className="grid grid-cols-2 gap-[11px] sm:grid-cols-3 md:grid-cols-4">
+          <div className="grid grid-cols-3 gap-x-[11px] gap-y-4 p-0 md:gap-y-[11px] lg:grid-cols-4 lg:gap-y-[22px]">
             {isPending ? (
               <PlaceListSkeleton count={16} />
             ) : (

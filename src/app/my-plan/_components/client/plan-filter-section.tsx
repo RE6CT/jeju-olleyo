@@ -104,7 +104,7 @@ const PlanFilterSection = ({
   }
 
   return (
-    <section className="flex flex-col items-center gap-[10px] pb-[90px] md:gap-[44px] md:pb-0 lg:gap-[21px]">
+    <section className="flex flex-col items-center gap-[10px] pb-[86px] md:gap-[44px] md:pb-0 lg:gap-[21px]">
       <div className="flex w-full items-center justify-start gap-[10px] md:gap-10">
         <Popover open={isOpen} onOpenChange={setIsOpen}>
           <PopoverTrigger

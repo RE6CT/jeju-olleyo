@@ -306,6 +306,8 @@ const PlanHeader = memo(() => {
                         )
                       : undefined
                   }
+                  className="max-md:origin-top-left max-md:scale-90"
+                  calendarClassName="max-md:!w-[330px] max-md:!left-[-30%] md:!w-[488px] md:!left-[-10%] lg:!left-[0%] !transform-none !border-0 !shadow-none"
                 />
               </div>
             )}

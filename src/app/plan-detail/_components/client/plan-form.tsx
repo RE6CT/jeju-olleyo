@@ -21,6 +21,13 @@ import PlanMap from './core/plan-map';
 import PlanSchedule from './core/plan-schedule';
 import PlanSidemenu from './core/plan-sidemenu';
 import { useCurrentUser } from '@/lib/queries/auth-queries';
+import {
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
+import { MessageCircle } from 'lucide-react';
 
 const PlanForm = ({
   initialPlan,
@@ -103,7 +110,7 @@ const PlanForm = ({
   }
 
   return (
-    <div className="flex h-full flex-col pb-[90px]">
+    <div className="flex h-full flex-col pb-[86px] md:pb-0">
       <PlanHeader />
       <div className="flex flex-1 gap-4">
         <div className="flex flex-1 flex-col">
@@ -117,6 +124,29 @@ const PlanForm = ({
         <div className="hidden md:block">
           <PlanSidemenu />
         </div>
+        {isReadOnly && (
+          <div className="md:hidden">
+            <Sheet>
+              <SheetTrigger asChild>
+                <button
+                  className="fixed bottom-24 right-[20px] z-50 flex h-12 w-12 items-center justify-center rounded-full bg-primary-500 text-white shadow-lg"
+                  style={{
+                    right: 'max(20px, calc((100vw - 375px) / 2 + 20px))',
+                  }}
+                >
+                  <MessageCircle className="h-6 w-6" />
+                </button>
+              </SheetTrigger>
+              <SheetContent
+                side="bottom"
+                className="mx-auto h-[470px] w-[375px] rounded-t-[20px] p-[16px_20px_12px_20px]"
+              >
+                <SheetTitle className="sr-only">일정 정보</SheetTitle>
+                <PlanSidemenu />
+              </SheetContent>
+            </Sheet>
+          </div>
+        )}
       </div>
     </div>
   );

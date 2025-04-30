@@ -33,15 +33,14 @@ const WeatherSection = async () => {
 
   // 오류가 있을 때
   if (error) {
-    return <WeatherError title={weatherMessage.title} errorMessage={error} />;
+    return <WeatherError errorMessage={error} />;
   }
 
   return (
-    <div className="flex flex-col items-center justify-center gap-4 self-stretch px-0 md:gap-7 md:px-4 lg:gap-9 lg:px-4">
+    <div className="flex flex-col items-center justify-center gap-4 self-stretch px-4 md:gap-7 md:px-4 lg:gap-9 lg:px-4">
       <WeatherHeader
         month={month}
         day={day}
-        title={weatherMessage.title}
         subtitle={weatherMessage.subtitle}
       />
 

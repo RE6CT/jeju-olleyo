@@ -4,6 +4,7 @@
     "title": "명소 배너",
     "image_url": "/banner-images/olleyo-banner1.jpg",
     "link_url": "/categories/toursite",
+    "mobile_image_url": "/banner-images/mobile-banner1.png",
     "display_order": 1,
     "is_active": true
   },
@@ -12,6 +13,7 @@
     "title": "유채꽃 배너",
     "image_url": "/banner-images/olleyo-banner2.jpg",
     "link_url": "/search/toursite?query=유채꽃",
+    "mobile_image_url": "/banner-images/mobile-banner2.png",
     "display_order": 2,
     "is_active": true
   },
@@ -20,6 +22,7 @@
     "title": "올레 렌트 배너",
     "image_url": "/banner-images/olleyo-banner3.jpg",
     "link_url": "/air-ticket",
+    "mobile_image_url": "/banner-images/mobile-banner3.png",
     "display_order": 3,
     "is_active": true
   },
@@ -28,6 +31,7 @@
     "title": "제주 오름 완전 정복",
     "image_url": "/banner-images/olleyo-banner4.jpg",
     "link_url": "/search/toursite?query=오름",
+    "mobile_image_url": "/banner-images/mobile-banner4.png",
     "display_order": 4,
     "is_active": true
   }

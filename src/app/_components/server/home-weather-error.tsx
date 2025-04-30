@@ -7,14 +7,10 @@ import { WeatherErrorProps } from '@/types/home.weather.type';
  * @param errorMessage 에러 내용
  */
 const WeatherError: React.FC<WeatherErrorProps> = ({
-  title,
   errorMessage,
 }: WeatherErrorProps) => {
   return (
     <div className="mx-auto w-full max-w-4xl rounded-lg p-4">
-      <h2 className="mb-2 text-16 font-semibold text-gray-800 sm:text-16 md:text-18 lg:text-20">
-        {title}
-      </h2>
       <p className="text-red">{errorMessage}</p>
     </div>
   );

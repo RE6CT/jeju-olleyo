@@ -3,6 +3,7 @@ export type CarouselImages = {
   title: string;
   image_url: string;
   link_url: string;
+  mobile_image_url: string;
 };
 
 export type MainCarouselProps = {

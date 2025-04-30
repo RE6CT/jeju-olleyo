@@ -14,9 +14,6 @@ import { MainCarouselProps } from '@/types/home.carousel.type';
 
 /**
  * 메인 캐러셀 컴포넌트
- * 768px 이상: 일반 캐러셀 기능 제공 (네비게이션 버튼, 프로그레스 바)
- * 768px 미만: 이미지 형태로 표시 (네비게이션 버튼 없음, 번호만 표시)
- * 모바일에서도 터치 드래그로 슬라이드 전환 가능
  * @param imageList - 캐러셀에 표시할 이미지 목록
  */
 const MainCarousel = ({ imageList }: MainCarouselProps) => {
@@ -76,12 +73,15 @@ const MainCarousel = ({ imageList }: MainCarouselProps) => {
       aria-label="이미지 캐러셀"
     >
       <div
-        className="overflow-hidden rounded-lg border-[0.6px] border-solid border-white md:rounded-none md:border-0"
+        className="mx-auto overflow-hidden rounded-lg border-[0.6px] border-solid border-white md:mx-0 md:rounded-none md:border-0"
         ref={emblaRef}
+        style={{
+          maxWidth: isMobile ? '343px' : '100%',
+        }}
       >
         <div className="flex">
           {(!imageList || imageList.length === 0) && (
-            <div className="relative h-[340px] max-h-[340px] min-w-full lg:h-[340px]">
+            <div className="relative h-[170px] w-full md:h-0 md:pb-[33.2%]">
               <div className="flex h-full w-full items-center justify-center bg-gray-100">
                 <p className="text-gray-500">이미지가 없습니다.</p>
               </div>
@@ -89,12 +89,13 @@ const MainCarousel = ({ imageList }: MainCarouselProps) => {
           )}
           {imageList?.map((image, index) => (
             <div
-              className="relative h-0 min-w-full"
+              className="relative min-w-full"
               key={image.id}
-              style={{
-                paddingTop: 'calc(340 / 1024 * 100%)', // 1024px 너비에서 340px 높이 비율 유지
-                maxHeight: '340px',
-              }}
+              style={
+                isMobile
+                  ? { height: '170px' }
+                  : { height: 0, paddingBottom: 'calc(340 / 1024 * 100%)' }
+              }
             >
               <Link
                 href={image.link_url || '#'}
@@ -102,11 +103,15 @@ const MainCarousel = ({ imageList }: MainCarouselProps) => {
                 aria-label={`${image.title || '슬라이드'} 상세 보기`}
               >
                 <Image
-                  src={image.image_url}
+                  src={
+                    isMobile && image.mobile_image_url
+                      ? image.mobile_image_url
+                      : image.image_url
+                  }
                   alt={image.title || '슬라이드 이미지'}
                   fill
                   priority={index === 0} // 첫번째 이미지는 우선 로딩
-                  sizes="100vw"
+                  sizes={isMobile ? '343px' : '100vw'}
                   className="object-cover"
                 />
               </Link>

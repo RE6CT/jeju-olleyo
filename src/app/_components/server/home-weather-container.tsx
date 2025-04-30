@@ -26,7 +26,7 @@ const WeatherCardsContainer = memo(
           userSelect: 'none',
         }}
       >
-        <div className="flex min-w-fit justify-center gap-2 px-4 md:gap-6 md:px-0 lg:gap-8">
+        <div className="flex min-w-fit justify-center gap-2 md:gap-6 md:px-0 lg:gap-8">
           {weatherData.map((day, index) => (
             <div
               key={`day-${index}`}

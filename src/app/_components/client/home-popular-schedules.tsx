@@ -19,16 +19,12 @@ const PopularSchedules = () => {
   const [planCount, setPlanCount] = useState(4);
 
   useEffect(() => {
-    let resizeTimer: NodeJS.Timeout;
     const updatePlanCount = () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(() => {
-        if (window.innerWidth >= 1024) {
-          setPlanCount(6); // lg 이상이면 6개 (3개씩 2줄)
-        } else {
-          setPlanCount(4); // 기본, md에서는 4개 (2개씩 2줄)
-        }
-      }, 250);
+      if (window.innerWidth >= 1024) {
+        setPlanCount(6); // lg 이상이면 6개 (3개씩 2줄)
+      } else {
+        setPlanCount(4); // 기본, md에서는 4개 (2개씩 2줄)
+      }
     };
 
     updatePlanCount(); // 처음 한 번 실행
@@ -36,7 +32,6 @@ const PopularSchedules = () => {
 
     return () => {
       window.removeEventListener('resize', updatePlanCount);
-      clearTimeout(resizeTimer);
     };
   }, []);
 

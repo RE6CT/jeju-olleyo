@@ -70,7 +70,7 @@ const SearchResultsPage = ({
 
   return (
     <div className="px-4">
-      <div className="mb-6 text-2xl font-bold">{`'${query}'의 검색 결과`}</div>
+      <div className="semibold-20 md:semibold-24 lg:semibold-28 mb-[11px] md:mb-4 lg:mb-5">{`'${query}'의 검색 결과`}</div>
 
       <div className="mb-[17px] mt-5 h-[40px] w-full max-w-[388px]">
         <CategoryFilterTabs

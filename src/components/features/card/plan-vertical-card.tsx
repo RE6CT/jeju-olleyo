@@ -36,7 +36,7 @@ const PlanVerticalCard = ({
           className="absolute right-2 top-2 md:right-4 md:top-4"
         />
         {onEdit && onDelete && isDropdownVisible && (
-          <div className="absolute right-2 top-10 md:hidden">
+          <div className="absolute right-2 top-10 block md:hidden">
             <PlanDropdown
               plan={plan as Plan}
               onEdit={onEdit}
@@ -45,13 +45,14 @@ const PlanVerticalCard = ({
               <Button
                 variant="ghost"
                 size="icon"
-                className="focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0" // 포커스 효과 제거
+                className="h-8 w-8 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0" // 포커스 효과 제거
               >
                 <img
                   src="/icons/option.svg"
                   alt="option"
-                  width={24}
-                  height={24}
+                  width={16}
+                  height={16}
+                  className="h-4 w-4"
                 />
               </Button>
             </PlanDropdown>

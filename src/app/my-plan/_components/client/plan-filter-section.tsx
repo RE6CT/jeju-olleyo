@@ -113,7 +113,7 @@ const PlanFilterSection = ({
             onMouseLeave={() => handleMouseLeave(isDatePickerFocused)}
             className="border-none"
           >
-            <Button variant="outline" size="sm" disabled={isPlansLoading}>
+            <Button variant="ghost" size="sm" disabled={isPlansLoading}>
               <Image
                 src="/icons/mdi_filter_mobile.svg"
                 alt="filter icon"

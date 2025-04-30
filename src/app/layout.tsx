@@ -40,7 +40,7 @@ export default function RootLayout({
           <AuthProvider>
             <div className="mx-auto flex h-full w-full min-w-[375px] max-w-[375px] flex-col overflow-hidden bg-home-gradient pb-[86px] md:max-w-[769px] md:bg-none md:pb-0 lg:max-w-[1024px]">
               <Header />
-              <div className="flex h-full w-full flex-col overflow-auto overflow-x-hidden md:pb-0">
+              <div className="hide-scrollbar flex h-full w-full flex-col overflow-auto overflow-x-hidden md:pb-0">
                 <main className="flex-1">{children}</main>
                 <Footer />
               </div>

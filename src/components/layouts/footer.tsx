@@ -111,18 +111,16 @@ const Footer = () => {
         </div>
 
         {/* 튜터 섹션 */}
-        <div className="flex w-[52px] flex-col items-start gap-[11px]">
-          <h3 className="medium-12 self-stretch text-gray-600">튜터</h3>
-          <div className="flex items-start gap-[50px]">
-            <div className="flex w-[42px] flex-col items-start gap-2.5">
-              <span className="regular-10 self-stretch text-gray-600">
-                김병연
-              </span>
-            </div>
-            <div className="flex w-[42px] flex-col items-start gap-2.5">
-              <span className="regular-10 self-stretch text-gray-600">
-                박가현
-              </span>
+        <div className="flex items-center gap-2 self-stretch pb-4">
+          <div className="flex w-[186px] flex-col items-start gap-[11px]">
+            <h3 className="medium-12 w-[70px] text-gray-600">튜터</h3>
+            <div className="flex items-start gap-[50px] self-stretch">
+              <div className="flex w-[53px] items-center gap-2.5">
+                <span className="regular-10 text-gray-600">김병연</span>
+              </div>
+              <div className="flex w-[53px] items-center gap-2.5">
+                <span className="regular-10 text-gray-600">박가현</span>
+              </div>
             </div>
           </div>
         </div>

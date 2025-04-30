@@ -57,7 +57,7 @@ const CategoryClient = ({ category }: { category: CategoryParamType }) => {
 
       {/* 카드 그리드 */}
       <section>
-        <ul className="grid list-none grid-cols-2 gap-x-[11px] gap-y-[22px] p-0 sm:grid-cols-3 md:grid-cols-4">
+        <ul className="grid list-none grid-cols-3 gap-x-[11px] gap-y-4 p-0 md:gap-y-[11px] lg:grid-cols-4 lg:gap-y-[22px]">
           {isPending ? (
             <PlaceListSkeleton count={16} />
           ) : (
@@ -75,7 +75,7 @@ const CategoryClient = ({ category }: { category: CategoryParamType }) => {
                 {index === 7 && (
                   <li
                     key={`banner-${index}`}
-                    className="col-span-full my-2 flex w-full items-center justify-center"
+                    className="col-span-full my-2 flex w-full items-center justify-center overflow-hidden rounded-[8px] md:rounded-none"
                   >
                     <Banner />
                   </li>

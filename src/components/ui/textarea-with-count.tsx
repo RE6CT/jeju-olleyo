@@ -54,7 +54,7 @@ const TextareaWithCount = forwardRef<
         <Textarea
           ref={ref}
           value={value}
-          className={cn(showCount ? 'pr-16' : '', className)} // 글자 수 표시 공간 확보, 외부에서 padding right 방향 속성 주면 이상해짐
+          className={cn(showCount ? 'pr-8 md:pr-16' : '', className)} // 글자 수 표시 공간 확보, 외부에서 padding right 방향 속성 주면 이상해짐
           onChange={handleChange}
           {...props}
         />
@@ -62,7 +62,7 @@ const TextareaWithCount = forwardRef<
         {showCount && (
           <div
             className={cn(
-              'absolute bottom-2 right-4 text-xs',
+              'absolute bottom-[2px] right-4 text-[10px] leading-[14px] md:bottom-2 md:text-xs',
               currentLength === 0
                 ? 'text-gray-300'
                 : isExceeded

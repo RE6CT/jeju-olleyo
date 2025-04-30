@@ -2,13 +2,13 @@
 
 import { ko } from 'date-fns/locale';
 import Image from 'next/image';
-import { memo, useState, ChangeEvent } from 'react';
+import { memo, useState, ChangeEvent, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import TextareaWithCount from '@/components/ui/textarea-with-count';
-import { formatTravelPeriod } from '@/lib/utils/date';
+import { formatTravelPeriod, formatSimpleTravelPeriod } from '@/lib/utils/date';
 import 'react-datepicker/dist/react-datepicker.css'; // react-datepicker 캘린더 스타일 적용
 import { useChangeImageFile } from '@/lib/hooks/use-change-image-file';
 import { LoadingSpinner } from '@/components/commons/loading-spinner';
@@ -29,11 +29,18 @@ import {
   usePlanSetImg,
   usePlanId,
 } from '@/zustand/plan.store';
+import { Image as ImageIcon } from 'lucide-react';
 
 const EDIT_ICON_CONSTANTS = {
   WIDTH: 24,
   HEIGHT: 24,
 };
+
+const MOBILE_EDIT_ICON_CONSTANTS = {
+  WIDTH: 16,
+  HEIGHT: 16,
+};
+
 const MAX_TEXT_LENGTH = {
   TITLE: 50,
   DESCRIPTION: 500,
@@ -60,6 +67,16 @@ const PlanHeader = memo(() => {
     useChangeImageFile(planImg);
 
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleDateChange = (dates: [Date | null, Date | null]) => {
     const [start, end] = dates;
@@ -167,12 +184,12 @@ const PlanHeader = memo(() => {
   };
 
   return (
-    <>
-      <div className="mt-6 flex gap-4">
+    <section className="max-md:rounded-[12px] max-md:border max-md:border-solid max-md:border-gray-200 max-md:p-3">
+      <div className="flex gap-[10px] md:gap-4">
         {/* 썸네일 업로드 영역 */}
         <Label
           htmlFor="thumbnail"
-          className={`relative flex h-[160px] w-[252px] flex-col items-center gap-3 rounded-[12px] border border-solid border-gray-200 ${
+          className={`relative flex h-[79px] w-[110px] flex-shrink-0 flex-col items-center gap-[8px] rounded-[12px] border border-solid border-gray-200 md:h-[160px] md:w-[252px] md:gap-3 ${
             !isReadOnly ? 'cursor-pointer' : ''
           }`}
         >
@@ -180,7 +197,7 @@ const PlanHeader = memo(() => {
             type="file"
             id="thumbnail"
             accept="image/*"
-            className="hidden px-[58px] py-7"
+            className="hidden px-[10px] md:px-[58px] md:py-7"
             onChange={handleImageChange}
             disabled={isUploading || isReadOnly}
           />
@@ -193,28 +210,45 @@ const PlanHeader = memo(() => {
               className="object-cover object-center"
             />
           ) : (
-            <div className="flex h-full w-full flex-col items-center justify-center gap-3">
-              <p className="text-24 text-gray-300">+</p>
-              <p className="text-center text-14 font-medium text-gray-300">
-                {isReadOnly
-                  ? '등록된 이미지가 없습니다'
-                  : '내 일정을 대표할\n이미지를 추가하세요'}
-              </p>
-            </div>
+            <>
+              <div className="flex h-[79px] w-[110px] items-center justify-center md:hidden">
+                <ImageIcon className="h-6 w-6 text-gray-300" />
+              </div>
+              <div className="hidden h-full w-full flex-col items-center justify-center gap-3 md:flex">
+                <p className="text-24 text-gray-300">+</p>
+                <p className="medium-14 text-center text-gray-300">
+                  {!isReadOnly && (
+                    <span className="hidden md:inline">
+                      내 일정을 대표할
+                      <br />
+                      이미지를 추가하세요
+                    </span>
+                  )}
+                </p>
+              </div>
+            </>
           )}
           {isUploading && <LoadingSpinner />}
         </Label>
 
         {/* 입력 영역 */}
-        <div className="flex h-[160px] flex-1 flex-col items-start gap-7 rounded-[12px] border border-solid border-gray-200">
+        <div className="flex h-[79px] flex-1 flex-col items-start md:h-[160px] md:gap-7 md:rounded-[12px] md:border md:border-solid md:border-gray-200">
           <div className="relative w-full">
             {!isReadOnly && (
               <Image
                 src="/icons/edit.svg"
                 alt="edit icon"
-                width={EDIT_ICON_CONSTANTS.WIDTH}
-                height={EDIT_ICON_CONSTANTS.HEIGHT}
-                className="absolute left-4 top-5 z-10"
+                width={
+                  isMobile
+                    ? MOBILE_EDIT_ICON_CONSTANTS.WIDTH
+                    : EDIT_ICON_CONSTANTS.WIDTH
+                }
+                height={
+                  isMobile
+                    ? MOBILE_EDIT_ICON_CONSTANTS.HEIGHT
+                    : EDIT_ICON_CONSTANTS.HEIGHT
+                }
+                className="absolute z-10 md:left-4 md:top-5"
               />
             )}
             <TextareaWithCount
@@ -222,9 +256,9 @@ const PlanHeader = memo(() => {
               placeholder="나만의 일정을 제목을 지어주세요"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className={`w-full resize-none border-0 bg-transparent py-5 ${
-                isReadOnly ? 'pl-5' : 'pl-12'
-              } text-14 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 ${
+              className={`w-full resize-none border-0 bg-transparent py-0 md:py-5 ${
+                isReadOnly ? 'pl-0 md:pl-5' : 'pl-6 md:pl-12'
+              } regular-18 md:regular-14 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 ${
                 isReadOnly ? 'cursor-default' : ''
               }`}
               readOnly={isReadOnly}
@@ -233,18 +267,25 @@ const PlanHeader = memo(() => {
           </div>
 
           <div className="relative w-full">
-            <div className="flex items-center gap-7 px-5 pb-5 text-14">
-              <span>여행 기간</span>
+            <div className="regular-14 md:text-black-900 flex items-center text-gray-500 md:gap-3 md:gap-7 md:px-5 md:pb-5">
+              {!isReadOnly && (
+                <span className="hidden md:inline">여행 기간</span>
+              )}
               <Button
                 type="button"
                 variant="outline"
-                className="disabled:text-black-900 h-7 w-fit justify-start border-transparent bg-gray-50 px-5 py-1 text-left text-14 font-normal disabled:opacity-100"
+                className="md:disabled:text-black-900 w-fit justify-start border-transparent bg-transparent p-0 text-left text-14 font-normal disabled:opacity-100 md:h-7 md:bg-gray-50 md:px-5 md:py-1"
                 onClick={() =>
                   !isReadOnly && setIsCalendarOpen(!isCalendarOpen)
                 }
                 disabled={isReadOnly}
               >
-                {formatTravelPeriod(startDate, endDate)}
+                <span className="md:hidden">
+                  {formatSimpleTravelPeriod(startDate, endDate)}
+                </span>
+                <span className="hidden md:inline">
+                  {formatTravelPeriod(startDate, endDate)}
+                </span>
               </Button>
             </div>
             {isCalendarOpen && (
@@ -273,14 +314,22 @@ const PlanHeader = memo(() => {
       </div>
 
       {/* 일정 설명 입력 */}
-      <div className="relative z-30 mt-4">
+      <div className="relative z-30 mt-[10px] md:mt-4">
         {!isReadOnly && (
           <Image
             src="/icons/edit.svg"
             alt="edit icon"
-            width={EDIT_ICON_CONSTANTS.WIDTH}
-            height={EDIT_ICON_CONSTANTS.HEIGHT}
-            className="absolute left-4 top-5 z-10"
+            width={
+              isMobile
+                ? MOBILE_EDIT_ICON_CONSTANTS.WIDTH
+                : EDIT_ICON_CONSTANTS.WIDTH
+            }
+            height={
+              isMobile
+                ? MOBILE_EDIT_ICON_CONSTANTS.HEIGHT
+                : EDIT_ICON_CONSTANTS.HEIGHT
+            }
+            className="absolute z-10 md:left-4 md:top-5"
           />
         )}
         <TextareaWithCount
@@ -288,14 +337,14 @@ const PlanHeader = memo(() => {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           maxLength={MAX_TEXT_LENGTH.DESCRIPTION}
-          className={`h-[160px] w-full resize-none rounded-[12px] border border-gray-200 py-5 ${
-            isReadOnly ? 'cursor-default pl-5' : 'pl-12'
-          } text-14 focus-visible:ring-0 focus-visible:ring-offset-0`}
+          className={`w-full resize-none border-0 bg-transparent p-0 text-[10px] focus-visible:ring-0 focus-visible:ring-offset-0 md:h-[160px] md:rounded-[12px] md:border md:border-gray-200 md:py-5 md:text-[14px] md:leading-[20px] ${
+            isReadOnly ? 'pl-0 md:pl-5' : 'pl-6 md:pl-12'
+          }`}
           readOnly={isReadOnly}
           showCount={!isReadOnly}
         />
       </div>
-    </>
+    </section>
   );
 });
 

@@ -26,8 +26,8 @@ const PlanDetailNewPage = async () => {
     if (!userId) return <NotFound />;
 
     return (
-      <main className="mx-auto flex w-full min-w-[375px] max-w-[1024px] max-w-[375px] flex-col p-4 md:max-w-[769px] md:px-5 md:py-3 lg:px-6 lg:py-5">
-        <header className="flex items-center justify-between">
+      <main className="mx-auto flex w-full min-w-[375px] max-w-[1024px] max-w-[375px] flex-col gap-5 bg-white p-4 md:max-w-[769px] md:px-5 md:py-3 lg:max-w-[1024px] lg:px-6 lg:py-5">
+        <header className="hidden items-center justify-between md:flex">
           <div className="flex items-center gap-3">
             <h1 className="font-bold leading-[130%] md:text-24 lg:text-28">
               내 일정 만들기

@@ -37,7 +37,7 @@ import {
   useScheduleSavePlan,
 } from '@/lib/hooks/use-schedule';
 import { useCurrentUser } from '@/lib/queries/auth-queries';
-import { toast, useToast } from '@/lib/hooks/use-toast';
+import { toast } from '@/lib/hooks/use-toast';
 
 const DROPDOWN_CONTENT_STYLE =
   'p-0 border border-[#E7EDF0] bg-[#F9FAFB] rounded-[12px] w-[140px] [&>*:hover]:bg-primary-100 [&>*:hover]:text-primary-500';
@@ -182,15 +182,15 @@ const PlanSchedule = memo(() => {
   const dayCount = calculateTotalDays(startDate, endDate);
 
   return (
-    <div className="relative w-full bg-white">
+    <div className="relative w-full bg-transparent">
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className="flex w-full flex-1 flex-col gap-2">
-          <div className="sticky top-[240px] z-40 bg-white">
+          <div className="sticky top-[153px] z-40 bg-white md:top-[260px]">
             <DropdownMenu modal={false}>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="outline"
-                  className="flex w-[140px] items-center justify-center gap-2 rounded-[12px] border border-[#E7EDF0] bg-[#F9FAFB] px-5 py-[10px] text-14 font-medium"
+                  className="flex items-center justify-center gap-2 rounded-[12px] border border-[#E7EDF0] bg-[#F9FAFB] px-5 py-[10px] text-14 font-medium md:w-[113px] lg:w-[152px]"
                 >
                   {activeTab === '전체보기' ? '전체보기' : `DAY ${activeTab}`}
                   <ChevronDown className="h-4 w-4" />
@@ -229,19 +229,19 @@ const PlanSchedule = memo(() => {
             </DropdownMenu>
           </div>
 
-          <div className="mt-4 flex w-full gap-6">
+          <div className="mt-4 flex w-full md:mt-[22.5px] lg:mt-[17px]">
             {startDate && endDate ? (
               activeTab === '전체보기' ? (
-                <div className="flex w-full flex-col gap-6">
+                <div className="flex w-full flex-col">
                   {Array.from({ length: dayCount }, (_, i) => i + 1).map(
                     (day) => (
                       <div key={day}>
-                        <div className="mb-4 flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <span className="text-18 font-bold text-gray-900">
+                        <div className="flex items-center justify-between md:mb-3 lg:mb-4">
+                          <div className="flex items-center gap-3">
+                            <span className="font-bold text-gray-900 md:text-14 lg:text-16">
                               DAY {day}
                             </span>
-                            <span className="text-14 text-gray-600">
+                            <span className="text-gray-900 md:text-10 lg:text-12">
                               {formatDayDate(startDate, day)}
                             </span>
                           </div>
@@ -250,7 +250,7 @@ const PlanSchedule = memo(() => {
                               {copiedDay !== null && copiedDay !== day ? (
                                 <Button
                                   variant="ghost"
-                                  className="text-12 font-medium text-gray-500 hover:text-gray-900"
+                                  className="text-12' text-gray-500 hover:text-gray-900"
                                   onClick={() => handlePasteDayPlaces(day)}
                                 >
                                   붙여넣기
@@ -259,7 +259,7 @@ const PlanSchedule = memo(() => {
                                 <Button
                                   variant="ghost"
                                   className={cn(
-                                    'text-12 font-medium',
+                                    'text-12',
                                     copiedDay === day
                                       ? 'cursor-not-allowed text-gray-400'
                                       : 'text-gray-500 hover:text-gray-900',
@@ -273,7 +273,7 @@ const PlanSchedule = memo(() => {
                               <Button
                                 variant="ghost"
                                 className={cn(
-                                  'text-12 font-medium',
+                                  'text-12',
                                   !dayPlaces[day] || dayPlaces[day].length === 0
                                     ? 'cursor-not-allowed text-gray-400'
                                     : 'text-red hover:bg-transparent hover:text-red/80',
@@ -288,7 +288,7 @@ const PlanSchedule = memo(() => {
                             </div>
                           )}
                         </div>
-                        <div className="flex flex-col gap-4">
+                        <div className="flex flex-col md:gap-3 lg:gap-4">
                           <PlacesRenderer
                             day={day}
                             places={dayPlaces[day] || []}
@@ -303,12 +303,12 @@ const PlanSchedule = memo(() => {
                 </div>
               ) : (
                 <div className="w-full">
-                  <div className="mb-4 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="text-18 font-bold text-gray-900">
+                  <div className="flex items-center justify-between md:mb-3 lg:mb-4">
+                    <div className="flex items-center gap-3">
+                      <span className="font-bold text-gray-900 md:text-14 lg:text-16">
                         DAY {activeTab}
                       </span>
-                      <span className="text-14 text-gray-600">
+                      <span className="text-gray-900 md:text-10 lg:text-12">
                         {formatDayDate(startDate, activeTab as number)}
                       </span>
                     </div>
@@ -317,7 +317,7 @@ const PlanSchedule = memo(() => {
                         {copiedDay !== null && copiedDay !== activeTab ? (
                           <Button
                             variant="ghost"
-                            className="text-12 font-medium text-gray-500 hover:text-gray-900"
+                            className="text-12' text-gray-500 hover:text-gray-900"
                             onClick={() =>
                               handlePasteDayPlaces(activeTab as number)
                             }
@@ -328,7 +328,7 @@ const PlanSchedule = memo(() => {
                           <Button
                             variant="ghost"
                             className={cn(
-                              'text-12 font-medium',
+                              'text-12',
                               copiedDay === activeTab
                                 ? 'cursor-not-allowed text-gray-400'
                                 : 'text-gray-500 hover:text-gray-900',
@@ -344,7 +344,7 @@ const PlanSchedule = memo(() => {
                         <Button
                           variant="ghost"
                           className={cn(
-                            'text-12 font-medium',
+                            'text-12',
                             !dayPlaces[activeTab as number] ||
                               dayPlaces[activeTab as number].length === 0
                               ? 'cursor-not-allowed text-gray-400'
@@ -363,7 +363,7 @@ const PlanSchedule = memo(() => {
                       </div>
                     )}
                   </div>
-                  <div className="flex flex-col gap-4">
+                  <div className="flex flex-col md:gap-3 lg:gap-4">
                     <PlacesRenderer
                       day={activeTab as number}
                       places={dayPlaces[activeTab as number] || []}

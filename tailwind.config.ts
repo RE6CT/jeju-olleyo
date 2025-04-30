@@ -115,6 +115,8 @@ const config: Config = {
         sans: 'var(--font-pretendard)',
       },
       fontSize: {
+        '8': ['0.5rem', { lineHeight: '150%' }],
+        '9': ['0.5625rem', { lineHeight: '150%' }],
         '10': ['0.625rem', { lineHeight: '150%' }],
         '12': ['0.75rem', { lineHeight: '150%' }],
         '14': ['0.875rem', { lineHeight: '150%' }],

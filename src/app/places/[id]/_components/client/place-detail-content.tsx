@@ -47,6 +47,7 @@ const PlaceDetailContent = ({
             <CategoryBadge
               category={place.category as CategoryType}
               badgeType="modal"
+              className="text-sm"
             />
           </div>
 

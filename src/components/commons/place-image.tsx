@@ -33,9 +33,7 @@ const PlaceImage = ({
       className={`relative aspect-square overflow-hidden ${className}`}
     >
       {isLoading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
-          <div className="h-6 w-6 animate-pulse rounded-full bg-gray-200"></div>
-        </div>
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-100"></div>
       )}
 
       {error ? (

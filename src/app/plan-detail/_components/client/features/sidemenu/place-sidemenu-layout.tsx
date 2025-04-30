@@ -60,9 +60,9 @@ const PlaceSidemenuLayout = ({
             tabs={filterTabs}
             defaultTab={activeFilterTab}
             onTabChange={onFilterTabChange}
-            tabsGapClass="md:gap-[8px] lg:gap-[10px]"
-            tabPaddingClass="md:px-[6px] lg:px-[9px]"
-            tabFontClass="md:text-9 lg:text-12"
+            tabsGapClass="gap-[6px] md:gap-[8px] lg:gap-[10px]"
+            tabPaddingClass="px-[6px] lg:px-[9px]"
+            tabFontClass="text-6 md:text-9 lg:text-12"
           />
         </div>
       )}

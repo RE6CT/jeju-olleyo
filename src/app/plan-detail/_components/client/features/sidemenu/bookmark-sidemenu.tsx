@@ -16,7 +16,10 @@ import { useGetDataCount } from '@/lib/queries/use-get-data-count';
 import { useCurrentUser } from '@/lib/queries/auth-queries';
 import { useBookmarkQuery } from '@/lib/queries/use-bookmark-query';
 
-const ITEMS_PER_PAGE = 3;
+const ITEMS_PER_PAGE = {
+  mobile: 5,
+  desktop: 3,
+};
 const NAVIGATION_BUTTON_WIDTH = 42.4;
 const NAVIGATION_BUTTON_GAP = 12;
 const BUTTON_WIDTH = 24;
@@ -53,6 +56,7 @@ const BookmarkSidemenu = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const resizeTimeoutRef = useRef<NodeJS.Timeout>();
   const listRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   const { data: user } = useCurrentUser();
   const userId = user?.id || undefined;
@@ -63,6 +67,23 @@ const BookmarkSidemenu = ({
   const { bookmarks, toggleBookmark, isBookmarked, error } = useBookmarkQuery(
     userId || null,
   );
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
+  }, []);
+
+  const itemsPerPage = isMobile
+    ? ITEMS_PER_PAGE.mobile
+    : ITEMS_PER_PAGE.desktop;
 
   const calculateMaxVisiblePages = useCallback(() => {
     if (!containerRef.current || !countData) return DEFAULT_VISIBLE_PAGES;
@@ -134,12 +155,12 @@ const BookmarkSidemenu = ({
       activeFilterTab === '전체' ? true : place.category === activeFilterTab,
     ) || [];
 
-  const totalPages = Math.ceil(filteredBookmarks.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(filteredBookmarks.length / itemsPerPage);
 
   // 현재 페이지에 해당하는 북마크 아이템만 필터링
   const currentPageBookmarks = filteredBookmarks.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE,
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage,
   );
 
   if (!userId) return null;
@@ -173,7 +194,7 @@ const BookmarkSidemenu = ({
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="space-y-2 overflow-hidden pb-5"
+            className="space-y-2 overflow-hidden"
             ref={containerRef}
           >
             {isCountLoading ? (
@@ -187,7 +208,7 @@ const BookmarkSidemenu = ({
                   : `북마크한 ${activeFilterTab} 정보가 없습니다.`}
               </div>
             ) : (
-              <div ref={listRef} className="overflow-y-auto">
+              <div ref={listRef} className="space-y-3 overflow-y-auto">
                 <AnimatePresence initial={false}>
                   {currentPageBookmarks.map((place) => (
                     <motion.div

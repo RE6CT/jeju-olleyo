@@ -478,7 +478,7 @@ const PlanSchedule = memo(() => {
       >
         <SheetContent
           side="bottom"
-          className="mx-auto h-[470px] w-[282px] rounded-t-[20px]"
+          className="mx-auto h-fit w-[282px] rounded-t-[20px]"
         >
           <SheetTitle className="sr-only">
             {openSheet === 'search' ? '장소 검색' : '내 북마크'}
@@ -492,6 +492,7 @@ const PlanSchedule = memo(() => {
                 handleAddPlace(place, activeTab);
                 setOpenSheet(null);
               }}
+              selectedButton={openSheet === 'search' ? 'search' : 'bookmark'}
             />
           </div>
         </SheetContent>

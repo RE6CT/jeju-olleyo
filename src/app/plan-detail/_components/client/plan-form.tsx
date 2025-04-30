@@ -124,25 +124,29 @@ const PlanForm = ({
         <div className="hidden md:block">
           <PlanSidemenu />
         </div>
-        <div className="md:hidden">
-          <Sheet>
-            <SheetTrigger asChild>
-              <button
-                className="fixed bottom-24 right-[20px] z-50 flex h-12 w-12 items-center justify-center rounded-full bg-primary-500 text-white shadow-lg"
-                style={{ right: 'max(20px, calc((100vw - 375px) / 2 + 20px))' }}
+        {isReadOnly && (
+          <div className="md:hidden">
+            <Sheet>
+              <SheetTrigger asChild>
+                <button
+                  className="fixed bottom-24 right-[20px] z-50 flex h-12 w-12 items-center justify-center rounded-full bg-primary-500 text-white shadow-lg"
+                  style={{
+                    right: 'max(20px, calc((100vw - 375px) / 2 + 20px))',
+                  }}
+                >
+                  <MessageCircle className="h-6 w-6" />
+                </button>
+              </SheetTrigger>
+              <SheetContent
+                side="bottom"
+                className="mx-auto h-[470px] w-[375px] rounded-t-[20px] p-[16px_20px_12px_20px]"
               >
-                <MessageCircle className="h-6 w-6" />
-              </button>
-            </SheetTrigger>
-            <SheetContent
-              side="bottom"
-              className="mx-auto h-[470px] w-[375px] rounded-t-[20px] p-[16px_20px_12px_20px]"
-            >
-              <SheetTitle className="sr-only">일정 정보</SheetTitle>
-              <PlanSidemenu />
-            </SheetContent>
-          </Sheet>
-        </div>
+                <SheetTitle className="sr-only">일정 정보</SheetTitle>
+                <PlanSidemenu />
+              </SheetContent>
+            </Sheet>
+          </div>
+        )}
       </div>
     </div>
   );

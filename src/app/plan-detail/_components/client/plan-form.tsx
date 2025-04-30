@@ -103,18 +103,20 @@ const PlanForm = ({
   }
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full flex-col pb-[90px]">
       <PlanHeader />
       <div className="flex flex-1 gap-4">
         <div className="flex flex-1 flex-col">
           <div className="sticky top-0 z-40">
-            <div className="h-4 w-[656px] bg-white" />
+            <div className="h-4 w-[343px] bg-white md:w-[498px] lg:w-[656px]" />
             <PlanMap />
           </div>
-          <div className="sticky top-[224px] z-30 h-4 w-[656px] bg-white" />
+          <div className="sticky top-[137px] z-40 h-4 w-[343px] bg-white md:top-[244px] md:w-[498px] lg:w-[656px]" />
           <PlanSchedule />
         </div>
-        <PlanSidemenu />
+        <div className="hidden md:block">
+          <PlanSidemenu />
+        </div>
       </div>
     </div>
   );

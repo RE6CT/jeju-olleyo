@@ -170,3 +170,21 @@ export const isDateInRange = (
     targetDate.isSameOrBefore(end, 'day')
   );
 };
+
+/**
+ * 여행 기간을 간단하게 포맷팅하는 함수
+ * @param startDate - 시작 날짜
+ * @param endDate - 종료 날짜
+ * @returns 포맷팅된 여행 기간 문자열
+ */
+export const formatSimpleTravelPeriod = (
+  startDate: Date | null,
+  endDate: Date | null,
+): string => {
+  if (!startDate || !endDate) return '여행 기간을 선택해주세요';
+
+  const start = dayjs(startDate);
+  const end = dayjs(endDate);
+
+  return `${start.format('YYYY.MM.DD')}~${end.format('MM.DD')}`;
+};

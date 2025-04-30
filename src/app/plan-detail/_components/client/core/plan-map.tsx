@@ -30,7 +30,7 @@ const PlanMap = memo(() => {
   } = usePlanMap({ dayPlaces, activeTab });
 
   return (
-    <div className="h-[218px] w-full overflow-hidden rounded-[12px]">
+    <div className="h-[121px] w-full overflow-hidden rounded-[12px] md:h-[228px]">
       {isLoading && <Loading />}
       {error && <ErrorMessage message={error} />}
       <KakaoMap

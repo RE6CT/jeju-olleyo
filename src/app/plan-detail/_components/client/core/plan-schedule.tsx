@@ -16,7 +16,9 @@ import ScheduleSaveModal from '../features/modal/schedule-save-modal';
 import ScheduleCreatedModal from '../features/modal/schedule-created-modal';
 import PlacesRenderer from '../features/place/places-renderer';
 import { DAY_COLORS } from '@/constants/map.constants';
-import { memo } from 'react';
+import { memo, useState } from 'react';
+import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet';
+import PlaceSidemenu from '../features/sidemenu/place-sidemenu';
 import {
   usePlanStartDate,
   usePlanEndDate,
@@ -38,6 +40,9 @@ import {
 } from '@/lib/hooks/use-schedule';
 import { useCurrentUser } from '@/lib/queries/auth-queries';
 import { toast } from '@/lib/hooks/use-toast';
+import { Place } from '@/types/search.type';
+import { nanoid } from 'nanoid';
+import { PlaceWithUniqueId } from '@/types/plan-detail.type';
 
 const DROPDOWN_CONTENT_STYLE =
   'p-0 border border-[#E7EDF0] bg-[#F9FAFB] rounded-[12px] w-[140px] [&>*:hover]:bg-primary-100 [&>*:hover]:text-primary-500';
@@ -47,6 +52,38 @@ const DROPDOWN_ITEM_STYLE =
 const STYLE_CONSTANTS = {
   SIDE_OFFSET: 4,
 } as const;
+
+const AddOrBookmarkPlaceButtons = ({
+  dayNumber,
+  onSearch,
+  onBookmark,
+}: {
+  dayNumber: number;
+  onSearch: () => void;
+  onBookmark: () => void;
+}) => {
+  const dayColor = dayNumber % 2 === 1 ? DAY_COLORS.ODD : DAY_COLORS.EVEN;
+
+  return (
+    <div className="mb-10 flex w-full items-center gap-2">
+      <Button
+        onClick={onSearch}
+        className="flex-1 gap-2 rounded-12 border border-gray-100 bg-gray-50 text-14 font-medium text-gray-600 hover:bg-gray-100"
+      >
+        <div className={`flex flex-col items-center justify-center gap-[10px]`}>
+          +
+        </div>
+        장소 추가
+      </Button>
+      <Button
+        onClick={onBookmark}
+        className="flex-1 rounded-12 border border-gray-100 bg-gray-50 text-12 font-medium text-gray-600 hover:bg-gray-100"
+      >
+        내 북마크
+      </Button>
+    </div>
+  );
+};
 
 const AddPlacePrompt = ({ dayNumber }: { dayNumber: number }) => {
   const dayColor = dayNumber % 2 === 1 ? DAY_COLORS.ODD : DAY_COLORS.EVEN;
@@ -181,6 +218,32 @@ const PlanSchedule = memo(() => {
 
   const dayCount = calculateTotalDays(startDate, endDate);
 
+  const [openSheet, setOpenSheet] = useState<null | 'search' | 'bookmark'>(
+    null,
+  );
+
+  const handleAddPlace = (place: Place, activeTab: string | number) => {
+    const uniqueId = nanoid();
+    const newPlaceWithId = { ...place, uniqueId } as PlaceWithUniqueId;
+
+    if (typeof activeTab === 'string') {
+      // 전체보기 상태일 때는 첫 번째 날짜에 추가
+      const firstDay = 1;
+      const updatedDayPlaces = {
+        ...dayPlaces,
+        [firstDay]: [...(dayPlaces[firstDay] || []), newPlaceWithId],
+      };
+      setDayPlaces(updatedDayPlaces);
+    } else {
+      // 특정 날짜가 선택된 상태
+      const updatedDayPlaces = {
+        ...dayPlaces,
+        [activeTab]: [...(dayPlaces[activeTab] || []), newPlaceWithId],
+      };
+      setDayPlaces(updatedDayPlaces);
+    }
+  };
+
   return (
     <div className="relative w-full bg-transparent">
       <DragDropContext onDragEnd={handleDragEnd}>
@@ -295,7 +358,20 @@ const PlanSchedule = memo(() => {
                             isReadOnly={isReadOnly}
                             onRemovePlace={handleRemovePlace}
                           />
-                          {!isReadOnly && <AddPlacePrompt dayNumber={day} />}
+                          {!isReadOnly && (
+                            <>
+                              <div className="md:hidden">
+                                <AddOrBookmarkPlaceButtons
+                                  dayNumber={day}
+                                  onSearch={() => setOpenSheet('search')}
+                                  onBookmark={() => setOpenSheet('bookmark')}
+                                />
+                              </div>
+                              <div className="hidden md:block">
+                                <AddPlacePrompt dayNumber={day} />
+                              </div>
+                            </>
+                          )}
                         </div>
                       </div>
                     ),
@@ -371,7 +447,18 @@ const PlanSchedule = memo(() => {
                       onRemovePlace={handleRemovePlace}
                     />
                     {!isReadOnly && (
-                      <AddPlacePrompt dayNumber={activeTab as number} />
+                      <>
+                        <div className="md:hidden">
+                          <AddOrBookmarkPlaceButtons
+                            dayNumber={activeTab as number}
+                            onSearch={() => setOpenSheet('search')}
+                            onBookmark={() => setOpenSheet('bookmark')}
+                          />
+                        </div>
+                        <div className="hidden md:block">
+                          <AddPlacePrompt dayNumber={activeTab as number} />
+                        </div>
+                      </>
                     )}
                   </div>
                 </div>
@@ -385,6 +472,30 @@ const PlanSchedule = memo(() => {
         </div>
       </DragDropContext>
       <ScheduleModals />
+      <Sheet
+        open={!!openSheet}
+        onOpenChange={(open) => !open && setOpenSheet(null)}
+      >
+        <SheetContent
+          side="bottom"
+          className="mx-auto h-[470px] w-[282px] rounded-t-[20px]"
+        >
+          <SheetTitle className="sr-only">
+            {openSheet === 'search' ? '장소 검색' : '내 북마크'}
+          </SheetTitle>
+          <div className="flex h-full w-full flex-col items-center pt-4">
+            <PlaceSidemenu
+              selectedDay={
+                activeTab === '전체보기' ? null : (activeTab as number)
+              }
+              onAddPlace={(place) => {
+                handleAddPlace(place, activeTab);
+                setOpenSheet(null);
+              }}
+            />
+          </div>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 });

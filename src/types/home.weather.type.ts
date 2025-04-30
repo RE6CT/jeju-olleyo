@@ -110,7 +110,6 @@ export type WeatherCardsContainerProps = {
  * 날씨 오류 컴포넌트 props 타입
  */
 export type WeatherErrorProps = {
-  title: string;
   errorMessage: string;
 };
 
@@ -120,7 +119,6 @@ export type WeatherErrorProps = {
 export type WeatherHeaderProps = {
   month: number;
   day: number;
-  title: string;
   subtitle: string;
 };
 
@@ -128,7 +126,6 @@ export type WeatherHeaderProps = {
  * 날씨 메시지 타입
  */
 export type WeatherMessage = {
-  title: string;
   subtitle: string;
 };
 

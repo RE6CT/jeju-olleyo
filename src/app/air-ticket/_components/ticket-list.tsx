@@ -30,11 +30,12 @@ const TicketList = ({
           <img
             src="../empty-result/ticket_empty_result.png"
             alt="검색 결과가 없어요"
-            className="mb-4"
+            className="mb-4 w-16 md:w-24"
           />
+          <p className="text-14 md:text-16">검색 결과가 없습니다.</p>
         </div>
       ) : (
-        <ul className="space-y-4">
+        <ul className="space-y-3 md:space-y-4">
           {sortFlights(flights, sortKey).map((flight, idx) => (
             <TicketCard
               key={idx}

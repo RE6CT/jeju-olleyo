@@ -99,12 +99,12 @@ const PlaceDetailContent = ({
           <div className="absolute bottom-0 left-0 h-[80px] w-full bg-gradient-to-t from-white to-transparent" />
         </div>
 
-        <div className="absolute bottom-0 left-0 z-20 mx-4 w-full px-4 pb-4">
+        <div className="mx-4 w-full px-4 py-2">
           {/* 제목 */}
           <div className="semibold-18 mt-2">{place.title}</div>
 
           {/* 정보 박스 */}
-          <div className="mt-2 rounded-[12px] bg-gray-50 px-4 py-3 shadow-sm">
+          <div className="mt-2 rounded-[12px] py-3">
             <div className="space-y-1">
               <div className="flex items-center gap-2">
                 <TimeIcon size={20} fill="gray-300" />

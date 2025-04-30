@@ -21,7 +21,7 @@ const PlanIncludingPlace = async ({ placeId }: { placeId: number }) => {
 
   return (
     <div>
-      <div className="md:semibold-20 lg:semibold-24 mt-[73px] md:mb-4 lg:mb-7">
+      <div className="semibold-20 md:semibold-20 lg:semibold-24 mb-4 md:mb-4 lg:mb-7">
         해당 장소가 포함된 일정
       </div>
 
@@ -31,7 +31,7 @@ const PlanIncludingPlace = async ({ placeId }: { placeId: number }) => {
         </p>
       )}
 
-      <div className="grid w-full grid-cols-1 gap-x-[11px] gap-y-9 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid w-full grid-cols-2 gap-x-[40px] gap-y-4 md:grid-cols-2 lg:grid-cols-3">
         {plans &&
           plans
             .slice(0, 6)

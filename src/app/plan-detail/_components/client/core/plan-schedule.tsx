@@ -235,7 +235,7 @@ const PlanSchedule = memo(() => {
                 <div className="flex w-full flex-col">
                   {Array.from({ length: dayCount }, (_, i) => i + 1).map(
                     (day) => (
-                      <div key={day}>
+                      <div className="space-y-3" key={day}>
                         <div className="flex items-center justify-between md:mb-3 lg:mb-4">
                           <div className="flex items-center gap-3">
                             <span className="font-bold text-gray-900 md:text-14 lg:text-16">

@@ -15,15 +15,15 @@ const TicketSearchSelector = ({
   };
 
   return (
-    <div className="mb-7 mt-9 flex items-start gap-0">
-      <span className="mr-[30px] whitespace-nowrap pt-1 text-18 font-medium">
+    <div className="mb-3 mt-3 flex items-center gap-3 md:mb-7 md:mt-9">
+      <span className="whitespace-nowrap text-14 font-medium md:mr-[30px] md:text-16 lg:text-18">
         왕복
       </span>
-      <div className="mr-9 min-w-0">
+      <div className="min-w-0">
         <select
           value={passengers}
           onChange={handlePassengerChange}
-          className="w-32 rounded border-none bg-transparent p-1 text-18"
+          className="w-full rounded border-none bg-transparent p-1 text-14 md:w-32 md:text-16 lg:text-18"
         >
           {[...Array(10)].map((_, i) => (
             <option key={i + 1} value={i + 1}>
@@ -36,7 +36,7 @@ const TicketSearchSelector = ({
         <select
           value={classType}
           onChange={handleClassChange}
-          className="w-32 rounded border-none bg-transparent p-1 text-18"
+          className="w-full rounded border-none bg-transparent p-1 text-14 md:w-32 md:text-16 lg:text-18"
         >
           <option value="economy">이코노미</option>
           <option value="business">비지니스</option>

@@ -62,6 +62,7 @@ const formatTime = (timeString: string | number) => {
   if (!timeStr || timeStr.length !== 4) return timeStr;
   return `${timeStr.slice(0, 2)}:${timeStr.slice(2)}`;
 };
+
 type Airport = {
   label: string;
   value: string;
@@ -96,6 +97,7 @@ const getAirportLabel = (code: string): string => {
 export const formatDateToString = (date: Date | string | null): string => {
   return date ? dayjs(date).format('YYYYMMDD') : '';
 };
+
 export const combineDateAndTime = (
   date: Date,
   timeStr: string | number,

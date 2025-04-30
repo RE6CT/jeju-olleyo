@@ -8,8 +8,8 @@ const Layout = ({
   children: React.ReactNode;
 }>) => {
   return (
-    <div className="w-full bg-gray-50">
-      <div className="border-b-0.6 relative flex border-gray-100 bg-white md:hidden">
+    <div className="h-full w-full bg-gray-50">
+      <div className="relative flex border-b-0.6 border-gray-100 bg-white md:hidden">
         <MypageHeader className="absolute left-0 top-1/2 -translate-y-1/2 px-4" />
         <h2 className="medium-18 m-auto w-fit pb-[12.5px] pt-[8.5px]">마이</h2>
       </div>

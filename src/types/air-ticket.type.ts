@@ -15,7 +15,7 @@ export type TicketSearchFormProps = {
   startDate: Date | null;
   endDate: Date | null;
   showInnerButton: boolean;
-  setShowInnerButton: Dispatch<SetStateAction<boolean>>;
+  setShowInnerButton?: Dispatch<SetStateAction<boolean>>;
   setStartDate: Dispatch<SetStateAction<Date | null>>;
   setEndDate: Dispatch<SetStateAction<Date | null>>;
   passengers: number;
@@ -38,7 +38,7 @@ export type TicketListProps = {
     flights: Flight[],
     key: 'airline' | 'dep_desc' | 'arr_asc' | 'dep_asc' | 'arr_desc',
   ) => Flight[];
-  setSortKey: React.Dispatch<
+  setSortKey?: React.Dispatch<
     React.SetStateAction<
       'airline' | 'dep_desc' | 'arr_asc' | 'dep_asc' | 'arr_desc'
     >

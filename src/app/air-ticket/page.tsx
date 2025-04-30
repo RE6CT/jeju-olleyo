@@ -19,13 +19,13 @@ import {
 } from './_utils/ticket-uitls';
 import { getBrowserClient } from '@/lib/supabase/client';
 import { useCurrentUser } from '@/lib/queries/auth-queries';
+import useCustomToast from '@/lib/hooks/use-custom-toast';
 
 const FlightSearch = () => {
   const [departure, setDeparture] = useState('');
   const [goFlights, setGoFlights] = useState<Flight[]>([]);
   const [returnFlights, setReturnFlights] = useState<Flight[]>([]);
   const [loading, setLoading] = useState(false);
-
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [goSortKey, setGoSortKey] = useState<SortKey>('airline');
@@ -36,9 +36,13 @@ const FlightSearch = () => {
   const [showInnerButton, setShowInnerButton] = useState(false);
   const [passengers, setPassengers] = useState(1);
   const [classType, setClassType] = useState('economy');
-  const didMount = useRef(false);
   const { open } = useAlertStore();
   const { data: user } = useCurrentUser();
+  const { successToast } = useCustomToast();
+
+  const totalPrice =
+    125000 * (selectedGoFlight ? 1 : 0) +
+    125000 * (selectedReturnFlight ? 1 : 0);
 
   const dateAlert = (message: string) => {
     open({
@@ -73,7 +77,10 @@ const FlightSearch = () => {
       if (startDate && endDate && startDate > endDate) {
         return dateAlert('오는날은 가는날보다 빠를수 없어요.');
       }
-      if (flightsToSave[0].arrPlandTime > flightsToSave[1].depPlandTime)
+      if (
+        flightsToSave.length > 1 &&
+        flightsToSave[0].arrPlandTime > flightsToSave[1].depPlandTime
+      )
         return dateAlert('가는편의 도착시간이 오는편의 출발시간보다 빨라요!');
 
       const departure_time = combineDateAndTime(baseDate, flight.depPlandTime);
@@ -93,10 +100,10 @@ const FlightSearch = () => {
       });
       if (error) {
         console.error(error.message);
-        alert('예약 중 오류가 발생했습니다!');
+        successToast('예약 중 오류가 발생했습니다!');
       }
     }
-    alert('항공권이 예약되었습니다!');
+    successToast('항공권이 예약되었습니다!');
     setSelectedGoFlight(null);
     setSelectedReturnFlight(null);
   };
@@ -160,16 +167,6 @@ const FlightSearch = () => {
       setLoading(false);
     }
   };
-  // useEffect(() => {
-  //   if (!didMount.current) {
-  //     didMount.current = true;
-  //     return;
-  //   }
-
-  //   if (formData.schDate && formData.returnDate && departure) {
-  //     // handleSubmit(new Event('submit') as any);
-  //   }
-  // }, [formData.schDate, formData.returnDate, departure, handleSubmit]);
 
   return (
     <div className="mx-auto max-w-5xl p-6">
@@ -194,12 +191,14 @@ const FlightSearch = () => {
         <Loading />
       ) : (
         showInnerButton && (
-          <div className="mx-7 grid max-w-4xl gap-6 px-9 py-8 md:grid-cols-[1fr_1fr_auto]">
-            <section>
+          <div className="mx-auto grid max-w-full gap-6 px-2 py-4 md:mx-7 md:grid-cols-[1fr_1fr] md:px-9 md:py-8 lg:grid-cols-[1fr_1fr_auto]">
+            <section className="w-full">
               <div className="flex items-end justify-between gap-2">
                 <div className="flex items-end gap-2">
-                  <h2 className="text-24 font-semibold">가는편</h2>
-                  <p className="mb-2 flex text-14 text-gray-300">
+                  <h2 className="text-16 font-semibold md:text-20 lg:text-24">
+                    가는 편
+                  </h2>
+                  <p className="mb-2 flex text-12 text-gray-300 md:text-14">
                     {getAirportLabel(departure)}
                     <img
                       alt="오른쪽 화살표"
@@ -246,11 +245,13 @@ const FlightSearch = () => {
               />
             </section>
 
-            <section>
+            <section className="w-full">
               <div className="flex items-end justify-between gap-2">
                 <div className="flex items-end gap-2">
-                  <h2 className="text-24 font-semibold">오는편</h2>
-                  <p className="mb-2 flex text-14 text-gray-300">
+                  <h2 className="text-16 font-semibold md:text-20 lg:text-24">
+                    오는 편
+                  </h2>
+                  <p className="mb-2 flex text-12 text-gray-300 md:text-14">
                     제주
                     <img
                       alt="오른쪽 화살표"
@@ -296,10 +297,12 @@ const FlightSearch = () => {
                 setStartDate={setEndDate}
               />
             </section>
+
+            {/* 데스크탑에서만 보이는 예약 버튼 */}
             <button
               onClick={handleReserve}
               disabled={!selectedGoFlight || !selectedReturnFlight}
-              className={`col-start-3 mx-[12px] h-11 w-24 self-start rounded-12 px-4 py-[10px] text-gray-500 ${
+              className={`col-start-3 mx-[12px] hidden h-11 w-24 self-start rounded-12 px-4 py-[10px] text-gray-500 lg:block ${
                 !selectedGoFlight || !selectedReturnFlight
                   ? 'cursor-not-allowed bg-gray-50 text-gray-500'
                   : 'bg-primary-500 text-white'
@@ -310,8 +313,36 @@ const FlightSearch = () => {
           </div>
         )
       )}
+
+      {/* 모바일/태블릿에서 보이는 하단 고정 예약 버튼 */}
+      {showInnerButton && (selectedGoFlight || selectedReturnFlight) && (
+        <div className="fixed bottom-0 left-0 z-50 flex h-[86px] w-full items-center justify-between border-t border-gray-200 bg-white p-4 lg:hidden">
+          <div className="flex flex-col">
+            <span className="text-16 font-semibold">
+              총 {totalPrice.toLocaleString()}원
+            </span>
+          </div>
+          <button
+            onClick={handleReserve}
+            disabled={!selectedGoFlight || !selectedReturnFlight}
+            className={`h-11 w-24 rounded-12 px-4 py-[10px] ${
+              !selectedGoFlight || !selectedReturnFlight
+                ? 'cursor-not-allowed bg-gray-50 text-gray-500'
+                : 'bg-primary-500 text-white'
+            }`}
+          >
+            예약하기
+          </button>
+        </div>
+      )}
+
+      {/* 바텀시트 여백을 위한 공간 */}
+      {showInnerButton && (selectedGoFlight || selectedReturnFlight) && (
+        <div className="h-20 pb-10 lg:hidden"></div>
+      )}
+
       {!showInnerButton && (
-        <footer className="fixed bottom-0 left-0 mt-10 flex w-full justify-center bg-white">
+        <footer className="fixed bottom-0 left-0 mt-10 hidden w-full justify-center bg-white md:flex">
           <img
             src="/banner-images/airplane_footer.png"
             alt="푸터 이미지"

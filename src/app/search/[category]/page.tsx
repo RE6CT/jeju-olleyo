@@ -87,7 +87,7 @@ const SearchResultsPage = ({
         <EmptyResult />
       ) : (
         <>
-          <div className="grid grid-cols-2 gap-[11px] sm:grid-cols-3 md:grid-cols-4">
+          <div className="grid grid-cols-3 gap-x-[11px] gap-y-4 p-0 md:gap-y-[11px] lg:grid-cols-4 lg:gap-y-[22px]">
             {isPending ? (
               <PlaceListSkeleton count={16} />
             ) : (

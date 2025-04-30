@@ -81,6 +81,7 @@ const ProfileModal = ({ isModalOpen, setModalOpen }: ProfileModalProps) => {
         </DialogDescription>
       </DialogHeader>
       <DialogContent className="flex w-fit flex-col gap-0 rounded-[20px] p-5 pt-4">
+        <DialogTitle className="sr-only">계정 프로필</DialogTitle>
         <button
           onClick={() => setModalOpen(false)}
           className="ml-auto h-[24px] w-[24px] bg-gray-300 [mask-image:url(/icons/close.svg)] [mask-repeat:no-repeat] [mask-size:contain]"

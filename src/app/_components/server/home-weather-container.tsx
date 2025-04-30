@@ -1,6 +1,9 @@
-import { memo } from 'react';
+'use client';
+
+import { memo, useRef } from 'react';
 import WeatherCard from '@/app/_components/server/home-weather-card';
 import { WeatherCardsContainerProps } from '@/types/home.weather.type';
+import useDragScroll from '@/lib/hooks/use-drag-scroll';
 
 /**
  * 날씨 카드들을 담는 컨테이너 컴포넌트
@@ -9,13 +12,25 @@ import { WeatherCardsContainerProps } from '@/types/home.weather.type';
  */
 const WeatherCardsContainer = memo(
   ({ weatherData }: WeatherCardsContainerProps) => {
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
+    useDragScroll(scrollContainerRef, { threshold: 5 });
+
     return (
-      <div className="w-full max-w-4xl overflow-x-auto pb-2 sm:pb-2 md:pb-3 lg:pb-4">
-        <div className="flex min-w-fit justify-center gap-2 px-1 sm:gap-3 sm:px-2 md:gap-5 md:px-2 lg:gap-7 lg:px-2">
+      <div
+        className="w-full cursor-grab select-none overflow-x-auto"
+        ref={scrollContainerRef}
+        style={{
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none',
+          WebkitOverflowScrolling: 'touch',
+          userSelect: 'none',
+        }}
+      >
+        <div className="flex min-w-fit justify-center gap-2 md:gap-6 md:px-0 lg:gap-8">
           {weatherData.map((day, index) => (
             <div
               key={`day-${index}`}
-              className="md:w-18 flex w-14 flex-shrink-0 flex-col items-center justify-center sm:w-16 lg:w-20"
+              className="flex flex-shrink-0 flex-col items-center justify-center"
             >
               <WeatherCard weather={day} isToday={index === 0} />
             </div>

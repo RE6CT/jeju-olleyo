@@ -49,11 +49,11 @@ const PlaceCardSidemenu = ({
 
   return (
     <>
-      <div className="flex h-[56px] w-[240px] items-center justify-between py-3">
-        <div className="flex gap-3">
+      <div className="flex w-[240px] items-center justify-between md:w-[182px] lg:w-[240px]">
+        <div className="flex items-center gap-3">
           {/* 장소 이미지 */}
           <div
-            className={`h-[40px] w-[40px] overflow-hidden rounded-[4px] ${!imageUrl && 'bg-gray-200'}`}
+            className={`h-[40px] w-[40px] overflow-hidden rounded-[4px] md:h-[30px] md:w-[30px] lg:h-[40px] lg:w-[40px] ${!imageUrl && 'bg-gray-200'}`}
           >
             <Image
               src={displayImageUrl}
@@ -66,10 +66,7 @@ const PlaceCardSidemenu = ({
           </div>
 
           {/* 장소 정보 */}
-          <div
-            className="flex flex-col gap-1"
-            onClick={() => setIsDialogOpen(true)}
-          >
+          <div className="flex flex-col" onClick={() => setIsDialogOpen(true)}>
             <span className="line-clamp-1 text-14 font-semibold text-gray-900">
               {title}
             </span>

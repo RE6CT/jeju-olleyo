@@ -25,16 +25,16 @@ const PlanSaveButton = memo(() => {
   );
 
   return (
-    <div className="mt-[70px]">
+    <section>
       {!isReadOnly && (
         <Button
           onClick={handleSaveButtonClick}
-          className="flex h-[44px] w-[138px] items-center justify-center rounded-[12px] bg-primary-500 p-[10px] text-24 font-semibold text-white hover:bg-primary-600"
+          className="md:semibold-16 flex items-center justify-center rounded-[12px] bg-primary-500 p-[10px] text-white hover:bg-primary-600 md:h-[36px] md:w-[130px] lg:h-[44px] lg:w-[138px]"
         >
           저장하기
         </Button>
       )}
-    </div>
+    </section>
   );
 });
 

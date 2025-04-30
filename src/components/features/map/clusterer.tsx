@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import {
   ClustererInstance,
@@ -11,6 +11,7 @@ import {
 import {
   MAP_ZOOM_LEVEL,
   MARKER,
+  MOBILE_SCREEN_OFFSET,
   SCREEN_OFFSET,
 } from '@/constants/map.constants';
 
@@ -42,6 +43,7 @@ import {
 const Clusterer = ({ map, markers, ...options }: ClustererOptions) => {
   const clustererInstance = useRef<ClustererInstance | null>(null);
   const overlayInstance = useRef<CustomOverlayInstance | null>(null);
+  const [screenOffset, setScreenOffset] = useState(SCREEN_OFFSET);
 
   // 클러스터러 스타일 속성 설정
   // styles 배열의 인덱스는 calculator에 지정된 개수에 따라 자동 지정
@@ -85,6 +87,18 @@ const Clusterer = ({ map, markers, ...options }: ClustererOptions) => {
     },
   ];
 
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenOffset(
+        window.innerWidth <= 768 ? MOBILE_SCREEN_OFFSET : SCREEN_OFFSET,
+      );
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   // 클러스터러 초기화
   useEffect(() => {
     if (!map) return;
@@ -118,7 +132,7 @@ const Clusterer = ({ map, markers, ...options }: ClustererOptions) => {
 
           // 클릭된 마커의 위치로 지도 중심 이동
           const position = new window.kakao.maps.LatLng(
-            marker.position.lat + SCREEN_OFFSET.LAT,
+            marker.position.lat + screenOffset.LAT,
             marker.position.lng,
           );
           map.setCenter(position);
@@ -181,7 +195,7 @@ const Clusterer = ({ map, markers, ...options }: ClustererOptions) => {
         kakaoMarkers.forEach((marker) => marker.setMap(null));
       }
     };
-  }, [map, markers, options, styles]);
+  }, [map, markers, options, styles, screenOffset]);
 
   return null;
 };

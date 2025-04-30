@@ -26,10 +26,10 @@ const PlaceSidemenuLayout = ({
   onToggleExpand?: () => void;
 }) => {
   return (
-    <div className="w-[240px] space-y-3">
+    <div className="space-y-3 md:w-[182px] lg:w-[240px]">
       {/* 섹션 제목 */}
       {isBookmarkSection && (
-        <div className="flex items-center justify-center gap-2 px-4 py-3">
+        <div className="flex items-center justify-center gap-2 md:px-3 md:py-[9px] lg:px-4 lg:py-3">
           <span className="semibold-16">내가 북마크한 장소</span>
           {onToggleExpand && (
             <button
@@ -60,8 +60,9 @@ const PlaceSidemenuLayout = ({
             tabs={filterTabs}
             defaultTab={activeFilterTab}
             onTabChange={onFilterTabChange}
-            tabsGapClass="gap-[10px]"
-            tabPaddingClass="px-[9px]"
+            tabsGapClass="gap-[6px] md:gap-[8px] lg:gap-[10px]"
+            tabPaddingClass="px-[6px] lg:px-[9px]"
+            tabFontClass="text-6 md:text-9 lg:text-12"
           />
         </div>
       )}

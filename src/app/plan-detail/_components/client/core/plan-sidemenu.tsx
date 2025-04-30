@@ -1,7 +1,6 @@
 import React from 'react';
 import PlaceSidemenu from '../features/sidemenu/place-sidemenu';
 import CommentsSection from '../features/comment/comments-section';
-import { Place } from '@/types/place.type';
 import {
   usePlanActiveTab,
   usePlanDayPlaces,
@@ -27,7 +26,7 @@ const PlanSidemenu = () => {
   );
 
   return (
-    <div className="mt-4">
+    <div className="mt-4 md:w-[212px] lg:w-[280px]">
       <div className="sticky top-4 h-fit">
         {!isReadOnly && (
           <div className="flex flex-col">
@@ -40,7 +39,7 @@ const PlanSidemenu = () => {
           </div>
         )}
         {isReadOnly && (
-          <div className="relative h-full w-[400px] border-gray-200 p-6">
+          <div className="relative h-full border-gray-200">
             {/* 댓글 섹션 */}
             <CommentsSection comments={comments || []} planId={planId} />
           </div>

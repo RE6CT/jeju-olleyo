@@ -25,14 +25,18 @@ const Community = async ({
   const { data: plans, totalPage } = await fetchGetAllPlans(userId, sort, page);
 
   return (
-    <div className="min-w-[1024px]">
-      <JejuBanner
-        imageUrl="/banner-images/plan-banner.jpg"
-        title="나만의 제주 여행 계획하기"
-        buttonText="내 일정 만들러 가기"
-        buttonUrl={PATH.PLAN_NEW}
-      />
-      <CommunityPlanList plans={plans} totalPage={totalPage} />
+    <div className="w-full">
+      <section className="m-4 overflow-hidden rounded-12 md:m-0 md:rounded-none">
+        <JejuBanner
+          imageUrl="/banner-images/plan-banner.jpg"
+          title="나만의 제주 여행 계획하기"
+          buttonText="내 일정 만들러 가기"
+          buttonUrl={PATH.PLAN_NEW}
+        />
+      </section>
+      <section>
+        <CommunityPlanList plans={plans} totalPage={totalPage} />
+      </section>
     </div>
   );
 };

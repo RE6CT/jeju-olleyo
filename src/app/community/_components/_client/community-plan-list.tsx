@@ -38,13 +38,15 @@ const CommunityPlanList = ({
   };
 
   return (
-    <div className="flex w-full max-w-[1024px] flex-col gap-3 p-9">
-      <section className="flex">
-        <h2 className="semibold-22 flex-1">올레 인기 일정</h2>
+    <div className="flex w-full flex-col gap-3 p-4 pt-0 md:p-9">
+      <section className="flex items-center">
+        <h2 className="semibold-20 md:semibold-22 flex-1 py-[10px] md:py-0">
+          올레 인기 일정
+        </h2>
         <SortDropdown sortType={sortOption} />
       </section>
       <div className="flex flex-col gap-20">
-        <ul className="grid w-full list-none grid-cols-1 gap-x-3 gap-y-5 p-0 sm:grid-cols-2 md:grid-cols-3">
+        <ul className="grid w-full list-none grid-cols-2 gap-x-3 gap-y-5 p-0 lg:grid-cols-3">
           {plans.map((plan) => (
             <li key={plan.planId}>
               <PlanVerticalCard plan={plan} />

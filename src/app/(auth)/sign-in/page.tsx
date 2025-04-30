@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 import Loading from '@/app/loading';
 import AuthForm from '@/app/(auth)/_components/client/auth-form';
@@ -26,13 +27,21 @@ const LoginPage = () => {
   const { savedEmail } = useRememberEmail();
   const [shouldCheckAuth, setShouldCheckAuth] = useState(true);
   const searchParams = useSearchParams();
+  const [isClient, setIsClient] = useState(false);
+
+  // 클라이언트 사이드 렌더링 확인
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // 로그아웃 후 접근 여부 확인 (t 파라미터 확인)
   useEffect(() => {
-    const hasLogoutParam = searchParams.has('t');
-    if (hasLogoutParam) {
-      // 로그아웃 직후 접근한 경우 인증 체크 건너뛰기
-      setShouldCheckAuth(false);
+    if (searchParams) {
+      const hasLogoutParam = searchParams.has('t');
+      if (hasLogoutParam) {
+        // 로그아웃 직후 접근한 경우 인증 체크 건너뛰기
+        setShouldCheckAuth(false);
+      }
     }
   }, [searchParams]);
 
@@ -56,15 +65,30 @@ const LoginPage = () => {
   // 에러 메시지 처리
   const errorMessages = error ? getLoginErrorMessage(error) : [];
 
+  // 초기 서버 렌더링 상태
+  if (!isClient) {
+    return (
+      <AuthLayout>
+        <div className="flex h-[146px] items-center justify-center">
+          {/* 초기 로딩 중 이미지 렌더링 스켈레톤 */}
+          <div className="h-[76px] w-[146px] bg-gray-100" />
+        </div>
+      </AuthLayout>
+    );
+  }
+
   return (
     <AuthLayout>
       <header className="flex h-[146px] items-center justify-center">
-        <Image
-          src={'/logo/color_logo.png'}
-          alt="logo"
-          width={146}
-          height={76}
-        />
+        <Link href={'/'}>
+          <Image
+            src={'/logo/color_logo.png'}
+            alt="logo"
+            width={146}
+            height={76}
+            priority
+          />
+        </Link>
       </header>
 
       {errorMessages.length > 0 && (

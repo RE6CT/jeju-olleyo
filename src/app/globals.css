@@ -97,6 +97,9 @@
   .semibold-16 {
     @apply text-16 font-semibold;
   }
+  .semibold-12 {
+    @apply text-12 font-semibold;
+  }
 
   .medium-20 {
     @apply text-20 font-medium;
@@ -112,6 +115,9 @@
   }
   .medium-12 {
     @apply text-12 font-medium;
+  }
+  .medium-10 {
+    @apply text-10 font-medium;
   }
 
   .regular-18 {
@@ -144,4 +150,17 @@
 /* 드래그 중일 때 스타일 */
 .active {
   cursor: grabbing !important;
+}
+
+/* 스크롤바 숨기기를 위한 클래스 */
+@layer utilities {
+  .hide-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  /* Chrome, Safari, Opera에서 스크롤바 숨기기 */
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 }

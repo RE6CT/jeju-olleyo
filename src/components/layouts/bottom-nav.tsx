@@ -25,7 +25,9 @@ const BottomNav = () => {
   const firstPath = '/' + pathname.split('/')[1];
   const router = useRouter();
 
-  const { isAuthenticated } = useAuthCheck();
+  const { isAuthenticated } = useAuthCheck({
+    skipCheck: true,
+  });
   const { user } = useAuth();
 
   const [isOpen, setIsOpen] = useState<boolean>(false);

@@ -16,7 +16,9 @@ import ScheduleSaveModal from '../features/modal/schedule-save-modal';
 import ScheduleCreatedModal from '../features/modal/schedule-created-modal';
 import PlacesRenderer from '../features/place/places-renderer';
 import { DAY_COLORS } from '@/constants/map.constants';
-import { memo } from 'react';
+import { memo, useState } from 'react';
+import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet';
+import PlaceSidemenu from '../features/sidemenu/place-sidemenu';
 import {
   usePlanStartDate,
   usePlanEndDate,
@@ -37,7 +39,10 @@ import {
   useScheduleSavePlan,
 } from '@/lib/hooks/use-schedule';
 import { useCurrentUser } from '@/lib/queries/auth-queries';
-import { toast, useToast } from '@/lib/hooks/use-toast';
+import { toast } from '@/lib/hooks/use-toast';
+import { Place } from '@/types/search.type';
+import { nanoid } from 'nanoid';
+import { PlaceWithUniqueId } from '@/types/plan-detail.type';
 
 const DROPDOWN_CONTENT_STYLE =
   'p-0 border border-[#E7EDF0] bg-[#F9FAFB] rounded-[12px] w-[140px] [&>*:hover]:bg-primary-100 [&>*:hover]:text-primary-500';
@@ -47,6 +52,38 @@ const DROPDOWN_ITEM_STYLE =
 const STYLE_CONSTANTS = {
   SIDE_OFFSET: 4,
 } as const;
+
+const AddOrBookmarkPlaceButtons = ({
+  dayNumber,
+  onSearch,
+  onBookmark,
+}: {
+  dayNumber: number;
+  onSearch: () => void;
+  onBookmark: () => void;
+}) => {
+  const dayColor = dayNumber % 2 === 1 ? DAY_COLORS.ODD : DAY_COLORS.EVEN;
+
+  return (
+    <div className="mb-10 flex w-full items-center gap-2">
+      <Button
+        onClick={onSearch}
+        className="flex-1 gap-2 rounded-12 border border-gray-100 bg-gray-50 text-14 font-medium text-gray-600 hover:bg-gray-100"
+      >
+        <div className={`flex flex-col items-center justify-center gap-[10px]`}>
+          +
+        </div>
+        장소 추가
+      </Button>
+      <Button
+        onClick={onBookmark}
+        className="flex-1 rounded-12 border border-gray-100 bg-gray-50 text-12 font-medium text-gray-600 hover:bg-gray-100"
+      >
+        내 북마크
+      </Button>
+    </div>
+  );
+};
 
 const AddPlacePrompt = ({ dayNumber }: { dayNumber: number }) => {
   const dayColor = dayNumber % 2 === 1 ? DAY_COLORS.ODD : DAY_COLORS.EVEN;
@@ -181,16 +218,42 @@ const PlanSchedule = memo(() => {
 
   const dayCount = calculateTotalDays(startDate, endDate);
 
+  const [openSheet, setOpenSheet] = useState<null | 'search' | 'bookmark'>(
+    null,
+  );
+
+  const handleAddPlace = (place: Place, activeTab: string | number) => {
+    const uniqueId = nanoid();
+    const newPlaceWithId = { ...place, uniqueId } as PlaceWithUniqueId;
+
+    if (typeof activeTab === 'string') {
+      // 전체보기 상태일 때는 첫 번째 날짜에 추가
+      const firstDay = 1;
+      const updatedDayPlaces = {
+        ...dayPlaces,
+        [firstDay]: [...(dayPlaces[firstDay] || []), newPlaceWithId],
+      };
+      setDayPlaces(updatedDayPlaces);
+    } else {
+      // 특정 날짜가 선택된 상태
+      const updatedDayPlaces = {
+        ...dayPlaces,
+        [activeTab]: [...(dayPlaces[activeTab] || []), newPlaceWithId],
+      };
+      setDayPlaces(updatedDayPlaces);
+    }
+  };
+
   return (
-    <div className="relative w-full bg-white">
+    <div className="relative w-full bg-transparent">
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className="flex w-full flex-1 flex-col gap-2">
-          <div className="sticky top-[240px] z-40 bg-white">
+          <div className="sticky top-[153px] z-40 bg-white md:top-[260px]">
             <DropdownMenu modal={false}>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="outline"
-                  className="flex w-[140px] items-center justify-center gap-2 rounded-[12px] border border-[#E7EDF0] bg-[#F9FAFB] px-5 py-[10px] text-14 font-medium"
+                  className="flex items-center justify-center gap-2 rounded-[12px] border border-[#E7EDF0] bg-[#F9FAFB] px-5 py-[10px] text-14 font-medium md:w-[113px] lg:w-[152px]"
                 >
                   {activeTab === '전체보기' ? '전체보기' : `DAY ${activeTab}`}
                   <ChevronDown className="h-4 w-4" />
@@ -229,19 +292,19 @@ const PlanSchedule = memo(() => {
             </DropdownMenu>
           </div>
 
-          <div className="mt-4 flex w-full gap-6">
+          <div className="mt-4 flex w-full md:mt-[22.5px] lg:mt-[17px]">
             {startDate && endDate ? (
               activeTab === '전체보기' ? (
-                <div className="flex w-full flex-col gap-6">
+                <div className="flex w-full flex-col">
                   {Array.from({ length: dayCount }, (_, i) => i + 1).map(
                     (day) => (
-                      <div key={day}>
-                        <div className="mb-4 flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <span className="text-18 font-bold text-gray-900">
+                      <div className="space-y-3" key={day}>
+                        <div className="flex items-center justify-between md:mb-3 lg:mb-4">
+                          <div className="flex items-center gap-3">
+                            <span className="font-bold text-gray-900 md:text-14 lg:text-16">
                               DAY {day}
                             </span>
-                            <span className="text-14 text-gray-600">
+                            <span className="text-gray-900 md:text-10 lg:text-12">
                               {formatDayDate(startDate, day)}
                             </span>
                           </div>
@@ -250,7 +313,7 @@ const PlanSchedule = memo(() => {
                               {copiedDay !== null && copiedDay !== day ? (
                                 <Button
                                   variant="ghost"
-                                  className="text-12 font-medium text-gray-500 hover:text-gray-900"
+                                  className="text-12' text-gray-500 hover:text-gray-900"
                                   onClick={() => handlePasteDayPlaces(day)}
                                 >
                                   붙여넣기
@@ -259,7 +322,7 @@ const PlanSchedule = memo(() => {
                                 <Button
                                   variant="ghost"
                                   className={cn(
-                                    'text-12 font-medium',
+                                    'text-12',
                                     copiedDay === day
                                       ? 'cursor-not-allowed text-gray-400'
                                       : 'text-gray-500 hover:text-gray-900',
@@ -273,7 +336,7 @@ const PlanSchedule = memo(() => {
                               <Button
                                 variant="ghost"
                                 className={cn(
-                                  'text-12 font-medium',
+                                  'text-12',
                                   !dayPlaces[day] || dayPlaces[day].length === 0
                                     ? 'cursor-not-allowed text-gray-400'
                                     : 'text-red hover:bg-transparent hover:text-red/80',
@@ -288,14 +351,27 @@ const PlanSchedule = memo(() => {
                             </div>
                           )}
                         </div>
-                        <div className="flex flex-col gap-4">
+                        <div className="flex flex-col md:gap-3 lg:gap-4">
                           <PlacesRenderer
                             day={day}
                             places={dayPlaces[day] || []}
                             isReadOnly={isReadOnly}
                             onRemovePlace={handleRemovePlace}
                           />
-                          {!isReadOnly && <AddPlacePrompt dayNumber={day} />}
+                          {!isReadOnly && (
+                            <>
+                              <div className="md:hidden">
+                                <AddOrBookmarkPlaceButtons
+                                  dayNumber={day}
+                                  onSearch={() => setOpenSheet('search')}
+                                  onBookmark={() => setOpenSheet('bookmark')}
+                                />
+                              </div>
+                              <div className="hidden md:block">
+                                <AddPlacePrompt dayNumber={day} />
+                              </div>
+                            </>
+                          )}
                         </div>
                       </div>
                     ),
@@ -303,12 +379,12 @@ const PlanSchedule = memo(() => {
                 </div>
               ) : (
                 <div className="w-full">
-                  <div className="mb-4 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="text-18 font-bold text-gray-900">
+                  <div className="flex items-center justify-between md:mb-3 lg:mb-4">
+                    <div className="flex items-center gap-3">
+                      <span className="font-bold text-gray-900 md:text-14 lg:text-16">
                         DAY {activeTab}
                       </span>
-                      <span className="text-14 text-gray-600">
+                      <span className="text-gray-900 md:text-10 lg:text-12">
                         {formatDayDate(startDate, activeTab as number)}
                       </span>
                     </div>
@@ -317,7 +393,7 @@ const PlanSchedule = memo(() => {
                         {copiedDay !== null && copiedDay !== activeTab ? (
                           <Button
                             variant="ghost"
-                            className="text-12 font-medium text-gray-500 hover:text-gray-900"
+                            className="text-12' text-gray-500 hover:text-gray-900"
                             onClick={() =>
                               handlePasteDayPlaces(activeTab as number)
                             }
@@ -328,7 +404,7 @@ const PlanSchedule = memo(() => {
                           <Button
                             variant="ghost"
                             className={cn(
-                              'text-12 font-medium',
+                              'text-12',
                               copiedDay === activeTab
                                 ? 'cursor-not-allowed text-gray-400'
                                 : 'text-gray-500 hover:text-gray-900',
@@ -344,7 +420,7 @@ const PlanSchedule = memo(() => {
                         <Button
                           variant="ghost"
                           className={cn(
-                            'text-12 font-medium',
+                            'text-12',
                             !dayPlaces[activeTab as number] ||
                               dayPlaces[activeTab as number].length === 0
                               ? 'cursor-not-allowed text-gray-400'
@@ -363,7 +439,7 @@ const PlanSchedule = memo(() => {
                       </div>
                     )}
                   </div>
-                  <div className="flex flex-col gap-4">
+                  <div className="flex flex-col md:gap-3 lg:gap-4">
                     <PlacesRenderer
                       day={activeTab as number}
                       places={dayPlaces[activeTab as number] || []}
@@ -371,7 +447,18 @@ const PlanSchedule = memo(() => {
                       onRemovePlace={handleRemovePlace}
                     />
                     {!isReadOnly && (
-                      <AddPlacePrompt dayNumber={activeTab as number} />
+                      <>
+                        <div className="md:hidden">
+                          <AddOrBookmarkPlaceButtons
+                            dayNumber={activeTab as number}
+                            onSearch={() => setOpenSheet('search')}
+                            onBookmark={() => setOpenSheet('bookmark')}
+                          />
+                        </div>
+                        <div className="hidden md:block">
+                          <AddPlacePrompt dayNumber={activeTab as number} />
+                        </div>
+                      </>
                     )}
                   </div>
                 </div>
@@ -385,6 +472,31 @@ const PlanSchedule = memo(() => {
         </div>
       </DragDropContext>
       <ScheduleModals />
+      <Sheet
+        open={!!openSheet}
+        onOpenChange={(open) => !open && setOpenSheet(null)}
+      >
+        <SheetContent
+          side="bottom"
+          className="mx-auto h-fit w-[282px] rounded-t-[20px]"
+        >
+          <SheetTitle className="sr-only">
+            {openSheet === 'search' ? '장소 검색' : '내 북마크'}
+          </SheetTitle>
+          <div className="flex h-full w-full flex-col items-center pt-4">
+            <PlaceSidemenu
+              selectedDay={
+                activeTab === '전체보기' ? null : (activeTab as number)
+              }
+              onAddPlace={(place) => {
+                handleAddPlace(place, activeTab);
+                setOpenSheet(null);
+              }}
+              selectedButton={openSheet === 'search' ? 'search' : 'bookmark'}
+            />
+          </div>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 });

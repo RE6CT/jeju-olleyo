@@ -40,7 +40,7 @@ const CategoryTabs = memo(({ className }: CategoryTabsProps) => {
         <img
           src={`/icons/${iconName}.svg`}
           alt={category}
-          className="h-6 w-6"
+          className="h-9 w-9 md:h-6 md:w-6"
           width={24}
           height={24}
           loading="eager"
@@ -60,42 +60,53 @@ const CategoryTabs = memo(({ className }: CategoryTabsProps) => {
   );
 
   return (
-    <div className={cn('flex items-center bg-white px-9', className)}>
-      <div className="flex items-center gap-x-4">
-        {/* 메인 카테고리 탭 */}
-        {CATEGORIES.map((category) => (
-          <button
-            key={category}
-            onClick={createCategoryClickHandler(category)}
-            className={cn(
-              'flex items-center justify-center gap-2 border-b-2 py-2.5 transition-all',
-              activeCategory === category
-                ? 'border-primary-500 text-gray-600'
-                : 'border-transparent text-gray-600 hover:text-gray-800',
-            )}
-            aria-current={activeCategory === category ? 'page' : undefined}
-          >
+    <div
+      className={cn(
+        'mb-[13px] flex w-full items-center justify-between px-4 md:mt-[10px] md:justify-start md:gap-6 md:bg-white md:px-9',
+        className,
+      )}
+    >
+      {/* 메인 카테고리 탭 */}
+      {CATEGORIES.map((category) => (
+        <button
+          key={category}
+          onClick={createCategoryClickHandler(category)}
+          className={cn(
+            'flex flex-col items-center justify-center gap-2 transition-all md:flex-row md:border-b-2 md:pb-2.5',
+            activeCategory === category
+              ? 'text-primary-500 md:border-primary-500 md:text-gray-600'
+              : 'border-transparent text-gray-600 hover:text-gray-800',
+          )}
+          aria-current={activeCategory === category ? 'page' : undefined}
+        >
+          <div className="flex h-[52px] w-[52px] items-center justify-center rounded-12 bg-white md:h-fit md:w-fit md:bg-transparent">
             {getCategoryIcon(category)}
-            <span className="text-base font-semibold">{category}</span>
-          </button>
-        ))}
-      </div>
+          </div>
+          <span className="medium-12 md:semibold-16 whitespace-nowrap">
+            {category}
+          </span>
+        </button>
+      ))}
 
       {/* 구분선 */}
-      <div className="mx-4 h-5 w-px bg-gray-300"></div>
+      <div className="mx-1 hidden h-5 w-px bg-gray-300 md:block"></div>
 
       {/* 항공권 링크 */}
       <Link
         href={CATEGORY_ROUTES.항공권}
         className={cn(
-          'flex items-center justify-center gap-2 border-b-2 py-2.5 transition-all',
+          'flex flex-col items-center justify-center gap-2 border-b-2 transition-all md:flex-row md:pb-2.5',
           activeCategory === '항공권'
             ? 'border-primary-500 text-gray-600'
             : 'border-transparent text-gray-600 hover:text-gray-800',
         )}
       >
-        {getCategoryIcon('항공권')}
-        <span className="text-base font-semibold">항공권</span>
+        <div className="flex h-[52px] w-[52px] items-center justify-center rounded-12 bg-white md:h-fit md:w-fit md:bg-transparent">
+          {getCategoryIcon('항공권')}
+        </div>
+        <span className="medium-12 md:semibold-16 whitespace-nowrap">
+          항공권
+        </span>
       </Link>
     </div>
   );

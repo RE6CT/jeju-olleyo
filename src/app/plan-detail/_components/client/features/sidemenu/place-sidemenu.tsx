@@ -13,9 +13,11 @@ const CATEGORIES: CategoryType[] = ['전체', '명소', '맛집', '카페', '숙
 const PlaceSidemenu = ({
   selectedDay,
   onAddPlace,
+  initialTab = 'search',
 }: {
   selectedDay: number | null;
   onAddPlace: (place: Place) => void;
+  initialTab?: 'search' | 'bookmark';
 }) => {
   const [activeBookmarkTab, setActiveBookmarkTab] =
     useState<CategoryType>('전체');
@@ -24,7 +26,7 @@ const PlaceSidemenu = ({
   return (
     <div className="h-fit space-y-4 md:w-[212px] lg:w-[280px]">
       {/* 북마크 섹션 */}
-      <div className="rounded-[12px] border border-gray-200 px-5">
+      <div className="md:rounded-[12px] md:border md:border-gray-200 md:bg-gray-50 md:px-[15px] lg:px-5">
         <BookmarkSidemenu
           filterTabs={CATEGORIES}
           activeFilterTab={activeBookmarkTab}
@@ -35,7 +37,7 @@ const PlaceSidemenu = ({
       </div>
 
       {/* 검색 섹션 */}
-      <div className="rounded-[12px] border border-gray-200 p-5">
+      <div className="px-5 md:rounded-[12px] md:border md:border-gray-200 md:bg-gray-50 md:py-5">
         <SearchSidemenu
           filterTabs={CATEGORIES}
           activeFilterTab={activeSearchTab}

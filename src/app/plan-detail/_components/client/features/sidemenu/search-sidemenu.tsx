@@ -247,7 +247,7 @@ const SearchSidemenu = ({
       }
     >
       {/* 검색 결과 */}
-      <div className="w-[240px]" ref={containerRef}>
+      <div className="md:w-[182px] lg:w-[240px]" ref={containerRef}>
         {displayedPlaces.length > 0 ? (
           <div ref={listRef} className="overflow-y-auto">
             <AnimatePresence initial={false}>

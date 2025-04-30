@@ -41,6 +41,7 @@ const PlaceDetailContent = ({
         <div className="flex gap-8">
           <div className="relative aspect-square w-full items-start bg-no-repeat object-cover md:mr-[28px] md:w-[300px] lg:mr-[50px] lg:w-[479px]">
             <PlaceImage image={place.image} title={place.title} />
+          </div>
           <div className="flex flex-col justify-start space-y-3 md:pt-0 lg:pt-2">
             <div className="flex items-center gap-2">
               <CategoryBadge

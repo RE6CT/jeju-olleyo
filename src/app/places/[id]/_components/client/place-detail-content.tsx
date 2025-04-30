@@ -86,6 +86,7 @@ const PlaceDetailContent = ({
           </div>
         </div>
       </div>
+
       {/* 모바일 레이아웃 */}
       <div className="flex flex-col md:hidden">
         {/* 이미지 및 카테고리 뱃지 */}
@@ -98,34 +99,40 @@ const PlaceDetailContent = ({
           <div className="absolute bottom-0 left-0 h-[80px] w-full bg-gradient-to-t from-white to-transparent" />
         </div>
 
-        {/* 제목 */}
-        <div className="mt-2 text-[20px] font-bold">{place.title}</div>
+        <div className="absolute bottom-0 left-0 z-20 mx-4 w-full px-4 pb-4">
+          {/* 제목 */}
+          <div className="semibold-18 mt-2">{place.title}</div>
 
-        {/* 정보 박스 */}
-        <div className="mt-2 rounded-[12px] bg-gray-50 px-4 py-3 shadow-sm">
-          <div className="space-y-2 text-[14px] text-gray-500">
-            <div className="flex items-center gap-2">
-              <TimeIcon size={16} fill="gray-300" />
-              {isHotel ? '체크인/체크아웃 ' : ''}
-              <span className="text-red-500">{openSummary}</span>
+          {/* 정보 박스 */}
+          <div className="mt-2 rounded-[12px] bg-gray-50 px-4 py-3 shadow-sm">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <TimeIcon size={20} fill="gray-300" />
+                {isHotel ? '체크인/체크아웃 ' : ''}
+                <span className="regular-14 text-gray-300">{openSummary}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <PhoneIcon size={20} fill="gray-300" />
+                <span className="regular-14 text-gray-300">
+                  {detailJson?.phone || '전화번호 미제공'}
+                </span>
+              </div>
+              <div className="flex items-start gap-2">
+                <LocationIcon size={20} fill="gray-300" />
+                <span className="regular-14 text-gray-300">
+                  {place.address}
+                </span>
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <PhoneIcon size={16} fill="gray-300" />
-              {detailJson?.phone || '전화번호 미제공'}
-            </div>
-            <div className="flex items-start gap-2">
-              <LocationIcon size={16} fill="gray-300" />
-              {place.address}
-            </div>
-          </div>
 
-          {/* 지도 */}
-          <div className="mt-3 h-[150px] w-full overflow-hidden rounded-[8px]">
-            <PlaceLocation
-              lat={place.lat}
-              lng={place.lng}
-              title={place.title}
-            />
+            {/* 지도 */}
+            <div className="mt-3 h-[150px] w-full overflow-hidden rounded-[8px]">
+              <PlaceLocation
+                lat={place.lat}
+                lng={place.lng}
+                title={place.title}
+              />
+            </div>
           </div>
         </div>
       </div>

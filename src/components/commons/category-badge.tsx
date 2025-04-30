@@ -1,7 +1,7 @@
 import { CategoryBadgeProps } from '@/types/category.type';
 
 const getStyleByBadgeType = (
-  badgeType: 'filter' | 'modal' | 'card',
+  badgeType: 'filter' | 'modal' | 'card' | 'page',
   selected: boolean,
   variant?: 'primary' | 'secondary',
 ): string => {
@@ -16,12 +16,16 @@ const getStyleByBadgeType = (
       return variant === 'primary'
         ? 'bg-transparent text-primary-500 border-[0.5px] border-primary-500'
         : 'bg-transparent text-secondary-300 border-[0.5px] border-secondary-300';
+    case 'page':
+      return 'bg-secondary-300 text-white';
     default:
       return '';
   }
 };
 
-const getLayoutByBadgeType = (badgeType: 'filter' | 'modal' | 'card') => {
+const getLayoutByBadgeType = (
+  badgeType: 'filter' | 'modal' | 'card' | 'page',
+) => {
   switch (badgeType) {
     case 'filter':
       return 'px-5 py-2 text-sm rounded-[28px]';
@@ -29,6 +33,8 @@ const getLayoutByBadgeType = (badgeType: 'filter' | 'modal' | 'card') => {
       return 'px-4 py-2 text-sm rounded-[20px]';
     case 'card':
       return 'px-2 py-[2px] text-sm h-[20px] rounded-[10px]';
+    case 'page':
+      return 'px-4 py-2 text-sm rounded-[20px]';
     default:
       return '';
   }

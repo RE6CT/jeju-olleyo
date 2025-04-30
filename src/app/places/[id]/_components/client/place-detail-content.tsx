@@ -87,7 +87,7 @@ const PlaceDetailContent = ({
         </div>
       </div>
       {/* 모바일 레이아웃 */}
-      <div className="flex flex-col px-4 pt-4 md:hidden">
+      <div className="flex flex-col md:hidden">
         {/* 이미지 */}
         <div className="w-full overflow-hidden rounded-[12px]">
           <PlaceImage image={place.image} title={place.title} />
@@ -97,7 +97,7 @@ const PlaceDetailContent = ({
         <div className="bg-blue-100 mt-2 w-fit rounded-full px-2 py-1 text-xs text-white">
           <CategoryBadge
             category={place.category as CategoryType}
-            badgeType="modal"
+            badgeType="page"
             className="text-[12px] text-white"
           />
         </div>

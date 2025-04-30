@@ -110,7 +110,6 @@ const TicketSearchForm = ({
                 dateFormat="yyyy-MM-dd"
                 className="w-full rounded border p-2 pl-9 text-16 text-black"
                 minDate={new Date()}
-                readOnly
               />
             </div>
             <Button

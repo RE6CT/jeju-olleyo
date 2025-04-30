@@ -70,15 +70,33 @@ export const fetchGetFilteredPlansByUserId = async (
   // 날짜 필터링은 클라이언트 측에서 처리
   let filteredDataByDate = data;
   if (filterOptions.date) {
-    const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone; // 브라우저 사용자의 시간대를 가져온다.
-    filteredDataByDate = filteredDataByDate.filter((plan) =>
-      isDateInRange(
-        filterOptions.date!,
-        plan.travel_start_date,
-        plan.travel_end_date,
-        userTimezone,
+    // UTC 기준으로 날짜를 비교하도록 수정
+    const targetDate = new Date(filterOptions.date);
+    const utcTargetDate = new Date(
+      Date.UTC(
+        targetDate.getFullYear(),
+        targetDate.getMonth(),
+        targetDate.getDate(),
       ),
     );
+
+    filteredDataByDate = filteredDataByDate.filter((plan) => {
+      const startDate = new Date(plan.travel_start_date);
+      const endDate = new Date(plan.travel_end_date);
+
+      const utcStartDate = new Date(
+        Date.UTC(
+          startDate.getFullYear(),
+          startDate.getMonth(),
+          startDate.getDate(),
+        ),
+      );
+      const utcEndDate = new Date(
+        Date.UTC(endDate.getFullYear(), endDate.getMonth(), endDate.getDate()),
+      );
+
+      return utcTargetDate >= utcStartDate && utcTargetDate <= utcEndDate;
+    });
   }
 
   return filteredDataByDate.map(camelize);

@@ -2,14 +2,24 @@ import Link from 'next/link';
 import Duration from '@/components/commons/duration';
 import PlanImage from '@/components/commons/plan-image';
 import { Separator } from '@/components/ui/separator';
-import { PlanVerticalCardProps } from '@/types/plan.type';
+import { Plan, PlanVerticalCardProps } from '@/types/plan.type';
 import LikeButton from '@/components/commons/like-button';
+import PlanDropdown from '@/components/commons/edit-and-delete-dropdown';
+import { Button } from '@/components/ui/button';
 
 /**
  * vertical한 플랜 카드 컴포넌트
  * @param plan - 플랜 카드를 위한 PlanCardType의 객체
+ * @param isDropdownVisible - 드롭다운 표시 여부
+ * @param onEdit - 수정 핸들러
+ * @param onDelete - 삭제 핸들러
  */
-const PlanVerticalCard = ({ plan }: PlanVerticalCardProps) => {
+const PlanVerticalCard = ({
+  plan,
+  isDropdownVisible,
+  onEdit,
+  onDelete,
+}: PlanVerticalCardProps) => {
   return (
     <Link href={`/plan-detail/${plan.planId}?isReadOnly=true`}>
       <div className="relative">
@@ -25,6 +35,29 @@ const PlanVerticalCard = ({ plan }: PlanVerticalCardProps) => {
           isLiked={plan.isLiked}
           className="absolute right-2 top-2 md:right-4 md:top-4"
         />
+        {onEdit && onDelete && isDropdownVisible && (
+          <div className="absolute right-2 top-10 block md:hidden">
+            <PlanDropdown
+              plan={plan as Plan}
+              onEdit={onEdit}
+              onDelete={onDelete}
+            >
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0" // 포커스 효과 제거
+              >
+                <img
+                  src="/icons/option.svg"
+                  alt="option"
+                  width={16}
+                  height={16}
+                  className="h-4 w-4"
+                />
+              </Button>
+            </PlanDropdown>
+          </div>
+        )}
       </div>
 
       <div className="mt-2 flex flex-col gap-1">

@@ -65,5 +65,12 @@ export const DAY_COLORS = {
 
 // 화면 좌표계 조정값
 export const SCREEN_OFFSET = {
-  LAT: 0.0005, // 위도 조정값
-} as const;
+  LAT: 0.0005,
+  LNG: 0.0005,
+};
+
+// 모바일 화면 좌표계 조정값
+export const MOBILE_SCREEN_OFFSET = {
+  LAT: 0.001,
+  LNG: 0.001,
+};

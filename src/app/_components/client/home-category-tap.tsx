@@ -72,9 +72,9 @@ const CategoryTabs = memo(({ className }: CategoryTabsProps) => {
           key={category}
           onClick={createCategoryClickHandler(category)}
           className={cn(
-            'flex flex-col items-center justify-center gap-2 transition-all md:flex-row md:border-b-2',
+            'flex flex-col items-center justify-center gap-2 transition-all md:flex-row md:border-b-2 md:pb-2.5',
             activeCategory === category
-              ? 'text-gray-600 md:border-primary-500'
+              ? 'text-primary-500 md:border-primary-500 md:text-gray-600'
               : 'border-transparent text-gray-600 hover:text-gray-800',
           )}
           aria-current={activeCategory === category ? 'page' : undefined}
@@ -95,7 +95,7 @@ const CategoryTabs = memo(({ className }: CategoryTabsProps) => {
       <Link
         href={CATEGORY_ROUTES.항공권}
         className={cn(
-          'flex flex-col items-center justify-center gap-2 border-b-2 transition-all md:flex-row',
+          'flex flex-col items-center justify-center gap-2 border-b-2 transition-all md:flex-row md:pb-2.5',
           activeCategory === '항공권'
             ? 'border-primary-500 text-gray-600'
             : 'border-transparent text-gray-600 hover:text-gray-800',

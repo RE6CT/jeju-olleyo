@@ -20,8 +20,10 @@ const PlanIncludingPlace = async ({ placeId }: { placeId: number }) => {
   const plans = data.map(camelize);
 
   return (
-    <div>
-      <div className="semibold-24 mb-7 mt-[73px]">해당 장소가 포함된 일정</div>
+    <div className="mx-auto w-full max-w-[640px] px-4 md:mx-0 md:max-w-none md:px-0">
+      <div className="semibold-20 md:semibold-20 lg:semibold-24 mb-4 md:mb-4 lg:mb-7">
+        해당 장소가 포함된 일정
+      </div>
 
       {plans?.length === 0 && (
         <p className="text-sm text-gray-400">
@@ -29,7 +31,7 @@ const PlanIncludingPlace = async ({ placeId }: { placeId: number }) => {
         </p>
       )}
 
-      <div className="grid w-full grid-cols-1 gap-x-[11px] gap-y-9 sm:grid-cols-2 md:grid-cols-3">
+      <div className="grid grid-cols-2 gap-x-[40px] gap-y-4 md:grid-cols-2 lg:grid-cols-3">
         {plans &&
           plans
             .slice(0, 6)

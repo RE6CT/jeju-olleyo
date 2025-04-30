@@ -26,6 +26,8 @@ import { useRouter } from 'next/navigation';
 import { PATH } from '@/constants/path.constants';
 import EmptyResult from '@/components/commons/empty-result-link';
 import FilterTag from './filter-tag';
+import PlanVerticalCard from '@/components/features/card/plan-vertical-card';
+import React from 'react';
 
 const FILTER_ICON_SIZE = 20;
 const POPOVER_SIDE_OFFSET = 5;
@@ -102,8 +104,8 @@ const PlanFilterSection = ({
   }
 
   return (
-    <section className="flex flex-col items-center gap-[21px]">
-      <div className="flex w-full items-center justify-start gap-10">
+    <section className="flex flex-col items-center gap-[10px] pb-[90px] md:gap-[44px] md:pb-0 lg:gap-[21px]">
+      <div className="flex w-full items-center justify-start gap-[10px] md:gap-10">
         <Popover open={isOpen} onOpenChange={setIsOpen}>
           <PopoverTrigger
             asChild
@@ -113,10 +115,18 @@ const PlanFilterSection = ({
           >
             <Button variant="outline" size="sm" disabled={isPlansLoading}>
               <Image
+                src="/icons/mdi_filter_mobile.svg"
+                alt="filter icon"
+                width={FILTER_ICON_SIZE}
+                height={FILTER_ICON_SIZE}
+                className="md:hidden"
+              />
+              <Image
                 src="/icons/mdi_filter.svg"
                 alt="filter icon"
                 width={FILTER_ICON_SIZE}
                 height={FILTER_ICON_SIZE}
+                className="hidden md:block"
               />
               필터
             </Button>
@@ -152,40 +162,42 @@ const PlanFilterSection = ({
           </PopoverContent>
         </Popover>
         {/* 필터 카드 렌더링 */}
-        <div className="flex items-center gap-3">
-          {filters.keyword && (
-            <FilterTag
-              onRemove={() => {
-                removeFilter(FILTER_TYPES.KEYWORD);
-                setCurrentPage(INITIAL_PAGE);
-              }}
-              ariaLabel="키워드 필터 삭제"
-            >
-              #{filters.keyword}
-            </FilterTag>
-          )}
-          {filters.date && (
-            <FilterTag
-              onRemove={() => {
-                removeFilter(FILTER_TYPES.DATE);
-                setCurrentPage(INITIAL_PAGE);
-              }}
-              ariaLabel="날짜 필터 삭제"
-            >
-              #{filters.date}
-            </FilterTag>
-          )}
-          {filters.public && filters.public !== PUBLIC_OPTIONS.ALL && (
-            <FilterTag
-              onRemove={() => {
-                removeFilter(FILTER_TYPES.PUBLIC);
-                setCurrentPage(INITIAL_PAGE);
-              }}
-              ariaLabel="공개상태 필터 삭제"
-            >
-              #{filters.public === PUBLIC_OPTIONS.PUBLIC ? '공개' : '비공개'}
-            </FilterTag>
-          )}
+        <div className="flex flex-1 items-center gap-2">
+          <div className="scrollbar-hide md:max-w-auto flex max-w-[200px] items-center gap-2 overflow-x-auto whitespace-nowrap">
+            {filters.keyword && (
+              <FilterTag
+                onRemove={() => {
+                  removeFilter(FILTER_TYPES.KEYWORD);
+                  setCurrentPage(INITIAL_PAGE);
+                }}
+                ariaLabel="키워드 필터 삭제"
+              >
+                #{filters.keyword}
+              </FilterTag>
+            )}
+            {filters.date && (
+              <FilterTag
+                onRemove={() => {
+                  removeFilter(FILTER_TYPES.DATE);
+                  setCurrentPage(INITIAL_PAGE);
+                }}
+                ariaLabel="날짜 필터 삭제"
+              >
+                #{filters.date}
+              </FilterTag>
+            )}
+            {filters.public && filters.public !== PUBLIC_OPTIONS.ALL && (
+              <FilterTag
+                onRemove={() => {
+                  removeFilter(FILTER_TYPES.PUBLIC);
+                  setCurrentPage(INITIAL_PAGE);
+                }}
+                ariaLabel="공개상태 필터 삭제"
+              >
+                #{filters.public === PUBLIC_OPTIONS.PUBLIC ? '공개' : '비공개'}
+              </FilterTag>
+            )}
+          </div>
           {(filters.keyword ||
             filters.date ||
             (filters.public && filters.public !== PUBLIC_OPTIONS.ALL)) && (
@@ -196,7 +208,7 @@ const PlanFilterSection = ({
                 resetFilter();
                 setCurrentPage(INITIAL_PAGE);
               }}
-              className="medium-14 px-3 text-gray-500 hover:text-gray-900"
+              className="lg:medium-14 md:medium-12 shrink-0 px-3 text-[11px] text-gray-500 hover:text-gray-900"
               disabled={isPlansLoading}
             >
               필터 초기화
@@ -213,15 +225,21 @@ const PlanFilterSection = ({
         />
       ) : (
         <>
-          <div className="grid w-full grid-cols-1 gap-5">
+          <div className="flex w-full flex-wrap justify-between gap-3 md:grid md:grid-cols-1 md:gap-[27px] lg:gap-5">
             {currentPagePlans.map((plan) => (
-              <PlanHorizontalCard
-                key={plan.planId}
-                plan={plan}
-                nickname={userNickname}
-                onEdit={handleEdit}
-                onDelete={() => handleDelete(plan.planId)}
-              />
+              <React.Fragment key={plan.planId}>
+                <div className="w-[calc(50%-6px)] md:hidden">
+                  <PlanVerticalCard plan={plan} />
+                </div>
+                <div className="hidden md:block">
+                  <PlanHorizontalCard
+                    plan={plan}
+                    nickname={userNickname}
+                    onEdit={handleEdit}
+                    onDelete={() => handleDelete(plan.planId)}
+                  />
+                </div>
+              </React.Fragment>
             ))}
           </div>
 

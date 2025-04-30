@@ -30,22 +30,22 @@ export const FilterInput = ({
   const renderFilterInput = () => {
     if (selectedFilter === FILTER_TYPES.KEYWORD) {
       return (
-        <div className="flex flex-col items-center justify-center gap-[10px] self-stretch pr-4">
+        <div className="flex flex-col items-start justify-center gap-[10px] self-stretch pr-4">
           <Input
             placeholder="예) 첫 제주"
             value={inputValue}
-            className="medium-14 border-gray-200 text-gray-900"
+            className="medium-16 m-0 border-gray-200 px-4 py-[10px] text-gray-900"
             onChange={(e) => setInputValue(e.target.value)}
           />
         </div>
       );
     } else if (selectedFilter === FILTER_TYPES.DATE) {
       return (
-        <div className="flex flex-col items-center justify-center gap-[10px] self-stretch pr-4">
+        <div className="flex flex-col items-start justify-center gap-[10px] self-stretch pr-4">
           <Input
             type="date"
             value={date}
-            className="medium-14 border-gray-200 text-gray-900"
+            className="medium-16 m-0 border-gray-200 px-4 py-[10px] text-gray-900 [&::-webkit-datetime-edit-day-field]:text-gray-200 [&::-webkit-datetime-edit-fields-wrapper]:text-gray-200 [&::-webkit-datetime-edit-month-field]:text-gray-200 [&::-webkit-datetime-edit-text]:text-gray-200 [&::-webkit-datetime-edit-year-field]:text-gray-200 [&::-webkit-datetime-edit]:text-gray-200"
             onChange={(e) => setDate(e.target.value)}
             onFocus={() => setIsDatePickerFocused(true)}
             onBlur={() => setIsDatePickerFocused(false)}
@@ -60,7 +60,7 @@ export const FilterInput = ({
             {Object.values(PUBLIC_OPTIONS).map((option) => (
               <label
                 key={option}
-                className="medium-14 flex cursor-pointer items-center gap-[10px] py-[6px] text-gray-900"
+                className="medium-16 flex cursor-pointer items-center gap-[10px] py-[6px] text-gray-900"
               >
                 <CheckboxSecondary
                   checked={selectedPublicOption === option}

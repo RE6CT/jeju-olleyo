@@ -16,6 +16,7 @@ import useRememberEmail from '@/lib/hooks/use-remember-email';
 import { getLoginErrorMessage } from '@/lib/utils/auth-error.util';
 import { LoginFormValues } from '@/types/auth.type';
 import AuthErrorMessage from '@/components/features/error-message/error-message';
+import Link from 'next/link';
 
 /**
  * 로그인 페이지 컴포넌트
@@ -59,12 +60,14 @@ const LoginPage = () => {
   return (
     <AuthLayout>
       <header className="flex h-[146px] items-center justify-center">
-        <Image
-          src={'/logo/color_logo.png'}
-          alt="logo"
-          width={146}
-          height={76}
-        />
+        <Link href={'/'}>
+          <Image
+            src={'/logo/color_logo.png'}
+            alt="logo"
+            width={146}
+            height={76}
+          />
+        </Link>
       </header>
 
       {errorMessages.length > 0 && (

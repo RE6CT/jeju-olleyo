@@ -4,7 +4,7 @@ import Autoplay from 'embla-carousel-autoplay';
 import useEmblaCarousel from 'embla-carousel-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import NavigationButton from '@/app/_components/server/home-navigation-button';
 import { ProgressIndicator } from '@/app/_components/server/home-progress';
@@ -14,18 +14,47 @@ import { MainCarouselProps } from '@/types/home.carousel.type';
 
 /**
  * 메인 캐러셀 컴포넌트
+ * 768px 이상: 일반 캐러셀 기능 제공 (네비게이션 버튼, 프로그레스 바)
+ * 768px 미만: 이미지 형태로 표시 (네비게이션 버튼 없음, 번호만 표시)
+ * 모바일에서도 터치 드래그로 슬라이드 전환 가능
  * @param imageList - 캐러셀에 표시할 이미지 목록
  */
 const MainCarousel = ({ imageList }: MainCarouselProps) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [
-    Autoplay({
-      delay: MAIN_CAROUSEL_OPTIONS.AUTO_ROLLING_TIME,
-      stopOnMouseEnter: true,
-      stopOnInteraction: false,
-    }),
-  ]);
+  // 768px 미만인지 확인하는 함수
+  const checkIfMobile = () => {
+    setIsMobile(window.innerWidth < 768);
+  };
+
+  useEffect(() => {
+    // 초기 로드 시 확인
+    checkIfMobile();
+
+    // 리사이즈 이벤트 리스너 등록
+    window.addEventListener('resize', checkIfMobile);
+
+    // 컴포넌트 언마운트 시 이벤트 리스너 제거
+    return () => {
+      window.removeEventListener('resize', checkIfMobile);
+    };
+  }, []);
+
+  // 자동 재생 옵션 설정
+  const autoplayOptions = {
+    delay: MAIN_CAROUSEL_OPTIONS.AUTO_ROLLING_TIME,
+    stopOnMouseEnter: true,
+    stopOnInteraction: false,
+    rootNode: (emblaRoot: HTMLElement) => emblaRoot.parentElement,
+  };
+
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    {
+      loop: true,
+    },
+    [Autoplay(autoplayOptions)],
+  );
 
   const { currentIndex, totalCount, progressWidth } = useCarouselProgress(
     emblaApi ?? null,
@@ -35,7 +64,7 @@ const MainCarousel = ({ imageList }: MainCarouselProps) => {
 
   return (
     <div
-      className="relative overflow-hidden"
+      className="relative mx-4 overflow-hidden md:mx-0"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onKeyDown={(e) => {
@@ -46,7 +75,10 @@ const MainCarousel = ({ imageList }: MainCarouselProps) => {
       role="region"
       aria-label="이미지 캐러셀"
     >
-      <div className="overflow-hidden" ref={emblaRef}>
+      <div
+        className="overflow-hidden rounded-lg border-[0.6px] border-solid border-white md:rounded-none md:border-0"
+        ref={emblaRef}
+      >
         <div className="flex">
           {(!imageList || imageList.length === 0) && (
             <div className="relative h-[340px] max-h-[340px] min-w-full lg:h-[340px]">
@@ -83,6 +115,7 @@ const MainCarousel = ({ imageList }: MainCarouselProps) => {
         </div>
       </div>
 
+      {/* 네비게이션 버튼 (768px 미만에서는 NavigationButton 내부에서 hidden 처리) */}
       <NavigationButton
         direction="left"
         onClick={() => emblaApi?.scrollPrev()}
@@ -92,6 +125,7 @@ const MainCarousel = ({ imageList }: MainCarouselProps) => {
         onClick={() => emblaApi?.scrollNext()}
       />
 
+      {/* 프로그레스 인디케이터 (768px 미만에서는 ProgressIndicator 내부에서 다르게 스타일링) */}
       <ProgressIndicator
         current={currentIndex + 1}
         total={totalCount}

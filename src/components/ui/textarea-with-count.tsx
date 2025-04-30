@@ -39,11 +39,12 @@ const TextareaWithCount = forwardRef<
     { value, maxLength, className, onChange, showCount = true, ...props },
     ref,
   ) => {
+    const restrictedLength = maxLength - 5;
     const currentLength = value.length;
-    const isExceeded = currentLength >= maxLength;
+    const isExceeded = currentLength >= restrictedLength;
 
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      if (e.target.value.length <= maxLength) {
+      if (e.target.value.length <= restrictedLength) {
         onChange?.(e);
       }
     };

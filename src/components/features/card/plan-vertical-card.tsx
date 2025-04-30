@@ -1,5 +1,4 @@
 import Link from 'next/link';
-
 import Duration from '@/components/commons/duration';
 import PlanImage from '@/components/commons/plan-image';
 import { Separator } from '@/components/ui/separator';
@@ -14,7 +13,7 @@ const PlanVerticalCard = ({ plan }: PlanVerticalCardProps) => {
   return (
     <Link href={`/plan-detail/${plan.planId}?isReadOnly=true`}>
       <div className="relative">
-        <div className="relative aspect-[310/216]">
+        <div className="relative aspect-[83/58] h-[116px] w-[166px] md:aspect-[310/216] md:h-auto md:w-full">
           <PlanImage
             image={plan.planImg}
             title={plan.title}
@@ -28,13 +27,13 @@ const PlanVerticalCard = ({ plan }: PlanVerticalCardProps) => {
         />
       </div>
 
-      <div className="flex flex-col gap-1 p-2">
+      <div className="mt-2 flex flex-col gap-1">
         {/* 제목과 내용 영역 */}
         <div className="flex flex-col gap-1 md:gap-2">
-          <p className="medium-16 line-clamp-1 overflow-hidden text-ellipsis text-gray-900">
+          <p className="medium-12 md:medium-18 lg:medium-16 overflow-hidden text-ellipsis whitespace-nowrap text-gray-900">
             {plan.title}
           </p>
-          <p className="regular-14 line-clamp-2 text-description">
+          <p className="regular-10 md:regular-16 lg:regular-14 overflow-hidden text-ellipsis whitespace-nowrap text-description">
             {plan.description}
           </p>
         </div>
@@ -48,7 +47,8 @@ const PlanVerticalCard = ({ plan }: PlanVerticalCardProps) => {
           <Duration
             start={plan.travelStartDate}
             end={plan.travelEndDate}
-            separator="-"
+            separator="~"
+            showShortYear
           />
         </div>
       </div>

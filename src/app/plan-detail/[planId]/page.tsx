@@ -50,11 +50,6 @@ const PlanDetailPage = async ({
   params: { planId: string };
   searchParams: { [key: string]: string | string[] | undefined };
 }) => {
-  const HAPPY_IMAGE = {
-    width: 37,
-    height: 36,
-  };
-
   try {
     // 병렬로 API 호출 실행
     const [plan, { user }, dayPlaces] = await Promise.all([
@@ -73,21 +68,7 @@ const PlanDetailPage = async ({
     const isReadOnly = searchParams.isReadOnly === 'true' || !isOwner;
 
     return (
-      <main className="mx-auto flex w-full max-w-[1024px] flex-col">
-        <header className="flex items-center justify-between gap-3 pt-6">
-          <div className="flex gap-3 pt-6">
-            <h1 className="text-28 font-bold leading-[130%]">
-              내 일정 수정하기
-            </h1>
-            <Image
-              src="/character/happy_color.svg"
-              alt="happy icon"
-              width={HAPPY_IMAGE.width}
-              height={HAPPY_IMAGE.height}
-            />
-          </div>
-          {!isReadOnly && <PlanSaveButton />}
-        </header>
+      <main className="mx-auto flex w-full min-w-[375px] max-w-[1024px] max-w-[375px] flex-col p-4 md:max-w-[769px] md:px-5 md:py-3 lg:px-9 lg:py-5">
         <section>
           <PlanForm
             initialPlan={plan}

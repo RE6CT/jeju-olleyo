@@ -110,7 +110,7 @@ const PlanForm = ({
   }
 
   return (
-    <div className="flex h-full flex-col pb-[90px]">
+    <div className="flex h-full flex-col pb-[86px] md:pb-0">
       <PlanHeader />
       <div className="flex flex-1 gap-4">
         <div className="flex flex-1 flex-col">

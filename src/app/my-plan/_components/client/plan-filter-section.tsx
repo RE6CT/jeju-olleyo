@@ -229,7 +229,12 @@ const PlanFilterSection = ({
             {currentPagePlans.map((plan) => (
               <React.Fragment key={plan.planId}>
                 <div className="w-[calc(50%-6px)] md:hidden">
-                  <PlanVerticalCard plan={plan} />
+                  <PlanVerticalCard
+                    plan={plan}
+                    onEdit={handleEdit}
+                    onDelete={() => handleDelete(plan.planId)}
+                    isDropdownVisible
+                  />
                 </div>
                 <div className="hidden md:block">
                   <PlanHorizontalCard

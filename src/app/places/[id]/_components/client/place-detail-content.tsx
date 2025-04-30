@@ -99,7 +99,7 @@ const PlaceDetailContent = ({
           <div className="absolute bottom-0 left-0 h-[80px] w-full bg-gradient-to-t from-white to-transparent" />
         </div>
 
-        <div className="mx-4 w-full px-4 py-2">
+        <div className="mx-auto w-full max-w-[600px] px-4 py-2">
           {/* 제목 */}
           <div className="semibold-18 mt-2">{place.title}</div>
 

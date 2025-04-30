@@ -4,41 +4,45 @@ import Autoplay from 'embla-carousel-autoplay';
 import useEmblaCarousel from 'embla-carousel-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 
 import NavigationButton from '@/app/_components/server/home-navigation-button';
 import { ProgressIndicator } from '@/app/_components/server/home-progress';
 import { MAIN_CAROUSEL_OPTIONS } from '@/constants/home.constants';
 import { useCarouselProgress } from '@/lib/hooks/use-carousel-progress';
-import { MainCarouselProps } from '@/types/home.carousel.type';
+import { EnhancedMainCarouselProps } from '@/types/home.carousel.type';
 
 /**
- * 메인 캐러셀 컴포넌트
+ * 메인 캐러셀 컴포넌트 - 하이드레이션 깜빡임 해결 및 CSS 기반 이미지 전환
  * @param imageList - 캐러셀에 표시할 이미지 목록
  */
-const MainCarousel = ({ imageList }: MainCarouselProps) => {
+const MainCarousel = ({ imageList }: EnhancedMainCarouselProps) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  // 768px 미만인지 확인하는 함수
-  const checkIfMobile = () => {
+  // 화면 크기 감지 함수
+  const checkDeviceSize = useCallback(() => {
     setIsMobile(window.innerWidth < 768);
-  };
-
-  useEffect(() => {
-    // 초기 로드 시 확인
-    checkIfMobile();
-
-    // 리사이즈 이벤트 리스너 등록
-    window.addEventListener('resize', checkIfMobile);
-
-    // 컴포넌트 언마운트 시 이벤트 리스너 제거
-    return () => {
-      window.removeEventListener('resize', checkIfMobile);
-    };
   }, []);
 
-  // 자동 재생 옵션 설정
+  // 마운트 시점에 한 번만 실행
+  useEffect(() => {
+    // 마운트 표시
+    setIsMounted(true);
+
+    // 초기 크기 체크
+    checkDeviceSize();
+
+    // 리사이즈 이벤트 리스너
+    window.addEventListener('resize', checkDeviceSize);
+
+    return () => {
+      window.removeEventListener('resize', checkDeviceSize);
+    };
+  }, [checkDeviceSize]);
+
+  // 자동 재생 옵션
   const autoplayOptions = {
     delay: MAIN_CAROUSEL_OPTIONS.AUTO_ROLLING_TIME,
     stopOnMouseEnter: true,
@@ -58,6 +62,12 @@ const MainCarousel = ({ imageList }: MainCarouselProps) => {
     MAIN_CAROUSEL_OPTIONS.AUTO_ROLLING_TIME,
     isHovered,
   );
+
+  // 클라이언트 사이드 렌더링 완료 전에는 아무것도 표시하지 않음
+  // (이 부분은 이제 스켈레톤 UI로 대체되므로 빈 div를 반환하지 않음)
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <div
@@ -102,17 +112,29 @@ const MainCarousel = ({ imageList }: MainCarouselProps) => {
                 className="block h-full w-full"
                 aria-label={`${image.title || '슬라이드'} 상세 보기`}
               >
+                {/* 모바일 이미지와 데스크탑 이미지 모두 로드하되,
+                    모바일 이미지는 CSS로 조건부 표시/숨김 처리 */}
+                {image.mobile_image_url && (
+                  <Image
+                    src={image.mobile_image_url}
+                    alt={image.title || '슬라이드 이미지 (모바일)'}
+                    fill
+                    priority={index < 2}
+                    sizes="343px"
+                    className={`object-cover ${isMobile ? 'block' : 'hidden'}`}
+                    unoptimized={true}
+                    loading={index < 2 ? 'eager' : 'lazy'}
+                  />
+                )}
                 <Image
-                  src={
-                    isMobile && image.mobile_image_url
-                      ? image.mobile_image_url
-                      : image.image_url
-                  }
+                  src={image.image_url}
                   alt={image.title || '슬라이드 이미지'}
                   fill
-                  priority={index === 0} // 첫번째 이미지는 우선 로딩
+                  priority={index < 2}
                   sizes={isMobile ? '343px' : '100vw'}
-                  className="object-cover"
+                  className={`object-cover ${isMobile && image.mobile_image_url ? 'hidden' : 'block'}`}
+                  unoptimized={true}
+                  loading={index < 2 ? 'eager' : 'lazy'}
                 />
               </Link>
             </div>
@@ -120,7 +142,7 @@ const MainCarousel = ({ imageList }: MainCarouselProps) => {
         </div>
       </div>
 
-      {/* 네비게이션 버튼 (768px 미만에서는 NavigationButton 내부에서 hidden 처리) */}
+      {/* 네비게이션 버튼 */}
       <NavigationButton
         direction="left"
         onClick={() => emblaApi?.scrollPrev()}
@@ -130,7 +152,7 @@ const MainCarousel = ({ imageList }: MainCarouselProps) => {
         onClick={() => emblaApi?.scrollNext()}
       />
 
-      {/* 프로그레스 인디케이터 (768px 미만에서는 ProgressIndicator 내부에서 다르게 스타일링) */}
+      {/* 프로그레스 인디케이터 */}
       <ProgressIndicator
         current={currentIndex + 1}
         total={totalCount}

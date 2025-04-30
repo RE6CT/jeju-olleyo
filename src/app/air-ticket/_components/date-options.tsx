@@ -21,7 +21,7 @@ const DateOptions = ({
   });
 
   return (
-    <div className="mb-[30px] mt-4 flex gap-2">
+    <div className="mb-4 mt-2 flex gap-1 overflow-x-auto md:mb-[30px] md:mt-4 md:gap-2">
       {dates.map((date) => {
         const dateStr = date.toISOString().split('T')[0];
         const display = `${date.getMonth() + 1}.${date.getDate()}`;
@@ -37,7 +37,7 @@ const DateOptions = ({
             onClick={() => {
               setStartDate?.(date);
             }}
-            className={`rounded-full border px-3 py-1 text-sm font-semibold text-black hover:bg-primary-100 ${
+            className={`rounded-full border px-2 py-1 text-xs font-semibold text-black hover:bg-primary-100 md:px-3 md:text-sm ${
               isSelected
                 ? 'border-primary-500 bg-primary-100'
                 : 'border-gray-600 bg-white'

@@ -60,7 +60,7 @@ const PopularPlaces = () => {
   // 스켈레톤 & 카드 리스트 생성
   const placeCards = useMemo(() => {
     const items = isFirstLoading
-      ? Array.from({ length: placeCount }, () => ({} as Place))
+      ? Array.from({ length: placeCount }, () => ({}) as Place)
       : places.slice(0, placeCount);
 
     if (!items.length) {

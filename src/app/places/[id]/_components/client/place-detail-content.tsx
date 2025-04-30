@@ -1,6 +1,5 @@
 'use client';
 
-import BookmarkButton from '@/components/features/like/bookmark-button';
 import CategoryBadge from '@/components/commons/category-badge';
 import PlaceImage from '@/components/commons/place-image';
 import PlaceLocation from './place-location';

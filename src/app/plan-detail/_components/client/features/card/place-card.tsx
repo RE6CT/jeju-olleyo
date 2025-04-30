@@ -22,11 +22,6 @@ const ICON_SIZE = {
   height: 20,
 };
 
-const MOBILE_INDEX_SIZE = {
-  width: 14.5,
-  height: 14.5,
-};
-
 const COLORS = {
   ODD: {
     bg: 'bg-primary-500',
@@ -76,7 +71,7 @@ const PlaceCard = ({
   return (
     <div
       className={cn(
-        'flex gap-3 md:w-[640px]',
+        'flex gap-3 md:w-[498px] lg:w-[640px]',
         !isReadOnly && 'cursor-grab active:cursor-grabbing',
         isDragging && 'opacity-50',
       )}

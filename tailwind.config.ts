@@ -141,6 +141,9 @@ const config: Config = {
         'home-gradient':
           'linear-gradient(180deg, rgba(231, 237, 240, 0.60) 0%, rgba(255, 255, 255, 0.00) 100%)',
       },
+      borderWidth: {
+        '0.6': '0.6px',
+      },
     },
   },
   plugins: [require('tailwindcss-animate')],

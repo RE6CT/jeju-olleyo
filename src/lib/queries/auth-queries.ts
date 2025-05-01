@@ -1,8 +1,6 @@
 'use client';
-
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-
 import {
   fetchLogin,
   fetchRegister,
@@ -23,10 +21,8 @@ import {
   EmailFormValues,
   ResetPasswordFormValues,
 } from '@/types/auth.type';
-
 // 사용자 정보 쿼리 키
 export const USER_QUERY_KEY = ['user'];
-
 /**
  * 현재 로그인한 사용자 정보를 가져오는 쿼리 훅
  */
@@ -36,16 +32,13 @@ export const useCurrentUser = (options = {}) => {
     queryFn: async () => {
       try {
         const { user, error } = await fetchGetCurrentUser();
-
         // 세션이 없는 경우 null 반환 (오류로 처리하지 않음)
         if (error?.message?.includes('Auth session missing')) {
           return null;
         }
-
         if (error) {
           throw new Error(error.message);
         }
-
         return user;
       } catch (error) {
         console.error('사용자 정보 조회 실패:', error);
@@ -60,12 +53,12 @@ export const useCurrentUser = (options = {}) => {
     ...options,
   });
 };
-
 /**
  * 로그인 Mutation 훅
  */
 export const useLogin = () => {
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   return useMutation({
     mutationFn: async (values: LoginFormValues) => {
@@ -83,11 +76,15 @@ export const useLogin = () => {
     onSuccess: (user) => {
       // 사용자 정보 캐시 업데이트
       queryClient.setQueryData<typeof user>(USER_QUERY_KEY, user);
-
       // 리다이렉션 처리
       if (typeof window !== 'undefined') {
         const urlParams = new URLSearchParams(window.location.search);
         const redirectTo = urlParams.get('redirectTo');
+<<<<<<<<< Temporary merge branch 1
+=========
+
+        console.log('로그인 성공, 리다이렉트 경로:', redirectTo || PATH.HOME);
+>>>>>>>>> Temporary merge branch 2
 
         // redirectTo 값이 있으면 해당 경로로, 없으면 홈으로 리다이렉트
         if (redirectTo) {
@@ -99,14 +96,12 @@ export const useLogin = () => {
     },
   });
 };
-
 /**
  * 회원가입 Mutation 훅
  */
 export const useRegister = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
-
   return useMutation({
     mutationFn: async (values: RegisterFormValues) => {
       const { error } = await fetchRegister(values);
@@ -118,20 +113,17 @@ export const useRegister = () => {
     onSuccess: () => {
       // 사용자 정보 다시 가져오도록 쿼리 무효화
       queryClient.invalidateQueries({ queryKey: USER_QUERY_KEY });
-
       // 홈으로 리다이렉트
       router.push(PATH.HOME);
     },
   });
 };
-
 /**
  * 로그아웃 Mutation 훅
  */
 export const useLogout = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
-
   return useMutation({
     mutationFn: async () => {
       const { success, error } = await fetchLogout();
@@ -143,16 +135,13 @@ export const useLogout = () => {
     onSuccess: () => {
       // 클라이언트 측 데이터 정리
       clearClientAuthData();
-
       // 캐시에서 사용자 정보 제거
       queryClient.setQueryData(USER_QUERY_KEY, null);
-
-      // 로그인 페이지로 리다이렉트
-      router.push(`${PATH.SIGNIN}?t=logout`);
+      // 홈 페이지로 리다이렉트 (수정된 부분)
+      router.push(PATH.HOME);
     },
   });
 };
-
 /**
  * 비밀번호 재설정 메일 전송 Mutation 훅
  */
@@ -170,7 +159,6 @@ export const useForgotPassword = (options = {}) => {
     ...options,
   });
 };
-
 /**
  * 비밀번호 업데이트 Mutation 훅
  */
@@ -186,7 +174,6 @@ export const useResetPassword = (options = {}) => {
     ...options,
   });
 };
-
 /**
  * 소셜 로그인 URL 가져오기 Mutation 훅
  */

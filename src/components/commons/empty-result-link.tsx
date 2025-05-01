@@ -19,14 +19,14 @@ const EmptyResult = ({
 }) => {
   return (
     <div className="flex w-full flex-col items-center md:h-[387px] md:w-[624.49px]">
-      <div className="w-full">
+      <div className="relative aspect-[16/9] w-full">
         <Image
           src={imagePath}
-          alt="좋아요 없음"
-          width={0}
-          height={0}
-          sizes="100vw"
-          className="h-auto w-full"
+          alt="결과 없음"
+          fill
+          sizes="(max-width: 768px) 100vw, 624px"
+          priority
+          className="object-contain"
         />
       </div>
       <EmptyResultLink href={href} text={buttonText} />

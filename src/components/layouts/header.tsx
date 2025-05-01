@@ -5,14 +5,14 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { PATH } from '@/constants/path.constants';
-import { LoadingSpinner } from '../commons/loading-spinner';
 import Nav from './nav';
 import { Suspense } from 'react';
+import Loading from '@/app/loading';
 
 // SearchBar를 클라이언트 사이드에서만 렌더링
 const SearchBar = dynamic(() => import('./search-bar'), {
   ssr: false,
-  loading: () => <LoadingSpinner />,
+  loading: () => <Loading />,
 });
 
 const Header = () => {
@@ -89,7 +89,7 @@ const Header = () => {
               />
             </Link>
             <div className="hidden w-[335px] md:block">
-              <Suspense fallback={<LoadingSpinner />}>
+              <Suspense fallback={<Loading />}>
                 <SearchBar />
               </Suspense>
             </div>
@@ -136,7 +136,7 @@ const Header = () => {
           </Link>
           {/* 검색바 */}
           <div className="w-[310px] sm:w-[251px] md:w-[335px]">
-            <Suspense fallback={<LoadingSpinner />}>
+            <Suspense fallback={<Loading />}>
               <SearchBar />
             </Suspense>
           </div>

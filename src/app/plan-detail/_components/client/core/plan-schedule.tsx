@@ -199,6 +199,7 @@ const PlanSchedule = memo(() => {
   const activeTab = usePlanActiveTab();
   const setActiveTab = usePlanSetActiveTab();
   const isReadOnly = usePlanIsReadOnly();
+  const { setIsSaveModalOpen, setIsPublicModalOpen } = useScheduleModalStore();
 
   const { setIsDeleteModalOpen, dayToDelete, setDayToDelete } =
     useScheduleModalStore();
@@ -215,6 +216,10 @@ const PlanSchedule = memo(() => {
       dayToDelete,
       setDayToDelete,
     );
+
+  const handleSaveButtonClick = () => {
+    setIsSaveModalOpen(true);
+  };
 
   const dayCount = calculateTotalDays(startDate, endDate);
 
@@ -375,6 +380,16 @@ const PlanSchedule = memo(() => {
                         </div>
                       </div>
                     ),
+                  )}
+                  {!isReadOnly && (
+                    <div className="sticky bottom-0 left-0 right-0 z-50 mt-4 flex w-full justify-center bg-white p-4 md:hidden">
+                      <Button
+                        onClick={handleSaveButtonClick}
+                        className="w-full rounded-[12px] bg-primary-500 p-[10px] text-white hover:bg-primary-600"
+                      >
+                        저장하기
+                      </Button>
+                    </div>
                   )}
                 </div>
               ) : (

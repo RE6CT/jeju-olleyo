@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import Link from 'next/link';
 
 import Duration from '@/components/commons/duration';
@@ -60,21 +59,26 @@ const PlanHorizontalCard = ({
         <div className="relative">
           {/* 드롭다운 메뉴 */}
           {onDelete && (
-            <PlanDropdown plan={plan} onDelete={onDelete}>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
-              >
-                <img
-                  src="/icons/option.svg"
-                  alt="option"
-                  width={16}
-                  height={16}
-                  className="h-4 w-4"
-                />
-              </Button>
-            </PlanDropdown>
+            <div
+              className="absolute right-0"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <PlanDropdown plan={plan} onDelete={onDelete}>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                >
+                  <img
+                    src="/icons/option.svg"
+                    alt="option"
+                    width={16}
+                    height={16}
+                    className="h-4 w-4"
+                  />
+                </Button>
+              </PlanDropdown>
+            </div>
           )}
         </div>
 

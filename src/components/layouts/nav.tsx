@@ -25,12 +25,7 @@ const Nav = () => {
   const { showQuestion } = useAlert();
   const [popoverOpen, setPopoverOpen] = useState(false);
 
-  const handleAuthRequiredAction = (
-    e: React.MouseEvent,
-    redirectPath: string,
-  ) => {
-    e.preventDefault(); // 기본 링크 동작 방지
-
+  const handleAuthRequiredAction = (redirectPath: string) => {
     // 로그인 체크
     if (!user) {
       showQuestion(
@@ -92,27 +87,27 @@ const Nav = () => {
               align="end"
               style={{ gap: 0 }}
             >
-              <Link
-                href="#"
+              <button
+                type="button"
                 className="flex w-[120px] items-center justify-center gap-[10px] rounded-[8px] px-0 py-2 text-black transition-colors hover:bg-primary-100 hover:text-[#FF8533]"
-                onClick={(e) => {
+                onClick={() => {
                   setPopoverOpen(false);
-                  handleAuthRequiredAction(e, PATH.PLAN_NEW);
+                  handleAuthRequiredAction(PATH.PLAN_NEW);
                 }}
               >
                 내 일정 만들기
-              </Link>
+              </button>
               <div className="my-1 h-px w-full bg-[#E7EDF0]" />
-              <a
-                href="#"
+              <button
+                type="button"
                 className="flex w-[120px] items-center justify-center gap-[10px] rounded-[8px] px-0 py-2 text-black transition-colors hover:bg-primary-100 hover:text-[#FF8533]"
-                onClick={(e) => {
+                onClick={() => {
                   setPopoverOpen(false);
-                  handleAuthRequiredAction(e, PATH.MYPLAN);
+                  handleAuthRequiredAction(PATH.MYPLAN);
                 }}
               >
                 지난 일정 보기
-              </a>
+              </button>
             </PopoverContent>
           </Popover>
           <Link href={PATH.COMMUNITY}>커뮤니티</Link>

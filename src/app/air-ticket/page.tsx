@@ -79,6 +79,7 @@ const FlightSearch = () => {
       }
       if (
         flightsToSave.length > 1 &&
+        formatDateToString(startDate) === formatDateToString(endDate) &&
         flightsToSave[0].arrPlandTime > flightsToSave[1].depPlandTime
       )
         return dateAlert('가는편의 도착시간이 오는편의 출발시간보다 빨라요!');

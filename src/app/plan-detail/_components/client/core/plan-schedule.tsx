@@ -228,56 +228,66 @@ const PlanSchedule = memo(() => {
   );
 
   const handleAddPlace = (place: Place, activeTab: string | number) => {
-    const uniqueId = nanoid();
-    const newPlaceWithId = { ...place, uniqueId } as PlaceWithUniqueId;
+    try {
+      const uniqueId = nanoid();
+      const newPlaceWithId = { ...place, uniqueId } as PlaceWithUniqueId;
 
-    if (typeof activeTab === 'string') {
-      // 전체보기 상태일 때는 첫 번째 날짜에 추가
-      const firstDay = 1;
-      const currentDayPlaces = dayPlaces[firstDay] || [];
+      if (typeof activeTab === 'string') {
+        // 전체보기 상태일 때는 첫 번째 날짜에 추가
+        const firstDay = 1;
+        const currentDayPlaces = dayPlaces[firstDay] || [];
 
-      // 동일한 장소가 이미 있는지 확인
-      const isDuplicate = currentDayPlaces.some(
-        (p) => p.placeId === place.placeId,
-      );
+        // 동일한 장소가 이미 있는지 확인
+        const isDuplicate = currentDayPlaces.some(
+          (p) => p.placeId === place.placeId,
+        );
 
-      if (isDuplicate) {
-        toast({
-          title: '장소 추가 실패',
-          description: '이미 추가된 장소입니다.',
-          variant: 'destructive',
-        });
-        return;
+        if (isDuplicate) {
+          toast({
+            title: '장소 추가 실패',
+            description: '이미 추가된 장소입니다.',
+            variant: 'destructive',
+          });
+          return;
+        }
+
+        const updatedDayPlaces = {
+          ...dayPlaces,
+          [firstDay]: [...currentDayPlaces, newPlaceWithId],
+        };
+        setDayPlaces(updatedDayPlaces);
+      } else {
+        // 특정 날짜가 선택된 상태
+        const currentDayPlaces = dayPlaces[activeTab] || [];
+
+        // 동일한 장소가 이미 있는지 확인
+        const isDuplicate = currentDayPlaces.some(
+          (p) => p.placeId === place.placeId,
+        );
+
+        if (isDuplicate) {
+          toast({
+            title: '장소 추가 실패',
+            description: '이미 추가된 장소입니다.',
+            variant: 'destructive',
+          });
+          return;
+        }
+
+        const updatedDayPlaces = {
+          ...dayPlaces,
+          [activeTab]: [...currentDayPlaces, newPlaceWithId],
+        };
+        setDayPlaces(updatedDayPlaces);
       }
-
-      const updatedDayPlaces = {
-        ...dayPlaces,
-        [firstDay]: [...currentDayPlaces, newPlaceWithId],
-      };
-      setDayPlaces(updatedDayPlaces);
-    } else {
-      // 특정 날짜가 선택된 상태
-      const currentDayPlaces = dayPlaces[activeTab] || [];
-
-      // 동일한 장소가 이미 있는지 확인
-      const isDuplicate = currentDayPlaces.some(
-        (p) => p.placeId === place.placeId,
-      );
-
-      if (isDuplicate) {
-        toast({
-          title: '장소 추가 실패',
-          description: '이미 추가된 장소입니다.',
-          variant: 'destructive',
-        });
-        return;
-      }
-
-      const updatedDayPlaces = {
-        ...dayPlaces,
-        [activeTab]: [...currentDayPlaces, newPlaceWithId],
-      };
-      setDayPlaces(updatedDayPlaces);
+    } catch (error) {
+      console.error('장소 추가 중 오류 발생:', error);
+      toast({
+        title: '장소 추가 실패',
+        description:
+          '장소 추가 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
+        variant: 'destructive',
+      });
     }
   };
 

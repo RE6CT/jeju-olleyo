@@ -49,7 +49,7 @@ const PlaceCardSidemenu = ({
 
   return (
     <>
-      <div className="lg:w-[240px]` flex w-[240px] items-center justify-between md:w-[182px]">
+      <div className="flex w-[240px] items-center justify-between md:w-[182px] lg:w-[240px]">
         <div className="flex items-center gap-3">
           {/* 장소 이미지 */}
           <div

@@ -132,7 +132,7 @@ export const usePlanMap = ({
             typeof position.lat !== 'number' ||
             typeof position.lng !== 'number'
           ) {
-            setError('잘못된 위치 정보입니다.');
+            setError('잘못된 위치 정보입니다. 장소를 다시 확인해주세요.');
             return null;
           }
 
@@ -233,7 +233,10 @@ export const usePlanMap = ({
         const prevSummary = usePlanStore.getState().routeSummary;
         setRouteSummary({ ...prevSummary, [day]: placeSummaries });
       } catch (error) {
-        setError('경로 검색에 실패했습니다.');
+        console.error('경로 검색 중 오류 발생:', error);
+        setError('경로 검색에 실패했습니다. 잠시 후 다시 시도해주세요.');
+        // 경로 검색 실패 시 빈 경로로 설정
+        setPaths((prev) => ({ ...prev, [day]: [] }));
       }
     },
     [map, routeCache, setRouteSummary],
@@ -302,6 +305,13 @@ export const usePlanMap = ({
       isMounted = false;
     };
   }, [dayPlaces, activeTab, map, getMarkersToShow, adjustMapView, searchRoute]);
+
+  // 에러 상태 초기화
+  useEffect(() => {
+    if (map) {
+      setError(null);
+    }
+  }, [map]);
 
   return {
     map,

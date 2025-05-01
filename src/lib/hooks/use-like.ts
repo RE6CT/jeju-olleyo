@@ -1,15 +1,12 @@
 'use client';
 
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { getCurrentSession } from '../apis/auth/auth-browser.api';
 import fetchUpdateLikeByUserId from '../apis/like/add-like.api';
 import fetchDeleteLike from '../apis/like/delete-like.api';
 import { fetchgetSingleLike } from '../apis/like/get-like.api';
 import { useInvalidateLikes } from '../mutations/use-like-mutation';
-import useAlert from './use-alert';
 
 import useCustomToast from './use-custom-toast';
-import { PATH } from '@/constants/path.constants';
 
 /**
  * 좋아요 토글 함수를 반환하는 커스텀 훅
@@ -19,17 +16,6 @@ import { PATH } from '@/constants/path.constants';
 const useToggleLike = (planId: number) => {
   const { invalidateLikes } = useInvalidateLikes();
   const { successToast } = useCustomToast();
-  const { showQuestion } = useAlert();
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  /** 현재 전체 URL 가져오기 (쿼리 파라미터 포함) */
-  const getCurrentUrl = () => {
-    const params = new URLSearchParams(searchParams.toString());
-    const queryString = params.toString();
-    return `${pathname}${queryString ? `?${queryString}` : ''}`;
-  };
 
   const toggleLike = async () => {
     try {
@@ -37,18 +23,8 @@ const useToggleLike = (planId: number) => {
       const userId = sessionUser?.id;
 
       if (!userId) {
-        const currentUrl = getCurrentUrl();
-        showQuestion(
-          '로그인 필요',
-          '일정을 만들기 위해서는 로그인이 필요합니다.\n로그인 페이지로 이동하시겠습니까?',
-          {
-            onConfirm: () =>
-              router.push(
-                `${PATH.SIGNIN}?redirectTo=${encodeURIComponent(currentUrl)}`,
-              ),
-            onCancel: () => {},
-          },
-        );
+        successToast('로그인이 필요합니다.');
+
         return;
       }
 

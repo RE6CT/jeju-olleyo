@@ -11,6 +11,9 @@ import { PATH } from '@/constants/path.constants';
 import { Input } from '../ui/input';
 import SearchIcon from '../icons/search-icon';
 import CloseIcon from '../icons/close-icon';
+import useCustomToast from '@/lib/hooks/use-custom-toast';
+
+const MAX_QUERY_LENGTH = 50;
 
 /**
  * 반응형 검색바 컴포넌트
@@ -28,6 +31,8 @@ const SearchBar = () => {
   const searchParams = useSearchParams();
   const queryFromUrl = searchParams.get('query') ?? '';
   const [inputValue, setInputValue] = useState(queryFromUrl);
+
+  const { successToast } = useCustomToast();
 
   const category = params.category ?? 'all';
 
@@ -49,6 +54,12 @@ const SearchBar = () => {
 
   const handleSearch = () => {
     const query = inputValue.trim();
+    if (query.length > MAX_QUERY_LENGTH) {
+      successToast(`검색어는 ${MAX_QUERY_LENGTH}자를 넘을 수 없습니다.`);
+      setInputValue('');
+      return;
+    }
+
     if (query) {
       handleAddKeyword(query);
       router.push(`${PATH.SEARCH}/${category}?query=${query}`);

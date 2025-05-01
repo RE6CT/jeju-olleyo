@@ -1,6 +1,6 @@
 'use client';
 
-import PlanHorizontalCard from '@/components/features/card/plan-horizontal_card';
+import PlanHorizontalCard from '@/components/features/card/plan-horizontal-card';
 import useAuth from '@/lib/hooks/use-auth';
 import { useGetDataCount } from '@/lib/queries/use-get-data-count';
 import { Plan } from '@/types/plan.type';

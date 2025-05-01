@@ -403,8 +403,8 @@ export const fetchUploadPlanImage = async (
   const { error: uploadError } = await supabase.storage
     .from('plan-images')
     .upload(filePath, file, {
-      cacheControl: '3600',
-      upsert: false,
+      cacheControl: '0',
+      upsert: true, // 동일 파일명으로 업로드할 때 덮어쓰기 가능하도록
     });
 
   if (uploadError) {
@@ -414,7 +414,9 @@ export const fetchUploadPlanImage = async (
   // 업로드된 이미지의 공개 URL 가져오기
   const {
     data: { publicUrl },
-  } = supabase.storage.from('plan-images').getPublicUrl(filePath);
+  } = supabase.storage.from('plan-images').getPublicUrl(filePath, {
+    download: false, // 파일 다운로드 없이 공개 URL만 가져오도록
+  });
 
   // 데이터베이스에 이미지 URL 업데이트
   const { error: updateError } = await supabase

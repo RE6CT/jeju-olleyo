@@ -206,8 +206,9 @@ const PlanHeader = memo(() => {
               src={previewImage}
               alt="썸네일"
               fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+              sizes="(max-width: 768px) 110px, (max-width: 1200px) 252px, 252px"
               className="object-cover object-center"
+              unoptimized
             />
           ) : (
             <>

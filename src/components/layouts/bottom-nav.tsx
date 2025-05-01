@@ -71,6 +71,44 @@ const BottomNav = () => {
     setIsOpen(!isOpen);
   };
 
+  const handleMyPlanGo = () => {
+    if (!isAuthenticated) {
+      const currentUrl = getCurrentUrl();
+      showQuestion(
+        '로그인 필요',
+        '일정을 만들기 위해서는 로그인이 필요합니다.\n로그인 페이지로 이동하시겠습니까?',
+        {
+          onConfirm: () =>
+            router.push(
+              `${PATH.SIGNIN}?redirectTo=${encodeURIComponent(currentUrl)}`,
+            ),
+          onCancel: () => {},
+        },
+      );
+      return;
+    }
+    router.push(PATH.MYPLAN);
+  };
+
+  const handleMyPlanNew = () => {
+    if (!isAuthenticated) {
+      const currentUrl = getCurrentUrl();
+      showQuestion(
+        '로그인 필요',
+        '일정을 만들기 위해서는 로그인이 필요합니다.\n로그인 페이지로 이동하시겠습니까?',
+        {
+          onConfirm: () =>
+            router.push(
+              `${PATH.SIGNIN}?redirectTo=${encodeURIComponent(currentUrl)}`,
+            ),
+          onCancel: () => {},
+        },
+      );
+      return;
+    }
+    router.push(PATH.PLAN_NEW);
+  };
+
   /**
    * 모달에서 링크 클릭 시 실행되는 이벤트 핸들러
    * @param path - 해당 링크의 path ("account", "bookmarks" 등)
@@ -108,13 +146,13 @@ const BottomNav = () => {
           커뮤니티
         </span>
       </Link>
-      <Link href={PATH.PLAN_NEW} className={LINK_STYLE}>
+      <button onClick={handleMyPlanNew} className={LINK_STYLE}>
         <div className="rounded-full bg-primary-500">
           <AddIcon fill="white" size={31} />
         </div>
         <span className="text-gray-300">일정 작성</span>
-      </Link>
-      <Link href={PATH.MYPLAN} className={LINK_STYLE}>
+      </button>
+      <button onClick={handleMyPlanGo} className={LINK_STYLE}>
         <CalendarIcon
           fill={firstPath === PATH.MYPLAN ? 'primary-300' : 'gray-300'}
           size={24}
@@ -124,7 +162,7 @@ const BottomNav = () => {
         >
           내 여행
         </span>
-      </Link>
+      </button>
       <div className="relative">
         <button
           className={LINK_STYLE}

@@ -29,7 +29,7 @@ const PlaceSidemenuLayout = ({
     <div className="space-y-3 md:w-[182px] lg:w-[240px]">
       {/* 섹션 제목 */}
       {isBookmarkSection && (
-        <div className="flex items-center justify-center gap-2 md:px-3 md:py-[9px] lg:px-4 lg:py-3">
+        <div className="flex items-center justify-center gap-0 md:px-3 md:py-[9px] lg:px-4 lg:py-3">
           <span className="semibold-16">내가 북마크한 장소</span>
           {onToggleExpand && (
             <button

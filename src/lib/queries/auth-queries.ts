@@ -91,7 +91,6 @@ export const useLogin = () => {
 
         // redirectTo 값이 있으면 해당 경로로, 없으면 홈으로 리다이렉트
         if (redirectTo) {
-          // Next.js router 대신 직접 window.location 사용
           window.location.href = redirectTo;
         } else {
           window.location.href = PATH.HOME;

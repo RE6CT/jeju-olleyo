@@ -59,6 +59,7 @@ const SearchSidemenu = ({
   const listRef = useRef<HTMLDivElement>(null);
   const searchTimeoutRef = useRef<NodeJS.Timeout>();
   const [containerHeight, setContainerHeight] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
 
   const { data: user } = useCurrentUser();
   const userId = user?.id || null;
@@ -167,8 +168,21 @@ const SearchSidemenu = ({
     fetchData();
   }, [userId]);
 
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
+  }, []);
+
   const handleAddPlace = (place: Place) => {
-    if (selectedDay === null) {
+    if (!isMobile && selectedDay === null) {
       setIsDaySelectModalOpen(true);
       return;
     }

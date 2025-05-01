@@ -32,14 +32,14 @@ const PlanMap = memo(() => {
   return (
     <div className="h-[121px] w-full overflow-hidden rounded-[12px] md:h-[228px]">
       {isLoading && <Loading />}
-      {error && <ErrorMessage message={error} />}
       <KakaoMap
         {...DEFAULT_MAP_OPTIONS}
         onMapLoad={handleMapLoad}
         onError={handleMapError}
       />
-      {map && !isLoading && !error && (
+      {map && !isLoading && (
         <>
+          {error && <ErrorMessage message={error} />}
           <Clusterer
             map={map}
             markers={markers}

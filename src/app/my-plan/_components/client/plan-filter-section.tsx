@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import Loading from '@/app/loading';
-import PlanHorizontalCard from '@/components/features/card/plan-horizontal_card';
+import PlanHorizontalCard from '@/components/features/card/plan-horizontal-card';
 import { Button } from '@/components/ui/button';
 import Pagination from '@/components/ui/pagination';
 import {
@@ -240,7 +240,6 @@ const PlanFilterSection = ({
                   <PlanHorizontalCard
                     plan={plan}
                     nickname={userNickname}
-                    onEdit={handleEdit}
                     onDelete={() => handleDelete(plan.planId)}
                   />
                 </div>

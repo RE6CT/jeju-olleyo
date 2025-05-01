@@ -35,6 +35,9 @@ const Header = () => {
     pathname.includes(PATH.COMMENTS.substring(1)) ||
     pathname.includes(PATH.RESERVATIONS.substring(1));
 
+  // 장소상세페이지인지 체크
+  const isPlaceDetailPage = pathname.includes(PATH.PLACES.substring(1));
+
   // 로그인 페이지에서는 무조건 헤더를 숨김
   if (isSignInPage) {
     return null;
@@ -57,6 +60,42 @@ const Header = () => {
             className="object-cover"
           />
         </Link>
+      </header>
+    );
+  }
+
+  // 장소 상세 페이지 & 모바일이면 숨김 (md 이상에서는 보여줌)
+  if (isPlaceDetailPage) {
+    return (
+      <header className="hidden flex-col md:flex">
+        <div className="mb-[19px] mt-3 flex h-fit w-full items-center justify-between gap-2 bg-transparent px-4 md:my-0 md:h-[64px] md:bg-white md:px-7 lg:h-[86px] lg:px-9">
+          <div className="flex items-center gap-[13px] md:gap-[30px] lg:gap-[42px]">
+            <Link href={PATH.HOME} className="flex-shrink-0">
+              <Image
+                src="/logo/color_logo.png"
+                alt="로고"
+                width={116}
+                height={61}
+                priority
+                className="hidden object-cover lg:block"
+              />
+              <Image
+                src="/logo/color_logo.png"
+                alt="로고"
+                width={86.7}
+                height={45.1}
+                priority
+                className="hidden object-cover md:block lg:hidden"
+              />
+            </Link>
+            <div className="hidden w-[335px] md:block">
+              <Suspense fallback={<LoadingSpinner />}>
+                <SearchBar />
+              </Suspense>
+            </div>
+          </div>
+          <Nav />
+        </div>
       </header>
     );
   }

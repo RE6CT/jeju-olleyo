@@ -234,16 +234,48 @@ const PlanSchedule = memo(() => {
     if (typeof activeTab === 'string') {
       // 전체보기 상태일 때는 첫 번째 날짜에 추가
       const firstDay = 1;
+      const currentDayPlaces = dayPlaces[firstDay] || [];
+
+      // 동일한 장소가 이미 있는지 확인
+      const isDuplicate = currentDayPlaces.some(
+        (p) => p.placeId === place.placeId,
+      );
+
+      if (isDuplicate) {
+        toast({
+          title: '장소 추가 실패',
+          description: '이미 추가된 장소입니다.',
+          variant: 'destructive',
+        });
+        return;
+      }
+
       const updatedDayPlaces = {
         ...dayPlaces,
-        [firstDay]: [...(dayPlaces[firstDay] || []), newPlaceWithId],
+        [firstDay]: [...currentDayPlaces, newPlaceWithId],
       };
       setDayPlaces(updatedDayPlaces);
     } else {
       // 특정 날짜가 선택된 상태
+      const currentDayPlaces = dayPlaces[activeTab] || [];
+
+      // 동일한 장소가 이미 있는지 확인
+      const isDuplicate = currentDayPlaces.some(
+        (p) => p.placeId === place.placeId,
+      );
+
+      if (isDuplicate) {
+        toast({
+          title: '장소 추가 실패',
+          description: '이미 추가된 장소입니다.',
+          variant: 'destructive',
+        });
+        return;
+      }
+
       const updatedDayPlaces = {
         ...dayPlaces,
-        [activeTab]: [...(dayPlaces[activeTab] || []), newPlaceWithId],
+        [activeTab]: [...currentDayPlaces, newPlaceWithId],
       };
       setDayPlaces(updatedDayPlaces);
     }

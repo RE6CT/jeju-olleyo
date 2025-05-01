@@ -166,9 +166,18 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(url);
     }
 
-    // 이미 인증된 사용자가 로그인/회원가입 페이지에 접근할 경우 홈으로 리다이렉트
+    // 이미 인증된 사용자가 로그인/회원가입 페이지에 접근할 경우 처리
     if (session && isAuthPage) {
-      return NextResponse.redirect(new URL(PATH.HOME, request.url));
+      // redirectTo 쿼리 파라미터가 있는지 확인
+      const redirectTo = request.nextUrl.searchParams.get('redirectTo');
+
+      if (redirectTo) {
+        // redirectTo 파라미터가 있으면 해당 URL로 리다이렉트
+        return NextResponse.redirect(new URL(redirectTo, request.url));
+      } else {
+        // redirectTo 파라미터가 없으면 기본적으로 홈으로 리다이렉트
+        return NextResponse.redirect(new URL(PATH.HOME, request.url));
+      }
     }
 
     if (pathname === PATH.BOOKMARKS) {

@@ -1,9 +1,12 @@
 'use client';
 
 import { Input } from '@/components/ui/input';
+import { PATH } from '@/constants/path.constants';
+import useAlert from '@/lib/hooks/use-alert';
 import useAuth from '@/lib/hooks/use-auth';
 import useCustomToast from '@/lib/hooks/use-custom-toast';
 import { useAddComment } from '@/lib/mutations/use-comment-mutation';
+import { usePathname, useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
 
 /**
@@ -14,12 +17,32 @@ const CommentInput = ({ planId }: { planId: number }) => {
   const { mutate } = useAddComment();
   const { successToast } = useCustomToast();
   const [inputText, setInputText] = useState<string>('');
+  const { showQuestion } = useAlert();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  /** 현재 전체 URL 가져오기 (window 객체 사용) */
+  const getCurrentUrl = () => {
+    if (typeof window === 'undefined') return pathname;
+    return window.location.pathname + window.location.search;
+  };
 
   /** 댓글 등록 버튼 이벤트 핸들러 */
   const handleRegisteCommentrButtonClick = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!user) {
-      successToast('로그인이 필요합니다.');
+      const currentUrl = getCurrentUrl();
+      showQuestion(
+        '로그인 필요',
+        '일정을 만들기 위해서는 로그인이 필요합니다.\n로그인 페이지로 이동하시겠습니까?',
+        {
+          onConfirm: () =>
+            router.push(
+              `${PATH.SIGNIN}?redirectTo=${encodeURIComponent(currentUrl)}`,
+            ),
+          onCancel: () => {},
+        },
+      );
       return;
     }
     if (inputText === '') {

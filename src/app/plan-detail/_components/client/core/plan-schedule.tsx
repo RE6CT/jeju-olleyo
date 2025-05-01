@@ -521,7 +521,7 @@ const PlanSchedule = memo(() => {
                 </div>
               )
             ) : (
-              <div className="mr-10 flex h-full w-full items-center justify-center rounded-[12px] border border-dashed border-gray-200 py-4 text-14 text-gray-300">
+              <div className="mr-2 flex h-full w-full items-center justify-center rounded-[12px] border border-dashed border-gray-200 py-4 text-14 text-gray-300">
                 여행 기간을 선택해 주세요
               </div>
             )}

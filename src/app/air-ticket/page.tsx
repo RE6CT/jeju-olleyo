@@ -1,6 +1,7 @@
 'use client';
 import axios from 'axios';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { DEPARTURE_LIST } from '@/constants/ticket.constants';
 import useAlertStore from '@/zustand/alert.store';
@@ -20,6 +21,8 @@ import {
 import { getBrowserClient } from '@/lib/supabase/client';
 import { useCurrentUser } from '@/lib/queries/auth-queries';
 import useCustomToast from '@/lib/hooks/use-custom-toast';
+import useAlert from '@/lib/hooks/use-alert';
+import { PATH } from '@/constants/path.constants';
 
 const FlightSearch = () => {
   const [departure, setDeparture] = useState('');
@@ -39,10 +42,21 @@ const FlightSearch = () => {
   const { open } = useAlertStore();
   const { data: user } = useCurrentUser();
   const { successToast } = useCustomToast();
+  const { showQuestion } = useAlert();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const totalPrice =
     125000 * (selectedGoFlight ? 1 : 0) +
     125000 * (selectedReturnFlight ? 1 : 0);
+
+  /** 현재 전체 URL 가져오기 (쿼리 파라미터 포함) */
+  const getCurrentUrl = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    const queryString = params.toString();
+    return `${pathname}${queryString ? `?${queryString}` : ''}`;
+  };
 
   const dateAlert = (message: string) => {
     open({
@@ -64,7 +78,21 @@ const FlightSearch = () => {
   const handleReserve = async () => {
     const supabase = getBrowserClient();
 
-    if (!user) return alert('로그인이 필요합니다!');
+    if (!user) {
+      const currentUrl = getCurrentUrl();
+      showQuestion(
+        '로그인 필요',
+        '일정을 만들기 위해서는 로그인이 필요합니다.\n로그인 페이지로 이동하시겠습니까?',
+        {
+          onConfirm: () =>
+            router.push(
+              `${PATH.SIGNIN}?redirectTo=${encodeURIComponent(currentUrl)}`,
+            ),
+          onCancel: () => {},
+        },
+      );
+      return;
+    }
 
     const flightsToSave = [selectedGoFlight, selectedReturnFlight].filter(
       (flight): flight is Flight => flight !== null,

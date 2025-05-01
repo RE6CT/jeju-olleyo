@@ -45,6 +45,19 @@ const useAuthCheck = ({
       return;
     }
 
+    // login 페이지에서 redirectTo 파라미터가 있는 경우 리다이렉션 로직 건너뛰기
+    if (typeof window !== 'undefined') {
+      const isLoginPage = window.location.pathname.includes('/sign-in');
+      const hasRedirectParam = new URLSearchParams(window.location.search).has(
+        'redirectTo',
+      );
+
+      if (isLoginPage && hasRedirectParam) {
+        setIsChecked(true);
+        return;
+      }
+    }
+
     // 오류가 발생했거나 로딩이 완료된 경우 적절한 리다이렉션 처리
     if (isAuthenticated && redirectIfFound) {
       router.push(redirectTo);

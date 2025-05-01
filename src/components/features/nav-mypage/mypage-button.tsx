@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useRef, useState } from 'react';
 
 import { PATH } from '@/constants/path.constants';
@@ -9,6 +9,7 @@ import useClickOutside from '@/lib/hooks/use-click-outside';
 import { ModalPath } from '@/types/mypage.type';
 
 import MypageModal from './mypage-modal';
+import useAlert from '@/lib/hooks/use-alert';
 
 /**
  * 헤더 nav 내부의 마이페이지 모달 오픈 버튼
@@ -20,6 +21,16 @@ const MypageButton = ({ userId }: { userId: string }) => {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const router = useRouter();
   const { isAuthenticated } = useAuthCheck();
+  const { showQuestion } = useAlert();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  /** 현재 전체 URL 가져오기 (쿼리 파라미터 포함) */
+  const getCurrentUrl = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    const queryString = params.toString();
+    return `${pathname}${queryString ? `?${queryString}` : ''}`;
+  };
 
   /** 모달을 닫는 함수 (isOpen-false) */
   const setClose = () => setIsOpen(false);
@@ -33,8 +44,18 @@ const MypageButton = ({ userId }: { userId: string }) => {
    */
   const handleMypageModalToggle = () => {
     if (!isAuthenticated) {
-      // 로그인되지 않은 경우 로그인 페이지로 리다이렉트
-      router.push(PATH.SIGNIN);
+      const currentUrl = getCurrentUrl();
+      showQuestion(
+        '로그인 필요',
+        '일정을 만들기 위해서는 로그인이 필요합니다.\n로그인 페이지로 이동하시겠습니까?',
+        {
+          onConfirm: () =>
+            router.push(
+              `${PATH.SIGNIN}?redirectTo=${encodeURIComponent(currentUrl)}`,
+            ),
+          onCancel: () => {},
+        },
+      );
       return;
     }
     setIsOpen(!isOpen);

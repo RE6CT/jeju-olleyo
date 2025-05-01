@@ -26,8 +26,8 @@ const LoginPage = () => {
   const { handleLogin, isLoading, error } = useAuth();
   const { savedEmail } = useRememberEmail();
   const [shouldCheckAuth, setShouldCheckAuth] = useState(true);
-  const searchParams = useSearchParams();
   const [isClient, setIsClient] = useState(false);
+  const searchParams = useSearchParams();
 
   // 클라이언트 사이드 렌더링 확인
   useEffect(() => {
@@ -54,7 +54,7 @@ const LoginPage = () => {
 
   // 로그인 폼 제출 핸들러
   const handleSubmit = async (data: LoginFormValues) => {
-    await handleLogin(data);
+    await handleLogin({ ...data, redirectTo });
   };
 
   // 로딩 중이거나 이미 로그인된 경우 로딩 표시

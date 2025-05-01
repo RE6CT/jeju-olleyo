@@ -21,19 +21,19 @@ const useAuth = () => {
 
   // 이메일 로그인 처리 함수
   const handleLogin = useCallback(
-    async (values: LoginFormValues) => {
+    async (values: LoginFormValues & { redirectTo?: string }) => {
       setError(null);
 
       try {
-        await loginMutation.mutateAsync(values);
+        await loginMutation.mutateAsync({
+          email: values.email,
+          password: values.password,
+          remember: values.remember,
+          redirectTo: values.redirectTo,
+        });
         return true;
       } catch (error) {
-        setError(
-          error instanceof Error
-            ? error.message
-            : '로그인 중 오류가 발생했습니다.',
-        );
-        return false;
+        // 오류 처리...
       }
     },
     [loginMutation],

@@ -7,7 +7,7 @@ import CommunityIcon from '../icons/community-icon';
 import AddIcon from '../icons/add-icon';
 import CalendarIcon from '../icons/calendar-icon';
 import MypageIcon from '../icons/mypage-icon';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useRef, useState } from 'react';
 import useClickOutside from '@/lib/hooks/use-click-outside';
 import useAuthCheck from '@/lib/hooks/use-auth-check';
@@ -15,6 +15,7 @@ import { ModalPath } from '@/types/mypage.type';
 import MypageModal from '../features/nav-mypage/mypage-modal';
 import useAuth from '@/lib/hooks/use-auth';
 import { MYPAGE_PATH_LIST } from '@/constants/mypage.constants';
+import useAlert from '@/lib/hooks/use-alert';
 
 const LINK_STYLE =
   'flex h-[57px] w-[52px] flex-col items-center justify-end gap-[7px] regular-12';
@@ -22,6 +23,7 @@ const LINK_STYLE =
 /** 모바일 버전에서 나타나는 바텀 탭 */
 const BottomNav = () => {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const firstPath = '/' + pathname.split('/')[1];
   const router = useRouter();
 
@@ -33,6 +35,14 @@ const BottomNav = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const modalRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const { showQuestion } = useAlert();
+
+  /** 현재 전체 URL 가져오기 (쿼리 파라미터 포함) */
+  const getCurrentUrl = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    const queryString = params.toString();
+    return `${pathname}${queryString ? `?${queryString}` : ''}`;
+  };
 
   /** 모달을 닫는 함수 (isOpen-false) */
   const setClose = () => setIsOpen(false);
@@ -46,8 +56,18 @@ const BottomNav = () => {
    */
   const handleMypageModalToggle = () => {
     if (!isAuthenticated) {
-      // 로그인되지 않은 경우 로그인 페이지로 리다이렉트
-      router.push(PATH.SIGNIN);
+      const currentUrl = getCurrentUrl();
+      showQuestion(
+        '로그인 필요',
+        '일정을 만들기 위해서는 로그인이 필요합니다.\n로그인 페이지로 이동하시겠습니까?',
+        {
+          onConfirm: () =>
+            router.push(
+              `${PATH.SIGNIN}?redirectTo=${encodeURIComponent(currentUrl)}`,
+            ),
+          onCancel: () => {},
+        },
+      );
       return;
     }
     setIsOpen(!isOpen);

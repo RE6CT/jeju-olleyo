@@ -66,7 +66,6 @@ export const useCurrentUser = (options = {}) => {
  */
 export const useLogin = () => {
   const queryClient = useQueryClient();
-  const router = useRouter();
 
   return useMutation({
     mutationFn: async (values: LoginFormValues) => {

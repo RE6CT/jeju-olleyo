@@ -69,6 +69,14 @@ const PlanHeader = memo(() => {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
+  // 새 일정을 만들 때 DatePicker 초기화
+  useEffect(() => {
+    if (!planId) {
+      setStartDate(null);
+      setEndDate(null);
+    }
+  }, [planId, setStartDate, setEndDate]);
+
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);

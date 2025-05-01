@@ -53,14 +53,14 @@ const PlaceCardSidemenu = ({
         <div className="flex items-center gap-3">
           {/* 장소 이미지 */}
           <div
-            className={`h-[40px] w-[40px] overflow-hidden rounded-[4px] md:h-[30px] md:w-[30px] lg:h-[40px] lg:w-[40px] ${!imageUrl && 'bg-gray-200'}`}
+            className={`relative h-[40px] w-[40px] min-w-[40px] overflow-hidden rounded-[4px] md:h-[30px] md:w-[30px] md:min-w-[30px] lg:h-[40px] lg:w-[40px] lg:min-w-[40px] ${!imageUrl && 'bg-gray-200'}`}
           >
             <Image
               src={displayImageUrl}
               alt=""
-              width={PLACE_IMAGE_SIZE.width}
-              height={PLACE_IMAGE_SIZE.height}
-              className="h-full w-full object-cover"
+              fill
+              sizes="(max-width: 768px) 30px, 40px"
+              className="absolute inset-0 object-cover"
               onError={handleImageLoadError}
             />
           </div>

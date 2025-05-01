@@ -20,8 +20,17 @@ const PlanVerticalCard = ({
   onEdit,
   onDelete,
 }: PlanVerticalCardProps) => {
+  const handleCardClick = (e: React.MouseEvent) => {
+    if (e.target instanceof HTMLElement && e.target.closest('.dropdown-menu')) {
+      e.preventDefault();
+    }
+  };
+
   return (
-    <Link href={`/plan-detail/${plan.planId}?isReadOnly=true`}>
+    <Link
+      href={`/plan-detail/${plan.planId}?isReadOnly=true`}
+      onClick={handleCardClick}
+    >
       <div className="relative">
         <div className="relative aspect-[83/58] h-[116px] w-[166px] md:aspect-[310/216] md:h-auto md:w-full">
           <PlanImage
@@ -37,15 +46,11 @@ const PlanVerticalCard = ({
         />
         {onEdit && onDelete && isDropdownVisible && (
           <div className="absolute right-2 top-10 block md:hidden">
-            <PlanDropdown
-              plan={plan as Plan}
-              onEdit={onEdit}
-              onDelete={onDelete}
-            >
+            <PlanDropdown plan={plan as Plan} onDelete={onDelete}>
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-8 w-8 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0" // 포커스 효과 제거
+                className="h-8 w-8 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
               >
                 <img
                   src="/icons/option.svg"

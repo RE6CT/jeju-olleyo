@@ -42,6 +42,7 @@ const MypageModal = ({
     refetchOnWindowFocus: true, // 창 포커스시 다시 가져오기
     staleTime: 0, // 항상 최신 데이터가 필요할 때
   });
+  console.log('유저데이터', user);
   const { data } = useGetDataCount(userId);
   const { handleLogout, isLoading: isAuthLoading } = useAuth();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -128,7 +129,7 @@ const MypageModal = ({
   return (
     <motion.div
       ref={modalRef}
-      className={`absolute z-40 w-[254px] rounded-12 bg-white p-4 shadow-dropdown ${className}`}
+      className={`absolute z-50 w-[254px] rounded-12 bg-white p-4 shadow-dropdown ${className}`}
       initial={{ opacity: 0, y: 10, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: 10, scale: 0.95 }}

@@ -130,56 +130,55 @@ const PlanHeader = memo(() => {
       // 먼저 미리보기 이미지 업데이트
       await handleFileChange(e);
 
+      const formData = new FormData();
+      formData.append('file', file);
       if (planId) {
-        const formData = new FormData();
-        formData.append('file', file);
         formData.append('planId', planId.toString());
+      }
 
-        let retryCount = 0;
-        const maxRetries = 3;
-        let response: string | null = null;
+      let retryCount = 0;
+      const maxRetries = 3;
+      let response: string | null = null;
 
-        while (retryCount < maxRetries) {
-          try {
-            const result = await Promise.race([
-              fetchUploadPlanImage(formData),
-              new Promise((_, reject) =>
-                setTimeout(() => reject(new Error('업로드 시간 초과')), 10000),
-              ),
-            ]);
+      while (retryCount < maxRetries) {
+        try {
+          const result = await Promise.race([
+            fetchUploadPlanImage(formData),
+            new Promise((_, reject) =>
+              setTimeout(() => reject(new Error('업로드 시간 초과')), 10000),
+            ),
+          ]);
 
-            if (typeof result === 'string') {
-              response = result;
-              break;
-            }
-          } catch (error) {
-            console.error(`이미지 업로드 시도 ${retryCount + 1} 실패:`, error);
-            retryCount++;
-            if (retryCount === maxRetries) {
-              toast({
-                title: '이미지 업로드 실패',
-                description: '이미지 업로드에 실패했습니다. 다시 시도해주세요.',
-                variant: 'destructive',
-              });
-              throw error;
-            }
-            await new Promise((resolve) => setTimeout(resolve, 500));
+          if (typeof result === 'string') {
+            response = result;
+            break;
           }
+        } catch (error) {
+          console.error(`이미지 업로드 시도 ${retryCount + 1} 실패:`, error);
+          retryCount++;
+          if (retryCount === maxRetries) {
+            toast({
+              title: '이미지 업로드 실패',
+              description: '이미지 업로드에 실패했습니다. 다시 시도해주세요.',
+              variant: 'destructive',
+            });
+            throw error;
+          }
+          await new Promise((resolve) => setTimeout(resolve, 500));
         }
+      }
 
-        if (response) {
-          // Zustand 상태 업데이트 및 로컬 스토리지에 저장
-          setPlanImg(response);
+      if (response) {
+        // Zustand 상태 업데이트 및 로컬 스토리지에 저장
+        setPlanImg(response);
+        if (planId) {
           localStorage.setItem(`planImg_${planId}`, response);
-
-          toast({
-            title: '이미지 업로드 성공',
-            description: '이미지가 성공적으로 업로드되었습니다.',
-          });
         }
-      } else {
-        const imageUrl = URL.createObjectURL(file);
-        setPlanImg(imageUrl);
+
+        toast({
+          title: '이미지 업로드 성공',
+          description: '이미지가 성공적으로 업로드되었습니다.',
+        });
       }
     } catch (error) {
       console.error('이미지 업로드 중 오류:', error);

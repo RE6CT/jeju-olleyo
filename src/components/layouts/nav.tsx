@@ -25,22 +25,25 @@ const Nav = () => {
   const { showQuestion } = useAlert();
   const [popoverOpen, setPopoverOpen] = useState(false);
 
-  const handleMyPlanClick = (e: React.MouseEvent) => {
+  const handleAuthRequiredAction = (
+    e: React.MouseEvent,
+    redirectPath: string,
+  ) => {
     e.preventDefault(); // 기본 링크 동작 방지
 
     // 로그인 체크
     if (!user) {
       showQuestion(
         '로그인 필요',
-        '일정을 만들기 위해서는 로그인이 필요합니다.\n로그인 페이지로 이동하시겠습니까?',
+        '일정을 관리하기 위해서는 로그인이 필요합니다.\n로그인 페이지로 이동하시겠습니까?',
         {
           onConfirm: () =>
-            router.push(`${PATH.SIGNIN}?redirectTo=${PATH.MYPLAN}`),
+            router.push(`${PATH.SIGNIN}?redirectTo=${redirectPath}`),
           onCancel: () => {},
         },
       );
     } else {
-      router.push(PATH.MYPLAN);
+      router.push(redirectPath);
     }
   };
 
@@ -89,21 +92,27 @@ const Nav = () => {
               align="end"
               style={{ gap: 0 }}
             >
-              <Link
-                href={PATH.PLAN_NEW}
+              <a
+                href="#"
                 className="flex w-[120px] items-center justify-center gap-[10px] rounded-[8px] px-0 py-2 text-black transition-colors hover:bg-primary-100 hover:text-[#FF8533]"
-                onClick={() => setPopoverOpen(false)}
+                onClick={(e) => {
+                  setPopoverOpen(false);
+                  handleAuthRequiredAction(e, PATH.PLAN_NEW);
+                }}
               >
                 내 일정 만들기
-              </Link>
+              </a>
               <div className="my-1 h-px w-full bg-[#E7EDF0]" />
-              <Link
-                href={PATH.MYPLAN}
+              <a
+                href="#"
                 className="flex w-[120px] items-center justify-center gap-[10px] rounded-[8px] px-0 py-2 text-black transition-colors hover:bg-primary-100 hover:text-[#FF8533]"
-                onClick={() => setPopoverOpen(false)}
+                onClick={(e) => {
+                  setPopoverOpen(false);
+                  handleAuthRequiredAction(e, PATH.MYPLAN);
+                }}
               >
                 지난 일정 보기
-              </Link>
+              </a>
             </PopoverContent>
           </Popover>
           <Link href={PATH.COMMUNITY}>커뮤니티</Link>

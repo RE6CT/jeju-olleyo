@@ -377,15 +377,6 @@ export const fetchUploadPlanImage = async (
     throw new Error('파일이 없습니다.');
   }
 
-  const planIdRaw = formData.get('planId');
-  if (typeof planIdRaw !== 'string') {
-    throw new Error('일정 ID가 없습니다.');
-  }
-  const planIdNum = Number(planIdRaw);
-  if (!Number.isInteger(planIdNum) || planIdNum <= 0) {
-    throw new Error('유효하지 않은 일정 ID입니다.');
-  }
-
   // 현재 사용자 정보 가져오기
   const {
     data: { user },
@@ -418,17 +409,24 @@ export const fetchUploadPlanImage = async (
     download: false, // 파일 다운로드 없이 공개 URL만 가져오도록
   });
 
-  // 데이터베이스에 이미지 URL 업데이트
-  const { error: updateError } = await supabase
-    .from('plans')
-    .update({ plan_img: publicUrl })
-    .eq('plan_id', parseInt(planId))
-    .eq('user_id', user.id);
+  // planId가 있는 경우에만 데이터베이스 업데이트
+  if (planId) {
+    const planIdNum = Number(planId);
+    if (!Number.isInteger(planIdNum) || planIdNum <= 0) {
+      throw new Error('유효하지 않은 일정 ID입니다.');
+    }
 
-  if (updateError) {
-    throw new Error(
-      `이미지 URL 업데이트에 실패했습니다: ${updateError.message}`,
-    );
+    const { error: updateError } = await supabase
+      .from('plans')
+      .update({ plan_img: publicUrl })
+      .eq('plan_id', planIdNum)
+      .eq('user_id', user.id);
+
+    if (updateError) {
+      throw new Error(
+        `이미지 URL 업데이트에 실패했습니다: ${updateError.message}`,
+      );
+    }
   }
 
   return publicUrl;

@@ -92,7 +92,7 @@ const Nav = () => {
               align="end"
               style={{ gap: 0 }}
             >
-              <a
+              <Link
                 href="#"
                 className="flex w-[120px] items-center justify-center gap-[10px] rounded-[8px] px-0 py-2 text-black transition-colors hover:bg-primary-100 hover:text-[#FF8533]"
                 onClick={(e) => {
@@ -101,7 +101,7 @@ const Nav = () => {
                 }}
               >
                 내 일정 만들기
-              </a>
+              </Link>
               <div className="my-1 h-px w-full bg-[#E7EDF0]" />
               <a
                 href="#"

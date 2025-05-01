@@ -1,7 +1,6 @@
 'use client';
 import axios from 'axios';
 import { useRef, useState } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
 
 import { DEPARTURE_LIST } from '@/constants/ticket.constants';
 import useAlertStore from '@/zustand/alert.store';
@@ -21,11 +20,6 @@ import {
 import { getBrowserClient } from '@/lib/supabase/client';
 import { useCurrentUser } from '@/lib/queries/auth-queries';
 import useCustomToast from '@/lib/hooks/use-custom-toast';
-import useAlert from '@/lib/hooks/use-alert';
-import { PATH } from '@/constants/path.constants';
-
-// 동적 렌더링 설정 (필요한 경우)
-export const dynamic = 'force-dynamic';
 
 const FlightSearch = () => {
   const [departure, setDeparture] = useState('');
@@ -45,19 +39,10 @@ const FlightSearch = () => {
   const { open } = useAlertStore();
   const { data: user } = useCurrentUser();
   const { successToast } = useCustomToast();
-  const { showQuestion } = useAlert();
-  const router = useRouter();
-  const pathname = usePathname();
 
   const totalPrice =
     125000 * (selectedGoFlight ? 1 : 0) +
     125000 * (selectedReturnFlight ? 1 : 0);
-
-  /** 현재 전체 URL 가져오기 (window 객체 사용) */
-  const getCurrentUrl = () => {
-    if (typeof window === 'undefined') return pathname;
-    return window.location.pathname + window.location.search;
-  };
 
   const dateAlert = (message: string) => {
     open({
@@ -79,21 +64,7 @@ const FlightSearch = () => {
   const handleReserve = async () => {
     const supabase = getBrowserClient();
 
-    if (!user) {
-      const currentUrl = getCurrentUrl();
-      showQuestion(
-        '로그인 필요',
-        '일정을 만들기 위해서는 로그인이 필요합니다.\n로그인 페이지로 이동하시겠습니까?',
-        {
-          onConfirm: () =>
-            router.push(
-              `${PATH.SIGNIN}?redirectTo=${encodeURIComponent(currentUrl)}`,
-            ),
-          onCancel: () => {},
-        },
-      );
-      return;
-    }
+    if (!user) return alert('로그인이 필요합니다!');
 
     const flightsToSave = [selectedGoFlight, selectedReturnFlight].filter(
       (flight): flight is Flight => flight !== null,
@@ -108,11 +79,10 @@ const FlightSearch = () => {
       }
       if (
         flightsToSave.length > 1 &&
-        formatDateToString(startDate) === formatDateToString(endDate) &&
         flightsToSave[0].arrPlandTime > flightsToSave[1].depPlandTime
-      ) {
+      )
         return dateAlert('가는편의 도착시간이 오는편의 출발시간보다 빨라요!');
-      }
+
       const departure_time = combineDateAndTime(baseDate, flight.depPlandTime);
       const arrive_time = combineDateAndTime(baseDate, flight.arrPlandTime);
 

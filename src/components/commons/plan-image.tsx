@@ -39,6 +39,14 @@ const PlanImage = ({
   const handleImageError = () => {
     setIsLoading(false);
     setError(true);
+    // 기본 이미지로 대체
+    if (containerRef.current) {
+      const img = containerRef.current.querySelector('img');
+      if (img) {
+        img.src = '/images/default_plan_image.svg';
+        img.onerror = null; // 무한 루프 방지
+      }
+    }
   };
 
   return (

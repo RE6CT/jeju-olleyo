@@ -262,10 +262,14 @@ const SearchSidemenu = ({
     >
       {/* 검색 결과 */}
       <div
-        className="relative w-[240px] md:w-[182px] lg:w-[240px]"
+        className="relative min-h-[300px] w-[240px] md:w-[182px] lg:w-[240px]"
         ref={containerRef}
       >
-        {isSearching && <LoadingSpinner />}
+        {isSearching && (
+          <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-80">
+            <LoadingSpinner />
+          </div>
+        )}
         {displayedPlaces.length > 0 ? (
           <div ref={listRef} className="space-y-3">
             <AnimatePresence initial={false}>
@@ -299,7 +303,7 @@ const SearchSidemenu = ({
             )}
           </div>
         ) : (
-          <div className="flex h-full items-center justify-center p-4">
+          <div className="flex h-[300px] items-center justify-center p-4">
             <p>검색 결과가 없습니다.</p>
           </div>
         )}

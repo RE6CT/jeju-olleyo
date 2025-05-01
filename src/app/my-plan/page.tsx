@@ -51,8 +51,8 @@ const MyPlanPage = async () => {
     const plans = await fetchGetAllPlansByUserId(user.id);
 
     return (
-      <main className="mx-auto w-full min-w-[375px] max-w-[375px] p-4 md:mt-[22px] md:max-w-[769px] md:px-7 md:py-0 lg:mt-0 lg:max-w-[1024px] lg:px-9 lg:py-0">
-        <div className="space-y-6 md:space-y-[21px]">
+      <main className="mx-auto w-full min-w-[375px] max-w-[375px] px-4 py-0 md:mt-[22px] md:max-w-[769px] md:px-7 md:py-0 md:py-4 lg:mt-0 lg:max-w-[1024px] lg:px-9 lg:py-0">
+        <div className="md:space-y-[21px] lg:space-y-6">
           <header className="hidden items-center justify-between md:flex">
             <div className="flex items-center gap-3">
               <h1 className="lg:bold-28 md:bold-24 leading-[130%]">

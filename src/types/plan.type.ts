@@ -106,8 +106,12 @@ export type PlanHorizontalCardProps = {
  * 수직형 계획 카드 컴포넌트의 props 타입
  */
 export type PlanVerticalCardProps = {
-  /** 계획 카드 정보 */
   plan: PlanCardType;
+  isDropdownVisible?: boolean;
+  /** 수정 핸들러 함수 */
+  onEdit?: (planId: number) => void;
+  /** 삭제 핸들러 함수 */
+  onDelete?: (planId: number) => void;
 };
 
 /**

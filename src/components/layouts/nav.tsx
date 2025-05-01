@@ -91,7 +91,7 @@ const Nav = () => {
             >
               <Link
                 href={PATH.PLAN_NEW}
-                className="flex w-[120px] items-center gap-[10px] rounded-[8px] px-0 py-2 font-semibold text-black transition-colors hover:bg-primary-100 hover:text-[#FF8533]"
+                className="flex w-[120px] items-center justify-center gap-[10px] rounded-[8px] px-0 py-2 text-black transition-colors hover:bg-primary-100 hover:text-[#FF8533]"
                 onClick={() => setPopoverOpen(false)}
               >
                 내 일정 만들기
@@ -99,7 +99,7 @@ const Nav = () => {
               <div className="my-1 h-px w-full bg-[#E7EDF0]" />
               <Link
                 href={PATH.MYPLAN}
-                className="flex w-[120px] items-center gap-[10px] rounded-[8px] px-0 py-2 text-black transition-colors hover:bg-primary-100 hover:text-[#FF8533]"
+                className="flex w-[120px] items-center justify-center gap-[10px] rounded-[8px] px-0 py-2 text-black transition-colors hover:bg-primary-100 hover:text-[#FF8533]"
                 onClick={() => setPopoverOpen(false)}
               >
                 지난 일정 보기

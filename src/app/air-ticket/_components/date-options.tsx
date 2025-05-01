@@ -13,8 +13,6 @@ const DateOptions = ({
   const day = parseInt(baseDateStr.slice(6, 8), 10);
 
   const baseDate = new Date(year, month, day);
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
 
   const dates = Array.from({ length: 5 }, (_, i) => {
     const date = new Date(baseDate);
@@ -31,23 +29,19 @@ const DateOptions = ({
           ? startDate.toISOString().split('T')[0]
           : '';
         const isSelected = selectedDateStr === dateStr;
-        const isPast = date < today;
 
         return (
           <Button
             key={dateStr}
             type="button"
             onClick={() => {
-              if (!isPast) {
-                setStartDate?.(date);
-              }
+              setStartDate?.(date);
             }}
-            disabled={isPast}
             className={`rounded-full border px-2 py-1 text-xs font-semibold text-black hover:bg-primary-100 md:px-3 md:text-sm ${
               isSelected
                 ? 'border-primary-500 bg-primary-100'
                 : 'border-gray-600 bg-white'
-            } ${isPast ? 'cursor-not-allowed opacity-50' : ''}`}
+            }`}
           >
             {display}
           </Button>

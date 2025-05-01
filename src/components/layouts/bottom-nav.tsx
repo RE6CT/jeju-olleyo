@@ -7,7 +7,7 @@ import CommunityIcon from '../icons/community-icon';
 import AddIcon from '../icons/add-icon';
 import CalendarIcon from '../icons/calendar-icon';
 import MypageIcon from '../icons/mypage-icon';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 import useClickOutside from '@/lib/hooks/use-click-outside';
 import useAuthCheck from '@/lib/hooks/use-auth-check';
@@ -23,7 +23,6 @@ const LINK_STYLE =
 /** 모바일 버전에서 나타나는 바텀 탭 */
 const BottomNav = () => {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
   const firstPath = '/' + pathname.split('/')[1];
   const router = useRouter();
 
@@ -37,11 +36,10 @@ const BottomNav = () => {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const { showQuestion } = useAlert();
 
-  /** 현재 전체 URL 가져오기 (쿼리 파라미터 포함) */
+  /** 현재 전체 URL 가져오기 (window 객체 사용) */
   const getCurrentUrl = () => {
-    const params = new URLSearchParams(searchParams.toString());
-    const queryString = params.toString();
-    return `${pathname}${queryString ? `?${queryString}` : ''}`;
+    if (typeof window === 'undefined') return pathname;
+    return window.location.pathname + window.location.search;
   };
 
   /** 모달을 닫는 함수 (isOpen-false) */

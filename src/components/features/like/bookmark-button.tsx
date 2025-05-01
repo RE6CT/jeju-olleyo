@@ -5,7 +5,7 @@ import { PATH } from '@/constants/path.constants';
 import useAlert from '@/lib/hooks/use-alert';
 import { useBookmarkMutation } from '@/lib/mutations/use-bookmark-mutation';
 import { useCurrentUser } from '@/lib/queries/auth-queries';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 /**
  * 북마크 버튼 컴포넌트 - 반응형 지원
@@ -26,29 +26,25 @@ const BookmarkButton = ({
   const { data: user } = useCurrentUser();
   const { showQuestion } = useAlert();
   const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  /** 현재 전체 URL 가져오기 (쿼리 파라미터 포함) */
-  const getCurrentUrl = () => {
-    const params = new URLSearchParams(searchParams.toString());
-    const queryString = params.toString();
-    return `${pathname}${queryString ? `?${queryString}` : ''}`;
-  };
 
   /** 북마크 버튼 클릭 핸들러 */
   const handleBookmarkClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     if (!user) {
-      const currentUrl = getCurrentUrl();
+      // 현재 URL을 직접 window.location에서 가져옴
+      const currentPath =
+        typeof window !== 'undefined'
+          ? window.location.pathname + window.location.search
+          : '';
+
       showQuestion(
         '로그인 필요',
         '일정을 만들기 위해서는 로그인이 필요합니다.\n로그인 페이지로 이동하시겠습니까?',
         {
           onConfirm: () =>
             router.push(
-              `${PATH.SIGNIN}?redirectTo=${encodeURIComponent(currentUrl)}`,
+              `${PATH.SIGNIN}?redirectTo=${encodeURIComponent(currentPath)}`,
             ),
           onCancel: () => {},
         },

@@ -1,6 +1,6 @@
 'use client';
 
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { getCurrentSession } from '../apis/auth/auth-browser.api';
 import fetchUpdateLikeByUserId from '../apis/like/add-like.api';
 import fetchDeleteLike from '../apis/like/delete-like.api';
@@ -22,13 +22,11 @@ const useToggleLike = (planId: number) => {
   const { showQuestion } = useAlert();
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
 
-  /** 현재 전체 URL 가져오기 (쿼리 파라미터 포함) */
+  /** 현재 전체 URL 가져오기 (window 객체 사용) */
   const getCurrentUrl = () => {
-    const params = new URLSearchParams(searchParams.toString());
-    const queryString = params.toString();
-    return `${pathname}${queryString ? `?${queryString}` : ''}`;
+    if (typeof window === 'undefined') return pathname;
+    return window.location.pathname + window.location.search;
   };
 
   const toggleLike = async () => {

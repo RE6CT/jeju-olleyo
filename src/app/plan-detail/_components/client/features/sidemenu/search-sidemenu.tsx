@@ -267,7 +267,7 @@ const SearchSidemenu = ({
       >
         {isSearching && <LoadingSpinner />}
         {displayedPlaces.length > 0 ? (
-          <div ref={listRef} className="space-y-3 overflow-y-auto">
+          <div ref={listRef} className="space-y-3">
             <AnimatePresence initial={false}>
               {displayedPlaces.map((place) => (
                 <motion.div

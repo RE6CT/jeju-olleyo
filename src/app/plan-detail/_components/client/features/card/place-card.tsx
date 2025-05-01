@@ -71,7 +71,7 @@ const PlaceCard = ({
   return (
     <div
       className={cn(
-        'flex gap-3 md:w-[498px] lg:w-[640px]',
+        'flex gap-3 md:w-[498px] lg:w-[665px]',
         !isReadOnly && 'cursor-grab active:cursor-grabbing',
         isDragging && 'opacity-50',
       )}

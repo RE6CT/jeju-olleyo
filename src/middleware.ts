@@ -155,9 +155,10 @@ export async function middleware(request: NextRequest) {
     });
 
     const isAuthPage = pathname === PATH.SIGNIN || pathname === PATH.SIGNUP;
+    const isProtectedPage = pathname === PATH.PLAN_NEW || !isPublicPage;
 
     // 유효한 경로이면서 인증이 필요한 페이지에 로그인 없이 접근 시
-    if (!session && !isPublicPage) {
+    if (!session && isProtectedPage) {
       // 인증되지 않은 사용자가 보호된 경로에 접근, 로그인 페이지로 리다이렉트
       const url = request.nextUrl.clone();
       url.pathname = PATH.SIGNIN;

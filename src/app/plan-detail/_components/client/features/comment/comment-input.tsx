@@ -28,7 +28,11 @@ const CommentInput = ({ planId }: { planId: number }) => {
     }
     mutate({ userId: user.id, content: inputText, planId });
     successToast('댓글이 등록되었습니다.');
-    setInputText('');
+    // 현재 실행 중인 이벤트 루프가 완료된 후에 콜백 함수를 실행
+    // input 초기화가 바텀시트의 상태 변경과 동시에 발생하지 않도록
+    setTimeout(() => {
+      setInputText('');
+    }, 0);
   };
 
   return (

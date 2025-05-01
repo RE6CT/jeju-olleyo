@@ -90,8 +90,6 @@ export const useLogin = () => {
         const urlParams = new URLSearchParams(window.location.search);
         const redirectTo = urlParams.get('redirectTo');
 
-        console.log('로그인 성공, 리다이렉트 경로:', redirectTo || PATH.HOME);
-
         // redirectTo 값이 있으면 해당 경로로, 없으면 홈으로 리다이렉트
         if (redirectTo) {
           // Next.js router 대신 직접 window.location 사용
@@ -151,8 +149,8 @@ export const useLogout = () => {
       // 캐시에서 사용자 정보 제거
       queryClient.setQueryData(USER_QUERY_KEY, null);
 
-      // 홈 페이지로 리다이렉트
-      router.push(PATH.HOME);
+      // 로그인 페이지로 리다이렉트
+      router.push(`${PATH.SIGNIN}?t=logout`);
     },
   });
 };

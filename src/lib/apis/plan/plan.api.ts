@@ -70,15 +70,33 @@ export const fetchGetFilteredPlansByUserId = async (
   // 날짜 필터링은 클라이언트 측에서 처리
   let filteredDataByDate = data;
   if (filterOptions.date) {
-    const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone; // 브라우저 사용자의 시간대를 가져온다.
-    filteredDataByDate = filteredDataByDate.filter((plan) =>
-      isDateInRange(
-        filterOptions.date!,
-        plan.travel_start_date,
-        plan.travel_end_date,
-        userTimezone,
+    // UTC 기준으로 날짜를 비교하도록 수정
+    const targetDate = new Date(filterOptions.date);
+    const utcTargetDate = new Date(
+      Date.UTC(
+        targetDate.getFullYear(),
+        targetDate.getMonth(),
+        targetDate.getDate(),
       ),
     );
+
+    filteredDataByDate = filteredDataByDate.filter((plan) => {
+      const startDate = new Date(plan.travel_start_date);
+      const endDate = new Date(plan.travel_end_date);
+
+      const utcStartDate = new Date(
+        Date.UTC(
+          startDate.getFullYear(),
+          startDate.getMonth(),
+          startDate.getDate(),
+        ),
+      );
+      const utcEndDate = new Date(
+        Date.UTC(endDate.getFullYear(), endDate.getMonth(), endDate.getDate()),
+      );
+
+      return utcTargetDate >= utcStartDate && utcTargetDate <= utcEndDate;
+    });
   }
 
   return filteredDataByDate.map(camelize);
@@ -385,8 +403,8 @@ export const fetchUploadPlanImage = async (
   const { error: uploadError } = await supabase.storage
     .from('plan-images')
     .upload(filePath, file, {
-      cacheControl: '3600',
-      upsert: false,
+      cacheControl: '0',
+      upsert: true, // 동일 파일명으로 업로드할 때 덮어쓰기 가능하도록
     });
 
   if (uploadError) {
@@ -396,7 +414,9 @@ export const fetchUploadPlanImage = async (
   // 업로드된 이미지의 공개 URL 가져오기
   const {
     data: { publicUrl },
-  } = supabase.storage.from('plan-images').getPublicUrl(filePath);
+  } = supabase.storage.from('plan-images').getPublicUrl(filePath, {
+    download: false, // 파일 다운로드 없이 공개 URL만 가져오도록
+  });
 
   // 데이터베이스에 이미지 URL 업데이트
   const { error: updateError } = await supabase

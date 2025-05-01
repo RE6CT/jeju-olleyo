@@ -3,12 +3,12 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 
-import { Button } from '@/components/ui/button';
 import DynamicPagination from '@/components/ui/dynamic-pagination';
 import fetchGetAllPlaces from '@/lib/apis/search/get-place.api';
 import { useBookmarkQuery } from '@/lib/queries/use-bookmark-query';
 import { CategoryType } from '@/types/category.type';
 import { Place } from '@/types/search.type';
+import { LoadingSpinner } from '@/components/commons/loading-spinner';
 
 import DaySelectRequiredModal from '../modal/day-select-required-modal';
 import PlaceCardSidemenu from '../card/place-card-sidemenu';
@@ -59,6 +59,7 @@ const SearchSidemenu = ({
   const listRef = useRef<HTMLDivElement>(null);
   const searchTimeoutRef = useRef<NodeJS.Timeout>();
   const [containerHeight, setContainerHeight] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
 
   const { data: user } = useCurrentUser();
   const userId = user?.id || null;
@@ -167,8 +168,21 @@ const SearchSidemenu = ({
     fetchData();
   }, [userId]);
 
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
+  }, []);
+
   const handleAddPlace = (place: Place) => {
-    if (selectedDay === null) {
+    if (!isMobile && selectedDay === null) {
       setIsDaySelectModalOpen(true);
       return;
     }
@@ -225,7 +239,7 @@ const SearchSidemenu = ({
         }
       >
         <div className="flex items-center justify-center p-4">
-          <p>로딩 중...</p>
+          <LoadingSpinner />
         </div>
       </PlaceSidemenuLayout>
     );
@@ -247,7 +261,11 @@ const SearchSidemenu = ({
       }
     >
       {/* 검색 결과 */}
-      <div className="w-[240px] md:w-[182px] lg:w-[240px]" ref={containerRef}>
+      <div
+        className="relative w-[240px] md:w-[182px] lg:w-[240px]"
+        ref={containerRef}
+      >
+        {isSearching && <LoadingSpinner />}
         {displayedPlaces.length > 0 ? (
           <div ref={listRef} className="space-y-3 overflow-y-auto">
             <AnimatePresence initial={false}>
@@ -271,14 +289,6 @@ const SearchSidemenu = ({
                 </motion.div>
               ))}
             </AnimatePresence>
-            {/* {currentPageItems.length > INITIAL_ITEMS && (
-              <Button
-                className="flex h-[36px] w-full flex-shrink-0 items-center justify-center gap-1 rounded-xl border border-secondary-300 bg-gray-50 text-sm font-normal text-secondary-300 transition-colors hover:bg-gray-100"
-                onClick={toggleExpand}
-              >
-                {isExpanded ? '접기' : '더보기'}
-              </Button>
-            )} */}
             {isExpanded && totalPages > 1 && (
               <DynamicPagination
                 currentPage={currentPage}

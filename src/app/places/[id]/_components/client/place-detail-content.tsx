@@ -37,7 +37,7 @@ const PlaceDetailContent = ({
   return (
     <>
       {/* 태블릿 및 피씨 레이아웃 */}
-      <div className="mt-[73px] hidden flex-col items-center justify-center md:flex">
+      <div className="mt-[73px] hidden flex-col md:flex">
         <div className="flex gap-8">
           <div className="relative aspect-square w-full items-start bg-no-repeat object-cover md:mr-[28px] md:w-[300px] lg:mr-[50px] lg:w-[479px]">
             <PlaceImage image={place.image} title={place.title} />

@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import Link from 'next/link';
 
 import Duration from '@/components/commons/duration';
@@ -31,8 +30,8 @@ import LikeButton from '@/components/commons/like-button';
 const PlanHorizontalCard = ({
   plan,
   nickname,
-  onEdit,
   onDelete,
+  onUpdate,
 }: PlanHorizontalCardProps) => {
   return (
     <Link
@@ -59,22 +58,23 @@ const PlanHorizontalCard = ({
       <div className="flex flex-1 flex-col gap-2">
         <div className="relative">
           {/* 드롭다운 메뉴 */}
-          {onEdit && onDelete && (
+          {onDelete && (
             <div
               className="absolute right-0"
               onClick={(e) => e.stopPropagation()}
             >
-              <PlanDropdown plan={plan} onEdit={onEdit} onDelete={onDelete}>
+              <PlanDropdown plan={plan} onDelete={onDelete}>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0" // 포커스 효과 제거
+                  className="focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
                 >
-                  <Image
+                  <img
                     src="/icons/option.svg"
                     alt="option"
-                    width={24}
-                    height={24}
+                    width={16}
+                    height={16}
+                    className="h-4 w-4"
                   />
                 </Button>
               </PlanDropdown>

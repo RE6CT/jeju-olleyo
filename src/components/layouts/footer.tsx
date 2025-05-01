@@ -208,11 +208,11 @@ const Footer = () => {
           </div>
 
           {/* 디자이너 섹션 */}
-          <div className="md:flex md:items-center md:justify-start md:gap-5 lg:h-6 lg:w-[205px] lg:shrink-0 lg:items-start lg:justify-center lg:gap-10">
+          <div className="md:[180px] md:flex md:items-center md:justify-start md:gap-5 lg:h-6 lg:w-[230px] lg:shrink-0 lg:items-start lg:justify-center lg:gap-10">
             <h3 className="md:semibold-12 lg:semibold-16 text-gray-600 md:w-[52.568px] md:flex-shrink-0 lg:w-[56px]">
               디자이너
             </h3>
-            <div className="md:flex md:items-center md:gap-6 lg:h-[21px] lg:w-[109px] lg:shrink-0 lg:items-start lg:gap-[30px] lg:pr-[5px]">
+            <div className="md:flex md:items-center md:gap-11 lg:h-[21px] lg:w-[130px] lg:shrink-0 lg:items-start lg:gap-[52px] lg:pr-[5px]">
               <span className="md:medium-10 lg:medium-14 text-gray-600">
                 유진희
               </span>
@@ -223,11 +223,11 @@ const Footer = () => {
           </div>
 
           {/* 튜터 섹션 */}
-          <div className="md:flex md:items-center md:justify-start md:gap-5 lg:h-6 lg:w-[205px] lg:shrink-0 lg:items-start lg:justify-center lg:gap-10">
+          <div className="md:[180px] md:flex md:items-center md:justify-start md:gap-5 lg:h-6 lg:w-[230px] lg:shrink-0 lg:items-start lg:justify-center lg:gap-10">
             <h3 className="md:semibold-12 lg:semibold-16 text-gray-600 md:w-[52.568px] md:flex-shrink-0 lg:w-[56px]">
               튜터
             </h3>
-            <div className="md:flex md:items-center md:gap-6 lg:h-[21px] lg:w-[109px] lg:shrink-0 lg:items-start lg:gap-[30px] lg:pr-[5px]">
+            <div className="md:flex md:items-center md:gap-11 lg:h-[21px] lg:w-[130px] lg:shrink-0 lg:items-start lg:gap-[52px] lg:pr-[5px]">
               <span className="md:medium-10 lg:medium-14 text-gray-600">
                 김병연
               </span>

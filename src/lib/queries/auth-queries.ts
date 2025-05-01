@@ -58,8 +58,6 @@ export const useCurrentUser = (options = {}) => {
  */
 export const useLogin = () => {
   const queryClient = useQueryClient();
-  const router = useRouter();
-
   return useMutation({
     mutationFn: async (values: LoginFormValues) => {
       const result = await fetchLogin(values);
@@ -80,12 +78,6 @@ export const useLogin = () => {
       if (typeof window !== 'undefined') {
         const urlParams = new URLSearchParams(window.location.search);
         const redirectTo = urlParams.get('redirectTo');
-<<<<<<<<< Temporary merge branch 1
-=========
-
-        console.log('로그인 성공, 리다이렉트 경로:', redirectTo || PATH.HOME);
->>>>>>>>> Temporary merge branch 2
-
         // redirectTo 값이 있으면 해당 경로로, 없으면 홈으로 리다이렉트
         if (redirectTo) {
           window.location.href = redirectTo;

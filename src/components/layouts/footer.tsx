@@ -208,7 +208,7 @@ const Footer = () => {
           </div>
 
           {/* 디자이너 섹션 */}
-          <div className="md:[180px] md:flex md:items-center md:justify-start md:gap-5 lg:h-6 lg:w-[230px] lg:shrink-0 lg:items-start lg:justify-center lg:gap-10">
+          <div className="md:flex md:w-[180px] md:items-center md:justify-start md:gap-5 lg:h-6 lg:w-[230px] lg:shrink-0 lg:items-start lg:justify-center lg:gap-10">
             <h3 className="md:semibold-12 lg:semibold-16 text-gray-600 md:w-[52.568px] md:flex-shrink-0 lg:w-[56px]">
               디자이너
             </h3>
@@ -223,7 +223,7 @@ const Footer = () => {
           </div>
 
           {/* 튜터 섹션 */}
-          <div className="md:[180px] md:flex md:items-center md:justify-start md:gap-5 lg:h-6 lg:w-[230px] lg:shrink-0 lg:items-start lg:justify-center lg:gap-10">
+          <div className="md:flex md:w-[180px] md:items-center md:justify-start md:gap-5 lg:h-6 lg:w-[230px] lg:shrink-0 lg:items-start lg:justify-center lg:gap-10">
             <h3 className="md:semibold-12 lg:semibold-16 text-gray-600 md:w-[52.568px] md:flex-shrink-0 lg:w-[56px]">
               튜터
             </h3>

@@ -26,8 +26,8 @@ const PlanSidemenu = () => {
   );
 
   return (
-    <div className="mt-4 md:w-[212px] lg:w-[280px]">
-      <div className="sticky top-4 h-fit">
+    <div className="sticky top-4 mt-4 md:w-[212px] lg:w-[280px]">
+      <div className="h-fit">
         {!isReadOnly && (
           <div className="flex flex-col">
             <PlaceSidemenu

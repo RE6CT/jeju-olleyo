@@ -15,6 +15,7 @@ import { ModalPath } from '@/types/mypage.type';
 import MypageModal from '../features/nav-mypage/mypage-modal';
 import useAuth from '@/lib/hooks/use-auth';
 import { MYPAGE_PATH_LIST } from '@/constants/mypage.constants';
+import useAlert from '@/lib/hooks/use-alert';
 
 const LINK_STYLE =
   'flex h-[57px] w-[52px] flex-col items-center justify-end gap-[7px] regular-12';
@@ -33,6 +34,13 @@ const BottomNav = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const modalRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const { showQuestion } = useAlert();
+
+  /** 현재 전체 URL 가져오기 (window 객체 사용) */
+  const getCurrentUrl = () => {
+    if (typeof window === 'undefined') return pathname;
+    return window.location.pathname + window.location.search;
+  };
 
   /** 모달을 닫는 함수 (isOpen-false) */
   const setClose = () => setIsOpen(false);
@@ -46,8 +54,18 @@ const BottomNav = () => {
    */
   const handleMypageModalToggle = () => {
     if (!isAuthenticated) {
-      // 로그인되지 않은 경우 로그인 페이지로 리다이렉트
-      router.push(PATH.SIGNIN);
+      const currentUrl = getCurrentUrl();
+      showQuestion(
+        '로그인 필요',
+        '일정을 만들기 위해서는 로그인이 필요합니다.\n로그인 페이지로 이동하시겠습니까?',
+        {
+          onConfirm: () =>
+            router.push(
+              `${PATH.SIGNIN}?redirectTo=${encodeURIComponent(currentUrl)}`,
+            ),
+          onCancel: () => {},
+        },
+      );
       return;
     }
     setIsOpen(!isOpen);

@@ -199,6 +199,7 @@ const PlanSchedule = memo(() => {
   const activeTab = usePlanActiveTab();
   const setActiveTab = usePlanSetActiveTab();
   const isReadOnly = usePlanIsReadOnly();
+  const { setIsSaveModalOpen, setIsPublicModalOpen } = useScheduleModalStore();
 
   const { setIsDeleteModalOpen, dayToDelete, setDayToDelete } =
     useScheduleModalStore();
@@ -216,6 +217,10 @@ const PlanSchedule = memo(() => {
       setDayToDelete,
     );
 
+  const handleSaveButtonClick = () => {
+    setIsSaveModalOpen(true);
+  };
+
   const dayCount = calculateTotalDays(startDate, endDate);
 
   const [openSheet, setOpenSheet] = useState<null | 'search' | 'bookmark'>(
@@ -223,24 +228,66 @@ const PlanSchedule = memo(() => {
   );
 
   const handleAddPlace = (place: Place, activeTab: string | number) => {
-    const uniqueId = nanoid();
-    const newPlaceWithId = { ...place, uniqueId } as PlaceWithUniqueId;
+    try {
+      const uniqueId = nanoid();
+      const newPlaceWithId = { ...place, uniqueId } as PlaceWithUniqueId;
 
-    if (typeof activeTab === 'string') {
-      // 전체보기 상태일 때는 첫 번째 날짜에 추가
-      const firstDay = 1;
-      const updatedDayPlaces = {
-        ...dayPlaces,
-        [firstDay]: [...(dayPlaces[firstDay] || []), newPlaceWithId],
-      };
-      setDayPlaces(updatedDayPlaces);
-    } else {
-      // 특정 날짜가 선택된 상태
-      const updatedDayPlaces = {
-        ...dayPlaces,
-        [activeTab]: [...(dayPlaces[activeTab] || []), newPlaceWithId],
-      };
-      setDayPlaces(updatedDayPlaces);
+      if (typeof activeTab === 'string') {
+        // 전체보기 상태일 때는 첫 번째 날짜에 추가
+        const firstDay = 1;
+        const currentDayPlaces = dayPlaces[firstDay] || [];
+
+        // 동일한 장소가 이미 있는지 확인
+        const isDuplicate = currentDayPlaces.some(
+          (p) => p.placeId === place.placeId,
+        );
+
+        if (isDuplicate) {
+          toast({
+            title: '장소 추가 실패',
+            description: '이미 추가된 장소입니다.',
+            variant: 'destructive',
+          });
+          return;
+        }
+
+        const updatedDayPlaces = {
+          ...dayPlaces,
+          [firstDay]: [...currentDayPlaces, newPlaceWithId],
+        };
+        setDayPlaces(updatedDayPlaces);
+      } else {
+        // 특정 날짜가 선택된 상태
+        const currentDayPlaces = dayPlaces[activeTab] || [];
+
+        // 동일한 장소가 이미 있는지 확인
+        const isDuplicate = currentDayPlaces.some(
+          (p) => p.placeId === place.placeId,
+        );
+
+        if (isDuplicate) {
+          toast({
+            title: '장소 추가 실패',
+            description: '이미 추가된 장소입니다.',
+            variant: 'destructive',
+          });
+          return;
+        }
+
+        const updatedDayPlaces = {
+          ...dayPlaces,
+          [activeTab]: [...currentDayPlaces, newPlaceWithId],
+        };
+        setDayPlaces(updatedDayPlaces);
+      }
+    } catch (error) {
+      console.error('장소 추가 중 오류 발생:', error);
+      toast({
+        title: '장소 추가 실패',
+        description:
+          '장소 추가 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
+        variant: 'destructive',
+      });
     }
   };
 
@@ -376,6 +423,16 @@ const PlanSchedule = memo(() => {
                       </div>
                     ),
                   )}
+                  {!isReadOnly && (
+                    <div className="sticky bottom-0 left-0 right-0 z-50 mt-4 flex w-full justify-center bg-white p-4 md:hidden">
+                      <Button
+                        onClick={handleSaveButtonClick}
+                        className="w-full rounded-[12px] bg-primary-500 p-[10px] text-white hover:bg-primary-600"
+                      >
+                        저장하기
+                      </Button>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div className="w-full">
@@ -478,7 +535,7 @@ const PlanSchedule = memo(() => {
       >
         <SheetContent
           side="bottom"
-          className="mx-auto h-fit w-[282px] rounded-t-[20px]"
+          className="mx-auto h-[60vh] max-h-[500px] w-full max-w-[282px] rounded-t-[20px]"
         >
           <SheetTitle className="sr-only">
             {openSheet === 'search' ? '장소 검색' : '내 북마크'}

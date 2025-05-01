@@ -94,8 +94,6 @@ export type PlanHorizontalCardProps = {
   plan: Plan;
   /** 작성자 닉네임 (선택적) */
   nickname?: string;
-  /** 수정 핸들러 함수 */
-  onEdit?: (planId: number) => void;
   /** 삭제 핸들러 함수 */
   onDelete?: (planId: number) => void;
   /** 업데이트 핸들러 함수 */

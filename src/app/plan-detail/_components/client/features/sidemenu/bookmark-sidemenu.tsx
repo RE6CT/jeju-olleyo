@@ -125,7 +125,7 @@ const BookmarkSidemenu = ({
   }, [activeFilterTab]);
 
   const handleAddPlace = (place: Place) => {
-    if (selectedDay === null) {
+    if (!isMobile && selectedDay === null) {
       setIsDaySelectModalOpen(true);
       return;
     }

@@ -9,7 +9,6 @@ import ProfileImage from '@/components/commons/profile-image';
 import { PATH } from '@/constants/path.constants';
 import useAuth from '@/lib/hooks/use-auth';
 import useCustomToast from '@/lib/hooks/use-custom-toast';
-import useAlert from '@/lib/hooks/use-alert'; // useAlert 훅 임포트 추가
 import { useGetDataCount } from '@/lib/queries/use-get-data-count';
 import { MypageModalProps } from '@/types/mypage.type';
 import { UserInfo } from '@/types/auth.type';
@@ -48,7 +47,6 @@ const MypageModal = ({
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [localUser, setLocalUser] = useState<UserInfo | null>(null);
   const { successToast } = useCustomToast();
-  const { showQuestion } = useAlert();
 
   // 컴포넌트 마운트 시 세션에서 직접 사용자 정보 가져오기
   useEffect(() => {
@@ -75,28 +73,30 @@ const MypageModal = ({
   const handleSignout = async (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
 
-    // 커스텀 알림으로 로그아웃 확인
-    showQuestion('로그아웃', '로그아웃하시겠습니까?', {
-      onConfirm: async () => {
-        try {
-          setIsLoggingOut(true);
-          const success = await handleLogout();
+    const isConfirmed = confirm('로그아웃하시겠습니까?');
+    if (!isConfirmed) return;
 
-          if (!success) {
-            successToast('로그아웃에 실패했습니다. 다시 시도해주세요.');
-            return;
-          }
+    try {
+      setIsLoggingOut(true);
+      const success = await handleLogout();
 
-          // 로그아웃 성공 시 모달 닫기
-          setClose();
-        } catch (error) {
-          console.error('로그아웃 오류:', error);
-        } finally {
-          setIsLoggingOut(false);
-        }
-      },
-      onCancel: () => {},
-    });
+      if (!success) {
+        successToast('로그아웃에 실패했습니다. 다시 시도해주세요.');
+        return;
+      }
+
+      // 로그아웃 성공 처리
+      setClose();
+
+      // 명시적인 페이지 전환 (인증 체크 건너뛰도록 t 파라미터 추가)
+      if (typeof window !== 'undefined') {
+        window.location.href = `${PATH.SIGNIN}?t=${Date.now()}`;
+      }
+    } catch (error) {
+      console.error('로그아웃 오류:', error);
+    } finally {
+      setIsLoggingOut(false);
+    }
   };
 
   // 쿠키에 저장된 provider 값 가져오기

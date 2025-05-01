@@ -1,6 +1,6 @@
 'use client';
 
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 
 import { PATH } from '@/constants/path.constants';
@@ -23,13 +23,11 @@ const MypageButton = ({ userId }: { userId: string }) => {
   const { isAuthenticated } = useAuthCheck();
   const { showQuestion } = useAlert();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
 
-  /** 현재 전체 URL 가져오기 (쿼리 파라미터 포함) */
+  /** 현재 전체 URL 가져오기 (window 객체 사용) */
   const getCurrentUrl = () => {
-    const params = new URLSearchParams(searchParams.toString());
-    const queryString = params.toString();
-    return `${pathname}${queryString ? `?${queryString}` : ''}`;
+    if (typeof window === 'undefined') return pathname;
+    return window.location.pathname + window.location.search;
   };
 
   /** 모달을 닫는 함수 (isOpen-false) */

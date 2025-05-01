@@ -64,11 +64,9 @@ export const useCurrentUser = (options = {}) => {
 /**
  * 로그인 Mutation 훅
  */
-/**
- * 로그인 Mutation 훅
- */
 export const useLogin = () => {
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   return useMutation({
     mutationFn: async (values: LoginFormValues) => {
@@ -89,10 +87,8 @@ export const useLogin = () => {
 
       // 리다이렉션 처리
       if (typeof window !== 'undefined') {
-        const params = new URLSearchParams(window.location.search);
-        const redirectTo = params.get('redirectTo');
-
-        console.log('로그인 성공, 리다이렉트 경로:', redirectTo || PATH.HOME);
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirectTo = urlParams.get('redirectTo');
 
         // redirectTo 값이 있으면 해당 경로로, 없으면 홈으로 리다이렉트
         if (redirectTo) {
@@ -153,8 +149,8 @@ export const useLogout = () => {
       // 캐시에서 사용자 정보 제거
       queryClient.setQueryData(USER_QUERY_KEY, null);
 
-      // 홈 페이지로 리다이렉트
-      router.push(PATH.HOME);
+      // 로그인 페이지로 리다이렉트
+      router.push(`${PATH.SIGNIN}?t=logout`);
     },
   });
 };

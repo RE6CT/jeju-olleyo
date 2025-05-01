@@ -1,7 +1,7 @@
 'use client';
 import axios from 'axios';
-import { useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useRef, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 
 import { DEPARTURE_LIST } from '@/constants/ticket.constants';
 import useAlertStore from '@/zustand/alert.store';
@@ -24,6 +24,9 @@ import useCustomToast from '@/lib/hooks/use-custom-toast';
 import useAlert from '@/lib/hooks/use-alert';
 import { PATH } from '@/constants/path.constants';
 
+// 동적 렌더링 설정 (필요한 경우)
+export const dynamic = 'force-dynamic';
+
 const FlightSearch = () => {
   const [departure, setDeparture] = useState('');
   const [goFlights, setGoFlights] = useState<Flight[]>([]);
@@ -45,17 +48,15 @@ const FlightSearch = () => {
   const { showQuestion } = useAlert();
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
 
   const totalPrice =
     125000 * (selectedGoFlight ? 1 : 0) +
     125000 * (selectedReturnFlight ? 1 : 0);
 
-  /** 현재 전체 URL 가져오기 (쿼리 파라미터 포함) */
+  /** 현재 전체 URL 가져오기 (window 객체 사용) */
   const getCurrentUrl = () => {
-    const params = new URLSearchParams(searchParams.toString());
-    const queryString = params.toString();
-    return `${pathname}${queryString ? `?${queryString}` : ''}`;
+    if (typeof window === 'undefined') return pathname;
+    return window.location.pathname + window.location.search;
   };
 
   const dateAlert = (message: string) => {

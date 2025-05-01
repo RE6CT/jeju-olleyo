@@ -15,8 +15,10 @@ export const ERROR_MESSAGES = {
   // 비밀번호 관련
   REQUIRED_PASSWORD: '비밀번호는 필수 입력항목입니다.',
   CHECK_REQUIRED_PASSWORD: '비밀번호 확인은 필수 입력 항목입니다.',
-  PASSWORD_CHECK:
-    '8-12자의 영문, 숫자, 특수문자 중 2가지 이상으로만 가능합니다.',
+  MIN_PASSWORD_LENGTH: '비밀번호는 최소 8자 이상이어야 합니다.',
+  PASSWORD_LETTER: '비밀번호는 최소 하나의 문자를 포함해야 합니다.',
+  PASSWORD_NUMBER: '비밀번호는 최소 하나의 숫자를 포함해야 합니다.',
+  PASSWORD_SPECIAL_CHAR: '비밀번호는 최소 하나의 특수문자를 포함해야 합니다.',
   PASSWORD_MISMATCH: '비밀번호가 일치하지 않습니다. 다시 입력해주세요.',
   PASSWORD_REQUIREMENTS_ERROR: '비밀번호가 보안 요구사항을 충족하지 않습니다.',
   PASSWORD_RESET_LINK_EXPIRED_ERROR: '비밀번호 재설정 링크가 만료되었습니다.',

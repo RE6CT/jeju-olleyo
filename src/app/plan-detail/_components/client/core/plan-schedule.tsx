@@ -478,7 +478,7 @@ const PlanSchedule = memo(() => {
       >
         <SheetContent
           side="bottom"
-          className="mx-auto h-fit w-[282px] rounded-t-[20px]"
+          className="mx-auto h-[60vh] w-full max-w-[282px] rounded-t-[20px]"
         >
           <SheetTitle className="sr-only">
             {openSheet === 'search' ? '장소 검색' : '내 북마크'}

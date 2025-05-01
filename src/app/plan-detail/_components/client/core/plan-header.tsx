@@ -340,7 +340,7 @@ const PlanHeader = memo(() => {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           maxLength={MAX_TEXT_LENGTH.DESCRIPTION}
-          className={`w-full resize-none border-0 bg-transparent p-0 text-[10px] focus-visible:ring-0 focus-visible:ring-offset-0 md:h-[160px] md:rounded-[12px] md:border md:border-gray-200 md:py-5 md:text-[14px] md:leading-[20px] ${
+          className={`h-[60px] w-full resize-none border-0 bg-transparent p-0 text-[11px] focus-visible:ring-0 focus-visible:ring-offset-0 md:h-[160px] md:rounded-[12px] md:border md:border-gray-200 md:py-5 md:text-[14px] md:leading-[20px] ${
             isReadOnly ? 'pl-0 md:pl-5' : 'pl-6 md:pl-12'
           }`}
           readOnly={isReadOnly}

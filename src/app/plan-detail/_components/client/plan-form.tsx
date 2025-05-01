@@ -139,7 +139,7 @@ const PlanForm = ({
               </SheetTrigger>
               <SheetContent
                 side="bottom"
-                className="mx-auto h-[470px] w-[375px] rounded-t-[20px] p-[16px_20px_12px_20px]"
+                className="mx-auto h-[60vh] w-full max-w-[375px] rounded-t-[20px] p-[16px_20px_12px_20px]"
               >
                 <SheetTitle className="sr-only">일정 정보</SheetTitle>
                 <PlanSidemenu />

@@ -461,6 +461,10 @@ export type Database = {
           is_liked: boolean;
         }[];
       };
+      get_user_like_plans: {
+        Args: { user_id_param: string };
+        Returns: Plan[];
+      };
       get_all_plans: {
         Args: {};
         Returns: Plan[];

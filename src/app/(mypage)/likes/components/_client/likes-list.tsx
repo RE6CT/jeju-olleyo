@@ -39,21 +39,17 @@ const LikesList = () => {
         </div>
       ) : (
         <section className="flex flex-col gap-20">
-          <ul className="hidden list-none grid-cols-1 gap-5 p-0 md:grid">
+          <ul className="grid grid-cols-2 gap-3 md:grid-cols-1 md:gap-5">
             {likes
               ?.slice(firstPlanIndex, firstPlanIndex + PAGE_SIZE)
               ?.map((plan) => (
                 <li key={plan.planId}>
-                  <PlanHorizontalCard plan={plan} nickname={plan.nickname} />
-                </li>
-              ))}
-          </ul>
-          <ul className="grid list-none grid-cols-2 gap-3 p-0 md:hidden">
-            {likes
-              ?.slice(firstPlanIndex, firstPlanIndex + PAGE_SIZE)
-              ?.map((plan) => (
-                <li key={plan.planId}>
-                  <PlanVerticalCard plan={plan} />
+                  <div className="block md:hidden">
+                    <PlanVerticalCard plan={plan} />
+                  </div>
+                  <div className="hidden md:block">
+                    <PlanHorizontalCard plan={plan} nickname={plan.nickname} />
+                  </div>
                 </li>
               ))}
           </ul>

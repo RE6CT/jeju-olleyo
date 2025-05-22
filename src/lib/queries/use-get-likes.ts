@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import {
   fetchGetAllLikesByUserId,
-  fetchGetAllPlans,
+  fetchGetUserLikePlans,
 } from '../apis/like/get-like.api';
 
 /**
@@ -20,7 +20,7 @@ export const useGetLikes = (userId: string | undefined) => {
   // 좋아요 디테일 목록 데이터
   const { data: likes } = useQuery({
     queryKey: ['likes', likeIds],
-    queryFn: () => fetchGetAllPlans(userId, likeIds),
+    queryFn: () => fetchGetUserLikePlans(userId, likeIds),
     staleTime: 1000 * 60 * 2,
     enabled: !!likeIds,
   });

@@ -15,7 +15,6 @@ export const useLikesMutation = (
   return useMutation({
     mutationFn: toggleLike,
     onMutate: async () => {
-      // 정확한 쿼리 키로 취소
       await queryClient.cancelQueries({ queryKey: ['likes', userId] });
       const previousData = queryClient.getQueryData(['likes', userId]);
 

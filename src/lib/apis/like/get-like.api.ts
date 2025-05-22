@@ -49,17 +49,18 @@ export const fetchGetAllLikesByUserId = async (
 
 /**
  * 사용자의 좋아요 목록 상세 정보를 가져오는 함수
+ * @param userId - 사용자 ID
+ * @param planIds - 사용자의 좋아요 id 목록
  */
-export const fetchGetAllPlans = async (
+export const fetchGetUserLikePlans = async (
   userId: string | undefined,
   planIds: number[] | null = [],
 ) => {
   if (!userId || !planIds) return [];
   const supabase = await getServerClient();
 
-  // TODO - 좋아요 순으로 정렬 필요
   const { data, error } = await supabase
-    .rpc('get_all_plans')
+    .rpc('get_user_like_plans', { user_id_param: userId })
     .in('plan_id', planIds);
 
   if (error) throw new Error(error.message);

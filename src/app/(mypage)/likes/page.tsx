@@ -3,9 +3,6 @@ import MypageDataCounts from '../_components/_client/mypage-data-counts';
 import { Suspense } from 'react';
 import Loading from '@/app/loading';
 import MypageActivitiesDropdown from '../_components/_client/mypage-activities-dropdown';
-import { fetchGetAllPlans } from '@/lib/apis/like/get-like.api';
-import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
-import ErrorMessage from '@/components/features/error-message/input-error-message';
 
 export const metadata = {
   title: '마이페이지 - 내가 좋아요한 일정',

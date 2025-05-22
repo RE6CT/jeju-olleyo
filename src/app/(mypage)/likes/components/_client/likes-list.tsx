@@ -2,7 +2,6 @@
 
 import PlanHorizontalCard from '@/components/features/card/plan-horizontal-card';
 import useAuth from '@/lib/hooks/use-auth';
-import { useGetDataCount } from '@/lib/queries/use-get-data-count';
 import MypagePagination from '../../../_components/_client/mypage-pagination';
 import EmptyResult from '@/components/commons/empty-result-link';
 import { PATH } from '@/constants/path.constants';
@@ -20,8 +19,7 @@ const LikesList = () => {
   const searchParams = useSearchParams();
 
   const { user } = useAuth();
-  const { data: countData } = useGetDataCount(user?.id);
-  const { likes } = useGetLikes(user?.id);
+  const { count, likes } = useGetLikes(user?.id);
 
   // 현재 페이지
   const currentPage: number = parseInt(searchParams.get('page') || '1');
@@ -29,7 +27,7 @@ const LikesList = () => {
 
   return (
     <>
-      {countData?.likeCount === 0 ? (
+      {count === 0 ? (
         <div role="region" aria-label="좋아요한 일정 없음">
           <EmptyResult
             buttonText="인기 일정 보러가기"

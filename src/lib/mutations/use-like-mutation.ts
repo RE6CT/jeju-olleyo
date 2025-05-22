@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useToggleLike from '../hooks/use-like';
+import { Plan } from '@/types/plan.type';
 
 /**
  * 좋아요 토글 뮤테이션
@@ -15,27 +16,45 @@ export const useLikesMutation = (
   return useMutation({
     mutationFn: toggleLike,
     onMutate: async () => {
-      await queryClient.cancelQueries({ queryKey: ['likes', userId] });
-      const previousData = queryClient.getQueryData(['likes', userId]);
+      // 쿼리 취소 및 저장
+      await queryClient.cancelQueries({ queryKey: ['likes'] });
+      const previousIds = queryClient.getQueryData<number[]>(['likes', userId]);
+      const previousLikes = queryClient.getQueryData<Plan[]>([
+        'likes',
+        previousIds,
+      ]);
 
-      // 같은 쿼리 키로 업데이트
+      // 좋아요 여부 판별
+      const isLiked = previousIds?.includes(planId);
+
+      // id 목록 업데이트
+      queryClient.setQueryData(['likes', userId], (oldData: number[] = []) => {
+        return isLiked
+          ? oldData.filter((id) => id !== planId)
+          : [...oldData, planId];
+      });
+
+      // 데이터 목록 업데이트
       queryClient.setQueryData(
-        ['likes', userId], // 정확한 키 매칭
-        (oldData: number[] | undefined) => {
-          if (!oldData) return [planId];
-          if (oldData.includes(planId)) {
-            return oldData.filter((id) => id !== planId);
-          } else {
-            return [...oldData, planId];
-          }
+        ['likes', previousIds],
+        (oldData: Plan[] = []) => {
+          return isLiked
+            ? oldData.filter((plan) => plan.planId !== planId)
+            : oldData;
         },
       );
 
-      return { previousData };
+      return { previousIds, previousLikes };
     },
     onError: (err, variables, context) => {
-      if (context?.previousData) {
-        queryClient.setQueryData(['likes', userId], context.previousData);
+      if (context?.previousIds) {
+        queryClient.setQueryData(['likes', userId], context.previousIds);
+      }
+      if (context?.previousLikes && context?.previousIds) {
+        queryClient.setQueryData(
+          ['likes', context.previousIds],
+          context.previousLikes,
+        );
       }
     },
     onSuccess: () => {

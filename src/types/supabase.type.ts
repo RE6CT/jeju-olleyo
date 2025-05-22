@@ -1,6 +1,6 @@
 import { CommentPlanRow, CommentsRow } from './comment.type';
 import { CommunitySortType } from './community.type';
-import { PlansRow, UsersNicknameRow } from './plan.type';
+import { Plan, PlansRow, UsersNicknameRow } from './plan.type';
 
 export type Json =
   | string
@@ -460,6 +460,10 @@ export type Database = {
           travel_end_date: string;
           is_liked: boolean;
         }[];
+      };
+      get_all_plans: {
+        Args: {};
+        Returns: Plan[];
       };
       get_places: {
         Args: { user_id_param: string | null };

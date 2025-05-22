@@ -523,7 +523,6 @@ export const fetchGetPlanById = async (
     createdAt: planData.created_at,
     publicAt: planData.public_at,
     nickname: planData.users.nickname,
-    isLiked: false,
     days: transformedDays,
   };
 };
@@ -653,6 +652,5 @@ export const fetchUpdatePlan = async (
   return {
     ...camelizedData,
     nickname: data.users.nickname,
-    isLiked: plan.isLiked, // 기존 plan의 isLiked 값 유지
   };
 };

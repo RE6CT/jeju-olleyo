@@ -1,15 +1,34 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchGetAllLikesByUserId } from '../apis/like/get-like.api';
+import {
+  fetchGetAllLikesByUserId,
+  fetchGetAllPlans,
+} from '../apis/like/get-like.api';
 
 /**
  * 유저의 좋아요 목록을 가져오는 쿼리 훅
  * @param userId - 유저의 uuid
- * @return 좋아요 목록 쿼리 결과
+ * @return 쿼리 결과 및 함수
  */
 export const useGetLikes = (userId: string | undefined) => {
-  return useQuery({
-    queryKey: ['likes'],
-    queryFn: () => fetchGetAllLikesByUserId(userId),
+  // 좋아요 id 목록 데이터
+  const { data: likeIds } = useQuery({
+    queryKey: ['likes', userId],
+    queryFn: async () => fetchGetAllLikesByUserId(userId),
     staleTime: 1000 * 60 * 2,
   });
+
+  // 좋아요 디테일 목록 데이터
+  const { data: likes } = useQuery({
+    queryKey: ['likes', likeIds],
+    queryFn: () => fetchGetAllPlans(userId, likeIds),
+    staleTime: 1000 * 60 * 2,
+    enabled: !!likeIds,
+  });
+
+  // 좋아요 여부
+  const isLiked = (planId: number) => {
+    return likeIds?.includes(planId);
+  };
+
+  return { likeIds, likes, isLiked };
 };

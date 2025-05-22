@@ -7,8 +7,8 @@ import MypagePagination from '../../../_components/_client/mypage-pagination';
 import EmptyResult from '@/components/commons/empty-result-link';
 import { PATH } from '@/constants/path.constants';
 import PlanVerticalCard from '@/components/features/card/plan-vertical-card';
-import { useGetLikes } from '@/lib/queries/use-get-likes';
 import { useSearchParams } from 'next/navigation';
+import { useGetLikes } from '@/lib/queries/use-get-likes';
 
 const PAGE_SIZE = 4;
 
@@ -21,7 +21,7 @@ const LikesList = () => {
 
   const { user } = useAuth();
   const { data: countData } = useGetDataCount(user?.id);
-  const { data: likes } = useGetLikes(user?.id);
+  const { likes } = useGetLikes(user?.id);
 
   // 현재 페이지
   const currentPage: number = parseInt(searchParams.get('page') || '1');

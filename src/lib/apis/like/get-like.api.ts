@@ -32,14 +32,35 @@ export const fetchgetSingleLike = async (planId: number, userId: string) => {
  */
 export const fetchGetAllLikesByUserId = async (
   userId: string | undefined,
-): Promise<Plan[] | null> => {
+): Promise<number[] | null> => {
+  if (!userId) return [];
   const supabase = await getServerClient();
 
-  if (!userId) return [];
+  const { data, error } = await supabase
+    .from('plan_likes')
+    .select('plan_id')
+    .eq('user_id', userId);
 
-  const { data, error } = await supabase.rpc('get_user_likes', {
-    user_id_param: userId,
-  });
+  if (error) throw new Error(error.message);
+
+  const idList = data?.map((item) => item.plan_id) || [];
+  return idList;
+};
+
+/**
+ * 사용자의 좋아요 목록 상세 정보를 가져오는 함수
+ */
+export const fetchGetAllPlans = async (
+  userId: string | undefined,
+  planIds: number[] | null = [],
+) => {
+  if (!userId || !planIds) return [];
+  const supabase = await getServerClient();
+
+  // TODO - 좋아요 순으로 정렬 필요
+  const { data, error } = await supabase
+    .rpc('get_all_plans')
+    .in('plan_id', planIds);
 
   if (error) throw new Error(error.message);
 

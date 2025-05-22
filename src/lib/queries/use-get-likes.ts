@@ -30,5 +30,8 @@ export const useGetLikes = (userId: string | undefined) => {
     return likeIds?.includes(planId);
   };
 
-  return { likeIds, likes, isLiked };
+  // 좋아요 개수
+  const count = likeIds?.length || 0;
+
+  return { likeIds, likes, isLiked, count };
 };

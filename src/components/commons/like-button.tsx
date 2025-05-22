@@ -2,7 +2,6 @@
 
 import React, { MouseEvent } from 'react';
 import LikesIcon from '../icons/like-icon';
-import useToggleLike from '@/lib/hooks/use-like';
 import { useGetLikes } from '@/lib/queries/use-get-likes';
 import useAuth from '@/lib/hooks/use-auth';
 import { useLikesMutation } from '@/lib/mutations/use-like-mutation';
@@ -19,8 +18,8 @@ const LikeButton = ({
   planId: number;
   className: string;
 }) => {
-  const { mutate: toggleLike } = useLikesMutation(planId);
   const { user } = useAuth();
+  const { mutate: toggleLike } = useLikesMutation(planId, user?.id);
   const { isLiked } = useGetLikes(user?.id);
 
   /**

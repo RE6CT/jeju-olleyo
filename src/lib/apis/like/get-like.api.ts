@@ -28,25 +28,18 @@ export const fetchgetSingleLike = async (planId: number, userId: string) => {
 /**
  * 사용자의 좋아요 목록을 가져오는 함수
  * @param userId - 사용자 ID
- * @param page - 시작 페이지
- * @param pageSize - 페이지 크기
  * @returns 사용자의 좋아요 목록 또는 null
  */
 export const fetchGetAllLikesByUserId = async (
-  userId: string,
-  page: number = 1,
-  pageSize: number = 4,
+  userId: string | undefined,
 ): Promise<Plan[] | null> => {
   const supabase = await getServerClient();
 
-  const startIndex = (page - 1) * pageSize;
-  const endIndex = startIndex + pageSize - 1;
+  if (!userId) return [];
 
-  const { data, error } = await supabase
-    .rpc('get_user_likes', {
-      user_id_param: userId,
-    })
-    .range(startIndex, endIndex);
+  const { data, error } = await supabase.rpc('get_user_likes', {
+    user_id_param: userId,
+  });
 
   if (error) throw new Error(error.message);
 

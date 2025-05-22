@@ -57,8 +57,6 @@ const useToggleLike = (planId: number) => {
       } else {
         await fetchUpdateLikeByUserId(planId, userId);
       }
-
-      invalidateLikes();
     } catch (error) {
       console.error('Error toggling like:', error);
       successToast('좋아요 처리 중 오류가 발생했습니다.');

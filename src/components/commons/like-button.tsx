@@ -5,6 +5,7 @@ import LikesIcon from '../icons/like-icon';
 import useToggleLike from '@/lib/hooks/use-like';
 import { useGetLikes } from '@/lib/queries/use-get-likes';
 import useAuth from '@/lib/hooks/use-auth';
+import { useLikesMutation } from '@/lib/mutations/use-like-mutation';
 
 /**
  * 좋아요 버튼 컴포넌트
@@ -18,7 +19,7 @@ const LikeButton = ({
   planId: number;
   className: string;
 }) => {
-  const { toggleLike } = useToggleLike(planId);
+  const { mutate: toggleLike } = useLikesMutation(planId);
   const { user } = useAuth();
   const { isLiked } = useGetLikes(user?.id);
 

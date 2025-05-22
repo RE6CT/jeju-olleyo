@@ -1,4 +1,21 @@
-import { useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import useToggleLike from '../hooks/use-like';
+
+/**
+ * 좋아요 토글 뮤테이션
+ * @returns 좋아요 뮤테이션 데이터
+ */
+export const useLikesMutation = (planId: number) => {
+  const queryClient = useQueryClient();
+  const { toggleLike } = useToggleLike(planId);
+
+  return useMutation({
+    mutationFn: toggleLike,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['likes'] });
+    },
+  });
+};
 
 /** 좋아요 관련 쿼리 무효화를 위한 커스텀 훅 */
 export const useInvalidateLikes = () => {

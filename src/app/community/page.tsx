@@ -1,6 +1,5 @@
 import JejuBanner from '@/components/features/banner/jeju-banner';
 import { PATH } from '@/constants/path.constants';
-import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 import { fetchGetAllPlans } from '@/lib/apis/plan/plan.api';
 import { CommunitySortType } from '@/types/community.type';
 
@@ -11,18 +10,18 @@ export const metadata = {
   description: '다양한 제주도 여행 계획을 살펴보세요!',
 };
 
+// 30초마다 재생성
+export const revalidate = 30;
+
 const Community = async ({
   searchParams,
 }: {
   searchParams: { sort?: string; page?: number };
 }) => {
-  const user = await fetchGetCurrentUser();
-  const userId = user.user?.id || null;
-
   // 쿼리 파라미터에서 sort 값 가져오기
   const sort = (searchParams.sort as CommunitySortType) || 'popular';
   const page = searchParams.page || 1;
-  const { data: plans, totalPage } = await fetchGetAllPlans(userId, sort, page);
+  const { data: plans, totalPage } = await fetchGetAllPlans(sort, page);
 
   return (
     <div className="w-full">

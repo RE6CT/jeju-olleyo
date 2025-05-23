@@ -25,9 +25,7 @@ export type UsersNicknameRow = Pick<
  * 계획의 기본 정보를 나타내는 타입
  * PlansRow와 UsersNicknameRow 합친 후 CamelCase로 변환
  */
-export type Plan = CamelCaseObject<
-  PlansRow & UsersNicknameRow & { is_liked: boolean }
->;
+export type Plan = CamelCaseObject<PlansRow & UsersNicknameRow>;
 
 /**
  * 일자별 방문 장소 정보가 포함된 계획 타입
@@ -82,8 +80,6 @@ export type PlanCardType = {
   travelStartDate: string;
   /** 여행 종료일 */
   travelEndDate: string;
-  /** 좋아요 여부 */
-  isLiked: boolean;
 };
 
 /**

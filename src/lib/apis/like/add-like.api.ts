@@ -1,8 +1,5 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
-
-import { PATH } from '@/constants/path.constants';
 import { getServerClient } from '@/lib/supabase/server';
 
 /**
@@ -19,9 +16,6 @@ const fetchUpdateLikeByUserId = async (plan_id: number, user_id: string) => {
   });
 
   if (error) throw new Error(error.message);
-
-  revalidatePath(PATH.COMMUNITY);
-  revalidatePath(PATH.LIKES);
 };
 
 export default fetchUpdateLikeByUserId;

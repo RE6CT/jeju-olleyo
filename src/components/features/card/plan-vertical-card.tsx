@@ -41,7 +41,6 @@ const PlanVerticalCard = ({
         </div>
         <LikeButton
           planId={plan.planId}
-          isLiked={plan.isLiked}
           className="absolute right-2 top-2 md:right-4 md:top-4"
         />
         {onEdit && onDelete && isDropdownVisible && (

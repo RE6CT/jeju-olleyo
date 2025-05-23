@@ -2,7 +2,6 @@
 
 import { getServerClient } from '@/lib/supabase/server';
 import { camelize } from '@/lib/utils/camelize';
-import { isDateInRange } from '@/lib/utils/date';
 import { CommunitySortType } from '@/types/community.type';
 import { LocationData } from '@/types/kakao-map.type';
 import { DayPlaces } from '@/types/plan-detail.type';
@@ -124,13 +123,12 @@ export const fetchDeletePlan = async (planId: number) => {
 
 /**
  * 전체 일정을 가져오는 함수
- * @param userId - 사용자의 userId
- * @param limit - 개수 제한
  * @param sortOption - 정렬 옵션
+ * @param page - 첫 페이지
+ * @param pageSize - 한 페이지의 데이터 개수
  * @returns 좋아요 여부가 포함된 전체 일정 목록
  */
 export const fetchGetAllPlans = async (
-  userId: string | null = null,
   sortOption: CommunitySortType = 'popular',
   page: number = 1,
   pageSize: number = 12,
@@ -140,12 +138,15 @@ export const fetchGetAllPlans = async (
   const startIndex = (page - 1) * pageSize;
   const endIndex = startIndex + pageSize - 1;
 
-  const query = supabase
-    .rpc('get_plans', {
-      user_id_param: userId,
-      sort_option: sortOption,
-    })
+  let query = supabase
+    .rpc('get_all_plans')
+    .eq('public', true)
     .range(startIndex, endIndex);
+
+  // 정렬 옵션 지정
+  if (sortOption === 'recent') {
+    query = query.order('created_at', { ascending: false });
+  }
 
   const { data, error: dataError } = await query;
   const { count, error: CountError } = await supabase
@@ -523,7 +524,6 @@ export const fetchGetPlanById = async (
     createdAt: planData.created_at,
     publicAt: planData.public_at,
     nickname: planData.users.nickname,
-    isLiked: false,
     days: transformedDays,
   };
 };
@@ -653,6 +653,5 @@ export const fetchUpdatePlan = async (
   return {
     ...camelizedData,
     nickname: data.users.nickname,
-    isLiked: plan.isLiked, // 기존 plan의 isLiked 값 유지
   };
 };

@@ -24,8 +24,7 @@ const AccountProfileImage = ({
 }) => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const { successToast } = useCustomToast();
-  const { mutate: deleteProfileImage, isPending } =
-    useDeleteProfileImageMutation();
+  const { mutate: deleteProfileImage } = useDeleteProfileImageMutation();
 
   /** 드롭다운 [사진 변경] 메뉴 클릭 핸들러 */
   const handleProfileImageEdit = () => {

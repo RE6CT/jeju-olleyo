@@ -49,7 +49,6 @@ const PlanHorizontalCard = ({
         </div>
         <LikeButton
           planId={plan.planId}
-          isLiked={plan.isLiked}
           className="absolute right-2 top-2 lg:right-4 lg:top-4"
         />
       </div>

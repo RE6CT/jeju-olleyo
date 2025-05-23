@@ -466,6 +466,7 @@ export type Database = {
         Returns: Plan[];
       };
       get_all_plans: {
+        /* eslint-disable @typescript-eslint/no-empty-object-type */
         Args: {};
         Returns: Plan[];
       };

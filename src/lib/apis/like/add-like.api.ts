@@ -1,8 +1,5 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
-
-import { PATH } from '@/constants/path.constants';
 import { getServerClient } from '@/lib/supabase/server';
 
 /**

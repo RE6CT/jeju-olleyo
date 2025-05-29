@@ -19,12 +19,14 @@ export const useLikesMutation = (
       // 쿼리 취소 및 저장
       await queryClient.cancelQueries({ queryKey: ['likes'] });
       const previousIds = queryClient.getQueryData<number[]>(['likes', userId]);
-      const previousLikes = queryClient.getQueryData<Plan[]>([
-        'likes',
-        'details',
-        userId,
-        previousIds,
-      ]);
+      const previousLikes = previousIds
+        ? queryClient.getQueryData<Plan[]>([
+            'likes',
+            'details',
+            userId,
+            previousIds,
+          ])
+        : undefined;
 
       // 좋아요 여부 판별
       const isLiked = previousIds?.includes(planId);
@@ -54,7 +56,7 @@ export const useLikesMutation = (
       }
       if (context?.previousLikes && context?.previousIds) {
         queryClient.setQueryData(
-          ['likes', context.previousIds],
+          ['likes', 'details', userId, context.previousIds],
           context.previousLikes,
         );
       }

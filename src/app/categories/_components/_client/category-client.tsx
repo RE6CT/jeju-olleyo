@@ -11,17 +11,12 @@ import CategoryRegionTabs from './category-region-tabs';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { PATH } from '@/constants/path.constants';
 import React from 'react';
-import { useBookmarkQuery } from '@/lib/queries/use-bookmark-query';
-import useAuth from '@/lib/hooks/use-auth';
 
 /** 서버에서 가져온 데이터를 표시하는 클라이언트 컴포넌트 (카테고리 리스트)) */
 const CategoryClient = ({ category }: { category: CategoryParamType }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const region = (searchParams.get('region') || '전체') as RegionType;
-
-  const { user } = useAuth();
-  const { isBookmarked } = useBookmarkQuery(user?.id || null);
 
   const {
     data,
@@ -73,7 +68,6 @@ const CategoryClient = ({ category }: { category: CategoryParamType }) => {
                     placeId={place.placeId}
                     image={place.image}
                     title={place.title}
-                    isBookmarked={isBookmarked(place.placeId)}
                   />
                 </li>
                 {/* 8번째 아이템 이후에 배너 삽입 (첫 페이지의 마지막에만 적용) */}

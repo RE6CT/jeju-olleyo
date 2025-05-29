@@ -14,7 +14,6 @@ const PlaceCard = ({
   placeId,
   image,
   title,
-  isBookmarked,
   className = '',
 }: PlaceCardProps) => {
   const router = useRouter();

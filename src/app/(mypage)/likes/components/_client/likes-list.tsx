@@ -23,7 +23,7 @@ const LikesList = () => {
 
   // 현재 페이지
   const currentPage: number = parseInt(searchParams.get('page') || '1');
-  const firstPlanIndex = (currentPage - 1) * 4;
+  const firstPlanIndex = (currentPage - 1) * PAGE_SIZE;
 
   return (
     <>
@@ -37,7 +37,10 @@ const LikesList = () => {
         </div>
       ) : (
         <section className="flex flex-col gap-20">
-          <ul className="grid grid-cols-2 gap-3 md:grid-cols-1 md:gap-5">
+          <ul
+            role="list"
+            className="grid grid-cols-2 gap-3 md:grid-cols-1 md:gap-5"
+          >
             {likes
               ?.slice(firstPlanIndex, firstPlanIndex + PAGE_SIZE)
               ?.map((plan) => (

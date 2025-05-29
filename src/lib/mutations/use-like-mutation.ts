@@ -21,6 +21,8 @@ export const useLikesMutation = (
       const previousIds = queryClient.getQueryData<number[]>(['likes', userId]);
       const previousLikes = queryClient.getQueryData<Plan[]>([
         'likes',
+        'details',
+        userId,
         previousIds,
       ]);
 

@@ -18,8 +18,8 @@ export const useGetLikes = (userId: string | undefined) => {
   });
 
   // 좋아요 디테일 목록 데이터
-  const { data: likes } = useQuery({
-    queryKey: ['likes', likeIds],
+  const { data: likes, error: likesError } = useQuery({
+    queryKey: ['likes', 'details', userId, likeIds],
     queryFn: () => fetchGetUserLikePlans(userId, likeIds),
     staleTime: 1000 * 60 * 2,
     enabled: !!likeIds,
@@ -34,5 +34,5 @@ export const useGetLikes = (userId: string | undefined) => {
   // 좋아요 개수
   const count = likeIds?.length || 0;
 
-  return { likeIds, likes, isLiked, count };
+  return { likeIds, likes, isLiked, count, error: likesError };
 };

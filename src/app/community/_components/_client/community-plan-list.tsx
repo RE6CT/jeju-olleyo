@@ -34,7 +34,7 @@ const CommunityPlanList = ({
    * @param page - 이동할 페이지 숫자
    */
   const handlePageChange = (page: number) => {
-    router.push(`?page=${page}`);
+    router.push(`?page=${page}&sort=${sortOption}`);
   };
 
   return (

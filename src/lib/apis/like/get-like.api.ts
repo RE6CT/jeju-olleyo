@@ -28,25 +28,40 @@ export const fetchgetSingleLike = async (planId: number, userId: string) => {
 /**
  * 사용자의 좋아요 목록을 가져오는 함수
  * @param userId - 사용자 ID
- * @param page - 시작 페이지
- * @param pageSize - 페이지 크기
  * @returns 사용자의 좋아요 목록 또는 null
  */
 export const fetchGetAllLikesByUserId = async (
-  userId: string,
-  page: number = 1,
-  pageSize: number = 4,
-): Promise<Plan[] | null> => {
+  userId: string | undefined,
+): Promise<number[] | null> => {
+  if (!userId) return [];
   const supabase = await getServerClient();
 
-  const startIndex = (page - 1) * pageSize;
-  const endIndex = startIndex + pageSize - 1;
+  const { data, error } = await supabase
+    .from('plan_likes')
+    .select('plan_id')
+    .eq('user_id', userId);
+
+  if (error) throw new Error(error.message);
+
+  const idList = data?.map((item) => item.plan_id) || [];
+  return idList;
+};
+
+/**
+ * 사용자의 좋아요 목록 상세 정보를 가져오는 함수
+ * @param userId - 사용자 ID
+ * @param planIds - 사용자의 좋아요 id 목록
+ */
+export const fetchGetUserLikePlans = async (
+  userId: string | undefined,
+  planIds: number[] | null = [],
+) => {
+  if (!userId || !planIds) return [];
+  const supabase = await getServerClient();
 
   const { data, error } = await supabase
-    .rpc('get_user_likes', {
-      user_id_param: userId,
-    })
-    .range(startIndex, endIndex);
+    .rpc('get_user_like_plans', { user_id_param: userId })
+    .in('plan_id', planIds);
 
   if (error) throw new Error(error.message);
 

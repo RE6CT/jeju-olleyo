@@ -5,7 +5,6 @@ import { getCurrentSession } from '../apis/auth/auth-browser.api';
 import fetchUpdateLikeByUserId from '../apis/like/add-like.api';
 import fetchDeleteLike from '../apis/like/delete-like.api';
 import { fetchgetSingleLike } from '../apis/like/get-like.api';
-import { useInvalidateLikes } from '../mutations/use-like-mutation';
 import useAlert from './use-alert';
 
 import useCustomToast from './use-custom-toast';
@@ -17,7 +16,6 @@ import { PATH } from '@/constants/path.constants';
  * @returns
  */
 const useToggleLike = (planId: number) => {
-  const { invalidateLikes } = useInvalidateLikes();
   const { successToast } = useCustomToast();
   const { showQuestion } = useAlert();
   const router = useRouter();
@@ -57,8 +55,6 @@ const useToggleLike = (planId: number) => {
       } else {
         await fetchUpdateLikeByUserId(planId, userId);
       }
-
-      invalidateLikes();
     } catch (error) {
       console.error('Error toggling like:', error);
       successToast('좋아요 처리 중 오류가 발생했습니다.');

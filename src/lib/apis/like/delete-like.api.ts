@@ -1,8 +1,5 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
-
-import { PATH } from '@/constants/path.constants';
 import { getServerClient } from '@/lib/supabase/server';
 
 /**
@@ -18,9 +15,6 @@ const fetchDeleteLike = async (planLikeId: number) => {
     .eq('plan_like_id', planLikeId);
 
   if (error) throw new Error(error.message);
-
-  revalidatePath(PATH.COMMUNITY);
-  revalidatePath(PATH.LIKES);
 };
 
 export default fetchDeleteLike;

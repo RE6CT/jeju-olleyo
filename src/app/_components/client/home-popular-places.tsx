@@ -86,7 +86,6 @@ const PopularPlaces = () => {
           placeId={place.id}
           image={place.image}
           title={place.title}
-          isBookmarked={place.isBookmarked}
         />
       );
     });

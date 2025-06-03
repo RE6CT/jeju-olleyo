@@ -5,7 +5,7 @@ import { useMemo, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { CategoryType } from '@/types/category.type';
-import BookmarkIcon from '@/components/commons/bookmark-icon';
+import BookmarkButton from '@/components/commons/bookmark-button';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import PlaceModal from '@/components/features/plan/place-modal';
 import { getDefaultPlanOrPlaceImage } from '@/lib/utils/get-default-plan-image';
@@ -76,11 +76,7 @@ const PlaceCardSidemenu = ({
 
         {/* 버튼 영역 */}
         <div className="flex items-center gap-2">
-          <BookmarkIcon
-            isBookmarked={isBookmarked}
-            onToggle={toggleBookmark}
-            className="h-6 w-6"
-          />
+          <BookmarkButton placeId={placeId} className="h-6 w-6" />
           {onAddPlace && (
             <Button
               variant="ghost"

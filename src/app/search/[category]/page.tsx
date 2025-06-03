@@ -98,7 +98,6 @@ const SearchResultsPage = ({
                       placeId={place.placeId}
                       image={place.image}
                       title={place.title}
-                      isBookmarked={place.isBookmarked}
                     />
                     {idx === 7 && (
                       <div className="col-span-full my-4 flex w-full items-center justify-center">

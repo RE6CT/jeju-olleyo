@@ -68,7 +68,6 @@ const CategoryClient = ({ category }: { category: CategoryParamType }) => {
                     placeId={place.placeId}
                     image={place.image}
                     title={place.title}
-                    isBookmarked={place.isBookmarked}
                   />
                 </li>
                 {/* 8번째 아이템 이후에 배너 삽입 (첫 페이지의 마지막에만 적용) */}

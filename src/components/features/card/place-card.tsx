@@ -5,7 +5,7 @@ import { memo } from 'react';
 
 import PlaceImage from '@/components/commons/place-image';
 import { PlaceCardProps } from '@/types/card.type';
-import BookmarkButton from '../like/bookmark-button';
+import BookmarkButton from '@/components/commons/bookmark-button';
 
 /**
  * 장소 카드 컴포넌트
@@ -14,7 +14,6 @@ const PlaceCard = ({
   placeId,
   image,
   title,
-  isBookmarked,
   className = '',
 }: PlaceCardProps) => {
   const router = useRouter();
@@ -37,7 +36,7 @@ const PlaceCard = ({
         />
         {/* 북마크 버튼 */}
         <div className="absolute right-2 top-2">
-          <BookmarkButton isBookmarked={isBookmarked} placeId={placeId} />
+          <BookmarkButton placeId={placeId} />
         </div>
       </div>
 

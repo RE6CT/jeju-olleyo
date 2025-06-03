@@ -5,11 +5,11 @@ import PlaceImage from '@/components/commons/place-image';
 import { Place } from '@/types/place.type';
 import { DetailIntroRaw } from '@/types/korea-tour.type';
 import { CategoryType } from '@/types/category.type';
-import BookmarkButton from '../like/bookmark-button';
 import TimeIcon from '@/components/icons/time-icon';
 import PhoneIcon from '@/components/icons/phone-icon';
 import AddIcon from '@/components/icons/add-icon';
 import { PlaceModal } from '@/types/place-modal.type';
+import BookmarkButton from '@/components/commons/bookmark-button';
 // import PlanVerticalCard from '../card/plan-vertical-card';
 
 const PlaceModalView = ({
@@ -61,9 +61,8 @@ const PlaceModalView = ({
         <div className="mt-2 flex w-full items-center justify-between">
           <div className="bold-28">{place.title}</div>
           <BookmarkButton
-            className="h-[44px] w-[42px]"
-            isBookmarked={isBookmarked}
             placeId={place.place_id}
+            className="h-[44px] w-[42px]"
           />
         </div>
 

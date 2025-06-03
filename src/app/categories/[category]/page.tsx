@@ -3,6 +3,12 @@ import { CategoryParamType } from '@/types/category.type';
 import CategoryClient from '../_components/_client/category-client';
 import { Metadata } from 'next';
 import { CATEGORY_KR_MAP } from '@/constants/home.constants';
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from '@tanstack/react-query';
+import { prefetchPlacesByCategory } from '@/lib/queries/use-get-places';
 
 export async function generateMetadata({
   params,
@@ -31,17 +37,17 @@ const CategoryPage = async ({
 }: {
   params: { category: CategoryParamType };
 }) => {
-  // const queryClient = new QueryClient();
+  const queryClient = new QueryClient();
 
   const urlCategory = params.category;
-  // await prefetchPlacesByCategory(queryClient, urlCategory);
+  await prefetchPlacesByCategory(queryClient, urlCategory);
 
   return (
-    // <HydrationBoundary state={dehydrate(queryClient)}>
-    <div className="flex flex-col items-center justify-center bg-white p-4 md:p-7 lg:p-9">
-      <CategoryClient category={urlCategory} />
-    </div>
-    // </HydrationBoundary>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <div className="flex flex-col items-center justify-center bg-white p-4 md:p-7 lg:p-9">
+        <CategoryClient category={urlCategory} />
+      </div>
+    </HydrationBoundary>
   );
 };
 

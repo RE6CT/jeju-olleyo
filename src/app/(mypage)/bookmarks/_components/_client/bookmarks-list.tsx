@@ -89,7 +89,6 @@ const BookmarksList = ({ category }: { category: CategoryParamType }) => {
                   placeId={place.placeId}
                   image={place.image}
                   title={place.title}
-                  isBookmarked={true}
                 />
               </li>
             ))}

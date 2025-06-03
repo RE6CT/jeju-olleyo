@@ -22,6 +22,5 @@ export type PlaceCardProps = {
   placeId: number;
   image: string | null;
   title: string;
-  isBookmarked: boolean;
   className?: string;
 };

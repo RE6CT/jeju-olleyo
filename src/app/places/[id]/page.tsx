@@ -6,6 +6,21 @@ import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 import PlaceDetailContent from './_components/client/place-detail-content';
 import PlanIncludingPlace from './_components/server/plan-including-place';
 import PlacesHeader from './_components/client/places-header';
+import { createClient } from '@supabase/supabase-js';
+
+export async function generateStaticParams() {
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+  );
+  const { data, error } = await supabase.from('places').select('place_id');
+
+  if (error || !data) return [];
+
+  return data.map((place) => ({
+    id: place.place_id.toString(),
+  }));
+}
 
 export async function generateMetadata({ params }: { params: { id: string } }) {
   const supabase = getServerClient();

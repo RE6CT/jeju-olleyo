@@ -12,10 +12,14 @@ import EasterEggWrapper from '@/components/commons/EasterEggWrapper';
 import BottomNav from '@/components/layouts/bottom-nav';
 
 export const metadata: Metadata = {
-  title: '제주 올레요',
+  title: { default: '제주 올레요', template: '%s - 제주 올레요' },
   description: '제주 여행을 떠나기 위한 일정 만들어요!',
-  icons: {
-    icon: '/logo/color_logo_single_bg.png',
+  twitter: {
+    card: 'summary_large_image',
+  },
+  // 구글 써치콘솔 등록 용도
+  verification: {
+    google: 'zPuC0ctkbTxBBW1VNlyTp-SHWjH4d_vIehfbyplktss',
   },
 };
 

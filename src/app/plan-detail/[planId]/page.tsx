@@ -73,7 +73,7 @@ const PlanDetailPage = async ({
     const isReadOnly = searchParams.isReadOnly === 'true' || !isOwner;
 
     return (
-      <main className="mx-auto flex w-full min-w-[375px] max-w-[1024px] max-w-[375px] flex-col gap-5 bg-white p-4 md:max-w-[769px] md:px-5 md:py-3 lg:max-w-[1024px] lg:px-6 lg:py-5">
+      <main className="mx-auto flex w-full min-w-[375px] max-w-[1024px] flex-col gap-5 bg-white p-4 md:max-w-[769px] md:px-5 md:py-3 lg:max-w-[1024px] lg:px-6 lg:py-5">
         {isOwner && (
           <header className="hidden items-center justify-between md:flex">
             <div className="flex items-center gap-3">

@@ -14,9 +14,6 @@ import BottomNav from '@/components/layouts/bottom-nav';
 export const metadata: Metadata = {
   title: '제주 올레요',
   description: '제주 여행을 떠나기 위한 일정 만들어요!',
-  icons: {
-    icon: '/logo/color_logo_single_bg.png',
-  },
 };
 
 const pretendard = localFont({

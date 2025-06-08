@@ -17,6 +17,10 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
   },
+  // 구글 써치콘솔 등록 용도
+  verification: {
+    google: 'zPuC0ctkbTxBBW1VNlyTp-SHWjH4d_vIehfbyplktss',
+  },
 };
 
 const pretendard = localFont({

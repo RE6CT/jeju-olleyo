@@ -197,5 +197,7 @@ export async function middleware(request: NextRequest) {
 
 // 매처 패턴 - 미들웨어를 적용할 경로 지정
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|sitemap.xml).*)'],
+  matcher: [
+    '/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
+  ],
 };

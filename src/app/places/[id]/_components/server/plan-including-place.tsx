@@ -32,9 +32,7 @@ const PlanIncludingPlace = async ({ placeId }: { placeId: number }) => {
         </p>
       )}
 
-      <div className="grid grid-cols-2 gap-x-[40px] gap-y-4 md:grid-cols-2 lg:grid-cols-3">
-        {plans && <PlanListPreview plans={plans} />}
-      </div>
+      <div>{plans && <PlanListPreview plans={plans} />}</div>
     </div>
   );
 };

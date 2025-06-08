@@ -16,7 +16,7 @@ type PlanSummary = {
 
 const PlanListPreview = ({ plans }: { plans: PlanSummary[] }) => {
   return (
-    <div className="grid grid-cols-2 gap-x-[40px] gap-y-4 md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid grid-cols-2 gap-x-[40px] gap-y-4 lg:grid-cols-3">
       {plans.slice(0, 6).map((plan) => (
         <PlanVerticalCard key={plan.planId} plan={plan} />
       ))}

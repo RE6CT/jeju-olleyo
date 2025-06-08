@@ -2,6 +2,7 @@ import PlanVerticalCard from '@/components/features/card/plan-vertical-card';
 import { getServerClient } from '@/lib/supabase/server';
 import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 import { camelize } from '@/lib/utils/camelize';
+import PlanListPreview from '../client/plan-list-preview';
 
 const PlanIncludingPlace = async ({ placeId }: { placeId: number }) => {
   const supabase = await getServerClient();
@@ -32,10 +33,7 @@ const PlanIncludingPlace = async ({ placeId }: { placeId: number }) => {
       )}
 
       <div className="grid grid-cols-2 gap-x-[40px] gap-y-4 md:grid-cols-2 lg:grid-cols-3">
-        {plans &&
-          plans
-            .slice(0, 6)
-            .map((plan) => <PlanVerticalCard key={plan.planId} plan={plan} />)}
+        {plans && <PlanListPreview plans={plans} />}
       </div>
     </div>
   );

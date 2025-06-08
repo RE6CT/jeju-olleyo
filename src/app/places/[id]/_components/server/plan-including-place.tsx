@@ -1,4 +1,3 @@
-import PlanVerticalCard from '@/components/features/card/plan-vertical-card';
 import { getServerClient } from '@/lib/supabase/server';
 import { fetchGetCurrentUser } from '@/lib/apis/auth/auth-server.api';
 import { camelize } from '@/lib/utils/camelize';

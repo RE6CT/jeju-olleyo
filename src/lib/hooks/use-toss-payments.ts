@@ -6,6 +6,11 @@ import {
 
 const clientKey = process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY || '';
 
+/**
+ * 토스 결제 시스템 관련 훅
+ * @param customerKey - 결제 요청 사용자의 UUID
+ * @param value - 결제 금액
+ */
 const useTossPayments = (customerKey: string, value: number) => {
   const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
   const [amount, setAmount] = useState({
@@ -75,6 +80,29 @@ const useTossPayments = (customerKey: string, value: number) => {
     setAmount({ ...amount, value });
     await widgets.setAmount(amount);
   };
+
+  /**
+   * 결제를 요청하는 함수
+   * @param orderName - 주문 이름
+   */
+  const requestPayment = async (orderName: string) => {
+    if (widgets === null) {
+      return;
+    }
+
+    try {
+      await widgets.requestPayment({
+        orderId: crypto.randomUUID(),
+        orderName,
+        successUrl: window.location.origin + '/success',
+        failUrl: window.location.origin + '/fail',
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return { ready, updateAmount, requestPayment };
 };
 
 export default useTossPayments;

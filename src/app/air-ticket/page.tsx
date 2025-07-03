@@ -20,6 +20,14 @@ import {
 import { getBrowserClient } from '@/lib/supabase/client';
 import { useCurrentUser } from '@/lib/queries/auth-queries';
 import useCustomToast from '@/lib/hooks/use-custom-toast';
+import PayUI from './_components/pay-ui';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 const FlightSearch = () => {
   const [departure, setDeparture] = useState('');
@@ -39,6 +47,7 @@ const FlightSearch = () => {
   const { open } = useAlertStore();
   const { data: user } = useCurrentUser();
   const { successToast } = useCustomToast();
+  const [isModalOpen, setModalOpen] = useState(false);
 
   const totalPrice =
     125000 * (selectedGoFlight ? 1 : 0) +
@@ -61,14 +70,22 @@ const FlightSearch = () => {
       confirmText: '확인',
     });
   };
+
+  /** 예약 버튼 핸들러 함수 */
   const handleReserve = async () => {
     const supabase = getBrowserClient();
 
-    if (!user) return alert('로그인이 필요합니다!');
+    if (!user) {
+      successToast('로그인이 필요합니다!');
+      return;
+    }
+
+    setModalOpen(true);
 
     const flightsToSave = [selectedGoFlight, selectedReturnFlight].filter(
       (flight): flight is Flight => flight !== null,
     );
+
     for (const flight of flightsToSave) {
       const isGoFlight = flight === selectedGoFlight;
       const baseDate = isGoFlight ? startDate : endDate;
@@ -170,188 +187,203 @@ const FlightSearch = () => {
   };
 
   return (
-    <div className="mx-auto max-w-5xl p-6">
-      <TicketSearchForm
-        departureList={DEPARTURE_LIST}
-        departure={departure}
-        setDeparture={setDeparture}
-        handleSubmit={handleSubmit}
-        showInnerButton={showInnerButton}
-        setShowInnerButton={setShowInnerButton}
-        startDate={startDate}
-        endDate={endDate}
-        setStartDate={setStartDate}
-        setEndDate={setEndDate}
-        passengers={passengers}
-        setPassengers={setPassengers}
-        classType={classType}
-        setClassType={setClassType}
-      />
+    <>
+      <div className="mx-auto max-w-5xl p-6">
+        <TicketSearchForm
+          departureList={DEPARTURE_LIST}
+          departure={departure}
+          setDeparture={setDeparture}
+          handleSubmit={handleSubmit}
+          showInnerButton={showInnerButton}
+          setShowInnerButton={setShowInnerButton}
+          startDate={startDate}
+          endDate={endDate}
+          setStartDate={setStartDate}
+          setEndDate={setEndDate}
+          passengers={passengers}
+          setPassengers={setPassengers}
+          classType={classType}
+          setClassType={setClassType}
+        />
 
-      {loading ? (
-        <Loading />
-      ) : (
-        showInnerButton && (
-          <div className="mx-auto grid max-w-full gap-6 px-2 py-4 md:mx-7 md:grid-cols-[1fr_1fr] md:px-9 md:py-8 lg:grid-cols-[1fr_1fr_auto]">
-            <section className="w-full">
-              <div className="flex items-end justify-between gap-2">
-                <div className="flex items-end gap-2">
-                  <h2 className="text-16 font-semibold md:text-20 lg:text-24">
-                    가는 편
-                  </h2>
-                  <p className="mb-2 flex text-12 text-gray-300 md:text-14">
-                    {getAirportLabel(departure)}
-                    <img
-                      alt="오른쪽 화살표"
-                      src="/icons/arrow_right.svg"
-                      className="mx-2 h-4 w-4 pt-1"
-                    />
-                    제주
-                  </p>
+        {loading ? (
+          <Loading />
+        ) : (
+          showInnerButton && (
+            <div className="mx-auto grid max-w-full gap-6 px-2 py-4 md:mx-7 md:grid-cols-[1fr_1fr] md:px-9 md:py-8 lg:grid-cols-[1fr_1fr_auto]">
+              <section className="w-full">
+                <div className="flex items-end justify-between gap-2">
+                  <div className="flex items-end gap-2">
+                    <h2 className="text-16 font-semibold md:text-20 lg:text-24">
+                      가는 편
+                    </h2>
+                    <p className="mb-2 flex text-12 text-gray-300 md:text-14">
+                      {getAirportLabel(departure)}
+                      <img
+                        alt="오른쪽 화살표"
+                        src="/icons/arrow_right.svg"
+                        className="mx-2 h-4 w-4 pt-1"
+                      />
+                      제주
+                    </p>
+                  </div>
+
+                  <select
+                    id="ticket-list-filter-go"
+                    className="mb-2 rounded px-2 py-1 text-sm text-gray-700"
+                    value={goSortKey}
+                    onChange={(e) =>
+                      setGoSortKey(
+                        e.target.value as
+                          | 'airline'
+                          | 'dep_desc'
+                          | 'arr_asc'
+                          | 'dep_asc'
+                          | 'arr_desc',
+                      )
+                    }
+                  >
+                    <option value="arr_asc">출발 빠른 순</option>
+                    <option value="arr_desc">출발 느린 순</option>
+                    <option value="dep_asc">도착 빠른 순</option>
+                    <option value="dep_desc">도착 느린 순</option>
+                    <option value="airline">항공사 별</option>
+                  </select>
                 </div>
 
-                <select
-                  id="ticket-list-filter-go"
-                  className="mb-2 rounded px-2 py-1 text-sm text-gray-700"
-                  value={goSortKey}
-                  onChange={(e) =>
-                    setGoSortKey(
-                      e.target.value as
-                        | 'airline'
-                        | 'dep_desc'
-                        | 'arr_asc'
-                        | 'dep_asc'
-                        | 'arr_desc',
-                    )
-                  }
-                >
-                  <option value="arr_asc">출발 빠른 순</option>
-                  <option value="arr_desc">출발 느린 순</option>
-                  <option value="dep_asc">도착 빠른 순</option>
-                  <option value="dep_desc">도착 느린 순</option>
-                  <option value="airline">항공사 별</option>
-                </select>
-              </div>
+                <TicketList
+                  flights={goFlights}
+                  sortKey={goSortKey}
+                  sortFlights={sortFlights}
+                  setSortKey={setGoSortKey}
+                  selectedFlight={selectedGoFlight}
+                  setSelectedFlight={setSelectedGoFlight}
+                  baseDateStr={formatDateToString(startDate)}
+                  startDate={startDate}
+                  setStartDate={setStartDate}
+                />
+              </section>
 
-              <TicketList
-                flights={goFlights}
-                sortKey={goSortKey}
-                sortFlights={sortFlights}
-                setSortKey={setGoSortKey}
-                selectedFlight={selectedGoFlight}
-                setSelectedFlight={setSelectedGoFlight}
-                baseDateStr={formatDateToString(startDate)}
-                startDate={startDate}
-                setStartDate={setStartDate}
-              />
-            </section>
+              <section className="w-full">
+                <div className="flex items-end justify-between gap-2">
+                  <div className="flex items-end gap-2">
+                    <h2 className="text-16 font-semibold md:text-20 lg:text-24">
+                      오는 편
+                    </h2>
+                    <p className="mb-2 flex text-12 text-gray-300 md:text-14">
+                      제주
+                      <img
+                        alt="오른쪽 화살표"
+                        src="/icons/arrow_right.svg"
+                        className="mx-2 h-4 w-4 pt-1"
+                      />
+                      {getAirportLabel(departure)}
+                    </p>
+                  </div>
 
-            <section className="w-full">
-              <div className="flex items-end justify-between gap-2">
-                <div className="flex items-end gap-2">
-                  <h2 className="text-16 font-semibold md:text-20 lg:text-24">
-                    오는 편
-                  </h2>
-                  <p className="mb-2 flex text-12 text-gray-300 md:text-14">
-                    제주
-                    <img
-                      alt="오른쪽 화살표"
-                      src="/icons/arrow_right.svg"
-                      className="mx-2 h-4 w-4 pt-1"
-                    />
-                    {getAirportLabel(departure)}
-                  </p>
+                  <select
+                    id="ticket-list-filter"
+                    className="mb-2 rounded px-2 py-1 text-sm text-gray-700"
+                    value={comeSortKey}
+                    onChange={(e) =>
+                      setComeSortKey(
+                        e.target.value as
+                          | 'airline'
+                          | 'dep_desc'
+                          | 'arr_asc'
+                          | 'dep_asc'
+                          | 'arr_desc',
+                      )
+                    }
+                  >
+                    <option value="arr_asc">출발 빠른 순</option>
+                    <option value="arr_desc">출발 느린 순</option>
+                    <option value="dep_asc">도착 빠른 순</option>
+                    <option value="dep_desc">도착 느린 순</option>
+                    <option value="airline">항공사 별</option>
+                  </select>
                 </div>
 
-                <select
-                  id="ticket-list-filter"
-                  className="mb-2 rounded px-2 py-1 text-sm text-gray-700"
-                  value={comeSortKey}
-                  onChange={(e) =>
-                    setComeSortKey(
-                      e.target.value as
-                        | 'airline'
-                        | 'dep_desc'
-                        | 'arr_asc'
-                        | 'dep_asc'
-                        | 'arr_desc',
-                    )
-                  }
-                >
-                  <option value="arr_asc">출발 빠른 순</option>
-                  <option value="arr_desc">출발 느린 순</option>
-                  <option value="dep_asc">도착 빠른 순</option>
-                  <option value="dep_desc">도착 느린 순</option>
-                  <option value="airline">항공사 별</option>
-                </select>
-              </div>
+                <TicketList
+                  flights={returnFlights}
+                  sortKey={comeSortKey}
+                  sortFlights={sortFlights}
+                  setSortKey={setComeSortKey}
+                  selectedFlight={selectedReturnFlight}
+                  setSelectedFlight={setSelectedReturnFlight}
+                  baseDateStr={formatDateToString(endDate)}
+                  startDate={endDate}
+                  setStartDate={setEndDate}
+                />
+              </section>
 
-              <TicketList
-                flights={returnFlights}
-                sortKey={comeSortKey}
-                sortFlights={sortFlights}
-                setSortKey={setComeSortKey}
-                selectedFlight={selectedReturnFlight}
-                setSelectedFlight={setSelectedReturnFlight}
-                baseDateStr={formatDateToString(endDate)}
-                startDate={endDate}
-                setStartDate={setEndDate}
-              />
-            </section>
+              {/* 데스크탑에서만 보이는 예약 버튼 */}
+              <button
+                onClick={handleReserve}
+                disabled={!selectedGoFlight || !selectedReturnFlight}
+                className={`col-start-3 mx-[12px] hidden h-11 w-24 self-start rounded-12 px-4 py-[10px] text-gray-500 lg:block ${
+                  !selectedGoFlight || !selectedReturnFlight
+                    ? 'cursor-not-allowed bg-gray-50 text-gray-500'
+                    : 'bg-primary-500 text-white'
+                }`}
+              >
+                예약 하기
+              </button>
+            </div>
+          )
+        )}
 
-            {/* 데스크탑에서만 보이는 예약 버튼 */}
+        {/* 모바일/태블릿에서 보이는 하단 고정 예약 버튼 */}
+        {showInnerButton && (selectedGoFlight || selectedReturnFlight) && (
+          <div className="fixed bottom-0 left-0 z-50 flex h-[86px] w-full items-center justify-between border-t border-gray-200 bg-white p-4 lg:hidden">
+            <div className="flex flex-col">
+              <span className="text-16 font-semibold">
+                총 {totalPrice.toLocaleString()}원
+              </span>
+            </div>
             <button
               onClick={handleReserve}
               disabled={!selectedGoFlight || !selectedReturnFlight}
-              className={`col-start-3 mx-[12px] hidden h-11 w-24 self-start rounded-12 px-4 py-[10px] text-gray-500 lg:block ${
+              className={`h-11 w-24 rounded-12 px-4 py-[10px] ${
                 !selectedGoFlight || !selectedReturnFlight
                   ? 'cursor-not-allowed bg-gray-50 text-gray-500'
                   : 'bg-primary-500 text-white'
               }`}
             >
-              예약 하기
+              예약하기
             </button>
           </div>
-        )
-      )}
+        )}
 
-      {/* 모바일/태블릿에서 보이는 하단 고정 예약 버튼 */}
-      {showInnerButton && (selectedGoFlight || selectedReturnFlight) && (
-        <div className="fixed bottom-0 left-0 z-50 flex h-[86px] w-full items-center justify-between border-t border-gray-200 bg-white p-4 lg:hidden">
-          <div className="flex flex-col">
-            <span className="text-16 font-semibold">
-              총 {totalPrice.toLocaleString()}원
-            </span>
-          </div>
-          <button
-            onClick={handleReserve}
-            disabled={!selectedGoFlight || !selectedReturnFlight}
-            className={`h-11 w-24 rounded-12 px-4 py-[10px] ${
-              !selectedGoFlight || !selectedReturnFlight
-                ? 'cursor-not-allowed bg-gray-50 text-gray-500'
-                : 'bg-primary-500 text-white'
-            }`}
-          >
-            예약하기
-          </button>
-        </div>
-      )}
+        {/* 바텀시트 여백을 위한 공간 */}
+        {showInnerButton && (selectedGoFlight || selectedReturnFlight) && (
+          <div className="h-20 pb-10 lg:hidden"></div>
+        )}
 
-      {/* 바텀시트 여백을 위한 공간 */}
-      {showInnerButton && (selectedGoFlight || selectedReturnFlight) && (
-        <div className="h-20 pb-10 lg:hidden"></div>
-      )}
+        {!showInnerButton && (
+          <footer className="fixed bottom-0 left-0 mt-10 hidden w-full justify-center bg-white md:flex">
+            <img
+              src="/banner-images/airplane_footer.png"
+              alt="푸터 이미지"
+              className="h-auto w-auto object-cover"
+            />
+          </footer>
+        )}
+      </div>
 
-      {!showInnerButton && (
-        <footer className="fixed bottom-0 left-0 mt-10 hidden w-full justify-center bg-white md:flex">
-          <img
-            src="/banner-images/airplane_footer.png"
-            alt="푸터 이미지"
-            className="h-auto w-auto object-cover"
-          />
-        </footer>
-      )}
-    </div>
+      {/* 결제창 UI 모달 */}
+      <Dialog open={isModalOpen} onOpenChange={setModalOpen}>
+        <DialogHeader>
+          <DialogTitle className="sr-only">티켓 결제</DialogTitle>
+          <DialogDescription className="sr-only">
+            티켓 결제 창입니다.
+          </DialogDescription>
+        </DialogHeader>
+        <DialogContent className="rounded-12">
+          <PayUI orderName="" value={totalPrice} />
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 

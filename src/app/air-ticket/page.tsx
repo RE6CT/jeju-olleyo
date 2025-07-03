@@ -71,6 +71,24 @@ const FlightSearch = () => {
     });
   };
 
+  const cancelPayAlert = ({
+    onConfirm,
+    onCancel,
+  }: {
+    onConfirm: () => void;
+    onCancel: () => void;
+  }) => {
+    open({
+      type: 'warning',
+      title: '결제 취소',
+      message: '결제가 취소됩니다.',
+      confirmText: '확인',
+      cancelText: '취소',
+      onConfirm,
+      onCancel,
+    });
+  };
+
   /** 예약 버튼 핸들러 함수 */
   const handleReserve = async () => {
     const supabase = getBrowserClient();
@@ -183,6 +201,26 @@ const FlightSearch = () => {
       ErrorAlert();
     } finally {
       setLoading(false);
+    }
+  };
+
+  /**
+   * 닫기 버튼 눌렀을 경우 실행할 함수
+   * @param newOpen - 닫기 여부
+   */
+  const handleOpenChange = (newOpen: boolean) => {
+    if (!newOpen) {
+      // 결제 취소 여부 확인
+      cancelPayAlert({
+        onConfirm: () => {
+          setModalOpen(false);
+        },
+        onCancel: () => {
+          setModalOpen(true);
+        },
+      });
+    } else {
+      setModalOpen(newOpen);
     }
   };
 
@@ -372,15 +410,21 @@ const FlightSearch = () => {
       </div>
 
       {/* 결제창 UI 모달 */}
-      <Dialog open={isModalOpen} onOpenChange={setModalOpen}>
+      <Dialog open={isModalOpen} onOpenChange={handleOpenChange}>
         <DialogHeader>
           <DialogTitle className="sr-only">티켓 결제</DialogTitle>
           <DialogDescription className="sr-only">
             티켓 결제 창입니다.
           </DialogDescription>
         </DialogHeader>
-        <DialogContent className="rounded-12">
-          <PayUI orderName="" value={totalPrice} />
+        <DialogContent
+          className="rounded-12"
+          onInteractOutside={(e) => e.preventDefault()}
+        >
+          <PayUI
+            orderName={`${selectedGoFlight?.airlineKorean} 외 1매`}
+            value={totalPrice}
+          />
         </DialogContent>
       </Dialog>
     </>

@@ -4,7 +4,7 @@ import {
   TossPaymentsWidgets,
 } from '@tosspayments/tosspayments-sdk';
 
-const clientKey = process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY || '';
+const clientKey = process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY;
 
 /**
  * 토스 결제 시스템 관련 훅
@@ -21,7 +21,7 @@ const useTossPayments = (customerKey: string | undefined, value: number) => {
 
   // 위젯 초기화
   useEffect(() => {
-    if (!customerKey) return;
+    if (!customerKey || !clientKey) return;
 
     const fetchPaymentWidgets = async () => {
       try {

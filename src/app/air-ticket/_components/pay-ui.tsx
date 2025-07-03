@@ -21,21 +21,19 @@ const PayUI = ({
   const { ready, requestPayment } = useTossPayments(user?.id, value);
 
   return (
-    <div className={`wrapper ${className}`}>
-      <div className="box_section">
-        {/* 결제 UI */}
-        <div id="payment-method" />
-        {/* 이용약관 UI */}
-        <div id="agreement" />
-        {/* 결제하기 버튼 */}
-        <button
-          disabled={!ready}
-          onClick={() => requestPayment(orderName)}
-          className="w-full rounded-12 bg-secondary-400 px-2 py-[10px] text-white hover:bg-secondary-500"
-        >
-          결제하기
-        </button>
-      </div>
+    <div className={`${className}`}>
+      {/* 결제 UI */}
+      <div id="payment-method" />
+      {/* 이용약관 UI */}
+      <div id="agreement" />
+      {/* 결제하기 버튼 */}
+      <button
+        disabled={!ready}
+        onClick={() => requestPayment(orderName)}
+        className="w-full rounded-12 bg-secondary-400 px-2 py-[10px] text-white hover:bg-secondary-500"
+      >
+        결제하기
+      </button>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-const SuccessPage = async ({
+const SuccessPage = ({
   searchParams,
 }: {
   searchParams: {
@@ -14,13 +14,11 @@ const SuccessPage = async ({
   // TODO: 결제 성공 로직 구현
 
   return (
-    <div className="result wrapper">
-      <div className="box_section">
-        <h2>결제 성공</h2>
-        <p>{`주문번호: ${orderId}`}</p>
-        <p>{`결제 금액: ${Number(amount).toLocaleString()}원`}</p>
-        <p>{`paymentKey: ${paymentKey}`}</p>
-      </div>
+    <div>
+      <h2>결제 성공</h2>
+      <p>{`주문번호: ${orderId}`}</p>
+      <p>{`결제 금액: ${Number(amount).toLocaleString()}원`}</p>
+      <p>{`paymentKey: ${paymentKey}`}</p>
     </div>
   );
 };

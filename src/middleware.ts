@@ -47,6 +47,7 @@ export async function middleware(request: NextRequest) {
     PATH.TICKET,
     PATH.PLACES,
     PATH.SUCCESS,
+    PATH.FAIL,
   ];
 
   // 유효한 경로 패턴을 더 세밀하게 정의

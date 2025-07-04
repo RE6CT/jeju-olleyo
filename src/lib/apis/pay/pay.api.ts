@@ -12,19 +12,24 @@ export const confirmPayment = async (requestData: {
   paymentKey?: string;
 }) => {
   try {
+    const secretKey = process.env.TOSS_SECRET_KEY;
+
     if (
       !requestData.orderId ||
       !requestData.amount ||
-      !requestData.paymentKey
+      !requestData.paymentKey ||
+      !secretKey
     ) {
-      throw new Error();
+      throw new Error('결제 데이터가 올바르지 않습니다.');
     }
 
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SITE_URL}/api/confirm`,
+      'https://api.tosspayments.com/v1/payments/confirm',
       {
         method: 'POST',
         headers: {
+          Authorization:
+            'Basic ' + Buffer.from(secretKey + ':').toString('base64'),
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(requestData),
@@ -32,7 +37,6 @@ export const confirmPayment = async (requestData: {
     );
 
     const json = await response.json();
-    console.log(response.statusText);
 
     if (!response.ok) {
       // 결제 실패 시 실패 페이지로 리다이렉트

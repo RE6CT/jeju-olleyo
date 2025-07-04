@@ -22,6 +22,8 @@ const SuccessPage = async ({
   // 결제 승인 함수 호출
   await confirmPayment(requestData);
 
+  // TODO: 결제 성공 로직 추가
+
   return (
     <div>
       <h2>결제 성공</h2>

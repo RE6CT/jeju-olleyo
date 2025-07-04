@@ -1,4 +1,6 @@
-const SuccessPage = ({
+import { confirmPayment } from '@/lib/apis/pay/pay.api';
+
+const SuccessPage = async ({
   searchParams,
 }: {
   searchParams: {
@@ -11,7 +13,14 @@ const SuccessPage = ({
 
   // TODO: 쿼리 파라미터에서 값이 결제 요청할 때 보낸 데이터와 동일한지 확인
 
-  // TODO: 결제 성공 로직 구현
+  const requestData = {
+    orderId,
+    amount,
+    paymentKey,
+  };
+
+  // 결제 승인 함수 호출
+  await confirmPayment(requestData);
 
   return (
     <div>

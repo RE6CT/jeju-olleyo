@@ -1,5 +1,3 @@
-import { redirect } from 'next/navigation';
-
 /**
  * 결제 승인을 처리하는 함수
  * @param requestData.orderId - 주문 ID
@@ -7,46 +5,35 @@ import { redirect } from 'next/navigation';
  * @param requestData.paymentKey - 결제 키
  */
 export const confirmPayment = async (requestData: {
-  orderId?: string;
-  amount?: string;
-  paymentKey?: string;
+  orderId: string;
+  amount: string;
+  paymentKey: string;
 }) => {
-  try {
-    const widgetSecretKey = process.env.TOSS_SECRET_KEY;
-    const encryptedSecretKey =
-      'Basic ' + Buffer.from(widgetSecretKey + ':').toString('base64');
+  const widgetSecretKey = process.env.TOSS_SECRET_KEY;
+  const encryptedSecretKey =
+    'Basic ' + Buffer.from(widgetSecretKey + ':').toString('base64');
 
-    if (
-      !requestData.orderId ||
-      !requestData.amount ||
-      !requestData.paymentKey ||
-      !widgetSecretKey
-    ) {
-      throw new Error('결제 데이터가 올바르지 않습니다.');
-    }
-
-    const response = await fetch(
-      'https://api.tosspayments.com/v1/payments/confirm',
-      {
-        method: 'POST',
-        headers: {
-          Authorization: encryptedSecretKey,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(requestData),
-      },
-    );
-
-    const json = await response.json();
-
-    if (!response.ok) {
-      // 결제 실패 시 실패 페이지로 리다이렉트
-      redirect(`/fail?message=${json.message}&code=${json.code}`);
-    }
-
-    return json;
-  } catch (error) {
-    console.error('결제 승인 처리 중 에러 발생:', error);
-    redirect('/fail?message=서버 오류가 발생했습니다&code=SERVER_ERROR');
+  if (!widgetSecretKey) {
+    throw new Error('결제 위젯 키가 올바르지 않습니다.');
   }
+
+  const response = await fetch(
+    'https://api.tosspayments.com/v1/payments/confirm',
+    {
+      method: 'POST',
+      headers: {
+        Authorization: encryptedSecretKey,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestData),
+    },
+  );
+
+  const json = await response.json();
+
+  if (!response.ok) {
+    throw new Error(json.message);
+  }
+
+  return json;
 };

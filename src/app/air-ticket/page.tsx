@@ -1,6 +1,6 @@
 'use client';
 import axios from 'axios';
-import { useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { DEPARTURE_LIST } from '@/constants/ticket.constants';
 import useAlertStore from '@/zustand/alert.store';
@@ -11,13 +11,11 @@ import Loading from '../loading';
 import TicketList from './_components/ticket-list';
 import TicketSearchForm from './_components/ticket-search-form';
 import {
-  combineDateAndTime,
   formatDateToString,
   getAirportLabel,
   sortFlights,
   SortKey,
 } from './_utils/ticket-uitls';
-import { getBrowserClient } from '@/lib/supabase/client';
 import { useCurrentUser } from '@/lib/queries/auth-queries';
 import useCustomToast from '@/lib/hooks/use-custom-toast';
 import PayUI from './_components/pay-ui';
@@ -96,8 +94,6 @@ const FlightSearch = () => {
 
   /** 예약 버튼 핸들러 함수 */
   const handleReserve = async () => {
-    const supabase = getBrowserClient();
-
     if (!user) {
       successToast('로그인이 필요합니다!');
       return;
@@ -157,8 +153,6 @@ const FlightSearch = () => {
     if (!hasError) {
       setOrderId(generatedOrderId);
       setModalOpen(true);
-      setSelectedGoFlight(null);
-      setSelectedReturnFlight(null);
     }
   };
 
@@ -235,6 +229,8 @@ const FlightSearch = () => {
           setModalOpen(false);
           await fetchDeleteTicketsByOrderId(orderId);
           setOrderId('');
+          setSelectedGoFlight(null);
+          setSelectedReturnFlight(null);
         },
         onCancel: () => {
           setModalOpen(true);

@@ -11,10 +11,12 @@ import useTossPayments from '@/lib/hooks/use-toss-payments';
 const PayUI = ({
   value,
   orderName,
+  orderId,
   className,
 }: {
   value: number;
   orderName: string;
+  orderId: string;
   className?: string;
 }) => {
   const { user } = useAuth();
@@ -29,7 +31,7 @@ const PayUI = ({
       {/* 결제하기 버튼 */}
       <button
         disabled={!ready}
-        onClick={() => requestPayment(orderName)}
+        onClick={() => requestPayment(orderName, orderId)}
         className="w-full rounded-12 bg-secondary-400 px-2 py-[10px] text-white hover:bg-secondary-500"
       >
         결제하기

@@ -12,13 +12,15 @@ export const confirmPayment = async (requestData: {
   paymentKey?: string;
 }) => {
   try {
-    const secretKey = process.env.TOSS_SECRET_KEY;
+    const widgetSecretKey = process.env.TOSS_SECRET_KEY;
+    const encryptedSecretKey =
+      'Basic ' + Buffer.from(widgetSecretKey + ':').toString('base64');
 
     if (
       !requestData.orderId ||
       !requestData.amount ||
       !requestData.paymentKey ||
-      !secretKey
+      !widgetSecretKey
     ) {
       throw new Error('결제 데이터가 올바르지 않습니다.');
     }
@@ -28,8 +30,7 @@ export const confirmPayment = async (requestData: {
       {
         method: 'POST',
         headers: {
-          Authorization:
-            'Basic ' + Buffer.from(secretKey + ':').toString('base64'),
+          Authorization: encryptedSecretKey,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(requestData),

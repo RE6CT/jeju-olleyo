@@ -73,14 +73,14 @@ const useTossPayments = (customerKey: string | undefined, value: number) => {
    * 결제를 요청하는 함수
    * @param orderName - 주문 이름
    */
-  const requestPayment = async (orderName: string) => {
-    if (widgets === null) {
+  const requestPayment = async (orderName: string, orderId: string) => {
+    if (!widgets) {
       return;
     }
 
     try {
       await widgets.requestPayment({
-        orderId: crypto.randomUUID(),
+        orderId,
         orderName,
         successUrl: window.location.origin + '/success',
         failUrl: window.location.origin + '/fail',

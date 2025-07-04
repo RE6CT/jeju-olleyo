@@ -48,6 +48,7 @@ const FlightSearch = () => {
   const { data: user } = useCurrentUser();
   const { successToast } = useCustomToast();
   const [isModalOpen, setModalOpen] = useState(false);
+  const [orderId, setOrderId] = useState<string>('');
 
   const totalPrice =
     125000 * (selectedGoFlight ? 1 : 0) +
@@ -98,12 +99,11 @@ const FlightSearch = () => {
       return;
     }
 
-    setModalOpen(true);
-
     const flightsToSave = [selectedGoFlight, selectedReturnFlight].filter(
       (flight): flight is Flight => flight !== null,
     );
 
+    // 검증 로직 먼저 실행
     for (const flight of flightsToSave) {
       const isGoFlight = flight === selectedGoFlight;
       const baseDate = isGoFlight ? startDate : endDate;
@@ -118,6 +118,17 @@ const FlightSearch = () => {
         flightsToSave[0].arrPlandTime > flightsToSave[1].depPlandTime
       )
         return dateAlert('가는편의 도착시간이 오는편의 출발시간보다 빨라요!');
+    }
+
+    // 모든 검증이 통과한 후 예약 처리 시작
+    let hasError = false;
+    const generatedOrderId = crypto.randomUUID();
+
+    for (const flight of flightsToSave) {
+      const isGoFlight = flight === selectedGoFlight;
+      const baseDate = isGoFlight ? startDate : endDate;
+
+      if (!baseDate) continue;
 
       const departure_time = combineDateAndTime(baseDate, flight.depPlandTime);
       const arrive_time = combineDateAndTime(baseDate, flight.arrPlandTime);
@@ -132,16 +143,26 @@ const FlightSearch = () => {
         arrive_location: isGoFlight ? '제주' : getAirportLabel(departure),
         size: passengers,
         class: classType,
-        price: null,
+        price: 125000,
+        status: 'pending',
+        order_id: generatedOrderId,
       });
+
       if (error) {
         console.error(error.message);
         successToast('예약 중 오류가 발생했습니다!');
+        hasError = true;
+        break; // 에러 발생 시 루프 중단
       }
     }
-    successToast('항공권이 예약되었습니다!');
-    setSelectedGoFlight(null);
-    setSelectedReturnFlight(null);
+
+    // 모든 예약이 성공한 경우에만 결제 모달 열기
+    if (!hasError) {
+      setOrderId(generatedOrderId);
+      setModalOpen(true);
+      setSelectedGoFlight(null);
+      setSelectedReturnFlight(null);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -214,6 +235,8 @@ const FlightSearch = () => {
       cancelPayAlert({
         onConfirm: () => {
           setModalOpen(false);
+          // TODO: 예약된 티켓 내역 다시 삭제하기
+          setOrderId('');
         },
         onCancel: () => {
           setModalOpen(true);
@@ -410,7 +433,7 @@ const FlightSearch = () => {
       </div>
 
       {/* 결제창 UI 모달 */}
-      <Dialog open={isModalOpen} onOpenChange={handleOpenChange}>
+      <Dialog open={isModalOpen && !!orderId} onOpenChange={handleOpenChange}>
         <DialogHeader>
           <DialogTitle className="sr-only">티켓 결제</DialogTitle>
           <DialogDescription className="sr-only">
@@ -424,6 +447,7 @@ const FlightSearch = () => {
           <PayUI
             orderName={`${selectedGoFlight?.airlineKorean} 외 1매`}
             value={totalPrice}
+            orderId={orderId}
           />
         </DialogContent>
       </Dialog>

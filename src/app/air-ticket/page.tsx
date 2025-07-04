@@ -28,6 +28,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import {
+  fetchAddFlightReservation,
+  fetchDeleteTicketsByOrderId,
+} from '@/lib/apis/flight/update-reservations.api';
 
 const FlightSearch = () => {
   const [departure, setDeparture] = useState('');
@@ -130,29 +134,22 @@ const FlightSearch = () => {
 
       if (!baseDate) continue;
 
-      const departure_time = combineDateAndTime(baseDate, flight.depPlandTime);
-      const arrive_time = combineDateAndTime(baseDate, flight.arrPlandTime);
-
-      const { error } = await supabase.from('tickets').insert({
-        user_id: user.id,
-        departure_time,
-        arrive_time,
-        airplane_name: flight!.airlineKorean,
-        carrier_code: flight!.flightId,
-        departure_location: isGoFlight ? getAirportLabel(departure) : '제주',
-        arrive_location: isGoFlight ? '제주' : getAirportLabel(departure),
-        size: passengers,
-        class: classType,
-        price: 125000,
-        status: 'pending',
-        order_id: generatedOrderId,
-      });
-
-      if (error) {
-        console.error(error.message);
+      try {
+        await fetchAddFlightReservation({
+          flight,
+          isGoFlight,
+          baseDate,
+          userId: user.id,
+          departure,
+          passengers,
+          classType,
+          orderId: generatedOrderId,
+        });
+      } catch (error) {
+        console.error(error);
         successToast('예약 중 오류가 발생했습니다!');
         hasError = true;
-        break; // 에러 발생 시 루프 중단
+        break;
       }
     }
 
@@ -233,9 +230,10 @@ const FlightSearch = () => {
     if (!newOpen) {
       // 결제 취소 여부 확인
       cancelPayAlert({
-        onConfirm: () => {
+        onConfirm: async () => {
+          // 취소할 경우 예약 내역 삭제 및 주문 ID 초기화
           setModalOpen(false);
-          // TODO: 예약된 티켓 내역 다시 삭제하기
+          await fetchDeleteTicketsByOrderId(orderId);
           setOrderId('');
         },
         onCancel: () => {

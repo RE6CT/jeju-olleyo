@@ -32,3 +32,33 @@ export const fetchGetReservationsByUserId = async (
   const camelizedData = data ? camelize(data) : null;
   return { data: camelizedData, count: count };
 };
+
+/**
+ * 결제 파라미터를 검증하는 함수
+ * @param orderId - 주문 ID
+ * @param amount - 총 가격
+ * @returns 결제 파라미터 데이터가 실제 결제 데이터와 일치하는지 여부
+ */
+export const validateReservationData = async (
+  orderId: string,
+  amount: number,
+) => {
+  const supabase = await getServerClient();
+
+  const { data, error } = await supabase
+    .from('tickets')
+    .select('price')
+    .eq('order_id', orderId);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  if (!data || data.length === 0) {
+    throw new Error('결제 데이터가 유효하지 않습니다.');
+  }
+
+  const totalPrice = data.reduce((sum, ticket) => sum + (ticket.price || 0), 0);
+
+  return totalPrice === amount;
+};

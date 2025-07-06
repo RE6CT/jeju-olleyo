@@ -66,3 +66,20 @@ export const fetchDeleteTicketsByOrderId = async (orderId: string) => {
     throw new Error(error.message);
   }
 };
+
+/**
+ * 티켓 상태를 결제 완료로 바꾸는 함수
+ * @param orderId - 주문 ID
+ */
+export const fetchUpdateTicketStatusByOrderId = async (orderId: string) => {
+  const supabase = getServerClient();
+
+  const { error } = await supabase
+    .from('tickets')
+    .update({ status: 'confirmed' })
+    .eq('order_id', orderId);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+};

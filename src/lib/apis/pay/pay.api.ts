@@ -10,12 +10,13 @@ export const confirmPayment = async (requestData: {
   paymentKey: string;
 }) => {
   const widgetSecretKey = process.env.TOSS_SECRET_KEY;
-  const encryptedSecretKey =
-    'Basic ' + Buffer.from(widgetSecretKey + ':').toString('base64');
 
   if (!widgetSecretKey) {
     throw new Error('결제 위젯 키가 올바르지 않습니다.');
   }
+
+  const encryptedSecretKey =
+    'Basic ' + Buffer.from(widgetSecretKey + ':').toString('base64');
 
   const response = await fetch(
     'https://api.tosspayments.com/v1/payments/confirm',

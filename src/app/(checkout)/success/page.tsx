@@ -32,7 +32,9 @@ const SuccessPage = async ({
     await fetchUpdateTicketStatusByOrderId(orderId);
   } catch (error) {
     console.error(`결제 실패: ${error}`);
-    redirect(`/fail?message=${error}`);
+    redirect(
+      `/fail?message=${error instanceof Error ? error.message : '결제 처리 중 오류가 발생했습니다.'}`,
+    );
   }
 
   return (

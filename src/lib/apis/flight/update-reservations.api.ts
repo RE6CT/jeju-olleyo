@@ -14,7 +14,7 @@ import { ReservationData } from '@/types/air-ticket.type';
 export const fetchAddFlightReservation = async (
   reservationData: ReservationData,
 ) => {
-  const supabase = getServerClient();
+  const supabase = await getServerClient();
   const {
     flight,
     isGoFlight,
@@ -55,7 +55,7 @@ export const fetchAddFlightReservation = async (
  * @param orderId - 주문 ID
  */
 export const fetchDeleteTicketsByOrderId = async (orderId: string) => {
-  const supabase = getServerClient();
+  const supabase = await getServerClient();
 
   const { error } = await supabase
     .from('tickets')
@@ -72,7 +72,7 @@ export const fetchDeleteTicketsByOrderId = async (orderId: string) => {
  * @param orderId - 주문 ID
  */
 export const fetchUpdateTicketStatusByOrderId = async (orderId: string) => {
-  const supabase = getServerClient();
+  const supabase = await getServerClient();
 
   const { error } = await supabase
     .from('tickets')

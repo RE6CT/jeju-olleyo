@@ -67,7 +67,7 @@ const useTossPayments = (customerKey: string | undefined, value: number) => {
     };
 
     renderPaymentWidgets();
-  }, [widgets]);
+  }, [widgets, amount]);
 
   /**
    * 결제를 요청하는 함수

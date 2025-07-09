@@ -16,6 +16,7 @@ export const fetchGetReservationsByUserId = async (
     .from('tickets')
     .select('*', { count: 'exact' })
     .eq('user_id', userId)
+    .eq('status', 'confirmed')
     .order('departure_time', { ascending: false });
 
   const { count, error: countError } = await query;

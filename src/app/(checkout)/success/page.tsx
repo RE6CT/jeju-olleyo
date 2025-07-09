@@ -1,6 +1,9 @@
+import { PATH } from '@/constants/path.constants';
 import { validateReservationData } from '@/lib/apis/flight/get-reservations.api';
 import { fetchUpdateTicketStatusByOrderId } from '@/lib/apis/flight/update-reservations.api';
 import { confirmPayment } from '@/lib/apis/pay/pay.api';
+import Image from 'next/image';
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 const SuccessPage = async ({
@@ -33,10 +36,34 @@ const SuccessPage = async ({
   }
 
   return (
-    <div>
-      <h2>결제 성공</h2>
-      <p>{`주문번호: ${orderId}`}</p>
-      <p>{`결제 금액: ${Number(amount).toLocaleString()}원`}</p>
+    <div className="flex h-full flex-col items-center justify-center gap-5">
+      <Image
+        src="/character/happy.png"
+        alt="결제 성공"
+        width={0}
+        height={0}
+        sizes="100vw"
+        className="w-[120px]"
+      />
+      <h3 className="semibold-24">성공적으로 결제되었습니다.</h3>
+      <div className="flex flex-col items-center justify-center gap-3 rounded-16 border border-gray-100 bg-white p-4">
+        <div className="flex flex-col items-center">
+          <p className="medium-16 text-gray-800">주문번호</p>
+          <p className="regular-14 text-description">{orderId}</p>
+        </div>
+        <div>
+          <p className="medium-16 text-gray-800">결제 금액</p>
+          <p className="regular-14 text-description">
+            {Number(amount).toLocaleString()}원
+          </p>
+        </div>
+      </div>
+      <Link
+        href={PATH.RESERVATIONS}
+        className="regular-16 rounded-24 bg-secondary-400 px-4 py-[10px] text-white hover:bg-secondary-500"
+      >
+        예약 내역 확인하기
+      </Link>
     </div>
   );
 };

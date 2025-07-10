@@ -316,6 +316,8 @@ export type Database = {
           user_id: string;
           size: number;
           class: string | null;
+          status: Database['public']['Enums']['ticket_status'];
+          order_id: string;
         };
         Insert: {
           airplane_name: string;
@@ -330,20 +332,11 @@ export type Database = {
           user_id: string;
           size: number;
           class: string | null;
+          status: Database['public']['Enums']['ticket_status'];
+          order_id: string;
         };
         Update: {
-          airplane_name: string;
-          arrive_location: string;
-          arrive_time: string;
-          carrier_code: string;
-          created_at?: string;
-          departure_location: string;
-          departure_time: string;
-          price: number | null;
-          ticket_id?: number;
-          user_id: string;
-          size: number;
-          class: string | null;
+          status: Database['public']['Enums']['ticket_status'];
         };
         Relationships: [
           {
@@ -506,7 +499,7 @@ export type Database = {
       };
     };
     Enums: {
-      [_ in never]: never;
+      ticket_status: 'pending' | 'confirmed';
     };
     CompositeTypes: {
       [_ in never]: never;

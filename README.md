@@ -3,10 +3,12 @@
 ![제주 올레요 브로셔](https://github.com/user-attachments/assets/ae343a75-9593-4f22-bfc6-4033512dc5e3)
 
 ### 📋 프로젝트 소개
+
 - Jeju Olleyo (제주 올레요)는 제주도 여행 일정을 쉽고 빠르게 계획하고, 다른 사람과 공유할 수 있는 웹 서비스입니다.<br />
-일정 저장, 지도 제공, 북마크 및 좋아요 기능 등을 제공하여 사용자가 직접 만든 여행 플랜을 기록하고 공유 할 수 있습니다. 사용자는 관심 있는 장소를 검색하고, 해당 장소가 포함된 공개 일정을 확인 할 수 있습니다.
+  일정 저장, 지도 제공, 북마크 및 좋아요 기능 등을 제공하여 사용자가 직접 만든 여행 플랜을 기록하고 공유 할 수 있습니다. 사용자는 관심 있는 장소를 검색하고, 해당 장소가 포함된 공개 일정을 확인 할 수 있습니다.
 
 ### 🔗 배포 링크
+
 - [제주 올레요 바로가기](https://jeju-olleyo.vercel.app/)
 
 ### 📆 프로젝트 기간
@@ -140,6 +142,7 @@
 <img width="378" alt="스크린샷 2025-04-29 오후 2 46 36" src="https://github.com/user-attachments/assets/d5ab68ae-8579-40a5-899b-1e5cd7122394" />
 
 ### 원인 분석
+
 https://nextjs.org/docs/messages/react-hydration-error
 
 에러 메시지에서 제공한 Next.js 공식 문서 내용을 살펴보면 이 에러의 원인은 크게 다음과 같이 나눌 수 있음.
@@ -186,7 +189,8 @@ return (...)
 ### 해결
 
 - `useSearchParams()` 사용
-    - 위 메서드 활용, url에 붙은 쿼리 문자열을 읽어 초기로 설정함
+  - 위 메서드 활용, url에 붙은 쿼리 문자열을 읽어 초기로 설정함
+
 ```typescript
 'use client';
 
@@ -197,8 +201,9 @@ const searchParams = useSearchParams();
 const queryFromUrl = searchParams.get('query') ?? '';
 const [inputValue, setInputValue] = useState(queryFromUrl);
 ```
+
 페이지를 새로고침해도 검색어가 input에 유지됨.
-  
+
 </details>
 
 <details>
@@ -212,28 +217,30 @@ const [inputValue, setInputValue] = useState(queryFromUrl);
 
 - `useSearchParams`는 런타임 중 url을 읽어야 하는 클라이언트 전용 훅
 - 빌드 타임에는 `searchParams`를 알 수 없기 때문에, 검색바가 포함된 헤더를 렌더링하는 모든 정적 페이지들이 해당 페이지를 정적으로 미리 생성할 수 없어서 에러 발생 추정
-    - 정적 빌드를 목표로 하는 페이지 내 런타임 전용 코드가 섞이면 충돌이 발생
+  - 정적 빌드를 목표로 하는 페이지 내 런타임 전용 코드가 섞이면 충돌이 발생
 
 ### 해결
 
 - `<Suspense>`로 컴포넌트 감싸기 : 공식문서 제안 방법
-    - `useSearchParams()`를 사용하는 컴포넌트만 `<Suspense>`로 감싸서 비동기 처리를 허용함
-        - 검색바 부분만 런타임에 로딩
-        - 페이지 전체는 정적 최적화 유지
-    
+  - `useSearchParams()`를 사용하는 컴포넌트만 `<Suspense>`로 감싸서 비동기 처리를 허용함
+    - 검색바 부분만 런타임에 로딩
+    - 페이지 전체는 정적 최적화 유지
+
 ```jsx
-{/* 검색바 */}
-  <div className="w-[310px] sm:w-[251px] md:w-[335px]">
-    <Suspense fallback={<LoadingSpinner />}>
-      <SearchBar />
-    </Suspense>
-  </div>
+{
+  /* 검색바 */
+}
+<div className="w-[310px] sm:w-[251px] md:w-[335px]">
+  <Suspense fallback={<LoadingSpinner />}>
+    <SearchBar />
+  </Suspense>
+</div>;
 ```
-    
+
 - 선택하지 않은 방법 : 페이지 상단 `export const dynamic = ‘force-dynamic’` 선언
-    - 빌드 에러는 해결할 수 있지만, 매번 서버에서 렌더링됨.
-        - 정적 최적화 이용 할 수 없음
-  
+  - 빌드 에러는 해결할 수 있지만, 매번 서버에서 렌더링됨.
+    - 정적 최적화 이용 할 수 없음
+
 </details>
 
 <details>
@@ -244,14 +251,14 @@ const [inputValue, setInputValue] = useState(queryFromUrl);
 - 발생 위치: 일정 생성 페이지 (/plan-detail/new)
 - 발생 시점: 사이드바 내 북마크 버튼 또는 장소 상세 모달창에서 북마크 버튼 클릭시
 - 증상
-    - 북마크 버튼 초기 클릭시 페이지 전체가 새로고침되며 작성 중이던 모든 내용 초기화
-    - 첫 클릭 시에만 문제 발생, 이후 발생하지 않음.
+  - 북마크 버튼 초기 클릭시 페이지 전체가 새로고침되며 작성 중이던 모든 내용 초기화
+  - 첫 클릭 시에만 문제 발생, 이후 발생하지 않음.
 
 ### 원인 분석
 
 - 북마크 버튼 내부에서 `revalidatePath(’/place/[id]’)` 호출; 해당 경로는 현재 페이지와 무관한 경로였음.
 - 하지만 `revalidatePath()` 호출로 인해 클라이언트 전체가 리렌더링되면서, 상태값 초기화
-    - `revalidatePath()`: 서버 캐시 무효화 및 해당 경로 외 전체 경로 트리의 재생성 유도
+  - `revalidatePath()`: 서버 캐시 무효화 및 해당 경로 외 전체 경로 트리의 재생성 유도
 - 특정 경로만 revalidate한다고 생각했지만, 내부적으로는 루트 경로까지 연쇄적으로 영향을 주는 것이였음.
 
 ### 해결
@@ -264,7 +271,7 @@ const [inputValue, setInputValue] = useState(queryFromUrl);
 - 예상치 못한 전체 리렌더링을 유도할 수 있으므로 신중하게 사용 할 것
 - 비제어컴포넌트로 폼 제출이 가능하고, 별도 입력 상태 관리가 필요없는 경우엔 server action 기반으로 `revalidatePath()` 사용을 고려할 수 있음.
 - 입력값이나 작성 도중의 상태를 클라이언트에서 관리해야 할 경우 : 탠스택 쿼리의 캐시 갱신 방식 사용 권장
-  
+
 </details>
 
 <details>
@@ -328,13 +335,14 @@ const [inputValue, setInputValue] = useState(queryFromUrl);
 ```
 
 ### 해결 방법 3: 자동 갱신 컴포넌트
+
 ```typescript
 export const WeatherRefresher = ({
   initialWeatherData,
 }: {
   initialWeatherData: ProcessedDayWeather[];
 }) => {
-// 자정에 데이터 갱신 설정
+  // 자정에 데이터 갱신 설정
   useEffect(() => {
     const msUntilMidnight = weatherUtil.calculateMsUntilMidnight();
 
@@ -345,18 +353,18 @@ export const WeatherRefresher = ({
     return () => clearTimeout(midnightTimer);
   }, []);
 
-// 갱신 플래그가 설정되면 날씨 데이터 갱신
+  // 갱신 플래그가 설정되면 날씨 데이터 갱신
   useEffect(() => {
     if (!refreshQueued) return;
 
     const refreshWeatherData = async () => {
-// 새로운 날씨 데이터 가져오기
+      // 새로운 날씨 데이터 가져오기
     };
 
     refreshWeatherData();
   }, [refreshQueued]);
 
-  return null;// UI를 렌더링하지 않는 컴포넌트
+  return null; // UI를 렌더링하지 않는 컴포넌트
 };
 ```
 
@@ -395,7 +403,7 @@ translateWeatherCondition(condition: string): string {
 2. **API 호출 최소화**: 6시간마다 서버에서 한 번만 API 호출
 3. **UX 개선**: 로딩 시간 감소 및 한글 날씨 정보 제공
 4. **확장성**: API 제공자 변경 시 서버 코드만 수정하면 되어 유지보수 용이
-  
+
 </details>
 
 <details>
@@ -406,16 +414,16 @@ translateWeatherCondition(condition: string): string {
 홈페이지 메인 캐러셀을 구현하는 과정에서 다음과 같은 주요 문제들이 발생했습니다.
 
 1. **타이밍 불일치**
-    - 이미지가 전환되는 시점과 프로그레스 바 진행이 서로 맞지 않음
-    - 사용자에게 시각적 혼란을 줌
+   - 이미지가 전환되는 시점과 프로그레스 바 진행이 서로 맞지 않음
+   - 사용자에게 시각적 혼란을 줌
 2. **호버 상태 일관성 부재**
-    - 사용자가 마우스를 올리면 이미지 자동 전환은 멈추지만
-    - 프로그레스 바는 계속 진행되는 불일치 발생
+   - 사용자가 마우스를 올리면 이미지 자동 전환은 멈추지만
+   - 프로그레스 바는 계속 진행되는 불일치 발생
 3. **성능 이슈**
-    - setInterval 사용으로 인한 브라우저 탭 비활성화 시 타이밍 문제 발생
-    - 불필요한 상태 업데이트로 성능 저하
+   - setInterval 사용으로 인한 브라우저 탭 비활성화 시 타이밍 문제 발생
+   - 불필요한 상태 업데이트로 성능 저하
 4. **메모리 누수**
-    - 이벤트 리스너와 타이머가 컴포넌트 언마운트 시 제대로 정리되지 않음
+   - 이벤트 리스너와 타이머가 컴포넌트 언마운트 시 제대로 정리되지 않음
 
 ### 해결 접근법 개요
 
@@ -442,11 +450,13 @@ src/
 └── types/
     └── home.carousel.type.ts          # 타입 정의
 ```
+
 이렇게 구조화함으로써 각 컴포넌트의 역할을 명확히 하고 유지보수성을 향상시켰습니다.
 
 #### 2. 타입과 상수 정의
 
 타입 정의
+
 ```typescript
 // 캐러셀 이미지 타입
 export type CarouselImages = {
@@ -476,11 +486,12 @@ export type ProgressIndicatorProps = {
 ```
 
 상수 정의
+
 ```typescript
 export const MAIN_CAROUSEL_OPTIONS = {
-  AUTO_ROLLING_TIME: 5000,// 자동 롤링 시간 (ms)
-  WIDTH: 1024,// 이미지 원본 너비
-  HEIGHT: 340,// 이미지 원본 높이
+  AUTO_ROLLING_TIME: 5000, // 자동 롤링 시간 (ms)
+  WIDTH: 1024, // 이미지 원본 너비
+  HEIGHT: 340, // 이미지 원본 높이
   NAVIGATION_ICON_SIZE: 48,
   NAVIGATION_ICON_STROKE_WIDTH: 2,
 };
@@ -491,26 +502,27 @@ export const MAIN_CAROUSEL_OPTIONS = {
 #### 3. 핵심 해결책: useCarouselProgress 커스텀 훅
 
 가장 중요한 부분은 프로그레스 바 동기화 문제를 해결하는 커스텀 훅입니다.
+
 ```typescript
 export const useCarouselProgress = (
   api: EmblaCarouselType | null,
   duration: number,
   paused: boolean,
 ) => {
-// 1. 상태 초기화
+  // 1. 상태 초기화
   const [currentIndex, setCurrentIndex] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
   const [progressWidth, setProgressWidth] = useState(0);
 
-// 2. 렌더링과 독립적인 값 관리를 위한 Ref 사용
+  // 2. 렌더링과 독립적인 값 관리를 위한 Ref 사용
   const startTimeRef = useRef(Date.now());
   const rafRef = useRef<number | null>(null);
 
-// 3. 프로그레스 업데이트 함수
+  // 3. 프로그레스 업데이트 함수
   const updateProgress = useCallback(() => {
     if (paused) return;
 
-// 실제 경과 시간 기반 계산
+    // 실제 경과 시간 기반 계산
     const elapsed = Date.now() - startTimeRef.current;
     const progress = Math.min(100, (elapsed / duration) * 100);
     setProgressWidth(progress);
@@ -520,7 +532,7 @@ export const useCarouselProgress = (
     }
   }, [duration, paused]);
 
-// 4. 프로그레스 리셋 함수
+  // 4. 프로그레스 리셋 함수
   const resetProgress = useCallback(() => {
     setProgressWidth(0);
     startTimeRef.current = Date.now();
@@ -531,7 +543,7 @@ export const useCarouselProgress = (
     }
   }, [paused, updateProgress]);
 
-// 5. Embla 캐러셀 API 연동
+  // 5. Embla 캐러셀 API 연동
   useEffect(() => {
     if (!api) return;
 
@@ -552,7 +564,7 @@ export const useCarouselProgress = (
     };
   }, [api, paused, resetProgress]);
 
-// 6. 일시 정지 상태 변경 처리
+  // 6. 일시 정지 상태 변경 처리
   useEffect(() => {
     if (paused) {
       setProgressWidth(0);
@@ -565,6 +577,7 @@ export const useCarouselProgress = (
   return { currentIndex, totalCount, progressWidth };
 };
 ```
+
 이 훅의 핵심 개선 사항:
 
 - **정확한 시간 계산**: setInterval 대신 `Date.now()`와 실제 경과 시간을 사용
@@ -578,26 +591,23 @@ export const useCarouselProgress = (
 
 ```tsx
 const MainCarousel = ({ imageList }: MainCarouselProps) => {
-// 호버 상태 관리
+  // 호버 상태 관리
   const [isHovered, setIsHovered] = useState(false);
 
-// Embla Carousel 초기화
-  const [emblaRef, emblaApi] = useEmblaCarousel(
-    { loop: true },
-    [
-      Autoplay({
-        delay: MAIN_CAROUSEL_OPTIONS.AUTO_ROLLING_TIME,
-        stopOnMouseEnter: true,// 마우스 오버 시 자동 재생 중지
-        stopOnInteraction: false,// 사용자 상호작용 시에도 자동 재생 유지
-      }),
-    ]
-  );
+  // Embla Carousel 초기화
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [
+    Autoplay({
+      delay: MAIN_CAROUSEL_OPTIONS.AUTO_ROLLING_TIME,
+      stopOnMouseEnter: true, // 마우스 오버 시 자동 재생 중지
+      stopOnInteraction: false, // 사용자 상호작용 시에도 자동 재생 유지
+    }),
+  ]);
 
-// 커스텀 훅으로 프로그레스 상태 관리
+  // 커스텀 훅으로 프로그레스 상태 관리
   const { currentIndex, totalCount, progressWidth } = useCarouselProgress(
     emblaApi ?? null,
     MAIN_CAROUSEL_OPTIONS.AUTO_ROLLING_TIME,
-    isHovered// 호버 상태 전달
+    isHovered, // 호버 상태 전달
   );
 
   return (
@@ -639,6 +649,7 @@ const MainCarousel = ({ imageList }: MainCarouselProps) => {
   );
 };
 ```
+
 이 컴포넌트의 주요 포인트:
 
 - **호버 상태 관리**: useState로 관리되는 호버 상태가 Embla Carousel과 프로그레스 바에 모두 전달됨
@@ -731,9 +742,9 @@ if (paused) {
 
 ```typescript
 useEffect(() => {
-// 설정 코드...
+  // 설정 코드...
 
-// 철저한 클린업
+  // 철저한 클린업
   return () => {
     api.off('select', onSelect);
     if (rafRef.current) {
@@ -743,7 +754,7 @@ useEffect(() => {
   };
 }, [dependencies]);
 ```
-  
+
 </details>
 
 <details>
@@ -792,6 +803,7 @@ Server Actions으로 사용자 정보(예: 닉네임)를 변경한 후, 이 변�
 #### 코드로 보는 문제점
 
 **1. 중복 저장 문제**
+
 ```typescript
 // Zustand 스토어 + 세션 스토리지 중복 저장
 const useAuthStore = create<AuthState>()(
@@ -801,27 +813,28 @@ const useAuthStore = create<AuthState>()(
       setUser: (user) => set({ user }),
       updateUserInfo: (userInfo) =>
         set((state) => ({
-          user: state.user ? { ...state.user, ...userInfo } : null
+          user: state.user ? { ...state.user, ...userInfo } : null,
         })),
     }),
     {
       name: 'auth-storage',
-      storage: createJSONStorage(() => sessionStorage),// 중복 저장
-    }
-  )
+      storage: createJSONStorage(() => sessionStorage), // 중복 저장
+    },
+  ),
 );
 ```
 
 **2. 수동 동기화 필요 (프로필 업데이트)**
+
 ```typescript
 // 프로필 업데이트 함수
 const handleUpdateProfile = async (nickname) => {
   try {
-// 서버 액션 호출
+    // 서버 액션 호출
     const result = await updateUserProfile(nickname);
 
     if (result.success) {
-// 수동으로 Zustand 상태 업데이트 필요// 이 코드를 잊으면 UI 불일치 발생
+      // 수동으로 Zustand 상태 업데이트 필요// 이 코드를 잊으면 UI 불일치 발생
       updateUserInfo({ nickname });
       return true;
     }
@@ -833,6 +846,7 @@ const handleUpdateProfile = async (nickname) => {
 ```
 
 **3. 컴포넌트 간 불일치 (UI 문제)**
+
 ```typescript
 // 프로필 페이지 (닉네임 업데이트 후)
 const ProfilePage = () => {
@@ -875,16 +889,18 @@ export async function getCurrentUser() {
   const supabase = getServerClient();
 
   try {
-// 쿠키 기반 세션에서 최신 정보 가져오기
+    // 쿠키 기반 세션에서 최신 정보 가져오기
     const { data, error } = await supabase.auth.getUser();
 
     if (error) throw error;
 
-    return data.user ? {
-      id: data.user.id,
-      email: data.user.email,
-      nickname: data.user.user_metadata?.nickname || null,
-    } : null;
+    return data.user
+      ? {
+          id: data.user.id,
+          email: data.user.email,
+          nickname: data.user.user_metadata?.nickname || null,
+        }
+      : null;
   } catch (error) {
     console.error('사용자 정보 조회 실패:', error);
     return null;
@@ -900,7 +916,7 @@ export const useCurrentUser = () => {
   return useQuery({
     queryKey: ['user'],
     queryFn: getCurrentUser,
-    staleTime: 1000 * 60 * 5,// 5분간 캐시 유지
+    staleTime: 1000 * 60 * 5, // 5분간 캐시 유지
     refetchOnWindowFocus: false,
   });
 };
@@ -916,7 +932,7 @@ export const useUpdateProfile = () => {
   return useMutation({
     mutationFn: updateUserProfile,
     onSuccess: () => {
-// 핵심: 성공 시 사용자 쿼리 자동 무효화
+      // 핵심: 성공 시 사용자 쿼리 자동 무효화
       queryClient.invalidateQueries({ queryKey: ['user'] });
     },
   });
@@ -965,7 +981,7 @@ const Header = () => {
 const handleUpdateProfile = async (nickname) => {
   const result = await updateUserProfile(nickname);
   if (result.success) {
-// 수동 업데이트 필요
+    // 수동 업데이트 필요
     updateUserInfo({ nickname });
   }
 };
@@ -973,11 +989,11 @@ const handleUpdateProfile = async (nickname) => {
 
 **이후**: 선언적이고 자동화된 상태 관리
 
-``` typescript
+```typescript
 // 자동 상태 관리 방식
 const handleUpdateProfile = async (nickname) => {
   await updateProfileMutation.mutateAsync(nickname);
-// 자동으로 모든 컴포넌트 업데이트
+  // 자동으로 모든 컴포넌트 업데이트
 };
 ```
 
@@ -1029,10 +1045,11 @@ const handleUpdateProfile = async (nickname) => {
 
 - **발생 위치**: 일정 상세 페이지의 장소 드래그 앤 드롭 기능
 - **문제 현상**:
-    - 장소 순서 변경 시 고유 ID 충돌 발생
-    - 일부 장소 데이터 드래그시 다른 장소 카드도 같이 드래그 되며 layout shift 문제 발생
+  - 장소 순서 변경 시 고유 ID 충돌 발생
+  - 일부 장소 데이터 드래그시 다른 장소 카드도 같이 드래그 되며 layout shift 문제 발생
 
 콘솔 에러 메시지
+
 ```
 Unable to find any drag handles in the context "2"
 A setup problem was encountered.> Invariant failed: Draggable[id: 2850913-0]: Unable to find drag handle
@@ -1053,7 +1070,7 @@ const handleAddPlace = (newPlace: Place, activeTab: number | '전체보기') => 
       return prev + 1;
     });
     const newPlaceWithId = { ...newPlace, uniqueId };
-    
+
     setDayPlaces((prev: DayPlaces) => ({
       ...prev,
       [dayNumber]: [...(prev[dayNumber] || []), newPlaceWithId],
@@ -1069,18 +1086,16 @@ const handlePasteDayPlaces = (targetDay: number) => {
       const newPlaces = copiedPlaces.map((place) => ({
         ...place,
         // 이미 존재하는 장소 뒤에 붙여넣기, 다음 index로 unique id 부여
-        uniqueId: `${place.id}-${placeCount + copiedPlaces.indexOf(place)}`, 
+        uniqueId: `${place.id}-${placeCount + copiedPlaces.indexOf(place)}`,
       }));
       ...
 }
 ```
+
 - 문제 1. 고유 ID 중복 현상 발생
-    
-    ex) 동일 장소 3개 추가 후(0,1,2 index) 1번 index 장소 삭제, 이후 동일 장소 추가시 동일 장소 id+동일한 2번 index를 가짐 ⇒ 고유성 위반 문제
-    
+  ex) 동일 장소 3개 추가 후(0,1,2 index) 1번 index 장소 삭제, 이후 동일 장소 추가시 동일 장소 id+동일한 2번 index를 가짐 ⇒ 고유성 위반 문제
 - 문제 2. id 의미 상실
-    
-    순서 변경시 고유 id 인덱싱 의미 상실
+  순서 변경시 고유 id 인덱싱 의미 상실
 
 ### 해결
 
@@ -1114,7 +1129,7 @@ const handlePasteDayPlaces = (targetDay: number) => {
   ...
 }));
 ```
-  
+
 </details>
 
 <details>
@@ -1124,24 +1139,18 @@ const handlePasteDayPlaces = (targetDay: number) => {
 
 - **발생 위치**: 일정 상세 페이지의 지도 경로 탐색 기능
 - **문제 현상**:
-    - 불필요한 네트워크 요청으로 인한 성능 저하 및 API 비용 발생
-    - 사용자 경험 저하
+  - 불필요한 네트워크 요청으로 인한 성능 저하 및 API 비용 발생
+  - 사용자 경험 저하
 
 ### 원인 분석
 
 - 장소 순서를 빈번하게 변경할 경우, 경로 재계산이 전체적으로 이루어져 API 호출비용이 과다하게 증가
-    
-    ⇒ 일정에 대한 캐싱 기능 도입 필요성 제기
-    
+  ⇒ 일정에 대한 캐싱 기능 도입 필요성 제기
 - dayPlaces 객체가 변경될 때마다 마커와 경로가 재계산됨,
-    
-    dayPlaces 객체는 일정에 대한 필수 데이터들을 모두 갖고 있고 zustand로 상태 관리를 하고 있어,
-    
-    다음 상황에서 실제 변경된 내용이 없어도 리렌더링 발생하는 경우 존재
-    
-    - zustand 스토어 업데이트시 실제 변경된게 없을 때(드래그 결과가 이전과 같음)에도 새로운 객체를 참조하게 되어 계산/리렌더링 발생
-    
-    ⇒ 이전 dayPlaces 객체 상태에 대한 참조를 갖고 있도록 해야 하는 필요성 제기
+  dayPlaces 객체는 일정에 대한 필수 데이터들을 모두 갖고 있고 zustand로 상태 관리를 하고 있어,
+  다음 상황에서 실제 변경된 내용이 없어도 리렌더링 발생하는 경우 존재
+  - zustand 스토어 업데이트시 실제 변경된게 없을 때(드래그 결과가 이전과 같음)에도 새로운 객체를 참조하게 되어 계산/리렌더링 발생
+  ⇒ 이전 dayPlaces 객체 상태에 대한 참조를 갖고 있도록 해야 하는 필요성 제기
 
 ```typescript
 // 경로에 대한 거리/시간 정보 계산
@@ -1150,7 +1159,7 @@ const searchRoute = async (markers: MarkerProps[], day: number) => {
 
   const routeInfo = createRouteInfo(markers);
   const { path, sections } = await getCarRoute(routeInfo);
-  
+
   setPaths((prev) => ({ ...prev, [day]: path }));
   setRouteSummary({ ...prevSummary, [day]: sections });
 };
@@ -1158,17 +1167,17 @@ const searchRoute = async (markers: MarkerProps[], day: number) => {
 
 ### 해결
 
-- 경로 캐시 상태를 가져 동일한 경로를 재계산하지 않게 하기 위해  `routeCache`추가
-    - 키 형식: 'day-위도,경도|위도,경도...' (일차와 마커 위치 정보를 조합)
-    - 저장 내용: 계산된 경로(path)와 섹션 정보(sections, 거리/이동시간)
-    - 사용 시점: searchRoute 함수 내에서 경로 계산 전에 캐시 확인
-- 이전 dayPlaces 상태를 추적하기 위한 참조인 `prevDayPlaces`  추가
+- 경로 캐시 상태를 가져 동일한 경로를 재계산하지 않게 하기 위해 `routeCache`추가
+  - 키 형식: 'day-위도,경도|위도,경도...' (일차와 마커 위치 정보를 조합)
+  - 저장 내용: 계산된 경로(path)와 섹션 정보(sections, 거리/이동시간)
+  - 사용 시점: searchRoute 함수 내에서 경로 계산 전에 캐시 확인
+- 이전 dayPlaces 상태를 추적하기 위한 참조인 `prevDayPlaces` 추가
 
 ```typescript
  const [routeCache, setRouteCache] = useState<{
     [key: string]: { path: { lat: number; lng: number }[]; sections: any[] };
   }>({});
-  
+
 // routeCache 사용
 const searchRoute = useCallback(
   async (markers: MarkerProps[], day: number) => {
@@ -1185,7 +1194,7 @@ const searchRoute = useCallback(
         const prevSummary = usePlanStore.getState().routeSummary;
         setRouteSummary({ ...prevSummary, [day]: sections });
         return;
-        
+
         ...
 }
 
@@ -1207,13 +1216,14 @@ const updateMarkersAndRoutes = async () => {
         }
 }
 ```
+
 #### 장점
 
 - 실제 변경이 있을 때만 업데이트 실행
 - 불필요한 리렌더링 방지
 - API 호출 최소화
 - 성능 향상
-  
+
 </details>
 
 <details>
@@ -1223,17 +1233,17 @@ const updateMarkersAndRoutes = async () => {
 
 - **발생 위치**: 일정 생성/수정 기능의 상태 관리
 - **문제 현상**:
-    - 여러 컴포넌트 간 상태 동기화 불안정
-    - 상태 업데이트 시 예상치 못한 사이드 이펙트 발생
+  - 여러 컴포넌트 간 상태 동기화 불안정
+  - 상태 업데이트 시 예상치 못한 사이드 이펙트 발생
 
 ### 원인 분석
 
 이전 방식은 하위 컴포넌트로 일정 정보를 props로 전달
 
 - 여러 상태가 동시에 업데이트되어야 할 때 개별적으로 업데이트
-    - 상태 간 의존성 관리가 제대로 되지 않고 있음
+  - 상태 간 의존성 관리가 제대로 되지 않고 있음
 - 상태 초기화 타이밍 문제
-    - 각 컴포넌트가 상태 업데이트 시점이 공유되지 않아 일부 상태만 초기화되는 경우 발생
+  - 각 컴포넌트가 상태 업데이트 시점이 공유되지 않아 일부 상태만 초기화되는 경우 발생
 
 ```typescript
 // 경로에 대한 거리/시간 정보 계산
@@ -1242,11 +1252,10 @@ const searchRoute = async (markers: MarkerProps[], day: number) => {
 
   const routeInfo = createRouteInfo(markers);
   const { path, sections } = await getCarRoute(routeInfo);
-  
+
   setPaths((prev) => ({ ...prev, [day]: path }));
   setRouteSummary({ ...prevSummary, [day]: sections });
 };
-
 ```
 
 ### 해결
@@ -1256,7 +1265,7 @@ const searchRoute = async (markers: MarkerProps[], day: number) => {
 - selector를 사용하여 컴포넌트가 필요로 하는 특정 상태만 구독 ⇒ store 안에 저장된 특정 props가 변경됐을 때 다른 요소를 구독하고 있는 컴포넌트에서 리렌더링이 발생하지 않게 만든다.
 
 ```typescript
- export const usePlanStore = create<PlanState>((set) => ({
+export const usePlanStore = create<PlanState>((set) => ({
   // 여행 기간
   startDate: null,
   endDate: null,
@@ -1334,7 +1343,7 @@ export const usePlanSetActiveTab = () =>
 
 - 상태 동기화 문제 해결
 - 디버깅 용이성 향상
-  
+
 </details>
 
 <details>
@@ -1346,7 +1355,7 @@ export const usePlanSetActiveTab = () =>
 
 ### 원인 분석
 
-날짜 정보를 불러오고 해당 정보를 기존 `HHMM` 형식이던 데이터를 `HH:MM` 으로 표현하는 과정에서 일부 파라미터 데이터 값만  `string`이 아닌 `number`로 인식됨
+날짜 정보를 불러오고 해당 정보를 기존 `HHMM` 형식이던 데이터를 `HH:MM` 으로 표현하는 과정에서 일부 파라미터 데이터 값만 `string`이 아닌 `number`로 인식됨
 
 ### 해결
 
@@ -1366,7 +1375,7 @@ const formatTime = (timeString: string | number) => {
   return `${timeStr.slice(0, 2)}:${timeStr.slice(2)}`;
 };
 ```
-  
+
 </details>
 
 <br />
@@ -1410,7 +1419,6 @@ src/
 ├─ types/               # 타입 모음
 └─ zustand/             # Zustand 설정 및 스토어
 ```
-
 
 ## 👥 팀원 소개
 
@@ -1473,7 +1481,7 @@ src/
     </tr>
     <tr>
       <td align="center">
-        <b>마이페이지, 커뮤니티, 카테고리 페이지</b> <br/>
+        <b>마이페이지, 커뮤니티/장소 페이지, 모의 결제 기능</b> <br/>
       </td>
       <td align="center">
         <b>내 일정 페이지, 일정 생성/수정/조회 페이지</b> <br/>

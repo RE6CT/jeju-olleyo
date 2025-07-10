@@ -6,7 +6,7 @@ const Loading = () => {
         role="status"
         aria-label="로딩 중"
       >
-        <img src="/character/happy.png" alt="해피귤" />
+        <img src="/character/happy_color.png" alt="해피귤" />
         <span className="sr-only">로딩 중...</span>
       </div>
     </>

@@ -66,3 +66,14 @@ export type TicketSearchSelectorProps = {
   classType: string;
   setClassType: Dispatch<SetStateAction<string>>;
 };
+
+export type ReservationData = {
+  flight: Flight;
+  isGoFlight: boolean;
+  baseDate: Date;
+  userId: string;
+  departure: string;
+  passengers: number;
+  classType: string;
+  orderId: string;
+};

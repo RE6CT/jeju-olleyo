@@ -61,6 +61,14 @@ const ReservationsPage = async ({
             지난 예약 내역 보기
           </Link>
         )}
+        {showAll && count !== 0 && (
+          <Link
+            href={PATH.RESERVATIONS}
+            className="medium-14 m-auto w-fit rounded-12 border border-secondary-300 px-[65px] py-2 text-secondary-300"
+          >
+            지난 예약 내역 접기
+          </Link>
+        )}
       </div>
     </div>
   );

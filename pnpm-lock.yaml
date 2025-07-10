@@ -50,6 +50,9 @@ importers:
       '@tanstack/react-query-devtools':
         specifier: ^5.74.3
         version: 5.74.3(@tanstack/react-query@5.71.1(react@18.3.1))(react@18.3.1)
+      '@tosspayments/tosspayments-sdk':
+        specifier: ^2.3.5
+        version: 2.3.5
       '@types/react-datepicker':
         specifier: ^7.0.0
         version: 7.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1038,6 +1041,9 @@ packages:
     resolution: {integrity: sha512-6BTkaSIGT58MroI4kIGXNdx/NhirXPU+75AJObLq+WBa39WmoxhzSk0YX+hqWJ/bvqZJFxslbEU4qIHaRZq+8Q==}
     peerDependencies:
       react: ^18 || ^19
+
+  '@tosspayments/tosspayments-sdk@2.3.5':
+    resolution: {integrity: sha512-XHi6e9LrF02vm4vuhrt8B4BaDUuyL0sQtdp21HITCUFdyRRB+lQKLZSRcBb8VTpymrCISlg/j8mT2r/QlJmipg==}
 
   '@tybys/wasm-util@0.9.0':
     resolution: {integrity: sha512-6+7nlbMVX/PVDCwaIQ8nTOPveOcFLSt8GcXdx8hD0bt39uWxYT88uXzqTd4fTvqta7oeUJqudepapKNt2DYJFw==}
@@ -3893,6 +3899,8 @@ snapshots:
     dependencies:
       '@tanstack/query-core': 5.71.1
       react: 18.3.1
+
+  '@tosspayments/tosspayments-sdk@2.3.5': {}
 
   '@tybys/wasm-util@0.9.0':
     dependencies:

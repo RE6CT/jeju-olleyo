@@ -19,7 +19,7 @@ const LikeButton = ({
   className: string;
 }) => {
   const { user } = useAuth();
-  const { mutate: toggleLike } = useLikesMutation(planId, user?.id);
+  const { mutate: toggleLike, isPending } = useLikesMutation(planId, user?.id);
   const { isLiked } = useGetLikes(user?.id);
 
   /**
@@ -28,11 +28,16 @@ const LikeButton = ({
   const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
+    e.stopPropagation();
+    if (isPending) return;
     toggleLike();
   };
 
   return (
     <button
+      type="button"
+      disabled={isPending}
+      aria-disabled={isPending}
       onClick={(e) => handleClick(e)}
       className={`flex h-8 w-8 cursor-pointer items-center justify-center gap-[5.714px] rounded-12 border-none bg-white/10 p-[5.714px] md:h-14 md:w-14 md:gap-2.5 md:p-2.5 lg:h-14 lg:w-14 lg:gap-2.5 lg:p-2.5 ${className}`}
       aria-label={isLiked(planId) ? '좋아요 취소' : '좋아요'}
